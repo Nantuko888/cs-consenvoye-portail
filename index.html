@@ -6,63 +6,42 @@
 <title>CS Consenvoye</title>
 
 <style>
-body {
+html, body {
   margin: 0;
-  height: 100vh;
+  padding: 0;
+  height: 100%;
+}
+
+body {
   background: url("background.jpg") no-repeat center top;
   background-size: cover;
   position: relative;
+  font-family: Arial, sans-serif;
 }
 
-/* zones cliquables */
-.zone {
+/* Titre en haut */
+.title {
   position: absolute;
-  width: 40%;
-  height: 15%;
-}
+  top: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 40px;
+  font-weight: 900;
+  color: #ffcc66;
 
-/* Ajustement positions (à affiner après) */
+  text-shadow:
+    0 0 8px #ff6600,
+    0 0 16px #ff3300,
+    0 0 32px #ff0000,
+    0 0 48px #cc0000;
 
-#entretien {
-  top: 35%;
-  left: 5%;
-}
-
-#documents {
-  top: 35%;
-  right: 5%;
-}
-
-#organigramme {
-  top: 55%;
-  left: 5%;
-}
-
-#infos {
-  top: 55%;
-  right: 5%;
-}
-
-#galerie {
-  top: 75%;
-  left: 5%;
-}
-
-#ressources {
-  top: 75%;
-  right: 5%;
 }
 </style>
 </head>
 
 <body>
 
-<a href="LIEN_ENTRETIEN" class="zone" id="entretien"></a>
-<a href="#" class="zone" id="documents"></a>
-<a href="#" class="zone" id="organigramme"></a>
-<a href="#" class="zone" id="infos"></a>
-<a href="#" class="zone" id="galerie"></a>
-<a href="#" class="zone" id="ressources"></a>
+<div class="title">CS CONSENVOYE</div>
 
 </body>
 </html>
