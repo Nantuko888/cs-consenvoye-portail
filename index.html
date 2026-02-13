@@ -16,32 +16,23 @@ body {
   background: url("background.jpg") no-repeat center top;
   background-size: cover;
   position: relative;
-  font-family: Arial, sans-serif;
 }
 
-/* Titre en haut */
-.title {
+/* Titre PNG */
+.titre {
   position: absolute;
-  top: 10px;
-  width: 100%;
-  text-align: center;
-  font-size: 40px;
-  font-weight: 900;
-  color: #ffcc66;
-
-  text-shadow:
-    0 0 8px #ff6600,
-    0 0 16px #ff3300,
-    0 0 32px #ff0000,
-    0 0 48px #cc0000;
-
+  top: 10px; /* ajuste ici si besoin */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%; /* ajuste taille ici */
+  max-width: 800px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="title">CS CONSENVOYE</div>
+<img src="titre.png" class="titre">
 
 </body>
 </html>
