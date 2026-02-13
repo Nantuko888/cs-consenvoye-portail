@@ -27,6 +27,21 @@ body {
   max-width: 800px;
   transform: translateX(-50%) translateY(-60px); /* <- monte vraiment */
 }
+/* Grille icônes */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 20px;
+  margin-top: 180px; /* espace sous le titre */
+}
+
+.grid img {
+  width: 100%;
+  max-width: 170px;
+  margin: auto;
+  display: block;
+}
 
 </style>
 </head>
@@ -34,6 +49,16 @@ body {
 <body>
 
 <img src="titre.png" class="titre">
+  <div class="grid">
+  <a href="entretien.html"><img src="entretien.png"></a>
+  <a href="documents.html"><img src="documents.png"></a>
+  <a href="organisation.html"><img src="organisation.png"></a>
+  <a href="#"><img src="informations.png"></a>
+  <a href="#"><img src="planning.png"></a>
+  <a href="#"><img src="galerie.png"></a>
+  <a href="#"><img src="admin.png"></a>
+</div>
+
 
 </body>
 </html>
