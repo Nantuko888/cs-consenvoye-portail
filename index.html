@@ -9,12 +9,60 @@
 body {
   margin: 0;
   height: 100vh;
-  background: url("background.jpg") no-repeat center center fixed;
+  background: url("background.jpg") no-repeat center top;
   background-size: cover;
+  position: relative;
+}
+
+/* zones cliquables */
+.zone {
+  position: absolute;
+  width: 40%;
+  height: 15%;
+}
+
+/* Ajustement positions (à affiner après) */
+
+#entretien {
+  top: 35%;
+  left: 5%;
+}
+
+#documents {
+  top: 35%;
+  right: 5%;
+}
+
+#organigramme {
+  top: 55%;
+  left: 5%;
+}
+
+#infos {
+  top: 55%;
+  right: 5%;
+}
+
+#galerie {
+  top: 75%;
+  left: 5%;
+}
+
+#ressources {
+  top: 75%;
+  right: 5%;
 }
 </style>
-
 </head>
+
 <body>
+
+<a href="LIEN_ENTRETIEN" class="zone" id="entretien"></a>
+<a href="#" class="zone" id="documents"></a>
+<a href="#" class="zone" id="organigramme"></a>
+<a href="#" class="zone" id="infos"></a>
+<a href="#" class="zone" id="galerie"></a>
+<a href="#" class="zone" id="ressources"></a>
+
 </body>
 </html>
