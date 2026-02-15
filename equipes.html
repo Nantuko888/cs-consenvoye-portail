@@ -12,18 +12,14 @@
       --gap: clamp(12px, 3vw, 22px);
 
       --card: rgba(0,0,0,.55);
-      --stroke: rgba(255,140,0,.45);
+      --stroke: rgba(255,140,0,.35);
       --txt: rgba(255,255,255,.92);
       --muted: rgba(255,255,255,.70);
 
-      --blue: rgba(25,130,255,.88);
-      --orange: rgba(255,140,0,.90);
+      --blue: #1276ff;
+      --orange: #ff9a1f;
 
-      /* ✅ Colonne fonction fixe (la clé pour aligner les noms) */
-      --roleCol: 10.5rem; /* ajuste si tu veux (ex: 9.5rem / 11rem) */
-
-      /* Couleur du texte "fonction" */
-      --roleColor: rgba(255, 210, 130, .95);
+      --rowGap: 10px;
     }
 
     html, body{
@@ -34,7 +30,7 @@
       background:#000;
     }
 
-    /* Background comme ton portail */
+    /* Background portail */
     body::before{
       content:"";
       position: fixed;
@@ -49,7 +45,8 @@
       z-index: 1;
       max-width: var(--maxw);
       margin: 0 auto;
-      padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad) calc(env(safe-area-inset-bottom) + var(--pad));
+      padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad)
+               calc(env(safe-area-inset-bottom) + var(--pad));
     }
 
     header{
@@ -67,20 +64,16 @@
       text-shadow: 0 0 18px rgba(255,120,0,.35);
     }
 
-    .actions{
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
+    .actions{ display:flex; gap:10px; align-items:center; }
 
     button{
       appearance:none;
-      border: 1px solid var(--stroke);
+      border: 1px solid rgba(255,255,255,.18);
       background: rgba(0,0,0,.45);
       color: var(--txt);
       padding: 10px 12px;
       border-radius: 12px;
-      font-weight: 700;
+      font-weight: 800;
       cursor:pointer;
     }
     button:active{ transform: translateY(1px); }
@@ -90,7 +83,6 @@
       grid-template-columns: 1fr;
       gap: var(--gap);
     }
-
     @media (min-width: 780px){
       .grid{ grid-template-columns: 1fr 1fr; }
     }
@@ -104,70 +96,85 @@
       backdrop-filter: blur(4px);
     }
 
-    /* Bandeaux */
+    /* BANDEAU (plus haut) */
     .band{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding: 14px 16px;
+      padding: 14px 16px; /* <- hauteur augmentée */
       font-weight: 900;
-      letter-spacing: 1px;
       text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,.95);
     }
-    .band.blue{ background: var(--blue); }
-    .band.orange{ background: var(--orange); }
+    .band.blue{ background: linear-gradient(90deg, rgba(18,118,255,.95), rgba(18,118,255,.65)); }
+    .band.orange{ background: linear-gradient(90deg, rgba(255,154,31,.95), rgba(255,154,31,.65)); }
 
-    /* Compteur à droite (oui c'est un compteur) */
+    /* Compteur à droite (nombre de lignes) */
     .badge{
       min-width: 34px;
-      height: 26px;
-      padding: 0 10px;
-      border-radius: 999px;
-      display:inline-grid;
+      height: 34px;
+      display:grid;
       place-items:center;
+      font-size: 14px;
       font-weight: 900;
+      border-radius: 999px;
       background: rgba(0,0,0,.25);
-      border: 1px solid rgba(255,255,255,.25);
+      border: 1px solid rgba(255,255,255,.22);
     }
 
-    .content{
-      padding: 12px 14px 14px;
+    .body{
+      padding: 14px 14px 16px;
     }
+
+    /* En-tête “Fonction | Nom | Comp” */
+    .colsHead{
+      display:grid;
+      grid-template-columns: 170px 1fr 1fr; /* <- colonnes fixes => alignement parfait */
+      gap: 12px;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.10);
+      font-weight: 900;
+      letter-spacing: .5px;
+      margin-bottom: 10px;
+    }
+
+    .colsHead span{ opacity:.95; }
+
+    /* Lignes */
+    .rows{ display:flex; flex-direction:column; gap: var(--rowGap); }
+
+    .row{
+      display:grid;
+      grid-template-columns: 170px 1fr 1fr; /* <- même grille que l'en-tête */
+      gap: 12px;
+      align-items: center;
+      padding: 12px 12px;
+      border-radius: 12px;
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    /* Fonction colorée + pas de retour à la ligne */
+    .role{
+      font-weight: 900;
+      color: rgba(255,200,120,.95); /* <- couleur différente */
+      white-space: nowrap; /* <- pas de saut => noms alignés */
+      overflow: hidden;
+      text-overflow: ellipsis; /* <- si trop long, "..." */
+    }
+
+    .name{ font-weight: 800; color: rgba(255,255,255,.92); }
+    .comp{ font-weight: 700; color: rgba(255,255,255,.78); }
 
     .empty{
       color: var(--muted);
       font-style: italic;
-      margin: 6px 2px 2px;
-    }
-
-    /* ✅ LIGNES : 2 colonnes FIXES -> noms parfaitement alignés */
-    .row{
-      display: grid;
-      grid-template-columns: var(--roleCol) 1fr; /* <-- fixe */
-      column-gap: 14px;
-      align-items: start; /* si la fonction passe sur 2 lignes, le nom reste aligné */
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: rgba(0,0,0,.28);
-      border: 1px solid rgba(255,255,255,.10);
-      margin: 10px 0;
-    }
-
-    .role{
-      color: var(--roleColor); /* ✅ couleur différente */
-      font-weight: 900;
-      line-height: 1.15;
-      /* si tu veux JAMAIS de retour ligne sur la fonction => décommente :
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      */
-    }
-
-    .name{
-      font-weight: 800;
-      line-height: 1.15;
-      text-align: left;
+      margin: 0;
+      padding: 10px 2px 0;
     }
 
     .status{
@@ -182,9 +189,12 @@
       font-size: 13px;
     }
 
-    /* Petits écrans : colonne fonction un peu plus petite */
-    @media (max-width: 380px){
-      :root{ --roleCol: 9.2rem; }
+    /* Petits écrans : on réduit juste la colonne “fonction” */
+    @media (max-width: 420px){
+      .colsHead, .row{ grid-template-columns: 140px 1fr 1fr; }
+    }
+    @media (max-width: 360px){
+      .colsHead, .row{ grid-template-columns: 120px 1fr 1fr; }
     }
   </style>
 </head>
@@ -203,21 +213,35 @@
       <!-- Équipe 1 -->
       <section class="card">
         <div class="band blue">
-          <span>Équipe 1</span>
+          <span>ÉQUIPE 1</span>
           <span class="badge" id="count1">0</span>
         </div>
-        <div class="content" id="team1"></div>
-        <p id="empty1" class="empty" style="display:none;">Aucun nom pour le moment.</p>
+        <div class="body">
+          <div class="colsHead">
+            <span>Fonction</span>
+            <span>Nom</span>
+            <span id="compLabel1">Comp</span>
+          </div>
+          <div class="rows" id="team1"></div>
+          <p id="empty1" class="empty" style="display:none;">Aucun nom pour le moment.</p>
+        </div>
       </section>
 
       <!-- Équipe 2 -->
       <section class="card">
         <div class="band orange">
-          <span>Équipe 2</span>
+          <span>ÉQUIPE 2</span>
           <span class="badge" id="count2">0</span>
         </div>
-        <div class="content" id="team2"></div>
-        <p id="empty2" class="empty" style="display:none;">Aucun nom pour le moment.</p>
+        <div class="body">
+          <div class="colsHead">
+            <span>Fonction</span>
+            <span>Nom</span>
+            <span id="compLabel2">Comp</span>
+          </div>
+          <div class="rows" id="team2"></div>
+          <p id="empty2" class="empty" style="display:none;">Aucun nom pour le moment.</p>
+        </div>
       </section>
     </div>
 
@@ -233,41 +257,59 @@
     const $t2 = document.getElementById("team2");
     const $e1 = document.getElementById("empty1");
     const $e2 = document.getElementById("empty2");
+    const $status = document.getElementById("status");
     const $c1 = document.getElementById("count1");
     const $c2 = document.getElementById("count2");
-    const $status = document.getElementById("status");
 
-    function renderTeam(container, emptyEl, countEl, arr){
-      container.innerHTML = "";
-      const list = Array.isArray(arr) ? arr : [];
+    // On accepte:
+    // - ancien format: teams["1"] = ["Nom", ...]
+    // - nouveau format: teams["1"] = [{role, name, comp}, ...]
+    function normalizeList(arr){
+      if (!Array.isArray(arr)) return [];
+      if (arr.length && typeof arr[0] === "object" && arr[0] !== null){
+        return arr.map(x => ({
+          role: String(x.role ?? x.fonction ?? "").trim(),
+          name: String(x.name ?? x.nom ?? "").trim(),
+          comp: String(x.comp ?? x.competences ?? x.compétences ?? "").trim()
+        }));
+      }
+      // fallback ancien: juste des noms
+      return arr.map(n => ({ role:"", name:String(n).trim(), comp:"" }));
+    }
 
-      countEl.textContent = String(list.length);
+    function setTeam($root, $empty, $count, list){
+      $root.innerHTML = "";
+      const rows = normalizeList(list);
 
-      if (!list.length){
-        emptyEl.style.display = "block";
+      $count.textContent = String(rows.length);
+
+      if (!rows.length){
+        $empty.style.display = "block";
         return;
       }
-      emptyEl.style.display = "none";
+      $empty.style.display = "none";
 
-      for (const item of list){
-        // item peut être {fonction, nom} ou une simple string (compat)
-        const fonction = (item && typeof item === "object") ? (item.fonction ?? "") : "";
-        const nom = (item && typeof item === "object") ? (item.nom ?? "") : String(item);
-
+      for (const r of rows){
         const row = document.createElement("div");
         row.className = "row";
 
         const role = document.createElement("div");
         role.className = "role";
-        role.textContent = String(fonction || "").trim() || "—";
+        role.textContent = r.role || "—";
 
         const name = document.createElement("div");
         name.className = "name";
-        name.textContent = String(nom || "").trim();
+        name.textContent = r.name || "—";
+
+        const comp = document.createElement("div");
+        comp.className = "comp";
+        comp.textContent = r.comp || "—";
 
         row.appendChild(role);
         row.appendChild(name);
-        container.appendChild(row);
+        row.appendChild(comp);
+
+        $root.appendChild(row);
       }
     }
 
@@ -281,8 +323,10 @@
       window[cbName] = (data) => {
         try{
           if (!data || data.ok !== true) throw new Error(data?.error || "Réponse invalide");
-          renderTeam($t1, $e1, $c1, data.teams && data.teams["1"]);
-          renderTeam($t2, $e2, $c2, data.teams && data.teams["2"]);
+
+          setTeam($t1, $e1, $c1, data.teams && data.teams["1"]);
+          setTeam($t2, $e2, $c2, data.teams && data.teams["2"]);
+
           $status.textContent = "OK — Dernière mise à jour : " + (data.updatedAt || "inconnue");
         }catch(err){
           console.error(err);
