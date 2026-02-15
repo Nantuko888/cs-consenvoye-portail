@@ -12,17 +12,19 @@
       --gap: clamp(12px, 3vw, 22px);
 
       --card: rgba(0,0,0,.55);
-      --stroke: rgba(255,140,0,.25);
-
+      --stroke: rgba(255,140,0,.45);
       --txt: rgba(255,255,255,.92);
       --muted: rgba(255,255,255,.70);
 
-      /* Bandeaux */
-      --blue: #1e6cff;
-      --orange: #ff8a00;
-    }
+      --blue: rgba(25,130,255,.88);
+      --orange: rgba(255,140,0,.90);
 
-    *{ box-sizing: border-box; }
+      /* ✅ Colonne fonction fixe (la clé pour aligner les noms) */
+      --roleCol: 10.5rem; /* ajuste si tu veux (ex: 9.5rem / 11rem) */
+
+      /* Couleur du texte "fonction" */
+      --roleColor: rgba(255, 210, 130, .95);
+    }
 
     html, body{
       margin:0; padding:0;
@@ -78,9 +80,8 @@
       color: var(--txt);
       padding: 10px 12px;
       border-radius: 12px;
-      font-weight: 800;
+      font-weight: 700;
       cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
     }
     button:active{ transform: translateY(1px); }
 
@@ -89,87 +90,84 @@
       grid-template-columns: 1fr;
       gap: var(--gap);
     }
+
     @media (min-width: 780px){
       .grid{ grid-template-columns: 1fr 1fr; }
     }
 
     .card{
       background: var(--card);
-      border: 1px solid rgba(255,255,255,.10);
+      border: 1px solid var(--stroke);
       border-radius: 18px;
       overflow: hidden;
       box-shadow: 0 10px 30px rgba(0,0,0,.35);
       backdrop-filter: blur(4px);
     }
 
-    /* Bandeau */
+    /* Bandeaux */
     .band{
-      padding: 12px 16px;
-      font-weight: 1000;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #fff;
       display:flex;
       align-items:center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .band.blue{ background: linear-gradient(90deg, rgba(30,108,255,1), rgba(30,108,255,.70)); }
-    .band.orange{ background: linear-gradient(90deg, rgba(255,138,0,1), rgba(255,138,0,.70)); }
-
-    .count{
-      font-size: 13px;
+      justify-content:space-between;
+      padding: 14px 16px;
       font-weight: 900;
-      opacity: .92;
-      background: rgba(0,0,0,.25);
-      padding: 4px 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .band.blue{ background: var(--blue); }
+    .band.orange{ background: var(--orange); }
+
+    /* Compteur à droite (oui c'est un compteur) */
+    .badge{
+      min-width: 34px;
+      height: 26px;
+      padding: 0 10px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.18);
-    }
-
-    .body{
-      padding: 14px 16px 16px;
-    }
-
-    /* Liste en lignes alignées (fonction / nom) */
-    .list{
-      margin:0;
-      padding: 0;
-      display: grid;
-      gap: 8px;
-    }
-
-    .row{
-      display: grid;
-      grid-template-columns: max-content 1fr; /* ALIGNE TOUS LES NOMS */
-      column-gap: 12px;
-      align-items: baseline;
-      padding: 8px 10px;
-      border-radius: 12px;
-      background: rgba(0,0,0,.28);
-      border: 1px solid rgba(255,255,255,.08);
-    }
-
-    .role{
+      display:inline-grid;
+      place-items:center;
       font-weight: 900;
-      opacity: .95;
-      white-space: nowrap;
+      background: rgba(0,0,0,.25);
+      border: 1px solid rgba(255,255,255,.25);
     }
 
-    .name{
-      font-weight: 700;
-      word-break: break-word;
-    }
-
-    @media (max-width: 380px){
-      .role{ white-space: normal; }
+    .content{
+      padding: 12px 14px 14px;
     }
 
     .empty{
       color: var(--muted);
       font-style: italic;
-      margin: 0;
-      padding: 8px 4px;
+      margin: 6px 2px 2px;
+    }
+
+    /* ✅ LIGNES : 2 colonnes FIXES -> noms parfaitement alignés */
+    .row{
+      display: grid;
+      grid-template-columns: var(--roleCol) 1fr; /* <-- fixe */
+      column-gap: 14px;
+      align-items: start; /* si la fonction passe sur 2 lignes, le nom reste aligné */
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.10);
+      margin: 10px 0;
+    }
+
+    .role{
+      color: var(--roleColor); /* ✅ couleur différente */
+      font-weight: 900;
+      line-height: 1.15;
+      /* si tu veux JAMAIS de retour ligne sur la fonction => décommente :
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      */
+    }
+
+    .name{
+      font-weight: 800;
+      line-height: 1.15;
+      text-align: left;
     }
 
     .status{
@@ -183,6 +181,11 @@
       color: rgba(255,200,130,.9);
       font-size: 13px;
     }
+
+    /* Petits écrans : colonne fonction un peu plus petite */
+    @media (max-width: 380px){
+      :root{ --roleCol: 9.2rem; }
+    }
   </style>
 </head>
 
@@ -191,37 +194,35 @@
     <header>
       <h1 class="title">Équipes</h1>
       <div class="actions">
-        <button id="refreshBtn" type="button">Actualiser</button>
-        <button type="button" onclick="history.back()">Retour</button>
+        <button id="refreshBtn">Actualiser</button>
+        <button onclick="history.back()">Retour</button>
       </div>
     </header>
 
     <div class="grid">
+      <!-- Équipe 1 -->
       <section class="card">
         <div class="band blue">
           <span>Équipe 1</span>
-          <span class="count" id="count1">—</span>
+          <span class="badge" id="count1">0</span>
         </div>
-        <div class="body">
-          <div id="team1" class="list"></div>
-          <p id="empty1" class="empty" style="display:none;">Aucun nom pour le moment.</p>
-        </div>
+        <div class="content" id="team1"></div>
+        <p id="empty1" class="empty" style="display:none;">Aucun nom pour le moment.</p>
       </section>
 
+      <!-- Équipe 2 -->
       <section class="card">
         <div class="band orange">
           <span>Équipe 2</span>
-          <span class="count" id="count2">—</span>
+          <span class="badge" id="count2">0</span>
         </div>
-        <div class="body">
-          <div id="team2" class="list"></div>
-          <p id="empty2" class="empty" style="display:none;">Aucun nom pour le moment.</p>
-        </div>
+        <div class="content" id="team2"></div>
+        <p id="empty2" class="empty" style="display:none;">Aucun nom pour le moment.</p>
       </section>
     </div>
 
     <div class="status" id="status">Chargement…</div>
-    <div class="hint">Astuce : tu modifies la feuille Google Sheets “Équipes”, puis tu cliques “Actualiser”.</div>
+    <div class="hint">Astuce : si tu modifies la feuille Google Sheets, clique sur “Actualiser”.</div>
   </div>
 
   <script>
@@ -236,47 +237,36 @@
     const $c2 = document.getElementById("count2");
     const $status = document.getElementById("status");
 
-    function renderList(container, emptyEl, countEl, arr){
+    function renderTeam(container, emptyEl, countEl, arr){
       container.innerHTML = "";
       const list = Array.isArray(arr) ? arr : [];
 
-      if (!list.length){
-        emptyEl.style.display = "block";
-        countEl.textContent = "0";
-        return;
-      }
-
-      emptyEl.style.display = "none";
       countEl.textContent = String(list.length);
 
+      if (!list.length){
+        emptyEl.style.display = "block";
+        return;
+      }
+      emptyEl.style.display = "none";
+
       for (const item of list){
-        let role = "";
-        let name = "";
-
-        if (typeof item === "string"){
-          // ancien format: juste le nom
-          name = item;
-        } else if (item && typeof item === "object"){
-          // nouveau format: {fonction, nom}
-          role = String(item.fonction ?? item.role ?? "").trim();
-          name = String(item.nom ?? item.name ?? "").trim();
-        }
-
-        if (!name) continue;
+        // item peut être {fonction, nom} ou une simple string (compat)
+        const fonction = (item && typeof item === "object") ? (item.fonction ?? "") : "";
+        const nom = (item && typeof item === "object") ? (item.nom ?? "") : String(item);
 
         const row = document.createElement("div");
         row.className = "row";
 
-        const r = document.createElement("div");
-        r.className = "role";
-        r.textContent = role || " ";
+        const role = document.createElement("div");
+        role.className = "role";
+        role.textContent = String(fonction || "").trim() || "—";
 
-        const n = document.createElement("div");
-        n.className = "name";
-        n.textContent = name;
+        const name = document.createElement("div");
+        name.className = "name";
+        name.textContent = String(nom || "").trim();
 
-        row.appendChild(r);
-        row.appendChild(n);
+        row.appendChild(role);
+        row.appendChild(name);
         container.appendChild(row);
       }
     }
@@ -291,10 +281,8 @@
       window[cbName] = (data) => {
         try{
           if (!data || data.ok !== true) throw new Error(data?.error || "Réponse invalide");
-
-          renderList($t1, $e1, $c1, data.teams && data.teams["1"]);
-          renderList($t2, $e2, $c2, data.teams && data.teams["2"]);
-
+          renderTeam($t1, $e1, $c1, data.teams && data.teams["1"]);
+          renderTeam($t2, $e2, $c2, data.teams && data.teams["2"]);
           $status.textContent = "OK — Dernière mise à jour : " + (data.updatedAt || "inconnue");
         }catch(err){
           console.error(err);
