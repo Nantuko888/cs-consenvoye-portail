@@ -37,7 +37,7 @@
       inset: 0;
       background: url("background.png") center top / cover no-repeat;
       z-index: 0;
-      transform: translateZ(0);
+      will-change: transform;
     }
 
     .wrap{
@@ -149,7 +149,7 @@
 
     .row{
       display:grid;
-      grid-template-columns: 170px 1fr 1fr; /* <- même grille que l'en-tête */
+      grid-template-columns: 1fr 1fr 1fr; /* <- même grille que l'en-tête */
       gap: 12px;
       align-items: center;
       padding: 12px 12px;
