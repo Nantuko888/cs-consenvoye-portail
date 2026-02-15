@@ -6,16 +6,20 @@
 <title>CS Consenvoye</title>
 
 <style>
-
 :root{
-  --maxw: 700px;
+  --maxw: 760px;
 
-  /* Taille boutons — vraie adaptation */
-  --btn: clamp(140px, 26vw, 220px);
+  /* Titre très haut (petite marge + safe-area) */
+  --titleTop: calc(env(safe-area-inset-top) + 6px);
 
-  --gap: clamp(14px, 3vw, 22px);
+  /* Le titre ne doit jamais bouffer l'écran : limite en hauteur */
+  --titleMaxH: 18vh;
 
-  --titleW: min(92vw, 650px);
+  /* Boutons: on tient compte de la HAUTEUR pour tout faire rentrer */
+  --btn: clamp(110px, min(26vw, 16vh), 190px);
+
+  /* Espacement qui s'adapte aussi à la hauteur */
+  --gap: clamp(10px, min(3vw, 2vh), 18px);
 }
 
 /* Reset */
@@ -23,12 +27,12 @@ html, body{
   margin:0;
   padding:0;
   height:100%;
-  overflow:hidden; /* AUCUN SCROLL */
+  overflow:hidden; /* fixe, pas de scroll */
   background:#000;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
 }
 
-/* Background FIXE */
+/* Background fixe */
 body::before{
   content:"";
   position:fixed;
@@ -37,43 +41,45 @@ body::before{
   z-index:0;
 }
 
-/* Layout principal */
+/* Layout plein écran */
 .wrap{
   position:fixed;
   inset:0;
   z-index:1;
-
   display:flex;
   flex-direction:column;
   align-items:center;
 }
 
-/* Titre */
+/* Titre (plus haut + contrôlé en hauteur) */
 .title{
-  margin-top:12px; /* plus haut */
-  width:var(--titleW);
+  margin-top: var(--titleTop);
+  width: min(94vw, 680px);
+  max-height: var(--titleMaxH);
+  height: auto;
+  display:block;
+  object-fit: contain;
   pointer-events:none;
   user-select:none;
 }
 
 /* Grille */
 .grid{
-  width:min(94vw, var(--maxw));
-  margin-top:20px;
-
+  width: min(94vw, var(--maxw));
+  margin-top: clamp(8px, 1.5vh, 16px);
   display:grid;
-  grid-template-columns:repeat(2, 1fr);
-  gap:var(--gap);
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--gap);
   justify-items:center;
+  align-content:start;
 }
 
-/* Boutons */
 .btn{
-  width:var(--btn);
-  height:var(--btn);
+  width: var(--btn);
+  height: var(--btn);
   display:block;
   text-decoration:none;
-  -webkit-tap-highlight-color:transparent;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn img{
@@ -83,54 +89,42 @@ body::before{
   display:block;
 }
 
-/* Grands téléphones (S24 Ultra etc.) */
-@media (min-width:420px){
-  :root{
-    --btn: clamp(160px, 28vw, 240px);
-  }
-}
-
 /* Tablettes */
-@media (min-width:768px){
+@media (min-width: 768px){
   :root{
-    --btn: clamp(160px, 18vw, 220px);
-    --maxw: 800px;
+    --btn: clamp(140px, min(18vw, 18vh), 220px);
+    --titleMaxH: 16vh;
+    --maxw: 900px;
   }
 }
 
-/* Petits écrans bas */
-@media (max-height:720px){
+/* Ecrans très bas (petits vieux tel) */
+@media (max-height: 700px){
   :root{
-    --btn: clamp(110px, 22vw, 160px);
+    --btn: clamp(95px, min(24vw, 15vh), 150px);
+    --titleMaxH: 16vh;
   }
 }
-
 </style>
 </head>
 
 <body>
-
 <main class="wrap">
+  <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
 
-<img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
+  <section class="grid" aria-label="Menu">
+    <a class="btn" href="entretien.html"><img src="entretien.png" alt="Entretien"></a>
+    <a class="btn" href="documents.html"><img src="documents.png" alt="Documents"></a>
 
-<section class="grid">
+    <a class="btn" href="organisation.html"><img src="organigramme.png" alt="Organigramme"></a>
+    <a class="btn" href="informations.html"><img src="informations.png" alt="Informations"></a>
 
-<a class="btn" href="entretien.html"><img src="entretien.png" alt="Entretien"></a>
-<a class="btn" href="documents.html"><img src="documents.png" alt="Documents"></a>
+    <a class="btn" href="planning.html"><img src="planning.png" alt="Planning"></a>
+    <a class="btn" href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
 
-<a class="btn" href="organisation.html"><img src="organigramme.png" alt="Organigramme"></a>
-<a class="btn" href="informations.html"><img src="informations.png" alt="Informations"></a>
-
-<a class="btn" href="planning.html"><img src="planning.png" alt="Planning"></a>
-<a class="btn" href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
-
-<a class="btn" href="book.html"><img src="book.png" alt="Book"></a>
-<a class="btn" href="galerie.html"><img src="galerie.png" alt="Galerie"></a>
-
-</section>
-
+    <a class="btn" href="book.html"><img src="book.png" alt="Book"></a>
+    <a class="btn" href="galerie.html"><img src="galerie.png" alt="Galerie"></a>
+  </section>
 </main>
-
 </body>
 </html>
