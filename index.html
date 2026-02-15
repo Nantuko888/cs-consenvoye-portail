@@ -3,87 +3,112 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <title>CS Consenvoye</title>
 
   <style>
     * { box-sizing: border-box; }
 
     html, body {
+      width: 100%;
+      height: 100%;
       margin: 0;
       padding: 0;
+      overflow: hidden; /* ✅ pas de scroll */
+      font-family: Arial, sans-serif;
     }
 
     body {
+      position: relative;
       background: url("background.png") no-repeat center top;
       background-size: cover;
-      background-attachment: fixed;
-      font-family: Arial, sans-serif;
-      min-height: 100vh;
+      background-color: #000; /* fallback */
     }
 
-    /* ===== TITRE FIXE ===== */
+    /* ===== TITRE FIXE (plus haut + plus gros) ===== */
     .header {
       position: fixed;
-      top: 16px; /* ajuste si besoin */
+      top: 6px; /* ✅ plus haut */
       left: 50%;
       transform: translateX(-50%);
-      width: 95%;
-      max-width: 750px; /* taille du titre */
-      z-index: 1000;
+      width: 98vw;
+      max-width: 900px; /* ✅ plus gros */
+      z-index: 10;
       text-align: center;
-      pointer-events: none; /* évite de gêner les clics */
+      pointer-events: none; /* ne gêne pas les clics */
     }
-
     .header img {
       width: 100%;
       height: auto;
       display: block;
     }
 
-    /* ===== GRILLE DES BOUTONS ===== */
+    /* ===== ZONE BOUTONS FIXE ===== */
+    .buttons-area {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 160px; /* position sous le titre */
+      width: min(92vw, 520px);
+      z-index: 5;
+    }
+
     .grid {
-      width: min(90vw, 520px);
-      margin: 230px auto 80px auto; /* espace sous le titre fixe */
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 22px;
-      padding: 0 10px;
+      gap: 18px; /* espace entre boutons */
+      justify-items: center;
+      align-items: center;
     }
 
     .grid a {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      display: block;
       text-decoration: none;
     }
 
     .grid img {
-      width: 100%;
-      max-width: 170px;
+      width: 150px; /* ✅ légèrement plus petits */
+      max-width: 38vw; /* s’adapte au mobile */
       height: auto;
       display: block;
+    }
+
+    /* dernière ligne : si tu as 7 boutons, le dernier peut être centré */
+    .grid a:last-child {
+      grid-column: 1 / -1;
+      justify-self: center;
+    }
+
+    /* Option : petits écrans */
+    @media (max-width: 380px) {
+      .buttons-area { top: 150px; }
+      .grid img { width: 140px; }
+      .grid { gap: 14px; }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- TITRE FIXE -->
+  <!-- TITRE -->
   <div class="header">
     <img src="titre.png" alt="Bienvenue sur CS Consenvoye">
   </div>
 
   <!-- BOUTONS -->
-  <div class="grid">
-    <a href="entretien.html"><img src="entretien.png" alt="Entretien"></a>
-    <a href="documents.html"><img src="documents.png" alt="Documents"></a>
-    <a href="organisation.html"><img src="organigramme.png" alt="Organigramme"></a>
-    <a href="informations.html"><img src="informations.png" alt="Informations"></a>
-    <a href="planning.html"><img src="planning.png" alt="Planning"></a>
-    <a href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
-    <a href="book.html"><img src="book.png" alt="Book"></a>
-    <a href="galerie.html"><img src="galerie.png" alt="Galerie"></a>
+  <div class="buttons-area">
+    <div class="grid">
+      <a href="entretien.html"><img src="entretien.png" alt="Entretien"></a>
+      <a href="documents.html"><img src="documents.png" alt="Documents"></a>
+
+      <a href="organisation.html"><img src="organigramme.png" alt="Organigramme"></a>
+      <a href="informations.html"><img src="informations.png" alt="Informations"></a>
+
+      <a href="planning.html"><img src="planning.png" alt="Planning"></a>
+      <a href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
+
+      <a href="book.html"><img src="book.png" alt="Book"></a>
+      <a href="galerie.html"><img src="galerie.png" alt="Galerie"></a>
+    </div>
   </div>
 
 </body>
