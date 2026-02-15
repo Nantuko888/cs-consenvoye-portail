@@ -1,79 +1,226 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Équipes – CS Consenvoye</title>
-<style>
-  :root{
-    --maxw: 820px;
-    --pad: clamp(14px, 3.5vw, 22px);
-    --gap: clamp(12px, 3vw, 18px);
-    --radius: 18px;
-    --text:#f3f3f3;
-    --muted:#bdbdbd;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0; background:#060606; color:var(--text); font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
-  body::before{
-    content:""; position:fixed; inset:0;
-    background:url("background.png") center top/cover no-repeat;
-    opacity:.18; z-index:-2;
-  }
-  body::after{
-    content:""; position:fixed; inset:0;
-    background:
-      radial-gradient(1100px 700px at 20% 10%, rgba(255,180,0,.18), transparent 55%),
-      radial-gradient(900px 600px at 85% 15%, rgba(255,90,0,.14), transparent 55%),
-      linear-gradient(180deg, rgba(0,0,0,.70), rgba(0,0,0,.55));
-    z-index:-1;
-  }
-  .wrap{max-width:var(--maxw); margin:0 auto; padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad) calc(env(safe-area-inset-bottom) + var(--pad));}
-  .top{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom: var(--gap);}
-  h1{margin:0; font-size: clamp(22px, 4.6vw, 32px);}
-  .btn{border:1px solid rgba(255,180,0,.25); background:rgba(0,0,0,.35); color:var(--text); padding:10px 12px; border-radius:999px; font-weight:700;}
-  .grid{display:grid; grid-template-columns:1fr; gap: var(--gap);}
-  @media(min-width:820px){ .grid{grid-template-columns:1fr 1fr;} }
-  .card{background:rgba(0,0,0,.40); border:1px solid rgba(255,180,0,.16); border-radius: var(--radius); overflow:hidden;}
-  .head{padding:14px 16px; border-bottom:1px solid rgba(255,180,0,.12);
-        background:linear-gradient(90deg, rgba(255,180,0,.18), rgba(255,90,0,.10), rgba(0,0,0,0));}
-  .head strong{font-size:18px; letter-spacing:.2px;}
-  .body{padding:14px 16px;}
-  ul{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px;}
-  li{padding:10px 12px; border-radius:14px; background:rgba(0,0,0,.35); border:1px solid rgba(255,180,0,.12); font-weight:800;}
-  .muted{color:var(--muted); font-weight:700;}
-</style>
-</head>
-<body>
-  <div class="wrap">
-    <div class="top">
-      <h1>Équipes</h1>
-      <button class="btn" onclick="history.back()">← Retour</button>
-    </div>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Équipes - CS Consenvoye</title>
 
-    <div class="grid" id="grid"></div>
-    <div class="muted" style="margin-top:14px;">Dernière mise à jour : <span id="maj">—</span></div>
-  </div>
-
-  <script src="equipes-data.js"></script>
-  <script>
-    // équipesData est défini dans equipes-data.js
-    const grid = document.getElementById("grid");
-    document.getElementById("maj").textContent = equipesData.updatedAt || "—";
-
-    function card(team){
-      const names = (team.members || []).map(n => `<li>${n}</li>`).join("");
-      return `
-        <div class="card">
-          <div class="head"><strong>${team.name}</strong></div>
-          <div class="body">
-            ${team.members?.length ? `<ul>${names}</ul>` : `<div class="muted">Aucun membre renseigné</div>`}
-          </div>
-        </div>
-      `;
+  <style>
+    :root{
+      --maxw: 900px;
+      --pad: clamp(14px, 4vw, 28px);
+      --gap: clamp(12px, 3vw, 22px);
+      --card: rgba(0,0,0,.55);
+      --stroke: rgba(255,140,0,.45);
+      --txt: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
     }
 
-    grid.innerHTML = equipesData.teams.map(card).join("");
+    html, body{
+      margin:0; padding:0;
+      min-height:100%;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--txt);
+      background:#000;
+    }
+
+    /* Background comme ton portail */
+    body::before{
+      content:"";
+      position: fixed;
+      inset: 0;
+      background: url("background.png") center top / cover no-repeat;
+      z-index: 0;
+      transform: translateZ(0);
+    }
+
+    .wrap{
+      position: relative;
+      z-index: 1;
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad) calc(env(safe-area-inset-bottom) + var(--pad));
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: var(--gap);
+    }
+
+    .title{
+      font-size: clamp(22px, 3.2vw, 34px);
+      margin:0;
+      letter-spacing: .5px;
+      text-shadow: 0 0 18px rgba(255,120,0,.35);
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    button{
+      appearance:none;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.45);
+      color: var(--txt);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor:pointer;
+    }
+    button:active{ transform: translateY(1px); }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: var(--gap);
+    }
+
+    @media (min-width: 780px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      backdrop-filter: blur(4px);
+    }
+
+    .card h2{
+      margin: 0 0 10px 0;
+      font-size: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255,180,80,.95);
+    }
+
+    .list{
+      margin:0;
+      padding-left: 18px;
+    }
+
+    .list li{
+      margin: 6px 0;
+      line-height: 1.25;
+    }
+
+    .empty{
+      color: var(--muted);
+      font-style: italic;
+      margin: 0;
+    }
+
+    .status{
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hint{
+      margin-top: 10px;
+      color: rgba(255,200,130,.9);
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <h1 class="title">Équipes</h1>
+      <div class="actions">
+        <button id="refreshBtn">Actualiser</button>
+        <button onclick="history.back()">Retour</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Équipe 1</h2>
+        <ul id="team1" class="list"></ul>
+        <p id="empty1" class="empty" style="display:none;">Aucun nom pour le moment.</p>
+      </section>
+
+      <section class="card">
+        <h2>Équipe 2</h2>
+        <ul id="team2" class="list"></ul>
+        <p id="empty2" class="empty" style="display:none;">Aucun nom pour le moment.</p>
+      </section>
+    </div>
+
+    <div class="status" id="status">Chargement…</div>
+    <div class="hint">Astuce : si tu modifies la feuille Google Sheets, clique sur “Actualiser”.</div>
+  </div>
+
+  <script>
+    // ✅ TON URL APPS SCRIPT
+    const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+
+    const $t1 = document.getElementById("team1");
+    const $t2 = document.getElementById("team2");
+    const $e1 = document.getElementById("empty1");
+    const $e2 = document.getElementById("empty2");
+    const $status = document.getElementById("status");
+
+    function setList(el, emptyEl, arr){
+      el.innerHTML = "";
+      const list = Array.isArray(arr) ? arr : [];
+      if (!list.length){
+        emptyEl.style.display = "block";
+        return;
+      }
+      emptyEl.style.display = "none";
+      for (const name of list){
+        const li = document.createElement("li");
+        li.textContent = String(name);
+        el.appendChild(li);
+      }
+    }
+
+    // JSONP (anti-CORS)
+    function loadTeams(){
+      $status.textContent = "Chargement…";
+
+      const cbName = "cb_" + Math.random().toString(36).slice(2);
+      const script = document.createElement("script");
+
+      window[cbName] = (data) => {
+        try{
+          if (!data || data.ok !== true) throw new Error("Réponse invalide");
+          setList($t1, $e1, data.teams && data.teams["1"]);
+          setList($t2, $e2, data.teams && data.teams["2"]);
+          $status.textContent = "OK — Dernière mise à jour : " + (data.updatedAt || "inconnue");
+        }catch(err){
+          console.error(err);
+          $status.textContent = "Erreur : " + err.message;
+        }finally{
+          // Nettoyage
+          delete window[cbName];
+          script.remove();
+        }
+      };
+
+      script.onerror = () => {
+        $status.textContent = "Erreur : impossible de charger le script (JSONP).";
+        delete window[cbName];
+        script.remove();
+      };
+
+      const sep = API.includes("?") ? "&" : "?";
+      script.src = API + sep + "callback=" + encodeURIComponent(cbName) + "&_=" + Date.now();
+      document.body.appendChild(script);
+    }
+
+    document.getElementById("refreshBtn").addEventListener("click", loadTeams);
+    loadTeams();
   </script>
 </body>
 </html>
