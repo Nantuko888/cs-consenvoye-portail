@@ -401,170 +401,129 @@
   </div>
 
   <script>
-    // ✅ TON URL APPS SCRIPT (JSONP)
-    const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+    <script>
+const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-    const $status = document.getElementById("status");
+const $rows1 = document.getElementById("rows1");
+const $rows2 = document.getElementById("rows2");
+const $empty1 = document.getElementById("empty1");
+const $empty2 = document.getElementById("empty2");
 
-    const $rows1 = document.getElementById("rows1");
-    const $rows2 = document.getElementById("rows2");
-    const $empty1 = document.getElementById("empty1");
-    const $empty2 = document.getElementById("empty2");
+const $count1 = document.getElementById("count1");
+const $count2 = document.getElementById("count2");
+const $badge1 = document.getElementById("badge1");
+const $badge2 = document.getElementById("badge2");
 
-    const $count1 = document.getElementById("count1");
-    const $count2 = document.getElementById("count2");
-    const $badge1 = document.getElementById("badge1");
-    const $badge2 = document.getElementById("badge2");
+const $branch1 = document.getElementById("branch1");
+const $branch2 = document.getElementById("branch2");
+const $card1 = document.getElementById("cardTeam1");
+const $card2 = document.getElementById("cardTeam2");
 
-    const $branch1 = document.getElementById("branch1");
-    const $branch2 = document.getElementById("branch2");
-    const $card1 = document.getElementById("cardTeam1");
-    const $card2 = document.getElementById("cardTeam2");
+function roleRank(role){
+  const r = String(role || "").trim().toLowerCase();
+  if (r.includes("responsable")) return 1;
+  if (r.includes("adjoint")) return 2;
+  if (r === "ca" || r.startsWith("ca ") || r.includes(" ca")) return 3;
+  if (r === "ce" || r.startsWith("ce ") || r.includes(" ce")) return 4;
+  if (r.includes("equipier") || r.includes("équipier")) return 5;
+  if (r.includes("isp")) return 6;
+  if (r.includes("apprenant")) return 7;
+  return 999;
+}
 
-    // ===== TRI demandé =====
-    // Responsable, Adjoint, CA, CE, Équipier, ISP, Apprenant, puis le reste
-    function roleRank(role){
-      const r = String(role || "").trim().toLowerCase();
-      if (r.includes("responsable")) return 1;
-      if (r.includes("adjoint")) return 2;
-      if (r === "ca" || r.startsWith("ca ") || r.includes(" ca")) return 3;
-      if (r === "ce" || r.startsWith("ce ") || r.includes(" ce")) return 4;
-      if (r.includes("equipier") || r.includes("équipier")) return 5;
-      if (r.includes("isp")) return 6;
-      if (r.includes("apprenant")) return 7;
-      return 999;
-    }
+function normalize(x){
+  if (!x || typeof x !== "object") {
+    const s = String(x || "").trim();
+    return { fonction:"", nom:s, comp:"" };
+  }
+  return {
+    fonction: String(x.fonction ?? "").trim(),
+    nom: String(x.nom ?? "").trim(),
+    comp: String(x.comp ?? "").trim()
+  };
+}
 
-    // Normalise une ligne API -> {fonction, nom, comp}
-    function normalize(x){
-      if (!x || typeof x !== "object") {
-        const s = String(x || "").trim();
-        return { fonction:"", nom:s, comp:"" };
-      }
-      const fonction = String(x.fonction ?? x.role ?? x.fct ?? "").trim();
-      const nom = String(x.nom ?? x.name ?? x.prenom_nom ?? "").trim();
-      const comp = String(x.comp ?? x.competences ?? x.competence ?? x.skill ?? "").trim();
-      return { fonction, nom, comp };
-    }
+function sortRows(list){
+  return list.slice().sort((a,b)=>{
+    const ra = roleRank(a.fonction);
+    const rb = roleRank(b.fonction);
+    if (ra !== rb) return ra - rb;
+    return String(a.nom || "").localeCompare(String(b.nom || ""), "fr");
+  });
+}
 
-    function sortRows(list){
-      return list.slice().sort((a,b)=>{
-        const ra = roleRank(a.fonction);
-        const rb = roleRank(b.fonction);
-        if (ra !== rb) return ra - rb;
-        return String(a.nom || "").localeCompare(String(b.nom || ""), "fr");
-      });
-    }
+function renderTeam($rows, $empty, $count, $badge, raw){
+  $rows.innerHTML = "";
+  const rows = sortRows((raw || []).map(normalize));
 
-    function renderTeam($rows, $empty, $count, $badge, raw){
-      $rows.innerHTML = "";
+  $count.textContent = rows.length;
+  $badge.textContent = rows.length;
 
-      const list = Array.isArray(raw) ? raw.map(normalize) : [];
-      const rows = sortRows(list).filter(r => (r.fonction || r.nom || r.comp));
+  if (!rows.length){
+    $empty.style.display = "block";
+    return;
+  }
+  $empty.style.display = "none";
 
-      $count.textContent = String(rows.length);
-      $badge.textContent = String(rows.length);
+  for (const r of rows){
+    const row = document.createElement("div");
+    row.className = "row";
 
-      if (!rows.length){
-        $empty.style.display = "block";
-        return;
-      }
-      $empty.style.display = "none";
+    row.innerHTML = `
+      <div class="role">${r.fonction || "—"}</div>
+      <div class="person">${r.nom || "—"}</div>
+      <div class="comp">${r.comp || "—"}</div>
+    `;
+    $rows.appendChild(row);
+  }
+}
 
-      for (const r of rows){
-        const row = document.createElement("div");
-        row.className = "row";
+function toggleTeam(team){
+  const is1 = team === "1";
+  const is2 = team === "2";
 
-        const c1 = document.createElement("div");
-        c1.className = "role";
-        c1.textContent = r.fonction || "—";
+  const open1 = !$card1.classList.contains("hidden");
+  const open2 = !$card2.classList.contains("hidden");
 
-        const c2 = document.createElement("div");
-        c2.className = "person";
-        c2.textContent = r.nom || "—";
+  if ((is1 && open1) || (is2 && open2)){
+    $card1.classList.add("hidden");
+    $card2.classList.add("hidden");
+    $branch1.classList.remove("isActive");
+    $branch2.classList.remove("isActive");
+    return;
+  }
 
-        const c3 = document.createElement("div");
-        c3.className = "comp";
-        c3.textContent = r.comp || "—";
+  $card1.classList.toggle("hidden", !is1);
+  $card2.classList.toggle("hidden", !is2);
 
-        row.appendChild(c1);
-        row.appendChild(c2);
-        row.appendChild(c3);
-        $rows.appendChild(row);
-      }
-    }
+  $branch1.classList.toggle("isActive", is1);
+  $branch2.classList.toggle("isActive", is2);
+}
 
-    // Toggle : clique équipe 1 -> affiche, re-clique -> cache (idem équipe 2)
-    function toggleTeam(team){
-      const t = String(team);
-      const is1 = (t === "1");
-      const is2 = (t === "2");
+$branch1.addEventListener("click", ()=> toggleTeam("1"));
+$branch2.addEventListener("click", ()=> toggleTeam("2"));
 
-      const open1 = !$card1.classList.contains("hidden");
-      const open2 = !$card2.classList.contains("hidden");
+function loadTeams(){
+  const cbName = "cb_" + Math.random().toString(36).slice(2);
+  const script = document.createElement("script");
 
-      if ((is1 && open1) || (is2 && open2)){
-        $card1.classList.add("hidden");
-        $card2.classList.add("hidden");
-        $branch1.classList.remove("isActive");
-        $branch2.classList.remove("isActive");
-        $branch1.setAttribute("aria-expanded","false");
-        $branch2.setAttribute("aria-expanded","false");
-        return;
-      }
+  window[cbName] = (data) => {
+    if (!data || data.ok !== true) return;
 
-      $card1.classList.toggle("hidden", !is1);
-      $card2.classList.toggle("hidden", !is2);
+    renderTeam($rows1, $empty1, $count1, $badge1, data.teams && data.teams["1"]);
+    renderTeam($rows2, $empty2, $count2, $badge2, data.teams && data.teams["2"]);
 
-      $branch1.classList.toggle("isActive", is1);
-      $branch2.classList.toggle("isActive", is2);
+    delete window[cbName];
+    script.remove();
+  };
 
-      $branch1.setAttribute("aria-expanded", is1 ? "true" : "false");
-      $branch2.setAttribute("aria-expanded", is2 ? "true" : "false");
+  script.src = API + "?callback=" + cbName + "&_=" + Date.now();
+  document.body.appendChild(script);
+}
 
-      const target = is1 ? $card1 : $card2;
-      setTimeout(()=> target.scrollIntoView({behavior:"smooth", block:"start"}), 0);
-    }
+document.getElementById("refreshBtn").addEventListener("click", loadTeams);
+loadTeams();
+</script>
 
-    $branch1.addEventListener("click", ()=> toggleTeam("1"));
-    $branch2.addEventListener("click", ()=> toggleTeam("2"));
-
-    function loadTeams(){
-      $status.textContent = "Chargement…";
-
-      const cbName = "cb_" + Math.random().toString(36).slice(2);
-      const script = document.createElement("script");
-
-      window[cbName] = (data) => {
-        try{
-          if (!data || data.ok !== true) throw new Error((data && data.error) ? data.error : "Réponse invalide");
-
-          renderTeam($rows1, $empty1, $count1, $badge1, data.teams && data.teams["1"]);
-          renderTeam($rows2, $empty2, $count2, $badge2, data.teams && data.teams["2"]);
-
-          $status.textContent = "OK — Dernière mise à jour : " + (data.updatedAt || "inconnue");
-        }catch(err){
-          console.error(err);
-          $status.textContent = "Erreur : " + err.message;
-        }finally{
-          delete window[cbName];
-          script.remove();
-        }
-      };
-
-      script.onerror = () => {
-        $status.textContent = "Erreur : impossible de charger le script (JSONP).";
-        delete window[cbName];
-        script.remove();
-      };
-
-      const sep = API.includes("?") ? "&" : "?";
-      script.src = API + sep + "callback=" + encodeURIComponent(cbName) + "&_=" + Date.now();
-      document.body.appendChild(script);
-    }
-
-    document.getElementById("refreshBtn").addEventListener("click", loadTeams);
-    loadTeams();
-  </script>
 </body>
 </html>
