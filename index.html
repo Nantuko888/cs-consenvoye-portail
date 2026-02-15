@@ -3,68 +3,75 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <title>CS Consenvoye</title>
 
   <style>
     * { box-sizing: border-box; }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-}
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
 
-body {
-  background: url("background.png") no-repeat center top;
-  background-size: cover;
-  background-attachment: fixed;
-  font-family: Arial, sans-serif;
-}
+    body {
+      background: url("background.png") no-repeat center top;
+      background-size: cover;
+      background-attachment: fixed;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+    }
 
-/* HEADER */
-.header {
-  text-align: center;
-  padding-top: 30px; /* ↓ descend le titre */
-  padding-bottom: 10px;
-}
+    /* ===== TITRE FIXE ===== */
+    .header {
+      position: fixed;
+      top: 16px; /* ajuste si besoin */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 95%;
+      max-width: 750px; /* taille du titre */
+      z-index: 1000;
+      text-align: center;
+      pointer-events: none; /* évite de gêner les clics */
+    }
 
-.titre {
-  width: 92%;
-  max-width: 750px; /* ↓ un peu plus petit */
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
+    .header img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
 
-/* GRILLE */
-.grid {
-  width: min(90vw, 480px);
-  margin: 30px auto 80px auto; /* ↓ espace sous le titre */
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 22px;
-}
+    /* ===== GRILLE DES BOUTONS ===== */
+    .grid {
+      width: min(90vw, 520px);
+      margin: 230px auto 80px auto; /* espace sous le titre fixe */
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+      padding: 0 10px;
+    }
 
-/* BOUTONS */
-.grid img {
-  width: 100%;
-  max-width: 160px; /* ↓ plus petits */
-  height: auto;
-  display: block;
-  margin: auto;
-}
+    .grid a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+    }
 
+    .grid img {
+      width: 100%;
+      max-width: 170px;
+      height: auto;
+      display: block;
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- TITRE -->
+  <!-- TITRE FIXE -->
   <div class="header">
-    <!-- Si ton titre est à la racine : titre.png -->
-    <img src="titre.png" class="titre" alt="Bienvenue sur CS Consenvoye">
-    <!-- Si ton titre est dans /images : décommente et commente la ligne au-dessus -->
-    <!-- <img src="images/titre.png" class="titre" alt="Bienvenue sur CS Consenvoye"> -->
+    <img src="titre.png" alt="Bienvenue sur CS Consenvoye">
   </div>
 
   <!-- BOUTONS -->
@@ -75,7 +82,7 @@ body {
     <a href="informations.html"><img src="informations.png" alt="Informations"></a>
     <a href="planning.html"><img src="planning.png" alt="Planning"></a>
     <a href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
-    <a href="book.html"><img src="book.png" alt="BOOK"></a>
+    <a href="book.html"><img src="book.png" alt="Book"></a>
     <a href="galerie.html"><img src="galerie.png" alt="Galerie"></a>
   </div>
 
