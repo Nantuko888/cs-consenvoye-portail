@@ -10,11 +10,19 @@
       --maxw: 900px;
       --pad: clamp(14px, 4vw, 28px);
       --gap: clamp(12px, 3vw, 22px);
+
       --card: rgba(0,0,0,.55);
-      --stroke: rgba(255,140,0,.45);
+      --stroke: rgba(255,140,0,.25);
+
       --txt: rgba(255,255,255,.92);
       --muted: rgba(255,255,255,.70);
+
+      /* Bandeaux */
+      --blue: #1e6cff;
+      --orange: #ff8a00;
     }
+
+    *{ box-sizing: border-box; }
 
     html, body{
       margin:0; padding:0;
@@ -70,8 +78,9 @@
       color: var(--txt);
       padding: 10px 12px;
       border-radius: 12px;
-      font-weight: 700;
+      font-weight: 800;
       cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
     }
     button:active{ transform: translateY(1px); }
 
@@ -80,42 +89,87 @@
       grid-template-columns: 1fr;
       gap: var(--gap);
     }
-
     @media (min-width: 780px){
       .grid{ grid-template-columns: 1fr 1fr; }
     }
 
     .card{
       background: var(--card);
-      border: 1px solid var(--stroke);
+      border: 1px solid rgba(255,255,255,.10);
       border-radius: 18px;
-      padding: 16px;
+      overflow: hidden;
       box-shadow: 0 10px 30px rgba(0,0,0,.35);
       backdrop-filter: blur(4px);
     }
 
-    .card h2{
-      margin: 0 0 10px 0;
-      font-size: 20px;
+    /* Bandeau */
+    .band{
+      padding: 12px 16px;
+      font-weight: 1000;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: rgba(255,180,80,.95);
+      color: #fff;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .band.blue{ background: linear-gradient(90deg, rgba(30,108,255,1), rgba(30,108,255,.70)); }
+    .band.orange{ background: linear-gradient(90deg, rgba(255,138,0,1), rgba(255,138,0,.70)); }
+
+    .count{
+      font-size: 13px;
+      font-weight: 900;
+      opacity: .92;
+      background: rgba(0,0,0,.25);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
     }
 
+    .body{
+      padding: 14px 16px 16px;
+    }
+
+    /* Liste en lignes alignées (fonction / nom) */
     .list{
       margin:0;
-      padding-left: 18px;
+      padding: 0;
+      display: grid;
+      gap: 8px;
     }
 
-    .list li{
-      margin: 6px 0;
-      line-height: 1.25;
+    .row{
+      display: grid;
+      grid-template-columns: max-content 1fr; /* ALIGNE TOUS LES NOMS */
+      column-gap: 12px;
+      align-items: baseline;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .role{
+      font-weight: 900;
+      opacity: .95;
+      white-space: nowrap;
+    }
+
+    .name{
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    @media (max-width: 380px){
+      .role{ white-space: normal; }
     }
 
     .empty{
       color: var(--muted);
       font-style: italic;
       margin: 0;
+      padding: 8px 4px;
     }
 
     .status{
@@ -137,27 +191,37 @@
     <header>
       <h1 class="title">Équipes</h1>
       <div class="actions">
-        <button id="refreshBtn">Actualiser</button>
-        <button onclick="history.back()">Retour</button>
+        <button id="refreshBtn" type="button">Actualiser</button>
+        <button type="button" onclick="history.back()">Retour</button>
       </div>
     </header>
 
     <div class="grid">
       <section class="card">
-        <h2>Équipe 1</h2>
-        <ul id="team1" class="list"></ul>
-        <p id="empty1" class="empty" style="display:none;">Aucun nom pour le moment.</p>
+        <div class="band blue">
+          <span>Équipe 1</span>
+          <span class="count" id="count1">—</span>
+        </div>
+        <div class="body">
+          <div id="team1" class="list"></div>
+          <p id="empty1" class="empty" style="display:none;">Aucun nom pour le moment.</p>
+        </div>
       </section>
 
       <section class="card">
-        <h2>Équipe 2</h2>
-        <ul id="team2" class="list"></ul>
-        <p id="empty2" class="empty" style="display:none;">Aucun nom pour le moment.</p>
+        <div class="band orange">
+          <span>Équipe 2</span>
+          <span class="count" id="count2">—</span>
+        </div>
+        <div class="body">
+          <div id="team2" class="list"></div>
+          <p id="empty2" class="empty" style="display:none;">Aucun nom pour le moment.</p>
+        </div>
       </section>
     </div>
 
     <div class="status" id="status">Chargement…</div>
-    <div class="hint">Astuce : si tu modifies la feuille Google Sheets, clique sur “Actualiser”.</div>
+    <div class="hint">Astuce : tu modifies la feuille Google Sheets “Équipes”, puis tu cliques “Actualiser”.</div>
   </div>
 
   <script>
@@ -168,20 +232,52 @@
     const $t2 = document.getElementById("team2");
     const $e1 = document.getElementById("empty1");
     const $e2 = document.getElementById("empty2");
+    const $c1 = document.getElementById("count1");
+    const $c2 = document.getElementById("count2");
     const $status = document.getElementById("status");
 
-    function setList(el, emptyEl, arr){
-      el.innerHTML = "";
+    function renderList(container, emptyEl, countEl, arr){
+      container.innerHTML = "";
       const list = Array.isArray(arr) ? arr : [];
+
       if (!list.length){
         emptyEl.style.display = "block";
+        countEl.textContent = "0";
         return;
       }
+
       emptyEl.style.display = "none";
-      for (const name of list){
-        const li = document.createElement("li");
-        li.textContent = String(name);
-        el.appendChild(li);
+      countEl.textContent = String(list.length);
+
+      for (const item of list){
+        let role = "";
+        let name = "";
+
+        if (typeof item === "string"){
+          // ancien format: juste le nom
+          name = item;
+        } else if (item && typeof item === "object"){
+          // nouveau format: {fonction, nom}
+          role = String(item.fonction ?? item.role ?? "").trim();
+          name = String(item.nom ?? item.name ?? "").trim();
+        }
+
+        if (!name) continue;
+
+        const row = document.createElement("div");
+        row.className = "row";
+
+        const r = document.createElement("div");
+        r.className = "role";
+        r.textContent = role || " ";
+
+        const n = document.createElement("div");
+        n.className = "name";
+        n.textContent = name;
+
+        row.appendChild(r);
+        row.appendChild(n);
+        container.appendChild(row);
       }
     }
 
@@ -194,15 +290,16 @@
 
       window[cbName] = (data) => {
         try{
-          if (!data || data.ok !== true) throw new Error("Réponse invalide");
-          setList($t1, $e1, data.teams && data.teams["1"]);
-          setList($t2, $e2, data.teams && data.teams["2"]);
+          if (!data || data.ok !== true) throw new Error(data?.error || "Réponse invalide");
+
+          renderList($t1, $e1, $c1, data.teams && data.teams["1"]);
+          renderList($t2, $e2, $c2, data.teams && data.teams["2"]);
+
           $status.textContent = "OK — Dernière mise à jour : " + (data.updatedAt || "inconnue");
         }catch(err){
           console.error(err);
           $status.textContent = "Erreur : " + err.message;
         }finally{
-          // Nettoyage
           delete window[cbName];
           script.remove();
         }
