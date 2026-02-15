@@ -151,12 +151,19 @@
       display:grid;
       grid-template-columns: 1fr 1fr 1fr; /* <- même grille que l'en-tête */
       gap: 12px;
-      align-items: center;
+      align-items: start;
       padding: 12px 12px;
       border-radius: 12px;
       background: rgba(0,0,0,.35);
       border: 1px solid rgba(255,255,255,.08);
     }
+    .row div{
+  word-break: break-word;
+}
+    .row div,
+.colsHead div{
+  text-align: left;
+}
 
     /* Fonction colorée + pas de retour à la ligne */
     .role{
