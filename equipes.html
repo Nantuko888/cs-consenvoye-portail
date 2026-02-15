@@ -21,6 +21,10 @@
 
       --line: rgba(255,255,255,.25);
       --roleColor: rgba(255,200,120,.95);
+
+      --chefYellow: rgba(255,190,40,.22);
+      --chefYellowBorder: rgba(255,190,40,.65);
+      --chefYellowGlow: rgba(255,190,40,.18);
     }
 
     html, body{
@@ -90,6 +94,7 @@
       margin-bottom: var(--gap);
     }
 
+    /* ✅ Chef de centre en jaune */
     .chef{
       display:flex;
       flex-direction:column;
@@ -97,8 +102,11 @@
       gap: 6px;
       padding: 10px 12px 12px;
       border-radius: 16px;
-      background: rgba(0,0,0,.45);
-      border: 1px solid rgba(255,255,255,.12);
+
+      background: var(--chefYellow);
+      border: 1px solid var(--chefYellowBorder);
+      box-shadow: 0 0 22px var(--chefYellowGlow);
+
       text-transform: uppercase;
       font-weight: 1000;
       letter-spacing: .8px;
@@ -108,7 +116,7 @@
       text-transform:none;
       letter-spacing:0;
       font-weight: 800;
-      opacity:.92;
+      opacity:.95;
       font-size: 14px;
     }
 
@@ -143,7 +151,7 @@
       align-items:center;
       justify-content: space-between;
       gap: 10px;
-      padding: 10px 12px; /* ✅ plus petit */
+      padding: 10px 12px; /* plus petit */
       border-radius: 16px;
       background: rgba(0,0,0,.35);
       border: 1px solid rgba(255,255,255,.12);
@@ -237,7 +245,7 @@
 
     .colsHead{
       display:grid;
-      grid-template-columns: 1fr 1fr 1fr; /* ✅ équilibré */
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 12px;
       align-items:center;
       padding: 12px 12px;
@@ -252,11 +260,12 @@
 
     .rows{ display:flex; flex-direction:column; gap: 10px; }
 
+    /* ✅ pour gérer les noms sur 2 lignes -> align-items:start */
     .row{
       display:grid;
-      grid-template-columns: 1fr 1fr 1fr; /* ✅ identique */
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 12px;
-      align-items:center;
+      align-items: start;
       padding: 12px 12px;
       border-radius: 14px;
       background: rgba(0,0,0,.35);
@@ -267,24 +276,36 @@
       font-weight: 1000;
       color: var(--roleColor);
       text-align:left;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
+
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      word-break: break-word;
+      line-height: 1.2;
     }
+
+    /* ✅ NOM EN ENTIER (plus d’ellipse) */
     .person{
       font-weight: 800;
       text-align:center;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
+
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      word-break: break-word;
+      line-height: 1.2;
     }
+
     .comp{
       font-weight: 800;
       opacity:.95;
       text-align:right;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
+
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      word-break: break-word;
+      line-height: 1.2;
     }
 
     .empty{
@@ -300,11 +321,6 @@
       margin-top: 10px;
       color: var(--muted);
       font-size: 14px;
-    }
-
-    @media (max-width: 380px){
-      .role, .person, .comp{ white-space: normal; }
-      .row{ align-items: start; }
     }
   </style>
 </head>
@@ -484,11 +500,10 @@
       const is1 = (t === "1");
       const is2 = (t === "2");
 
-      const currentlyOpen1 = !$card1.classList.contains("hidden");
-      const currentlyOpen2 = !$card2.classList.contains("hidden");
+      const open1 = !$card1.classList.contains("hidden");
+      const open2 = !$card2.classList.contains("hidden");
 
-      // Si on reclique sur la même -> on ferme
-      if ((is1 && currentlyOpen1) || (is2 && currentlyOpen2)){
+      if ((is1 && open1) || (is2 && open2)){
         $card1.classList.add("hidden");
         $card2.classList.add("hidden");
         $branch1.classList.remove("isActive");
@@ -498,7 +513,6 @@
         return;
       }
 
-      // Sinon : on ouvre celle cliquée et on ferme l’autre
       $card1.classList.toggle("hidden", !is1);
       $card2.classList.toggle("hidden", !is2);
 
@@ -515,7 +529,6 @@
     $branch1.addEventListener("click", ()=> toggleTeam("1"));
     $branch2.addEventListener("click", ()=> toggleTeam("2"));
 
-    // JSONP
     function loadTeams(){
       $status.textContent = "Chargement…";
 
@@ -551,8 +564,6 @@
     }
 
     document.getElementById("refreshBtn").addEventListener("click", loadTeams);
-
-    // Au départ : cartes cachées (tu cliques sur une équipe)
     loadTeams();
   </script>
 </body>
