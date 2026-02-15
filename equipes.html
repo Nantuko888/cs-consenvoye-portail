@@ -425,7 +425,7 @@
     // Responsable, Adjoint, CA, CE, Équipier, ISP, Apprenant, puis le reste
     function roleRank(role){
       const r = String(role || "").trim().toLowerCase();
-      if (r.includes("responsable")) return 1;
+      if (r.includes("resp.")) return 1;
       if (r.includes("adjoint")) return 2;
       if (r === "ca" || r.startsWith("ca ") || r.includes(" ca")) return 3;
       if (r === "ce" || r.startsWith("ce ") || r.includes(" ce")) return 4;
