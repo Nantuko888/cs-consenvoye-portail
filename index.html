@@ -1,115 +1,95 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CS Consenvoye</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CS Consenvoye</title>
 
-  <style>
-    * { box-sizing: border-box; }
+<style>
+* { box-sizing: border-box; }
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden; /* ✅ pas de scroll */
-      font-family: Arial, sans-serif;
-    }
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* PAS DE SCROLL */
+}
 
-    body {
-      position: relative;
-      background: url("background.png") no-repeat center top;
-      background-size: cover;
-      background-color: #000; /* fallback */
-    }
+body {
+  background: url("background.png") no-repeat center center;
+  background-size: cover;
+  background-color: #000;
+}
 
-    /* ===== TITRE FIXE (plus haut + plus gros) ===== */
-    .header {
-      position: fixed;
-      top: 6px; /* ✅ plus haut */
-      left: 50%;
-      transform: translateX(-50%);
-      width: 98vw;
-      max-width: 900px; /* ✅ plus gros */
-      z-index: 10;
-      text-align: center;
-      pointer-events: none; /* ne gêne pas les clics */
-    }
-    .header img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+/* ===== TITRE ===== */
+.header {
+  position: fixed;
+  top: -10px; /* on remonte VRAIMENT */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92vw; /* légèrement réduit */
+  max-width: 600px; /* plus équilibré */
+  z-index: 10;
+  pointer-events: none;
+}
 
-    /* ===== ZONE BOUTONS FIXE ===== */
-    .buttons-area {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      top: 160px; /* position sous le titre */
-      width: min(92vw, 520px);
-      z-index: 5;
-    }
+.header img {
+  width: 100%;
+  display: block;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px; /* espace entre boutons */
-      justify-items: center;
-      align-items: center;
-    }
+/* ===== BOUTONS ===== */
+.buttons {
+  position: fixed;
+  top: 190px; /* descend un peu sous le titre */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92vw;
+  max-width: 420px;
+}
 
-    .grid a {
-      display: block;
-      text-decoration: none;
-    }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  justify-items: center;
+}
 
-    .grid img {
-      width: 150px; /* ✅ légèrement plus petits */
-      max-width: 38vw; /* s’adapte au mobile */
-      height: auto;
-      display: block;
-    }
+.grid img {
+  width: 135px; /* plus petits */
+  height: auto;
+  display: block;
+}
 
-    /* dernière ligne : si tu as 7 boutons, le dernier peut être centré */
-    .grid a:last-child {
-      grid-column: 1 / -1;
-      justify-self: center;
-    }
+/* dernier bouton centré */
+.grid a:last-child {
+  grid-column: 1 / -1;
+  justify-self: center;
+}
 
-    /* Option : petits écrans */
-    @media (max-width: 380px) {
-      .buttons-area { top: 150px; }
-      .grid img { width: 140px; }
-      .grid { gap: 14px; }
-    }
-  </style>
+</style>
 </head>
 
 <body>
 
-  <!-- TITRE -->
-  <div class="header">
-    <img src="titre.png" alt="Bienvenue sur CS Consenvoye">
+<div class="header">
+  <img src="titre.png" alt="Bienvenue sur CS Consenvoye">
+</div>
+
+<div class="buttons">
+  <div class="grid">
+    <a href="entretien.html"><img src="entretien.png"></a>
+    <a href="documents.html"><img src="documents.png"></a>
+
+    <a href="organisation.html"><img src="organigramme.png"></a>
+    <a href="informations.html"><img src="informations.png"></a>
+
+    <a href="planning.html"><img src="planning.png"></a>
+    <a href="equipes.html"><img src="equipes.png"></a>
+
+    <a href="book.html"><img src="book.png"></a>
   </div>
-
-  <!-- BOUTONS -->
-  <div class="buttons-area">
-    <div class="grid">
-      <a href="entretien.html"><img src="entretien.png" alt="Entretien"></a>
-      <a href="documents.html"><img src="documents.png" alt="Documents"></a>
-
-      <a href="organisation.html"><img src="organigramme.png" alt="Organigramme"></a>
-      <a href="informations.html"><img src="informations.png" alt="Informations"></a>
-
-      <a href="planning.html"><img src="planning.png" alt="Planning"></a>
-      <a href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
-
-      <a href="book.html"><img src="book.png" alt="Book"></a>
-      <a href="galerie.html"><img src="galerie.png" alt="Galerie"></a>
-    </div>
-  </div>
+</div>
 
 </body>
 </html>
