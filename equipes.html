@@ -282,11 +282,13 @@ function roleRank(role){
   if (r.includes("adjoint")) return 2;
   if (r === "ca" || r.includes("ca ")) return 3;
   if (r === "ce" || r.includes("ce ")) return 4;
-  if (r.includes("isp")) return 5;
-  if (r.includes("apprenant")) return 6;
+  if (r.includes("equipier") || r.includes("équipier")) return 5;
+  if (r.includes("isp")) return 6;
+  if (r.includes("apprenant")) return 7;
 
-  return 999; // tout le reste en bas
+  return 999;
 }
+
 
 function sortRows(rows){
   return rows.slice().sort((a,b)=>{
