@@ -23,6 +23,13 @@
       --titleW: min(92vw, 560px);
     }
 
+    /* Grands téléphones (S24 Ultra, etc.) : boutons un peu plus gros */
+@media (min-width: 420px) and (max-width: 520px) and (min-height: 800px) {
+  :root{
+    --btn: clamp(120px, 22vw, 175px);
+  }
+}
+
     html, body{
       height: 100%;
       margin: 0;
