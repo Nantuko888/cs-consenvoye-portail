@@ -1,141 +1,136 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>CS Consenvoye</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CS Consenvoye</title>
 
-  <style>
-    :root{
-      /* Largeur max “zone centrale” */
-      --maxw: 680px;
+<style>
 
-      /* Taille icône : plus petit, responsive */
-      --btn: clamp(170px, 32vw, 240px);
+:root{
+  --maxw: 700px;
 
-      /* Espacement */
-      --gap: clamp(12px, 3.2vw, 18px);
+  /* Taille boutons — vraie adaptation */
+  --btn: clamp(140px, 26vw, 220px);
 
-      /* Marge haute (pour mettre le titre + haut) */
-      --titleTop: calc(env(safe-area-inset-top) + 6px);
+  --gap: clamp(14px, 3vw, 22px);
 
-      /* Taille titre (plus gros) */
-      --titleW: min(92vw, 560px);
-    }
+  --titleW: min(92vw, 650px);
+}
 
-    /* Grands téléphones (S24 Ultra, etc.) : boutons un peu plus gros */
-@media (min-width: 420px) and (max-width: 520px) and (min-height: 800px) {
+/* Reset */
+html, body{
+  margin:0;
+  padding:0;
+  height:100%;
+  overflow:hidden; /* AUCUN SCROLL */
+  background:#000;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto;
+}
+
+/* Background FIXE */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:url("background.png") center top / cover no-repeat;
+  z-index:0;
+}
+
+/* Layout principal */
+.wrap{
+  position:fixed;
+  inset:0;
+  z-index:1;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+/* Titre */
+.title{
+  margin-top:12px; /* plus haut */
+  width:var(--titleW);
+  pointer-events:none;
+  user-select:none;
+}
+
+/* Grille */
+.grid{
+  width:min(94vw, var(--maxw));
+  margin-top:20px;
+
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:var(--gap);
+  justify-items:center;
+}
+
+/* Boutons */
+.btn{
+  width:var(--btn);
+  height:var(--btn);
+  display:block;
+  text-decoration:none;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.btn img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+
+/* Grands téléphones (S24 Ultra etc.) */
+@media (min-width:420px){
   :root{
-    --btn: clamp(120px, 22vw, 175px);
+    --btn: clamp(160px, 28vw, 240px);
   }
 }
 
-    html, body{
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: auto; /* IMPORTANT : empêche le scroll */
-      background: #000;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
+/* Tablettes */
+@media (min-width:768px){
+  :root{
+    --btn: clamp(160px, 18vw, 220px);
+    --maxw: 800px;
+  }
+}
 
-    /* Background FIXE (ne bouge jamais, meilleur que background-attachment:fixed sur Android) */
-    body::before{
-      content:"";
-      position: fixed;
-      inset: 0;
-      background: url("background.png") center top / cover no-repeat;
-      transform: translateZ(0);
-      z-index: 0;
-    }
+/* Petits écrans bas */
+@media (max-height:720px){
+  :root{
+    --btn: clamp(110px, 22vw, 160px);
+  }
+}
 
-    /* Conteneur FIXE plein écran */
-    .wrap{
-      position: fixed;
-      inset: 0;
-      z-index: 1;
-      display: grid;
-      grid-template-rows: auto 1fr;
-      align-items: start;
-      justify-items: center;
-      padding-left: env(safe-area-inset-left);
-      padding-right: env(safe-area-inset-right);
-    }
-
-    /* Titre FIXE */
-    .title{
-      margin-top: var(--titleTop);
-      width: var(--titleW);
-      display: block;
-      height: auto;
-      pointer-events: none; /* évite les clics dessus */
-      user-select: none;
-    }
-
-    /* Zone des boutons (reste visible, pas de scroll) */
-    .grid{
-      width: min(92vw, var(--maxw));
-      margin-top: clamp(10px, 2.2vw, 18px);
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--gap);
-      align-content: start;
-      justify-items: center;
-    }
-
-    .btn{
-      width: var(--btn);
-      height: var(--btn);
-      display: block;
-      text-decoration: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .btn img{
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      /* PAS DE HALO : rien ici */
-    }
-
-    /* Tablettes / grands écrans : un peu plus grand */
-    @media (min-width: 700px){
-      :root{
-        --btn: clamp(110px, 14vw, 170px);
-        --maxw: 640px;
-        --titleW: min(85vw, 650px);
-      }
-    }
-
-    /* Petits écrans très bas : réduire un poil */
-    @media (max-height: 720px){
-      :root{
-        --btn: clamp(84px, 18vw, 125px);
-      }
-    }
-  </style>
+</style>
 </head>
 
 <body>
-  <main class="wrap">
-    <!-- Titre (FIXE) -->
-    <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
 
-    <!-- Boutons (FIXES) -->
-    <section class="grid" aria-label="Menu">
-      <a class="btn" href="entretien.html"><img src="entretien.png" alt="Entretien"></a>
-      <a class="btn" href="documents.html"><img src="documents.png" alt="Documents"></a>
+<main class="wrap">
 
-      <a class="btn" href="organisation.html"><img src="organigramme.png" alt="Organigramme"></a>
-      <a class="btn" href="informations.html"><img src="informations.png" alt="Informations"></a>
+<img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
 
-      <a class="btn" href="planning.html"><img src="planning.png" alt="Planning"></a>
-      <a class="btn" href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
+<section class="grid">
 
-      <a class="btn" href="book.html"><img src="book.png" alt="Book"></a>
-      <a class="btn" href="galerie.html"><img src="galerie.png" alt="Galerie"></a>
-    </section>
-  </main>
+<a class="btn" href="entretien.html"><img src="entretien.png" alt="Entretien"></a>
+<a class="btn" href="documents.html"><img src="documents.png" alt="Documents"></a>
+
+<a class="btn" href="organisation.html"><img src="organigramme.png" alt="Organigramme"></a>
+<a class="btn" href="informations.html"><img src="informations.png" alt="Informations"></a>
+
+<a class="btn" href="planning.html"><img src="planning.png" alt="Planning"></a>
+<a class="btn" href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
+
+<a class="btn" href="book.html"><img src="book.png" alt="Book"></a>
+<a class="btn" href="galerie.html"><img src="galerie.png" alt="Galerie"></a>
+
+</section>
+
+</main>
+
 </body>
 </html>
