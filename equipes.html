@@ -274,6 +274,32 @@
       }
       return { fonction: "", nom: String(x ?? "").trim(), comp: "" };
     }
+    // --- TRI PERSONNALISÉ PAR FONCTION ---
+function roleRank(role){
+  const r = String(role || "").trim().toLowerCase();
+
+  if (r.includes("responsable")) return 1;
+  if (r.includes("adjoint")) return 2;
+  if (r === "ca" || r.includes("ca ")) return 3;
+  if (r === "ce" || r.includes("ce ")) return 4;
+  if (r.includes("isp")) return 5;
+  if (r.includes("apprenant")) return 6;
+
+  return 999; // tout le reste en bas
+}
+
+function sortRows(rows){
+  return rows.slice().sort((a,b)=>{
+    const ra = roleRank(a.fonction);
+    const rb = roleRank(b.fonction);
+
+    if (ra !== rb) return ra - rb;
+
+    // Si même fonction → tri par nom
+    return a.nom.localeCompare(b.nom, "fr");
+  });
+}
+
 
     function renderTeam(container, emptyEl, countEl, arr){
       container.innerHTML = "";
@@ -288,7 +314,7 @@
       }
       emptyEl.style.display = "none";
 
-      for (const r of rows){
+      for (const r of sortrows(rows)){
         const row = document.createElement("div");
         row.className = "row";
 
