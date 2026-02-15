@@ -7,24 +7,24 @@
 
   <style>
     :root{
-      --maxw: 920px;
-      --pad: clamp(12px, 3.5vw, 22px);
-      --gap: clamp(12px, 3vw, 18px);
+      --maxw: 980px;
+      --pad: clamp(14px, 4vw, 28px);
+      --gap: clamp(12px, 3vw, 22px);
 
-      --card: rgba(0,0,0,.52);
-      --stroke: rgba(255,140,0,.35);
-
+      --card: rgba(0,0,0,.55);
+      --stroke: rgba(255,140,0,.45);
       --txt: rgba(255,255,255,.92);
       --muted: rgba(255,255,255,.70);
 
-      --blue: #0b62c7;
-      --orange: #f08b1a;
+      --blue: #1976d2;
+      --orange: #f28c1b;
+      --chip: rgba(0,0,0,.25);
 
-      --rowGap: 10px;
-      --colGap: 12px;
+      --line: rgba(255,255,255,.30);
+      --rowBg: rgba(0,0,0,.35);
+      --headBg: rgba(255,255,255,.08);
 
-      /* 3 colonnes équilibrées */
-      --cols: 1fr 1fr 1fr;
+      --roleColor: rgba(255,200,120,.95);
     }
 
     html, body{
@@ -33,9 +33,10 @@
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--txt);
       background:#000;
+      -webkit-text-size-adjust: 100%;
     }
 
-    /* Background fixe */
+    /* Background fixe (évite le "scroll" du fond) */
     body::before{
       content:"";
       position: fixed;
@@ -69,7 +70,12 @@
       text-shadow: 0 0 18px rgba(255,120,0,.35);
     }
 
-    .actions{ display:flex; gap:10px; align-items:center; }
+    .actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
     button{
       appearance:none;
       border: 1px solid var(--stroke);
@@ -82,111 +88,8 @@
     }
     button:active{ transform: translateY(1px); }
 
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: var(--gap);
-    }
-    @media (min-width: 780px){
-      .grid{ grid-template-columns: 1fr 1fr; }
-    }
-
-    .card{
-      background: var(--card);
-      border: 1px solid var(--stroke);
-      border-radius: 18px;
-      padding: 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-      backdrop-filter: blur(4px);
-      overflow: hidden;
-    }
-
-    /* Bandeau */
-    .band{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding: 14px 14px; /* un peu plus haut */
-      border-radius: 14px;
-      font-weight: 900;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-    .band.blue{ background: rgba(11,98,199,.92); }
-    .band.orange{ background: rgba(240,139,26,.92); }
-
-    .count{
-      min-width: 34px;
-      height: 34px;
-      display:grid;
-      place-items:center;
-      border-radius: 999px;
-      background: rgba(0,0,0,.25);
-      border: 1px solid rgba(255,255,255,.25);
-      font-weight: 900;
-    }
-
-    /* Entête des colonnes (Fonction / Nom / Comp) */
-    .colsHead{
-      display:grid;
-      grid-template-columns: var(--cols);
-      gap: var(--colGap);
-      align-items: start;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.10);
-      font-weight: 900;
-      letter-spacing: .5px;
-      margin-bottom: 10px;
-    }
-    .colsHead span{ opacity:.95; }
-
-    /* Lignes */
-    .rows{ display:flex; flex-direction:column; gap: var(--rowGap); }
-
-    .row{
-      display:grid;
-      grid-template-columns: var(--cols); /* ✅ 1fr 1fr 1fr */
-      gap: var(--colGap);
-      align-items: start; /* ✅ IMPORTANT : plus de décalage */
-      padding: 12px 12px;
-      border-radius: 12px;
-      background: rgba(0,0,0,.32);
-      border: 1px solid rgba(255,255,255,.08);
-    }
-
-    /* ✅ IMPORTANT : permet aux 1fr de vraiment s’équilibrer */
-    .cell{ min-width: 0; }
-
-    /* Colonnes */
-    .role{
-      font-weight: 900;
-      color: rgba(255,190,95,.95); /* couleur différente */
-      text-transform: none;
-      white-space: normal;
-      overflow-wrap: anywhere;
-    }
-    .name{
-      font-weight: 800;
-      color: rgba(255,255,255,.92);
-      overflow-wrap: anywhere;
-    }
-    .comp{
-      font-weight: 800;
-      color: rgba(255,255,255,.80);
-      overflow-wrap: anywhere;
-    }
-
-    .empty{
-      color: var(--muted);
-      font-style: italic;
-      margin: 8px 0 0 0;
-    }
-
     .status{
-      margin-top: 12px;
+      margin-top: 10px;
       color: var(--muted);
       font-size: 14px;
     }
@@ -195,6 +98,296 @@
       color: rgba(255,200,130,.9);
       font-size: 13px;
     }
+
+    /* ====== ORGANIGRAMME / BRANCHES ====== */
+    .tree{
+      margin: 0 auto var(--gap);
+      max-width: 860px;
+      position: relative;
+    }
+
+    .treeCard{
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      backdrop-filter: blur(4px);
+    }
+
+    .treeTop{
+      display:flex;
+      justify-content:center;
+      margin-bottom: 14px;
+      position: relative;
+    }
+
+    .node{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.45);
+      font-weight: 900;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      user-select:none;
+    }
+
+    .node .sub{
+      opacity:.85;
+      font-weight:800;
+      text-transform:none;
+      letter-spacing: 0;
+    }
+
+    .branches{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      align-items: start;
+      position: relative;
+      padding-top: 14px;
+    }
+
+    /* Ligne verticale sous Chef de centre */
+    .branches::before{
+      content:"";
+      position:absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 18px;
+      background: var(--line);
+      border-radius: 2px;
+    }
+    /* Ligne horizontale qui va vers les 2 branches */
+    .branches::after{
+      content:"";
+      position:absolute;
+      top: 18px;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background: var(--line);
+      border-radius: 2px;
+    }
+
+    .branch{
+      position: relative;
+      padding-top: 16px;
+      display:flex;
+      justify-content:center;
+    }
+
+    /* petite ligne verticale vers chaque bouton branche */
+    .branch::before{
+      content:"";
+      position:absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 18px;
+      background: var(--line);
+      border-radius: 2px;
+    }
+
+    .branchBtn{
+      width: 100%;
+      max-width: 360px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.35);
+      cursor:pointer;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+
+    .branchBtn .left{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .pill{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      flex: 0 0 auto;
+    }
+
+    .count{
+      min-width: 34px;
+      height: 34px;
+      display:grid;
+      place-items:center;
+      border-radius: 999px;
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.16);
+      font-weight: 900;
+    }
+
+    .branchBtn[data-team="1"]{
+      outline: none;
+      box-shadow: 0 0 0 1px rgba(25,118,210,.35) inset;
+    }
+    .branchBtn[data-team="2"]{
+      outline: none;
+      box-shadow: 0 0 0 1px rgba(242,140,27,.35) inset;
+    }
+
+    .branchBtn.isActive[data-team="1"]{
+      background: rgba(25,118,210,.25);
+      border-color: rgba(25,118,210,.55);
+    }
+    .branchBtn.isActive[data-team="2"]{
+      background: rgba(242,140,27,.25);
+      border-color: rgba(242,140,27,.55);
+    }
+
+    /* Mobile : branches en colonne */
+    @media (max-width: 560px){
+      .branches{ grid-template-columns: 1fr; }
+      .branches::after{ left: 50%; right: 50%; } /* on "coupe" la ligne horizontale */
+      .branch{ padding-top: 18px; }
+    }
+
+    /* ====== CARTES ÉQUIPES (tables) ====== */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: var(--gap);
+      margin-top: var(--gap);
+    }
+    @media (min-width: 900px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      backdrop-filter: blur(4px);
+    }
+
+    .band{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 18px 18px; /* un peu plus haut */
+      color: #fff;
+      font-weight: 1000;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .band.blue{ background: linear-gradient(90deg, rgba(25,118,210,1), rgba(25,118,210,.70)); }
+    .band.orange{ background: linear-gradient(90deg, rgba(242,140,27,1), rgba(242,140,27,.70)); }
+
+    .band .badge{
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      display:grid;
+      place-items:center;
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.18);
+      font-weight: 1000;
+    }
+
+    .tableWrap{
+      padding: 14px 14px 16px;
+    }
+
+    /* En-tête colonnes : 3 colonnes équilibrées */
+    .colsHead{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr; /* ✅ équilibré */
+      gap: 12px;
+      align-items:center;
+      padding: 12px 12px;
+      border-radius: 14px;
+      background: var(--headBg);
+      border: 1px solid rgba(255,255,255,.10);
+      font-weight: 1000;
+      letter-spacing: .6px;
+      margin-bottom: 12px;
+    }
+    .colsHead span{ opacity: .95; text-align:center; }
+
+    /* Lignes */
+    .rows{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr; /* ✅ même grille que l'en-tête */
+      gap: 12px;
+      align-items:center;
+      padding: 12px 12px;
+      border-radius: 14px;
+      background: var(--rowBg);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .role{
+      font-weight: 1000;
+      color: var(--roleColor); /* ✅ couleur différente */
+      text-align:left;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+
+    .name{
+      font-weight: 800;
+      text-align:center;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+
+    .comp{
+      font-weight: 800;
+      opacity: .95;
+      text-align:right;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* sur très petit écran : autorise retour à la ligne sur la fonction */
+    @media (max-width: 380px){
+      .role{ white-space: normal; }
+      .name, .comp{ white-space: normal; }
+      .row{ align-items: start; }
+    }
+
+    .empty{
+      color: var(--muted);
+      font-style: italic;
+      margin: 10px 2px 0;
+      display:none;
+    }
+
+    /* Affichage conditionnel */
+    .hidden{ display:none !important; }
   </style>
 </head>
 
@@ -204,46 +397,82 @@
       <h1 class="title">Équipes</h1>
       <div class="actions">
         <button id="refreshBtn">Actualiser</button>
-        <button type="button" onclick="history.back()">Retour</button>
+        <button onclick="history.back()">Retour</button>
       </div>
     </header>
 
-    <div class="grid">
+    <!-- ORGANIGRAMME -->
+    <div class="tree">
+      <div class="treeCard">
+        <div class="treeTop">
+          <div class="node">
+            Chef de centre <span class="sub">(sélectionne une équipe)</span>
+          </div>
+        </div>
 
+        <div class="branches">
+          <div class="branch">
+            <button class="branchBtn" id="branch1" data-team="1" type="button" aria-controls="cardTeam1" aria-expanded="false">
+              <span class="left">
+                <span class="pill" style="background: var(--blue)"></span>
+                <span>Équipe 1</span>
+              </span>
+              <span class="count" id="count1">0</span>
+            </button>
+          </div>
+
+          <div class="branch">
+            <button class="branchBtn" id="branch2" data-team="2" type="button" aria-controls="cardTeam2" aria-expanded="false">
+              <span class="left">
+                <span class="pill" style="background: var(--orange)"></span>
+                <span>Équipe 2</span>
+              </span>
+              <span class="count" id="count2">0</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARTES (cachées tant qu’on ne clique pas) -->
+    <div class="grid">
       <!-- Équipe 1 -->
-      <section class="card">
+      <section class="card hidden" id="cardTeam1">
         <div class="band blue">
           <span>Équipe 1</span>
-          <span class="count" id="count1">0</span>
+          <span class="badge" id="badge1">0</span>
         </div>
 
-        <div class="colsHead">
-          <span>Fonction</span>
-          <span>Nom</span>
-          <span>Comp</span>
-        </div>
+        <div class="tableWrap">
+          <div class="colsHead">
+            <span>Fonction</span>
+            <span>Nom</span>
+            <span>Comp</span>
+          </div>
 
-        <div class="rows" id="rows1"></div>
-        <p class="empty" id="empty1" style="display:none;">Aucune ligne pour le moment.</p>
+          <div class="rows" id="rows1"></div>
+          <p class="empty" id="empty1">Aucun nom pour le moment.</p>
+        </div>
       </section>
 
       <!-- Équipe 2 -->
-      <section class="card">
+      <section class="card hidden" id="cardTeam2">
         <div class="band orange">
           <span>Équipe 2</span>
-          <span class="count" id="count2">0</span>
+          <span class="badge" id="badge2">0</span>
         </div>
 
-        <div class="colsHead">
-          <span>Fonction</span>
-          <span>Nom</span>
-          <span>Comp</span>
-        </div>
+        <div class="tableWrap">
+          <div class="colsHead">
+            <span>Fonction</span>
+            <span>Nom</span>
+            <span>Comp</span>
+          </div>
 
-        <div class="rows" id="rows2"></div>
-        <p class="empty" id="empty2" style="display:none;">Aucune ligne pour le moment.</p>
+          <div class="rows" id="rows2"></div>
+          <p class="empty" id="empty2">Aucun nom pour le moment.</p>
+        </div>
       </section>
-
     </div>
 
     <div class="status" id="status">Chargement…</div>
@@ -251,95 +480,122 @@
   </div>
 
   <script>
-    // ✅ TON URL APPS SCRIPT
+    // ✅ TON URL APPS SCRIPT (JSONP)
     const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+
+    const $status = document.getElementById("status");
 
     const $rows1 = document.getElementById("rows1");
     const $rows2 = document.getElementById("rows2");
     const $empty1 = document.getElementById("empty1");
     const $empty2 = document.getElementById("empty2");
+
     const $count1 = document.getElementById("count1");
     const $count2 = document.getElementById("count2");
-    const $status = document.getElementById("status");
+    const $badge1 = document.getElementById("badge1");
+    const $badge2 = document.getElementById("badge2");
 
-    // Normalise une ligne (supporte: string OU objet)
-    // - si Apps Script renvoie des strings -> on met tout dans "Nom"
-    // - si Apps Script renvoie {fonction, nom, comp} -> on affiche les 3 colonnes
-    function normalizeRow(x){
-      if (x && typeof x === "object"){
-        const fonction = (x.fonction ?? x.role ?? x.fct ?? "").toString().trim();
-        const nom = (x.nom ?? x.name ?? "").toString().trim();
-        const comp = (x.comp ?? x.competences ?? x.competence ?? "").toString().trim();
-        return { fonction, nom, comp };
-      }
-      return { fonction: "", nom: String(x ?? "").trim(), comp: "" };
+    const $branch1 = document.getElementById("branch1");
+    const $branch2 = document.getElementById("branch2");
+    const $card1 = document.getElementById("cardTeam1");
+    const $card2 = document.getElementById("cardTeam2");
+
+    let lastData = null;
+
+    // ===== TRI PERSONNALISÉ PAR FONCTION =====
+    // Ordre demandé :
+    // Responsable, Adjoint, CA, CE, Équipier, ISP, Apprenant, puis le reste
+    function roleRank(role){
+      const r = String(role || "").trim().toLowerCase();
+
+      if (r.includes("responsable")) return 1;
+      if (r.includes("adjoint")) return 2;
+      if (r === "ca" || r.includes("ca ")) return 3;
+      if (r === "ce" || r.includes("ce ")) return 4;
+      if (r.includes("equipier") || r.includes("équipier")) return 5;
+      if (r.includes("isp")) return 6;
+      if (r.includes("apprenant")) return 7;
+
+      return 999;
     }
-    // --- TRI PERSONNALISÉ PAR FONCTION ---
-function roleRank(role){
-  const r = String(role || "").trim().toLowerCase();
 
-  if (r.includes("responsable")) return 1;
-  if (r.includes("adjoint")) return 2;
-  if (r === "ca" || r.includes("ca ")) return 3;
-  if (r === "ce" || r.includes("ce ")) return 4;
-  if (r.includes("equipier") || r.includes("équipier")) return 5;
-  if (r.includes("isp")) return 6;
-  if (r.includes("apprenant")) return 7;
+    function sortRows(rows){
+      return rows.slice().sort((a,b)=>{
+        const ra = roleRank(a.fonction);
+        const rb = roleRank(b.fonction);
+        if (ra !== rb) return ra - rb;
+        // même fonction : tri par nom
+        return String(a.nom || "").localeCompare(String(b.nom || ""), "fr");
+      });
+    }
 
-  return 999;
-}
+    // Rend une équipe dans un conteneur .rows
+    function renderTeam($rows, $empty, $count, $badge, rows){
+      $rows.innerHTML = "";
 
+      const list = Array.isArray(rows) ? rows : [];
+      const sorted = sortRows(list);
 
-function sortRows(rows){
-  return rows.slice().sort((a,b)=>{
-    const ra = roleRank(a.fonction);
-    const rb = roleRank(b.fonction);
+      $count.textContent = String(sorted.length);
+      $badge.textContent = String(sorted.length);
 
-    if (ra !== rb) return ra - rb;
-
-    // Si même fonction → tri par nom
-    return a.nom.localeCompare(b.nom, "fr");
-  });
-}
-
-
-    function renderTeam(container, emptyEl, countEl, arr){
-      container.innerHTML = "";
-      const list = Array.isArray(arr) ? arr : [];
-      const rows = list.map(normalizeRow).filter(r => (r.fonction || r.nom || r.comp));
-
-      countEl.textContent = String(rows.length);
-
-      if (!rows.length){
-        emptyEl.style.display = "block";
+      if (!sorted.length){
+        $empty.style.display = "block";
         return;
       }
-      emptyEl.style.display = "none";
+      $empty.style.display = "none";
 
-      for (const r of sortRows(rows)){
+      for (const r of sorted){
         const row = document.createElement("div");
         row.className = "row";
 
         const c1 = document.createElement("div");
-        c1.className = "cell role";
-        c1.textContent = r.fonction || "—";
+        c1.className = "role";
+        c1.textContent = (r.fonction && String(r.fonction).trim()) ? String(r.fonction).trim() : "—";
 
         const c2 = document.createElement("div");
-        c2.className = "cell name";
-        c2.textContent = r.nom || "—";
+        c2.className = "name";
+        c2.textContent = (r.nom && String(r.nom).trim()) ? String(r.nom).trim() : "—";
 
         const c3 = document.createElement("div");
-        c3.className = "cell comp";
-        c3.textContent = r.comp || "—";
+        c3.className = "comp";
+        c3.textContent = (r.comp && String(r.comp).trim()) ? String(r.comp).trim() : "—";
 
         row.appendChild(c1);
         row.appendChild(c2);
         row.appendChild(c3);
-        container.appendChild(row);
+
+        $rows.appendChild(row);
       }
     }
 
-    // JSONP (anti-CORS)
+    // ===== Affichage par branches =====
+    function showTeam(team){
+      const t = String(team);
+
+      const show1 = (t === "1");
+      const show2 = (t === "2");
+
+      $card1.classList.toggle("hidden", !show1);
+      $card2.classList.toggle("hidden", !show2);
+
+      $branch1.classList.toggle("isActive", show1);
+      $branch2.classList.toggle("isActive", show2);
+
+      $branch1.setAttribute("aria-expanded", show1 ? "true" : "false");
+      $branch2.setAttribute("aria-expanded", show2 ? "true" : "false");
+
+      // scroll doux vers la carte affichée
+      const target = show1 ? $card1 : (show2 ? $card2 : null);
+      if (target){
+        setTimeout(()=>target.scrollIntoView({behavior:"smooth", block:"start"}), 0);
+      }
+    }
+
+    $branch1.addEventListener("click", ()=> showTeam("1"));
+    $branch2.addEventListener("click", ()=> showTeam("2"));
+
+    // ===== JSONP (anti-CORS) =====
     function loadTeams(){
       $status.textContent = "Chargement…";
 
@@ -350,9 +606,11 @@ function sortRows(rows){
         try{
           if (!data || data.ok !== true) throw new Error((data && data.error) ? data.error : "Réponse invalide");
 
-          // ⚠️ IMPORTANT : on n’applique AUCUN tri ici -> ordre = ordre de Sheets / API
-          renderTeam($rows1, $empty1, $count1, data.teams && data.teams["1"]);
-          renderTeam($rows2, $empty2, $count2, data.teams && data.teams["2"]);
+          lastData = data;
+
+          // data.teams["1"] et ["2"] doivent être des tableaux d'objets : {fonction, nom, comp}
+          renderTeam($rows1, $empty1, $count1, $badge1, data.teams && data.teams["1"]);
+          renderTeam($rows2, $empty2, $count2, $badge2, data.teams && data.teams["2"]);
 
           $status.textContent = "OK — Dernière mise à jour : " + (data.updatedAt || "inconnue");
         }catch(err){
@@ -376,6 +634,8 @@ function sortRows(rows){
     }
 
     document.getElementById("refreshBtn").addEventListener("click", loadTeams);
+
+    // Au chargement : on ne montre aucun tableau (tu cliques sur une branche)
     loadTeams();
   </script>
 </body>
