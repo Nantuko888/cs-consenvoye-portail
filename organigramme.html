@@ -1,675 +1,184 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Organigramme - CS Consenvoye</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Organigramme - CS Consenvoye</title>
 
-  <style>
-    :root{
-      --maxw: 980px;
-      --pad: clamp(14px, 4vw, 26px);
-      --gap: clamp(10px, 3vw, 18px);
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#000;
+  color:white;
+  text-align:center;
+}
 
-      --txt: rgba(255,255,255,.94);
-      --muted: rgba(255,255,255,.72);
+/* ======= DIRECTION ======= */
+.direction{
+  padding:30px 15px;
+}
 
-      --card: rgba(0,0,0,.52);
-      --stroke: rgba(255,140,0,.42);
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --glow: 0 0 18px rgba(255,120,0,.25);
+.chef{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:5px;
+}
 
-      --yellow1:#ffd24d; --yellow2:#ff9a2f;
-      --orange1:#ffb04d; --orange2:#ff7a00;
-      --blue1:#46b1ff; --blue2:#1b6cff;
-      --violet1:#b067ff; --violet2:#6d27ff;
-      --pink1:#ff63cf; --pink2:#d600a6;
-      --green1:#79ffb1; --green2:#1ecf7a;
-      --red1:#ff7d7d; --red2:#ff2f2f;
+.chef-name{
+  font-size:18px;
+  margin-bottom:20px;
+}
 
-      --tileH: clamp(86px, 12vw, 110px); /* hauteur harmonieuse des pôles */
-    }
+.adjoints{
+  display:flex;
+  justify-content:space-between;
+  max-width:600px;
+  margin:0 auto;
+  font-size:16px;
+}
 
-    html, body{
-      margin:0; padding:0; min-height:100%;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--txt);
-      background:#000;
-    }
+/* ======= POLES ======= */
+.poles{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
+  gap:20px;
+  padding:30px;
+  max-width:900px;
+  margin:0 auto;
+}
 
-    /* background fixe */
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      background: url("background.png") center top / cover no-repeat;
-      z-index:0;
-      transform: translate3d(0,0,0);
-      will-change: transform;
-      pointer-events:none;
-    }
+.pole{
+  background:linear-gradient(145deg,#1a1a1a,#111);
+  border:1px solid #ff6a00;
+  border-radius:15px;
+  padding:25px 10px;
+  cursor:pointer;
+  transition:0.2s;
+}
 
-    .wrap{
-      position:relative;
-      z-index:1;
-      max-width: var(--maxw);
-      margin: 0 auto;
-      padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad)
-               calc(env(safe-area-inset-bottom) + var(--pad));
-    }
+.pole:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 15px #ff6a00;
+}
 
-    header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom: var(--gap);
-    }
+.pole h3{
+  margin:0;
+  font-size:16px;
+}
 
-    .title{
-      margin:0;
-      font-size: clamp(22px, 3.2vw, 34px);
-      letter-spacing:.5px;
-      text-shadow: var(--glow);
-    }
+/* ======= OVERLAY PLEIN ECRAN ======= */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:none;
+  flex-direction:column;
+  padding:20px;
+  overflow:auto;
+}
 
-    .actions{ display:flex; gap:10px; align-items:center; }
-    button{
-      appearance:none;
-      border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.45);
-      color: var(--txt);
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-weight: 900;
-      cursor:pointer;
-    }
-    button:active{ transform: translateY(1px); }
+.overlay h2{
+  margin-top:40px;
+}
 
-    /* ===== DIRECTION (mise en page demandée) ===== */
-    .dirWrap{
-      border-radius: 18px;
-      overflow:hidden;
-      border: 1px solid rgba(255,220,80,.55);
-      box-shadow: var(--shadow);
-      background: rgba(0,0,0,.45);
-      margin-bottom: var(--gap);
-    }
-    .dirHead{
-      background: linear-gradient(90deg, var(--yellow1), var(--yellow2));
-      color:#1a1200;
-      font-weight: 1000;
-      letter-spacing: 1px;
-      padding: 14px 16px;
-      text-transform: uppercase;
-      text-align:center;
-    }
-    .dirBody{
-      padding: 14px 14px 16px;
-      display:grid;
-      gap: 12px;
-    }
-    .chiefCard{
-      text-align:center;
-      padding: 12px 12px;
-      border-radius: 14px;
-      background: rgba(0,0,0,.28);
-      border: 1px solid rgba(255,255,255,.08);
-    }
-    .chiefRole{
-      font-weight: 1000;
-      color: rgba(255,200,130,.95);
-      text-transform: uppercase;
-      letter-spacing: .7px;
-      font-size: 13px;
-    }
-    .chiefName{
-      margin-top: 6px;
-      font-weight: 1000;
-      font-size: 18px;
-      word-break: break-word;
-    }
+.close{
+  position:absolute;
+  top:15px;
+  right:20px;
+  font-size:24px;
+  cursor:pointer;
+}
 
-    .adjGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .adjCard{
-      padding: 12px 12px;
-      border-radius: 14px;
-      background: rgba(0,0,0,.28);
-      border: 1px solid rgba(255,255,255,.08);
-      text-align:center;
-    }
-    .adjRole{
-      font-weight: 1000;
-      color: rgba(255,200,130,.95);
-      text-transform: uppercase;
-      letter-spacing: .6px;
-      font-size: 12.5px;
-    }
-    .adjName{
-      margin-top: 6px;
-      font-weight: 950;
-      word-break: break-word;
-    }
-
-    .hint{
-      margin: 2px 0 var(--gap);
-      font-size: 13px;
-      color: rgba(255,200,130,.9);
-    }
-
-    /* ===== POLES (harmonieux + pas de texte) ===== */
-    .poles{
-      display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--gap);
-    }
-    @media (min-width: 800px){
-      .poles{ grid-template-columns: repeat(4, 1fr); }
-    }
-
-    .poleBtn{
-      display:block;
-      width:100%;
-      border:none;
-      background: transparent;
-      padding:0;
-      cursor:pointer;
-      text-align:left;
-    }
-
-    .poleCard{
-      height: var(--tileH);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: 10px 12px;
-      border-radius: 18px;
-      overflow:hidden;
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: 0 10px 22px rgba(0,0,0,.30);
-      transition: transform .08s;
-      position: relative;
-    }
-    .poleBtn:active .poleCard{ transform: translateY(1px); }
-
-    .poleCard::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      opacity:.95;
-    }
-
-    .poleTitle{
-      position:relative;
-      z-index:1;
-      text-align:center;
-      font-weight: 1000;
-      letter-spacing: .6px;
-      text-transform: uppercase;
-      color: rgba(0,0,0,.9);
-      padding: 8px 10px;
-      border-radius: 14px;
-      background: rgba(0,0,0,.22);
-      border: 1px solid rgba(255,255,255,.18);
-      color: rgba(255,255,255,.95);
-      text-shadow: 0 0 10px rgba(0,0,0,.35);
-      line-height: 1.1;
-    }
-
-    /* couleurs */
-    .c-tech::before{ background: linear-gradient(90deg, var(--orange1), var(--orange2)); }
-    .c-ope::before{ background: linear-gradient(90deg, #ffee66, #ffcc00); }
-    .c-form::before{ background: linear-gradient(90deg, var(--violet1), var(--violet2)); }
-    .c-recr::before{ background: linear-gradient(90deg, var(--pink1), var(--pink2)); }
-    .c-amical::before{ background: linear-gradient(90deg, var(--green1), var(--green2)); }
-    .c-soutien::before{ background: linear-gradient(90deg, var(--blue1), var(--blue2)); }
-    .c-jsp::before{ background: linear-gradient(90deg, var(--red1), var(--red2)); }
-
-    /* ===== OVERLAY plein écran ===== */
-    .overlay{
-      position: fixed;
-      inset: 0;
-      z-index: 999;
-      display:none;
-      background: rgba(0,0,0,.86);
-      backdrop-filter: blur(4px);
-      padding: calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 14px);
-    }
-    .overlay.on{ display:block; }
-
-    .sheet{
-      max-width: 980px;
-      margin: 0 auto;
-      height: 100%;
-      display:flex;
-      flex-direction:column;
-      gap: 12px;
-    }
-
-    .sheetTop{
-      border-radius: 18px;
-      overflow:hidden;
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: var(--shadow);
-    }
-    .sheetHead{
-      padding: 16px 16px;
-      font-weight: 1000;
-      text-transform: uppercase;
-      letter-spacing:.8px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      color: rgba(0,0,0,.9);
-    }
-    .sheetHeadTitle{
-      font-size: 16px;
-      font-weight: 1000;
-      color: rgba(0,0,0,.9);
-      text-shadow:none;
-    }
-    .closeBtn{
-      border: 1px solid rgba(255,255,255,.25);
-      background: rgba(0,0,0,.35);
-      color: var(--txt);
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-weight: 1000;
-      cursor:pointer;
-    }
-
-    .sheetBody{
-      background: rgba(0,0,0,.55);
-      padding: 12px 12px 14px;
-      overflow:auto;
-      border-top: 1px solid rgba(255,255,255,.10);
-      border-radius: 0 0 18px 18px;
-    }
-
-    /* Sous-pôles (catégories cliquables) */
-    .subPole{
-      border-radius: 16px;
-      overflow:hidden;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.30);
-      margin-bottom: 10px;
-    }
-
-    .subBtn{
-      width:100%;
-      border: none;
-      background: rgba(0,0,0,.22);
-      color: var(--txt);
-      padding: 12px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      font-weight: 1000;
-      cursor:pointer;
-      text-align:left;
-    }
-
-    .subBtn .left{
-      display:flex;
-      flex-direction:column;
-      gap: 2px;
-    }
-    .subTitle{
-      font-weight: 1000;
-      letter-spacing: .4px;
-    }
-    .subMeta{
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 800;
-    }
-
-    .chev{
-      width: 34px;
-      height: 30px;
-      border-radius: 999px;
-      display:grid;
-      place-items:center;
-      background: rgba(0,0,0,.25);
-      border: 1px solid rgba(255,255,255,.14);
-      font-weight: 1000;
-    }
-
-    .subBody{
-      padding: 10px 12px 12px;
-      display:none;
-      border-top: 1px solid rgba(255,255,255,.08);
-    }
-    .subBody.on{ display:block; }
-
-    /* Liste Fonction / Nom (sans compétences) */
-    .thead, .trow{
-      display:grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 10px;
-      align-items:start;
-    }
-    .thead{
-      padding: 10px 10px;
-      border-radius: 14px;
-      background: rgba(255,140,0,.12);
-      border: 1px solid rgba(255,140,0,.35);
-      font-weight: 1000;
-      color: rgba(255,220,160,.95);
-      text-transform: uppercase;
-      letter-spacing: .7px;
-      font-size: 12px;
-      margin-bottom: 8px;
-    }
-    .trow{
-      padding: 10px 10px;
-      border-radius: 14px;
-      background: rgba(0,0,0,.25);
-      border: 1px solid rgba(255,255,255,.08);
-      font-weight: 850;
-      margin-bottom: 8px;
-    }
-    .cellRole{ color: rgba(255,200,130,.95); font-weight: 1000; word-break: break-word; }
-    .cellName{ word-break: break-word; }
-
-    @media (max-width: 380px){
-      .thead, .trow{ grid-template-columns: 1fr; }
-      .adjGrid{ grid-template-columns: 1fr; }
-    }
-  </style>
+.subpole{
+  margin:15px 0;
+  padding:15px;
+  border:1px solid #ff6a00;
+  border-radius:10px;
+}
+</style>
 </head>
 
 <body>
-  <div class="wrap">
-    <header>
-      <h1 class="title">Organigramme</h1>
-      <div class="actions">
-        <button type="button" onclick="history.back()">Retour</button>
-      </div>
-    </header>
 
-    <!-- DIRECTION -->
-    <section class="dirWrap" aria-label="Direction">
-      <div class="dirHead">Direction du CS Consenvoye</div>
-      <div class="dirBody">
-        <div class="chiefCard">
-          <div class="chiefRole">Chef de centre</div>
-          <div class="chiefName" id="chiefName">ADC Vénante Pierre</div>
-        </div>
+<!-- ======= DIRECTION ======= -->
+<div class="direction">
+  <div class="chef">Chef de centre</div>
+  <div class="chef-name">Nom à modifier</div>
 
-        <div class="adjGrid">
-          <div class="adjCard">
-            <div class="adjRole">1er adjoint</div>
-            <div class="adjName" id="adj1Name">—</div>
-          </div>
-          <div class="adjCard">
-            <div class="adjRole">2ème adjoint</div>
-            <div class="adjName" id="adj2Name">—</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="hint">Clique sur un pôle pour afficher ses sous-pôles / catégories.</div>
-
-    <!-- POLES -->
-    <section class="poles" id="polesGrid" aria-label="Pôles"></section>
+  <div class="adjoints">
+    <div>1er adjoint<br>Nom</div>
+    <div>2ème adjoint<br>Nom</div>
   </div>
+</div>
 
-  <!-- OVERLAY plein écran -->
-  <div class="overlay" id="overlay" aria-hidden="true">
-    <div class="sheet">
-      <div class="sheetTop">
-        <div class="sheetHead" id="sheetHead">
-          <div class="sheetHeadTitle" id="sheetTitle">Pôle</div>
-          <button class="closeBtn" type="button" id="closeBtn">Fermer</button>
-        </div>
+<!-- ======= POLES ======= -->
+<div class="poles">
+  <div class="pole" onclick="openPole('operationnel')"><h3>Opérationnel</h3></div>
+  <div class="pole" onclick="openPole('logistique')"><h3>Logistique</h3></div>
+  <div class="pole" onclick="openPole('formation')"><h3>Formation</h3></div>
+  <div class="pole" onclick="openPole('jsp')"><h3>JSP</h3></div>
+  <div class="pole" onclick="openPole('amicale')"><h3>Amicale</h3></div>
+  <div class="pole" onclick="openPole('soutien')"><h3>Équipe de soutien</h3></div>
+</div>
 
-        <div class="sheetBody" id="sheetBody">
-          <!-- sous-pôles injectés ici -->
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- ======= OVERLAY ======= -->
+<div class="overlay" id="overlay">
+  <div class="close" onclick="closePole()">✖</div>
+  <h2 id="poleTitle"></h2>
+  <div id="poleContent"></div>
+</div>
 
-  <script>
-    // =========================
-    // DONNÉES (déjà remplies)
-    // => On branchera Sheets après
-    // =========================
-    const DATA = {
-      direction: {
-        chef: "ADC Vénante Pierre",
-        adj1: "—",
-        adj2: "—"
-      },
+<script>
+const data = {
+  operationnel: {
+    title:"Pôle Opérationnel",
+    subs:["Chef d'agrès","Conducteurs","Équipiers"]
+  },
+  logistique:{
+    title:"Pôle Logistique",
+    subs:["Matériel","Véhicules","Stocks"]
+  },
+  formation:{
+    title:"Pôle Formation",
+    subs:["Responsable formation","Formateurs"]
+  },
+  jsp:{
+    title:"Pôle JSP",
+    subs:["Encadrants","Jeunes SP"]
+  },
+  amicale:{
+    title:"Amicale",
+    subs:["Président","Membres"]
+  },
+  soutien:{
+    title:"Équipe de soutien",
+    subs:["Soutien logistique","Soutien moral"]
+  }
+};
 
-      poles: [
-        {
-          id: "techlog",
-          title: "Groupe Technique & Logistique",
-          colorClass: "c-tech",
-          subpoles: [
-            { title: "Bâtiment", rows: [
-              { role:"Responsable", name:"—" },
-              { role:"Membres", name:"—" }
-            ]},
-            { title: "Équipement / Habillement", rows: [
-              { role:"Responsable", name:"—" },
-              { role:"Membres", name:"—" }
-            ]},
-            { title: "Véhicules / Tickets carburant", rows: [
-              { role:"Responsable", name:"—" },
-              { role:"Membres", name:"—" }
-            ]},
-            { title: "Vérification casques", rows: [
-              { role:"Responsable", name:"—" },
-              { role:"Membres", name:"—" }
-            ]}
-          ]
-        },
+function openPole(key){
+  const overlay=document.getElementById("overlay");
+  const title=document.getElementById("poleTitle");
+  const content=document.getElementById("poleContent");
 
-        {
-          id: "oper",
-          title: "Groupe Opérationnel",
-          colorClass: "c-ope",
-          subpoles: [
-            { title: "DECI / Prévision", rows: [
-              { role:"Responsable", name:"—" },
-              { role:"Membres", name:"—" }
-            ]},
-            { title: "Inventaires / Parcellaires", rows: [
-              { role:"Responsable", name:"—" },
-              { role:"Membres", name:"—" }
-            ]},
-            { title: "Référent VSAV / Inventaire VSAV", rows: [
-              { role:"Responsable", name:"—" },
-              { role:"Membres", name:"—" }
-            ]},
-            { title: "Référent SSSM", rows: [
-              { role:"Responsable", name:"—" },
-              { role:"Membres", name:"—" }
-            ]}
-          ]
-        },
+  title.textContent=data[key].title;
+  content.innerHTML="";
 
-        {
-          id: "form",
-          title: "Groupe Formation / Sport",
-          colorClass: "c-form",
-          subpoles: [
-            { title: "FORACC / ACCPRO / FPS", rows: [
-              { role:"Responsable", name:"—" },
-              { role:"Membres", name:"—" }
-            ]},
-            { title: "Sport", rows: [
-              { role:"Responsable", name:"—" },
-              { role:"Membres", name:"—" }
-            ]}
-          ]
-        },
+  data[key].subs.forEach(sub=>{
+    const div=document.createElement("div");
+    div.className="subpole";
+    div.textContent=sub;
+    content.appendChild(div);
+  });
 
-        {
-          id: "recrut",
-          title: "Recrutement / Volontariat",
-          colorClass: "c-recr",
-          subpoles: [
-            { title: "SPV", rows: [
-              { role:"Responsable", name:"—" },
-              { role:"Membres", name:"—" }
-            ]}
-          ]
-        },
+  overlay.style.display="flex";
+}
 
-        {
-          id: "jsp",
-          title: "JSP",
-          colorClass: "c-jsp",
-          subpoles: [
-            { title: "JSP", rows: [
-              { role:"Responsable JSP", name:"—" },
-              { role:"Encadrement", name:"—" }
-            ]}
-          ]
-        },
+function closePole(){
+  document.getElementById("overlay").style.display="none";
+}
+</script>
 
-        {
-          id: "soutien",
-          title: "Équipe de soutien",
-          colorClass: "c-soutien",
-          subpoles: [
-            { title: "Soutien", rows: [
-              { role:"Référent", name:"—" },
-              { role:"Membres", name:"—" }
-            ]}
-          ]
-        },
-
-        {
-          id: "amicale",
-          title: "Amicale",
-          colorClass: "c-amical",
-          subpoles: [
-            { title: "Bureau", rows: [
-              { role:"Président(e)", name:"—" },
-              { role:"Trésorier", name:"—" },
-              { role:"Secrétaire", name:"—" }
-            ]}
-          ]
-        }
-      ]
-    };
-
-    // Inject direction
-    document.getElementById("chiefName").textContent = DATA.direction.chef || "—";
-    document.getElementById("adj1Name").textContent = DATA.direction.adj1 || "—";
-    document.getElementById("adj2Name").textContent = DATA.direction.adj2 || "—";
-
-    const grid = document.getElementById("polesGrid");
-    const overlay = document.getElementById("overlay");
-    const sheetTitle = document.getElementById("sheetTitle");
-    const sheetHead = document.getElementById("sheetHead");
-    const sheetBody = document.getElementById("sheetBody");
-    const closeBtn = document.getElementById("closeBtn");
-
-    function esc(s){
-      return String(s ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#39;");
-    }
-
-    function openPole(pole){
-      sheetTitle.textContent = pole.title;
-      sheetHead.className = "sheetHead " + pole.colorClass;
-
-      sheetBody.innerHTML = "";
-
-      // Crée les sous-pôles, chacun cliquable
-      (pole.subpoles || []).forEach((sp, idx)=>{
-        const box = document.createElement("div");
-        box.className = "subPole";
-
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "subBtn";
-        btn.innerHTML = `
-          <div class="left">
-            <div class="subTitle">${esc(sp.title)}</div>
-            <div class="subMeta">Cliquer pour afficher</div>
-          </div>
-          <div class="chev">+</div>
-        `;
-
-        const body = document.createElement("div");
-        body.className = "subBody";
-
-        // Table
-        const head = document.createElement("div");
-        head.className = "thead";
-        head.innerHTML = `<div>Fonction</div><div>Nom</div>`;
-        body.appendChild(head);
-
-        (sp.rows || []).forEach(r=>{
-          const row = document.createElement("div");
-          row.className = "trow";
-          row.innerHTML = `
-            <div class="cellRole">${esc(r.role || "—")}</div>
-            <div class="cellName">${esc(r.name || "—")}</div>
-          `;
-          body.appendChild(row);
-        });
-
-        btn.addEventListener("click", ()=>{
-          const isOn = body.classList.toggle("on");
-          btn.querySelector(".chev").textContent = isOn ? "−" : "+";
-        });
-
-        // Option : ouvrir le 1er sous-pôle automatiquement
-        // if (idx === 0) { body.classList.add("on"); btn.querySelector(".chev").textContent="−"; }
-
-        box.appendChild(btn);
-        box.appendChild(body);
-        sheetBody.appendChild(box);
-      });
-
-      overlay.classList.add("on");
-      overlay.setAttribute("aria-hidden","false");
-      document.body.style.overflow = "hidden";
-    }
-
-    function closeOverlay(){
-      overlay.classList.remove("on");
-      overlay.setAttribute("aria-hidden","true");
-      document.body.style.overflow = "";
-    }
-
-    closeBtn.addEventListener("click", closeOverlay);
-    overlay.addEventListener("click", (e)=>{ if(e.target === overlay) closeOverlay(); });
-
-    // Render pôles (harmonieux, sans compteur, sans texte)
-    DATA.poles.forEach(pole=>{
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "poleBtn";
-      btn.addEventListener("click", ()=>openPole(pole));
-
-      btn.innerHTML = `
-        <div class="poleCard ${pole.colorClass}">
-          <div class="poleTitle">${esc(pole.title)}</div>
-        </div>
-      `;
-      grid.appendChild(btn);
-    });
-  </script>
 </body>
 </html>
