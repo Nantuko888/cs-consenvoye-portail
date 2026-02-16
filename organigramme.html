@@ -1,119 +1,331 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Organigramme</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Organigramme - CS Consenvoye</title>
 
-<style>
-body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:#111;
-    color:white;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-}
+  <style>
+    :root{
+      --maxw: 980px;
+      --pad: clamp(14px, 4vw, 26px);
+      --gap: clamp(10px, 3vw, 18px);
+      --card: rgba(0,0,0,.55);
+      --stroke: rgba(255,140,0,.45);
+      --txt: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
 
-.container{
-    width:100%;
-    max-width:1100px;
-    padding:20px;
-}
+      --yellow1: #ffd24d;
+      --yellow2: #ff9a2f;
 
-.block{
-    background:linear-gradient(145deg,#ffb347,#ff6a00);
-    border-radius:15px;
-    padding:15px;
-    text-align:center;
-    font-weight:bold;
-    cursor:pointer;
-    margin:10px auto;
-    width:90%;
-    max-width:400px;
-}
+      --blue1:#2c83ff;
+      --blue2:#145fdc;
 
-.childs{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:20px;
-    margin-top:20px;
-}
+      --orange1:#ffb04d;
+      --orange2:#ff7a00;
 
-.card{
-    background:#222;
-    border-radius:12px;
-    padding:15px;
-    width:280px;
-    transition:0.3s;
-}
+      --violet1:#b067ff;
+      --violet2:#6d27ff;
 
-.card h3{
-    margin-top:0;
-    color:#ffae00;
-}
+      --pink1:#ff63cf;
+      --pink2:#d600a6;
+    }
 
-.hidden{
-    display:none;
-}
+    html, body{
+      margin:0; padding:0;
+      min-height:100%;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--txt);
+      background:#000;
+      overflow-x:hidden;
+    }
 
-.line{
-    width:3px;
-    height:30px;
-    background:#ff6a00;
-    margin:auto;
-}
-</style>
+    /* background fixe (ne bouge pas) */
+    body::before{
+      content:"";
+      position: fixed;
+      inset: 0;
+      background: url("background.png") center top / cover no-repeat;
+      z-index: 0;
+      transform: translateZ(0);
+      will-change: transform;
+    }
+
+    .wrap{
+      position: relative;
+      z-index: 1;
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad)
+               calc(env(safe-area-inset-bottom) + var(--pad));
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: var(--gap);
+    }
+    .title{
+      font-size: clamp(22px, 3.2vw, 34px);
+      margin:0;
+      letter-spacing: .5px;
+      text-shadow: 0 0 18px rgba(255,120,0,.35);
+    }
+
+    .actions{ display:flex; gap:10px; align-items:center; }
+    button{
+      appearance:none;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.45);
+      color: var(--txt);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor:pointer;
+    }
+    button:active{ transform: translateY(1px); }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      backdrop-filter: blur(4px);
+    }
+
+    /* Chef de centre */
+    .chiefBand{
+      border-radius: 18px;
+      overflow:hidden;
+      border: 1px solid rgba(255,220,80,.55);
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      margin-bottom: 14px;
+    }
+    .chiefHead{
+      background: linear-gradient(90deg, var(--yellow1), var(--yellow2));
+      color:#1a1200;
+      font-weight: 1000;
+      letter-spacing: 1px;
+      padding: 14px 16px;
+      text-transform: uppercase;
+      text-align:center;
+    }
+    .chiefBody{
+      padding: 14px 16px;
+      text-align:center;
+      font-weight: 800;
+      background: rgba(0,0,0,.45);
+    }
+
+    /* Branche */
+    .branch{
+      margin-top: 16px;
+    }
+
+    .branchBtn{
+      width:100%;
+      border:none;
+      padding:0;
+      background: transparent;
+      cursor:pointer;
+      text-align:left;
+    }
+
+    .branchTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-weight: 1000;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 10px 26px rgba(0,0,0,.30);
+    }
+
+    .pill{
+      min-width: 36px;
+      height: 32px;
+      border-radius: 999px;
+      display:grid;
+      place-items:center;
+      font-weight: 1000;
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.18);
+    }
+
+    .branchBody{
+      margin-top: 10px;
+      border-radius: 16px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.35);
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      font-weight: 700;
+    }
+    .row:last-child{ border-bottom:none; }
+
+    .row .name{
+      font-weight: 800;
+      opacity:.95;
+    }
+
+    .hint{
+      margin-top: 12px;
+      color: rgba(255,200,130,.9);
+      font-size: 13px;
+    }
+
+    /* couleurs des branches */
+    .b-tech{ background: linear-gradient(90deg, var(--orange1), var(--orange2)); color:#1a0f00; }
+    .b-ope{ background: linear-gradient(90deg, #ffee66, #ffcc00); color:#1a1200; }
+    .b-form{ background: linear-gradient(90deg, var(--violet1), var(--violet2)); color:#0c001a; }
+    .b-recr{ background: linear-gradient(90deg, var(--pink1), var(--pink2)); color:#1a0012; }
+
+    /* animation ouverture */
+    .collapsible{
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .28s ease;
+    }
+    .collapsible.open{
+      max-height: 900px; /* assez grand */
+    }
+
+    /* layout branches en 2 colonnes sur grand écran */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: var(--gap);
+      margin-top: 10px;
+    }
+    @media (min-width: 900px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="wrap">
+    <header>
+      <h1 class="title">Organigramme</h1>
+      <div class="actions">
+        <button onclick="location.reload()">Actualiser</button>
+        <button onclick="history.back()">Retour</button>
+      </div>
+    </header>
 
-<div class="container">
-
-    <div class="block">CHEF DE CENTRE<br><br>ADC Vénante Pierre</div>
-
-    <div class="line"></div>
-
-    <div class="childs">
-
-        <div class="card">
-            <h3>Groupe Technique & Logistique</h3>
-            ADC Sénéchal Benjamin<br>
-            ADC Kolodzieczak Stéphane<br>
-            CPL Gaffard Robin<br>
-            CPL Rogie Florian
-        </div>
-
-        <div class="card">
-            <h3>Groupe Opérationnel</h3>
-            ADC Vénante Pierre<br>
-            SCH Wallarin Hélène<br>
-            SCH Stellato Vincent<br>
-            INF Dur Amélie<br>
-            INF Lepezel Laura
-        </div>
-
-        <div class="card">
-            <h3>Groupe Formation / Sport</h3>
-            ADJ Laleuw Franck<br>
-            ADC Joseph Judaicel<br>
-            SCH Wallarin Hélène<br>
-            CPL Barotte Christopher
-        </div>
-
-        <div class="card">
-            <h3>Groupe Recrutement / Volontariat</h3>
-            ADC Vénante Pierre<br>
-            ADJ Laleuw Franck<br>
-            ADJ Sénéchal Benjamin<br>
-            SA1 Vénante Amélie
-        </div>
-
+    <!-- CHEF DE CENTRE -->
+    <div class="chiefBand">
+      <div class="chiefHead">Chef de Centre</div>
+      <div class="chiefBody">ADC Vénante Pierre</div>
     </div>
 
-</div>
+    <div class="hint">Clique sur un groupe pour afficher / masquer les personnes.</div>
 
+    <div class="grid">
+
+      <!-- TECHNIQUE -->
+      <section class="branch card">
+        <button class="branchBtn" data-target="tech">
+          <div class="branchTop b-tech">
+            <div>Groupe Technique & Logistique</div>
+            <div class="pill" id="count-tech">4</div>
+          </div>
+        </button>
+        <div class="branchBody collapsible" id="tech">
+          <div class="row"><div class="name">ADC Sénéchal Benjamin</div></div>
+          <div class="row"><div class="name">ADC Kolodzieczak Stéphane</div></div>
+          <div class="row"><div class="name">CPL Gaffard Robin</div></div>
+          <div class="row"><div class="name">CPL Rogie Florian</div></div>
+        </div>
+      </section>
+
+      <!-- OPERATIONNEL -->
+      <section class="branch card">
+        <button class="branchBtn" data-target="ope">
+          <div class="branchTop b-ope">
+            <div>Groupe Opérationnel</div>
+            <div class="pill" id="count-ope">5</div>
+          </div>
+        </button>
+        <div class="branchBody collapsible" id="ope">
+          <div class="row"><div class="name">ADC Vénante Pierre</div></div>
+          <div class="row"><div class="name">SCH Wallarin Hélène</div></div>
+          <div class="row"><div class="name">SCH Stellato Vincent</div></div>
+          <div class="row"><div class="name">INF Dur Amélie</div></div>
+          <div class="row"><div class="name">INF Lepezel Laura</div></div>
+        </div>
+      </section>
+
+      <!-- FORMATION / SPORT -->
+      <section class="branch card">
+        <button class="branchBtn" data-target="form">
+          <div class="branchTop b-form">
+            <div>Groupe Formation / Sport</div>
+            <div class="pill" id="count-form">4</div>
+          </div>
+        </button>
+        <div class="branchBody collapsible" id="form">
+          <div class="row"><div class="name">ADJ Laleuw Franck</div></div>
+          <div class="row"><div class="name">ADC Joseph Judaicel</div></div>
+          <div class="row"><div class="name">SCH Wallarin Hélène</div></div>
+          <div class="row"><div class="name">CPL Barotte Christopher</div></div>
+        </div>
+      </section>
+
+      <!-- RECRUTEMENT / VOLONTARIAT -->
+      <section class="branch card">
+        <button class="branchBtn" data-target="recr">
+          <div class="branchTop b-recr">
+            <div>Groupe Recrutement / Volontariat</div>
+            <div class="pill" id="count-recr">4</div>
+          </div>
+        </button>
+        <div class="branchBody collapsible" id="recr">
+          <div class="row"><div class="name">ADC Vénante Pierre</div></div>
+          <div class="row"><div class="name">ADJ Laleuw Franck</div></div>
+          <div class="row"><div class="name">ADJ Sénéchal Benjamin</div></div>
+          <div class="row"><div class="name">SA1 Vénante Amélie</div></div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    // toggle open/close
+    document.querySelectorAll(".branchBtn").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const id = btn.getAttribute("data-target");
+        const el = document.getElementById(id);
+        el.classList.toggle("open");
+      });
+    });
+
+    // calc counts automatically (au cas où tu ajoutes/enlèves des lignes)
+    function setCount(idBody, idCount){
+      const body = document.getElementById(idBody);
+      const count = body.querySelectorAll(".row").length;
+      const pill = document.getElementById(idCount);
+      if (pill) pill.textContent = String(count);
+    }
+    setCount("tech","count-tech");
+    setCount("ope","count-ope");
+    setCount("form","count-form");
+    setCount("recr","count-recr");
+  </script>
 </body>
 </html>
