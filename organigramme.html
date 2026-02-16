@@ -10,50 +10,46 @@
       --maxw: 980px;
       --pad: clamp(14px, 4vw, 26px);
       --gap: clamp(10px, 3vw, 18px);
-      --card: rgba(0,0,0,.55);
-      --stroke: rgba(255,140,0,.45);
-      --txt: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.70);
 
-      --yellow1: #ffd24d;
-      --yellow2: #ff9a2f;
+      --txt: rgba(255,255,255,.94);
+      --muted: rgba(255,255,255,.72);
 
-      --blue1:#2c83ff;
-      --blue2:#145fdc;
+      --card: rgba(0,0,0,.52);
+      --stroke: rgba(255,140,0,.42);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --glow: 0 0 18px rgba(255,120,0,.25);
 
-      --orange1:#ffb04d;
-      --orange2:#ff7a00;
-
-      --violet1:#b067ff;
-      --violet2:#6d27ff;
-
-      --pink1:#ff63cf;
-      --pink2:#d600a6;
+      --yellow1:#ffd24d; --yellow2:#ff9a2f;
+      --orange1:#ffb04d; --orange2:#ff7a00;
+      --blue1:#46b1ff; --blue2:#1b6cff;
+      --violet1:#b067ff; --violet2:#6d27ff;
+      --pink1:#ff63cf; --pink2:#d600a6;
+      --green1:#79ffb1; --green2:#1ecf7a;
+      --red1:#ff7d7d; --red2:#ff2f2f;
     }
 
     html, body{
-      margin:0; padding:0;
-      min-height:100%;
+      margin:0; padding:0; min-height:100%;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--txt);
       background:#000;
-      overflow-x:hidden;
     }
 
-    /* background fixe (ne bouge pas) */
+    /* background fixe */
     body::before{
       content:"";
-      position: fixed;
-      inset: 0;
+      position:fixed;
+      inset:0;
       background: url("background.png") center top / cover no-repeat;
-      z-index: 0;
-      transform: translateZ(0);
+      z-index:0;
+      transform: translate3d(0,0,0);
       will-change: transform;
+      pointer-events:none;
     }
 
     .wrap{
-      position: relative;
-      z-index: 1;
+      position:relative;
+      z-index:1;
       max-width: var(--maxw);
       margin: 0 auto;
       padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad)
@@ -64,14 +60,15 @@
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 12px;
+      gap:12px;
       margin-bottom: var(--gap);
     }
+
     .title{
-      font-size: clamp(22px, 3.2vw, 34px);
       margin:0;
-      letter-spacing: .5px;
-      text-shadow: 0 0 18px rgba(255,120,0,.35);
+      font-size: clamp(22px, 3.2vw, 34px);
+      letter-spacing:.5px;
+      text-shadow: var(--glow);
     }
 
     .actions{ display:flex; gap:10px; align-items:center; }
@@ -82,27 +79,19 @@
       color: var(--txt);
       padding: 10px 12px;
       border-radius: 12px;
-      font-weight: 800;
+      font-weight: 900;
       cursor:pointer;
     }
     button:active{ transform: translateY(1px); }
 
-    .card{
-      background: var(--card);
-      border: 1px solid var(--stroke);
-      border-radius: 18px;
-      padding: 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-      backdrop-filter: blur(4px);
-    }
-
-    /* Chef de centre */
+    /* Direction visible direct */
     .chiefBand{
       border-radius: 18px;
       overflow:hidden;
       border: 1px solid rgba(255,220,80,.55);
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+      margin-bottom: var(--gap);
+      background: rgba(0,0,0,.45);
     }
     .chiefHead{
       background: linear-gradient(90deg, var(--yellow1), var(--yellow2));
@@ -114,105 +103,193 @@
       text-align:center;
     }
     .chiefBody{
-      padding: 14px 16px;
-      text-align:center;
-      font-weight: 800;
-      background: rgba(0,0,0,.45);
+      padding: 14px 16px 16px;
+      display:grid;
+      gap: 10px;
+    }
+    .dirRow{
+      display:grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.08);
+      align-items:start;
+    }
+    .dirRole{ font-weight: 1000; color: rgba(255,200,130,.95); }
+    .dirName{ font-weight: 900; word-break: break-word; }
+
+    .hint{
+      margin: 2px 0 var(--gap);
+      font-size: 13px;
+      color: rgba(255,200,130,.9);
     }
 
-    /* Branche */
-    .branch{
-      margin-top: 16px;
+    /* Grille des pôles (2 par ligne sur mobile, 3/4 sur grands écrans) */
+    .poles{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--gap);
+    }
+    @media (min-width: 800px){
+      .poles{ grid-template-columns: repeat(4, 1fr); }
     }
 
-    .branchBtn{
+    .poleBtn{
+      display:block;
       width:100%;
       border:none;
-      padding:0;
       background: transparent;
+      padding:0;
       cursor:pointer;
       text-align:left;
     }
 
-    .branchTop{
+    .poleCard{
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      overflow:hidden;
+      box-shadow: 0 10px 22px rgba(0,0,0,.30);
+      transition: transform .08s;
+    }
+    .poleBtn:active .poleCard{ transform: translateY(1px); }
+
+    .poleTop{
+      padding: 14px 14px;
+      font-weight: 1000;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      color: rgba(0,0,0,.9);
+    }
+
+    .badge{
+      min-width: 34px;
+      height: 30px;
+      border-radius: 999px;
+      display:grid;
+      place-items:center;
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.18);
+      font-weight: 1000;
+      color: rgba(255,255,255,.92);
+      text-shadow: none;
+    }
+
+    .poleMini{
+      padding: 12px 14px 14px;
+      color: rgba(255,255,255,.9);
+      font-weight: 800;
+      font-size: 13px;
+      background: rgba(0,0,0,.36);
+    }
+
+    /* couleurs */
+    .c-tech{ background: linear-gradient(90deg, var(--orange1), var(--orange2)); }
+    .c-ope{ background: linear-gradient(90deg, #ffee66, #ffcc00); }
+    .c-form{ background: linear-gradient(90deg, var(--violet1), var(--violet2)); }
+    .c-recr{ background: linear-gradient(90deg, var(--pink1), var(--pink2)); }
+    .c-amical{background: linear-gradient(90deg, var(--green1), var(--green2)); }
+    .c-soutien{background: linear-gradient(90deg, var(--blue1), var(--blue2)); }
+    .c-jsp{ background: linear-gradient(90deg, var(--red1), var(--red2)); }
+
+    /* Overlay plein écran */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display:none;
+      background: rgba(0,0,0,.86);
+      backdrop-filter: blur(4px);
+      padding: calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 14px);
+    }
+    .overlay.on{ display:block; }
+
+    .sheet{
+      max-width: 980px;
+      margin: 0 auto;
+      height: 100%;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+
+    .sheetTop{
+      border-radius: 18px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow);
+    }
+    .sheetHead{
+      padding: 16px 16px;
+      font-weight: 1000;
+      text-transform: uppercase;
+      letter-spacing:.8px;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap: 12px;
-      border-radius: 16px;
-      padding: 14px 16px;
+      color: rgba(0,0,0,.9);
+    }
+    .sheetBody{
+      background: rgba(0,0,0,.55);
+      padding: 12px 12px 14px;
+      overflow:auto;
+      border-top: 1px solid rgba(255,255,255,.10);
+      border-radius: 0 0 18px 18px;
+    }
+
+    .closeBtn{
+      border: 1px solid rgba(255,255,255,.25);
+      background: rgba(0,0,0,.35);
+      color: var(--txt);
+      padding: 10px 12px;
+      border-radius: 12px;
       font-weight: 1000;
-      letter-spacing: .6px;
+      cursor:pointer;
+    }
+
+    /* tableau “fonction / nom / compétences” (équilibré) */
+    .table{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .thead, .trow{
+      display:grid;
+      grid-template-columns: 1fr 1.4fr 1.4fr; /* équilibré */
+      gap: 10px;
+      align-items:start;
+    }
+    .thead{
+      padding: 12px 12px;
+      border-radius: 14px;
+      background: rgba(255,140,0,.12);
+      border: 1px solid rgba(255,140,0,.35);
+      font-weight: 1000;
+      color: rgba(255,220,160,.95);
       text-transform: uppercase;
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: 0 10px 26px rgba(0,0,0,.30);
+      letter-spacing: .7px;
+      font-size: 12px;
     }
+    .trow{
+      padding: 12px 12px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.30);
+      border: 1px solid rgba(255,255,255,.08);
+      font-weight: 850;
+    }
+    .cellRole{ color: rgba(255,200,130,.95); font-weight: 1000; word-break: break-word; }
+    .cellName{ word-break: break-word; }
+    .cellComp{ color: rgba(255,255,255,.80); word-break: break-word; }
 
-    .pill{
-      min-width: 36px;
-      height: 32px;
-      border-radius: 999px;
-      display:grid;
-      place-items:center;
-      font-weight: 1000;
-      background: rgba(0,0,0,.35);
-      border: 1px solid rgba(255,255,255,.18);
-    }
-
-    .branchBody{
-      margin-top: 10px;
-      border-radius: 16px;
-      overflow:hidden;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.35);
-    }
-
-    .row{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 6px;
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      font-weight: 700;
-    }
-    .row:last-child{ border-bottom:none; }
-
-    .row .name{
-      font-weight: 800;
-      opacity:.95;
-    }
-
-    .hint{
-      margin-top: 12px;
-      color: rgba(255,200,130,.9);
-      font-size: 13px;
-    }
-
-    /* couleurs des branches */
-    .b-tech{ background: linear-gradient(90deg, var(--orange1), var(--orange2)); color:#1a0f00; }
-    .b-ope{ background: linear-gradient(90deg, #ffee66, #ffcc00); color:#1a1200; }
-    .b-form{ background: linear-gradient(90deg, var(--violet1), var(--violet2)); color:#0c001a; }
-    .b-recr{ background: linear-gradient(90deg, var(--pink1), var(--pink2)); color:#1a0012; }
-
-    /* animation ouverture */
-    .collapsible{
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height .28s ease;
-    }
-    .collapsible.open{
-      max-height: 900px; /* assez grand */
-    }
-
-    /* layout branches en 2 colonnes sur grand écran */
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: var(--gap);
-      margin-top: 10px;
-    }
-    @media (min-width: 900px){
-      .grid{ grid-template-columns: 1fr 1fr; }
+    @media (max-width: 380px){
+      .thead, .trow{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -222,110 +299,223 @@
     <header>
       <h1 class="title">Organigramme</h1>
       <div class="actions">
-        <button onclick="location.reload()">Actualiser</button>
-        <button onclick="history.back()">Retour</button>
+        <button type="button" onclick="history.back()">Retour</button>
       </div>
     </header>
 
-    <!-- CHEF DE CENTRE -->
-    <div class="chiefBand">
-      <div class="chiefHead">Chef de Centre</div>
-      <div class="chiefBody">ADC Vénante Pierre</div>
-    </div>
+    <!-- DIRECTION VISIBLE DIRECT -->
+    <section class="chiefBand" aria-label="Direction">
+      <div class="chiefHead">Direction du CS Consenvoye</div>
+      <div class="chiefBody" id="directionRows"></div>
+    </section>
 
-    <div class="hint">Clique sur un groupe pour afficher / masquer les personnes.</div>
+    <div class="hint">Tout est visible ici. Clique sur un pôle pour l’ouvrir en plein écran.</div>
 
-    <div class="grid">
+    <!-- POLES (2 par ligne sur mobile) -->
+    <section class="poles" id="polesGrid" aria-label="Pôles"></section>
+  </div>
 
-      <!-- TECHNIQUE -->
-      <section class="branch card">
-        <button class="branchBtn" data-target="tech">
-          <div class="branchTop b-tech">
-            <div>Groupe Technique & Logistique</div>
-            <div class="pill" id="count-tech">4</div>
-          </div>
-        </button>
-        <div class="branchBody collapsible" id="tech">
-          <div class="row"><div class="name">ADC Sénéchal Benjamin</div></div>
-          <div class="row"><div class="name">ADC Kolodzieczak Stéphane</div></div>
-          <div class="row"><div class="name">CPL Gaffard Robin</div></div>
-          <div class="row"><div class="name">CPL Rogie Florian</div></div>
+  <!-- OVERLAY plein écran -->
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="sheet">
+      <div class="sheetTop" id="sheetTop">
+        <div class="sheetHead" id="sheetHead">
+          <div id="sheetTitle">Pôle</div>
+          <button class="closeBtn" type="button" id="closeBtn">Fermer</button>
         </div>
-      </section>
-
-      <!-- OPERATIONNEL -->
-      <section class="branch card">
-        <button class="branchBtn" data-target="ope">
-          <div class="branchTop b-ope">
-            <div>Groupe Opérationnel</div>
-            <div class="pill" id="count-ope">5</div>
-          </div>
-        </button>
-        <div class="branchBody collapsible" id="ope">
-          <div class="row"><div class="name">ADC Vénante Pierre</div></div>
-          <div class="row"><div class="name">SCH Wallarin Hélène</div></div>
-          <div class="row"><div class="name">SCH Stellato Vincent</div></div>
-          <div class="row"><div class="name">INF Dur Amélie</div></div>
-          <div class="row"><div class="name">INF Lepezel Laura</div></div>
+        <div class="sheetBody">
+          <div class="table" id="sheetTable"></div>
         </div>
-      </section>
-
-      <!-- FORMATION / SPORT -->
-      <section class="branch card">
-        <button class="branchBtn" data-target="form">
-          <div class="branchTop b-form">
-            <div>Groupe Formation / Sport</div>
-            <div class="pill" id="count-form">4</div>
-          </div>
-        </button>
-        <div class="branchBody collapsible" id="form">
-          <div class="row"><div class="name">ADJ Laleuw Franck</div></div>
-          <div class="row"><div class="name">ADC Joseph Judaicel</div></div>
-          <div class="row"><div class="name">SCH Wallarin Hélène</div></div>
-          <div class="row"><div class="name">CPL Barotte Christopher</div></div>
-        </div>
-      </section>
-
-      <!-- RECRUTEMENT / VOLONTARIAT -->
-      <section class="branch card">
-        <button class="branchBtn" data-target="recr">
-          <div class="branchTop b-recr">
-            <div>Groupe Recrutement / Volontariat</div>
-            <div class="pill" id="count-recr">4</div>
-          </div>
-        </button>
-        <div class="branchBody collapsible" id="recr">
-          <div class="row"><div class="name">ADC Vénante Pierre</div></div>
-          <div class="row"><div class="name">ADJ Laleuw Franck</div></div>
-          <div class="row"><div class="name">ADJ Sénéchal Benjamin</div></div>
-          <div class="row"><div class="name">SA1 Vénante Amélie</div></div>
-        </div>
-      </section>
-
+      </div>
     </div>
   </div>
 
   <script>
-    // toggle open/close
-    document.querySelectorAll(".branchBtn").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const id = btn.getAttribute("data-target");
-        const el = document.getElementById(id);
-        el.classList.toggle("open");
-      });
+    // =========================
+    // DONNÉES (remplies)
+    // (On branchera Sheets après)
+    // =========================
+    const DATA = {
+      direction: [
+        { role: "Chef de centre", name: "ADC Vénante Pierre", comp: "" },
+        { role: "Adjoint", name: "—", comp: "" },
+        { role: "Adjoint", name: "—", comp: "" }
+      ],
+      poles: [
+        {
+          id: "techlog",
+          title: "Groupe Technique & Logistique",
+          colorClass: "c-tech",
+          preview: "Bâtiment • Habillement • Véhicules • Casques",
+          rows: [
+            { role: "Responsable", name: "—", comp: "" },
+            { role: "Bâtiment", name: "—", comp: "" },
+            { role: "Équipement / Habillement", name: "—", comp: "" },
+            { role: "Véhicules / Tickets carburant", name: "—", comp: "" },
+            { role: "Vérification casques", name: "—", comp: "" }
+          ]
+        },
+        {
+          id: "oper",
+          title: "Groupe Opérationnel",
+          colorClass: "c-ope",
+          preview: "DECI • VSAV • SSSM",
+          rows: [
+            { role: "Responsable", name: "—", comp: "" },
+            { role: "DECI / Prévision", name: "—", comp: "" },
+            { role: "Inventaires / Parcellaires", name: "—", comp: "" },
+            { role: "Référent VSAV / Inventaire VSAV", name: "—", comp: "" },
+            { role: "Référent SSSM", name: "—", comp: "" }
+          ]
+        },
+        {
+          id: "form",
+          title: "Groupe Formation / Sport",
+          colorClass: "c-form",
+          preview: "FORACC • ACCPRO • FPS • Sport",
+          rows: [
+            { role: "Responsable", name: "—", comp: "" },
+            { role: "FORACC / ACCPRO / FPS", name: "—", comp: "" },
+            { role: "SPORT", name: "—", comp: "" }
+          ]
+        },
+        {
+          id: "recrut",
+          title: "Groupe Recrutement / Volontariat",
+          colorClass: "c-recr",
+          preview: "SPV",
+          rows: [
+            { role: "Responsable", name: "—", comp: "" },
+            { role: "SPV", name: "—", comp: "" }
+          ]
+        },
+        {
+          id: "jsp",
+          title: "JSP",
+          colorClass: "c-jsp",
+          preview: "Jeunes Sapeurs-Pompiers",
+          rows: [
+            { role: "Responsable JSP", name: "—", comp: "" },
+            { role: "Encadrement", name: "—", comp: "" },
+            { role: "Infos", name: "—", comp: "" }
+          ]
+        },
+        {
+          id: "soutien",
+          title: "Équipe de soutien",
+          colorClass: "c-soutien",
+          preview: "Logistique • Divers",
+          rows: [
+            { role: "Référent", name: "—", comp: "" },
+            { role: "Missions", name: "—", comp: "" }
+          ]
+        },
+        {
+          id: "amicale",
+          title: "Amicale",
+          colorClass: "c-amical",
+          preview: "Vie du centre",
+          rows: [
+            { role: "Président(e)", name: "—", comp: "" },
+            { role: "Trésorier", name: "—", comp: "" },
+            { role: "Secrétaire", name: "—", comp: "" }
+          ]
+        }
+      ]
+    };
+
+    // =========================
+    // RENDER DIRECTION (visible)
+    // =========================
+    const dirBox = document.getElementById("directionRows");
+    dirBox.innerHTML = "";
+    DATA.direction.forEach(r => {
+      const div = document.createElement("div");
+      div.className = "dirRow";
+      div.innerHTML = `
+        <div class="dirRole">${escapeHtml(r.role)}</div>
+        <div class="dirName">${escapeHtml(r.name || "—")}</div>
+      `;
+      dirBox.appendChild(div);
     });
 
-    // calc counts automatically (au cas où tu ajoutes/enlèves des lignes)
-    function setCount(idBody, idCount){
-      const body = document.getElementById(idBody);
-      const count = body.querySelectorAll(".row").length;
-      const pill = document.getElementById(idCount);
-      if (pill) pill.textContent = String(count);
+    // =========================
+    // GRID DES POLES
+    // =========================
+    const grid = document.getElementById("polesGrid");
+    const overlay = document.getElementById("overlay");
+    const sheetTitle = document.getElementById("sheetTitle");
+    const sheetHead = document.getElementById("sheetHead");
+    const sheetTable = document.getElementById("sheetTable");
+    const closeBtn = document.getElementById("closeBtn");
+
+    function openPole(pole){
+      sheetTitle.textContent = pole.title;
+
+      // applique la couleur sur le header overlay
+      sheetHead.className = "sheetHead " + pole.colorClass;
+
+      // table
+      sheetTable.innerHTML = "";
+      const head = document.createElement("div");
+      head.className = "thead";
+      head.innerHTML = `<div>Fonction</div><div>Nom</div><div>Compétences</div>`;
+      sheetTable.appendChild(head);
+
+      (pole.rows || []).forEach(r=>{
+        const row = document.createElement("div");
+        row.className = "trow";
+        row.innerHTML = `
+          <div class="cellRole">${escapeHtml(r.role || "—")}</div>
+          <div class="cellName">${escapeHtml(r.name || "—")}</div>
+          <div class="cellComp">${escapeHtml(r.comp || "")}</div>
+        `;
+        sheetTable.appendChild(row);
+      });
+
+      overlay.classList.add("on");
+      overlay.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
     }
-    setCount("tech","count-tech");
-    setCount("ope","count-ope");
-    setCount("form","count-form");
-    setCount("recr","count-recr");
+
+    function closeOverlay(){
+      overlay.classList.remove("on");
+      overlay.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+    }
+
+    closeBtn.addEventListener("click", closeOverlay);
+    overlay.addEventListener("click", (e)=>{
+      if (e.target === overlay) closeOverlay();
+    });
+
+    DATA.poles.forEach(pole=>{
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "poleBtn";
+      btn.addEventListener("click", ()=>openPole(pole));
+
+      const count = (pole.rows || []).length;
+      btn.innerHTML = `
+        <div class="poleCard">
+          <div class="poleTop ${pole.colorClass}">
+            <div>${escapeHtml(pole.title)}</div>
+            <div class="badge">${count}</div>
+          </div>
+          <div class="poleMini">${escapeHtml(pole.preview || "Clique pour ouvrir")}</div>
+        </div>
+      `;
+      grid.appendChild(btn);
+    });
+
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#39;");
+    }
   </script>
 </body>
 </html>
