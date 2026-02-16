@@ -14,17 +14,17 @@
       --txt: rgba(255,255,255,.94);
       --muted: rgba(255,255,255,.72);
 
-      --card: rgba(0,0,0,.50);
-      --card2: rgba(0,0,0,.35);
+      --card: rgba(0,0,0,.52);
       --stroke: rgba(255,140,0,.42);
 
       --glow: 0 0 18px rgba(255,120,0,.25);
       --shadow: 0 10px 30px rgba(0,0,0,.35);
     }
 
-    html, body{ margin:0; padding:0; min-height:100%; background:#000; color:var(--txt); font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
+    html, body{ margin:0; padding:0; min-height:100%; background:#000; color:var(--txt);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
 
-    /* ✅ Background fixe sans “bouger” sur mobile */
+    /* Background fixe (évite le “bougé” sur mobile) */
     body::before{
       content:"";
       position:fixed;
@@ -61,7 +61,7 @@
       color: var(--txt);
       padding: 10px 12px;
       border-radius: 12px;
-      font-weight: 800;
+      font-weight: 900;
       cursor:pointer;
     }
     button:active{ transform: translateY(1px); }
@@ -75,132 +75,129 @@
       overflow:hidden;
     }
 
-    /* Bandeaux “feu” */
+    /* Bandeau “feu” */
     .band{
-      display:flex; align-items:center; justify-content:space-between;
       padding: 14px 16px;
-      font-weight: 900;
+      font-weight: 950;
       letter-spacing: .8px;
       text-transform: uppercase;
       text-shadow: var(--glow);
-    }
-    .band .count{
-      width: 40px; height: 40px;
-      display:grid; place-items:center;
-      border-radius: 999px;
-      background: rgba(0,0,0,.25);
-      border: 1px solid rgba(255,255,255,.10);
-      font-weight: 900;
+      background: linear-gradient(90deg, rgba(255,155,70,.92), rgba(255,120,0,.72));
     }
 
-    .c-orange{ background: linear-gradient(90deg, rgba(255,155,70,.92), rgba(255,120,0,.75)); }
-    .c-bleu{ background: linear-gradient(90deg, rgba(40,140,255,.92), rgba(20,90,210,.75)); }
-    .c-bleuclair{ background: linear-gradient(90deg, rgba(120,190,255,.92), rgba(70,140,220,.75)); }
-    .c-jaune{ background: linear-gradient(90deg, rgba(255,205,70,.92), rgba(230,150,0,.78)); color: rgba(0,0,0,.88); text-shadow:none; }
-    .c-jaunevif{ background: linear-gradient(90deg, rgba(240,255,80,.92), rgba(210,220,0,.78)); color: rgba(0,0,0,.88); text-shadow:none; }
-    .c-violet{ background: linear-gradient(90deg, rgba(160,80,255,.92), rgba(110,50,220,.75)); }
-    .c-rose{ background: linear-gradient(90deg, rgba(255,70,210,.92), rgba(190,30,160,.75)); }
-    .c-vert{ background: linear-gradient(90deg, rgba(0,190,95,.92), rgba(0,140,70,.72)); }
-
-    .body{
+    /* Bloc chef de centre (noeud haut) */
+    .nodeTop{
+      margin-bottom: var(--gap);
+      text-align:center;
+    }
+    .nodeCard{
+      display:inline-block;
+      min-width: min(92vw, 520px);
+      border-radius: 18px;
+      overflow:hidden;
+      border: 1px solid rgba(255,170,80,.40);
+      background: rgba(0,0,0,.48);
+      box-shadow: var(--shadow);
+    }
+    .nodeHead{
+      background: linear-gradient(90deg, rgba(255,220,60,.92), rgba(255,140,0,.72));
+      color: rgba(0,0,0,.90);
+      font-weight: 1000;
+      padding: 14px 16px;
+      letter-spacing:.8px;
+      text-transform: uppercase;
+      text-shadow:none;
+    }
+    .nodeBody{
       padding: 14px 16px 16px;
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.00));
+      text-align:left;
+    }
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.28);
+      margin-bottom: 10px;
+    }
+    .role{
+      font-weight: 950;
+      color: rgba(255,200,130,.95);
+    }
+    .name{
+      font-weight: 850;
+      word-break: break-word;
     }
 
-    /* Tableau direction + blocs haut */
-    .gridTop{
+    /* “branches” (boutons) */
+    .branches{
       display:grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, 1fr);
       gap: var(--gap);
       margin-bottom: var(--gap);
     }
     @media (min-width: 860px){
-      .gridTop{ grid-template-columns: 1.35fr .65fr; }
+      .branches{ grid-template-columns: repeat(4, 1fr); }
     }
 
-    .miniGrid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: var(--gap);
-    }
-    @media (min-width: 860px){
-      .miniGrid{ grid-template-columns: 1fr; }
-    }
-
-    .table{
-      width:100%;
-      border-collapse: collapse;
-      overflow:hidden;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.25);
-    }
-    .table td{
-      padding: 10px 12px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      vertical-align: top;
-    }
-    .table tr:last-child td{ border-bottom:none; }
-
-    .k{ width: 42%; color: rgba(255,200,130,.92); font-weight: 900; }
-    .v{ width: 58%; font-weight: 800; }
-
-    /* Groupes */
-    .groups{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: var(--gap);
-    }
-    @media (min-width: 980px){
-      .groups{ grid-template-columns: 1fr 1fr; }
-    }
-
-    .section{
-      margin-top: 12px;
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 14px;
-      overflow:hidden;
-      background: rgba(0,0,0,.22);
-    }
-
-    details{ border-radius: 18px; overflow:hidden; }
-    details > summary{
-      list-style:none;
+    .branchBtn{
+      border-radius: 18px;
+      border: 1px solid rgba(255,140,0,.35);
+      background: rgba(0,0,0,.42);
+      padding: 14px 14px;
+      text-align:center;
+      font-weight: 1000;
+      letter-spacing:.4px;
       cursor:pointer;
       user-select:none;
+      position:relative;
+      box-shadow: 0 10px 22px rgba(0,0,0,.26);
+      transition: transform .08s;
     }
-    details > summary::-webkit-details-marker{ display:none; }
+    .branchBtn:active{ transform: translateY(1px); }
+    .branchBtn .sub{
+      display:block;
+      margin-top: 6px;
+      font-size: 12px;
+      color: rgba(255,255,255,.78);
+      font-weight: 800;
+    }
+    .branchBtn.on{
+      outline: 2px solid rgba(255,200,90,.55);
+      background: rgba(255,140,0,.12);
+    }
 
-    .summaryRow{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding: 14px 16px;
-      background: rgba(0,0,0,.18);
-      border-top: 1px solid rgba(255,255,255,.08);
+    /* contenu branch */
+    .branchPanel{
+      display:none;
+      margin-bottom: var(--gap);
     }
-    .summaryRow .label{
-      font-weight: 950;
-      letter-spacing:.3px;
-    }
-    .summaryRow .chev{
-      opacity:.85;
-      font-weight: 900;
-    }
+    .branchPanel.on{ display:block; }
 
-    .members{
-      padding: 12px 14px 14px;
+    .list{
+      padding: 14px 16px 16px;
       display:flex;
       flex-direction:column;
       gap: 10px;
     }
-
-    /* ✅ lignes “Fonction / Nom / Comp” mais ici = membres lisibles */
-    .member{
+    .item{
+      display:grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 10px;
       padding: 10px 12px;
       border-radius: 12px;
       border: 1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.30);
-      font-weight: 800;
-      line-height: 1.25;
+      background: rgba(0,0,0,.28);
+    }
+    .item .k{
+      font-weight: 950;
+      color: rgba(255,200,130,.95);
+      word-break: break-word;
+    }
+    .item .v{
+      font-weight: 850;
       word-break: break-word;
     }
 
@@ -210,8 +207,6 @@
       color: rgba(255,200,130,.88);
     }
   </style>
-
-  <script src="organigramme-data.js"></script>
 </head>
 
 <body>
@@ -224,164 +219,185 @@
       </div>
     </header>
 
-    <!-- Haut -->
-    <div class="gridTop">
-      <section class="panel" id="directionPanel"></section>
+    <!-- NOEUD HAUT -->
+    <div class="nodeTop" id="topNode"></div>
 
-      <div class="miniGrid" id="topBlocks"></div>
-    </div>
+    <!-- BRANCHES -->
+    <div class="branches" id="branches"></div>
 
-    <!-- Groupes -->
-    <div class="groups" id="groups"></div>
+    <!-- PANELS -->
+    <div id="panels"></div>
 
     <div class="hint">
-      ✅ Modifs : change uniquement <b>organigramme-data.js</b> (puis commit). Aucun autre fichier à toucher.
+      ✅ Modifs : tu changes tes lignes dans Google Sheets, puis “Actualiser”.
     </div>
   </div>
 
   <script>
-    function clsFromColor(c){
-      const map = {
-        orange:"c-orange",
-        bleu:"c-bleu",
-        bleuclair:"c-bleuclair",
-        jaune:"c-jaune",
-        jaunevif:"c-jaunevif",
-        violet:"c-violet",
-        rose:"c-rose",
-        vert:"c-vert",
-      };
-      return map[c] || "c-orange";
+    // ✅ Mets ton URL Apps Script ici (le même que tu utilises déjà)
+    const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+
+    // Ordre d’affichage des branches
+    const BRANCH_ORDER = ["Équipe 1", "Équipe 2", "Soutien", "Amicale", "GTL", "Opérationnel", "Formation/Sport", "Recrutement"];
+
+    // Map auto depuis le texte “Poste”
+    function detectBranch(poste){
+      const p = (poste || "").toLowerCase();
+
+      if (p.startsWith("direction")) return "Direction";
+
+      if (p.includes("équipe 1") || p.includes("equipe 1")) return "Équipe 1";
+      if (p.includes("équipe 2") || p.includes("equipe 2")) return "Équipe 2";
+
+      if (p.includes("amicale")) return "Amicale";
+      if (p.includes("soutien")) return "Soutien";
+
+      if (p.includes("technique") || p.includes("logistique") || p.includes("gtl")) return "GTL";
+      if (p.includes("opération") || p.includes("operation")) return "Opérationnel";
+      if (p.includes("formation") || p.includes("sport")) return "Formation/Sport";
+      if (p.includes("recrut")) return "Recrutement";
+
+      // fallback
+      return "Autres";
     }
 
-    function el(tag, attrs={}, children=[]){
+    function stripBranchPrefix(poste){
+      // Ex: "Équipe 1 - Responsable" => "Responsable"
+      const s = String(poste || "");
+      const parts = s.split(" - ");
+      return parts.length >= 2 ? parts.slice(1).join(" - ") : s.replace(/^Direction\s*-\s*/i, "");
+    }
+
+    function el(tag, cls, html){
       const n = document.createElement(tag);
-      for (const [k,v] of Object.entries(attrs)){
-        if (k === "class") n.className = v;
-        else if (k === "html") n.innerHTML = v;
-        else n.setAttribute(k, v);
-      }
-      for (const ch of children){
-        if (typeof ch === "string") n.appendChild(document.createTextNode(ch));
-        else if (ch) n.appendChild(ch);
-      }
+      if (cls) n.className = cls;
+      if (html !== undefined) n.innerHTML = html;
       return n;
     }
 
-    function render(){
-      const ORG = window.ORG;
-      if (!ORG){ alert("ORG introuvable : organigramme-data.js"); return; }
+    async function load(){
+      const btn = document.getElementById("refreshBtn");
+      btn.disabled = true;
 
-      // Direction
-      const dir = document.getElementById("directionPanel");
-      dir.innerHTML = "";
-      dir.appendChild(
-        el("div",{class:"band c-jaune"},[
-          el("div",{class:"label"},[ORG.direction?.titre || "Direction"]),
-          el("div",{class:"count"},[(ORG.direction?.lignes?.length || 0).toString()])
-        ])
-      );
+      const res = await fetch(API + "?type=organigramme&_=" + Date.now());
+      const data = await res.json();
+      const rows = (data && data.organigramme) ? data.organigramme : [];
 
-      const body = el("div",{class:"body"});
-      const table = el("table",{class:"table"});
-      const lignes = ORG.direction?.lignes || [];
-      for (const [k,v] of lignes){
-        const tr = document.createElement("tr");
-        tr.appendChild(el("td",{class:"k"},[k || ""]));
-        tr.appendChild(el("td",{class:"v"},[v || ""]));
-        table.appendChild(tr);
+      // regroupe
+      const groups = new Map();
+      for (const r of rows){
+        const poste = r.poste || "";
+        const nom = r.nom || "";
+        const b = detectBranch(poste);
+        if (!groups.has(b)) groups.set(b, []);
+        groups.get(b).push({ poste, nom });
       }
-      body.appendChild(table);
-      dir.appendChild(body);
 
-      // Blocs du haut (Soutien / Amicale)
-      const top = document.getElementById("topBlocks");
-      top.innerHTML = "";
-      (ORG.blocsHaut || []).forEach(b=>{
-        const p = el("section",{class:"panel"});
-        const cls = clsFromColor(b.couleur);
-        p.appendChild(
-          el("div",{class:"band "+cls},[
-            el("div",{class:"label"},[b.titre || "Bloc"]),
-            el("div",{class:"count"},[((b.lignes||[]).length).toString()])
-          ])
-        );
-        const bd = el("div",{class:"body"});
-        const t = el("table",{class:"table"});
-        (b.lignes||[]).forEach(([k,v])=>{
-          const tr = document.createElement("tr");
-          tr.appendChild(el("td",{class:"k"},[k || ""]));
-          tr.appendChild(el("td",{class:"v"},[v || ""]));
-          t.appendChild(tr);
+      // TOP NODE (chef de centre + adjoints) = on prend "Direction" si existe sinon tout ce qui ressemble
+      const direction = groups.get("Direction") || rows.filter(x => /chef de centre|adjoint/i.test(x.poste || "")).map(x=>({poste:x.poste, nom:x.nom}));
+
+      // top node rendu
+      const topNode = document.getElementById("topNode");
+      topNode.innerHTML = "";
+      const node = el("div","nodeCard");
+      node.appendChild(el("div","nodeHead","Chef de centre"));
+      const body = el("div","nodeBody");
+      if (!direction.length){
+        body.appendChild(el("div","row", `<div class="role">—</div><div class="name">Aucun renseignement</div>`));
+      } else {
+        // affiche 3 premières lignes si elles existent
+        direction.slice(0, 3).forEach(x=>{
+          const role = stripBranchPrefix(x.poste);
+          body.appendChild(el("div","row", `<div class="role">${escapeHtml(role)}</div><div class="name">${escapeHtml(x.nom || "")}</div>`));
         });
-        bd.appendChild(t);
-        p.appendChild(bd);
-        top.appendChild(p);
+      }
+      node.appendChild(body);
+      topNode.appendChild(node);
+
+      // Branches visibles = toutes sauf "Direction"
+      const branchNames = Array.from(groups.keys()).filter(k => k !== "Direction");
+
+      // tri selon BRANCH_ORDER, puis le reste
+      branchNames.sort((a,b)=>{
+        const ia = BRANCH_ORDER.indexOf(a);
+        const ib = BRANCH_ORDER.indexOf(b);
+        if (ia === -1 && ib === -1) return a.localeCompare(b, 'fr');
+        if (ia === -1) return 1;
+        if (ib === -1) return -1;
+        return ia - ib;
       });
 
-      // Groupes
-      const groups = document.getElementById("groups");
-      groups.innerHTML = "";
+      // build buttons
+      const branches = document.getElementById("branches");
+      branches.innerHTML = "";
 
-      (ORG.groupes || []).forEach(g=>{
-        const panel = el("section",{class:"panel"});
-        const cls = clsFromColor(g.couleur);
+      const panels = document.getElementById("panels");
+      panels.innerHTML = "";
 
-        // compter membres
-        let total = 0;
-        (g.sections||[]).forEach(s=> total += (s.membres||[]).length);
+      let openKey = null;
 
-        panel.appendChild(
-          el("div",{class:"band "+cls},[
-            el("div",{class:"label"},[g.titre || "Groupe"]),
-            el("div",{class:"count"},[String(total)])
-          ])
-        );
+      function closeAll(){
+        document.querySelectorAll(".branchBtn").forEach(x=>x.classList.remove("on"));
+        document.querySelectorAll(".branchPanel").forEach(x=>x.classList.remove("on"));
+        openKey = null;
+      }
 
-        const bd = el("div",{class:"body"});
+      function toggle(key){
+        if (openKey === key){
+          closeAll();
+          return;
+        }
+        closeAll();
+        openKey = key;
+        document.getElementById("btn_"+key).classList.add("on");
+        document.getElementById("panel_"+key).classList.add("on");
+      }
 
-        (g.sections || []).forEach(s=>{
-          const details = document.createElement("details");
-          details.open = false;
+      for (const key of branchNames){
+        const list = groups.get(key) || [];
+        const btnDiv = el("div","branchBtn");
+        btnDiv.id = "btn_" + key;
+        btnDiv.innerHTML = `${escapeHtml(key)}<span class="sub">${list.length} ligne(s)</span>`;
+        btnDiv.addEventListener("click", ()=>toggle(key));
+        branches.appendChild(btnDiv);
 
-          const sum = document.createElement("summary");
-          sum.appendChild(
-            el("div",{class:"summaryRow"},[
-              el("div",{class:"label"},[s.titre || "Section"]),
-              el("div",{class:"chev"},["▼"])
-            ])
-          );
-          details.appendChild(sum);
+        const p = el("section","panel branchPanel");
+        p.id = "panel_" + key;
+        p.appendChild(el("div","band", escapeHtml(key)));
 
-          const membersWrap = el("div",{class:"members"});
-          const mem = s.membres || [];
-          if (!mem.length){
-            membersWrap.appendChild(el("div",{class:"member"},["—"]));
-          } else {
-            mem.forEach(name=>{
-              membersWrap.appendChild(el("div",{class:"member"},[String(name)]));
-            });
-          }
-          details.appendChild(membersWrap);
+        const listDiv = el("div","list");
+        if (!list.length){
+          listDiv.appendChild(el("div","item", `<div class="k">—</div><div class="v">Aucun renseignement</div>`));
+        } else {
+          // pas de tri ici : c’est toi qui décides l’ordre dans le sheet
+          list.forEach(x=>{
+            const role = stripBranchPrefix(x.poste);
+            listDiv.appendChild(el("div","item", `<div class="k">${escapeHtml(role)}</div><div class="v">${escapeHtml(x.nom || "")}</div>`));
+          });
+        }
+        p.appendChild(listDiv);
+        panels.appendChild(p);
+      }
 
-          // petit bandeau vert sur la section (comme ton tableau)
-          const sectionBox = el("div",{class:"section"});
-          sectionBox.appendChild(el("div",{class:"band "+clsFromColor(s.couleur || "vert")},[
-            el("div",{class:"label"},[""]),
-            el("div",{class:"count"},[String(mem.length)])
-          ]));
-          sectionBox.appendChild(details);
+      // ouvre la 1ère branche par défaut (si tu veux)
+      if (branchNames.length){
+        toggle(branchNames[0]);
+      }
 
-          bd.appendChild(sectionBox);
-        });
-
-        panel.appendChild(bd);
-        groups.appendChild(panel);
-      });
+      btn.disabled = false;
     }
 
-    document.getElementById("refreshBtn").addEventListener("click", render);
-    render();
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#39;");
+    }
+
+    document.getElementById("refreshBtn").addEventListener("click", load);
+    load();
   </script>
 </body>
 </html>
