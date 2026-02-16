@@ -1,35 +1,387 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Organigramme</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Organigramme - CS Consenvoye</title>
 
-<style>
-body{
-    margin:0;
-    background:#000;
-}
+  <style>
+    :root{
+      --maxw: 980px;
+      --pad: clamp(14px, 4vw, 26px);
+      --gap: clamp(12px, 3vw, 18px);
 
-.pdf-container{
-    width:100%;
-    height:100vh;
-}
+      --txt: rgba(255,255,255,.94);
+      --muted: rgba(255,255,255,.72);
 
-.pdf-container iframe{
-    width:100%;
-    height:100%;
-    border:none;
-}
-</style>
+      --card: rgba(0,0,0,.50);
+      --card2: rgba(0,0,0,.35);
+      --stroke: rgba(255,140,0,.42);
 
+      --glow: 0 0 18px rgba(255,120,0,.25);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    html, body{ margin:0; padding:0; min-height:100%; background:#000; color:var(--txt); font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
+
+    /* ✅ Background fixe sans “bouger” sur mobile */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background: url("background.png") center top / cover no-repeat;
+      z-index:0;
+      transform: translate3d(0,0,0);
+      will-change: transform;
+      pointer-events:none;
+    }
+
+    .wrap{
+      position:relative; z-index:1;
+      max-width:var(--maxw);
+      margin:0 auto;
+      padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad) calc(env(safe-area-inset-bottom) + var(--pad));
+    }
+
+    header{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      margin-bottom: var(--gap);
+    }
+    .title{
+      margin:0;
+      font-size: clamp(22px, 3.2vw, 34px);
+      letter-spacing:.5px;
+      text-shadow: var(--glow);
+    }
+    .actions{ display:flex; gap:10px; align-items:center; }
+    button{
+      appearance:none;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.45);
+      color: var(--txt);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor:pointer;
+    }
+    button:active{ transform: translateY(1px); }
+
+    .panel{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(4px);
+      overflow:hidden;
+    }
+
+    /* Bandeaux “feu” */
+    .band{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 14px 16px;
+      font-weight: 900;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      text-shadow: var(--glow);
+    }
+    .band .count{
+      width: 40px; height: 40px;
+      display:grid; place-items:center;
+      border-radius: 999px;
+      background: rgba(0,0,0,.25);
+      border: 1px solid rgba(255,255,255,.10);
+      font-weight: 900;
+    }
+
+    .c-orange{ background: linear-gradient(90deg, rgba(255,155,70,.92), rgba(255,120,0,.75)); }
+    .c-bleu{ background: linear-gradient(90deg, rgba(40,140,255,.92), rgba(20,90,210,.75)); }
+    .c-bleuclair{ background: linear-gradient(90deg, rgba(120,190,255,.92), rgba(70,140,220,.75)); }
+    .c-jaune{ background: linear-gradient(90deg, rgba(255,205,70,.92), rgba(230,150,0,.78)); color: rgba(0,0,0,.88); text-shadow:none; }
+    .c-jaunevif{ background: linear-gradient(90deg, rgba(240,255,80,.92), rgba(210,220,0,.78)); color: rgba(0,0,0,.88); text-shadow:none; }
+    .c-violet{ background: linear-gradient(90deg, rgba(160,80,255,.92), rgba(110,50,220,.75)); }
+    .c-rose{ background: linear-gradient(90deg, rgba(255,70,210,.92), rgba(190,30,160,.75)); }
+    .c-vert{ background: linear-gradient(90deg, rgba(0,190,95,.92), rgba(0,140,70,.72)); }
+
+    .body{
+      padding: 14px 16px 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.00));
+    }
+
+    /* Tableau direction + blocs haut */
+    .gridTop{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: var(--gap);
+      margin-bottom: var(--gap);
+    }
+    @media (min-width: 860px){
+      .gridTop{ grid-template-columns: 1.35fr .65fr; }
+    }
+
+    .miniGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: var(--gap);
+    }
+    @media (min-width: 860px){
+      .miniGrid{ grid-template-columns: 1fr; }
+    }
+
+    .table{
+      width:100%;
+      border-collapse: collapse;
+      overflow:hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.25);
+    }
+    .table td{
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      vertical-align: top;
+    }
+    .table tr:last-child td{ border-bottom:none; }
+
+    .k{ width: 42%; color: rgba(255,200,130,.92); font-weight: 900; }
+    .v{ width: 58%; font-weight: 800; }
+
+    /* Groupes */
+    .groups{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: var(--gap);
+    }
+    @media (min-width: 980px){
+      .groups{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .section{
+      margin-top: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      overflow:hidden;
+      background: rgba(0,0,0,.22);
+    }
+
+    details{ border-radius: 18px; overflow:hidden; }
+    details > summary{
+      list-style:none;
+      cursor:pointer;
+      user-select:none;
+    }
+    details > summary::-webkit-details-marker{ display:none; }
+
+    .summaryRow{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding: 14px 16px;
+      background: rgba(0,0,0,.18);
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .summaryRow .label{
+      font-weight: 950;
+      letter-spacing:.3px;
+    }
+    .summaryRow .chev{
+      opacity:.85;
+      font-weight: 900;
+    }
+
+    .members{
+      padding: 12px 14px 14px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+
+    /* ✅ lignes “Fonction / Nom / Comp” mais ici = membres lisibles */
+    .member{
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.30);
+      font-weight: 800;
+      line-height: 1.25;
+      word-break: break-word;
+    }
+
+    .hint{
+      margin-top: 10px;
+      font-size: 13px;
+      color: rgba(255,200,130,.88);
+    }
+  </style>
+
+  <script src="organigramme-data.js"></script>
 </head>
 
 <body>
+  <div class="wrap">
+    <header>
+      <h1 class="title">Organigramme</h1>
+      <div class="actions">
+        <button id="refreshBtn" type="button">Actualiser</button>
+        <button type="button" onclick="history.back()">Retour</button>
+      </div>
+    </header>
 
-<div class="pdf-container">
-    <iframe src="organigramme.pdf"></iframe>
-</div>
+    <!-- Haut -->
+    <div class="gridTop">
+      <section class="panel" id="directionPanel"></section>
 
+      <div class="miniGrid" id="topBlocks"></div>
+    </div>
+
+    <!-- Groupes -->
+    <div class="groups" id="groups"></div>
+
+    <div class="hint">
+      ✅ Modifs : change uniquement <b>organigramme-data.js</b> (puis commit). Aucun autre fichier à toucher.
+    </div>
+  </div>
+
+  <script>
+    function clsFromColor(c){
+      const map = {
+        orange:"c-orange",
+        bleu:"c-bleu",
+        bleuclair:"c-bleuclair",
+        jaune:"c-jaune",
+        jaunevif:"c-jaunevif",
+        violet:"c-violet",
+        rose:"c-rose",
+        vert:"c-vert",
+      };
+      return map[c] || "c-orange";
+    }
+
+    function el(tag, attrs={}, children=[]){
+      const n = document.createElement(tag);
+      for (const [k,v] of Object.entries(attrs)){
+        if (k === "class") n.className = v;
+        else if (k === "html") n.innerHTML = v;
+        else n.setAttribute(k, v);
+      }
+      for (const ch of children){
+        if (typeof ch === "string") n.appendChild(document.createTextNode(ch));
+        else if (ch) n.appendChild(ch);
+      }
+      return n;
+    }
+
+    function render(){
+      const ORG = window.ORG;
+      if (!ORG){ alert("ORG introuvable : organigramme-data.js"); return; }
+
+      // Direction
+      const dir = document.getElementById("directionPanel");
+      dir.innerHTML = "";
+      dir.appendChild(
+        el("div",{class:"band c-jaune"},[
+          el("div",{class:"label"},[ORG.direction?.titre || "Direction"]),
+          el("div",{class:"count"},[(ORG.direction?.lignes?.length || 0).toString()])
+        ])
+      );
+
+      const body = el("div",{class:"body"});
+      const table = el("table",{class:"table"});
+      const lignes = ORG.direction?.lignes || [];
+      for (const [k,v] of lignes){
+        const tr = document.createElement("tr");
+        tr.appendChild(el("td",{class:"k"},[k || ""]));
+        tr.appendChild(el("td",{class:"v"},[v || ""]));
+        table.appendChild(tr);
+      }
+      body.appendChild(table);
+      dir.appendChild(body);
+
+      // Blocs du haut (Soutien / Amicale)
+      const top = document.getElementById("topBlocks");
+      top.innerHTML = "";
+      (ORG.blocsHaut || []).forEach(b=>{
+        const p = el("section",{class:"panel"});
+        const cls = clsFromColor(b.couleur);
+        p.appendChild(
+          el("div",{class:"band "+cls},[
+            el("div",{class:"label"},[b.titre || "Bloc"]),
+            el("div",{class:"count"},[((b.lignes||[]).length).toString()])
+          ])
+        );
+        const bd = el("div",{class:"body"});
+        const t = el("table",{class:"table"});
+        (b.lignes||[]).forEach(([k,v])=>{
+          const tr = document.createElement("tr");
+          tr.appendChild(el("td",{class:"k"},[k || ""]));
+          tr.appendChild(el("td",{class:"v"},[v || ""]));
+          t.appendChild(tr);
+        });
+        bd.appendChild(t);
+        p.appendChild(bd);
+        top.appendChild(p);
+      });
+
+      // Groupes
+      const groups = document.getElementById("groups");
+      groups.innerHTML = "";
+
+      (ORG.groupes || []).forEach(g=>{
+        const panel = el("section",{class:"panel"});
+        const cls = clsFromColor(g.couleur);
+
+        // compter membres
+        let total = 0;
+        (g.sections||[]).forEach(s=> total += (s.membres||[]).length);
+
+        panel.appendChild(
+          el("div",{class:"band "+cls},[
+            el("div",{class:"label"},[g.titre || "Groupe"]),
+            el("div",{class:"count"},[String(total)])
+          ])
+        );
+
+        const bd = el("div",{class:"body"});
+
+        (g.sections || []).forEach(s=>{
+          const details = document.createElement("details");
+          details.open = false;
+
+          const sum = document.createElement("summary");
+          sum.appendChild(
+            el("div",{class:"summaryRow"},[
+              el("div",{class:"label"},[s.titre || "Section"]),
+              el("div",{class:"chev"},["▼"])
+            ])
+          );
+          details.appendChild(sum);
+
+          const membersWrap = el("div",{class:"members"});
+          const mem = s.membres || [];
+          if (!mem.length){
+            membersWrap.appendChild(el("div",{class:"member"},["—"]));
+          } else {
+            mem.forEach(name=>{
+              membersWrap.appendChild(el("div",{class:"member"},[String(name)]));
+            });
+          }
+          details.appendChild(membersWrap);
+
+          // petit bandeau vert sur la section (comme ton tableau)
+          const sectionBox = el("div",{class:"section"});
+          sectionBox.appendChild(el("div",{class:"band "+clsFromColor(s.couleur || "vert")},[
+            el("div",{class:"label"},[""]),
+            el("div",{class:"count"},[String(mem.length)])
+          ]));
+          sectionBox.appendChild(details);
+
+          bd.appendChild(sectionBox);
+        });
+
+        panel.appendChild(bd);
+        groups.appendChild(panel);
+      });
+    }
+
+    document.getElementById("refreshBtn").addEventListener("click", render);
+    render();
+  </script>
 </body>
 </html>
