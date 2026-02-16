@@ -1,403 +1,119 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Organigramme - CS Consenvoye</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organigramme</title>
 
-  <style>
-    :root{
-      --maxw: 980px;
-      --pad: clamp(14px, 4vw, 26px);
-      --gap: clamp(12px, 3vw, 18px);
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#111;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
 
-      --txt: rgba(255,255,255,.94);
-      --muted: rgba(255,255,255,.72);
+.container{
+    width:100%;
+    max-width:1100px;
+    padding:20px;
+}
 
-      --card: rgba(0,0,0,.52);
-      --stroke: rgba(255,140,0,.42);
+.block{
+    background:linear-gradient(145deg,#ffb347,#ff6a00);
+    border-radius:15px;
+    padding:15px;
+    text-align:center;
+    font-weight:bold;
+    cursor:pointer;
+    margin:10px auto;
+    width:90%;
+    max-width:400px;
+}
 
-      --glow: 0 0 18px rgba(255,120,0,.25);
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-    }
+.childs{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:20px;
+    margin-top:20px;
+}
 
-    html, body{ margin:0; padding:0; min-height:100%; background:#000; color:var(--txt);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
+.card{
+    background:#222;
+    border-radius:12px;
+    padding:15px;
+    width:280px;
+    transition:0.3s;
+}
 
-    /* Background fixe (évite le “bougé” sur mobile) */
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      background: url("background.png") center top / cover no-repeat;
-      z-index:0;
-      transform: translate3d(0,0,0);
-      will-change: transform;
-      pointer-events:none;
-    }
+.card h3{
+    margin-top:0;
+    color:#ffae00;
+}
 
-    .wrap{
-      position:relative; z-index:1;
-      max-width:var(--maxw);
-      margin:0 auto;
-      padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad) calc(env(safe-area-inset-bottom) + var(--pad));
-    }
+.hidden{
+    display:none;
+}
 
-    header{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      margin-bottom: var(--gap);
-    }
-    .title{
-      margin:0;
-      font-size: clamp(22px, 3.2vw, 34px);
-      letter-spacing:.5px;
-      text-shadow: var(--glow);
-    }
-    .actions{ display:flex; gap:10px; align-items:center; }
-    button{
-      appearance:none;
-      border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.45);
-      color: var(--txt);
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-weight: 900;
-      cursor:pointer;
-    }
-    button:active{ transform: translateY(1px); }
-
-    .panel{
-      background: var(--card);
-      border: 1px solid var(--stroke);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(4px);
-      overflow:hidden;
-    }
-
-    /* Bandeau “feu” */
-    .band{
-      padding: 14px 16px;
-      font-weight: 950;
-      letter-spacing: .8px;
-      text-transform: uppercase;
-      text-shadow: var(--glow);
-      background: linear-gradient(90deg, rgba(255,155,70,.92), rgba(255,120,0,.72));
-    }
-
-    /* Bloc chef de centre (noeud haut) */
-    .nodeTop{
-      margin-bottom: var(--gap);
-      text-align:center;
-    }
-    .nodeCard{
-      display:inline-block;
-      min-width: min(92vw, 520px);
-      border-radius: 18px;
-      overflow:hidden;
-      border: 1px solid rgba(255,170,80,.40);
-      background: rgba(0,0,0,.48);
-      box-shadow: var(--shadow);
-    }
-    .nodeHead{
-      background: linear-gradient(90deg, rgba(255,220,60,.92), rgba(255,140,0,.72));
-      color: rgba(0,0,0,.90);
-      font-weight: 1000;
-      padding: 14px 16px;
-      letter-spacing:.8px;
-      text-transform: uppercase;
-      text-shadow:none;
-    }
-    .nodeBody{
-      padding: 14px 16px 16px;
-      text-align:left;
-    }
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.28);
-      margin-bottom: 10px;
-    }
-    .role{
-      font-weight: 950;
-      color: rgba(255,200,130,.95);
-    }
-    .name{
-      font-weight: 850;
-      word-break: break-word;
-    }
-
-    /* “branches” (boutons) */
-    .branches{
-      display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--gap);
-      margin-bottom: var(--gap);
-    }
-    @media (min-width: 860px){
-      .branches{ grid-template-columns: repeat(4, 1fr); }
-    }
-
-    .branchBtn{
-      border-radius: 18px;
-      border: 1px solid rgba(255,140,0,.35);
-      background: rgba(0,0,0,.42);
-      padding: 14px 14px;
-      text-align:center;
-      font-weight: 1000;
-      letter-spacing:.4px;
-      cursor:pointer;
-      user-select:none;
-      position:relative;
-      box-shadow: 0 10px 22px rgba(0,0,0,.26);
-      transition: transform .08s;
-    }
-    .branchBtn:active{ transform: translateY(1px); }
-    .branchBtn .sub{
-      display:block;
-      margin-top: 6px;
-      font-size: 12px;
-      color: rgba(255,255,255,.78);
-      font-weight: 800;
-    }
-    .branchBtn.on{
-      outline: 2px solid rgba(255,200,90,.55);
-      background: rgba(255,140,0,.12);
-    }
-
-    /* contenu branch */
-    .branchPanel{
-      display:none;
-      margin-bottom: var(--gap);
-    }
-    .branchPanel.on{ display:block; }
-
-    .list{
-      padding: 14px 16px 16px;
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-    }
-    .item{
-      display:grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.28);
-    }
-    .item .k{
-      font-weight: 950;
-      color: rgba(255,200,130,.95);
-      word-break: break-word;
-    }
-    .item .v{
-      font-weight: 850;
-      word-break: break-word;
-    }
-
-    .hint{
-      margin-top: 10px;
-      font-size: 13px;
-      color: rgba(255,200,130,.88);
-    }
-  </style>
+.line{
+    width:3px;
+    height:30px;
+    background:#ff6a00;
+    margin:auto;
+}
+</style>
 </head>
 
 <body>
-  <div class="wrap">
-    <header>
-      <h1 class="title">Organigramme</h1>
-      <div class="actions">
-        <button id="refreshBtn" type="button">Actualiser</button>
-        <button type="button" onclick="history.back()">Retour</button>
-      </div>
-    </header>
 
-    <!-- NOEUD HAUT -->
-    <div class="nodeTop" id="topNode"></div>
+<div class="container">
 
-    <!-- BRANCHES -->
-    <div class="branches" id="branches"></div>
+    <div class="block">CHEF DE CENTRE<br><br>ADC Vénante Pierre</div>
 
-    <!-- PANELS -->
-    <div id="panels"></div>
+    <div class="line"></div>
 
-    <div class="hint">
-      ✅ Modifs : tu changes tes lignes dans Google Sheets, puis “Actualiser”.
+    <div class="childs">
+
+        <div class="card">
+            <h3>Groupe Technique & Logistique</h3>
+            ADC Sénéchal Benjamin<br>
+            ADC Kolodzieczak Stéphane<br>
+            CPL Gaffard Robin<br>
+            CPL Rogie Florian
+        </div>
+
+        <div class="card">
+            <h3>Groupe Opérationnel</h3>
+            ADC Vénante Pierre<br>
+            SCH Wallarin Hélène<br>
+            SCH Stellato Vincent<br>
+            INF Dur Amélie<br>
+            INF Lepezel Laura
+        </div>
+
+        <div class="card">
+            <h3>Groupe Formation / Sport</h3>
+            ADJ Laleuw Franck<br>
+            ADC Joseph Judaicel<br>
+            SCH Wallarin Hélène<br>
+            CPL Barotte Christopher
+        </div>
+
+        <div class="card">
+            <h3>Groupe Recrutement / Volontariat</h3>
+            ADC Vénante Pierre<br>
+            ADJ Laleuw Franck<br>
+            ADJ Sénéchal Benjamin<br>
+            SA1 Vénante Amélie
+        </div>
+
     </div>
-  </div>
 
-  <script>
-    // ✅ Mets ton URL Apps Script ici (le même que tu utilises déjà)
-    const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+</div>
 
-    // Ordre d’affichage des branches
-    const BRANCH_ORDER = ["Équipe 1", "Équipe 2", "Soutien", "Amicale", "GTL", "Opérationnel", "Formation/Sport", "Recrutement"];
-
-    // Map auto depuis le texte “Poste”
-    function detectBranch(poste){
-      const p = (poste || "").toLowerCase();
-
-      if (p.startsWith("direction")) return "Direction";
-
-      if (p.includes("équipe 1") || p.includes("equipe 1")) return "Équipe 1";
-      if (p.includes("équipe 2") || p.includes("equipe 2")) return "Équipe 2";
-
-      if (p.includes("amicale")) return "Amicale";
-      if (p.includes("soutien")) return "Soutien";
-
-      if (p.includes("technique") || p.includes("logistique") || p.includes("gtl")) return "GTL";
-      if (p.includes("opération") || p.includes("operation")) return "Opérationnel";
-      if (p.includes("formation") || p.includes("sport")) return "Formation/Sport";
-      if (p.includes("recrut")) return "Recrutement";
-
-      // fallback
-      return "Autres";
-    }
-
-    function stripBranchPrefix(poste){
-      // Ex: "Équipe 1 - Responsable" => "Responsable"
-      const s = String(poste || "");
-      const parts = s.split(" - ");
-      return parts.length >= 2 ? parts.slice(1).join(" - ") : s.replace(/^Direction\s*-\s*/i, "");
-    }
-
-    function el(tag, cls, html){
-      const n = document.createElement(tag);
-      if (cls) n.className = cls;
-      if (html !== undefined) n.innerHTML = html;
-      return n;
-    }
-
-    async function load(){
-      const btn = document.getElementById("refreshBtn");
-      btn.disabled = true;
-
-      const res = await fetch(API + "?type=organigramme&_=" + Date.now());
-      const data = await res.json();
-      const rows = (data && data.organigramme) ? data.organigramme : [];
-
-      // regroupe
-      const groups = new Map();
-      for (const r of rows){
-        const poste = r.poste || "";
-        const nom = r.nom || "";
-        const b = detectBranch(poste);
-        if (!groups.has(b)) groups.set(b, []);
-        groups.get(b).push({ poste, nom });
-      }
-
-      // TOP NODE (chef de centre + adjoints) = on prend "Direction" si existe sinon tout ce qui ressemble
-      const direction = groups.get("Direction") || rows.filter(x => /chef de centre|adjoint/i.test(x.poste || "")).map(x=>({poste:x.poste, nom:x.nom}));
-
-      // top node rendu
-      const topNode = document.getElementById("topNode");
-      topNode.innerHTML = "";
-      const node = el("div","nodeCard");
-      node.appendChild(el("div","nodeHead","Chef de centre"));
-      const body = el("div","nodeBody");
-      if (!direction.length){
-        body.appendChild(el("div","row", `<div class="role">—</div><div class="name">Aucun renseignement</div>`));
-      } else {
-        // affiche 3 premières lignes si elles existent
-        direction.slice(0, 3).forEach(x=>{
-          const role = stripBranchPrefix(x.poste);
-          body.appendChild(el("div","row", `<div class="role">${escapeHtml(role)}</div><div class="name">${escapeHtml(x.nom || "")}</div>`));
-        });
-      }
-      node.appendChild(body);
-      topNode.appendChild(node);
-
-      // Branches visibles = toutes sauf "Direction"
-      const branchNames = Array.from(groups.keys()).filter(k => k !== "Direction");
-
-      // tri selon BRANCH_ORDER, puis le reste
-      branchNames.sort((a,b)=>{
-        const ia = BRANCH_ORDER.indexOf(a);
-        const ib = BRANCH_ORDER.indexOf(b);
-        if (ia === -1 && ib === -1) return a.localeCompare(b, 'fr');
-        if (ia === -1) return 1;
-        if (ib === -1) return -1;
-        return ia - ib;
-      });
-
-      // build buttons
-      const branches = document.getElementById("branches");
-      branches.innerHTML = "";
-
-      const panels = document.getElementById("panels");
-      panels.innerHTML = "";
-
-      let openKey = null;
-
-      function closeAll(){
-        document.querySelectorAll(".branchBtn").forEach(x=>x.classList.remove("on"));
-        document.querySelectorAll(".branchPanel").forEach(x=>x.classList.remove("on"));
-        openKey = null;
-      }
-
-      function toggle(key){
-        if (openKey === key){
-          closeAll();
-          return;
-        }
-        closeAll();
-        openKey = key;
-        document.getElementById("btn_"+key).classList.add("on");
-        document.getElementById("panel_"+key).classList.add("on");
-      }
-
-      for (const key of branchNames){
-        const list = groups.get(key) || [];
-        const btnDiv = el("div","branchBtn");
-        btnDiv.id = "btn_" + key;
-        btnDiv.innerHTML = `${escapeHtml(key)}<span class="sub">${list.length} ligne(s)</span>`;
-        btnDiv.addEventListener("click", ()=>toggle(key));
-        branches.appendChild(btnDiv);
-
-        const p = el("section","panel branchPanel");
-        p.id = "panel_" + key;
-        p.appendChild(el("div","band", escapeHtml(key)));
-
-        const listDiv = el("div","list");
-        if (!list.length){
-          listDiv.appendChild(el("div","item", `<div class="k">—</div><div class="v">Aucun renseignement</div>`));
-        } else {
-          // pas de tri ici : c’est toi qui décides l’ordre dans le sheet
-          list.forEach(x=>{
-            const role = stripBranchPrefix(x.poste);
-            listDiv.appendChild(el("div","item", `<div class="k">${escapeHtml(role)}</div><div class="v">${escapeHtml(x.nom || "")}</div>`));
-          });
-        }
-        p.appendChild(listDiv);
-        panels.appendChild(p);
-      }
-
-      // ouvre la 1ère branche par défaut (si tu veux)
-      if (branchNames.length){
-        toggle(branchNames[0]);
-      }
-
-      btn.disabled = false;
-    }
-
-    function escapeHtml(s){
-      return String(s ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#39;");
-    }
-
-    document.getElementById("refreshBtn").addEventListener("click", load);
-    load();
-  </script>
 </body>
 </html>
