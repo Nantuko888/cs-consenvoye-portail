@@ -1,34 +1,368 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Organigramme - CS Consenvoye</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Organigramme - CS Consenvoye</title>
 
-<style>
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  background: #000;
-}
+  <style>
+    :root{
+      --maxw: 980px;
+      --pad: clamp(14px, 4vw, 26px);
+      --card: rgba(0,0,0,.55);
+      --stroke: rgba(255,140,0,.45);
+      --txt: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --yellow: rgba(255, 204, 0, .95);
+    }
 
-.viewer {
-  position: fixed;
-  inset: 0;
-}
+    html, body{
+      margin:0; padding:0;
+      min-height:100%;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--txt);
+      background:#000;
+    }
 
-.viewer iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-</style>
+    /* même philosophie que ton portail */
+    body::before{
+      content:"";
+      position: fixed;
+      inset: 0;
+      background: url("background.png") center top / cover no-repeat;
+      z-index: 0;
+      transform: translateZ(0);
+    }
+
+    .wrap{
+      position: relative;
+      z-index: 1;
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad) calc(env(safe-area-inset-bottom) + var(--pad));
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .title{
+      margin:0;
+      font-size: clamp(22px, 3.2vw, 34px);
+      letter-spacing: .5px;
+      text-shadow: 0 0 18px rgba(255,120,0,.35);
+    }
+    .actions{ display:flex; gap:10px; }
+
+    button{
+      appearance:none;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.45);
+      color: var(--txt);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor:pointer;
+    }
+    button:active{ transform: translateY(1px); }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      backdrop-filter: blur(4px);
+    }
+
+    /* zone image */
+    .imgWrap{
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,140,0,.25);
+    }
+
+    /* ✅ important : image responsive + pinch zoom natif */
+    .imgWrap img{
+      width: 100%;
+      height: auto;
+      display:block;
+      user-select:none;
+      -webkit-user-drag:none;
+      touch-action: pan-x pan-y; /* laisse le pinch/scroll fonctionner */
+    }
+
+    /* Zones cliquables (overlay divs) */
+    .hotspot{
+      position:absolute;
+      border-radius: 12px;
+      outline: 2px solid rgba(255,255,255,.0);
+      background: rgba(255,255,255,0);
+      cursor: pointer;
+      transition: .15s;
+    }
+    .hotspot:active{ transform: scale(.995); }
+
+    /* au clic -> surlignage */
+    .hotspot.on{
+      outline: 2px solid rgba(255, 204, 0, .75);
+      background: rgba(255, 204, 0, .08);
+      box-shadow: 0 0 0 6px rgba(255, 204, 0, .12);
+    }
+
+    /* panneau détail */
+    .panel{
+      margin-top: 14px;
+      display:none;
+    }
+    .panel.on{ display:block; }
+
+    .panelTitle{
+      font-weight: 900;
+      font-size: 18px;
+      margin: 0 0 8px 0;
+      color: var(--yellow);
+      letter-spacing: .3px;
+    }
+    .panelBody{
+      margin:0;
+      color: var(--txt);
+      line-height: 1.35;
+      white-space: pre-line;
+    }
+
+    .hint{
+      margin-top: 10px;
+      color: rgba(255,200,130,.9);
+      font-size: 13px;
+    }
+
+    /* bouton discret "mode réglage coords" */
+    .small{
+      font-size: 12px;
+      opacity: .9;
+      padding: 8px 10px;
+      border-radius: 10px;
+    }
+
+    /* overlay mode réglage */
+    .coord{
+      position:absolute;
+      inset: 0;
+      display:none;
+      pointer-events:none;
+    }
+    .coord.on{ display:block; }
+    .coordBox{
+      position:absolute;
+      border:2px dashed rgba(255,255,255,.75);
+      border-radius: 12px;
+      background: rgba(0,0,0,.15);
+    }
+    .coordText{
+      position:absolute;
+      left: 10px;
+      bottom: 10px;
+      background: rgba(0,0,0,.6);
+      border: 1px solid rgba(255,255,255,.2);
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      color: rgba(255,255,255,.9);
+      max-width: 92%;
+    }
+  </style>
 </head>
 
 <body>
-<div class="viewer">
-  <iframe src="organigramme.pdf"></iframe>
-</div>
+  <div class="wrap">
+    <header>
+      <h1 class="title">Organigramme</h1>
+      <div class="actions">
+        <button class="small" id="coordsBtn">Coords</button>
+        <button onclick="location.href='index.html'">Retour</button>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="imgWrap" id="imgWrap">
+        <!-- ✅ mets ton fichier ici -->
+        <img id="orgImg" src="organigramme.png" alt="Organigramme CS Consenvoye">
+
+        <!-- 🔥 ZONES CLIQUABLES (en %) : tu peux ajuster plus tard -->
+        <!-- Chef de centre (en haut milieu) -->
+        <div class="hotspot" data-key="cdc" style="left: 36%; top: 2%; width: 28%; height: 14%;"></div>
+
+        <!-- Équipe de soutien (haut gauche) -->
+        <div class="hotspot" data-key="soutien" style="left: 3%; top: 8%; width: 28%; height: 16%;"></div>
+
+        <!-- Amicale (haut droite) -->
+        <div class="hotspot" data-key="amicale" style="left: 72%; top: 6%; width: 25%; height: 18%;"></div>
+
+        <!-- Groupe Technique et Logistique (bas gauche) -->
+        <div class="hotspot" data-key="gtl" style="left: 8%; top: 58%; width: 23%; height: 38%;"></div>
+
+        <!-- Groupe Opérationnel (bas milieu-gauche) -->
+        <div class="hotspot" data-key="go" style="left: 33%; top: 58%; width: 23%; height: 38%;"></div>
+
+        <!-- Groupe Formation / Sport (bas milieu-droit) -->
+        <div class="hotspot" data-key="gfs" style="left: 58%; top: 58%; width: 23%; height: 38%;"></div>
+
+        <!-- Groupe Recrutement / Volontariat (bas droite) -->
+        <div class="hotspot" data-key="grv" style="left: 83%; top: 58%; width: 14%; height: 38%;"></div>
+
+        <!-- overlay coords -->
+        <div class="coord" id="coordOverlay">
+          <div class="coordBox" id="coordBox"></div>
+          <div class="coordText" id="coordText">Mode COORDS : touche et glisse pour créer un rectangle (utile si tu veux ajuster précisément).</div>
+        </div>
+      </div>
+
+      <div class="panel" id="panel">
+        <div class="panelTitle" id="panelTitle"></div>
+        <p class="panelBody" id="panelBody"></p>
+      </div>
+
+      <div class="hint">
+        Astuce : sur smartphone tu peux zoomer/pincer directement sur l’organigramme.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ✅ contenu (modifiable quand tu veux)
+    const DATA = {
+      cdc: {
+        title: "Direction du CS Consenvoye",
+        body:
+`Chef de Centre : ADC Vénante Pierre
+1er Adjoint CDC : ADJ Laleeuuw Franck
+2ème Adjoint CDC : ADJ Sénéchal Benjamin`
+      },
+      soutien: {
+        title: "Équipe de soutien",
+        body:
+`CNE Bienaimé Jean Paul
+ADJ Lecourtier Guy
+SGT Chavrelles Gilles
+SGT Beausire Bernard`
+      },
+      amicale: {
+        title: "Amicale",
+        body:
+`Présidente : Trontin Chloé
+Vice-président : Vénante Pierre
+Trésorier : Baur Benjamin
+Trésorier adjoint : Laleeuuw Franck
+Secrétaire : Vénante Amélie
+Secrétaire adjoint : Dur Amélie`
+      },
+      gtl: { title:"Groupe Technique et Logistique", body:"(détails à compléter / ou lien vers une page dédiée)" },
+      go: { title:"Groupe Opérationnel", body:"(détails à compléter / ou lien vers une page dédiée)" },
+      gfs: { title:"Groupe Formation / Sport", body:"(détails à compléter / ou lien vers une page dédiée)" },
+      grv: { title:"Groupe Recrutement / Volontariat", body:"(détails à compléter / ou lien vers une page dédiée)" },
+    };
+
+    const panel = document.getElementById("panel");
+    const panelTitle = document.getElementById("panelTitle");
+    const panelBody = document.getElementById("panelBody");
+
+    const spots = Array.from(document.querySelectorAll(".hotspot"));
+
+    function closeAll(){
+      spots.forEach(s => s.classList.remove("on"));
+      panel.classList.remove("on");
+      panelTitle.textContent = "";
+      panelBody.textContent = "";
+    }
+
+    function toggleSpot(spot){
+      const isOn = spot.classList.contains("on");
+      closeAll();
+      if (isOn) return; // re-clic => ferme
+
+      spot.classList.add("on");
+      const key = spot.dataset.key;
+      const d = DATA[key] || { title:"", body:"" };
+
+      panelTitle.textContent = d.title || "";
+      panelBody.textContent = d.body || "";
+      panel.classList.add("on");
+    }
+
+    spots.forEach(spot => spot.addEventListener("click", () => toggleSpot(spot)));
+
+    // ----------------------------
+    // MODE COORDS (optionnel)
+    // ----------------------------
+    const coordsBtn = document.getElementById("coordsBtn");
+    const overlay = document.getElementById("coordOverlay");
+    const box = document.getElementById("coordBox");
+    const txt = document.getElementById("coordText");
+    const wrap = document.getElementById("imgWrap");
+
+    let coordMode = false;
+    let start = null;
+
+    coordsBtn.addEventListener("click", () => {
+      coordMode = !coordMode;
+      overlay.classList.toggle("on", coordMode);
+      coordsBtn.textContent = coordMode ? "Coords ON" : "Coords";
+      txt.textContent = coordMode
+        ? "Mode COORDS : touche et glisse pour créer un rectangle. Les % s’affichent (copie-les dans style='left/top/width/height')."
+        : "";
+    });
+
+    wrap.addEventListener("pointerdown", (e) => {
+      if (!coordMode) return;
+      const r = wrap.getBoundingClientRect();
+      start = { x: e.clientX - r.left, y: e.clientY - r.top, w: r.width, h: r.height };
+      box.style.left = start.x + "px";
+      box.style.top = start.y + "px";
+      box.style.width = "0px";
+      box.style.height = "0px";
+      wrap.setPointerCapture(e.pointerId);
+    });
+
+    wrap.addEventListener("pointermove", (e) => {
+      if (!coordMode || !start) return;
+      const r = wrap.getBoundingClientRect();
+      const x = e.clientX - r.left;
+      const y = e.clientY - r.top;
+
+      const x1 = Math.min(start.x, x);
+      const y1 = Math.min(start.y, y);
+      const x2 = Math.max(start.x, x);
+      const y2 = Math.max(start.y, y);
+
+      box.style.left = x1 + "px";
+      box.style.top = y1 + "px";
+      box.style.width = (x2 - x1) + "px";
+      box.style.height = (y2 - y1) + "px";
+
+      const left = (x1 / start.w * 100).toFixed(2);
+      const top = (y1 / start.h * 100).toFixed(2);
+      const width = ((x2 - x1) / start.w * 100).toFixed(2);
+      const height = ((y2 - y1) / start.h * 100).toFixed(2);
+
+      txt.textContent = `left:${left}%; top:${top}%; width:${width}%; height:${height}%`;
+    });
+
+    wrap.addEventListener("pointerup", (e) => {
+      if (!coordMode) return;
+      start = null;
+      wrap.releasePointerCapture(e.pointerId);
+    });
+
+    // clic en dehors => ferme panneau
+    document.addEventListener("click", (e) => {
+      const inside = e.target.closest(".hotspot") || e.target.closest("#panel") || e.target.closest("#coordsBtn");
+      if (!inside && !coordMode) closeAll();
+    });
+  </script>
 </body>
 </html>
