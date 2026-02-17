@@ -11,8 +11,8 @@
     --pad: clamp(12px, 4vw, 20px);
     --gap: clamp(10px, 2.6vw, 16px);
 
-    --glass: rgba(0,0,0,.42);
-    --stroke: rgba(255,170,70,.28);
+    --glass: rgba(0,0,0,.45);
+    --stroke: rgba(255,170,70,.26);
 
     --txt: rgba(255,255,255,.95);
     --muted: rgba(255,255,255,.72);
@@ -20,302 +20,146 @@
     --radius: 18px;
     --shadow: 0 16px 44px rgba(0,0,0,.35);
 
-    /* TAILLES (COMPACTES) */
-    --dirRole: 11px;
-    --chefName: 16px;
-    --adjName: 14px;
+    /* direction compacte */
+    --role: 11px;
+    --nameChef: 16px;
+    --nameAdj: 14px;
+
+    /* pôles */
     --poleFont: 12px;
-    --poleMinH: 68px;
+    --poleMinH: 70px;
   }
 
   *{box-sizing:border-box}
-  html, body{
-    margin:0; padding:0; min-height:100%;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    color: var(--txt);
-    background:#000;
-  }
+  html,body{margin:0;padding:0;min-height:100%;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);background:#000;}
 
-  /* Background FIXE */
   body::before{
     content:"";
     position:fixed; inset:0;
     background:url("background.png") center top / cover no-repeat;
-    transform: translateZ(0);
+    transform:translateZ(0);
     z-index:0;
   }
 
   .wrap{
     position:relative; z-index:1;
-    max-width: var(--maxw);
-    margin: 0 auto;
-    padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad) calc(env(safe-area-inset-bottom) + var(--pad));
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:calc(env(safe-area-inset-top) + var(--pad)) var(--pad) calc(env(safe-area-inset-bottom) + var(--pad));
   }
 
-  .topbar{
-    display:flex; align-items:center; justify-content:space-between;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-
+  .topbar{display:flex;justify-content:space-between;gap:10px;margin-bottom:10px;}
   .btn{
-    appearance:none;
-    border:1px solid rgba(255,255,255,.14);
-    background: rgba(0,0,0,.35);
-    color: var(--txt);
-    padding: 9px 12px;
-    border-radius: 14px;
-    font-weight: 950;
-    cursor:pointer;
-    box-shadow: 0 10px 24px rgba(0,0,0,.25);
-    backdrop-filter: blur(8px);
+    appearance:none; border:1px solid rgba(255,255,255,.14);
+    background:rgba(0,0,0,.35); color:var(--txt);
+    padding:9px 12px; border-radius:14px; font-weight:950; cursor:pointer;
+    box-shadow:0 10px 24px rgba(0,0,0,.25); backdrop-filter:blur(8px);
     -webkit-tap-highlight-color: transparent;
   }
-  .btn:active{ transform: translateY(1px); }
-  .btn.primary{
-    border-color: var(--stroke);
-    background: linear-gradient(180deg, rgba(255,170,70,.16), rgba(0,0,0,.35));
-  }
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{border-color:var(--stroke); background:linear-gradient(180deg, rgba(255,170,70,.14), rgba(0,0,0,.35));}
 
-  .title{
-    font-size: clamp(22px, 4.2vw, 34px);
-    font-weight: 1000;
-    margin: 6px 0 12px;
-    text-shadow: 0 12px 26px rgba(0,0,0,.55);
-    letter-spacing: .2px;
-  }
+  .title{font-size:clamp(22px,4.2vw,34px);font-weight:1000;margin:6px 0 12px;text-shadow:0 12px 26px rgba(0,0,0,.55);}
 
   .card{
-    background: var(--glass);
-    border: 1px solid var(--stroke);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    backdrop-filter: blur(10px);
+    background:var(--glass);
+    border:1px solid var(--stroke);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(10px);
     overflow:hidden;
   }
 
-  /* Direction (COMPACT) */
-  .dir{
-    padding: 12px;
-    display:grid;
-    gap: 10px;
-  }
-
-  .chef{
-    border-radius: 16px;
-    padding: 10px 10px;
+  /* Direction sobre (plus orange) */
+  .dir{padding:12px;display:grid;gap:10px;}
+  .dirGrid{display:grid;grid-template-columns:1fr;gap:10px;}
+  .chefBox,.adjBox{
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(0,0,0,.28);
+    padding:10px;
     text-align:center;
-    background: linear-gradient(180deg, rgba(255,220,110,.95), rgba(255,165,55,.88));
-    color:#111;
-    box-shadow: 0 12px 26px rgba(0,0,0,.22);
   }
-  .chef .role{
-    font-size: var(--dirRole);
-    font-weight: 1000;
-    text-transform: uppercase;
-    letter-spacing: .6px;
-    opacity:.92;
+  .chefBox .role,.adjBox .role{
+    font-size:var(--role);
+    font-weight:1000;
+    text-transform:uppercase;
+    letter-spacing:.55px;
+    color:rgba(255,200,120,.92);
   }
-  .chef .name{
-    font-size: var(--chefName);
-    font-weight: 1000;
-    margin-top: 4px;
-    word-break: break-word;
-  }
+  .chefBox .name{font-size:var(--nameChef);font-weight:1000;margin-top:4px;word-break:break-word;}
+  .adjBox .name{font-size:var(--nameAdj);font-weight:950;margin-top:4px;word-break:break-word;}
 
-  .adjs{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  .adj{
-    border-radius: 16px;
-    padding: 9px 10px;
-    text-align:center;
-    background: linear-gradient(180deg, rgba(255,135,55,.90), rgba(255,105,20,.78));
-    border:1px solid rgba(255,255,255,.10);
-    box-shadow: 0 12px 26px rgba(0,0,0,.20);
-  }
-  .adj .role{
-    font-size: var(--dirRole);
-    font-weight: 1000;
-    text-transform: uppercase;
-    letter-spacing: .55px;
-    opacity:.95;
-  }
-  .adj .name{
-    font-size: var(--adjName);
-    font-weight: 950;
-    margin-top: 4px;
-    word-break: break-word;
+  .adjs{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  @media (min-width: 700px){
+    .dirGrid{grid-template-columns: 1.2fr .8fr;}
+    .adjs{grid-template-columns:1fr;align-content:start;}
   }
 
   /* Pôles */
-  .polesWrap{ margin-top: var(--gap); }
-  .polesHead{
-    margin: 0 0 10px;
-    font-weight: 1000;
-    text-transform: uppercase;
-    letter-spacing: .65px;
-    color: rgba(255,210,140,.95);
-    text-shadow: 0 10px 18px rgba(0,0,0,.4);
-  }
+  .polesWrap{margin-top:var(--gap);}
+  .polesHead{margin:0 0 10px;font-weight:1000;text-transform:uppercase;letter-spacing:.65px;color:rgba(255,210,140,.95);text-shadow:0 10px 18px rgba(0,0,0,.4);}
+  .poles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+  @media (min-width:520px){.poles{grid-template-columns:repeat(3,minmax(0,1fr));}}
+  @media (min-width:900px){.poles{grid-template-columns:repeat(4,minmax(0,1fr));}}
 
-  .poles{
-    display:grid;
-    grid-template-columns: repeat(2, minmax(0,1fr));
-    gap: 10px;
-  }
-  @media (min-width: 520px){
-    .poles{ grid-template-columns: repeat(3, minmax(0,1fr)); }
-  }
-  @media (min-width: 900px){
-    .poles{ grid-template-columns: repeat(4, minmax(0,1fr)); }
-  }
-
-  .poleBtn{
-    border:none;
-    padding:0;
-    background: transparent;
-    cursor:pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-
+  .poleBtn{border:none;background:transparent;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;}
   .poleTile{
-    border-radius: 16px;
-    min-height: var(--poleMinH);
-    padding: 10px 10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    font-weight: 1000;
-    text-transform: uppercase;
-    letter-spacing: .35px;
-    font-size: var(--poleFont);
-    color:#0f0f0f;
-    box-shadow: 0 16px 34px rgba(0,0,0,.22);
-    border: 1px solid rgba(255,255,255,.14);
-    position:relative;
-    overflow:hidden;
+    border-radius:16px; min-height:var(--poleMinH);
+    padding:10px; display:flex;align-items:center;justify-content:center;text-align:center;
+    font-weight:1000;text-transform:uppercase;letter-spacing:.35px;font-size:var(--poleFont);
+    color:#111; border:1px solid rgba(255,255,255,.14);
+    box-shadow:0 16px 34px rgba(0,0,0,.22);
+    position:relative; overflow:hidden;
   }
   .poleTile::after{
-    content:"";
-    position:absolute; inset:0;
-    background:
-      radial-gradient(circle at 18% 15%, rgba(255,255,255,.18), transparent 55%),
-      radial-gradient(circle at 92% 115%, rgba(0,0,0,.14), transparent 55%);
+    content:""; position:absolute; inset:0;
+    background: radial-gradient(circle at 18% 15%, rgba(255,255,255,.18), transparent 55%),
+                radial-gradient(circle at 92% 115%, rgba(0,0,0,.14), transparent 55%);
     pointer-events:none;
   }
-  .poleTile span{ position:relative; z-index:1; line-height:1.1; }
+  .poleTile span{position:relative;z-index:1;line-height:1.1}
 
-  /* Modal plein écran */
-  .modal{
-    position: fixed;
-    inset: 0;
-    z-index: 50;
-    display:none;
-  }
-  .modal.open{ display:block; }
-
-  .modalBg{
-    position:absolute; inset:0;
-    background: rgba(0,0,0,.66);
-    backdrop-filter: blur(6px);
-  }
-
+  /* Modal */
+  .modal{position:fixed;inset:0;z-index:50;display:none;}
+  .modal.open{display:block;}
+  .modalBg{position:absolute;inset:0;background:rgba(0,0,0,.66);backdrop-filter:blur(6px);}
   .modalBox{
-    position:absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: calc(env(safe-area-inset-top) + 12px);
-    width: min(94vw, 920px);
-    max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
+    position:absolute; left:50%; transform:translateX(-50%);
+    top:calc(env(safe-area-inset-top) + 12px);
+    width:min(94vw, 920px);
+    max-height:calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
     overflow:auto;
-
-    background: rgba(0,0,0,.60);
-    border: 1px solid var(--stroke);
-    border-radius: 18px;
-    box-shadow: 0 22px 70px rgba(0,0,0,.45);
+    background:rgba(0,0,0,.62);
+    border:1px solid var(--stroke);
+    border-radius:18px;
+    box-shadow:0 22px 70px rgba(0,0,0,.45);
   }
-
   .modalHead{
-    position: sticky;
-    top: 0;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap: 10px;
-    padding: 10px 12px;
-    background: rgba(0,0,0,.78);
-    border-bottom: 1px solid rgba(255,255,255,.10);
-    backdrop-filter: blur(10px);
+    position:sticky; top:0;
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    padding:10px 12px;
+    background:rgba(0,0,0,.8);
+    border-bottom:1px solid rgba(255,255,255,.10);
+    backdrop-filter:blur(10px);
   }
+  .modalTitle{font-weight:1000;text-transform:uppercase;letter-spacing:.55px;color:rgba(255,210,140,.95);}
+  .modalBody{padding:12px;display:grid;gap:12px;}
 
-  .modalTitle{
-    font-weight:1000;
-    text-transform: uppercase;
-    letter-spacing: .55px;
-    color: rgba(255,210,140,.95);
-  }
-
-  .modalBody{
-    padding: 12px 12px 14px;
-    display:grid;
-    gap: 12px;
-  }
-
-  .subCard{
-    border:1px solid rgba(255,255,255,.12);
-    border-radius: 16px;
-    overflow:hidden;
-    background: rgba(0,0,0,.25);
-  }
-  .subHead{
-    padding: 9px 10px;
-    font-weight: 1000;
-    text-transform: uppercase;
-    letter-spacing: .3px;
-    background: rgba(255,255,255,.08);
-  }
-  .people{
-    padding: 10px 10px;
-    display:grid;
-    gap: 8px;
-  }
-
+  .subCard{border:1px solid rgba(255,255,255,.12);border-radius:16px;overflow:hidden;background:rgba(0,0,0,.22);}
+  .subHead{padding:9px 10px;font-weight:1000;text-transform:uppercase;letter-spacing:.3px;background:rgba(255,255,255,.08);}
+  .people{padding:10px;display:grid;gap:8px;}
   .person{
-    padding: 9px 9px;
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,.10);
-    background: rgba(0,0,0,.22);
-    display:grid;
-    grid-template-columns: 200px 1fr;
-    gap: 10px;
-    align-items:start;
+    padding:9px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.20);
+    display:grid;grid-template-columns:200px 1fr;gap:10px;align-items:start;
   }
-  .fn{
-    font-weight: 1000;
-    color: rgba(255,200,120,.98);
-  }
-  .nm{
-    font-weight: 900;
-    opacity: .95;
-    word-break: break-word;
-  }
-  @media (max-width: 420px){
-    .person{ grid-template-columns: 1fr; }
-  }
+  .fn{font-weight:1000;color:rgba(255,200,120,.98);}
+  .nm{font-weight:900;opacity:.95;word-break:break-word;}
+  @media (max-width:420px){.person{grid-template-columns:1fr;}}
 
   .empty{
-    padding: 14px;
-    border-radius: 16px;
-    border: 1px dashed rgba(255,255,255,.18);
-    background: rgba(0,0,0,.18);
-    text-align:center;
-    font-weight: 900;
-    color: var(--muted);
+    padding:14px;border-radius:16px;border:1px dashed rgba(255,255,255,.18);
+    background:rgba(0,0,0,.16);text-align:center;font-weight:900;color:var(--muted);
   }
 </style>
 </head>
@@ -323,7 +167,7 @@
 <body>
 <div class="wrap">
   <div class="topbar">
-    <button class="btn" id="backBtn">Retour</button>
+    <button class="btn" onclick="location.href='index.html'">Retour</button>
     <button class="btn primary" id="reloadBtn">Actualiser</button>
   </div>
 
@@ -331,18 +175,20 @@
 
   <section class="card">
     <div class="dir">
-      <div class="chef">
-        <div class="role">Chef de centre</div>
-        <div class="name" id="chefName">—</div>
-      </div>
-      <div class="adjs">
-        <div class="adj">
-          <div class="role">1er adjoint</div>
-          <div class="name" id="adj1Name">—</div>
+      <div class="dirGrid">
+        <div class="chefBox">
+          <div class="role">Chef de centre</div>
+          <div class="name" id="chefName">—</div>
         </div>
-        <div class="adj">
-          <div class="role">2ème adjoint</div>
-          <div class="name" id="adj2Name">—</div>
+        <div class="adjs">
+          <div class="adjBox">
+            <div class="role">1er adjoint</div>
+            <div class="name" id="adj1Name">—</div>
+          </div>
+          <div class="adjBox">
+            <div class="role">2ème adjoint</div>
+            <div class="name" id="adj2Name">—</div>
+          </div>
         </div>
       </div>
     </div>
@@ -366,33 +212,16 @@
 </div>
 
 <script>
+  // ✅ Ton URL Apps Script
   const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-  // ✅ Palette vraiment distincte (pas 3 couleurs proches)
-  const PALETTE = [
-    "#4CC9F0", // bleu
-    "#F9C74F", // jaune
-    "#90BE6D", // vert
-    "#F8961E", // orange
-    "#F28482", // rose
-    "#9D4EDD", // violet
-    "#43AA8B", // turquoise
-    "#577590" // bleu-gris
-  ];
-
-  // ✅ Fallback avec TES pôles (inclut JSP / Amicale / Équipe de soutien)
-  const FALLBACK = {
-    direction: { chef:"À renseigner", adj1:"À renseigner", adj2:"À renseigner" },
-    poles: [
-      { id:"ope", libelle:"Opérationnel", sousPoles:[] },
-      { id:"jsp", libelle:"JSP", sousPoles:[] },
-      { id:"tech", libelle:"Technique", sousPoles:[] },
-      { id:"adm", libelle:"Administratif", sousPoles:[] },
-      { id:"ami", libelle:"Amicale", sousPoles:[] },
-      { id:"soutien", libelle:"Équipe de soutien", sousPoles:[] },
-      { id:"formation", libelle:"Formation", sousPoles:[] }
-    ]
-  };
+  // Couleurs DISTINCTES (stables par nom)
+  const PALETTE = ["#4CC9F0","#F9C74F","#90BE6D","#F8961E","#F28482","#9D4EDD","#43AA8B","#577590"];
+  function colorForName(name){
+    const s = String(name||"").toLowerCase().trim();
+    let h = 0; for(let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i))>>>0;
+    return PALETTE[h % PALETTE.length];
+  }
 
   const $chef = document.getElementById("chefName");
   const $adj1 = document.getElementById("adj1Name");
@@ -402,16 +231,13 @@
   const $modal = document.getElementById("modal");
   const $modalTitle = document.getElementById("modalTitle");
   const $modalBody = document.getElementById("modalBody");
-  const $closeBtn = document.getElementById("closeBtn");
-  const $modalBg = document.getElementById("modalBg");
-
-  document.getElementById("backBtn").onclick = () => location.href = "index.html";
-  document.getElementById("reloadBtn").onclick = () => load();
-  $closeBtn.onclick = closeModal;
-  $modalBg.onclick = closeModal;
+  document.getElementById("closeBtn").onclick = closeModal;
+  document.getElementById("modalBg").onclick = closeModal;
+  document.getElementById("reloadBtn").onclick = load;
 
   function closeModal(){ $modal.classList.remove("open"); }
 
+  // JSONP
   function jsonp(url){
     return new Promise((resolve, reject)=>{
       const cb = "cb_" + Math.random().toString(36).slice(2);
@@ -430,17 +256,13 @@
     $adj2.textContent = dir?.adj2 || "—";
   }
 
-  // Couleur stable par nom (même pôle = même couleur)
-  function colorForPoleName(name){
-    const key = String(name || "").toLowerCase().trim();
-    let h = 0;
-    for (let i=0;i<key.length;i++) h = (h*31 + key.charCodeAt(i)) >>> 0;
-    return PALETTE[h % PALETTE.length];
-  }
-
   function renderPoles(poles){
     $poles.innerHTML = "";
-    poles.forEach((p, i)=>{
+    if(!Array.isArray(poles) || !poles.length){
+      $poles.innerHTML = `<div class="empty">Aucun pôle reçu depuis Sheets (ou Apps Script).</div>`;
+      return;
+    }
+    poles.forEach(p=>{
       const btn = document.createElement("button");
       btn.className = "poleBtn";
       btn.type = "button";
@@ -448,8 +270,7 @@
       const tile = document.createElement("div");
       tile.className = "poleTile";
 
-      // Si Apps Script envoie une couleur, on la respecte, sinon couleur stable par libellé
-      const c = p.couleur || colorForPoleName(p.libelle);
+      const c = p.couleur || colorForName(p.libelle);
       tile.style.background = `linear-gradient(180deg, ${c}EE, ${c}B5)`;
 
       const sp = document.createElement("span");
@@ -468,7 +289,7 @@
 
     const subs = p.sousPoles || [];
     if(!subs.length){
-      $modalBody.innerHTML = `<div class="empty">Aucun contenu pour ce pôle (pour l’instant).</div>`;
+      $modalBody.innerHTML = `<div class="empty">Ce pôle est vide dans Sheets (pas de sous-pôle/membre).</div>`;
       $modal.classList.add("open");
       return;
     }
@@ -518,22 +339,15 @@
   }
 
   async function load(){
-    // 1) Toujours afficher quelque chose (propre) si API ne répond pas
-    setDirection(FALLBACK.direction);
-    renderPoles(FALLBACK.poles);
-
-    // 2) Si API OK, on remplace par TES vrais pôles + TES vrais noms
     try{
       const data = await jsonp(API);
-      if(data && data.ok === true){
-        if(data.direction) setDirection(data.direction);
-        if(Array.isArray(data.poles) && data.poles.length){
-          // IMPORTANT : on respecte EXACTEMENT les libellés renvoyés
-          renderPoles(data.poles);
-        }
-      }
+      if(!data || data.ok !== true) throw new Error("Réponse invalide");
+      setDirection(data.direction);
+      renderPoles(data.poles);
     }catch(e){
-      // On laisse le fallback (au moins c’est propre)
+      // si l'API ne répond pas, on affiche un message clair
+      setDirection(null);
+      renderPoles(null);
     }
   }
 
