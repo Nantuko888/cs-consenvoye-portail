@@ -3,29 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Équipes - CS Consenvoye</title>
+  <title>Équipes — CS Consenvoye</title>
 
   <style>
     :root{
-      --maxw: 920px;
-      --pad: clamp(14px, 4vw, 26px);
-      --gap: clamp(12px, 3vw, 18px);
+      --maxw: 980px;
+      --pad: clamp(12px, 3.5vw, 22px);
+      --gap: clamp(10px, 2.8vw, 18px);
 
-      --card: rgba(0,0,0,.55);
+      --glass: rgba(0,0,0,.55);
       --stroke: rgba(255,140,0,.45);
       --txt: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.70);
+      --muted: rgba(255,255,255,.72);
 
-      --blue: #1976d2;
-      --orange: #f28c1b;
-
-      --line: rgba(255,255,255,.25);
-      --roleColor: rgba(255,200,120,.95);
-
-      --chefYellow: rgba(255,190,40,.22);
-      --chefYellowBorder: rgba(255,190,40,.65);
-      --chefYellowGlow: rgba(255,190,40,.18);
+      --blue: #2f7fd1;
+      --orange: #ff8a00;
     }
+
+    *{ box-sizing:border-box; }
 
     html, body{
       margin:0; padding:0;
@@ -33,9 +28,9 @@
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--txt);
       background:#000;
-      -webkit-text-size-adjust: 100%;
     }
 
+    /* ✅ BACKGROUND FIGÉ (robuste Android) */
     body::before{
       content:"";
       position: fixed;
@@ -43,7 +38,14 @@
       background: url("background.png") center top / cover no-repeat;
       z-index: 0;
       transform: translateZ(0);
-      will-change: transform;
+    }
+    body::after{
+      content:"";
+      position: fixed;
+      inset:0;
+      background: linear-gradient(to bottom, rgba(0,0,0,.15), rgba(0,0,0,.55));
+      z-index: 0;
+      pointer-events:none;
     }
 
     .wrap{
@@ -69,7 +71,12 @@
       text-shadow: 0 0 18px rgba(255,120,0,.35);
     }
 
-    .actions{ display:flex; gap:10px; align-items:center; }
+    .actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
     button{
       appearance:none;
       border: 1px solid var(--stroke);
@@ -79,248 +86,100 @@
       border-radius: 12px;
       font-weight: 800;
       cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
     }
     button:active{ transform: translateY(1px); }
 
-    /* ===== Bloc “Chef de centre + branches” ===== */
-    .tree{
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 20px;
-      padding: 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-      backdrop-filter: blur(4px);
-      margin-bottom: var(--gap);
-    }
-
-    /* ✅ Chef de centre en jaune */
-    .chef{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap: 6px;
-      padding: 10px 12px 12px;
-      border-radius: 16px;
-
-      background: var(--chefYellow);
-      border: 1px solid var(--chefYellowBorder);
-      box-shadow: 0 0 22px var(--chefYellowGlow);
-
-      text-transform: uppercase;
-      font-weight: 1000;
-      letter-spacing: .8px;
-    }
-
-    .chef .name{
-      text-transform:none;
-      letter-spacing:0;
-      font-weight: 800;
-      opacity:.95;
-      font-size: 14px;
-    }
-
-    .connector{
-      height: 14px;
-      display:flex;
-      justify-content:center;
-      margin: 8px 0 10px;
-      position: relative;
-    }
-    .connector::before{
-      content:"";
-      width: 2px;
-      height: 14px;
-      background: var(--line);
-      border-radius: 2px;
-    }
-
-    /* Les 2 équipes sur UNE LIGNE */
-    .branches{
-      display:flex;
-      gap: 12px;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: nowrap; /* ✅ interdit le retour ligne */
-    }
-
-    .branchBtn{
-      flex: 1 1 0;
-      min-width: 0;
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 10px 12px; /* plus petit */
-      border-radius: 16px;
-      background: rgba(0,0,0,.35);
-      border: 1px solid rgba(255,255,255,.12);
-      cursor:pointer;
-      font-weight: 1000;
-      letter-spacing: .6px;
-      text-transform: uppercase;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .branchLeft{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      min-width: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .dot{
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      flex: 0 0 auto;
-    }
-
-    .miniCount{
-      min-width: 30px;
-      height: 30px;
-      border-radius: 999px;
-      display:grid;
-      place-items:center;
-      background: rgba(0,0,0,.22);
-      border: 1px solid rgba(255,255,255,.18);
-      font-size: 13px;
-      font-weight: 1000;
-      flex: 0 0 auto;
-    }
-
-    .branchBtn.isActive[data-team="1"]{
-      background: rgba(25,118,210,.22);
-      border-color: rgba(25,118,210,.55);
-    }
-    .branchBtn.isActive[data-team="2"]{
-      background: rgba(242,140,27,.22);
-      border-color: rgba(242,140,27,.55);
-    }
-
-    /* ===== Cartes équipes ===== */
     .grid{
       display:grid;
       grid-template-columns: 1fr;
       gap: var(--gap);
     }
 
+    @media (min-width: 860px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+
     .card{
-      background: var(--card);
+      background: var(--glass);
       border: 1px solid var(--stroke);
-      border-radius: 20px;
-      overflow: hidden;
+      border-radius: 18px;
+      overflow:hidden;
       box-shadow: 0 10px 30px rgba(0,0,0,.35);
       backdrop-filter: blur(4px);
     }
 
-    .band{
+    /* ✅ Bandeaux couleur */
+    .bar{
+      padding: 12px 14px;
+      font-weight: 1000;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding: 18px 18px;
-      color: #fff;
-      font-weight: 1000;
-      letter-spacing: 1px;
-      text-transform: uppercase;
+      gap: 10px;
     }
-    .band.blue{ background: linear-gradient(90deg, rgba(25,118,210,1), rgba(25,118,210,.70)); }
-    .band.orange{ background: linear-gradient(90deg, rgba(242,140,27,1), rgba(242,140,27,.70)); }
-
-    .band .badge{
-      width: 38px;
-      height: 38px;
-      border-radius: 999px;
-      display:grid;
-      place-items:center;
-      background: rgba(0,0,0,.22);
-      border: 1px solid rgba(255,255,255,.18);
-      font-weight: 1000;
+    .bar small{
+      font-weight: 900;
+      opacity:.95;
     }
+    .bar.blue{ background: linear-gradient(180deg, rgba(47,127,209,.95), rgba(47,127,209,.75)); }
+    .bar.orange{ background: linear-gradient(180deg, rgba(255,138,0,.95), rgba(255,138,0,.75)); }
 
-    .tableWrap{ padding: 14px 14px 16px; }
+    .content{ padding: 12px 14px 14px; }
 
-    .colsHead{
+    /* ✅ En-tête colonnes équilibrées */
+    .headRow{
       display:grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-      align-items:center;
-      padding: 12px 12px;
+      gap: 10px;
+      padding: 10px 12px;
       border-radius: 14px;
-      background: rgba(255,255,255,.08);
       border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.35);
       font-weight: 1000;
-      letter-spacing: .6px;
-      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      font-size: 12px;
+      color: rgba(255,220,170,.95);
     }
-    .colsHead span{ opacity:.95; text-align:center; }
 
-    .rows{ display:flex; flex-direction:column; gap: 10px; }
-
-    /* ✅ pour gérer les noms sur 2 lignes -> align-items:start */
+    /* ✅ Lignes : 3 colonnes égales */
     .row{
       display:grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-      align-items: start;
-      padding: 12px 12px;
+      gap: 10px;
+      padding: 10px 12px;
       border-radius: 14px;
-      background: rgba(0,0,0,.35);
       border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.22);
+      margin-top: 10px;
+      align-items:start;
     }
 
     .role{
       font-weight: 1000;
-      color: var(--roleColor);
-      text-align:left;
-
-      white-space: normal;
-      overflow: visible;
-      text-overflow: clip;
-      word-break: break-word;
-      line-height: 1.2;
+      color: rgba(255,190,120,.95);
+      text-decoration: none;
+      line-height:1.15;
+      overflow-wrap:anywhere;
     }
-
-    /* ✅ NOM EN ENTIER (plus d’ellipse) */
-    .person{
+    .name{
       font-weight: 800;
-      text-align:center;
-
-      white-space: normal;
-      overflow: visible;
-      text-overflow: clip;
-      word-break: break-word;
-      line-height: 1.2;
+      line-height:1.15;
+      overflow-wrap:anywhere;
     }
-
-    .comp{
-      font-weight: 800;
-      opacity:.95;
-      text-align:right;
-
-      white-space: normal;
-      overflow: visible;
-      text-overflow: clip;
-      word-break: break-word;
-      line-height: 1.2;
+    .skills{
+      font-weight: 650;
+      color: rgba(255,255,255,.78);
+      line-height:1.15;
+      overflow-wrap:anywhere;
     }
 
     .empty{
       color: var(--muted);
       font-style: italic;
-      margin: 10px 2px 0;
-      display:none;
-    }
-
-    .hidden{ display:none !important; }
-
-    .status{
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 14px;
+      margin: 12px 0 0;
     }
   </style>
 </head>
@@ -331,221 +190,163 @@
       <h1 class="title">Équipes</h1>
       <div class="actions">
         <button id="refreshBtn">Actualiser</button>
-        <button type="button" onclick="history.back()">Retour</button>
+        <button onclick="window.location.href='index.html'">Retour</button>
       </div>
     </header>
 
-    <!-- Chef de centre + branches -->
-    <section class="tree" aria-label="Organigramme équipes">
-      <div class="chef">
-        <div>Chef de centre</div>
-        <!-- ✅ Tu modifies ici le nom -->
-        <div class="name"><strong id="chefName">ADC VÉNANTE Pierre</strong></div>
-      </div>
-
-      <div class="connector"></div>
-
-      <div class="branches">
-        <button class="branchBtn" id="branch1" data-team="1" type="button" aria-controls="cardTeam1" aria-expanded="false">
-          <span class="branchLeft">
-            <span class="dot" style="background: var(--blue)"></span>
-            <span>Équipe 1</span>
-          </span>
-          <span class="miniCount" id="count1">0</span>
-        </button>
-
-        <button class="branchBtn" id="branch2" data-team="2" type="button" aria-controls="cardTeam2" aria-expanded="false">
-          <span class="branchLeft">
-            <span class="dot" style="background: var(--orange)"></span>
-            <span>Équipe 2</span>
-          </span>
-          <span class="miniCount" id="count2">0</span>
-        </button>
-      </div>
-    </section>
-
-    <!-- Cartes équipes (cachées au départ) -->
     <div class="grid">
-      <section class="card hidden" id="cardTeam1">
-        <div class="band blue">
+      <section class="card">
+        <div class="bar blue">
           <span>Équipe 1</span>
-          <span class="badge" id="badge1">0</span>
+          <small id="count1">0</small>
         </div>
-
-        <div class="tableWrap">
-          <div class="colsHead">
-            <span>Fonction</span><span>Nom</span><span>Comp</span>
+        <div class="content">
+          <div class="headRow">
+            <div>Fonction</div><div>Nom</div><div>Comp</div>
           </div>
-          <div class="rows" id="rows1"></div>
-          <p class="empty" id="empty1">Aucun nom pour le moment.</p>
+          <div id="team1"></div>
+          <p id="empty1" class="empty" style="display:none;">Aucun nom pour le moment.</p>
         </div>
       </section>
 
-      <section class="card hidden" id="cardTeam2">
-        <div class="band orange">
+      <section class="card">
+        <div class="bar orange">
           <span>Équipe 2</span>
-          <span class="badge" id="badge2">0</span>
+          <small id="count2">0</small>
         </div>
-
-        <div class="tableWrap">
-          <div class="colsHead">
-            <span>Fonction</span><span>Nom</span><span>Comp</span>
+        <div class="content">
+          <div class="headRow">
+            <div>Fonction</div><div>Nom</div><div>Comp</div>
           </div>
-          <div class="rows" id="rows2"></div>
-          <p class="empty" id="empty2">Aucun nom pour le moment.</p>
+          <div id="team2"></div>
+          <p id="empty2" class="empty" style="display:none;">Aucun nom pour le moment.</p>
         </div>
       </section>
     </div>
-
-    <div class="status" id="status">Chargement…</div>
   </div>
 
   <script>
     // ✅ TON URL APPS SCRIPT (JSONP)
     const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-    const $status = document.getElementById("status");
+    const $t1 = document.getElementById("team1");
+    const $t2 = document.getElementById("team2");
+    const $e1 = document.getElementById("empty1");
+    const $e2 = document.getElementById("empty2");
+    const $c1 = document.getElementById("count1");
+    const $c2 = document.getElementById("count2");
 
-    const $rows1 = document.getElementById("rows1");
-    const $rows2 = document.getElementById("rows2");
-    const $empty1 = document.getElementById("empty1");
-    const $empty2 = document.getElementById("empty2");
+    // Ordre demandé
+    const ORDER = ["Responsable","Adjoint","CA","CE","Équipier","Equipier","ISP","Apprenant"];
+    const rank = {};
+    ORDER.forEach((k,i)=>{ rank[normalize(k)] = i; });
 
-    const $count1 = document.getElementById("count1");
-    const $count2 = document.getElementById("count2");
-    const $badge1 = document.getElementById("badge1");
-    const $badge2 = document.getElementById("badge2");
+    function normalize(s){
+      return String(s||"")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g,""); // enlève accents
+    }
 
-    const $branch1 = document.getElementById("branch1");
-    const $branch2 = document.getElementById("branch2");
-    const $card1 = document.getElementById("cardTeam1");
-    const $card2 = document.getElementById("cardTeam2");
-
-    // ===== TRI demandé =====
-    // Responsable, Adjoint, CA, CE, Équipier, ISP, Apprenant, puis le reste
     function roleRank(role){
-      const r = String(role || "").trim().toLowerCase();
-      if (r.includes("resp.")) return 1;
-      if (r.includes("adjoint")) return 2;
-      if (r === "ca" || r.startsWith("ca ") || r.includes(" ca")) return 3;
-      if (r === "ce" || r.startsWith("ce ") || r.includes(" ce")) return 4;
-      if (r.includes("equipier") || r.includes("équipier")) return 5;
-      if (r.includes("isp")) return 6;
-      if (r.includes("apprenant")) return 7;
-      return 999;
+      const key = normalize(role);
+      return (key in rank) ? rank[key] : 999;
     }
 
-    // Normalise une ligne API -> {fonction, nom, comp}
-    function normalize(x){
-      if (!x || typeof x !== "object") {
-        const s = String(x || "").trim();
-        return { fonction:"", nom:s, comp:"" };
+    // Accepte : string OU objet {role,name,skills}
+    function toObj(item){
+      if (item == null) return { role:"", name:"", skills:"" };
+
+      if (typeof item === "string"){
+        // ancien format : juste un nom
+        return { role:"", name:item, skills:"" };
       }
-      const fonction = String(x.fonction ?? x.role ?? x.fct ?? "").trim();
-      const nom = String(x.nom ?? x.name ?? x.prenom_nom ?? "").trim();
-      const comp = String(x.comp ?? x.competences ?? x.competence ?? x.skill ?? "").trim();
-      return { fonction, nom, comp };
+
+      // si format objet
+      const role = item.role ?? item.fonction ?? item.Fonction ?? "";
+      const name = item.name ?? item.nom ?? item.Nom ?? "";
+      const skills = item.skills ?? item.competences ?? item.Compétences ?? item.competences ?? item.comp ?? "";
+      return { role, name, skills };
     }
 
-    function sortRows(list){
-      return list.slice().sort((a,b)=>{
-        const ra = roleRank(a.fonction);
-        const rb = roleRank(b.fonction);
+    function sortTeam(list){
+      const arr = list.map(toObj);
+
+      // tri par rang de fonction puis nom
+      arr.sort((a,b)=>{
+        const ra = roleRank(a.role);
+        const rb = roleRank(b.role);
         if (ra !== rb) return ra - rb;
-        return String(a.nom || "").localeCompare(String(b.nom || ""), "fr");
+
+        const na = normalize(a.name);
+        const nb = normalize(b.name);
+        if (na < nb) return -1;
+        if (na > nb) return 1;
+        return 0;
       });
+
+      return arr;
     }
 
-    function renderTeam($rows, $empty, $count, $badge, raw){
-      $rows.innerHTML = "";
+    function renderTeam(container, emptyEl, countEl, list){
+      container.innerHTML = "";
+      const arr = Array.isArray(list) ? sortTeam(list) : [];
+      countEl.textContent = arr.length;
 
-      const list = Array.isArray(raw) ? raw.map(normalize) : [];
-      const rows = sortRows(list).filter(r => (r.fonction || r.nom || r.comp));
-
-      $count.textContent = String(rows.length);
-      $badge.textContent = String(rows.length);
-
-      if (!rows.length){
-        $empty.style.display = "block";
+      if (!arr.length){
+        emptyEl.style.display = "block";
         return;
       }
-      $empty.style.display = "none";
+      emptyEl.style.display = "none";
 
-      for (const r of rows){
+      for (const m of arr){
         const row = document.createElement("div");
         row.className = "row";
 
-        const c1 = document.createElement("div");
-        c1.className = "role";
-        c1.textContent = r.fonction || "—";
+        const role = document.createElement("div");
+        role.className = "role";
+        role.textContent = m.role || "—";
 
-        const c2 = document.createElement("div");
-        c2.className = "person";
-        c2.textContent = r.nom || "—";
+        const name = document.createElement("div");
+        name.className = "name";
+        name.textContent = m.name || "—";
 
-        const c3 = document.createElement("div");
-        c3.className = "comp";
-        c3.textContent = r.comp || "—";
+        const skills = document.createElement("div");
+        skills.className = "skills";
+        skills.textContent = m.skills || "—";
 
-        row.appendChild(c1);
-        row.appendChild(c2);
-        row.appendChild(c3);
-        $rows.appendChild(row);
+        row.appendChild(role);
+        row.appendChild(name);
+        row.appendChild(skills);
+
+        container.appendChild(row);
       }
     }
 
-    // Toggle : clique équipe 1 -> affiche, re-clique -> cache (idem équipe 2)
-    function toggleTeam(team){
-      const t = String(team);
-      const is1 = (t === "1");
-      const is2 = (t === "2");
-
-      const open1 = !$card1.classList.contains("hidden");
-      const open2 = !$card2.classList.contains("hidden");
-
-      if ((is1 && open1) || (is2 && open2)){
-        $card1.classList.add("hidden");
-        $card2.classList.add("hidden");
-        $branch1.classList.remove("isActive");
-        $branch2.classList.remove("isActive");
-        $branch1.setAttribute("aria-expanded","false");
-        $branch2.setAttribute("aria-expanded","false");
-        return;
-      }
-
-      $card1.classList.toggle("hidden", !is1);
-      $card2.classList.toggle("hidden", !is2);
-
-      $branch1.classList.toggle("isActive", is1);
-      $branch2.classList.toggle("isActive", is2);
-
-      $branch1.setAttribute("aria-expanded", is1 ? "true" : "false");
-      $branch2.setAttribute("aria-expanded", is2 ? "true" : "false");
-
-      const target = is1 ? $card1 : $card2;
-      setTimeout(()=> target.scrollIntoView({behavior:"smooth", block:"start"}), 0);
-    }
-
-    $branch1.addEventListener("click", ()=> toggleTeam("1"));
-    $branch2.addEventListener("click", ()=> toggleTeam("2"));
-
+    // JSONP loader
     function loadTeams(){
-      $status.textContent = "Chargement…";
-
       const cbName = "cb_" + Math.random().toString(36).slice(2);
       const script = document.createElement("script");
 
       window[cbName] = (data) => {
         try{
-          if (!data || data.ok !== true) throw new Error((data && data.error) ? data.error : "Réponse invalide");
+          // Attendu : { ok:true, teams: { "1":[...], "2":[...] } }
+          if (!data || data.ok !== true) throw new Error("Réponse invalide");
 
-          renderTeam($rows1, $empty1, $count1, $badge1, data.teams && data.teams["1"]);
-          renderTeam($rows2, $empty2, $count2, $badge2, data.teams && data.teams["2"]);
+          const t1 = data.teams && (data.teams["1"] || data.teams[1]) || [];
+          const t2 = data.teams && (data.teams["2"] || data.teams[2]) || [];
 
-          $status.textContent = "OK — Dernière mise à jour : " + (data.updatedAt || "inconnue");
+          renderTeam($t1, $e1, $c1, t1);
+          renderTeam($t2, $e2, $c2, t2);
         }catch(err){
           console.error(err);
-          $status.textContent = "Erreur : " + err.message;
+          // en cas d'erreur : on affiche vide mais la page reste stable
+          renderTeam($t1, $e1, $c1, []);
+          renderTeam($t2, $e2, $c2, []);
+          $e1.style.display = "block";
+          $e2.style.display = "block";
+          $e1.textContent = "Erreur de chargement (API).";
+          $e2.textContent = "Erreur de chargement (API).";
         }finally{
           delete window[cbName];
           script.remove();
@@ -553,9 +354,14 @@
       };
 
       script.onerror = () => {
-        $status.textContent = "Erreur : impossible de charger le script (JSONP).";
         delete window[cbName];
         script.remove();
+        renderTeam($t1, $e1, $c1, []);
+        renderTeam($t2, $e2, $c2, []);
+        $e1.style.display = "block";
+        $e2.style.display = "block";
+        $e1.textContent = "Erreur : impossible de charger le script (JSONP).";
+        $e2.textContent = "Erreur : impossible de charger le script (JSONP).";
       };
 
       const sep = API.includes("?") ? "&" : "?";
