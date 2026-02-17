@@ -8,349 +8,214 @@
   <style>
     :root{
       --maxw: 980px;
-      --pad: clamp(14px, 4vw, 26px);
-      --gap: clamp(10px, 3vw, 18px);
-      --tileH: clamp(86px, 12vw, 110px);
-
-      --txt: rgba(255,255,255,.94);
-      --muted: rgba(255,255,255,.72);
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-
-      --yellow1:#ffd24d; --yellow2:#ff9a2f;
-      --orange1:#ffb04d; --orange2:#ff7a00;
-      --blue1:#46b1ff;   --blue2:#1b6cff;
-      --violet1:#b067ff; --violet2:#6d27ff;
-      --pink1:#ff63cf;   --pink2:#d600a6;
-      --green1:#79ffb1;  --green2:#1ecf7a;
-      --red1:#ff7d7d;    --red2:#ff2f2f;
+      --pad: clamp(12px, 4vw, 26px);
+      --gap: clamp(10px, 2.8vw, 18px);
+      --card: rgba(0,0,0,.50);
+      --stroke: rgba(255,150,40,.45);
+      --txt: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --yellow: #FFCC33;
     }
 
-    html, body{
-      margin:0; padding:0; min-height:100%;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--txt);
-      background:#000;
-    }
+    html, body{ margin:0; padding:0; min-height:100%; background:#000; color:var(--txt);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
 
-    /* Background fixe identique portail */
+    /* Background fixe */
     body::before{
       content:"";
-      position:fixed;
-      inset:0;
+      position: fixed; inset: 0;
       background: url("background.png") center top / cover no-repeat;
-      z-index:0;
-      transform: translate3d(0,0,0);
-      will-change: transform;
-      pointer-events:none;
+      z-index: 0;
+      transform: translateZ(0);
     }
 
     .wrap{
-      position:relative;
-      z-index:1;
+      position: relative;
+      z-index: 1;
       max-width: var(--maxw);
       margin: 0 auto;
-      padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad)
-               calc(env(safe-area-inset-bottom) + var(--pad));
+      padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad) calc(env(safe-area-inset-bottom) + var(--pad));
     }
 
     header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
+      display:flex; align-items:center; justify-content:space-between; gap: 12px;
       margin-bottom: var(--gap);
     }
-
     .title{
       margin:0;
-      font-size: clamp(22px, 3.2vw, 34px);
-      letter-spacing:.5px;
-      text-shadow: 0 0 18px rgba(255,120,0,.25);
+      font-size: clamp(20px, 3.2vw, 34px);
+      letter-spacing: .4px;
+      text-shadow: 0 0 18px rgba(255,120,0,.35);
     }
-
-    button{
+    .btn{
       appearance:none;
-      border: 1px solid rgba(255,140,0,.42);
+      border: 1px solid var(--stroke);
       background: rgba(0,0,0,.45);
       color: var(--txt);
       padding: 10px 12px;
       border-radius: 12px;
-      font-weight: 900;
+      font-weight: 800;
       cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
     }
-    button:active{ transform: translateY(1px); }
+    .btn:active{ transform: translateY(1px); }
 
-    /* ===== DIRECTION ===== */
-    .dirWrap{
+    /* Direction */
+    .direction{
+      background: rgba(0,0,0,.55);
+      border: 1px solid rgba(255,200,90,.55);
       border-radius: 18px;
-      overflow:hidden;
-      border: 1px solid rgba(255,220,80,.55);
-      box-shadow: var(--shadow);
-      background: rgba(0,0,0,.45);
+      padding: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
       margin-bottom: var(--gap);
     }
-    .dirHead{
-      background: linear-gradient(90deg, var(--yellow1), var(--yellow2));
-      color:#1a1200;
-      font-weight: 1000;
-      letter-spacing: 1px;
-      padding: 14px 16px;
-      text-transform: uppercase;
-      text-align:center;
-    }
-    .dirBody{
-      padding: 14px 14px 16px;
+    .dir-grid{
       display:grid;
-      gap: 12px;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      align-items: start;
     }
-    .chiefCard{
-      text-align:center;
+    @media(min-width:760px){
+      .dir-grid{ grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    .dir-card{
+      border-radius: 16px;
       padding: 12px 12px;
-      border-radius: 14px;
-      background: rgba(0,0,0,.28);
-      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,170,60,.35);
     }
-    .chiefRole{
-      font-weight: 1000;
-      color: rgba(255,200,130,.95);
+    .dir-card.chef{
+      background: rgba(255,204,51,.20);
+      border: 1px solid rgba(255,204,51,.80);
+    }
+    .dir-role{
+      font-weight: 900;
+      letter-spacing: .4px;
       text-transform: uppercase;
-      letter-spacing: .7px;
       font-size: 13px;
+      color: rgba(255,220,140,.95);
+      margin-bottom: 6px;
     }
-    .chiefName{
-      margin-top: 6px;
-      font-weight: 1000;
-      font-size: 18px;
-      word-break: break-word;
+    .dir-card.chef .dir-role{
+      color: rgba(255,240,170,.98);
     }
+    .dir-name{
+      font-weight: 800;
+      font-size: 16px;
+      line-height: 1.2;
+      word-break: break-word; /* IMPORTANT: ne coupe pas le nom */
+    }
+    .dir-empty{ color: var(--muted); font-style: italic; }
 
-    .adjGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .adjCard{
-      padding: 12px 12px;
-      border-radius: 14px;
-      background: rgba(0,0,0,.28);
-      border: 1px solid rgba(255,255,255,.08);
-      text-align:center;
-    }
-    .adjRole{
-      font-weight: 1000;
-      color: rgba(255,200,130,.95);
-      text-transform: uppercase;
-      letter-spacing: .6px;
-      font-size: 12.5px;
-    }
-    .adjName{
-      margin-top: 6px;
-      font-weight: 950;
-      word-break: break-word;
-    }
-
-    .hint{
-      margin: 2px 0 var(--gap);
-      font-size: 13px;
-      color: rgba(255,200,130,.9);
-    }
-
-    /* ===== POLES ===== */
+    /* Pôles */
     .poles{
       display:grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr 1fr;
       gap: var(--gap);
     }
-    @media (min-width: 800px){
-      .poles{ grid-template-columns: repeat(4, 1fr); }
+    @media(min-width:900px){
+      .poles{ grid-template-columns: 1fr 1fr 1fr; }
     }
 
-    .poleBtn{
-      display:block;
-      width:100%;
-      border:none;
-      background: transparent;
-      padding:0;
-      cursor:pointer;
-    }
-
-    .poleCard{
-      height: var(--tileH);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: 10px 12px;
+    .pole{
       border-radius: 18px;
-      overflow:hidden;
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: 0 10px 22px rgba(0,0,0,.30);
-      transition: transform .08s;
-      position: relative;
-    }
-    .poleBtn:active .poleCard{ transform: translateY(1px); }
-
-    .poleCard::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      opacity:.98;
-    }
-
-    .poleTitle{
-      position:relative;
-      z-index:1;
-      text-align:center;
-      font-weight: 1000;
-      letter-spacing: .6px;
-      text-transform: uppercase;
-      padding: 8px 10px;
-      border-radius: 14px;
-      background: rgba(0,0,0,.22);
-      border: 1px solid rgba(255,255,255,.18);
-      color: rgba(255,255,255,.95);
-      text-shadow: 0 0 10px rgba(0,0,0,.35);
-      line-height: 1.1;
-    }
-
-    /* couleurs */
-    .c-tech::before  { background: linear-gradient(90deg, var(--orange1), var(--orange2)); }
-    .c-ope::before   { background: linear-gradient(90deg, #ffee66, #ffcc00); }
-    .c-form::before  { background: linear-gradient(90deg, var(--violet1), var(--violet2)); }
-    .c-recr::before  { background: linear-gradient(90deg, var(--pink1), var(--pink2)); }
-    .c-amical::before{ background: linear-gradient(90deg, var(--green1), var(--green2)); }
-    .c-soutien::before{background: linear-gradient(90deg, var(--blue1), var(--blue2)); }
-    .c-jsp::before   { background: linear-gradient(90deg, var(--red1), var(--red2)); }
-
-    /* ===== OVERLAY plein écran ===== */
-    .overlay{
-      position: fixed;
-      inset: 0;
-      z-index: 999;
-      display:none;
-      background: rgba(0,0,0,.86);
-      backdrop-filter: blur(4px);
-      padding: calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 14px);
-    }
-    .overlay.on{ display:block; }
-
-    .sheet{
-      max-width: 980px;
-      margin: 0 auto;
-      height: 100%;
-      display:flex;
-      flex-direction:column;
-      gap: 12px;
-    }
-
-    .sheetTop{
-      border-radius: 18px;
-      overflow:hidden;
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: var(--shadow);
-    }
-    .sheetHead{
-      padding: 16px 16px;
-      font-weight: 1000;
-      text-transform: uppercase;
-      letter-spacing:.8px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      color: rgba(0,0,0,.9);
-    }
-    .closeBtn{
-      border: 1px solid rgba(255,255,255,.25);
-      background: rgba(0,0,0,.35);
-      color: var(--txt);
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-weight: 1000;
-      cursor:pointer;
-    }
-    .sheetBody{
-      background: rgba(0,0,0,.55);
-      padding: 12px 12px 14px;
-      overflow:auto;
-      border-top: 1px solid rgba(255,255,255,.10);
-    }
-
-    /* sous-pôles */
-    .subPole{
-      border-radius: 16px;
-      overflow:hidden;
+      padding: 14px;
       border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.30);
+      background: rgba(0,0,0,.45);
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      overflow: hidden;
+    }
+    .pole::after{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(circle at 20% 10%, rgba(255,255,255,.18), transparent 45%);
+      opacity:.35;
+      pointer-events:none;
+    }
+
+    .pole-title{
+      margin:0;
+      font-weight: 950;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      font-size: 14px;
+      text-shadow: 0 0 14px rgba(0,0,0,.25);
+    }
+    .pole-sub{
+      margin-top: 8px;
+      font-size: 12px;
+      color: rgba(255,255,255,.82);
+      opacity: .85;
+    }
+
+    /* Détails */
+    .details{
+      display:none;
+      margin-top: var(--gap);
+      background: rgba(0,0,0,.55);
+      border: 1px solid var(--stroke);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    .details-head{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
       margin-bottom: 10px;
     }
-
-    .subBtn{
-      width:100%;
-      border: none;
-      background: rgba(0,0,0,.22);
-      color: var(--txt);
-      padding: 12px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      font-weight: 1000;
-      cursor:pointer;
-      text-align:left;
+    .details-title{
+      margin:0;
+      font-size: 18px;
+      font-weight: 950;
+      letter-spacing:.3px;
     }
 
-    .chev{
-      width: 34px;
-      height: 30px;
+    .chip{
+      display:inline-block;
+      padding: 6px 10px;
       border-radius: 999px;
-      display:grid;
-      place-items:center;
-      background: rgba(0,0,0,.25);
+      background: rgba(0,0,0,.35);
       border: 1px solid rgba(255,255,255,.14);
-      font-weight: 1000;
-    }
-
-    .subBody{
-      padding: 10px 12px 12px;
-      display:none;
-      border-top: 1px solid rgba(255,255,255,.08);
-    }
-    .subBody.on{ display:block; }
-
-    /* tableau Fonction / Nom */
-    .thead, .trow{
-      display:grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 10px;
-      align-items:start;
-    }
-    .thead{
-      padding: 10px 10px;
-      border-radius: 14px;
-      background: rgba(255,140,0,.12);
-      border: 1px solid rgba(255,140,0,.35);
-      font-weight: 1000;
-      color: rgba(255,220,160,.95);
-      text-transform: uppercase;
-      letter-spacing: .7px;
+      font-weight: 800;
       font-size: 12px;
+      margin-right: 8px;
       margin-bottom: 8px;
+      cursor:pointer;
     }
-    .trow{
-      padding: 10px 10px;
-      border-radius: 14px;
-      background: rgba(0,0,0,.25);
-      border: 1px solid rgba(255,255,255,.08);
-      font-weight: 850;
-      margin-bottom: 8px;
-    }
-    .cellRole{ color: rgba(255,200,130,.95); font-weight: 1000; word-break: break-word; }
-    .cellName{ word-break: break-word; }
 
-    @media (max-width: 380px){
-      .thead, .trow{ grid-template-columns: 1fr; }
-      .adjGrid{ grid-template-columns: 1fr; }
+    .list{
+      margin: 10px 0 0 0;
+      padding: 0;
+      list-style: none;
+      display:grid;
+      gap: 8px;
     }
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 2fr; /* aligné, pas de décalage */
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .role{
+      font-weight: 900;
+      color: rgba(255,200,120,.95);
+      word-break: break-word;
+    }
+    .name{
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .hint{ margin-top: 10px; color: var(--muted); font-size: 13px; }
+    .status{ margin-top: 10px; color: var(--muted); font-size: 13px; }
   </style>
 </head>
 
@@ -358,178 +223,193 @@
   <div class="wrap">
     <header>
       <h1 class="title">Organigramme</h1>
-      <button type="button" onclick="history.back()">Retour</button>
+      <button class="btn" onclick="history.back()">Retour</button>
     </header>
 
-    <!-- DIRECTION -->
-    <section class="dirWrap">
-      <div class="dirHead">Direction du CS Consenvoye</div>
-      <div class="dirBody">
-        <div class="chiefCard">
-          <div class="chiefRole">Chef de centre</div>
-          <div class="chiefName" id="chiefName">ADC Vénante Pierre</div>
+    <!-- Direction -->
+    <section class="direction" aria-label="Direction">
+      <div class="dir-grid">
+        <div class="dir-card chef">
+          <div class="dir-role">Chef de centre</div>
+          <div id="chefName" class="dir-name dir-empty">—</div>
         </div>
-
-        <div class="adjGrid">
-          <div class="adjCard">
-            <div class="adjRole">1er adjoint</div>
-            <div class="adjName" id="adj1Name">—</div>
-          </div>
-          <div class="adjCard">
-            <div class="adjRole">2ème adjoint</div>
-            <div class="adjName" id="adj2Name">—</div>
-          </div>
+        <div class="dir-card">
+          <div class="dir-role">1er adjoint</div>
+          <div id="adj1Name" class="dir-name dir-empty">—</div>
+        </div>
+        <div class="dir-card">
+          <div class="dir-role">2ème adjoint</div>
+          <div id="adj2Name" class="dir-name dir-empty">—</div>
         </div>
       </div>
     </section>
 
-    <div class="hint">Clique sur un pôle pour afficher ses sous-pôles / catégories.</div>
+    <!-- Pôles -->
+    <section>
+      <div id="poles" class="poles" aria-label="Pôles"></div>
+      <div id="status" class="status">Chargement…</div>
 
-    <!-- POLES -->
-    <section class="poles" id="polesGrid"></section>
-  </div>
-
-  <!-- OVERLAY -->
-  <div class="overlay" id="overlay" aria-hidden="true">
-    <div class="sheet">
-      <div class="sheetTop">
-        <div class="sheetHead" id="sheetHead">
-          <div id="sheetTitle">Pôle</div>
-          <button class="closeBtn" type="button" id="closeBtn">Fermer</button>
+      <div id="details" class="details" aria-label="Détails pôle">
+        <div class="details-head">
+          <h2 id="detailsTitle" class="details-title"></h2>
+          <button class="btn" id="closeDetails">Fermer</button>
         </div>
-        <div class="sheetBody" id="sheetBody"></div>
+
+        <div id="chips"></div>
+        <ul id="membersList" class="list"></ul>
+        <div class="hint">Clique un sous-pôle pour afficher ses membres.</div>
       </div>
-    </div>
+    </section>
   </div>
 
-<script>
-  // ====== DONNÉES (remplies) ======
-  // Plus tard : remplacées par Sheets.
-  const DATA = {
-    direction: { chef:"ADC Vénante Pierre", adj1:"—", adj2:"—" },
+  <script>
+    // ✅ TON URL APPS SCRIPT
+    const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-    poles: [
-      { id:"soutien", title:"Équipe de soutien", color:"c-soutien", subpoles:[
-        { title:"Soutien", rows:[ {role:"Responsable", name:"—"}, {role:"Membres", name:"—"} ] }
-      ]},
+    const $status = document.getElementById("status");
+    const $poles = document.getElementById("poles");
+    const $details = document.getElementById("details");
+    const $detailsTitle = document.getElementById("detailsTitle");
+    const $chips = document.getElementById("chips");
+    const $membersList = document.getElementById("membersList");
 
-      { id:"tech", title:"Groupe Technique & Logistique", color:"c-tech", subpoles:[
-        { title:"Bâtiment", rows:[ {role:"Responsable", name:"—"}, {role:"Membres", name:"—"} ] },
-        { title:"Équipement / Habillement", rows:[ {role:"Responsable", name:"—"}, {role:"Membres", name:"—"} ] },
-        { title:"Véhicules / Tickets carburant", rows:[ {role:"Responsable", name:"—"}, {role:"Membres", name:"—"} ] },
-        { title:"Vérification casques", rows:[ {role:"Responsable", name:"—"}, {role:"Membres", name:"—"} ] }
-      ]},
+    const $chef = document.getElementById("chefName");
+    const $adj1 = document.getElementById("adj1Name");
+    const $adj2 = document.getElementById("adj2Name");
 
-      { id:"ope", title:"Groupe Opérationnel", color:"c-ope", subpoles:[
-        { title:"DECI / Prévision", rows:[ {role:"Responsable", name:"—"}, {role:"Membres", name:"—"} ] },
-        { title:"Inventaires / Parcellaires", rows:[ {role:"Responsable", name:"—"}, {role:"Membres", name:"—"} ] },
-        { title:"Référent VSAV / Inventaire VSAV", rows:[ {role:"Responsable", name:"—"}, {role:"Membres", name:"—"} ] },
-        { title:"Référent SSSM", rows:[ {role:"Responsable", name:"—"}, {role:"Membres", name:"—"} ] }
-      ]},
-
-      { id:"form", title:"Groupe Formation / Sport", color:"c-form", subpoles:[
-        { title:"FORACC / ACCPRO / FPS", rows:[ {role:"Responsable", name:"—"}, {role:"Membres", name:"—"} ] },
-        { title:"Sport", rows:[ {role:"Responsable", name:"—"}, {role:"Membres", name:"—"} ] }
-      ]},
-
-      { id:"recr", title:"Groupe Recrutement / Volontariat", color:"c-recr", subpoles:[
-        { title:"SPV", rows:[ {role:"Responsable", name:"—"}, {role:"Membres", name:"—"} ] }
-      ]},
-
-      { id:"jsp", title:"JSP", color:"c-jsp", subpoles:[
-        { title:"JSP", rows:[ {role:"Responsable JSP", name:"—"}, {role:"Encadrement", name:"—"} ] }
-      ]},
-
-      { id:"amicale", title:"Amicale", color:"c-amical", subpoles:[
-        { title:"Bureau", rows:[
-          {role:"Président(e)", name:"—"},
-          {role:"Trésorier", name:"—"},
-          {role:"Secrétaire", name:"—"}
-        ]}
-      ]}
-    ]
-  };
-
-  // Direction
-  document.getElementById("chiefName").textContent = DATA.direction.chef || "—";
-  document.getElementById("adj1Name").textContent  = DATA.direction.adj1 || "—";
-  document.getElementById("adj2Name").textContent  = DATA.direction.adj2 || "—";
-
-  const grid = document.getElementById("polesGrid");
-  const overlay = document.getElementById("overlay");
-  const sheetTitle = document.getElementById("sheetTitle");
-  const sheetHead = document.getElementById("sheetHead");
-  const sheetBody = document.getElementById("sheetBody");
-
-  document.getElementById("closeBtn").addEventListener("click", closeOverlay);
-  overlay.addEventListener("click", (e)=>{ if(e.target === overlay) closeOverlay(); });
-
-  function esc(s){
-    return String(s ?? "")
-      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;").replaceAll("'","&#39;");
-  }
-
-  function openPole(pole){
-    sheetTitle.textContent = pole.title;
-    sheetHead.className = "sheetHead " + pole.color;
-
-    sheetBody.innerHTML = "";
-
-    (pole.subpoles || []).forEach(sp=>{
-      const box = document.createElement("div");
-      box.className = "subPole";
-
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "subBtn";
-      btn.innerHTML = `<div>${esc(sp.title)}</div><div class="chev">+</div>`;
-
-      const body = document.createElement("div");
-      body.className = "subBody";
-
-      const head = document.createElement("div");
-      head.className = "thead";
-      head.innerHTML = `<div>Fonction</div><div>Nom</div>`;
-      body.appendChild(head);
-
-      (sp.rows || []).forEach(r=>{
-        const row = document.createElement("div");
-        row.className = "trow";
-        row.innerHTML = `<div class="cellRole">${esc(r.role||"—")}</div><div class="cellName">${esc(r.name||"—")}</div>`;
-        body.appendChild(row);
-      });
-
-      btn.addEventListener("click", ()=>{
-        const on = body.classList.toggle("on");
-        btn.querySelector(".chev").textContent = on ? "−" : "+";
-      });
-
-      box.appendChild(btn);
-      box.appendChild(body);
-      sheetBody.appendChild(box);
+    document.getElementById("closeDetails").addEventListener("click", () => {
+      $details.style.display = "none";
+      $membersList.innerHTML = "";
+      $chips.innerHTML = "";
     });
 
-    overlay.classList.add("on");
-    overlay.setAttribute("aria-hidden","false");
-    document.body.style.overflow = "hidden";
-  }
+    function setText(el, txt){
+      const s = (txt && String(txt).trim()) ? String(txt).trim() : "—";
+      el.textContent = s;
+      el.classList.toggle("dir-empty", s === "—");
+    }
 
-  function closeOverlay(){
-    overlay.classList.remove("on");
-    overlay.setAttribute("aria-hidden","true");
-    document.body.style.overflow = "";
-  }
+    function jsonp(url, cb){
+      const cbName = "cb_" + Math.random().toString(36).slice(2);
+      window[cbName] = (data) => {
+        try { cb(data); }
+        finally {
+          delete window[cbName];
+          script.remove();
+        }
+      };
+      const script = document.createElement("script");
+      script.onerror = () => {
+        delete window[cbName];
+        script.remove();
+        $status.textContent = "Erreur de chargement (JSONP).";
+      };
+      const sep = url.includes("?") ? "&" : "?";
+      script.src = url + sep + "view=org&callback=" + encodeURIComponent(cbName) + "&_=" + Date.now();
+      document.body.appendChild(script);
+    }
 
-  // Render pôles (harmonieux, sans texte)
-  DATA.poles.forEach(pole=>{
-    const b = document.createElement("button");
-    b.type = "button";
-    b.className = "poleBtn";
-    b.innerHTML = `<div class="poleCard ${pole.color}"><div class="poleTitle">${esc(pole.title)}</div></div>`;
-    b.addEventListener("click", ()=>openPole(pole));
-    grid.appendChild(b);
-  });
-</script>
+    function renderPoleCards(poles){
+      $poles.innerHTML = "";
+      for (const p of poles){
+        const div = document.createElement("div");
+        div.className = "pole";
+        // couleur depuis sheets (fallback si vide)
+        const color = (p.couleur && String(p.couleur).trim()) ? String(p.couleur).trim() : "#777777";
+        div.style.background = `linear-gradient(180deg, ${color}CC, rgba(0,0,0,.55))`;
+        div.style.borderColor = "rgba(255,255,255,.14)";
+
+        const h = document.createElement("h3");
+        h.className = "pole-title";
+        h.textContent = p.libelle || p.id || "Pôle";
+
+        const sub = document.createElement("div");
+        sub.className = "pole-sub";
+        const nbSP = (p.souspoles && p.souspoles.length) ? p.souspoles.length : 0;
+        sub.textContent = nbSP ? (nbSP + " sous-pôles") : "Voir le détail";
+
+        div.appendChild(h);
+        div.appendChild(sub);
+
+        div.addEventListener("click", () => openPole(p));
+        $poles.appendChild(div);
+      }
+    }
+
+    function openPole(p){
+      $detailsTitle.textContent = p.libelle || p.id || "Pôle";
+      $details.style.display = "block";
+      $chips.innerHTML = "";
+      $membersList.innerHTML = "";
+
+      // 1) puces sous-pôles
+      if (p.souspoles && p.souspoles.length){
+        for (const sp of p.souspoles){
+          const chip = document.createElement("span");
+          chip.className = "chip";
+          chip.textContent = sp.libelle || sp.id || "Sous-pôle";
+          chip.addEventListener("click", () => renderMembers(sp.membres || []));
+          $chips.appendChild(chip);
+        }
+      } else {
+        // si pas de sous-pôles, on affiche les membres directs du pôle
+        renderMembers(p.membres || []);
+      }
+
+      // scroll vers détails
+      $details.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function renderMembers(list){
+      $membersList.innerHTML = "";
+      if (!list.length){
+        const li = document.createElement("li");
+        li.className = "row";
+        li.innerHTML = `<div class="role">—</div><div class="name">Aucun membre</div>`;
+        $membersList.appendChild(li);
+        return;
+      }
+      for (const m of list){
+        const li = document.createElement("li");
+        li.className = "row";
+        li.innerHTML = `<div class="role">${escapeHtml(m.fonction || "")}</div><div class="name">${escapeHtml(m.nom || "")}</div>`;
+        $membersList.appendChild(li);
+      }
+    }
+
+    function escapeHtml(s){
+      return String(s||"")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    // CHARGEMENT
+    jsonp(API, (data) => {
+      if (!data || data.ok !== true){
+        $status.textContent = "Erreur : données invalides.";
+        return;
+      }
+
+      // Direction (si ton script renvoie {direction:{chef,adj1,adj2}})
+      if (data.direction){
+        setText($chef, data.direction.chef);
+        setText($adj1, data.direction.adj1);
+        setText($adj2, data.direction.adj2);
+      } else {
+        setText($chef, "—");
+        setText($adj1, "—");
+        setText($adj2, "—");
+      }
+
+      // Pôles
+      const poles = Array.isArray(data.poles) ? data.poles : [];
+      renderPoleCards(poles);
+
+      $status.textContent = "OK";
+    });
+  </script>
 </body>
 </html>
