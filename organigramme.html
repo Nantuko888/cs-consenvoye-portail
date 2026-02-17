@@ -1,522 +1,163 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Organigramme - CS Consenvoye</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Organigramme - CS Consenvoye</title>
 
-  <style>
-    :root{
-      --maxw: 1050px;
-      --pad: clamp(12px, 3.5vw, 22px);
-      --gap: clamp(10px, 2.8vw, 16px);
+<style>
+html, body{
+  margin:0;
+  padding:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background:#000;
+  color:white;
+}
 
-      --card: rgba(0,0,0,.55);
-      --stroke: rgba(255,160,60,.45);
-      --txt: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.70);
+/* Background fixe */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:url("background.png") center top / cover no-repeat;
+  z-index:0;
+}
 
-      --yellow: #ffcc33;
-      --blue: #2d7dff;
-      --orange: #ff8a1e;
-      --radius: 18px;
-    }
+.wrap{
+  position:relative;
+  z-index:1;
+  padding:20px;
+  max-width:1100px;
+  margin:auto;
+}
 
-    html, body{
-      margin:0; padding:0;
-      min-height:100%;
-      background:#000;
-      color:var(--txt);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
+/* TITRE */
+h1{
+  text-align:center;
+  margin-bottom:30px;
+  text-shadow:0 0 20px rgba(255,120,0,.6);
+}
 
-    /* Background fixe (comme ton portail) */
-    body::before{
-      content:"";
-      position: fixed;
-      inset: 0;
-      background: url("background.png") center top / cover no-repeat;
-      z-index: 0;
-      transform: translateZ(0);
-    }
+/* DIRECTION */
+.direction{
+  text-align:center;
+  margin-bottom:40px;
+}
 
-    .wrap{
-      position: relative;
-      z-index: 1;
-      max-width: var(--maxw);
-      margin: 0 auto;
-      padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad) calc(env(safe-area-inset-bottom) + var(--pad));
-    }
+.chef{
+  background:#FFD700;
+  color:#000;
+  padding:15px;
+  border-radius:14px;
+  font-weight:700;
+  margin-bottom:20px;
+}
 
-    header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom: var(--gap);
-    }
+.adjoints{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+}
 
-    .title{
-      margin:0;
-      font-size: clamp(20px, 3.2vw, 34px);
-      letter-spacing: .4px;
-      text-shadow: 0 0 18px rgba(255,120,0,.35);
-    }
+.adjoint{
+  flex:1;
+  background:rgba(255,120,0,.85);
+  padding:15px;
+  border-radius:14px;
+  font-weight:600;
+}
 
-    .btn{
-      appearance:none;
-      border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.45);
-      color: var(--txt);
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-weight: 900;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btn:active{ transform: translateY(1px); }
+/* POLES */
+.poles{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+  gap:20px;
+}
 
-    /* DIRECTION */
-    .direction{
-      background: var(--card);
-      border: 1px solid rgba(255,210,120,.55);
-      border-radius: var(--radius);
-      padding: 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-      margin-bottom: var(--gap);
-    }
+.pole{
+  background:rgba(0,0,0,.6);
+  border:1px solid rgba(255,140,0,.6);
+  padding:25px 15px;
+  border-radius:16px;
+  text-align:center;
+  cursor:pointer;
+  transition:0.2s;
+  font-weight:700;
+}
 
-    .dir-grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      align-items: start;
-    }
-    @media (min-width: 860px){
-      .dir-grid{ grid-template-columns: 1fr 1fr 1fr; }
-    }
-
-    .dir-card{
-      border-radius: 16px;
-      padding: 12px 12px;
-      background: rgba(0,0,0,.35);
-      border: 1px solid rgba(255,170,60,.35);
-    }
-
-    .dir-card.chef{
-      background: rgba(255,204,51,.20);
-      border: 1px solid rgba(255,204,51,.85);
-    }
-
-    .dir-role{
-      font-weight: 950;
-      letter-spacing: .4px;
-      text-transform: uppercase;
-      font-size: 12px;
-      color: rgba(255,220,140,.95);
-      margin-bottom: 6px;
-    }
-
-    .dir-name{
-      font-weight: 900;
-      font-size: 16px;
-      line-height: 1.2;
-      word-break: break-word;
-    }
-
-    /* POLES GRID */
-    .poles{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--gap);
-    }
-    @media (min-width: 900px){
-      .poles{ grid-template-columns: 1fr 1fr 1fr; }
-    }
-
-    .pole{
-      border-radius: var(--radius);
-      padding: 14px;
-      background: rgba(0,0,0,.50);
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-      cursor:pointer;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-      position: relative;
-      overflow:hidden;
-      min-height: 72px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-    }
-
-    .pole::after{
-      content:"";
-      position:absolute; inset:0;
-      background: radial-gradient(circle at 20% 10%, rgba(255,255,255,.18), transparent 45%);
-      opacity:.35;
-      pointer-events:none;
-    }
-
-    .pole h3{
-      margin:0;
-      font-weight: 950;
-      letter-spacing: .5px;
-      text-transform: uppercase;
-      font-size: 13px;
-      text-shadow: 0 0 14px rgba(0,0,0,.25);
-      padding: 0 6px;
-    }
-
-    /* MODAL */
-    .modal{
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.75);
-      display:none;
-      z-index: 999;
-      padding: calc(env(safe-area-inset-top) + 14px) 14px calc(env(safe-area-inset-bottom) + 14px);
-    }
-
-    .modal-card{
-      max-width: 980px;
-      margin: 0 auto;
-      background: rgba(0,0,0,.72);
-      border: 1px solid rgba(255,160,60,.45);
-      border-radius: 18px;
-      box-shadow: 0 18px 60px rgba(0,0,0,.55);
-      backdrop-filter: blur(6px);
-      padding: 14px;
-      max-height: calc(100vh - 28px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-      overflow:auto;
-    }
-
-    .modal-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .modal-title{
-      margin:0;
-      font-size: 18px;
-      font-weight: 950;
-      letter-spacing:.3px;
-    }
-
-    .chips{
-      display:flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 10px 0 8px;
-    }
-
-    .chip{
-      display:inline-block;
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.35);
-      border: 1px solid rgba(255,255,255,.14);
-      font-weight: 900;
-      font-size: 12px;
-      cursor:pointer;
-      user-select:none;
-    }
-    .chip.active{
-      border-color: rgba(255,190,90,.75);
-      box-shadow: 0 0 0 2px rgba(255,140,0,.18) inset;
-    }
-
-    .rows{
-      list-style:none;
-      margin: 0;
-      padding: 0;
-      display:grid;
-      gap: 8px;
-    }
-
-    /* 2 colonnes alignées (pas de décalage) */
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: rgba(0,0,0,.35);
-      border: 1px solid rgba(255,255,255,.10);
-    }
-
-    .r-role{
-      font-weight: 950;
-      color: rgba(255,200,120,.95);
-      word-break: break-word;
-    }
-
-    .r-name{
-      font-weight: 850;
-      word-break: break-word;
-    }
-
-    .hint{
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-  </style>
+.pole:hover{
+  transform:scale(1.04);
+  background:rgba(255,100,0,.25);
+}
+</style>
 </head>
 
 <body>
-  <div class="wrap">
-    <header>
-      <h1 class="title">Organigramme</h1>
-      <button class="btn" onclick="history.back()">Retour</button>
-    </header>
+<div class="wrap">
 
-    <!-- Direction -->
-    <section class="direction">
-      <div class="dir-grid">
-        <div class="dir-card chef">
-          <div class="dir-role">Chef de centre</div>
-          <div class="dir-name">ADC Vénante Pierre</div>
-        </div>
-        <div class="dir-card">
-          <div class="dir-role">1er adjoint</div>
-          <div class="dir-name">ADJ Laleeuw Franck</div>
-        </div>
-        <div class="dir-card">
-          <div class="dir-role">2ème adjoint</div>
-          <div class="dir-name">ADJ Sénéchal Benjamin</div>
-        </div>
-      </div>
-    </section>
+<h1>Organigramme</h1>
 
-    <!-- Pôles (cliquables, sans texte interne détaillé) -->
-    <section class="poles" id="poles"></section>
-
-    <div class="hint">
-      Clique sur un pôle → tu vois ses sous-pôles. Clique sur un sous-pôle → tu vois les membres.
-    </div>
+<div class="direction">
+  <div class="chef">
+    Chef de centre<br>
+    <span id="chefNom">Nom Chef</span>
   </div>
 
-  <!-- Modal -->
-  <div class="modal" id="modal" aria-hidden="true">
-    <div class="modal-card">
-      <div class="modal-head">
-        <h2 class="modal-title" id="modalTitle"></h2>
-        <button class="btn" id="closeBtn">Fermer</button>
-      </div>
-
-      <div class="chips" id="chips"></div>
-      <ul class="rows" id="rows"></ul>
-      <div class="hint" id="modalHint"></div>
+  <div class="adjoints">
+    <div class="adjoint">
+      1er Adjoint<br>
+      <span id="adj1Nom">Nom Adjoint 1</span>
+    </div>
+    <div class="adjoint">
+      2ème Adjoint<br>
+      <span id="adj2Nom">Nom Adjoint 2</span>
     </div>
   </div>
+</div>
 
-  <script>
-    // ✅ Données (remplies depuis ton Organigramme.xlsx)
-    const ORG = [
-      {
-        id:"techlog",
-        title:"Groupe Technique et Logistique",
-        color:"#ff8a1e",
-        subpoles:[
-          { title:"Bâtiment", members:[
-            { role:"Référent", name:"ADC Sénéchal Benjamin" },
-            { role:"Référent", name:"ADC KOLODZIEJCZAK Stéphane" }
-          ]},
-          { title:"Équipement / Habillement", members:[
-            { role:"Référent", name:"ADC Sénéchal Benjamin" },
-            { role:"Référent", name:"CPL Gaffard Robin" }
-          ]},
-          { title:"Véhicules / Tickets carburant", members:[
-            { role:"Référent", name:"ADC Sénéchal Benjamin" },
-            { role:"Référent", name:"CPL Rogie Florian" }
-          ]},
-          { title:"Vérification casques", members:[
-            { role:"Référent", name:"SA1 Moreau Florent" }
-          ]}
-        ]
-      },
+<div class="poles" id="polesContainer">
+  <!-- Les pôles arrivent ici -->
+</div>
 
-      {
-        id:"ope",
-        title:"Groupe Opérationnel",
-        color:"#2d7dff",
-        subpoles:[
-          { title:"DECI / Prévision / Inventaires / Parcellaires", members:[
-            { role:"Référent", name:"ADC Vénante Pierre" }
-          ]},
-          { title:"Référent VSAV / Inventaire VSAV", members:[
-            { role:"Référent", name:"SCH Wallarin Hélène" },
-            { role:"Référent", name:"SCH Stellato Vincent" }
-          ]},
-          { title:"Référent SSSM", members:[
-            { role:"Référent", name:"INF Dur Amélie" },
-            { role:"Référent", name:"INF Lepezel Laura" }
-          ]}
-        ]
-      },
+</div>
 
-      {
-        id:"formation",
-        title:"Groupe Formation / Sport",
-        color:"#ff3b3b",
-        subpoles:[
-          { title:"FORACC / ACCPRO / FPS", members:[
-            { role:"Référent", name:"ADJ Laleeuw Franck" },
-            { role:"Référent", name:"ADC Joseph Judicael" },
-            { role:"Référent", name:"ADC Kolodziejczak Stéphane" },
-            { role:"Référent", name:"SCH Wallarin Hélène" }
-          ]},
-          { title:"SPORT", members:[
-            { role:"Référent", name:"SCH Wallarin Hélène" },
-            { role:"Référent", name:"CPL Barotte Christopher" },
-            { role:"Référent", name:"SGT Michel Marianne" }
-          ]}
-        ]
-      },
+<script>
 
-      {
-        id:"recrut",
-        title:"Groupe Recrutement / Volontariat",
-        color:"#00c08b",
-        subpoles:[
-          { title:"SPV", members:[
-            { role:"Référent", name:"ADC Vénante Pierre" },
-            { role:"Référent", name:"ADJ Laleeuw Franck" },
-            { role:"Référent", name:"ADJ Sénéchal Benjamin" }
-          ]},
-          { title:"JSP", members:[
-            { role:"Référent", name:"SA1 Vénante Amélie" },
-            { role:"Référent", name:"ADJ Laleeuw Franck" },
-            { role:"Référent", name:"ADC Vénante Pierre" },
-            { role:"Référent", name:"SA1 Christal Mallaury" },
-            { role:"Référent", name:"SA2 Bamme Mélody" }
-          ]}
-        ]
-      },
+const API = "TON_URL_EXEC?view=org"; 
+// 🔴 REMPLACE TON_URL_EXEC PAR TON URL /exec
 
-      {
-        id:"amicale",
-        title:"Amicale",
-        color:"#ffcc33",
-        subpoles:[
-          { title:"Bureau", members:[
-            { role:"Présidente", name:"Trontin Chloé" },
-            { role:"Vice-président", name:"Vénante Pierre" },
-            { role:"Trésorier", name:"Baur Benjamin" },
-            { role:"Trésorier adjoint", name:"Laleeuw Franck" },
-            { role:"Secrétaire", name:"Vénante Amélie" },
-            { role:"Secrétaire adjoint", name:"Dur Amélie" }
-          ]}
-        ]
-      },
+function loadOrg(){
 
-      {
-        id:"soutien",
-        title:"Équipe de soutien",
-        color:"#a855f7",
-        subpoles:[
-          { title:"Membres", members:[
-            { role:"Membre", name:"CNE Bienaimé Jean Paul" },
-            { role:"Membre", name:"ADJ Lecourtier Guy" },
-            { role:"Membre", name:"SGT Chavrelles Gilles" },
-            { role:"Membre", name:"SGT Beausire Bernard" }
-          ]}
-        ]
-      }
-    ];
+  fetch(API)
+  .then(res => res.json())
+  .then(data => {
 
-    const $poles = document.getElementById("poles");
-    const $modal = document.getElementById("modal");
-    const $modalTitle = document.getElementById("modalTitle");
-    const $chips = document.getElementById("chips");
-    const $rows = document.getElementById("rows");
-    const $hint = document.getElementById("modalHint");
-    const $close = document.getElementById("closeBtn");
+    document.getElementById("chefNom").textContent =
+      data.direction?.chef || "Non renseigné";
 
-    function openModal(pole){
-      $modal.style.display = "block";
-      $modal.setAttribute("aria-hidden","false");
-      $modalTitle.textContent = pole.title;
+    document.getElementById("adj1Nom").textContent =
+      data.direction?.adj1 || "Non renseigné";
 
-      // chips sous-pôles
-      $chips.innerHTML = "";
-      $rows.innerHTML = "";
-      $hint.textContent = "Clique un sous-pôle pour afficher les membres.";
+    document.getElementById("adj2Nom").textContent =
+      data.direction?.adj2 || "Non renseigné";
 
-      pole.subpoles.forEach((sp, idx) => {
-        const chip = document.createElement("span");
-        chip.className = "chip";
-        chip.textContent = sp.title;
-        chip.addEventListener("click", () => {
-          document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-          chip.classList.add("active");
-          renderMembers(sp.members);
-          $hint.textContent = "";
-        });
-        $chips.appendChild(chip);
+    const container = document.getElementById("polesContainer");
+    container.innerHTML = "";
 
-        // auto-select 1er sous-pôle
-        if(idx === 0){
-          chip.classList.add("active");
-          renderMembers(sp.members);
-          $hint.textContent = "";
-        }
-      });
-    }
-
-    function renderMembers(members){
-      $rows.innerHTML = "";
-      if(!members || !members.length){
-        const li = document.createElement("li");
-        li.className = "row";
-        li.innerHTML = `<div class="r-role">—</div><div class="r-name">Aucun membre</div>`;
-        $rows.appendChild(li);
-        return;
-      }
-      members.forEach(m => {
-        const li = document.createElement("li");
-        li.className = "row";
-        li.innerHTML = `<div class="r-role">${escapeHtml(m.role)}</div><div class="r-name">${escapeHtml(m.name)}</div>`;
-        $rows.appendChild(li);
-      });
-    }
-
-    function escapeHtml(s){
-      return String(s||"")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    $close.addEventListener("click", () => {
-      $modal.style.display = "none";
-      $modal.setAttribute("aria-hidden","true");
-    });
-
-    $modal.addEventListener("click", (e) => {
-      if(e.target === $modal){
-        $modal.style.display = "none";
-        $modal.setAttribute("aria-hidden","true");
-      }
-    });
-
-    // Render poles
-    ORG.forEach(p => {
+    data.poles.forEach(pole=>{
       const div = document.createElement("div");
-      div.className = "pole";
-      div.style.background = `linear-gradient(180deg, ${p.color}CC, rgba(0,0,0,.55))`;
-      div.innerHTML = `<h3>${escapeHtml(p.title)}</h3>`;
-      div.addEventListener("click", () => openModal(p));
-      $poles.appendChild(div);
+      div.className="pole";
+      div.textContent = pole.nom;
+      div.onclick = ()=> alert("Pôle : " + pole.nom);
+      container.appendChild(div);
     });
-  </script>
+
+  })
+  .catch(()=> alert("Erreur chargement organigramme"));
+}
+
+loadOrg();
+
+</script>
 </body>
 </html>
