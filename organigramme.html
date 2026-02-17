@@ -1,357 +1,536 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>Organigramme - CS Consenvoye</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Organigramme - CS Consenvoye</title>
 
-<style>
-  :root{
-    --maxw: 1100px;
-    --pad: clamp(12px, 4vw, 20px);
-    --gap: clamp(10px, 2.6vw, 16px);
+  <style>
+    :root{
+      --maxw: 980px;
+      --pad: clamp(12px, 4vw, 26px);
+      --gap: clamp(10px, 2.8vw, 18px);
 
-    --glass: rgba(0,0,0,.45);
-    --stroke: rgba(255,170,70,.26);
+      --glass: rgba(0,0,0,.50);
+      --stroke: rgba(255,160,50,.28);
+      --txt: rgba(255,255,255,.93);
+      --muted: rgba(255,255,255,.72);
 
-    --txt: rgba(255,255,255,.95);
-    --muted: rgba(255,255,255,.72);
+      --cardR: 18px;
+      --shadow: 0 14px 35px rgba(0,0,0,.40);
 
-    --radius: 18px;
-    --shadow: 0 16px 44px rgba(0,0,0,.35);
+      --dirH: clamp(92px, 12vh, 128px);
+      --poleH: clamp(66px, 9vh, 86px);
+    }
 
-    /* direction compacte */
-    --role: 11px;
-    --nameChef: 16px;
-    --nameAdj: 14px;
+    html, body{
+      margin:0; padding:0;
+      min-height:100%;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--txt);
+      background:#000;
+    }
 
-    /* pôles */
-    --poleFont: 12px;
-    --poleMinH: 70px;
-  }
+    /* Background fixe (ne bouge pas au scroll) */
+    body::before{
+      content:"";
+      position: fixed;
+      inset: 0;
+      background: url("background.png") center top / cover no-repeat;
+      z-index: 0;
+      transform: translateZ(0);
+    }
 
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0;min-height:100%;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);background:#000;}
+    /* Wrapper */
+    .wrap{
+      position: relative;
+      z-index: 1;
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad) calc(env(safe-area-inset-bottom) + var(--pad));
+    }
 
-  body::before{
-    content:"";
-    position:fixed; inset:0;
-    background:url("background.png") center top / cover no-repeat;
-    transform:translateZ(0);
-    z-index:0;
-  }
+    /* Top bar */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: var(--gap);
+    }
 
-  .wrap{
-    position:relative; z-index:1;
-    max-width:var(--maxw);
-    margin:0 auto;
-    padding:calc(env(safe-area-inset-top) + var(--pad)) var(--pad) calc(env(safe-area-inset-bottom) + var(--pad));
-  }
+    .title{
+      margin:0;
+      font-size: clamp(20px, 3.1vw, 30px);
+      letter-spacing: .5px;
+      text-shadow: 0 0 18px rgba(255,130,0,.25);
+    }
 
-  .topbar{display:flex;justify-content:space-between;gap:10px;margin-bottom:10px;}
-  .btn{
-    appearance:none; border:1px solid rgba(255,255,255,.14);
-    background:rgba(0,0,0,.35); color:var(--txt);
-    padding:9px 12px; border-radius:14px; font-weight:950; cursor:pointer;
-    box-shadow:0 10px 24px rgba(0,0,0,.25); backdrop-filter:blur(8px);
-    -webkit-tap-highlight-color: transparent;
-  }
-  .btn:active{transform:translateY(1px)}
-  .btn.primary{border-color:var(--stroke); background:linear-gradient(180deg, rgba(255,170,70,.14), rgba(0,0,0,.35));}
+    .actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
 
-  .title{font-size:clamp(22px,4.2vw,34px);font-weight:1000;margin:6px 0 12px;text-shadow:0 12px 26px rgba(0,0,0,.55);}
+    .btn{
+      appearance:none;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.45);
+      color: var(--txt);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active{ transform: translateY(1px); }
 
-  .card{
-    background:var(--glass);
-    border:1px solid var(--stroke);
-    border-radius:var(--radius);
-    box-shadow:var(--shadow);
-    backdrop-filter:blur(10px);
-    overflow:hidden;
-  }
+    /* Direction layout */
+    .direction{
+      background: var(--glass);
+      border: 1px solid var(--stroke);
+      border-radius: var(--cardR);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(4px);
+      padding: 14px;
+      margin-bottom: var(--gap);
+    }
 
-  /* Direction sobre (plus orange) */
-  .dir{padding:12px;display:grid;gap:10px;}
-  .dirGrid{display:grid;grid-template-columns:1fr;gap:10px;}
-  .chefBox,.adjBox{
-    border-radius:16px;
-    border:1px solid rgba(255,255,255,.12);
-    background:rgba(0,0,0,.28);
-    padding:10px;
-    text-align:center;
-  }
-  .chefBox .role,.adjBox .role{
-    font-size:var(--role);
-    font-weight:1000;
-    text-transform:uppercase;
-    letter-spacing:.55px;
-    color:rgba(255,200,120,.92);
-  }
-  .chefBox .name{font-size:var(--nameChef);font-weight:1000;margin-top:4px;word-break:break-word;}
-  .adjBox .name{font-size:var(--nameAdj);font-weight:950;margin-top:4px;word-break:break-word;}
+    .dirGrid{
+      display:grid;
+      grid-template-columns: 1fr 1.2fr 1fr;
+      gap: 12px;
+      align-items: stretch;
+    }
 
-  .adjs{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  @media (min-width: 700px){
-    .dirGrid{grid-template-columns: 1.2fr .8fr;}
-    .adjs{grid-template-columns:1fr;align-content:start;}
-  }
+    .dirBox{
+      border-radius: 16px;
+      padding: 12px 12px;
+      min-height: var(--dirH);
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.25);
+      overflow:hidden;
+    }
 
-  /* Pôles */
-  .polesWrap{margin-top:var(--gap);}
-  .polesHead{margin:0 0 10px;font-weight:1000;text-transform:uppercase;letter-spacing:.65px;color:rgba(255,210,140,.95);text-shadow:0 10px 18px rgba(0,0,0,.4);}
-  .poles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
-  @media (min-width:520px){.poles{grid-template-columns:repeat(3,minmax(0,1fr));}}
-  @media (min-width:900px){.poles{grid-template-columns:repeat(4,minmax(0,1fr));}}
+    .dirRole{
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      font-size: 13px;
+      opacity: .95;
+      margin-bottom: 6px;
+      text-shadow: 0 0 12px rgba(0,0,0,.35);
+    }
 
-  .poleBtn{border:none;background:transparent;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;}
-  .poleTile{
-    border-radius:16px; min-height:var(--poleMinH);
-    padding:10px; display:flex;align-items:center;justify-content:center;text-align:center;
-    font-weight:1000;text-transform:uppercase;letter-spacing:.35px;font-size:var(--poleFont);
-    color:#111; border:1px solid rgba(255,255,255,.14);
-    box-shadow:0 16px 34px rgba(0,0,0,.22);
-    position:relative; overflow:hidden;
-  }
-  .poleTile::after{
-    content:""; position:absolute; inset:0;
-    background: radial-gradient(circle at 18% 15%, rgba(255,255,255,.18), transparent 55%),
-                radial-gradient(circle at 92% 115%, rgba(0,0,0,.14), transparent 55%);
-    pointer-events:none;
-  }
-  .poleTile span{position:relative;z-index:1;line-height:1.1}
+    .dirName{
+      font-weight: 900;
+      font-size: clamp(14px, 2.2vw, 20px);
+      line-height: 1.12;
+      word-break: break-word; /* pas de noms coupés */
+      text-shadow: 0 0 14px rgba(0,0,0,.35);
+      padding: 0 6px;
+    }
 
-  /* Modal */
-  .modal{position:fixed;inset:0;z-index:50;display:none;}
-  .modal.open{display:block;}
-  .modalBg{position:absolute;inset:0;background:rgba(0,0,0,.66);backdrop-filter:blur(6px);}
-  .modalBox{
-    position:absolute; left:50%; transform:translateX(-50%);
-    top:calc(env(safe-area-inset-top) + 12px);
-    width:min(94vw, 920px);
-    max-height:calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
-    overflow:auto;
-    background:rgba(0,0,0,.62);
-    border:1px solid var(--stroke);
-    border-radius:18px;
-    box-shadow:0 22px 70px rgba(0,0,0,.45);
-  }
-  .modalHead{
-    position:sticky; top:0;
-    display:flex;justify-content:space-between;align-items:center;gap:10px;
-    padding:10px 12px;
-    background:rgba(0,0,0,.8);
-    border-bottom:1px solid rgba(255,255,255,.10);
-    backdrop-filter:blur(10px);
-  }
-  .modalTitle{font-weight:1000;text-transform:uppercase;letter-spacing:.55px;color:rgba(255,210,140,.95);}
-  .modalBody{padding:12px;display:grid;gap:12px;}
+    /* couleurs direction */
+    .chef{ background: linear-gradient(180deg, rgba(255,200,85,.95), rgba(255,160,35,.88)); color: rgba(20,10,0,.95); }
+    .adj1{ background: linear-gradient(180deg, rgba(135,210,255,.60), rgba(85,155,255,.45)); }
+    .adj2{ background: linear-gradient(180deg, rgba(200,170,255,.55), rgba(155,120,255,.40)); }
 
-  .subCard{border:1px solid rgba(255,255,255,.12);border-radius:16px;overflow:hidden;background:rgba(0,0,0,.22);}
-  .subHead{padding:9px 10px;font-weight:1000;text-transform:uppercase;letter-spacing:.3px;background:rgba(255,255,255,.08);}
-  .people{padding:10px;display:grid;gap:8px;}
-  .person{
-    padding:9px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.20);
-    display:grid;grid-template-columns:200px 1fr;gap:10px;align-items:start;
-  }
-  .fn{font-weight:1000;color:rgba(255,200,120,.98);}
-  .nm{font-weight:900;opacity:.95;word-break:break-word;}
-  @media (max-width:420px){.person{grid-template-columns:1fr;}}
+    /* Pôles */
+    .poles{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--gap);
+    }
 
-  .empty{
-    padding:14px;border-radius:16px;border:1px dashed rgba(255,255,255,.18);
-    background:rgba(0,0,0,.16);text-align:center;font-weight:900;color:var(--muted);
-  }
-</style>
+    @media (min-width: 820px){
+      .poles{ grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .poleBtn{
+      position: relative;
+      min-height: var(--poleH);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.50);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding: 10px 10px;
+    }
+
+    /* bande couleur en haut du pôle */
+    .poleBtn::before{
+      content:"";
+      position:absolute;
+      left:0; top:0;
+      height: 10px;
+      width: 100%;
+      background: rgba(255,170,50,.9);
+      opacity: .95;
+    }
+
+    .poleLabel{
+      font-weight: 950;
+      font-size: clamp(15px, 2.7vw, 19px);
+      letter-spacing: .2px;
+      text-shadow: 0 0 18px rgba(0,0,0,.50);
+      padding-top: 6px;
+    }
+
+    /* Overlay plein écran */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(0,0,0,.78);
+      backdrop-filter: blur(6px);
+      display:none;
+      padding: calc(env(safe-area-inset-top) + 14px) 14px calc(env(safe-area-inset-bottom) + 14px);
+    }
+
+    .panel{
+      max-width: 980px;
+      margin: 0 auto;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.60);
+      box-shadow: 0 18px 50px rgba(0,0,0,.55);
+      overflow:hidden;
+    }
+
+    .panelHead{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.40);
+    }
+
+    .panelTitle{
+      margin:0;
+      font-size: 18px;
+      font-weight: 950;
+      letter-spacing: .3px;
+    }
+
+    .closeBtn{
+      appearance:none;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.35);
+      color: var(--txt);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 900;
+      cursor:pointer;
+    }
+
+    .panelBody{
+      padding: 14px;
+    }
+
+    .subGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 780px){
+      .subGrid{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .subCard{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.45);
+      overflow:hidden;
+    }
+
+    .subHead{
+      padding: 12px 12px;
+      font-weight: 950;
+      letter-spacing: .4px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,140,0,.15);
+    }
+
+    /* 3 colonnes équilibrées : Fonction / Nom / (Competences pas affichées ici, tu as dit inutile) */
+    .rows{
+      padding: 8px 10px 10px;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1.4fr; /* fonction / nom */
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: 12px;
+      margin-top: 8px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.06);
+      align-items: start;
+    }
+
+    .fonction{
+      font-weight: 900;
+      color: rgba(255,190,110,.95);
+      white-space: normal;
+      line-height: 1.15;
+    }
+
+    .nom{
+      font-weight: 800;
+      word-break: break-word;
+      line-height: 1.15;
+    }
+
+    .empty{
+      color: var(--muted);
+      font-style: italic;
+      padding: 10px 12px;
+    }
+
+    .status{
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
-<div class="wrap">
-  <div class="topbar">
-    <button class="btn" onclick="location.href='index.html'">Retour</button>
-    <button class="btn primary" id="reloadBtn">Actualiser</button>
-  </div>
-
-  <div class="title">Organigramme</div>
-
-  <section class="card">
-    <div class="dir">
-      <div class="dirGrid">
-        <div class="chefBox">
-          <div class="role">Chef de centre</div>
-          <div class="name" id="chefName">—</div>
-        </div>
-        <div class="adjs">
-          <div class="adjBox">
-            <div class="role">1er adjoint</div>
-            <div class="name" id="adj1Name">—</div>
-          </div>
-          <div class="adjBox">
-            <div class="role">2ème adjoint</div>
-            <div class="name" id="adj2Name">—</div>
-          </div>
-        </div>
+  <div class="wrap">
+    <div class="topbar">
+      <h1 class="title">Organigramme</h1>
+      <div class="actions">
+        <button class="btn" onclick="history.back()">Retour</button>
       </div>
     </div>
-  </section>
 
-  <section class="polesWrap">
-    <div class="polesHead">Pôles</div>
-    <div class="poles" id="poles"></div>
-  </section>
-</div>
+    <!-- DIRECTION -->
+    <section class="direction" aria-label="Direction">
+      <div class="dirGrid">
+        <div class="dirBox adj1">
+          <div class="dirRole">1er adjoint</div>
+          <div class="dirName" id="adj1Name">—</div>
+        </div>
 
-<div class="modal" id="modal">
-  <div class="modalBg" id="modalBg"></div>
-  <div class="modalBox">
-    <div class="modalHead">
-      <div class="modalTitle" id="modalTitle">Pôle</div>
-      <button class="btn" id="closeBtn">Fermer</button>
-    </div>
-    <div class="modalBody" id="modalBody"></div>
+        <div class="dirBox chef">
+          <div class="dirRole">Chef de centre</div>
+          <div class="dirName" id="chefName">—</div>
+        </div>
+
+        <div class="dirBox adj2">
+          <div class="dirRole">2ème adjoint</div>
+          <div class="dirName" id="adj2Name">—</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- POLES -->
+    <section class="poles" id="poles" aria-label="Pôles">
+      <!-- injecté -->
+    </section>
+
+    <div class="status" id="status">Chargement…</div>
   </div>
-</div>
 
-<script>
-  // ✅ Ton URL Apps Script
-  const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+  <!-- Overlay -->
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="panel">
+      <div class="panelHead" id="panelHead">
+        <h2 class="panelTitle" id="panelTitle">—</h2>
+        <button class="closeBtn" id="closeBtn">Fermer</button>
+      </div>
+      <div class="panelBody" id="panelBody"></div>
+    </div>
+  </div>
 
-  // Couleurs DISTINCTES (stables par nom)
-  const PALETTE = ["#4CC9F0","#F9C74F","#90BE6D","#F8961E","#F28482","#9D4EDD","#43AA8B","#577590"];
-  function colorForName(name){
-    const s = String(name||"").toLowerCase().trim();
-    let h = 0; for(let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i))>>>0;
-    return PALETTE[h % PALETTE.length];
-  }
+  <script>
+    // ✅ COLLE ICI TON URL /exec
+    const API = "COLLE_ICI_TON_URL_EXEC";
 
-  const $chef = document.getElementById("chefName");
-  const $adj1 = document.getElementById("adj1Name");
-  const $adj2 = document.getElementById("adj2Name");
-  const $poles = document.getElementById("poles");
+    const $chef = document.getElementById("chefName");
+    const $adj1 = document.getElementById("adj1Name");
+    const $adj2 = document.getElementById("adj2Name");
+    const $poles = document.getElementById("poles");
+    const $status = document.getElementById("status");
 
-  const $modal = document.getElementById("modal");
-  const $modalTitle = document.getElementById("modalTitle");
-  const $modalBody = document.getElementById("modalBody");
-  document.getElementById("closeBtn").onclick = closeModal;
-  document.getElementById("modalBg").onclick = closeModal;
-  document.getElementById("reloadBtn").onclick = load;
+    const $overlay = document.getElementById("overlay");
+    const $panelTitle = document.getElementById("panelTitle");
+    const $panelBody = document.getElementById("panelBody");
+    const $closeBtn = document.getElementById("closeBtn");
 
-  function closeModal(){ $modal.classList.remove("open"); }
+    let ORG = null;
 
-  // JSONP
-  function jsonp(url){
-    return new Promise((resolve, reject)=>{
-      const cb = "cb_" + Math.random().toString(36).slice(2);
-      const s = document.createElement("script");
-      const sep = url.includes("?") ? "&" : "?";
-      s.src = url + sep + "view=org&callback=" + cb + "&_=" + Date.now();
-      window[cb] = (data)=>{ delete window[cb]; s.remove(); resolve(data); };
-      s.onerror = ()=>{ delete window[cb]; s.remove(); reject(new Error("JSONP fail")); };
-      document.head.appendChild(s);
-    });
-  }
-
-  function setDirection(dir){
-    $chef.textContent = dir?.chef || "—";
-    $adj1.textContent = dir?.adj1 || "—";
-    $adj2.textContent = dir?.adj2 || "—";
-  }
-
-  function renderPoles(poles){
-    $poles.innerHTML = "";
-    if(!Array.isArray(poles) || !poles.length){
-      $poles.innerHTML = `<div class="empty">Aucun pôle reçu depuis Sheets (ou Apps Script).</div>`;
-      return;
+    function jsonp(url){
+      return new Promise((resolve, reject)=>{
+        const cb = "cb_" + Math.random().toString(36).slice(2);
+        const s = document.createElement("script");
+        window[cb] = (data)=>{
+          try{ resolve(data); }
+          finally{
+            delete window[cb];
+            s.remove();
+          }
+        };
+        s.onerror = ()=>{ delete window[cb]; s.remove(); reject(new Error("JSONP load error")); };
+        const sep = url.includes("?") ? "&" : "?";
+        s.src = url + sep + "callback=" + encodeURIComponent(cb) + "&_=" + Date.now();
+        document.body.appendChild(s);
+      });
     }
-    poles.forEach(p=>{
+
+    function setDirection(direction){
+      $chef.textContent = direction?.chef || "—";
+      $adj1.textContent = direction?.adj1 || "—";
+      $adj2.textContent = direction?.adj2 || "—";
+    }
+
+    function poleButton(pole){
       const btn = document.createElement("button");
       btn.className = "poleBtn";
       btn.type = "button";
 
-      const tile = document.createElement("div");
-      tile.className = "poleTile";
+      // couleur bandeau
+      const col = pole.couleur && pole.couleur.trim() ? pole.couleur.trim() : "#FF8A00";
+      btn.style.setProperty("--bar", col);
+      btn.style.position = "relative";
+      btn.style.setProperty("outline","none");
+      btn.style.borderColor = "rgba(255,255,255,.12)";
+      // hack: utiliser ::before via inline = pas possible -> on met un div
+      const bar = document.createElement("div");
+      bar.style.position = "absolute";
+      bar.style.left = "0";
+      bar.style.top = "0";
+      bar.style.height = "10px";
+      bar.style.width = "100%";
+      bar.style.background = col;
+      bar.style.opacity = "0.95";
+      btn.appendChild(bar);
 
-      const c = p.couleur || colorForName(p.libelle);
-      tile.style.background = `linear-gradient(180deg, ${c}EE, ${c}B5)`;
+      const label = document.createElement("div");
+      label.className = "poleLabel";
+      label.textContent = pole.libelle;
+      btn.appendChild(label);
 
-      const sp = document.createElement("span");
-      sp.textContent = p.libelle || "Pôle";
-      tile.appendChild(sp);
-      btn.appendChild(tile);
-
-      btn.onclick = ()=> openPole(p);
-      $poles.appendChild(btn);
-    });
-  }
-
-  function openPole(p){
-    $modalTitle.textContent = p.libelle || "Pôle";
-    $modalBody.innerHTML = "";
-
-    const subs = p.sousPoles || [];
-    if(!subs.length){
-      $modalBody.innerHTML = `<div class="empty">Ce pôle est vide dans Sheets (pas de sous-pôle/membre).</div>`;
-      $modal.classList.add("open");
-      return;
+      btn.addEventListener("click", ()=> openPole(pole.id));
+      return btn;
     }
 
-    subs.forEach(sp=>{
-      const sc = document.createElement("div");
-      sc.className = "subCard";
+    function renderPoles(poles){
+      $poles.innerHTML = "";
+      (poles || []).forEach(p=>{
+        $poles.appendChild(poleButton(p));
+      });
+    }
 
-      const head = document.createElement("div");
-      head.className = "subHead";
-      head.textContent = sp.libelle || "Sous-pôle";
-      sc.appendChild(head);
+    function openPole(poleId){
+      const pole = (ORG?.poles || []).find(p=>p.id === poleId);
+      if(!pole) return;
 
-      const list = document.createElement("div");
-      list.className = "people";
+      $panelTitle.textContent = pole.libelle;
+      $panelBody.innerHTML = "";
 
-      const mem = sp.membres || [];
-      if(!mem.length){
-        const e = document.createElement("div");
-        e.className = "empty";
-        e.textContent = "Aucun membre.";
-        list.appendChild(e);
+      const sub = pole.sousPoles || [];
+      if(!sub.length){
+        const p = document.createElement("div");
+        p.className = "empty";
+        p.textContent = "Aucun sous-pôle pour le moment.";
+        $panelBody.appendChild(p);
       }else{
-        mem.forEach(m=>{
-          const row = document.createElement("div");
-          row.className = "person";
+        const grid = document.createElement("div");
+        grid.className = "subGrid";
 
-          const fn = document.createElement("div");
-          fn.className = "fn";
-          fn.textContent = m.fonction || "";
+        sub.forEach(sp=>{
+          const card = document.createElement("div");
+          card.className = "subCard";
 
-          const nm = document.createElement("div");
-          nm.className = "nm";
-          nm.textContent = m.nom || "";
+          const head = document.createElement("div");
+          head.className = "subHead";
+          head.textContent = sp.libelle;
+          card.appendChild(head);
 
-          row.appendChild(fn);
-          row.appendChild(nm);
-          list.appendChild(row);
+          const rows = document.createElement("div");
+          rows.className = "rows";
+
+          const mem = sp.membres || [];
+          if(!mem.length){
+            const empty = document.createElement("div");
+            empty.className = "empty";
+            empty.textContent = "Aucun membre.";
+            rows.appendChild(empty);
+          }else{
+            mem.forEach(m=>{
+              const r = document.createElement("div");
+              r.className = "row";
+
+              const f = document.createElement("div");
+              f.className = "fonction";
+              f.textContent = m.fonction || "—";
+
+              const n = document.createElement("div");
+              n.className = "nom";
+              n.textContent = m.nom || "—";
+
+              r.appendChild(f);
+              r.appendChild(n);
+              rows.appendChild(r);
+            });
+          }
+
+          card.appendChild(rows);
+          grid.appendChild(card);
         });
+
+        $panelBody.appendChild(grid);
       }
 
-      sc.appendChild(list);
-      $modalBody.appendChild(sc);
+      $overlay.style.display = "block";
+      $overlay.setAttribute("aria-hidden","false");
+    }
+
+    function closeOverlay(){
+      $overlay.style.display = "none";
+      $overlay.setAttribute("aria-hidden","true");
+    }
+
+    $closeBtn.addEventListener("click", closeOverlay);
+    $overlay.addEventListener("click", (e)=>{
+      if(e.target === $overlay) closeOverlay();
     });
 
-    $modal.classList.add("open");
-  }
+    async function loadOrg(){
+      try{
+        $status.textContent = "Chargement…";
+        const data = await jsonp(API + (API.includes("?") ? "&" : "?") + "view=org");
+        if(!data || data.ok !== true) throw new Error(data?.error || "Réponse invalide");
+        ORG = data;
 
-  async function load(){
-    try{
-      const data = await jsonp(API);
-      if(!data || data.ok !== true) throw new Error("Réponse invalide");
-      setDirection(data.direction);
-      renderPoles(data.poles);
-    }catch(e){
-      // si l'API ne répond pas, on affiche un message clair
-      setDirection(null);
-      renderPoles(null);
+        setDirection(data.direction);
+        renderPoles(data.poles);
+
+        $status.textContent = "";
+      }catch(err){
+        console.error(err);
+        $status.textContent = "Erreur : " + err.message;
+      }
     }
-  }
 
-  load();
-</script>
+    loadOrg();
+  </script>
 </body>
 </html>
