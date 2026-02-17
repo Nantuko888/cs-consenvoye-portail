@@ -7,23 +7,34 @@
 
   <style>
     :root{
-      --maxw: 980px;
-      --pad: clamp(12px, 4vw, 26px);
-      --gap: clamp(10px, 2.8vw, 18px);
-      --card: rgba(0,0,0,.50);
-      --stroke: rgba(255,150,40,.45);
+      --maxw: 1050px;
+      --pad: clamp(12px, 3.5vw, 22px);
+      --gap: clamp(10px, 2.8vw, 16px);
+
+      --card: rgba(0,0,0,.55);
+      --stroke: rgba(255,160,60,.45);
       --txt: rgba(255,255,255,.92);
       --muted: rgba(255,255,255,.70);
-      --yellow: #FFCC33;
+
+      --yellow: #ffcc33;
+      --blue: #2d7dff;
+      --orange: #ff8a1e;
+      --radius: 18px;
     }
 
-    html, body{ margin:0; padding:0; min-height:100%; background:#000; color:var(--txt);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    html, body{
+      margin:0; padding:0;
+      min-height:100%;
+      background:#000;
+      color:var(--txt);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
 
-    /* Background fixe */
+    /* Background fixe (comme ton portail) */
     body::before{
       content:"";
-      position: fixed; inset: 0;
+      position: fixed;
+      inset: 0;
       background: url("background.png") center top / cover no-repeat;
       z-index: 0;
       transform: translateZ(0);
@@ -38,15 +49,20 @@
     }
 
     header{
-      display:flex; align-items:center; justify-content:space-between; gap: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
       margin-bottom: var(--gap);
     }
+
     .title{
       margin:0;
       font-size: clamp(20px, 3.2vw, 34px);
       letter-spacing: .4px;
       text-shadow: 0 0 18px rgba(255,120,0,.35);
     }
+
     .btn{
       appearance:none;
       border: 1px solid var(--stroke);
@@ -54,28 +70,29 @@
       color: var(--txt);
       padding: 10px 12px;
       border-radius: 12px;
-      font-weight: 800;
+      font-weight: 900;
       cursor:pointer;
       -webkit-tap-highlight-color: transparent;
     }
     .btn:active{ transform: translateY(1px); }
 
-    /* Direction */
+    /* DIRECTION */
     .direction{
-      background: rgba(0,0,0,.55);
-      border: 1px solid rgba(255,200,90,.55);
-      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid rgba(255,210,120,.55);
+      border-radius: var(--radius);
       padding: 14px;
       box-shadow: 0 10px 30px rgba(0,0,0,.35);
       margin-bottom: var(--gap);
     }
+
     .dir-grid{
       display:grid;
       grid-template-columns: 1fr;
       gap: 10px;
       align-items: start;
     }
-    @media(min-width:760px){
+    @media (min-width: 860px){
       .dir-grid{ grid-template-columns: 1fr 1fr 1fr; }
     }
 
@@ -85,51 +102,56 @@
       background: rgba(0,0,0,.35);
       border: 1px solid rgba(255,170,60,.35);
     }
+
     .dir-card.chef{
       background: rgba(255,204,51,.20);
-      border: 1px solid rgba(255,204,51,.80);
+      border: 1px solid rgba(255,204,51,.85);
     }
+
     .dir-role{
-      font-weight: 900;
+      font-weight: 950;
       letter-spacing: .4px;
       text-transform: uppercase;
-      font-size: 13px;
+      font-size: 12px;
       color: rgba(255,220,140,.95);
       margin-bottom: 6px;
     }
-    .dir-card.chef .dir-role{
-      color: rgba(255,240,170,.98);
-    }
+
     .dir-name{
-      font-weight: 800;
+      font-weight: 900;
       font-size: 16px;
       line-height: 1.2;
-      word-break: break-word; /* IMPORTANT: ne coupe pas le nom */
+      word-break: break-word;
     }
-    .dir-empty{ color: var(--muted); font-style: italic; }
 
-    /* Pôles */
+    /* POLES GRID */
     .poles{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: var(--gap);
     }
-    @media(min-width:900px){
+    @media (min-width: 900px){
       .poles{ grid-template-columns: 1fr 1fr 1fr; }
     }
 
     .pole{
-      border-radius: 18px;
+      border-radius: var(--radius);
       padding: 14px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.45);
+      background: rgba(0,0,0,.50);
+      border: 1px solid rgba(255,255,255,.12);
       box-shadow: 0 10px 30px rgba(0,0,0,.35);
       cursor:pointer;
       user-select:none;
       -webkit-tap-highlight-color: transparent;
       position: relative;
-      overflow: hidden;
+      overflow:hidden;
+      min-height: 72px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
     }
+
     .pole::after{
       content:"";
       position:absolute; inset:0;
@@ -138,84 +160,112 @@
       pointer-events:none;
     }
 
-    .pole-title{
+    .pole h3{
       margin:0;
       font-weight: 950;
-      letter-spacing: .4px;
+      letter-spacing: .5px;
       text-transform: uppercase;
-      font-size: 14px;
+      font-size: 13px;
       text-shadow: 0 0 14px rgba(0,0,0,.25);
-    }
-    .pole-sub{
-      margin-top: 8px;
-      font-size: 12px;
-      color: rgba(255,255,255,.82);
-      opacity: .85;
+      padding: 0 6px;
     }
 
-    /* Détails */
-    .details{
+    /* MODAL */
+    .modal{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.75);
       display:none;
-      margin-top: var(--gap);
-      background: rgba(0,0,0,.55);
-      border: 1px solid var(--stroke);
-      border-radius: 18px;
-      padding: 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      z-index: 999;
+      padding: calc(env(safe-area-inset-top) + 14px) 14px calc(env(safe-area-inset-bottom) + 14px);
     }
 
-    .details-head{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    .modal-card{
+      max-width: 980px;
+      margin: 0 auto;
+      background: rgba(0,0,0,.72);
+      border: 1px solid rgba(255,160,60,.45);
+      border-radius: 18px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.55);
+      backdrop-filter: blur(6px);
+      padding: 14px;
+      max-height: calc(100vh - 28px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      overflow:auto;
+    }
+
+    .modal-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
       margin-bottom: 10px;
     }
-    .details-title{
+
+    .modal-title{
       margin:0;
       font-size: 18px;
       font-weight: 950;
       letter-spacing:.3px;
     }
 
+    .chips{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 8px;
+    }
+
     .chip{
       display:inline-block;
-      padding: 6px 10px;
+      padding: 7px 10px;
       border-radius: 999px;
       background: rgba(0,0,0,.35);
       border: 1px solid rgba(255,255,255,.14);
-      font-weight: 800;
+      font-weight: 900;
       font-size: 12px;
-      margin-right: 8px;
-      margin-bottom: 8px;
       cursor:pointer;
+      user-select:none;
+    }
+    .chip.active{
+      border-color: rgba(255,190,90,.75);
+      box-shadow: 0 0 0 2px rgba(255,140,0,.18) inset;
     }
 
-    .list{
-      margin: 10px 0 0 0;
+    .rows{
+      list-style:none;
+      margin: 0;
       padding: 0;
-      list-style: none;
       display:grid;
       gap: 8px;
     }
+
+    /* 2 colonnes alignées (pas de décalage) */
     .row{
       display:grid;
-      grid-template-columns: 1fr 2fr; /* aligné, pas de décalage */
+      grid-template-columns: 1fr 2fr;
       gap: 10px;
       padding: 10px 12px;
       border-radius: 14px;
       background: rgba(0,0,0,.35);
       border: 1px solid rgba(255,255,255,.10);
     }
-    .role{
-      font-weight: 900;
+
+    .r-role{
+      font-weight: 950;
       color: rgba(255,200,120,.95);
       word-break: break-word;
     }
-    .name{
-      font-weight: 800;
+
+    .r-name{
+      font-weight: 850;
       word-break: break-word;
     }
 
-    .hint{ margin-top: 10px; color: var(--muted); font-size: 13px; }
-    .status{ margin-top: 10px; color: var(--muted); font-size: 13px; }
+    .hint{
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
   </style>
 </head>
 
@@ -227,154 +277,214 @@
     </header>
 
     <!-- Direction -->
-    <section class="direction" aria-label="Direction">
+    <section class="direction">
       <div class="dir-grid">
         <div class="dir-card chef">
           <div class="dir-role">Chef de centre</div>
-          <div id="chefName" class="dir-name dir-empty">—</div>
+          <div class="dir-name">ADC Vénante Pierre</div>
         </div>
         <div class="dir-card">
           <div class="dir-role">1er adjoint</div>
-          <div id="adj1Name" class="dir-name dir-empty">—</div>
+          <div class="dir-name">ADJ Laleeuw Franck</div>
         </div>
         <div class="dir-card">
           <div class="dir-role">2ème adjoint</div>
-          <div id="adj2Name" class="dir-name dir-empty">—</div>
+          <div class="dir-name">ADJ Sénéchal Benjamin</div>
         </div>
       </div>
     </section>
 
-    <!-- Pôles -->
-    <section>
-      <div id="poles" class="poles" aria-label="Pôles"></div>
-      <div id="status" class="status">Chargement…</div>
+    <!-- Pôles (cliquables, sans texte interne détaillé) -->
+    <section class="poles" id="poles"></section>
 
-      <div id="details" class="details" aria-label="Détails pôle">
-        <div class="details-head">
-          <h2 id="detailsTitle" class="details-title"></h2>
-          <button class="btn" id="closeDetails">Fermer</button>
-        </div>
+    <div class="hint">
+      Clique sur un pôle → tu vois ses sous-pôles. Clique sur un sous-pôle → tu vois les membres.
+    </div>
+  </div>
 
-        <div id="chips"></div>
-        <ul id="membersList" class="list"></ul>
-        <div class="hint">Clique un sous-pôle pour afficher ses membres.</div>
+  <!-- Modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <button class="btn" id="closeBtn">Fermer</button>
       </div>
-    </section>
+
+      <div class="chips" id="chips"></div>
+      <ul class="rows" id="rows"></ul>
+      <div class="hint" id="modalHint"></div>
+    </div>
   </div>
 
   <script>
-    // ✅ TON URL APPS SCRIPT
-    const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+    // ✅ Données (remplies depuis ton Organigramme.xlsx)
+    const ORG = [
+      {
+        id:"techlog",
+        title:"Groupe Technique et Logistique",
+        color:"#ff8a1e",
+        subpoles:[
+          { title:"Bâtiment", members:[
+            { role:"Référent", name:"ADC Sénéchal Benjamin" },
+            { role:"Référent", name:"ADC KOLODZIEJCZAK Stéphane" }
+          ]},
+          { title:"Équipement / Habillement", members:[
+            { role:"Référent", name:"ADC Sénéchal Benjamin" },
+            { role:"Référent", name:"CPL Gaffard Robin" }
+          ]},
+          { title:"Véhicules / Tickets carburant", members:[
+            { role:"Référent", name:"ADC Sénéchal Benjamin" },
+            { role:"Référent", name:"CPL Rogie Florian" }
+          ]},
+          { title:"Vérification casques", members:[
+            { role:"Référent", name:"SA1 Moreau Florent" }
+          ]}
+        ]
+      },
 
-    const $status = document.getElementById("status");
+      {
+        id:"ope",
+        title:"Groupe Opérationnel",
+        color:"#2d7dff",
+        subpoles:[
+          { title:"DECI / Prévision / Inventaires / Parcellaires", members:[
+            { role:"Référent", name:"ADC Vénante Pierre" }
+          ]},
+          { title:"Référent VSAV / Inventaire VSAV", members:[
+            { role:"Référent", name:"SCH Wallarin Hélène" },
+            { role:"Référent", name:"SCH Stellato Vincent" }
+          ]},
+          { title:"Référent SSSM", members:[
+            { role:"Référent", name:"INF Dur Amélie" },
+            { role:"Référent", name:"INF Lepezel Laura" }
+          ]}
+        ]
+      },
+
+      {
+        id:"formation",
+        title:"Groupe Formation / Sport",
+        color:"#ff3b3b",
+        subpoles:[
+          { title:"FORACC / ACCPRO / FPS", members:[
+            { role:"Référent", name:"ADJ Laleeuw Franck" },
+            { role:"Référent", name:"ADC Joseph Judicael" },
+            { role:"Référent", name:"ADC Kolodziejczak Stéphane" },
+            { role:"Référent", name:"SCH Wallarin Hélène" }
+          ]},
+          { title:"SPORT", members:[
+            { role:"Référent", name:"SCH Wallarin Hélène" },
+            { role:"Référent", name:"CPL Barotte Christopher" },
+            { role:"Référent", name:"SGT Michel Marianne" }
+          ]}
+        ]
+      },
+
+      {
+        id:"recrut",
+        title:"Groupe Recrutement / Volontariat",
+        color:"#00c08b",
+        subpoles:[
+          { title:"SPV", members:[
+            { role:"Référent", name:"ADC Vénante Pierre" },
+            { role:"Référent", name:"ADJ Laleeuw Franck" },
+            { role:"Référent", name:"ADJ Sénéchal Benjamin" }
+          ]},
+          { title:"JSP", members:[
+            { role:"Référent", name:"SA1 Vénante Amélie" },
+            { role:"Référent", name:"ADJ Laleeuw Franck" },
+            { role:"Référent", name:"ADC Vénante Pierre" },
+            { role:"Référent", name:"SA1 Christal Mallaury" },
+            { role:"Référent", name:"SA2 Bamme Mélody" }
+          ]}
+        ]
+      },
+
+      {
+        id:"amicale",
+        title:"Amicale",
+        color:"#ffcc33",
+        subpoles:[
+          { title:"Bureau", members:[
+            { role:"Présidente", name:"Trontin Chloé" },
+            { role:"Vice-président", name:"Vénante Pierre" },
+            { role:"Trésorier", name:"Baur Benjamin" },
+            { role:"Trésorier adjoint", name:"Laleeuw Franck" },
+            { role:"Secrétaire", name:"Vénante Amélie" },
+            { role:"Secrétaire adjoint", name:"Dur Amélie" }
+          ]}
+        ]
+      },
+
+      {
+        id:"soutien",
+        title:"Équipe de soutien",
+        color:"#a855f7",
+        subpoles:[
+          { title:"Membres", members:[
+            { role:"Membre", name:"CNE Bienaimé Jean Paul" },
+            { role:"Membre", name:"ADJ Lecourtier Guy" },
+            { role:"Membre", name:"SGT Chavrelles Gilles" },
+            { role:"Membre", name:"SGT Beausire Bernard" }
+          ]}
+        ]
+      }
+    ];
+
     const $poles = document.getElementById("poles");
-    const $details = document.getElementById("details");
-    const $detailsTitle = document.getElementById("detailsTitle");
+    const $modal = document.getElementById("modal");
+    const $modalTitle = document.getElementById("modalTitle");
     const $chips = document.getElementById("chips");
-    const $membersList = document.getElementById("membersList");
+    const $rows = document.getElementById("rows");
+    const $hint = document.getElementById("modalHint");
+    const $close = document.getElementById("closeBtn");
 
-    const $chef = document.getElementById("chefName");
-    const $adj1 = document.getElementById("adj1Name");
-    const $adj2 = document.getElementById("adj2Name");
+    function openModal(pole){
+      $modal.style.display = "block";
+      $modal.setAttribute("aria-hidden","false");
+      $modalTitle.textContent = pole.title;
 
-    document.getElementById("closeDetails").addEventListener("click", () => {
-      $details.style.display = "none";
-      $membersList.innerHTML = "";
+      // chips sous-pôles
       $chips.innerHTML = "";
-    });
+      $rows.innerHTML = "";
+      $hint.textContent = "Clique un sous-pôle pour afficher les membres.";
 
-    function setText(el, txt){
-      const s = (txt && String(txt).trim()) ? String(txt).trim() : "—";
-      el.textContent = s;
-      el.classList.toggle("dir-empty", s === "—");
-    }
+      pole.subpoles.forEach((sp, idx) => {
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        chip.textContent = sp.title;
+        chip.addEventListener("click", () => {
+          document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+          renderMembers(sp.members);
+          $hint.textContent = "";
+        });
+        $chips.appendChild(chip);
 
-    function jsonp(url, cb){
-      const cbName = "cb_" + Math.random().toString(36).slice(2);
-      window[cbName] = (data) => {
-        try { cb(data); }
-        finally {
-          delete window[cbName];
-          script.remove();
+        // auto-select 1er sous-pôle
+        if(idx === 0){
+          chip.classList.add("active");
+          renderMembers(sp.members);
+          $hint.textContent = "";
         }
-      };
-      const script = document.createElement("script");
-      script.onerror = () => {
-        delete window[cbName];
-        script.remove();
-        $status.textContent = "Erreur de chargement (JSONP).";
-      };
-      const sep = url.includes("?") ? "&" : "?";
-      script.src = url + sep + "view=org&callback=" + encodeURIComponent(cbName) + "&_=" + Date.now();
-      document.body.appendChild(script);
+      });
     }
 
-    function renderPoleCards(poles){
-      $poles.innerHTML = "";
-      for (const p of poles){
-        const div = document.createElement("div");
-        div.className = "pole";
-        // couleur depuis sheets (fallback si vide)
-        const color = (p.couleur && String(p.couleur).trim()) ? String(p.couleur).trim() : "#777777";
-        div.style.background = `linear-gradient(180deg, ${color}CC, rgba(0,0,0,.55))`;
-        div.style.borderColor = "rgba(255,255,255,.14)";
-
-        const h = document.createElement("h3");
-        h.className = "pole-title";
-        h.textContent = p.libelle || p.id || "Pôle";
-
-        const sub = document.createElement("div");
-        sub.className = "pole-sub";
-        const nbSP = (p.souspoles && p.souspoles.length) ? p.souspoles.length : 0;
-        sub.textContent = nbSP ? (nbSP + " sous-pôles") : "Voir le détail";
-
-        div.appendChild(h);
-        div.appendChild(sub);
-
-        div.addEventListener("click", () => openPole(p));
-        $poles.appendChild(div);
-      }
-    }
-
-    function openPole(p){
-      $detailsTitle.textContent = p.libelle || p.id || "Pôle";
-      $details.style.display = "block";
-      $chips.innerHTML = "";
-      $membersList.innerHTML = "";
-
-      // 1) puces sous-pôles
-      if (p.souspoles && p.souspoles.length){
-        for (const sp of p.souspoles){
-          const chip = document.createElement("span");
-          chip.className = "chip";
-          chip.textContent = sp.libelle || sp.id || "Sous-pôle";
-          chip.addEventListener("click", () => renderMembers(sp.membres || []));
-          $chips.appendChild(chip);
-        }
-      } else {
-        // si pas de sous-pôles, on affiche les membres directs du pôle
-        renderMembers(p.membres || []);
-      }
-
-      // scroll vers détails
-      $details.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    function renderMembers(list){
-      $membersList.innerHTML = "";
-      if (!list.length){
+    function renderMembers(members){
+      $rows.innerHTML = "";
+      if(!members || !members.length){
         const li = document.createElement("li");
         li.className = "row";
-        li.innerHTML = `<div class="role">—</div><div class="name">Aucun membre</div>`;
-        $membersList.appendChild(li);
+        li.innerHTML = `<div class="r-role">—</div><div class="r-name">Aucun membre</div>`;
+        $rows.appendChild(li);
         return;
       }
-      for (const m of list){
+      members.forEach(m => {
         const li = document.createElement("li");
         li.className = "row";
-        li.innerHTML = `<div class="role">${escapeHtml(m.fonction || "")}</div><div class="name">${escapeHtml(m.nom || "")}</div>`;
-        $membersList.appendChild(li);
-      }
+        li.innerHTML = `<div class="r-role">${escapeHtml(m.role)}</div><div class="r-name">${escapeHtml(m.name)}</div>`;
+        $rows.appendChild(li);
+      });
     }
 
     function escapeHtml(s){
@@ -386,29 +496,26 @@
         .replaceAll("'","&#039;");
     }
 
-    // CHARGEMENT
-    jsonp(API, (data) => {
-      if (!data || data.ok !== true){
-        $status.textContent = "Erreur : données invalides.";
-        return;
+    $close.addEventListener("click", () => {
+      $modal.style.display = "none";
+      $modal.setAttribute("aria-hidden","true");
+    });
+
+    $modal.addEventListener("click", (e) => {
+      if(e.target === $modal){
+        $modal.style.display = "none";
+        $modal.setAttribute("aria-hidden","true");
       }
+    });
 
-      // Direction (si ton script renvoie {direction:{chef,adj1,adj2}})
-      if (data.direction){
-        setText($chef, data.direction.chef);
-        setText($adj1, data.direction.adj1);
-        setText($adj2, data.direction.adj2);
-      } else {
-        setText($chef, "—");
-        setText($adj1, "—");
-        setText($adj2, "—");
-      }
-
-      // Pôles
-      const poles = Array.isArray(data.poles) ? data.poles : [];
-      renderPoleCards(poles);
-
-      $status.textContent = "OK";
+    // Render poles
+    ORG.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "pole";
+      div.style.background = `linear-gradient(180deg, ${p.color}CC, rgba(0,0,0,.55))`;
+      div.innerHTML = `<h3>${escapeHtml(p.title)}</h3>`;
+      div.addEventListener("click", () => openModal(p));
+      $poles.appendChild(div);
     });
   </script>
 </body>
