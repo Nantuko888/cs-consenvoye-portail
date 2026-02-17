@@ -2,535 +2,440 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Organigramme - CS Consenvoye</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Organigramme — CS Consenvoye</title>
   <style>
     :root{
-      --maxw: 980px;
-      --pad: clamp(12px, 4vw, 26px);
-      --gap: clamp(10px, 2.8vw, 18px);
-
-      --glass: rgba(0,0,0,.50);
-      --stroke: rgba(255,160,50,.28);
-      --txt: rgba(255,255,255,.93);
-      --muted: rgba(255,255,255,.72);
-
-      --cardR: 18px;
-      --shadow: 0 14px 35px rgba(0,0,0,.40);
-
-      --dirH: clamp(92px, 12vh, 128px);
-      --poleH: clamp(66px, 9vh, 86px);
+      --glass: rgba(20,20,20,.55);
+      --stroke: rgba(255,255,255,.12);
+      --text: #f3f3f3;
+      --muted: rgba(255,255,255,.75);
+      --shadow: 0 18px 45px rgba(0,0,0,.45);
+      --radius: 22px;
+      --btnRadius: 18px;
     }
-
-    html, body{
-      margin:0; padding:0;
-      min-height:100%;
+    *{box-sizing:border-box}
+    body{
+      margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--txt);
+      color: var(--text);
+      background:#000;
+      min-height:100svh;
+      display:flex;
+      justify-content:center;
+      padding:14px;
+    }
+    .page{
+      width:min(520px, 100%);
+      position:relative;
+      border-radius:28px;
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.08);
       background:#000;
     }
-
-    /* Background fixe (ne bouge pas au scroll) */
-    body::before{
-      content:"";
-      position: fixed;
-      inset: 0;
-      background: url("background.png") center top / cover no-repeat;
-      z-index: 0;
-      transform: translateZ(0);
+    .bg{
+      position:absolute; inset:0;
+      background:url("background.png") center/cover no-repeat;
+      filter: grayscale(1) contrast(1.05);
+      transform: scale(1.02);
+    }
+    .veil{
+      position:absolute; inset:0;
+      background: radial-gradient(circle at 30% 10%, rgba(255,255,255,.10), transparent 45%),
+                  linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.55));
     }
 
-    /* Wrapper */
-    .wrap{
-      position: relative;
-      z-index: 1;
-      max-width: var(--maxw);
-      margin: 0 auto;
-      padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad) calc(env(safe-area-inset-bottom) + var(--pad));
-    }
-
-    /* Top bar */
-    .topbar{
+    header{
+      position:relative;
+      padding: 16px 16px 8px;
       display:flex;
       align-items:center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: var(--gap);
+      justify-content:space-between;
+      gap:12px;
     }
-
     .title{
-      margin:0;
-      font-size: clamp(20px, 3.1vw, 30px);
-      letter-spacing: .5px;
-      text-shadow: 0 0 18px rgba(255,130,0,.25);
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing:.2px;
+      text-shadow: 0 8px 18px rgba(0,0,0,.65);
+      opacity:.92;
     }
-
-    .actions{
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
-
-    .btn{
-      appearance:none;
-      border: 1px solid var(--stroke);
+    .topBtns{display:flex; gap:10px;}
+    .chipBtn{
+      border:1px solid rgba(255,255,255,.15);
       background: rgba(0,0,0,.45);
-      color: var(--txt);
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-weight: 800;
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight:700;
       cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 10px 25px rgba(0,0,0,.35);
     }
-    .btn:active{ transform: translateY(1px); }
 
-    /* Direction layout */
-    .direction{
-      background: var(--glass);
-      border: 1px solid var(--stroke);
-      border-radius: var(--cardR);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(4px);
+    .card{
+      position:relative;
+      margin: 10px 14px 14px;
       padding: 14px;
-      margin-bottom: var(--gap);
+      border-radius: var(--radius);
+      background: var(--glass);
+      border:1px solid var(--stroke);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 16px 40px rgba(0,0,0,.35);
     }
 
-    .dirGrid{
+    /* Direction layout: Chef centré en haut, adjoints gauche/droite dessous */
+    .directionWrap{display:grid; gap:12px;}
+    .chefRow{display:flex; justify-content:center;}
+    .adjRow{
       display:grid;
-      grid-template-columns: 1fr 1.2fr 1fr;
-      gap: 12px;
-      align-items: stretch;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
     }
 
-    .dirBox{
-      border-radius: 16px;
+    .badge{
+      width:100%;
+      border-radius: 18px;
       padding: 12px 12px;
-      min-height: var(--dirH);
-      display:flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      border: 1px solid rgba(255,255,255,.10);
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.25);
-      overflow:hidden;
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: 0 18px 35px rgba(0,0,0,.35);
+      text-align:center;
+      min-height: 92px;
+      display:flex; flex-direction:column; justify-content:center;
+    }
+    .badge .role{
+      font-weight:900;
+      letter-spacing:.6px;
+      text-transform:uppercase;
+      font-size:14px;
+      opacity:.95;
+    }
+    .badge .name{
+      margin-top:6px;
+      font-weight:800;
+      font-size:18px;
+      text-shadow: 0 10px 16px rgba(0,0,0,.55);
     }
 
-    .dirRole{
+    .chef{background: linear-gradient(180deg, rgba(250,190,80,.92), rgba(220,140,35,.88)); color:#1b1206;}
+    .adj1{background: linear-gradient(180deg, rgba(95,150,210,.90), rgba(55,100,155,.88));}
+    .adj2{background: linear-gradient(180deg, rgba(140,120,190,.90), rgba(95,75,150,.88));}
+
+    .sectionTitle{
+      margin: 0 14px 8px;
+      position:relative;
       font-weight: 900;
+      letter-spacing:.8px;
       text-transform: uppercase;
-      letter-spacing: .8px;
-      font-size: 13px;
-      opacity: .95;
-      margin-bottom: 6px;
-      text-shadow: 0 0 12px rgba(0,0,0,.35);
+      color: rgba(255,255,255,.75);
+      text-shadow: 0 10px 16px rgba(0,0,0,.55);
     }
 
-    .dirName{
-      font-weight: 900;
-      font-size: clamp(14px, 2.2vw, 20px);
-      line-height: 1.12;
-      word-break: break-word; /* pas de noms coupés */
-      text-shadow: 0 0 14px rgba(0,0,0,.35);
-      padding: 0 6px;
-    }
-
-    /* couleurs direction */
-    .chef{ background: linear-gradient(180deg, rgba(255,200,85,.95), rgba(255,160,35,.88)); color: rgba(20,10,0,.95); }
-    .adj1{ background: linear-gradient(180deg, rgba(135,210,255,.60), rgba(85,155,255,.45)); }
-    .adj2{ background: linear-gradient(180deg, rgba(200,170,255,.55), rgba(155,120,255,.40)); }
-
-    /* Pôles */
-    .poles{
+    /* Pôles grid */
+    .polesGrid{
+      position:relative;
       display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--gap);
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 0 14px 16px;
     }
-
-    @media (min-width: 820px){
-      .poles{ grid-template-columns: repeat(3, 1fr); }
+    @media (min-width: 520px){
+      .polesGrid{ grid-template-columns: 1fr 1fr; }
     }
 
     .poleBtn{
-      position: relative;
-      min-height: var(--poleH);
-      border-radius: 18px;
+      border: none;
+      border-radius: 20px;
+      padding: 18px 12px;
+      min-height: 92px;
+      cursor:pointer;
+      color:#fff;
+      font-weight: 900;
+      letter-spacing:.6px;
+      text-transform: uppercase;
+      box-shadow: 0 18px 35px rgba(0,0,0,.35);
       border: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.50);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
       display:flex;
       align-items:center;
       justify-content:center;
       text-align:center;
-      padding: 10px 10px;
+      line-height:1.1;
     }
 
-    /* bande couleur en haut du pôle */
-    .poleBtn::before{
-      content:"";
-      position:absolute;
-      left:0; top:0;
-      height: 10px;
-      width: 100%;
-      background: rgba(255,170,50,.9);
-      opacity: .95;
-    }
-
-    .poleLabel{
-      font-weight: 950;
-      font-size: clamp(15px, 2.7vw, 19px);
-      letter-spacing: .2px;
-      text-shadow: 0 0 18px rgba(0,0,0,.50);
-      padding-top: 6px;
-    }
-
-    /* Overlay plein écran */
-    .overlay{
-      position: fixed;
-      inset: 0;
-      z-index: 999;
-      background: rgba(0,0,0,.78);
-      backdrop-filter: blur(6px);
+    /* Modal (plein écran) */
+    .modal{
+      position:fixed; inset:0;
       display:none;
-      padding: calc(env(safe-area-inset-top) + 14px) 14px calc(env(safe-area-inset-bottom) + 14px);
-    }
-
-    .panel{
-      max-width: 980px;
-      margin: 0 auto;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.60);
-      box-shadow: 0 18px 50px rgba(0,0,0,.55);
-      overflow:hidden;
-    }
-
-    .panelHead{
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 14px 14px;
-      border-bottom: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.40);
-    }
-
-    .panelTitle{
-      margin:0;
-      font-size: 18px;
-      font-weight: 950;
-      letter-spacing: .3px;
-    }
-
-    .closeBtn{
-      appearance:none;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.35);
-      color: var(--txt);
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-weight: 900;
-      cursor:pointer;
-    }
-
-    .panelBody{
+      background: rgba(0,0,0,.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 9999;
       padding: 14px;
     }
-
-    .subGrid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-
-    @media (min-width: 780px){
-      .subGrid{ grid-template-columns: 1fr 1fr; }
-    }
-
-    .subCard{
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.45);
+    .modal.show{display:block;}
+    .modalBox{
+      max-width: 560px;
+      margin: 0 auto;
+      border-radius: 22px;
       overflow:hidden;
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: 0 25px 70px rgba(0,0,0,.55);
+      background: rgba(18,18,18,.72);
     }
-
-    .subHead{
-      padding: 12px 12px;
-      font-weight: 950;
-      letter-spacing: .4px;
+    .modalHead{
+      padding: 14px 14px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
       border-bottom: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,140,0,.15);
     }
-
-    /* 3 colonnes équilibrées : Fonction / Nom / (Competences pas affichées ici, tu as dit inutile) */
-    .rows{
-      padding: 8px 10px 10px;
+    .modalTitle{
+      font-weight: 1000;
+      text-transform: uppercase;
+      letter-spacing: .8px;
     }
-
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1.4fr; /* fonction / nom */
-      gap: 10px;
-      padding: 9px 10px;
-      border-radius: 12px;
-      margin-top: 8px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.06);
-      align-items: start;
-    }
-
-    .fonction{
+    .closeBtn{
+      border:none;
+      cursor:pointer;
+      border-radius: 999px;
+      padding: 10px 14px;
       font-weight: 900;
-      color: rgba(255,190,110,.95);
-      white-space: normal;
-      line-height: 1.15;
+      color:#fff;
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.14);
     }
-
-    .nom{
-      font-weight: 800;
-      word-break: break-word;
-      line-height: 1.15;
-    }
-
-    .empty{
-      color: var(--muted);
-      font-style: italic;
-      padding: 10px 12px;
-    }
-
-    .status{
+    .modalBody{padding: 12px 14px 16px;}
+    .sub{
       margin-top: 10px;
-      color: var(--muted);
-      font-size: 13px;
-      text-align: center;
+      padding: 12px 12px;
+      border-radius: 18px;
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.10);
     }
+    .subName{
+      font-weight: 1000;
+      text-transform: uppercase;
+      letter-spacing:.6px;
+      margin-bottom: 8px;
+      opacity:.92;
+    }
+    ul{margin:0; padding-left: 18px;}
+    li{margin: 6px 0; color: rgba(255,255,255,.92); font-weight:600;}
+    .hint{color: rgba(255,255,255,.70); font-size: 13px; margin-top: 8px;}
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <h1 class="title">Organigramme</h1>
-      <div class="actions">
-        <button class="btn" onclick="history.back()">Retour</button>
+  <div class="page">
+    <div class="bg"></div>
+    <div class="veil"></div>
+
+    <header>
+      <div class="title">Organigramme</div>
+      <div class="topBtns">
+        <button class="chipBtn" onclick="goBack()">Retour</button>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="directionWrap">
+        <div class="chefRow">
+          <div class="badge chef" id="chefBox">
+            <div class="role">Chef de centre</div>
+            <div class="name" id="chefName">—</div>
+          </div>
+        </div>
+
+        <div class="adjRow">
+          <div class="badge adj1">
+            <div class="role">1er adjoint</div>
+            <div class="name" id="adj1Name">—</div>
+          </div>
+          <div class="badge adj2">
+            <div class="role">2ème adjoint</div>
+            <div class="name" id="adj2Name">—</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- DIRECTION -->
-    <section class="direction" aria-label="Direction">
-      <div class="dirGrid">
-        <div class="dirBox adj1">
-          <div class="dirRole">1er adjoint</div>
-          <div class="dirName" id="adj1Name">—</div>
-        </div>
-
-        <div class="dirBox chef">
-          <div class="dirRole">Chef de centre</div>
-          <div class="dirName" id="chefName">—</div>
-        </div>
-
-        <div class="dirBox adj2">
-          <div class="dirRole">2ème adjoint</div>
-          <div class="dirName" id="adj2Name">—</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- POLES -->
-    <section class="poles" id="poles" aria-label="Pôles">
-      <!-- injecté -->
-    </section>
-
-    <div class="status" id="status">Chargement…</div>
+    <div class="sectionTitle">Pôles</div>
+    <div class="polesGrid" id="polesGrid"></div>
   </div>
 
-  <!-- Overlay -->
-  <div class="overlay" id="overlay" aria-hidden="true">
-    <div class="panel">
-      <div class="panelHead" id="panelHead">
-        <h2 class="panelTitle" id="panelTitle">—</h2>
-        <button class="closeBtn" id="closeBtn">Fermer</button>
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modalBox">
+      <div class="modalHead" id="modalHead">
+        <div class="modalTitle" id="modalTitle">—</div>
+        <button class="closeBtn" onclick="closeModal()">Fermer</button>
       </div>
-      <div class="panelBody" id="panelBody"></div>
+      <div class="modalBody" id="modalBody"></div>
     </div>
   </div>
 
   <script>
-    // ✅ COLLE ICI TON URL /exec
-    const API = "COLLE_ICI_TON_URL_EXEC";
+    /* ==========================
+       DATA (A = fixe)
+       👉 C’EST ICI QUE TU EDITES
+       ========================== */
+    const DATA = {
+      direction: {
+        chef: "ADC Vénante Pierre",
+        adj1: "ADJ Laleuuw Franck",
+        adj2: "ADJ Sénéchal Benjamin"
+      },
+      poles: [
+        {
+          id: "soutien",
+          label: "Équipe de soutien",
+          color: "#5aa9d6",
+          subpoles: [
+            { label: "Membres", membres: ["CNE Bienaimé Jean Paul", "ADJ Lecourtier Guy", "SGT Chavrelleis Gilles", "SGT Beausire Bernard"] }
+          ]
+        },
+        {
+          id: "amicale",
+          label: "Amicale",
+          color: "#7fb0e0",
+          subpoles: [
+            { label: "Bureau", membres: ["Présidente : Trontin Chloé", "Vice-président : Vénante Pierre", "Trésorier : Baur Benjamin", "Trésorier adjoint : Laleuuw Franck", "Secrétaire : Vénante Amélie", "Secrétaire adjoint : Dur Amélie"] }
+          ]
+        },
+        {
+          id: "techlog",
+          label: "Groupe Technique & Logistique",
+          color: "#f0b64a",
+          subpoles: [
+            { label: "Bâtiment", membres: ["ADC Sénéchal Benjamin", "ADC Kolodziejczak Stéphane"] },
+            { label: "Équipement / Habillement", membres: ["ADC Sénéchal Benjamin", "CPL Gaffard Robin"] },
+            { label: "Véhicules / Tickets carburant", membres: ["ADC Sénéchal Benjamin", "CPL Rogie Florian"] },
+            { label: "Vérification casques", membres: ["SA1 Moreau Florent"] }
+          ]
+        },
+        {
+          id: "operationnel",
+          label: "Groupe Opérationnel",
+          color: "#f1d85a",
+          subpoles: [
+            { label: "DECI / Prévision / Inventaires / Parcellaires", membres: ["ADC Vénante Pierre"] },
+            { label: "Référent VSAV / Inventaire VSAV", membres: ["SCH Wallarin Hélène", "SCH Stellato Vincent"] },
+            { label: "Référent SSSM", membres: ["INF Dur Amélie", "INF Lepezel Laura"] }
+          ]
+        },
+        {
+          id: "formation",
+          label: "Groupe Formation / Sport",
+          color: "#8c74d9",
+          subpoles: [
+            { label: "FORACC / ACCPRO / FPS", membres: ["ADJ Laleuuw Franck", "ADC Joseph Judicael", "ADC Kolodziejczak Stéphane", "SCH Wallarin Hélène"] },
+            { label: "Sport", membres: ["SCH Wallarin Hélène", "CPL Barotte Christopher", "SGT Michel Marianne"] }
+          ]
+        },
+        {
+          id: "recrutement",
+          label: "Groupe Recrutement / Volontariat",
+          color: "#d06ad6",
+          subpoles: [
+            { label: "SPV", membres: ["ADC Vénante Pierre", "ADJ Laleuuw Franck", "ADJ Sénéchal Benjamin"] }
+          ]
+        },
+        {
+          id: "jsp",
+          label: "JSP",
+          color: "#40c27e",
+          subpoles: [
+            { label: "Encadrement JSP", membres: ["SA1 Vénante Amélie", "ADJ Laleuuw Franck", "ADC Vénante Pierre", "SA1 Christal Mallaury", "SA2 Bamme Mélody"] }
+          ]
+        }
+      ]
+    };
 
-    const $chef = document.getElementById("chefName");
-    const $adj1 = document.getElementById("adj1Name");
-    const $adj2 = document.getElementById("adj2Name");
-    const $poles = document.getElementById("poles");
-    const $status = document.getElementById("status");
+    /* ==========================
+       RENDER
+       ========================== */
+    const $chefName = document.getElementById("chefName");
+    const $adj1Name = document.getElementById("adj1Name");
+    const $adj2Name = document.getElementById("adj2Name");
+    const $grid = document.getElementById("polesGrid");
 
-    const $overlay = document.getElementById("overlay");
-    const $panelTitle = document.getElementById("panelTitle");
-    const $panelBody = document.getElementById("panelBody");
-    const $closeBtn = document.getElementById("closeBtn");
+    function render(){
+      $chefName.textContent = DATA.direction.chef || "—";
+      $adj1Name.textContent = DATA.direction.adj1 || "—";
+      $adj2Name.textContent = DATA.direction.adj2 || "—";
 
-    let ORG = null;
-
-    function jsonp(url){
-      return new Promise((resolve, reject)=>{
-        const cb = "cb_" + Math.random().toString(36).slice(2);
-        const s = document.createElement("script");
-        window[cb] = (data)=>{
-          try{ resolve(data); }
-          finally{
-            delete window[cb];
-            s.remove();
-          }
-        };
-        s.onerror = ()=>{ delete window[cb]; s.remove(); reject(new Error("JSONP load error")); };
-        const sep = url.includes("?") ? "&" : "?";
-        s.src = url + sep + "callback=" + encodeURIComponent(cb) + "&_=" + Date.now();
-        document.body.appendChild(s);
+      $grid.innerHTML = "";
+      DATA.poles.forEach(p => {
+        const btn = document.createElement("button");
+        btn.className = "poleBtn";
+        btn.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .92)}, ${hexToRgba(p.color, .68)})`;
+        btn.textContent = p.label;
+        btn.onclick = () => openPole(p);
+        $grid.appendChild(btn);
       });
     }
 
-    function setDirection(direction){
-      $chef.textContent = direction?.chef || "—";
-      $adj1.textContent = direction?.adj1 || "—";
-      $adj2.textContent = direction?.adj2 || "—";
-    }
+    /* ==========================
+       MODAL
+       ========================== */
+    const $modal = document.getElementById("modal");
+    const $modalTitle = document.getElementById("modalTitle");
+    const $modalBody = document.getElementById("modalBody");
 
-    function poleButton(pole){
-      const btn = document.createElement("button");
-      btn.className = "poleBtn";
-      btn.type = "button";
+    function openPole(p){
+      $modalTitle.textContent = p.label;
+      $modalBody.innerHTML = "";
 
-      // couleur bandeau
-      const col = pole.couleur && pole.couleur.trim() ? pole.couleur.trim() : "#FF8A00";
-      btn.style.setProperty("--bar", col);
-      btn.style.position = "relative";
-      btn.style.setProperty("outline","none");
-      btn.style.borderColor = "rgba(255,255,255,.12)";
-      // hack: utiliser ::before via inline = pas possible -> on met un div
-      const bar = document.createElement("div");
-      bar.style.position = "absolute";
-      bar.style.left = "0";
-      bar.style.top = "0";
-      bar.style.height = "10px";
-      bar.style.width = "100%";
-      bar.style.background = col;
-      bar.style.opacity = "0.95";
-      btn.appendChild(bar);
+      (p.subpoles || []).forEach(sp => {
+        const box = document.createElement("div");
+        box.className = "sub";
 
-      const label = document.createElement("div");
-      label.className = "poleLabel";
-      label.textContent = pole.libelle;
-      btn.appendChild(label);
+        const t = document.createElement("div");
+        t.className = "subName";
+        t.textContent = sp.label;
 
-      btn.addEventListener("click", ()=> openPole(pole.id));
-      return btn;
-    }
-
-    function renderPoles(poles){
-      $poles.innerHTML = "";
-      (poles || []).forEach(p=>{
-        $poles.appendChild(poleButton(p));
-      });
-    }
-
-    function openPole(poleId){
-      const pole = (ORG?.poles || []).find(p=>p.id === poleId);
-      if(!pole) return;
-
-      $panelTitle.textContent = pole.libelle;
-      $panelBody.innerHTML = "";
-
-      const sub = pole.sousPoles || [];
-      if(!sub.length){
-        const p = document.createElement("div");
-        p.className = "empty";
-        p.textContent = "Aucun sous-pôle pour le moment.";
-        $panelBody.appendChild(p);
-      }else{
-        const grid = document.createElement("div");
-        grid.className = "subGrid";
-
-        sub.forEach(sp=>{
-          const card = document.createElement("div");
-          card.className = "subCard";
-
-          const head = document.createElement("div");
-          head.className = "subHead";
-          head.textContent = sp.libelle;
-          card.appendChild(head);
-
-          const rows = document.createElement("div");
-          rows.className = "rows";
-
-          const mem = sp.membres || [];
-          if(!mem.length){
-            const empty = document.createElement("div");
-            empty.className = "empty";
-            empty.textContent = "Aucun membre.";
-            rows.appendChild(empty);
-          }else{
-            mem.forEach(m=>{
-              const r = document.createElement("div");
-              r.className = "row";
-
-              const f = document.createElement("div");
-              f.className = "fonction";
-              f.textContent = m.fonction || "—";
-
-              const n = document.createElement("div");
-              n.className = "nom";
-              n.textContent = m.nom || "—";
-
-              r.appendChild(f);
-              r.appendChild(n);
-              rows.appendChild(r);
-            });
-          }
-
-          card.appendChild(rows);
-          grid.appendChild(card);
+        const ul = document.createElement("ul");
+        (sp.membres || []).forEach(m => {
+          const li = document.createElement("li");
+          li.textContent = m;
+          ul.appendChild(li);
         });
 
-        $panelBody.appendChild(grid);
-      }
+        box.appendChild(t);
+        box.appendChild(ul);
+        $modalBody.appendChild(box);
+      });
 
-      $overlay.style.display = "block";
-      $overlay.setAttribute("aria-hidden","false");
+      const hint = document.createElement("div");
+      hint.className = "hint";
+      hint.textContent = "Clique sur Fermer pour revenir aux pôles.";
+      $modalBody.appendChild(hint);
+
+      $modal.classList.add("show");
     }
 
-    function closeOverlay(){
-      $overlay.style.display = "none";
-      $overlay.setAttribute("aria-hidden","true");
+    function closeModal(){ $modal.classList.remove("show"); }
+    $modal.addEventListener("click", (e)=>{ if(e.target === $modal) closeModal(); });
+
+    function goBack(){
+      // si tu veux forcer vers index.html :
+      // window.location.href = "index.html";
+      history.back();
     }
 
-    $closeBtn.addEventListener("click", closeOverlay);
-    $overlay.addEventListener("click", (e)=>{
-      if(e.target === $overlay) closeOverlay();
-    });
-
-    async function loadOrg(){
-      try{
-        $status.textContent = "Chargement…";
-        const data = await jsonp(API + (API.includes("?") ? "&" : "?") + "view=org");
-        if(!data || data.ok !== true) throw new Error(data?.error || "Réponse invalide");
-        ORG = data;
-
-        setDirection(data.direction);
-        renderPoles(data.poles);
-
-        $status.textContent = "";
-      }catch(err){
-        console.error(err);
-        $status.textContent = "Erreur : " + err.message;
-      }
+    function hexToRgba(hex, a){
+      const h = (hex || "").replace("#","");
+      if(h.length !== 6) return `rgba(255,255,255,${a})`;
+      const r = parseInt(h.slice(0,2),16);
+      const g = parseInt(h.slice(2,4),16);
+      const b = parseInt(h.slice(4,6),16);
+      return `rgba(${r},${g},${b},${a})`;
     }
 
-    loadOrg();
+    render();
   </script>
 </body>
 </html>
