@@ -2,162 +2,474 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Organigramme - CS Consenvoye</title>
-
 <style>
-html, body{
-  margin:0;
-  padding:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background:#000;
-  color:white;
-}
+  :root{
+    --maxw: 1100px;
+    --pad: clamp(14px, 4vw, 26px);
+    --gap: clamp(12px, 2.6vw, 18px);
 
-/* Background fixe */
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:url("background.png") center top / cover no-repeat;
-  z-index:0;
-}
+    --glass: rgba(0,0,0,.45);
+    --stroke: rgba(255,170,70,.35);
+    --txt: rgba(255,255,255,.95);
+    --muted: rgba(255,255,255,.72);
 
-.wrap{
-  position:relative;
-  z-index:1;
-  padding:20px;
-  max-width:1100px;
-  margin:auto;
-}
+    --radius: 20px;
+    --shadow: 0 16px 44px rgba(0,0,0,.35);
+  }
 
-/* TITRE */
-h1{
-  text-align:center;
-  margin-bottom:30px;
-  text-shadow:0 0 20px rgba(255,120,0,.6);
-}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;min-height:100%;color:var(--txt);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#000}
 
-/* DIRECTION */
-.direction{
-  text-align:center;
-  margin-bottom:40px;
-}
+  /* background comme ton portail */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background:url("background.png") center top/cover no-repeat;
+    transform:translateZ(0);
+    z-index:0;
+  }
 
-.chef{
-  background:#FFD700;
-  color:#000;
-  padding:15px;
-  border-radius:14px;
-  font-weight:700;
-  margin-bottom:20px;
-}
+  .wrap{
+    position:relative; z-index:1;
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad) calc(env(safe-area-inset-bottom) + var(--pad));
+  }
 
-.adjoints{
-  display:flex;
-  justify-content:space-between;
-  gap:20px;
-}
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    margin-bottom: 10px;
+  }
 
-.adjoint{
-  flex:1;
-  background:rgba(255,120,0,.85);
-  padding:15px;
-  border-radius:14px;
-  font-weight:600;
-}
+  .btn{
+    appearance:none;
+    border:1px solid rgba(255,255,255,.16);
+    background: rgba(0,0,0,.35);
+    color: var(--txt);
+    padding:10px 14px;
+    border-radius: 14px;
+    font-weight: 900;
+    cursor:pointer;
+    box-shadow: 0 12px 26px rgba(0,0,0,.25);
+    backdrop-filter: blur(8px);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{
+    border-color: rgba(255,170,70,.35);
+    background: linear-gradient(180deg, rgba(255,170,70,.18), rgba(0,0,0,.35));
+  }
 
-/* POLES */
-.poles{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
-  gap:20px;
-}
+  .title{
+    font-size: clamp(26px, 4.2vw, 44px);
+    font-weight: 1000;
+    letter-spacing:.4px;
+    text-shadow: 0 12px 26px rgba(0,0,0,.55);
+    margin: 10px 0 14px;
+  }
 
-.pole{
-  background:rgba(0,0,0,.6);
-  border:1px solid rgba(255,140,0,.6);
-  padding:25px 15px;
-  border-radius:16px;
-  text-align:center;
-  cursor:pointer;
-  transition:0.2s;
-  font-weight:700;
-}
+  /* Direction */
+  .card{
+    background: var(--glass);
+    border:1px solid var(--stroke);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+    overflow:hidden;
+  }
 
-.pole:hover{
-  transform:scale(1.04);
-  background:rgba(255,100,0,.25);
-}
+  .dirHead{
+    padding: 12px 14px;
+    font-weight: 1000;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    background: linear-gradient(90deg, rgba(255,200,90,.98), rgba(255,120,0,.92));
+    color:#111;
+  }
+
+  .dirBody{padding: 14px; display:grid; gap: 12px;}
+
+  .chef{
+    border-radius: 18px;
+    padding: 14px 12px;
+    text-align:center;
+    background: linear-gradient(180deg, rgba(255,220,100,.98), rgba(255,155,40,.92));
+    color:#111;
+    box-shadow: 0 14px 30px rgba(0,0,0,.25);
+  }
+  .chef .role{font-size:13px; font-weight:1000; letter-spacing:.7px; text-transform:uppercase; opacity:.92}
+  .chef .name{font-size:20px; font-weight:1000; margin-top:6px}
+
+  .adjRow{display:grid; grid-template-columns: 1fr 1fr; gap: 12px;}
+  .adj{
+    border-radius: 18px;
+    padding: 12px 10px;
+    text-align:center;
+    background: linear-gradient(180deg, rgba(255,140,60,.92), rgba(255,110,20,.82));
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow: 0 14px 30px rgba(0,0,0,.22);
+  }
+  .adj .role{font-size:12px; font-weight:1000; text-transform:uppercase; letter-spacing:.6px; opacity:.95}
+  .adj .name{font-size:16px; font-weight:950; margin-top:6px}
+
+  /* Layout pôles + contenu */
+  .layout{
+    margin-top: var(--gap);
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap);
+  }
+  @media (min-width: 900px){
+    .layout{ grid-template-columns: 1fr 1.2fr; align-items:start; }
+  }
+
+  /* Pôles (belles tuiles colorées) */
+  .poles{
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 12px;
+  }
+  @media (min-width: 520px){
+    .poles{ grid-template-columns: repeat(3, minmax(0,1fr)); }
+  }
+
+  .poleBtn{
+    border:none; padding:0; background:transparent; cursor:pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .poleTile{
+    border-radius: 18px;
+    min-height: 92px;
+    padding: 14px 12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-weight: 1000;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color:#101010;
+    box-shadow: 0 18px 40px rgba(0,0,0,.25);
+    border: 1px solid rgba(255,255,255,.16);
+    position:relative;
+    overflow:hidden;
+  }
+  .poleTile::after{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 18% 12%, rgba(255,255,255,.22), transparent 55%),
+      radial-gradient(circle at 92% 100%, rgba(0,0,0,.12), transparent 55%);
+    pointer-events:none;
+  }
+  .poleTile span{position:relative; z-index:1; line-height:1.15}
+
+  /* Panneau fixe à droite (membres affichés) */
+  .panel{
+    background: rgba(0,0,0,.55);
+    border:1px solid var(--stroke);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+    overflow:hidden;
+    min-height: 360px;
+  }
+
+  .panelHead{
+    padding: 12px 14px;
+    font-weight: 1000;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    background: rgba(255,255,255,.08);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap: 12px;
+  }
+
+  .panelTitle{font-weight:1000}
+  .panelSub{font-size:12px; color: var(--muted); font-weight:900}
+
+  .panelBody{padding: 12px 14px; display:grid; gap: 12px;}
+
+  .subCard{
+    border:1px solid rgba(255,255,255,.12);
+    border-radius: 16px;
+    overflow:hidden;
+    background: rgba(0,0,0,.25);
+  }
+  .subHead{
+    padding: 10px 12px;
+    font-weight: 1000;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    background: rgba(255,255,255,.08);
+  }
+  .people{padding: 10px 12px; display:grid; gap: 8px;}
+
+  .person{
+    padding: 10px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(0,0,0,.22);
+    display:grid;
+    grid-template-columns: 190px 1fr;
+    gap: 10px;
+    align-items:start;
+  }
+  .fn{
+    font-weight: 1000;
+    color: rgba(255,200,120,.98);
+  }
+  .nm{
+    font-weight: 900;
+    opacity: .95;
+    word-break: break-word;
+  }
+  @media (max-width: 420px){
+    .person{grid-template-columns: 1fr; }
+  }
+
+  .empty{
+    padding: 14px;
+    border-radius: 16px;
+    border: 1px dashed rgba(255,255,255,.18);
+    background: rgba(0,0,0,.18);
+    text-align:center;
+    font-weight: 900;
+    color: var(--muted);
+  }
+
+  .status{
+    margin-top: 10px;
+    text-align:center;
+    font-weight:900;
+    color: var(--muted);
+  }
 </style>
 </head>
 
 <body>
-<div class="wrap">
-
-<h1>Organigramme</h1>
-
-<div class="direction">
-  <div class="chef">
-    Chef de centre<br>
-    <span id="chefNom">Nom Chef</span>
-  </div>
-
-  <div class="adjoints">
-    <div class="adjoint">
-      1er Adjoint<br>
-      <span id="adj1Nom">Nom Adjoint 1</span>
+  <div class="wrap">
+    <div class="topbar">
+      <button class="btn" id="backBtn">Retour</button>
+      <button class="btn primary" id="reloadBtn">Actualiser</button>
     </div>
-    <div class="adjoint">
-      2ème Adjoint<br>
-      <span id="adj2Nom">Nom Adjoint 2</span>
+
+    <div class="title">Organigramme</div>
+
+    <section class="card">
+      <div class="dirHead">Direction du CS Consenvoye</div>
+      <div class="dirBody">
+        <div class="chef">
+          <div class="role">Chef de centre</div>
+          <div class="name" id="chefName">—</div>
+        </div>
+        <div class="adjRow">
+          <div class="adj">
+            <div class="role">1er adjoint</div>
+            <div class="name" id="adj1Name">—</div>
+          </div>
+          <div class="adj">
+            <div class="role">2ème adjoint</div>
+            <div class="name" id="adj2Name">—</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section>
+        <div class="poles" id="poles"></div>
+        <div class="status" id="status">Chargement…</div>
+      </section>
+
+      <aside class="panel" id="panel">
+        <div class="panelHead">
+          <div>
+            <div class="panelTitle" id="panelTitle">Sélectionne un pôle</div>
+            <div class="panelSub" id="panelSub">Les sous-pôles + membres s’affichent ici</div>
+          </div>
+        </div>
+        <div class="panelBody" id="panelBody">
+          <div class="empty">Clique sur un pôle à gauche.</div>
+        </div>
+      </aside>
     </div>
   </div>
-</div>
-
-<div class="poles" id="polesContainer">
-  <!-- Les pôles arrivent ici -->
-</div>
-
-</div>
 
 <script>
+  // 🔥 Mets ton URL Apps Script ici
+  const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec?view=org"; 
-// 🔴 REMPLACE TON_URL_EXEC PAR TON URL /exec
+  // ✅ fallback “pré-rempli” (beau) si Sheets vide / API KO
+  const DEMO = {
+    direction: { chef: "À renseigner", adj1: "À renseigner", adj2: "À renseigner" },
+    poles: [
+      { id:"ope", libelle:"Opérationnel", couleur:"#7bd3ff", sousPoles:[
+        { id:"vsav", libelle:"VSAV", membres:[ {fonction:"Responsable", nom:"Nom Prénom"}, {fonction:"Adjoint", nom:"Nom Prénom"} ] },
+        { id:"inc", libelle:"Incendie", membres:[ {fonction:"Référent", nom:"Nom Prénom"} ] }
+      ]},
+      { id:"jsp", libelle:"JSP", couleur:"#ffd166", sousPoles:[
+        { id:"enc", libelle:"Encadrement", membres:[ {fonction:"Responsable", nom:"Nom Prénom"} ] }
+      ]},
+      { id:"ami", libelle:"Amicale", couleur:"#cdb4ff", sousPoles:[
+        { id:"bur", libelle:"Bureau", membres:[ {fonction:"Président", nom:"Nom Prénom"} ] }
+      ]},
+      { id:"sup", libelle:"Équipe de soutien", couleur:"#95d5b2", sousPoles:[
+        { id:"log", libelle:"Logistique", membres:[ {fonction:"Référent", nom:"Nom Prénom"} ] }
+      ]},
+      { id:"adm", libelle:"Administratif", couleur:"#f28482", sousPoles:[
+        { id:"sec", libelle:"Secrétariat", membres:[ {fonction:"Référent", nom:"Nom Prénom"} ] }
+      ]},
+      { id:"tech", libelle:"Technique", couleur:"#f7b267", sousPoles:[
+        { id:"mat", libelle:"Matériel", membres:[ {fonction:"Référent", nom:"Nom Prénom"} ] }
+      ]},
+    ]
+  };
 
-function loadOrg(){
+  const $status = document.getElementById("status");
+  const $poles = document.getElementById("poles");
+  const $chef = document.getElementById("chefName");
+  const $a1 = document.getElementById("adj1Name");
+  const $a2 = document.getElementById("adj2Name");
+  const $panelTitle = document.getElementById("panelTitle");
+  const $panelSub = document.getElementById("panelSub");
+  const $panelBody = document.getElementById("panelBody");
 
-  fetch(API)
-  .then(res => res.json())
-  .then(data => {
+  document.getElementById("backBtn").onclick = () => location.href = "index.html";
+  document.getElementById("reloadBtn").onclick = () => load();
 
-    document.getElementById("chefNom").textContent =
-      data.direction?.chef || "Non renseigné";
+  function jsonp(url){
+    return new Promise((resolve, reject)=>{
+      const cb = "cb_" + Math.random().toString(36).slice(2);
+      const s = document.createElement("script");
+      const sep = url.includes("?") ? "&" : "?";
+      s.src = url + sep + "view=org&callback=" + cb + "&_=" + Date.now();
 
-    document.getElementById("adj1Nom").textContent =
-      data.direction?.adj1 || "Non renseigné";
-
-    document.getElementById("adj2Nom").textContent =
-      data.direction?.adj2 || "Non renseigné";
-
-    const container = document.getElementById("polesContainer");
-    container.innerHTML = "";
-
-    data.poles.forEach(pole=>{
-      const div = document.createElement("div");
-      div.className="pole";
-      div.textContent = pole.nom;
-      div.onclick = ()=> alert("Pôle : " + pole.nom);
-      container.appendChild(div);
+      window[cb] = (data)=>{
+        delete window[cb];
+        s.remove();
+        resolve(data);
+      };
+      s.onerror = ()=>{
+        delete window[cb];
+        s.remove();
+        reject(new Error("JSONP fail"));
+      };
+      document.head.appendChild(s);
     });
+  }
 
-  })
-  .catch(()=> alert("Erreur chargement organigramme"));
-}
+  function setDirection(dir){
+    $chef.textContent = dir.chef || "—";
+    $a1.textContent = dir.adj1 || "—";
+    $a2.textContent = dir.adj2 || "—";
+  }
 
-loadOrg();
+  function renderPoles(poles){
+    $poles.innerHTML = "";
+    poles.forEach((p, i)=>{
+      const btn = document.createElement("button");
+      btn.className = "poleBtn";
+      btn.type = "button";
 
+      const tile = document.createElement("div");
+      tile.className = "poleTile";
+      const c = p.couleur || ["#7bd3ff","#ffd166","#cdb4ff","#95d5b2","#f28482","#f7b267"][i%6];
+      tile.style.background = `linear-gradient(180deg, ${c}EE, ${c}B5)`;
+
+      const sp = document.createElement("span");
+      sp.textContent = (p.libelle || "Pôle").toUpperCase();
+      tile.appendChild(sp);
+      btn.appendChild(tile);
+
+      btn.onclick = ()=> openPole(p);
+      $poles.appendChild(btn);
+    });
+  }
+
+  function openPole(p){
+    $panelTitle.textContent = p.libelle || "Pôle";
+    $panelSub.textContent = "Sous-pôles et membres";
+
+    $panelBody.innerHTML = "";
+
+    const subs = p.sousPoles || [];
+    if(!subs.length){
+      $panelBody.innerHTML = `<div class="empty">Aucun sous-pôle.</div>`;
+      return;
+    }
+
+    subs.forEach(sp=>{
+      const sc = document.createElement("div");
+      sc.className = "subCard";
+
+      const head = document.createElement("div");
+      head.className = "subHead";
+      head.textContent = sp.libelle || "Sous-pôle";
+      sc.appendChild(head);
+
+      const list = document.createElement("div");
+      list.className = "people";
+
+      const mem = sp.membres || [];
+      if(!mem.length){
+        const e = document.createElement("div");
+        e.className = "empty";
+        e.textContent = "Aucun membre.";
+        list.appendChild(e);
+      }else{
+        mem.forEach(m=>{
+          const row = document.createElement("div");
+          row.className = "person";
+
+          const fn = document.createElement("div");
+          fn.className = "fn";
+          fn.textContent = m.fonction || "";
+
+          const nm = document.createElement("div");
+          nm.className = "nm";
+          nm.textContent = m.nom || "";
+
+          row.appendChild(fn);
+          row.appendChild(nm);
+          list.appendChild(row);
+        });
+      }
+
+      sc.appendChild(list);
+      $panelBody.appendChild(sc);
+    });
+  }
+
+  async function load(){
+    $status.textContent = "Chargement…";
+
+    // Affiche quelque chose de beau tout de suite
+    setDirection(DEMO.direction);
+    renderPoles(DEMO.poles);
+    openPole(DEMO.poles[0]);
+
+    try{
+      const data = await jsonp(API);
+      if(data && data.ok === true && data.poles){
+        setDirection(data.direction || DEMO.direction);
+        renderPoles(data.poles);
+        openPole(data.poles[0] || DEMO.poles[0]);
+        $status.textContent = "OK";
+      }else{
+        $status.textContent = "Mode démo (Sheets non chargé)";
+      }
+    }catch(e){
+      $status.textContent = "Mode démo (API inaccessible)";
+    }
+  }
+
+  load();
 </script>
 </body>
 </html>
