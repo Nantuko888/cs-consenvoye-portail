@@ -8,17 +8,24 @@
 <style>
   :root{
     --maxw: 1100px;
-    --pad: clamp(12px, 4vw, 22px);
+    --pad: clamp(12px, 4vw, 20px);
     --gap: clamp(10px, 2.6vw, 16px);
 
-    --glass: rgba(0,0,0,.45);
-    --stroke: rgba(255,170,70,.30);
+    --glass: rgba(0,0,0,.42);
+    --stroke: rgba(255,170,70,.28);
 
     --txt: rgba(255,255,255,.95);
     --muted: rgba(255,255,255,.72);
 
     --radius: 18px;
     --shadow: 0 16px 44px rgba(0,0,0,.35);
+
+    /* TAILLES (COMPACTES) */
+    --dirRole: 11px;
+    --chefName: 16px;
+    --adjName: 14px;
+    --poleFont: 12px;
+    --poleMinH: 68px;
   }
 
   *{box-sizing:border-box}
@@ -29,7 +36,7 @@
     background:#000;
   }
 
-  /* Background FIXE (ne bouge pas) */
+  /* Background FIXE */
   body::before{
     content:"";
     position:fixed; inset:0;
@@ -45,42 +52,39 @@
     padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad) calc(env(safe-area-inset-bottom) + var(--pad));
   }
 
-  /* Top bar */
   .topbar{
     display:flex; align-items:center; justify-content:space-between;
     gap: 10px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   .btn{
     appearance:none;
-    border:1px solid rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.14);
     background: rgba(0,0,0,.35);
     color: var(--txt);
-    padding: 10px 14px;
+    padding: 9px 12px;
     border-radius: 14px;
-    font-weight: 900;
+    font-weight: 950;
     cursor:pointer;
-    box-shadow: 0 12px 26px rgba(0,0,0,.25);
+    box-shadow: 0 10px 24px rgba(0,0,0,.25);
     backdrop-filter: blur(8px);
     -webkit-tap-highlight-color: transparent;
   }
   .btn:active{ transform: translateY(1px); }
   .btn.primary{
     border-color: var(--stroke);
-    background: linear-gradient(180deg, rgba(255,170,70,.18), rgba(0,0,0,.35));
+    background: linear-gradient(180deg, rgba(255,170,70,.16), rgba(0,0,0,.35));
   }
 
-  /* Title */
   .title{
-    font-size: clamp(26px, 4.6vw, 44px);
+    font-size: clamp(22px, 4.2vw, 34px);
     font-weight: 1000;
-    margin: 6px 0 14px;
+    margin: 6px 0 12px;
     text-shadow: 0 12px 26px rgba(0,0,0,.55);
-    letter-spacing: .3px;
+    letter-spacing: .2px;
   }
 
-  /* Cards */
   .card{
     background: var(--glass);
     border: 1px solid var(--stroke);
@@ -90,71 +94,70 @@
     overflow:hidden;
   }
 
-  /* Direction layout */
+  /* Direction (COMPACT) */
   .dir{
-    padding: 14px;
+    padding: 12px;
     display:grid;
-    gap: 12px;
+    gap: 10px;
   }
 
   .chef{
-    border-radius: 18px;
-    padding: 14px 12px;
+    border-radius: 16px;
+    padding: 10px 10px;
     text-align:center;
-    background: linear-gradient(180deg, rgba(255,220,110,.98), rgba(255,160,45,.92));
+    background: linear-gradient(180deg, rgba(255,220,110,.95), rgba(255,165,55,.88));
     color:#111;
-    box-shadow: 0 14px 30px rgba(0,0,0,.25);
+    box-shadow: 0 12px 26px rgba(0,0,0,.22);
   }
   .chef .role{
-    font-size: 12px;
+    font-size: var(--dirRole);
     font-weight: 1000;
     text-transform: uppercase;
-    letter-spacing: .7px;
+    letter-spacing: .6px;
     opacity:.92;
   }
   .chef .name{
-    font-size: 20px;
+    font-size: var(--chefName);
     font-weight: 1000;
-    margin-top: 6px;
+    margin-top: 4px;
     word-break: break-word;
   }
 
   .adjs{
     display:grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
   }
 
   .adj{
-    border-radius: 18px;
-    padding: 12px 10px;
+    border-radius: 16px;
+    padding: 9px 10px;
     text-align:center;
-    background: linear-gradient(180deg, rgba(255,140,60,.92), rgba(255,105,20,.82));
-    border:1px solid rgba(255,255,255,.12);
-    box-shadow: 0 14px 30px rgba(0,0,0,.22);
+    background: linear-gradient(180deg, rgba(255,135,55,.90), rgba(255,105,20,.78));
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow: 0 12px 26px rgba(0,0,0,.20);
   }
   .adj .role{
-    font-size: 12px;
+    font-size: var(--dirRole);
     font-weight: 1000;
     text-transform: uppercase;
-    letter-spacing: .6px;
+    letter-spacing: .55px;
     opacity:.95;
   }
   .adj .name{
-    font-size: 16px;
+    font-size: var(--adjName);
     font-weight: 950;
-    margin-top: 6px;
+    margin-top: 4px;
     word-break: break-word;
   }
 
-  /* Poles grid */
+  /* Pôles */
   .polesWrap{ margin-top: var(--gap); }
-
   .polesHead{
     margin: 0 0 10px;
     font-weight: 1000;
     text-transform: uppercase;
-    letter-spacing: .7px;
+    letter-spacing: .65px;
     color: rgba(255,210,140,.95);
     text-shadow: 0 10px 18px rgba(0,0,0,.4);
   }
@@ -162,7 +165,7 @@
   .poles{
     display:grid;
     grid-template-columns: repeat(2, minmax(0,1fr));
-    gap: 12px;
+    gap: 10px;
   }
   @media (min-width: 520px){
     .poles{ grid-template-columns: repeat(3, minmax(0,1fr)); }
@@ -180,19 +183,20 @@
   }
 
   .poleTile{
-    border-radius: 18px;
-    min-height: 84px;
-    padding: 12px 10px;
+    border-radius: 16px;
+    min-height: var(--poleMinH);
+    padding: 10px 10px;
     display:flex;
     align-items:center;
     justify-content:center;
     text-align:center;
     font-weight: 1000;
     text-transform: uppercase;
-    letter-spacing: .4px;
-    color:#101010;
-    box-shadow: 0 18px 40px rgba(0,0,0,.25);
-    border: 1px solid rgba(255,255,255,.16);
+    letter-spacing: .35px;
+    font-size: var(--poleFont);
+    color:#0f0f0f;
+    box-shadow: 0 16px 34px rgba(0,0,0,.22);
+    border: 1px solid rgba(255,255,255,.14);
     position:relative;
     overflow:hidden;
   }
@@ -200,13 +204,13 @@
     content:"";
     position:absolute; inset:0;
     background:
-      radial-gradient(circle at 15% 15%, rgba(255,255,255,.20), transparent 55%),
-      radial-gradient(circle at 90% 110%, rgba(0,0,0,.14), transparent 55%);
+      radial-gradient(circle at 18% 15%, rgba(255,255,255,.18), transparent 55%),
+      radial-gradient(circle at 92% 115%, rgba(0,0,0,.14), transparent 55%);
     pointer-events:none;
   }
-  .poleTile span{ position:relative; z-index:1; line-height:1.15; }
+  .poleTile span{ position:relative; z-index:1; line-height:1.1; }
 
-  /* Modal full screen */
+  /* Modal plein écran */
   .modal{
     position: fixed;
     inset: 0;
@@ -217,7 +221,7 @@
 
   .modalBg{
     position:absolute; inset:0;
-    background: rgba(0,0,0,.65);
+    background: rgba(0,0,0,.66);
     backdrop-filter: blur(6px);
   }
 
@@ -225,14 +229,14 @@
     position:absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: calc(env(safe-area-inset-top) + 14px);
+    top: calc(env(safe-area-inset-top) + 12px);
     width: min(94vw, 920px);
-    max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 28px);
+    max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
     overflow:auto;
 
     background: rgba(0,0,0,.60);
     border: 1px solid var(--stroke);
-    border-radius: 20px;
+    border-radius: 18px;
     box-shadow: 0 22px 70px rgba(0,0,0,.45);
   }
 
@@ -243,8 +247,8 @@
     align-items:center;
     justify-content:space-between;
     gap: 10px;
-    padding: 12px 14px;
-    background: rgba(0,0,0,.75);
+    padding: 10px 12px;
+    background: rgba(0,0,0,.78);
     border-bottom: 1px solid rgba(255,255,255,.10);
     backdrop-filter: blur(10px);
   }
@@ -252,12 +256,12 @@
   .modalTitle{
     font-weight:1000;
     text-transform: uppercase;
-    letter-spacing: .6px;
+    letter-spacing: .55px;
     color: rgba(255,210,140,.95);
   }
 
   .modalBody{
-    padding: 12px 14px 16px;
+    padding: 12px 12px 14px;
     display:grid;
     gap: 12px;
   }
@@ -269,26 +273,25 @@
     background: rgba(0,0,0,.25);
   }
   .subHead{
-    padding: 10px 12px;
+    padding: 9px 10px;
     font-weight: 1000;
     text-transform: uppercase;
-    letter-spacing: .35px;
+    letter-spacing: .3px;
     background: rgba(255,255,255,.08);
   }
   .people{
-    padding: 10px 12px;
+    padding: 10px 10px;
     display:grid;
     gap: 8px;
   }
 
-  /* aligné propre : Fonction | Nom */
   .person{
-    padding: 10px 10px;
+    padding: 9px 9px;
     border-radius: 12px;
     border: 1px solid rgba(255,255,255,.10);
     background: rgba(0,0,0,.22);
     display:grid;
-    grid-template-columns: 210px 1fr;
+    grid-template-columns: 200px 1fr;
     gap: 10px;
     align-items:start;
   }
@@ -326,7 +329,6 @@
 
   <div class="title">Organigramme</div>
 
-  <!-- Direction -->
   <section class="card">
     <div class="dir">
       <div class="chef">
@@ -346,14 +348,12 @@
     </div>
   </section>
 
-  <!-- Poles -->
   <section class="polesWrap">
     <div class="polesHead">Pôles</div>
     <div class="poles" id="poles"></div>
   </section>
 </div>
 
-<!-- Modal -->
 <div class="modal" id="modal">
   <div class="modalBg" id="modalBg"></div>
   <div class="modalBox">
@@ -366,32 +366,31 @@
 </div>
 
 <script>
-  // ✅ URL APPS SCRIPT (la tienne)
   const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-  // ✅ Données de secours (rempli) si Sheets / API ne renvoie rien
+  // ✅ Palette vraiment distincte (pas 3 couleurs proches)
+  const PALETTE = [
+    "#4CC9F0", // bleu
+    "#F9C74F", // jaune
+    "#90BE6D", // vert
+    "#F8961E", // orange
+    "#F28482", // rose
+    "#9D4EDD", // violet
+    "#43AA8B", // turquoise
+    "#577590" // bleu-gris
+  ];
+
+  // ✅ Fallback avec TES pôles (inclut JSP / Amicale / Équipe de soutien)
   const FALLBACK = {
-    direction: { chef: "À renseigner", adj1: "À renseigner", adj2: "À renseigner" },
+    direction: { chef:"À renseigner", adj1:"À renseigner", adj2:"À renseigner" },
     poles: [
-      { id:"direction", libelle:"Direction", couleur:"#ffd166", sousPoles:[
-        { id:"cdc", libelle:"Bureau", membres:[ {fonction:"Chef de centre", nom:"Nom Prénom"} ] }
-      ]},
-      { id:"ope", libelle:"Opérationnel", couleur:"#7bd3ff", sousPoles:[
-        { id:"vsav", libelle:"VSAV", membres:[ {fonction:"Responsable", nom:"Nom Prénom"}, {fonction:"Adjoint", nom:"Nom Prénom"} ] },
-        { id:"inc", libelle:"Incendie", membres:[ {fonction:"Référent", nom:"Nom Prénom"} ] }
-      ]},
-      { id:"jsp", libelle:"JSP", couleur:"#95d5b2", sousPoles:[
-        { id:"enc", libelle:"Encadrement", membres:[ {fonction:"Responsable", nom:"Nom Prénom"} ] }
-      ]},
-      { id:"ami", libelle:"Amicale", couleur:"#cdb4ff", sousPoles:[
-        { id:"bur", libelle:"Bureau", membres:[ {fonction:"Président", nom:"Nom Prénom"} ] }
-      ]},
-      { id:"soutien", libelle:"Équipe de soutien", couleur:"#f7b267", sousPoles:[
-        { id:"log", libelle:"Logistique", membres:[ {fonction:"Référent", nom:"Nom Prénom"} ] }
-      ]},
-      { id:"tech", libelle:"Technique", couleur:"#f28482", sousPoles:[
-        { id:"mat", libelle:"Matériel", membres:[ {fonction:"Référent", nom:"Nom Prénom"} ] }
-      ]},
+      { id:"ope", libelle:"Opérationnel", sousPoles:[] },
+      { id:"jsp", libelle:"JSP", sousPoles:[] },
+      { id:"tech", libelle:"Technique", sousPoles:[] },
+      { id:"adm", libelle:"Administratif", sousPoles:[] },
+      { id:"ami", libelle:"Amicale", sousPoles:[] },
+      { id:"soutien", libelle:"Équipe de soutien", sousPoles:[] },
+      { id:"formation", libelle:"Formation", sousPoles:[] }
     ]
   };
 
@@ -411,9 +410,7 @@
   $closeBtn.onclick = closeModal;
   $modalBg.onclick = closeModal;
 
-  function closeModal(){
-    $modal.classList.remove("open");
-  }
+  function closeModal(){ $modal.classList.remove("open"); }
 
   function jsonp(url){
     return new Promise((resolve, reject)=>{
@@ -421,24 +418,24 @@
       const s = document.createElement("script");
       const sep = url.includes("?") ? "&" : "?";
       s.src = url + sep + "view=org&callback=" + cb + "&_=" + Date.now();
-      window[cb] = (data)=>{
-        delete window[cb];
-        s.remove();
-        resolve(data);
-      };
-      s.onerror = ()=>{
-        delete window[cb];
-        s.remove();
-        reject(new Error("JSONP fail"));
-      };
+      window[cb] = (data)=>{ delete window[cb]; s.remove(); resolve(data); };
+      s.onerror = ()=>{ delete window[cb]; s.remove(); reject(new Error("JSONP fail")); };
       document.head.appendChild(s);
     });
   }
 
   function setDirection(dir){
-    $chef.textContent = (dir && dir.chef) ? dir.chef : "—";
-    $adj1.textContent = (dir && dir.adj1) ? dir.adj1 : "—";
-    $adj2.textContent = (dir && dir.adj2) ? dir.adj2 : "—";
+    $chef.textContent = dir?.chef || "—";
+    $adj1.textContent = dir?.adj1 || "—";
+    $adj2.textContent = dir?.adj2 || "—";
+  }
+
+  // Couleur stable par nom (même pôle = même couleur)
+  function colorForPoleName(name){
+    const key = String(name || "").toLowerCase().trim();
+    let h = 0;
+    for (let i=0;i<key.length;i++) h = (h*31 + key.charCodeAt(i)) >>> 0;
+    return PALETTE[h % PALETTE.length];
   }
 
   function renderPoles(poles){
@@ -451,11 +448,12 @@
       const tile = document.createElement("div");
       tile.className = "poleTile";
 
-      const c = p.couleur || ["#7bd3ff","#ffd166","#cdb4ff","#95d5b2","#f28482","#f7b267"][i%6];
+      // Si Apps Script envoie une couleur, on la respecte, sinon couleur stable par libellé
+      const c = p.couleur || colorForPoleName(p.libelle);
       tile.style.background = `linear-gradient(180deg, ${c}EE, ${c}B5)`;
 
       const sp = document.createElement("span");
-      sp.textContent = (p.libelle || "Pôle");
+      sp.textContent = p.libelle || "Pôle";
       tile.appendChild(sp);
       btn.appendChild(tile);
 
@@ -465,12 +463,12 @@
   }
 
   function openPole(p){
-    $modalTitle.textContent = (p.libelle || "Pôle");
+    $modalTitle.textContent = p.libelle || "Pôle";
     $modalBody.innerHTML = "";
 
     const subs = p.sousPoles || [];
     if(!subs.length){
-      $modalBody.innerHTML = `<div class="empty">Aucun sous-pôle.</div>`;
+      $modalBody.innerHTML = `<div class="empty">Aucun contenu pour ce pôle (pour l’instant).</div>`;
       $modal.classList.add("open");
       return;
     }
@@ -520,19 +518,22 @@
   }
 
   async function load(){
-    // 1) affiche quelque chose de propre tout de suite
+    // 1) Toujours afficher quelque chose (propre) si API ne répond pas
     setDirection(FALLBACK.direction);
     renderPoles(FALLBACK.poles);
 
-    // 2) tente de charger Sheets
+    // 2) Si API OK, on remplace par TES vrais pôles + TES vrais noms
     try{
       const data = await jsonp(API);
-      if(data && data.ok === true && Array.isArray(data.poles)){
-        setDirection(data.direction || FALLBACK.direction);
-        renderPoles(data.poles.length ? data.poles : FALLBACK.poles);
+      if(data && data.ok === true){
+        if(data.direction) setDirection(data.direction);
+        if(Array.isArray(data.poles) && data.poles.length){
+          // IMPORTANT : on respecte EXACTEMENT les libellés renvoyés
+          renderPoles(data.poles);
+        }
       }
     }catch(e){
-      // laisse fallback
+      // On laisse le fallback (au moins c’est propre)
     }
   }
 
