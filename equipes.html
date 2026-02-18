@@ -470,8 +470,41 @@
     document.body.style.overflow = "";
   }
 
-  /** GO */
-  loadAll(false);
+  /** GO AVEC CACHE */
+
+const CACHE_KEY = "cs_equipes_cache";
+const CACHE_TIME = 5 * 60 * 1000; // 5 minutes
+
+function loadWithCache(){
+  const raw = localStorage.getItem(CACHE_KEY);
+  if(raw){
+    try{
+      const cache = JSON.parse(raw);
+      const age = Date.now() - cache.time;
+
+      if(age < CACHE_TIME){
+        // On recharge depuis le cache
+        TEAMS_CACHE = cache.teams;
+        $count1.textContent = String(TEAMS_CACHE["1"].length);
+        $count2.textContent = String(TEAMS_CACHE["2"].length);
+        $chiefName.textContent = cache.chef || "—";
+        return; // STOP ici
+      }
+    }catch(e){}
+  }
+
+  // Sinon on recharge depuis l’API
+  loadAll(false).then(() => {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({
+      time: Date.now(),
+      teams: TEAMS_CACHE,
+      chef: $chiefName.textContent
+    }));
+  });
+}
+
+loadWithCache();
+
 </script>
 </body>
 </html>
