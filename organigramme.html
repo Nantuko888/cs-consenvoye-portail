@@ -340,194 +340,211 @@
   </div>
 
   <script>
-    /** ✅ API Apps Script (JSONP) */
-    const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+  /** ✅ API Apps Script (JSONP) */
+  const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-    const $chefName = document.getElementById("chefName");
-    const $adj1Name = document.getElementById("adj1Name");
-    const $adj2Name = document.getElementById("adj2Name");
-    const $grid = document.getElementById("polesGrid");
-    const $err = document.getElementById("errBox");
+  const $chefName = document.getElementById("chefName");
+  const $adj1Name = document.getElementById("adj1Name");
+  const $adj2Name = document.getElementById("adj2Name");
+  const $grid = document.getElementById("polesGrid");
+  const $err = document.getElementById("errBox");
 
-    const $modal = document.getElementById("modal");
-    const $modalHead = document.getElementById("modalHead");
-    const $modalTitle = document.getElementById("modalTitle");
-    const $modalBody = document.getElementById("modalBody");
+  const $modal = document.getElementById("modal");
+  const $modalHead = document.getElementById("modalHead");
+  const $modalTitle = document.getElementById("modalTitle");
+  const $modalBody = document.getElementById("modalBody");
 
-    let DATA = { direction:{chef:"—",adj1:"—",adj2:"—"}, poles:[] };
+  let DATA = { direction:{chef:"—",adj1:"—",adj2:"—"}, poles:[] };
 
-    function showErr(msg){
-      $err.style.display = "block";
-      $err.textContent = msg;
-    }
-    function hideErr(){
-      $err.style.display = "none";
-      $err.textContent = "";
-    }
+  /** ✅ Garde-fou anti rechargements multiples */
+  let ORG_LOADED = false;
+  let ORG_LOADING = false;
 
-    function goBack(){ window.location.href = "index.html"; }
-    function reload(){ loadFromSheets(true); }
+  function showErr(msg){
+    if(!$err) return;
+    $err.style.display = "block";
+    $err.textContent = msg;
+  }
+  function hideErr(){
+    if(!$err) return;
+    $err.style.display = "none";
+    $err.textContent = "";
+  }
 
-    function jsonp(url, cbName){
-      return new Promise((resolve, reject) => {
-        const script = document.createElement("script");
-        const timer = setTimeout(() => {
-          cleanup();
-          reject(new Error("Timeout JSONP"));
-        }, 12000);
+  function goBack(){ window.location.href = "index.html"; }
 
-        function cleanup(){
-          clearTimeout(timer);
-          script.remove();
-          try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
-        }
+  function jsonp(url, cbName){
+    return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
 
-        window[cbName] = (data) => { cleanup(); resolve(data); };
-        script.onerror = () => { cleanup(); reject(new Error("Erreur JSONP")); };
-        script.src = url;
-        document.head.appendChild(script);
-      });
-    }
+      const timer = setTimeout(() => {
+        cleanup();
+        reject(new Error("Timeout JSONP"));
+      }, 12000);
 
-    function hexToRgba(hex, a){
-      const h = (hex || "").replace("#","");
-      if(h.length !== 6) return `rgba(255,255,255,${a})`;
-      const r = parseInt(h.slice(0,2),16);
-      const g = parseInt(h.slice(2,4),16);
-      const b = parseInt(h.slice(4,6),16);
-      return `rgba(${r},${g},${b},${a})`;
-    }
-
-    function escapeHtml(s){
-      return String(s ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    function normalizeOrgPayload(apiData){
-      const direction = apiData?.direction || {};
-      const polesIn = Array.isArray(apiData?.poles) ? apiData.poles : [];
-
-      const poles = polesIn.map(p => ({
-        id: p.id || "",
-        label: p.libelle || p.label || "",
-        color: p.couleur || p.color || "#888888",
-        subpoles: (p.sousPoles || p.subpoles || []).map(sp => ({
-          label: sp.libelle || sp.label || "",
-          membres: (sp.membres || []).map(m => {
-            // m peut être {fonction, nom} OU une string
-            if (typeof m === "string") return m;
-            const f = (m.fonction || "").trim();
-            const n = (m.nom || "").trim();
-            if (f && n) return `${f} : ${n}`;
-            return n || f || "—";
-          })
-        }))
-      })).filter(p => p.label);
-
-      return {
-        direction: {
-          chef: direction.chef || "—",
-          adj1: direction.adj1 || "—",
-          adj2: direction.adj2 || "—"
-        },
-        poles
-      };
-    }
-
-    function render(){
-      $chefName.textContent = DATA.direction.chef || "—";
-      $adj1Name.textContent = DATA.direction.adj1 || "—";
-      $adj2Name.textContent = DATA.direction.adj2 || "—";
-
-      $grid.innerHTML = "";
-      DATA.poles.forEach(p => {
-        const btn = document.createElement("button");
-        btn.className = "poleBtn";
-        btn.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .92)}, ${hexToRgba(p.color, .70)})`;
-        btn.textContent = p.label;
-        btn.onclick = () => openPole(p);
-        $grid.appendChild(btn);
-      });
-    }
-
-    function openPole(p){
-      $modalHead.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .95)}, ${hexToRgba(p.color, .75)})`;
-      $modalTitle.textContent = p.label;
-
-      $modalBody.innerHTML = "";
-
-      (p.subpoles || []).forEach(sp => {
-        const box = document.createElement("div");
-        box.className = "sub";
-
-        const bar = document.createElement("div");
-        bar.className = "subBar";
-        bar.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .92)}, ${hexToRgba(p.color, .72)})`;
-        bar.textContent = sp.label;
-
-        const body = document.createElement("div");
-        body.className = "subBody";
-
-        const ul = document.createElement("ul");
-
-        (sp.membres || []).forEach(m => {
-          const li = document.createElement("li");
-          const s = String(m ?? "");
-
-          // ✅ Souligner fonctions uniquement dans Amicale > Bureau quand "Role : Nom"
-          if ((p.id === "amicale") && /bureau/i.test(sp.label || "") && s.includes(":")){
-            const [rolePart, ...rest] = s.split(":");
-            const namePart = rest.join(":").trim();
-            li.innerHTML = `<span class="roleU">${escapeHtml(rolePart.trim())} :</span> ${escapeHtml(namePart)}`;
-          } else {
-            li.textContent = s;
-          }
-          ul.appendChild(li);
-        });
-
-        body.appendChild(ul);
-        box.appendChild(bar);
-        box.appendChild(body);
-        $modalBody.appendChild(box);
-      });
-
-      const hint = document.createElement("div");
-      hint.className = "hint";
-      hint.textContent = "Clique sur Fermer pour revenir aux pôles.";
-      $modalBody.appendChild(hint);
-
-      $modal.classList.add("show");
-    }
-
-    function closeModal(){ $modal.classList.remove("show"); }
-    $modal.addEventListener("click", (e)=>{ if(e.target === $modal) closeModal(); });
-
-    async function loadFromSheets(showToast){
-      hideErr();
-
-      try{
-        const cb = "cb_org_" + Math.random().toString(36).slice(2);
-        const url = `${API}?view=org&callback=${cb}&_=${Date.now()}`;
-        const apiData = await jsonp(url, cb);
-
-        if(!apiData || apiData.ok === false){
-          throw new Error(apiData?.error || "Réponse org invalide");
-        }
-
-        DATA = normalizeOrgPayload(apiData);
-        render();
-
-      }catch(err){
-        console.error(err);
-        showErr("Erreur de chargement depuis Sheets (API). Vérifie que le déploiement Apps Script est bien en /exec et accessible.");
+      function cleanup(){
+        clearTimeout(timer);
+        script.remove();
+        try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
       }
-    }
 
-    loadFromSheets(false);
-  </script>
+      window[cbName] = (data) => { cleanup(); resolve(data); };
+      script.onerror = () => { cleanup(); reject(new Error("Erreur JSONP")); };
+
+      script.src = url;
+      document.head.appendChild(script);
+    });
+  }
+
+  function hexToRgba(hex, a){
+    const h = (hex || "").replace("#","");
+    if(h.length !== 6) return `rgba(255,255,255,${a})`;
+    const r = parseInt(h.slice(0,2),16);
+    const g = parseInt(h.slice(2,4),16);
+    const b = parseInt(h.slice(4,6),16);
+    return `rgba(${r},${g},${b},${a})`;
+  }
+
+  function escapeHtml(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function normalizeOrgPayload(apiData){
+    const direction = apiData?.direction || {};
+    const polesIn = Array.isArray(apiData?.poles) ? apiData.poles : [];
+
+    const poles = polesIn.map(p => ({
+      id: p.id || "",
+      label: p.libelle || p.label || "",
+      color: p.couleur || p.color || "#888888",
+      subpoles: (p.sousPoles || p.subpoles || []).map(sp => ({
+        label: sp.libelle || sp.label || "",
+        membres: (sp.membres || []).map(m => {
+          if (typeof m === "string") return m;
+          const f = (m.fonction || "").trim();
+          const n = (m.nom || "").trim();
+          if (f && n) return `${f} : ${n}`;
+          return n || f || "—";
+        })
+      }))
+    })).filter(p => p.label);
+
+    return {
+      direction: {
+        chef: direction.chef || "—",
+        adj1: direction.adj1 || "—",
+        adj2: direction.adj2 || "—"
+      },
+      poles
+    };
+  }
+
+  function render(){
+    $chefName.textContent = DATA.direction.chef || "—";
+    $adj1Name.textContent = DATA.direction.adj1 || "—";
+    $adj2Name.textContent = DATA.direction.adj2 || "—";
+
+    $grid.innerHTML = "";
+    DATA.poles.forEach(p => {
+      const btn = document.createElement("button");
+      btn.className = "poleBtn";
+      btn.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .92)}, ${hexToRgba(p.color, .70)})`;
+      btn.textContent = p.label;
+      btn.onclick = () => openPole(p);
+      $grid.appendChild(btn);
+    });
+  }
+
+  function openPole(p){
+    $modalHead.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .95)}, ${hexToRgba(p.color, .75)})`;
+    $modalTitle.textContent = p.label;
+    $modalBody.innerHTML = "";
+
+    (p.subpoles || []).forEach(sp => {
+      const box = document.createElement("div");
+      box.className = "sub";
+
+      const bar = document.createElement("div");
+      bar.className = "subBar";
+      bar.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .92)}, ${hexToRgba(p.color, .72)})`;
+      bar.textContent = sp.label;
+
+      const body = document.createElement("div");
+      body.className = "subBody";
+
+      const ul = document.createElement("ul");
+
+      (sp.membres || []).forEach(m => {
+        const li = document.createElement("li");
+        const s = String(m ?? "");
+
+        if ((p.id === "amicale") && /bureau/i.test(sp.label || "") && s.includes(":")){
+          const [rolePart, ...rest] = s.split(":");
+          const namePart = rest.join(":").trim();
+          li.innerHTML = `<span class="roleU">${escapeHtml(rolePart.trim())} :</span> ${escapeHtml(namePart)}`;
+        } else {
+          li.textContent = s;
+        }
+        ul.appendChild(li);
+      });
+
+      body.appendChild(ul);
+      box.appendChild(bar);
+      box.appendChild(body);
+      $modalBody.appendChild(box);
+    });
+
+    const hint = document.createElement("div");
+    hint.className = "hint";
+    hint.textContent = "Clique sur Fermer pour revenir aux pôles.";
+    $modalBody.appendChild(hint);
+
+    $modal.classList.add("show");
+  }
+
+  function closeModal(){ $modal.classList.remove("show"); }
+  $modal.addEventListener("click", (e)=>{ if(e.target === $modal) closeModal(); });
+
+  async function loadFromSheets(){
+    // ✅ bloque si déjà chargé / en cours
+    if (ORG_LOADED || ORG_LOADING) return;
+    ORG_LOADING = true;
+
+    hideErr();
+
+    try{
+      const cb = "cb_org_" + Math.random().toString(36).slice(2);
+      const url = `${API}?view=org&callback=${cb}&_=${Date.now()}`;
+      const apiData = await jsonp(url, cb);
+
+      if(!apiData || apiData.ok === false){
+        throw new Error(apiData?.error || "Réponse org invalide");
+      }
+
+      DATA = normalizeOrgPayload(apiData);
+      render();
+      ORG_LOADED = true;
+
+    }catch(err){
+      console.error(err);
+      showErr("Erreur de chargement depuis Sheets (API).");
+    }finally{
+      ORG_LOADING = false;
+    }
+  }
+
+  // ✅ charge UNE FOIS, au premier affichage uniquement
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", loadFromSheets, { once:true });
+  } else {
+    loadFromSheets();
+  }
+</script>
+
 </body>
 </html>
