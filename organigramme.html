@@ -13,15 +13,11 @@
       --muted: rgba(255,255,255,.75);
       --shadow: 0 18px 45px rgba(0,0,0,.45);
       --radius: 22px;
-      --btnRadius: 18px;
     }
-
     *{ box-sizing:border-box; }
 
-    /* ✅ Background figé (robuste sur Android) */
-    html, body{
-      height:100%;
-    }
+    html, body{ height:100%; }
+
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -63,15 +59,14 @@
     }
 
     header{
-      padding: 12px 14px 6px; /* ✅ plus compact */
+      padding: 12px 14px 6px;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
     }
-
     .title{
-      font-size: 30px; /* un poil moins gros */
+      font-size: 30px;
       font-weight: 900;
       letter-spacing:.2px;
       text-shadow: 0 8px 18px rgba(0,0,0,.65);
@@ -90,12 +85,13 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       box-shadow: 0 10px 25px rgba(0,0,0,.35);
+      -webkit-tap-highlight-color: transparent;
     }
     .chipBtn:active{ transform: translateY(1px); }
 
     .card{
-      margin: 8px 12px 10px; /* ✅ réduit */
-      padding: 10px; /* ✅ réduit */
+      margin: 8px 12px 10px;
+      padding: 10px;
       border-radius: var(--radius);
       background: var(--glass);
       border:1px solid var(--stroke);
@@ -104,11 +100,7 @@
       box-shadow: 0 16px 40px rgba(0,0,0,.35);
     }
 
-    /* ✅ Commandement compact */
-    .directionWrap{
-      display:grid;
-      gap:10px;
-    }
+    .directionWrap{ display:grid; gap:10px; }
     .chefRow{ display:flex; justify-content:center; }
     .adjRow{
       display:grid;
@@ -119,11 +111,11 @@
     .badge{
       width:100%;
       border-radius: 16px;
-      padding: 10px 10px; /* ✅ réduit */
+      padding: 10px 10px;
       border:1px solid rgba(255,255,255,.14);
       box-shadow: 0 14px 28px rgba(0,0,0,.30);
       text-align:center;
-      min-height: 68px; /* ✅ beaucoup moins haut */
+      min-height: 68px;
       display:flex;
       flex-direction:column;
       justify-content:center;
@@ -132,17 +124,16 @@
       font-weight:1000;
       letter-spacing:.6px;
       text-transform:uppercase;
-      font-size:12px; /* ✅ plus petit */
+      font-size:12px;
       opacity:.95;
       line-height:1.05;
     }
     .badge .name{
       margin-top:5px;
       font-weight:900;
-      font-size:15px; /* ✅ plus petit */
+      font-size:15px;
       text-shadow: 0 10px 16px rgba(0,0,0,.55);
       line-height:1.15;
-      /* ✅ autorise retour ligne pour noms complets */
       white-space: normal;
       overflow-wrap: anywhere;
     }
@@ -151,7 +142,6 @@
     .adj1{ background: linear-gradient(180deg, rgba(95,150,210,.90), rgba(55,100,155,.88)); }
     .adj2{ background: linear-gradient(180deg, rgba(140,120,190,.90), rgba(95,75,150,.88)); }
 
-    /* ✅ "Pôles" centré */
     .sectionTitle{
       margin: 6px 14px 8px;
       font-weight: 1000;
@@ -186,10 +176,10 @@
       justify-content:center;
       text-align:center;
       line-height:1.1;
+      -webkit-tap-highlight-color: transparent;
     }
     .poleBtn:active{ transform: translateY(1px); }
 
-    /* Modal */
     .modal{
       position:fixed; inset:0;
       display:none;
@@ -211,7 +201,6 @@
       background: rgba(18,18,18,.72);
     }
 
-    /* ✅ Bandeau (pôle) : couleur dynamique */
     .modalHead{
       padding: 14px 14px;
       display:flex; align-items:center; justify-content:space-between; gap:10px;
@@ -232,6 +221,7 @@
       color:#fff;
       background: rgba(0,0,0,.35);
       border: 1px solid rgba(255,255,255,.14);
+      -webkit-tap-highlight-color: transparent;
     }
 
     .modalBody{ padding: 12px 14px 16px; }
@@ -244,7 +234,6 @@
       background: rgba(0,0,0,.20);
     }
 
-    /* ✅ Bandeau sous-pôle : même couleur que pôle */
     .subBar{
       padding: 10px 12px;
       font-weight: 1000;
@@ -253,9 +242,7 @@
       color:#fff;
     }
 
-    .subBody{
-      padding: 10px 12px 12px;
-    }
+    .subBody{ padding: 10px 12px 12px; }
 
     ul{ margin:0; padding-left: 18px; }
     li{
@@ -273,11 +260,20 @@
       margin-top: 10px;
     }
 
-    /* ✅ Soulignement des fonctions (Amicale > Bureau) */
     .roleU{
       text-decoration: underline;
       text-underline-offset: 3px;
       font-weight: 1000;
+    }
+
+    .err{
+      margin: 8px 12px 12px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border:1px dashed rgba(255,170,60,.35);
+      background: rgba(0,0,0,.25);
+      color:#ffd19a;
+      display:none;
     }
   </style>
 </head>
@@ -288,6 +284,7 @@
       <div class="title">Organigramme</div>
       <div class="topBtns">
         <button class="chipBtn" onclick="goBack()">Retour</button>
+        <button class="chipBtn" onclick="reload()">Actualiser</button>
       </div>
     </header>
 
@@ -313,11 +310,12 @@
       </div>
     </div>
 
+    <div class="err" id="errBox"></div>
+
     <div class="sectionTitle">Pôles</div>
     <div class="polesGrid" id="polesGrid"></div>
   </div>
 
-  <!-- Modal -->
   <div class="modal" id="modal">
     <div class="modalBox">
       <div class="modalHead" id="modalHead">
@@ -329,88 +327,103 @@
   </div>
 
   <script>
-    /* ==========================
-       DATA (fixe)
-       ========================== */
-    const DATA = {
-      direction: {
-        chef: "ADC Vénante Pierre",
-        adj1: "ADJ Laleuuw Franck",
-        adj2: "ADJ Sénéchal Benjamin"
-      },
-      poles: [
-        {
-          id: "soutien",
-          label: "Équipe de soutien",
-          color: "#5aa9d6",
-          subpoles: [
-            { label: "Membres", membres: ["CNE Bienaimé Jean Paul", "ADJ Lecourtier Guy", "SGT Chavrelles Gilles", "SGT Beausire Bernard"] }
-          ]
-        },
-        {
-          id: "amicale",
-          label: "Amicale",
-          color: "#7fb0e0",
-          subpoles: [
-            { label: "Bureau", membres: ["Présidente : Trontin Chloé", "Vice-président : Vénante Pierre", "Trésorier : Baur Benjamin", "Trésorier adjoint : Laleuuw Franck", "Secrétaire : Vénante Amélie", "Secrétaire adjoint : Dur Amélie"] }
-          ]
-        },
-        {
-          id: "techlog",
-          label: "Groupe Technique & Logistique",
-          color: "#f0b64a",
-          subpoles: [
-            { label: "Bâtiment", membres: ["ADC Sénéchal Benjamin", "ADC Kolodziejczak Stéphane"] },
-            { label: "Équipement / Habillement", membres: ["ADC Sénéchal Benjamin", "CPL Gaffard Robin"] },
-            { label: "Véhicules / Tickets carburant", membres: ["ADC Sénéchal Benjamin", "CPL Rogie Florian"] },
-            { label: "Vérification casques", membres: ["SA1 Moreau Florent"] }
-          ]
-        },
-        {
-          id: "operationnel",
-          label: "Groupe Opérationnel",
-          color: "#f1d85a",
-          subpoles: [
-            { label: "DECI / Prévision", membres: ["ADC Vénante Pierre"] },
-            { label: "Référent VSAV", membres: ["SCH Wallarin Hélène", "SCH Stellato Vincent"] },
-            { label: "Référent SSSM", membres: ["INF Dur Amélie", "INF Lepezel Laura"] }
-          ]
-        },
-        {
-          id: "formation",
-          label: "Groupe Formation / Sport",
-          color: "#8c74d9",
-          subpoles: [
-            { label: "FORACC / ACCPRO / FPS", membres: ["ADJ Laleuuw Franck", "ADC Joseph Judicael", "ADC Kolodziejczak Stéphane", "SCH Wallarin Hélène"] },
-            { label: "Sport", membres: ["SCH Wallarin Hélène", "CPL Barotte Christopher", "SGT Michel Marianne"] }
-          ]
-        },
-        {
-          id: "recrutement",
-          label: "Groupe Recrutement",
-          color: "#d06ad6",
-          subpoles: [
-            { label: "SPV", membres: ["ADC Vénante Pierre", "ADJ Laleuuw Franck", "ADJ Sénéchal Benjamin"] }
-          ]
-        },
-        {
-          id: "jsp",
-          label: "JSP",
-          color: "#40c27e",
-          subpoles: [
-            { label: "Encadrement JSP", membres: ["SA1 Vénante Amélie", "ADJ Laleuuw Franck", "ADC Vénante Pierre", "SA1 Christal Mallaury", "SA2 Bamme Mélody"] }
-          ]
-        }
-      ]
-    };
+    /** ✅ API Apps Script (JSONP) */
+    const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-    /* ==========================
-       RENDER
-       ========================== */
     const $chefName = document.getElementById("chefName");
     const $adj1Name = document.getElementById("adj1Name");
     const $adj2Name = document.getElementById("adj2Name");
     const $grid = document.getElementById("polesGrid");
+    const $err = document.getElementById("errBox");
+
+    const $modal = document.getElementById("modal");
+    const $modalHead = document.getElementById("modalHead");
+    const $modalTitle = document.getElementById("modalTitle");
+    const $modalBody = document.getElementById("modalBody");
+
+    let DATA = { direction:{chef:"—",adj1:"—",adj2:"—"}, poles:[] };
+
+    function showErr(msg){
+      $err.style.display = "block";
+      $err.textContent = msg;
+    }
+    function hideErr(){
+      $err.style.display = "none";
+      $err.textContent = "";
+    }
+
+    function goBack(){ window.location.href = "index.html"; }
+    function reload(){ loadFromSheets(true); }
+
+    function jsonp(url, cbName){
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        const timer = setTimeout(() => {
+          cleanup();
+          reject(new Error("Timeout JSONP"));
+        }, 12000);
+
+        function cleanup(){
+          clearTimeout(timer);
+          script.remove();
+          try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+        }
+
+        window[cbName] = (data) => { cleanup(); resolve(data); };
+        script.onerror = () => { cleanup(); reject(new Error("Erreur JSONP")); };
+        script.src = url;
+        document.head.appendChild(script);
+      });
+    }
+
+    function hexToRgba(hex, a){
+      const h = (hex || "").replace("#","");
+      if(h.length !== 6) return `rgba(255,255,255,${a})`;
+      const r = parseInt(h.slice(0,2),16);
+      const g = parseInt(h.slice(2,4),16);
+      const b = parseInt(h.slice(4,6),16);
+      return `rgba(${r},${g},${b},${a})`;
+    }
+
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function normalizeOrgPayload(apiData){
+      const direction = apiData?.direction || {};
+      const polesIn = Array.isArray(apiData?.poles) ? apiData.poles : [];
+
+      const poles = polesIn.map(p => ({
+        id: p.id || "",
+        label: p.libelle || p.label || "",
+        color: p.couleur || p.color || "#888888",
+        subpoles: (p.sousPoles || p.subpoles || []).map(sp => ({
+          label: sp.libelle || sp.label || "",
+          membres: (sp.membres || []).map(m => {
+            // m peut être {fonction, nom} OU une string
+            if (typeof m === "string") return m;
+            const f = (m.fonction || "").trim();
+            const n = (m.nom || "").trim();
+            if (f && n) return `${f} : ${n}`;
+            return n || f || "—";
+          })
+        }))
+      })).filter(p => p.label);
+
+      return {
+        direction: {
+          chef: direction.chef || "—",
+          adj1: direction.adj1 || "—",
+          adj2: direction.adj2 || "—"
+        },
+        poles
+      };
+    }
 
     function render(){
       $chefName.textContent = DATA.direction.chef || "—";
@@ -428,16 +441,7 @@
       });
     }
 
-    /* ==========================
-       MODAL
-       ========================== */
-    const $modal = document.getElementById("modal");
-    const $modalHead = document.getElementById("modalHead");
-    const $modalTitle = document.getElementById("modalTitle");
-    const $modalBody = document.getElementById("modalBody");
-
     function openPole(p){
-      // ✅ Bandeau pôle = même couleur
       $modalHead.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .95)}, ${hexToRgba(p.color, .75)})`;
       $modalTitle.textContent = p.label;
 
@@ -447,7 +451,6 @@
         const box = document.createElement("div");
         box.className = "sub";
 
-        // ✅ Bandeau sous-pôle = même couleur
         const bar = document.createElement("div");
         bar.className = "subBar";
         bar.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .92)}, ${hexToRgba(p.color, .72)})`;
@@ -460,23 +463,22 @@
 
         (sp.membres || []).forEach(m => {
           const li = document.createElement("li");
+          const s = String(m ?? "");
 
-          // ✅ Souligner fonctions uniquement dans Amicale > Bureau
-          if (p.id === "amicale" && /bureau/i.test(sp.label) && String(m).includes(":")) {
-            const [rolePart, ...rest] = String(m).split(":");
+          // ✅ Souligner fonctions uniquement dans Amicale > Bureau quand "Role : Nom"
+          if ((p.id === "amicale") && /bureau/i.test(sp.label || "") && s.includes(":")){
+            const [rolePart, ...rest] = s.split(":");
             const namePart = rest.join(":").trim();
             li.innerHTML = `<span class="roleU">${escapeHtml(rolePart.trim())} :</span> ${escapeHtml(namePart)}`;
           } else {
-            li.textContent = String(m);
+            li.textContent = s;
           }
-
           ul.appendChild(li);
         });
 
         body.appendChild(ul);
         box.appendChild(bar);
         box.appendChild(body);
-
         $modalBody.appendChild(box);
       });
 
@@ -491,31 +493,28 @@
     function closeModal(){ $modal.classList.remove("show"); }
     $modal.addEventListener("click", (e)=>{ if(e.target === $modal) closeModal(); });
 
-    function goBack(){
-      // ✅ Retour toujours vers le portail (recommandé)
-      window.location.href = "index.html";
-      // sinon : history.back();
+    async function loadFromSheets(showToast){
+      hideErr();
+
+      try{
+        const cb = "cb_org_" + Math.random().toString(36).slice(2);
+        const url = `${API}?view=org&callback=${cb}&_=${Date.now()}`;
+        const apiData = await jsonp(url, cb);
+
+        if(!apiData || apiData.ok === false){
+          throw new Error(apiData?.error || "Réponse org invalide");
+        }
+
+        DATA = normalizeOrgPayload(apiData);
+        render();
+
+      }catch(err){
+        console.error(err);
+        showErr("Erreur de chargement depuis Sheets (API). Vérifie que le déploiement Apps Script est bien en /exec et accessible.");
+      }
     }
 
-    function hexToRgba(hex, a){
-      const h = (hex || "").replace("#","");
-      if(h.length !== 6) return `rgba(255,255,255,${a})`;
-      const r = parseInt(h.slice(0,2),16);
-      const g = parseInt(h.slice(2,4),16);
-      const b = parseInt(h.slice(4,6),16);
-      return `rgba(${r},${g},${b},${a})`;
-    }
-
-    function escapeHtml(s){
-      return String(s)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    render();
+    loadFromSheets(false);
   </script>
 </body>
 </html>
