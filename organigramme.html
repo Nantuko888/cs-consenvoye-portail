@@ -340,8 +340,12 @@
   </div>
 
   <script>
-  /** ✅ API Apps Script (JSONP) */
   const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+
+  // ✅ Cache navigateur (session = jusqu’à fermeture onglet)
+  const CACHE_KEY = "CS_ORGA_CACHE_V1";
+  const CACHE_TS_KEY = "CS_ORGA_CACHE_TS_V1";
+  const CACHE_MAX_AGE_MS = 6 * 60 * 60 * 1000; // 6h (mets 24h si tu veux)
 
   const $chefName = document.getElementById("chefName");
   const $adj1Name = document.getElementById("adj1Name");
@@ -355,10 +359,6 @@
   const $modalBody = document.getElementById("modalBody");
 
   let DATA = { direction:{chef:"—",adj1:"—",adj2:"—"}, poles:[] };
-
-  /** ✅ Garde-fou anti rechargements multiples */
-  let ORG_LOADED = false;
-  let ORG_LOADING = false;
 
   function showErr(msg){
     if(!$err) return;
@@ -390,7 +390,6 @@
 
       window[cbName] = (data) => { cleanup(); resolve(data); };
       script.onerror = () => { cleanup(); reject(new Error("Erreur JSONP")); };
-
       script.src = url;
       document.head.appendChild(script);
     });
@@ -510,13 +509,48 @@
   function closeModal(){ $modal.classList.remove("show"); }
   $modal.addEventListener("click", (e)=>{ if(e.target === $modal) closeModal(); });
 
-  async function loadFromSheets(){
-    // ✅ bloque si déjà chargé / en cours
-    if (ORG_LOADED || ORG_LOADING) return;
-    ORG_LOADING = true;
+  /** ✅ Cache helpers */
+  function loadCache(){
+    try{
+      const ts = Number(sessionStorage.getItem(CACHE_TS_KEY) || "0");
+      const raw = sessionStorage.getItem(CACHE_KEY);
+      if(!raw) return null;
+      if(!ts) return null;
+      if(Date.now() - ts > CACHE_MAX_AGE_MS) return null;
+      return JSON.parse(raw);
+    }catch(e){
+      return null;
+    }
+  }
 
+  function saveCache(payload){
+    try{
+      sessionStorage.setItem(CACHE_KEY, JSON.stringify(payload));
+      sessionStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+    }catch(e){
+      // ignore
+    }
+  }
+
+  // ✅ Appel manuel possible si un jour tu veux forcer (console: forceReloadOrg())
+  window.forceReloadOrg = async function(){
+    sessionStorage.removeItem(CACHE_KEY);
+    sessionStorage.removeItem(CACHE_TS_KEY);
+    await loadFromSheets();
+  };
+
+  async function loadFromSheets(){
     hideErr();
 
+    // 1) ✅ tente cache
+    const cached = loadCache();
+    if(cached && cached.direction && Array.isArray(cached.poles)){
+      DATA = cached;
+      render();
+      return;
+    }
+
+    // 2) sinon ✅ API + cache
     try{
       const cb = "cb_org_" + Math.random().toString(36).slice(2);
       const url = `${API}?view=org&callback=${cb}&_=${Date.now()}`;
@@ -527,18 +561,16 @@
       }
 
       DATA = normalizeOrgPayload(apiData);
+      saveCache(DATA);
       render();
-      ORG_LOADED = true;
 
     }catch(err){
       console.error(err);
       showErr("Erreur de chargement depuis Sheets (API).");
-    }finally{
-      ORG_LOADING = false;
     }
   }
 
-  // ✅ charge UNE FOIS, au premier affichage uniquement
+  // ✅ Charge au démarrage (mais utilisera le cache si déjà fait)
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", loadFromSheets, { once:true });
   } else {
