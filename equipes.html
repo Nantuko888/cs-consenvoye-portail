@@ -346,7 +346,8 @@
   const $panelEmpty = document.getElementById("panelEmpty");
 
   document.getElementById("btnBack").addEventListener("click", () => location.href = BACK_URL);
-  document.getElementById("btnRefresh").addEventListener("click", () => loadAll(true));
+  const btnRefresh = document.getElementById("btnRefresh");
+if (btnRefresh) btnRefresh.addEventListener("click", () => loadAll(true));
 
   document.getElementById("btnClose").addEventListener("click", closeOverlay);
   $overlay.addEventListener("click", (e) => { if(e.target === $overlay) closeOverlay(); });
