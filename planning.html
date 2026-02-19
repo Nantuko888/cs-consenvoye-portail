@@ -10,8 +10,6 @@
       --muted:rgba(255,255,255,.70);
       --shadow: 0 14px 34px rgba(0,0,0,.40);
       --radius: 22px;
-      --glass: rgba(0,0,0,.38);
-      --glass2: rgba(0,0,0,.26);
       --stroke: rgba(255,255,255,.10);
 
       --orange:#d46a00;
@@ -27,10 +25,8 @@
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--txt);
       background:#0b0b0b;
-      overflow:hidden; /* ✅ page fixe */
+      overflow:hidden;
     }
-
-    /* ✅ background figé */
     .bg{
       position:fixed; inset:0;
       background:
@@ -52,16 +48,12 @@
       margin: 0 auto;
       padding: calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
       display:grid;
-      grid-template-rows: auto auto 1fr auto; /* header, monthbar, calendar, legend */
+      grid-template-rows: auto auto 1fr auto;
       gap: 10px;
     }
 
-    /* ✅ bandeau haut discret */
     .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
       padding: 10px 12px;
       border-radius: 18px;
       background: linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
@@ -72,13 +64,8 @@
       min-height: 46px;
     }
     .topbar .title{
-      font-weight:950;
-      letter-spacing:.8px;
-      text-transform: uppercase;
-      font-size: 18px; /* ✅ plus discret */
-      line-height:1;
-      margin:0;
-      white-space:nowrap;
+      font-weight:950; letter-spacing:.8px; text-transform: uppercase;
+      font-size: 18px; margin:0; white-space:nowrap;
     }
     .btn{
       border:1px solid rgba(255,255,255,.18);
@@ -91,9 +78,7 @@
       -webkit-tap-highlight-color: transparent;
     }
     .btn:active{transform: translateY(1px)}
-    .btn:disabled{opacity:.45; cursor:default}
 
-    /* ✅ bandeau mois discret + flèches intégrées */
     .monthbar{
       display:grid;
       grid-template-columns: 52px 1fr 52px;
@@ -113,10 +98,7 @@
       border-radius: 16px;
       font-size: 22px;
       font-weight: 950;
-      line-height: 0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      display:flex; align-items:center; justify-content:center;
       border:1px solid rgba(255,255,255,.14);
       background: rgba(0,0,0,.18);
       color:var(--txt);
@@ -129,13 +111,12 @@
     .monthname{
       text-align:center;
       font-weight: 950;
-      font-size: 22px; /* ✅ réduit vs énorme */
+      font-size: 22px;
       letter-spacing:.4px;
       margin:0;
       white-space:nowrap;
     }
 
-    /* ✅ carte calendrier (proportions “Samsung”) */
     .calCard{
       border-radius: var(--radius);
       background: linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.30));
@@ -148,7 +129,7 @@
       display:flex;
       flex-direction:column;
       gap: 10px;
-      min-height: 0; /* grid fix */
+      min-height: 0;
     }
 
     .dow{
@@ -159,7 +140,6 @@
       color: rgba(255,255,255,.72);
       font-weight: 900;
       letter-spacing:.5px;
-      text-transform: capitalize;
       font-size: 14px;
       user-select:none;
     }
@@ -169,7 +149,7 @@
       flex:1;
       display:grid;
       grid-template-columns: repeat(7, 1fr);
-      grid-auto-rows: minmax(54px, 1fr); /* ✅ un poil plus haut */
+      grid-auto-rows: minmax(54px, 1fr);
       gap: 8px;
       min-height: 0;
     }
@@ -188,40 +168,27 @@
       user-select:none;
       -webkit-tap-highlight-color: transparent;
     }
-
-    .day.is-empty{
-      opacity:.12;
-      pointer-events:none;
-    }
-
-    /* ✅ couleur événement (overlay) */
+    .day.is-empty{ opacity:.12; pointer-events:none; }
     .day.has-color::before{
       content:"";
-      position:absolute; inset: 0;
+      position:absolute; inset:0;
       border-radius: 18px;
       background: var(--dayColor, transparent);
       opacity: .78;
-      filter: saturate(1.08);
       z-index:0;
     }
-
     .day span{ position:relative; z-index:1; }
-
-    /* ✅ aujourd’hui : contour rouge */
     .day.is-today{
       box-shadow: inset 0 0 0 3px rgba(255,59,48,.95);
       border-color: rgba(255,59,48,.55);
     }
-
-    /* ✅ jour avec note : contour jaune */
     .day.has-note{
       box-shadow: inset 0 0 0 3px rgba(255,212,0,.92);
       border-color: rgba(255,212,0,.55);
+      cursor:pointer;
     }
 
-    .day.can-open{ cursor:pointer; }
-
-    /* ✅ légende compacte 2 colonnes */
+    /* ✅ légende TOUJOURS visible */
     .legend{
       border-radius: var(--radius);
       background: linear-gradient(180deg, rgba(0,0,0,.40), rgba(0,0,0,.28));
@@ -231,6 +198,7 @@
       -webkit-backdrop-filter: blur(10px);
       padding: 10px;
       overflow:hidden;
+      min-height: 92px; /* ✅ évite "vide" visuellement */
     }
     .legendGrid{
       display:grid;
@@ -239,9 +207,7 @@
       align-items:center;
     }
     .legItem{
-      display:flex;
-      align-items:center;
-      gap: 10px;
+      display:flex; align-items:center; gap:10px;
       padding: 8px 10px;
       border-radius: 16px;
       background: rgba(0,0,0,.18);
@@ -249,91 +215,49 @@
       min-height: 44px;
     }
     .sq{
-      width: 20px;
-      height: 20px;
-      border-radius: 5px; /* ✅ carrés arrondis */
+      width: 20px; height: 20px;
+      border-radius: 5px;
       border:1px solid rgba(255,255,255,.18);
       flex: 0 0 auto;
       background: rgba(255,255,255,.25);
     }
     .legTxt{
       font-weight: 900;
-      font-size: 18px; /* ✅ plus gros */
+      font-size: 18px;
       line-height:1.05;
       white-space: nowrap;
       overflow:hidden;
       text-overflow: ellipsis;
     }
 
-    /* ✅ popup note demi-page */
-    .overlay{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.62);
-      z-index:60;
+    /* mini message d'état (si API HS) */
+    .status{
+      position:fixed;
+      left:12px; right:12px;
+      bottom: calc(env(safe-area-inset-bottom) + 12px);
+      z-index:80;
       display:none;
-      padding: calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
-    }
-    .overlay.open{ display:block; }
-    .sheet{
       max-width: 980px;
       margin: 0 auto;
-      height: 100%;
-      display:flex;
-      flex-direction:column;
-      justify-content:flex-end;
-      gap: 12px;
+      pointer-events:none;
     }
-    .modal{
-      border-radius: 24px;
-      background: linear-gradient(180deg, rgba(0,0,0,.70), rgba(0,0,0,.52));
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .modalHead{
-      padding: 12px 14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
+    .status .pill{
+      pointer-events:auto;
+      display:inline-flex;
       gap:10px;
-      background: rgba(212,106,0,.35);
-      border-bottom: 1px solid rgba(255,255,255,.10);
-    }
-    .modalTitle{
-      font-weight: 950;
-      letter-spacing:.4px;
-      margin:0;
-      font-size: 16px;
-      text-transform: uppercase;
-    }
-    .close{
-      border:1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.20);
-      color: var(--txt);
-      padding: 8px 12px;
-      border-radius: 14px;
-      font-weight: 950;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .modalBody{
-      padding: 14px;
-      max-height: 46vh; /* ✅ demi page */
-      overflow:auto;
-    }
-    .line{margin:0 0 10px 0; color: var(--muted); font-weight:800}
-    .block{
-      background: rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.10);
+      align-items:center;
+      padding:10px 12px;
       border-radius: 16px;
-      padding: 12px;
-      margin-bottom: 10px;
+      background: rgba(0,0,0,.62);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+      color: rgba(255,255,255,.90);
+      font-weight:900;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
-    .bTitle{font-weight:950; margin:0 0 6px 0; font-size: 16px}
-    .bMeta{margin:0; color: rgba(255,255,255,.76); font-weight:800; font-size: 13px}
-    .bNote{margin:10px 0 0 0; color: rgba(255,255,255,.92); font-weight:800; white-space:pre-wrap}
+    .status .small{font-weight:800; opacity:.85; font-size:13px}
 
-    /* petits écrans */
     @media (max-width: 360px){
       .monthname{font-size:20px}
       .day{font-size:20px; border-radius:16px}
@@ -350,7 +274,7 @@
 
   <div class="wrap">
     <div class="topbar">
-      <h1 class="title" id="topTitle">PLANNING 2026</h1>
+      <h1 class="title">PLANNING 2026</h1>
       <button class="btn" id="btnBack">Retour</button>
     </div>
 
@@ -372,61 +296,75 @@
     </section>
   </div>
 
-  <!-- popup note -->
-  <div class="overlay" id="overlay" aria-hidden="true">
-    <div class="sheet">
-      <div class="modal">
-        <div class="modalHead">
-          <p class="modalTitle" id="modalTitle">—</p>
-          <button class="close" id="btnClose">Fermer</button>
-        </div>
-        <div class="modalBody" id="modalBody"></div>
+  <div class="status" id="status">
+    <div class="pill">
+      <span>⚠️</span>
+      <div>
+        <div id="statusTxt">Chargement…</div>
+        <div class="small" id="statusSub">Si ça reste, l’URL API est mauvaise.</div>
       </div>
     </div>
   </div>
 
 <script>
   /********** CONFIG **********/
-  const API = "TON_URL_EXEC_ICI";          // ex: https://script.google.com/macros/s/XXXXX/exec
+  const API = "COLLE_ICI_TON_URL_EXEC"; // ✅ OBLIGATOIRE
   const BACK_URL = "index.html";
   const YEAR = 2026;
 
-  // ✅ overrides “interface” (si tu veux imposer une couleur sans toucher Sheets)
+  // ✅ Légende par défaut (affichée même si l’API plante)
+  const DEFAULT_CATEGORIES = [
+    { category:"FMA centre",   color:"#ff2d2d", order:1 },
+    { category:"FMA équipe 1", color:"#24d36a", order:2 },
+    { category:"FMA équipe 2", color:"#f6a000", order:3 },
+    { category:"JSP",          color:"#4aa8ff", order:4 },
+    { category:"Navette",      color:"#2f79ff", order:5 },
+    { category:"RECSEC",       color:"#a081ff", order:6 },
+    { category:"Sainte Barbe", color:"#ff5a5a", order:7 },
+  ];
+
+  // ✅ Overrides interface (si tu veux forcer une couleur sans toucher Sheets)
   const OVERRIDE_COLORS = {
-    "fma centre": "#ff2d2d" // rouge
-    // ajoute ici si tu veux forcer d'autres couleurs
+    "fma centre": "#ff2d2d",
   };
 
-  /********** UTIL **********/
+  /********** DOM **********/
   const $ = (id)=>document.getElementById(id);
   const $grid = $("grid");
   const $monthName = $("monthName");
   const $legendGrid = $("legendGrid");
   const $btnPrev = $("btnPrev");
   const $btnNext = $("btnNext");
-
-  const $overlay = $("overlay");
-  const $modalTitle = $("modalTitle");
-  const $modalBody = $("modalBody");
+  const $status = $("status");
+  const $statusTxt = $("statusTxt");
+  const $statusSub = $("statusSub");
 
   const monthsFR = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
 
   function norm(s){
-    return String(s||"")
-      .trim()
-      .toLowerCase()
+    return String(s||"").trim().toLowerCase()
       .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
       .replace(/['’]/g,"")
       .replace(/\s+/g," ");
   }
-
   function escapeHtml(s){
     return (s==null ? "" : String(s))
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
+      .replaceAll("&","&amp;").replaceAll("<","&lt;")
+      .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
+  function ymd(d){
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const dd = String(d.getDate()).padStart(2,"0");
+    return `${y}-${m}-${dd}`;
+  }
+  function firstMondayGrid(year, monthIndex){
+    const d = new Date(year, monthIndex, 1);
+    const js = d.getDay(); // 0=dim 1=lun ...
+    const offset = (js === 0) ? 6 : (js - 1);
+    d.setDate(d.getDate() - offset);
+    d.setHours(12,0,0,0);
+    return d;
   }
 
   function jsonp(url, cbName){
@@ -444,74 +382,24 @@
     });
   }
 
-  function ymd(d){
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,"0");
-    const dd = String(d.getDate()).padStart(2,"0");
-    return `${y}-${m}-${dd}`;
-  }
-
-  function firstMondayGrid(year, monthIndex){
-    // monthIndex: 0..11
-    const d = new Date(year, monthIndex, 1);
-    // lundi=1..dimanche=0 (JS)
-    const js = d.getDay(); // 0=dim 1=lun ...
-    const offset = (js === 0) ? 6 : (js - 1); // combien reculer pour tomber sur lundi
-    d.setDate(d.getDate() - offset);
-    d.setHours(12,0,0,0);
-    return d;
-  }
-
   /********** DATA **********/
   let events = [];
-  let categoriesRaw = [];
-  let eventsByDate = new Map();   // date -> [events]
-  let catColor = new Map();       // norm(cat) -> color
-  let catLabel = new Map();       // norm(cat) -> label (tel qu'affiché)
-  let catOrder = new Map();       // norm(cat) -> order
-  let firstCatByDate = new Map(); // date -> norm(cat)
-  let hasNoteByDate = new Map();  // date -> true
+  let categoriesRaw = DEFAULT_CATEGORIES.slice(); // ✅ toujours quelque chose
+  let eventsByDate = new Map();
+  let catColor = new Map();
+  let catLabel = new Map();
+  let catOrder = new Map();
+  let firstCatByDate = new Map();
+  let hasNoteByDate = new Map();
   let currentMonth = 0;
 
-  /********** LOAD (cache local) **********/
-  const CACHE_KEY = `cs_planning_${YEAR}_v2`;
-  const CACHE_MS = 10 * 60 * 1000;
-
-  async function loadAll(){
-    const raw = localStorage.getItem(CACHE_KEY);
-    if(raw){
-      try{
-        const cache = JSON.parse(raw);
-        if(Date.now() - cache.time < CACHE_MS){
-          events = cache.events || [];
-          categoriesRaw = cache.categories || [];
-          rebuildMaps();
-          return;
-        }
-      }catch(e){}
-    }
-
-    const cb1 = "cb_py_" + Math.random().toString(36).slice(2);
-    const cb2 = "cb_pc_" + Math.random().toString(36).slice(2);
-
-    const [py, pc] = await Promise.all([
-      jsonp(`${API}?view=planning_year&year=${YEAR}&callback=${cb1}`, cb1),
-      jsonp(`${API}?view=planning_categories&callback=${cb2}`, cb2)
-    ]);
-
-    if(!py || py.ok===false) throw new Error(py?.error || "planning_year invalide");
-    if(!pc || pc.ok===false) throw new Error(pc?.error || "planning_categories invalide");
-
-    events = Array.isArray(py.events) ? py.events : [];
-    categoriesRaw = Array.isArray(pc.categories) ? pc.categories : [];
-
-    rebuildMaps();
-
-    localStorage.setItem(CACHE_KEY, JSON.stringify({
-      time: Date.now(),
-      events,
-      categories: categoriesRaw
-    }));
+  function showStatus(txt, sub){
+    $statusTxt.textContent = txt || "";
+    $statusSub.textContent = sub || "";
+    $status.style.display = "block";
+  }
+  function hideStatus(){
+    $status.style.display = "none";
   }
 
   function rebuildMaps(){
@@ -524,27 +412,27 @@
       if(!eventsByDate.has(date)) eventsByDate.set(date, []);
       eventsByDate.get(date).push(ev);
 
-      const det = String(ev.details||"").trim();
-      if(det) hasNoteByDate.set(date, true);
+      if(String(ev.details||"").trim()) hasNoteByDate.set(date, true);
     }
 
-    // categories : dédoublonnage par clé normalisée
+    // catégories dédoublonnées (navette/Navette)
     catColor = new Map();
     catLabel = new Map();
     catOrder = new Map();
 
-    // on trie d'abord par order
-    const cats = [...categoriesRaw].map(c => ({
-      category: String(c.category||"").trim(),
-      color: String(c.color||"").trim(),
-      order: Number(c.order||9999) || 9999
-    })).filter(c => c.category);
+    const cats = [...categoriesRaw]
+      .map(c => ({
+        category: String(c.category||"").trim(),
+        color: String(c.color||"").trim(),
+        order: Number(c.order||9999) || 9999
+      }))
+      .filter(c => c.category);
 
     cats.sort((a,b)=> (a.order-b.order) || a.category.localeCompare(b.category));
 
     for(const c of cats){
       const k = norm(c.category);
-      if(catLabel.has(k)) continue; // dédoublon (navette/Navette)
+      if(catLabel.has(k)) continue;
       const forced = OVERRIDE_COLORS[k];
       const col = forced || c.color || "rgba(255,255,255,.25)";
       catLabel.set(k, c.category);
@@ -552,23 +440,16 @@
       catOrder.set(k, c.order);
     }
 
-    // pour chaque date : choisir la catégorie "principale" (order le plus petit)
     firstCatByDate = new Map();
     for(const [date, arr] of eventsByDate.entries()){
       let best = null;
       let bestOrder = 9999;
-
       for(const ev of arr){
         const k = norm(ev.category || "");
         const o = catOrder.has(k) ? catOrder.get(k) : 9999;
-        if(o < bestOrder){
-          bestOrder = o;
-          best = k;
-        }
+        if(o < bestOrder){ bestOrder=o; best=k; }
       }
-      if(!best){
-        best = norm(arr[0]?.category || "");
-      }
+      if(!best) best = norm(arr[0]?.category || "");
       firstCatByDate.set(date, best);
     }
   }
@@ -579,12 +460,9 @@
     return catColor.get(k) || "rgba(255,255,255,.25)";
   }
 
-  /********** RENDER **********/
   function renderLegend(){
     $legendGrid.innerHTML = "";
-
-    // on affiche dans l'ordre (déjà trié)
-    for(const [k, label] of catLabel.entries()){
+    for(const [k,label] of catLabel.entries()){
       const col = getColorForCategory(k);
       const div = document.createElement("div");
       div.className = "legItem";
@@ -598,22 +476,17 @@
 
   function renderMonth(){
     $monthName.textContent = monthsFR[currentMonth];
-
-    // boutons utiles uniquement
     $btnPrev.disabled = (currentMonth === 0);
     $btnNext.disabled = (currentMonth === 11);
 
     const start = firstMondayGrid(YEAR, currentMonth);
     const todayStr = ymd(new Date());
-
     $grid.innerHTML = "";
 
-    // 6 semaines * 7 = 42 cases (proportions widget)
     for(let i=0;i<42;i++){
       const d = new Date(start);
-      d.setDate(start.getDate() + i);
-
-      const inMonth = (d.getMonth() === currentMonth);
+      d.setDate(start.getDate()+i);
+      const inMonth = (d.getMonth()===currentMonth);
       const dateStr = ymd(d);
 
       const cell = document.createElement("div");
@@ -625,94 +498,69 @@
           cell.classList.add("has-color");
           cell.style.setProperty("--dayColor", getColorForCategory(catKey));
         }
-
-        if(dateStr === todayStr){
-          cell.classList.add("is-today");
-        }
-
-        const hasNote = hasNoteByDate.get(dateStr) === true;
-        if(hasNote){
-          cell.classList.add("has-note","can-open");
-          cell.addEventListener("click", ()=>openDay(dateStr));
-        }else{
-          // si tu veux cliquer aussi sans note (plus tard), on gardera ici
-        }
+        if(dateStr===todayStr) cell.classList.add("is-today");
+        if(hasNoteByDate.get(dateStr)===true) cell.classList.add("has-note");
       }
-
       cell.innerHTML = `<span>${inMonth ? d.getDate() : ""}</span>`;
       $grid.appendChild(cell);
     }
   }
 
-  function openDay(dateStr){
-    const arr = eventsByDate.get(dateStr) || [];
-    const m = dateStr.slice(5,7);
-    const d = dateStr.slice(8,10);
-    const monthLabel = monthsFR[Number(m)-1] || "";
-    $modalTitle.textContent = `${d}/${m}/${YEAR} — ${monthLabel}`;
+  /********** LOAD **********/
+  async function loadApi(){
+    if(!API || API.includes("COLLE_ICI")){
+      showStatus("API manquante", "Mets ton URL exec dans const API.");
+      return;
+    }
+    showStatus("Chargement…", "Récupération des événements et catégories.");
 
-    const blocks = arr
-      .filter(ev => String(ev.details||"").trim() || String(ev.title||"").trim() || String(ev.category||"").trim())
-      .map(ev=>{
-        const title = String(ev.title||"").trim() || "Événement";
-        const cat = String(ev.category||"").trim();
-        const start = String(ev.start||"").trim();
-        const end = String(ev.end||"").trim();
-        const loc = String(ev.location||"").trim();
-        const det = String(ev.details||"").trim();
+    const cb1 = "cb_py_" + Math.random().toString(36).slice(2);
+    const cb2 = "cb_pc_" + Math.random().toString(36).slice(2);
 
-        const meta = [
-          (cat ? cat : null),
-          ((start||end) ? `${start}${end?(" – "+end):""}` : null),
-          (loc ? loc : null)
-        ].filter(Boolean).join(" • ");
+    try{
+      const [py, pc] = await Promise.all([
+        jsonp(`${API}?view=planning_year&year=${YEAR}&callback=${cb1}`, cb1),
+        jsonp(`${API}?view=planning_categories&callback=${cb2}`, cb2)
+      ]);
 
-        return `
-          <div class="block">
-            <p class="bTitle">${escapeHtml(title)}</p>
-            ${meta ? `<p class="bMeta">${escapeHtml(meta)}</p>` : ``}
-            ${det ? `<p class="bNote">${escapeHtml(det)}</p>` : ``}
-          </div>
-        `;
-      }).join("");
+      if(py?.ok===false) throw new Error(py?.error || "planning_year invalide");
+      if(pc?.ok===false) throw new Error(pc?.error || "planning_categories invalide");
 
-    $modalBody.innerHTML = blocks || `<p class="line">Aucune note.</p>`;
+      events = Array.isArray(py.events) ? py.events : [];
+      categoriesRaw = Array.isArray(pc.categories) && pc.categories.length ? pc.categories : DEFAULT_CATEGORIES.slice();
 
-    $overlay.classList.add("open");
-    $overlay.setAttribute("aria-hidden","false");
+      rebuildMaps();
+      renderLegend();
+      renderMonth();
+
+      hideStatus();
+    }catch(e){
+      // ✅ on garde au moins la légende par défaut
+      categoriesRaw = DEFAULT_CATEGORIES.slice();
+      events = [];
+      rebuildMaps();
+      renderLegend();
+      renderMonth();
+      showStatus("API HS / lente", "La légende reste, mais pas d’événements.");
+    }
   }
 
-  function closeDay(){
-    $overlay.classList.remove("open");
-    $overlay.setAttribute("aria-hidden","true");
-  }
-
-  /********** EVENTS **********/
-  $("btnBack").addEventListener("click", ()=>location.href = BACK_URL);
+  /********** UI **********/
+  $("btnBack").addEventListener("click", ()=>location.href="index.html");
   $btnPrev.addEventListener("click", ()=>{ if(currentMonth>0){ currentMonth--; renderMonth(); }});
   $btnNext.addEventListener("click", ()=>{ if(currentMonth<11){ currentMonth++; renderMonth(); }});
 
-  $("btnClose").addEventListener("click", closeDay);
-  $overlay.addEventListener("click", (e)=>{ if(e.target === $overlay) closeDay(); });
-
   /********** BOOT **********/
-  (async function(){
-    try{
-      await loadAll();
-      renderLegend();
+  (function(){
+    // ✅ affiche direct la légende (défaut) puis met à jour avec l’API
+    rebuildMaps();
+    renderLegend();
 
-      // mois par défaut = mois actuel si on est en 2026, sinon janvier
-      const now = new Date();
-      currentMonth = (now.getFullYear() === YEAR) ? now.getMonth() : 0;
+    const now = new Date();
+    currentMonth = (now.getFullYear()===YEAR) ? now.getMonth() : 0;
+    renderMonth();
 
-      renderMonth();
-    }catch(err){
-      console.error(err);
-      // si erreur API : on affiche au moins la grille
-      renderLegend();
-      currentMonth = 0;
-      renderMonth();
-    }
+    loadApi();
   })();
 </script>
 </body>
