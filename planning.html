@@ -767,7 +767,7 @@
 
     try{
       const [py, pc] = await Promise.all([
-      jsonp(`${API}?view=planning_year&year=${YEAR}&nocache=1&callback=${cb1}`, cb1)
+      jsonp(`${API}?view=planning_year&year=${YEAR}&nocache=1&callback=${cb1}`, cb1),
       jsonp(`${API}?view=planning_categories&nocache=1&callback=${cb2}`, cb2)
 
       ]);
