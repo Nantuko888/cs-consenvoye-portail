@@ -763,11 +763,12 @@
 
     const cb1 = "cb_py_" + Math.random().toString(36).slice(2);
     const cb2 = "cb_pc_" + Math.random().toString(36).slice(2);
+    const bust = "&t=" + Date.now();
 
     try{
       const [py, pc] = await Promise.all([
-        jsonp(`${API}?view=planning_year&year=${YEAR}&callback=${cb1}`, cb1),
-        jsonp(`${API}?view=planning_categories&callback=${cb2}`, cb2)
+       jsonp(`${API}?view=planning_year&year=${YEAR}&callback=${cb1}${bust}`, cb1),
+       jsonp(`${API}?view=planning_categories&callback=${cb2}${bust}`, cb2)
       ]);
 
       if(py?.ok===false) throw new Error(py?.error || "planning_year invalide");
