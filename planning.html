@@ -3,234 +3,266 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Planning 2026 — CS Consenvoye</title>
+  <title>Planning — CS Consenvoye</title>
 
   <style>
     :root{
       --txt:#f4f4f4;
-      --shadow: 0 14px 34px rgba(0,0,0,.38);
-      --line: rgba(255,255,255,.10);
-      --glass1: rgba(0,0,0,.50);
+      --muted:rgba(255,255,255,.70);
+      --glass: rgba(0,0,0,.42);
       --glass2: rgba(0,0,0,.28);
-      --orange1:#f07a00;
-      --orange2:#d35d00;
-      --red:#ff2d2d;
+      --stroke: rgba(255,255,255,.10);
+      --shadow: 0 14px 34px rgba(0,0,0,.40);
+      --r: 22px;
+
+      --orange:#d56a00;
+      --orange2:#ff8a22;
+
+      --today:#ff2b2b;
+      --select:#ffd100;
+
+      /* Proportions "Samsung" */
+      --cell-radius: 14px;
+      --cell-font: 18px;
+      --cell-gap: 8px;
     }
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--txt);
       background:#0b0b0b;
-      overflow:hidden; /* pas de scroll */
+      overflow:hidden; /* ✅ pas de scroll */
     }
 
-    /* Background FIXE */
+    /* ✅ background fixe (ne bouge pas au scroll) */
     .bg{
       position:fixed; inset:0;
       background:
-        linear-gradient(180deg, rgba(0,0,0,.40), rgba(0,0,0,.62)),
+        linear-gradient(180deg, rgba(0,0,0,.50), rgba(0,0,0,.55)),
         url("background.png") center top/cover no-repeat;
       z-index:-2;
+      transform: translateZ(0);
     }
     .bg::after{
       content:"";
       position:absolute; inset:0;
-      background: radial-gradient(circle at 50% 10%, rgba(255,170,60,.18), rgba(0,0,0,.66) 62%);
+      background: radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.70) 62%);
       z-index:-1;
     }
 
-    .wrap{
-      height:100%;
-      max-width:980px;
-      margin:0 auto;
-      padding:12px 14px 14px;
+    .app{
+      height:100vh;
       display:flex;
       flex-direction:column;
-      gap:10px;
-      position:relative;
+      padding: env(safe-area-inset-top) 12px env(safe-area-inset-bottom) 12px;
+      gap: 10px;
     }
 
-    /* ✅ UN SEUL BANDEAU (compact) */
-    .band{
-      flex:0 0 auto;
-      border-radius:22px;
-      background: linear-gradient(180deg, rgba(245,120,0,.98), rgba(210,80,0,.92));
-      box-shadow: var(--shadow);
-      border:1px solid rgba(255,255,255,.10);
-      padding:10px 12px;
-      display:grid;
-      grid-template-columns: 44px 1fr 44px 92px;
-      align-items:center;
-      gap:10px;
-    }
-    .nav{
-      width:44px;height:44px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.18);
-      color:var(--txt);
-      font-size:22px;
-      font-weight:950;
+    /* Bandeau haut */
+    .topbar{
       display:flex;
       align-items:center;
-      justify-content:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 14px 14px;
+      border-radius: var(--r);
+      background: linear-gradient(180deg, rgba(213,106,0,.95), rgba(213,106,0,.78));
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .title{
+      font-weight: 950;
+      letter-spacing: .8px;
+      font-size: 22px;
+      text-transform: uppercase;
+    }
+    .top-actions{display:flex; gap:10px; align-items:center;}
+    .btn{
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      color: var(--txt);
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-weight: 900;
       cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
+      -webkit-tap-highlight-color: transparent;
     }
-    .nav:active{transform:translateY(1px)}
-    .nav[disabled]{opacity:.30;cursor:default;transform:none}
-
-    .bandTitle{
-      text-align:center;
-      line-height:1.1;
-    }
-    .bandTitle .top{
-      font-weight:950;
-      letter-spacing:1px;
-      text-transform:uppercase;
-      font-size:16px;
-      opacity:.95;
-    }
-    .bandTitle .month{
-      font-weight:950;
-      font-size:30px;
-      text-shadow:0 10px 22px rgba(0,0,0,.55);
+    .btn:active{transform: translateY(1px)}
+    .btn.icon{
+      width: 42px; height: 42px;
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:0;
+      border-radius: 14px;
+      font-size: 18px;
     }
 
-    .btnBack{
-      justify-self:end;
-      border-radius:999px;
+    /* Bandeau mois (flèches intégrées dedans) */
+    .monthbar{
+      display:grid;
+      grid-template-columns: 56px 1fr 56px;
+      align-items:center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: var(--r);
+      background: linear-gradient(180deg, rgba(213,106,0,.95), rgba(213,106,0,.70));
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .arrow{
+      width:56px; height:56px;
+      border-radius: 18px;
       border:1px solid rgba(255,255,255,.18);
       background: rgba(0,0,0,.18);
-      color:var(--txt);
-      padding:10px 14px;
-      font-weight:950;
+      color: var(--txt);
+      font-weight: 950;
+      font-size: 22px;
       cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
+      -webkit-tap-highlight-color: transparent;
     }
-    .btnBack:active{transform:translateY(1px)}
+    .arrow:disabled{
+      opacity:.25;
+      cursor:default;
+    }
+    .monthname{
+      text-align:center;
+      font-weight: 950;
+      font-size: 40px;
+      letter-spacing:.6px;
+      text-shadow: 0 12px 26px rgba(0,0,0,.55);
+    }
 
-    /* Calendrier */
+    /* Carte calendrier */
     .card{
-      flex:1 1 auto;
-      min-height:0;
-      border-radius:22px;
-      background: linear-gradient(180deg, var(--glass1), var(--glass2));
-      border:1px solid var(--line);
+      border-radius: var(--r);
+      background: linear-gradient(180deg, var(--glass), var(--glass2));
+      border:1px solid var(--stroke);
       box-shadow: var(--shadow);
-      overflow:hidden;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      padding:10px;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
+      overflow:hidden;
     }
 
-    .dow{
+    .calendar{
+      flex: 1;               /* prend tout l’espace dispo */
+      display:flex;
+      flex-direction:column;
+      min-height: 0;         /* important pour éviter scroll interne */
+    }
+
+    .weekdays{
       display:grid;
-      grid-template-columns:repeat(7,1fr);
-      gap:10px;
-      padding:4px 6px 0;
-      color:rgba(255,255,255,.72);
-      font-weight:950;
-      font-size:15px;
+      grid-template-columns: repeat(7,1fr);
+      gap: var(--cell-gap);
+      padding: 14px 14px 8px;
+      color: rgba(255,255,255,.78);
+      font-weight: 850;
       letter-spacing:.6px;
+      text-transform: capitalize;
+      font-size: 16px;
+    }
+    .weekdays div{
       text-align:center;
     }
 
     .grid{
-      flex:1 1 auto;
+      flex:1;
       min-height:0;
+      padding: 8px 14px 14px;
       display:grid;
-      grid-template-columns:repeat(7,1fr);
-      gap:12px;
-      padding:6px;
-      align-content:start;
+      grid-template-columns: repeat(7, 1fr);
+      grid-template-rows: repeat(6, 1fr); /* ✅ 6 lignes fixes */
+      gap: var(--cell-gap);
     }
 
-    /* ✅ Cases plus grosses + style proche ton modèle */
-    .day{
-      height:66px;
-      border-radius:18px;
-      background: rgba(0,0,0,.26);
-      border:1px solid rgba(255,255,255,.10);
+    /* ✅ Cellules proportions "Samsung" : plus fines, pas trop grosses */
+    .cell{
+      border-radius: var(--cell-radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
       display:flex;
       align-items:center;
       justify-content:center;
-      font-size:22px;
-      font-weight:950;
+      font-weight: 950;
+      font-size: var(--cell-font);
+      text-shadow: 0 10px 22px rgba(0,0,0,.60);
       user-select:none;
-      -webkit-tap-highlight-color:transparent;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+      -webkit-tap-highlight-color: transparent;
+      position:relative;
+      overflow:hidden;
     }
-    .day.empty{opacity:0;pointer-events:none}
-
-    .day.has-event{
-      border-color: rgba(255,255,255,.16);
+    .cell.is-empty{
+      background: transparent;
+      border-color: transparent;
     }
-
-    .day.today{
-      outline:4px solid var(--red);
-      outline-offset:-4px;
+    .cell.is-click{
+      cursor:pointer;
     }
 
-    .day.clickable{cursor:pointer}
-    .day.clickable:active{transform:translateY(1px)}
+    /* Jour d'aujourd'hui (rouge) */
+    .cell.is-today{
+      outline: 3px solid var(--today);
+      outline-offset: -3px;
+    }
+    /* Jour sélectionné (jaune) */
+    .cell.is-selected{
+      outline: 3px solid var(--select);
+      outline-offset: -3px;
+    }
 
-    /* ✅ MINI légende (discrète, bas-gauche) */
-    .legendMini{
-      position:absolute;
-      left:14px;
-      bottom:14px;
-      width:min(420px, calc(100% - 28px));
-      border-radius:18px;
-      background: rgba(0,0,0,.35);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      padding:10px 10px;
+    /* Légende (2 colonnes, compacte) */
+    .legend{
+      padding: 12px;
+    }
+    .legend-grid{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap:8px 12px;
-      pointer-events:auto;
+      gap: 10px;
     }
-    .legItem{
+    .leg-item{
       display:flex;
       align-items:center;
-      gap:10px;
-      font-weight:950;
-      font-size:16px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+      min-width:0;
     }
-    .sq{
-      width:16px;height:16px;
-      border-radius:4px;
-      border:1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.30);
-      flex:0 0 auto;
+    .swatch{
+      width: 20px;
+      height: 20px;
+      border-radius: 6px; /* ✅ carré arrondi */
+      border: 1px solid rgba(255,255,255,.22);
+      flex: 0 0 auto;
+    }
+    .leg-label{
+      font-weight: 900;
+      font-size: 18px;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
     }
 
-    /* Modal demi page */
-    .overlay{
-      position:fixed; inset:0;
+    /* Bottom sheet (demi-page) */
+    .sheet{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
       display:none;
-      background: rgba(0,0,0,.62);
-      z-index:50;
-      padding:14px;
+      z-index: 50;
+      padding: env(safe-area-inset-top) 12px env(safe-area-inset-bottom) 12px;
     }
-    .overlay.open{display:block}
-    .modal{
-      max-width:980px;
-      margin:0 auto;
-      height:52vh;
-      border-radius:22px;
-      background: linear-gradient(180deg, rgba(0,0,0,.72), rgba(0,0,0,.45));
+    .sheet.open{display:block;}
+    .sheet-panel{
+      position:absolute;
+      left:12px; right:12px;
+      bottom:12px;
+      height: 48vh; /* ✅ demi-page */
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(0,0,0,.74), rgba(0,0,0,.50));
       border:1px solid rgba(255,255,255,.12);
       box-shadow: var(--shadow);
       overflow:hidden;
@@ -239,41 +271,79 @@
       display:flex;
       flex-direction:column;
     }
-    .modalHead{
-      padding:12px 14px;
+    .sheet-head{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:10px;
-      border-bottom:1px solid rgba(255,255,255,.10);
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.06);
-      font-weight:950;
     }
-    .close{
+    .sheet-title{
+      font-weight: 950;
+      font-size: 18px;
+      letter-spacing:.4px;
+    }
+    .sheet-close{
       border:1px solid rgba(255,255,255,.18);
       background: rgba(255,255,255,.10);
       color:var(--txt);
       padding:10px 14px;
-      border-radius:16px;
-      font-weight:950;
+      border-radius: 16px;
+      font-weight: 950;
       cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
     }
-    .close:active{transform:translateY(1px)}
-    .modalBody{
-      padding:14px;
+    .sheet-body{
+      flex:1;
       overflow:auto;
-      font-size:16px;
-      line-height:1.35;
-      color:rgba(255,255,255,.92);
+      padding: 12px 14px;
     }
-    .muted{color:rgba(255,255,255,.70);font-style:italic}
+    .event{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.25);
+      border-radius: 18px;
+      padding: 12px 12px;
+      margin-bottom: 10px;
+    }
+    .event-top{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:6px;
+    }
+    .event-title{
+      font-weight: 950;
+      font-size: 16px;
+    }
+    .event-time{
+      color: rgba(255,255,255,.70);
+      font-weight: 850;
+      font-size: 13px;
+      white-space:nowrap;
+    }
+    .event-details{
+      color: rgba(255,255,255,.80);
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+    .hint{
+      color: rgba(255,255,255,.70);
+      font-style: italic;
+      margin: 10px 2px 0;
+    }
 
-    @media (max-width:380px){
-      .day{height:60px;font-size:20px}
-      .bandTitle .month{font-size:26px}
-      .legendMini{padding:9px}
-      .legItem{font-size:15px}
+    /* petits écrans : on garde lisible */
+    @media (max-width: 360px){
+      :root{
+        --cell-font: 16px;
+        --cell-gap: 7px;
+      }
+      .monthname{font-size: 34px;}
+      .leg-label{font-size: 16px;}
+      .swatch{width:18px;height:18px;}
     }
   </style>
 </head>
@@ -281,262 +351,410 @@
 <body>
   <div class="bg"></div>
 
-  <div class="wrap">
-    <div class="band">
-      <button class="nav" id="btnPrev" aria-label="Mois précédent">‹</button>
-
-      <div class="bandTitle">
-        <div class="top">PLANNING 2026</div>
-        <div class="month" id="monthTitle">—</div>
+  <div class="app">
+    <!-- Bandeau haut -->
+    <div class="topbar">
+      <div class="title" id="yearTitle">PLANNING 2026</div>
+      <div class="top-actions">
+        <!-- (option) petite clé admin : change le href si tu veux -->
+        <!-- <button class="btn icon" id="btnAdmin" title="Admin">🔑</button> -->
+        <button class="btn" id="btnBack">Retour</button>
       </div>
-
-      <button class="nav" id="btnNext" aria-label="Mois suivant">›</button>
-
-      <button class="btnBack" id="btnBack">Retour</button>
     </div>
 
-    <section class="card">
-      <div class="dow">
+    <!-- Bandeau mois -->
+    <div class="monthbar">
+      <button class="arrow" id="prevBtn" aria-label="Mois précédent">‹</button>
+      <div class="monthname" id="monthName">—</div>
+      <button class="arrow" id="nextBtn" aria-label="Mois suivant">›</button>
+    </div>
+
+    <!-- Calendrier -->
+    <div class="card calendar">
+      <div class="weekdays">
         <div>Lun</div><div>Mar</div><div>Mer</div><div>Jeu</div><div>Ven</div><div>Sam</div><div>Dim</div>
       </div>
       <div class="grid" id="grid"></div>
-    </section>
+    </div>
 
-    <!-- ✅ Légende mini -->
-    <div class="legendMini" id="legendMini"></div>
+    <!-- Légende -->
+    <div class="card legend">
+      <div class="legend-grid" id="legend"></div>
+    </div>
   </div>
 
-  <!-- Modal note -->
-  <div class="overlay" id="overlay" aria-hidden="true">
-    <div class="modal">
-      <div class="modalHead">
-        <div id="modalTitle">—</div>
-        <button class="close" id="btnClose">Fermer</button>
+  <!-- Sheet demi-page -->
+  <div class="sheet" id="sheet" aria-hidden="true">
+    <div class="sheet-panel">
+      <div class="sheet-head">
+        <div class="sheet-title" id="sheetTitle">—</div>
+        <button class="sheet-close" id="sheetClose">Fermer</button>
       </div>
-      <div class="modalBody" id="modalBody"></div>
+      <div class="sheet-body" id="sheetBody"></div>
     </div>
   </div>
 
 <script>
-  const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
-  const BACK_URL = "index.html";
-  const YEAR = 2026;
+/* ================== CONFIG ================== */
+const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+const YEAR = 2026;
+const BACK_URL = "index.html";
 
-  const MONTHS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+/* ✅ Overrides UI (si tu veux forcer une couleur côté interface, sans toucher Sheets)
+   Exemple demandé : FMA centre en rouge.
+   -> la clé doit matcher le texte de category (peu importe maj/min, on normalise)
+*/
+const OVERRIDE_COLORS = {
+  "fma centre": "#ff2b2b"
+  // "navette": "#2f7bd3",
+};
 
-  const $grid = document.getElementById("grid");
-  const $monthTitle = document.getElementById("monthTitle");
-  const $legendMini = document.getElementById("legendMini");
-  const $btnPrev = document.getElementById("btnPrev");
-  const $btnNext = document.getElementById("btnNext");
+/* Cache */
+const CACHE_KEY = "cs_planning_cache_" + YEAR;
+const CACHE_TTL = 15 * 60 * 1000; // 15 min
 
-  const $overlay = document.getElementById("overlay");
-  const $modalTitle = document.getElementById("modalTitle");
-  const $modalBody = document.getElementById("modalBody");
+/* ================== ETAT ================== */
+let monthIndex = 0; // 0=Jan
+let selectedDate = null; // "YYYY-MM-DD"
 
-  document.getElementById("btnBack").addEventListener("click", ()=>location.href=BACK_URL);
-  document.getElementById("btnClose").addEventListener("click", closeModal);
-  $overlay.addEventListener("click", (e)=>{ if(e.target === $overlay) closeModal(); });
+let categories = [];                // [{category,color,order}]
+let catColor = new Map();           // norm -> color
+let catLabel = new Map();           // norm -> original label
+let eventsByDate = new Map();       // date -> [events]
+let firstCatByDate = new Map();     // date -> normCategory
 
-  function jsonp(url, cbName){
-    return new Promise((resolve, reject) => {
-      const s = document.createElement("script");
-      const cleanup = () => { s.remove(); try{ delete window[cbName]; }catch(e){ window[cbName]=undefined; } };
-      const t = setTimeout(()=>{ cleanup(); reject(new Error("Timeout JSONP")); }, 12000);
-      window[cbName] = (data)=>{ clearTimeout(t); cleanup(); resolve(data); };
-      s.src = url;
-      s.onerror = ()=>{ clearTimeout(t); cleanup(); reject(new Error("Erreur JSONP")); };
-      document.head.appendChild(s);
-    });
+/* ================== DOM ================== */
+const $grid = document.getElementById("grid");
+const $monthName = document.getElementById("monthName");
+const $prev = document.getElementById("prevBtn");
+const $next = document.getElementById("nextBtn");
+const $legend = document.getElementById("legend");
+const $yearTitle = document.getElementById("yearTitle");
+
+const $sheet = document.getElementById("sheet");
+const $sheetTitle = document.getElementById("sheetTitle");
+const $sheetBody = document.getElementById("sheetBody");
+const $sheetClose = document.getElementById("sheetClose");
+
+/* ================== OUTILS ================== */
+function norm(s){
+  return String(s||"")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .replace(/\s+/g," ");
+}
+function pad2(n){ return String(n).padStart(2,"0"); }
+function ymd(y,m,d){ return `${y}-${pad2(m)}-${pad2(d)}`; }
+
+function monthLabelFR(m){
+  const names = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  return names[m];
+}
+
+/* JSONP */
+function jsonp(url, cbName){
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    const cleanup = () => {
+      script.remove();
+      try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+    };
+    const t = setTimeout(() => { cleanup(); reject(new Error("Timeout JSONP")); }, 12000);
+    window[cbName] = (data) => { clearTimeout(t); cleanup(); resolve(data); };
+    script.src = url;
+    script.onerror = () => { clearTimeout(t); cleanup(); reject(new Error("Erreur JSONP")); };
+    document.head.appendChild(script);
+  });
+}
+
+function getUiColorForCategory(cat){
+  const k = norm(cat);
+  if(OVERRIDE_COLORS[k]) return OVERRIDE_COLORS[k];
+  return catColor.get(k) || "rgba(255,255,255,.25)";
+}
+
+/* ================== DATA -> MAPS ================== */
+function buildMaps(){
+  catColor = new Map();
+  catLabel = new Map();
+
+  for(const c of categories){
+    const k = norm(c.category);
+    const col = getUiColorForCategory(c.category); // applique override
+    catColor.set(k, col);
+    catLabel.set(k, c.category);
   }
-  function esc(x){
-    return (x==null?"":String(x))
-      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+
+  firstCatByDate = new Map();
+  for(const [date, arr] of eventsByDate.entries()){
+    // choix de couleur : première catégorie dans l'ordre des categories (si possible), sinon premier event
+    let picked = null;
+
+    // on tente de prendre la catégorie "la plus prioritaire" selon categories.order
+    const scored = arr.map(ev => {
+      const nk = norm(ev.category);
+      const idx = categories.findIndex(x => norm(x.category) === nk);
+      const order = (idx >= 0) ? Number(categories[idx].order||9999) : 9999;
+      return { nk, order };
+    }).sort((a,b)=>a.order-b.order);
+
+    picked = scored.length ? scored[0].nk : null;
+    if(!picked) picked = norm(arr[0]?.category || "");
+
+    firstCatByDate.set(date, picked);
   }
-  function normCat(s){ return String(s||"").trim().toLowerCase(); }
-  function dateKey(y,m,d){
-    return `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+}
+
+/* ================== RENDER ================== */
+function renderLegend(){
+  $legend.innerHTML = "";
+  const list = [...categories].sort((a,b)=> (Number(a.order||9999)-Number(b.order||9999)));
+
+  for(const c of list){
+    const item = document.createElement("div");
+    item.className = "leg-item";
+
+    const sw = document.createElement("div");
+    sw.className = "swatch";
+    sw.style.background = getUiColorForCategory(c.category); // ✅ carrés couleur UI
+
+    const lab = document.createElement("div");
+    lab.className = "leg-label";
+    lab.textContent = c.category;
+
+    item.appendChild(sw);
+    item.appendChild(lab);
+    $legend.appendChild(item);
   }
+}
 
-  function openModal(title, html){
-    $modalTitle.textContent = title;
-    $modalBody.innerHTML = html;
-    $overlay.classList.add("open");
-    $overlay.setAttribute("aria-hidden","false");
-  }
-  function closeModal(){
-    $overlay.classList.remove("open");
-    $overlay.setAttribute("aria-hidden","true");
-  }
+function renderMonth(){
+  $monthName.textContent = monthLabelFR(monthIndex);
 
-  // Cache local (évite reload pénible)
-  const CACHE_KEY = "cs_planning_cache_compact_" + YEAR;
-  const CACHE_TTL = 12 * 60 * 60 * 1000;
+  // flèches utiles uniquement
+  $prev.disabled = (monthIndex === 0);
+  $next.disabled = (monthIndex === 11);
 
-  let EVENTS = [];
-  let CATCOLORS = {};
-  let CATS = []; // [{category,color,order}]
-  let currentMonth = (new Date().getFullYear() === YEAR) ? new Date().getMonth() : 0;
+  // grille
+  $grid.innerHTML = "";
 
-  function setNavDisabled(){
-    $btnPrev.disabled = (currentMonth === 0);
-    $btnNext.disabled = (currentMonth === 11);
-  }
+  const first = new Date(YEAR, monthIndex, 1);
+  const daysInMonth = new Date(YEAR, monthIndex + 1, 0).getDate();
 
-  function buildLegend(){
-    $legendMini.innerHTML = "";
-    const list = (CATS.length ? CATS : Object.keys(CATCOLORS).map(c=>({category:c,color:CATCOLORS[c],order:9999})))
-      .slice()
-      .sort((a,b)=>(a.order-b.order)||a.category.localeCompare(b.category));
+  // Lundi=0 ... Dimanche=6
+  let dow = first.getDay(); // 0=Dim
+  dow = (dow === 0) ? 6 : (dow - 1);
 
-    for(const it of list){
-      const div = document.createElement("div");
-      div.className = "legItem";
-      div.innerHTML = `<span class="sq" style="background:${esc(it.color||"rgba(255,255,255,.30)")};"></span><span>${esc(it.category)}</span>`;
-      $legendMini.appendChild(div);
-    }
-  }
+  const totalCells = 42; // 6 lignes x 7
+  const today = new Date();
+  const todayYMD = ymd(today.getFullYear(), today.getMonth()+1, today.getDate());
 
-  function buildMonth(){
-    $grid.innerHTML = "";
-    $monthTitle.textContent = MONTHS[currentMonth];
-    setNavDisabled();
+  for(let i=0;i<totalCells;i++){
+    const cell = document.createElement("div");
+    cell.className = "cell";
 
-    const first = new Date(YEAR, currentMonth, 1);
-    const jsDay = first.getDay(); // 0=dim
-    const offset = (jsDay===0)?6:(jsDay-1);
-    const daysInMonth = new Date(YEAR, currentMonth+1, 0).getDate();
-
-    const byDate = new Map();
-    for(const ev of EVENTS){
-      if(!ev.date) continue;
-      if(!byDate.has(ev.date)) byDate.set(ev.date, []);
-      byDate.get(ev.date).push(ev);
-    }
-
-    for(let i=0;i<offset;i++){
-      const c = document.createElement("div");
-      c.className = "day empty";
-      $grid.appendChild(c);
-    }
-
-    const now = new Date();
-    const todayKey = (now.getFullYear()===YEAR) ? dateKey(YEAR, now.getMonth(), now.getDate()) : "";
-
-    for(let d=1; d<=daysInMonth; d++){
-      const key = dateKey(YEAR, currentMonth, d);
-      const cell = document.createElement("div");
-      cell.className = "day";
-      cell.textContent = d;
-
-      if(key === todayKey) cell.classList.add("today");
-
-      const list = byDate.get(key) || [];
-      if(list.length){
-        const cat = normCat(list[0].category);
-        const col = CATCOLORS[cat] || "rgba(255,255,255,.22)";
-        cell.classList.add("has-event");
-        cell.style.background = `linear-gradient(180deg, ${col}, rgba(0,0,0,.26))`;
-
-        const withNote = list.find(x => String(x.details||"").trim() !== "");
-        if(withNote){
-          cell.classList.add("clickable");
-          cell.addEventListener("click", ()=>{
-            const title = `${d} ${MONTHS[currentMonth]} ${YEAR}`;
-            const html = list.map(ev=>{
-              const h = [ev.start, ev.end].filter(Boolean).join(" - ");
-              const t = ev.title || "";
-              const c = ev.category ? ` <span class="muted">(${esc(ev.category)})</span>` : "";
-              const det = ev.details ? `<div style="margin-top:6px;">${esc(ev.details).replaceAll("\n","<br>")}</div>` : "";
-              return `<div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08);">
-                        <div style="font-weight:950;">${esc(h ? (h+" — ") : "")}${esc(t)}${c}</div>
-                        ${det}
-                      </div>`;
-            }).join("");
-            openModal(title, html);
-          });
-        }
-      }
-
+    const dayNum = i - dow + 1;
+    if(dayNum < 1 || dayNum > daysInMonth){
+      cell.classList.add("is-empty");
       $grid.appendChild(cell);
+      continue;
+    }
+
+    const date = ymd(YEAR, monthIndex+1, dayNum);
+    cell.textContent = String(dayNum);
+
+    // couleur si event ce jour
+    const pickedCat = firstCatByDate.get(date);
+    if(pickedCat){
+      const col = getUiColorForCategory(pickedCat);
+      cell.style.background = `linear-gradient(180deg, ${col}, rgba(0,0,0,.20))`;
+      cell.style.borderColor = "rgba(255,255,255,.14)";
+    }
+
+    // today en rouge
+    if(date === todayYMD){
+      cell.classList.add("is-today");
+    }
+
+    // sélection en jaune
+    if(selectedDate && date === selectedDate){
+      cell.classList.add("is-selected");
+    }
+
+    // clic si au moins une note (details) sur ce jour
+    const evs = eventsByDate.get(date) || [];
+    const hasNote = evs.some(e => String(e.details||"").trim() !== "");
+    if(hasNote){
+      cell.classList.add("is-click");
+      cell.addEventListener("click", () => openSheet(date));
+    }else{
+      // si pas de note : on peut quand même sélectionner visuellement
+      cell.addEventListener("click", () => {
+        selectedDate = date;
+        renderMonth();
+      });
+    }
+
+    $grid.appendChild(cell);
+  }
+}
+
+/* ================== SHEET ================== */
+function openSheet(date){
+  selectedDate = date;
+  renderMonth(); // met le contour jaune
+
+  const evs = (eventsByDate.get(date) || []).slice().sort((a,b)=> String(a.start||"").localeCompare(String(b.start||"")));
+
+  $sheetTitle.textContent = formatDateFR(date);
+  $sheetBody.innerHTML = "";
+
+  const withNote = evs.filter(e => String(e.details||"").trim() !== "");
+  if(!withNote.length){
+    const p = document.createElement("p");
+    p.className = "hint";
+    p.textContent = "Aucune note.";
+    $sheetBody.appendChild(p);
+  }else{
+    for(const e of withNote){
+      const box = document.createElement("div");
+      box.className = "event";
+
+      const top = document.createElement("div");
+      top.className = "event-top";
+
+      const t = document.createElement("div");
+      t.className = "event-title";
+      t.textContent = e.title || "—";
+
+      const time = document.createElement("div");
+      time.className = "event-time";
+      const h = [e.start,e.end].filter(Boolean).join("–");
+      time.textContent = h || "";
+
+      top.appendChild(t);
+      top.appendChild(time);
+
+      const det = document.createElement("div");
+      det.className = "event-details";
+      det.textContent = e.details;
+
+      box.appendChild(top);
+      box.appendChild(det);
+      $sheetBody.appendChild(box);
     }
   }
 
-  async function fetchAll(){
-    const cb1 = "cb_py_" + Math.random().toString(36).slice(2);
-    const cb2 = "cb_pc_" + Math.random().toString(36).slice(2);
-    const urlEvents = `${API}?view=planning_year&year=${YEAR}&callback=${cb1}`;
-    const urlCats = `${API}?view=planning_categories&callback=${cb2}`;
+  $sheet.classList.add("open");
+  $sheet.setAttribute("aria-hidden","false");
+}
 
-    const [py, pc] = await Promise.all([jsonp(urlEvents, cb1), jsonp(urlCats, cb2)]);
-    if(!py || py.ok===false) throw new Error(py?.error || "planning_year invalide");
-    if(!pc || pc.ok===false) throw new Error(pc?.error || "planning_categories invalide");
+function closeSheet(){
+  $sheet.classList.remove("open");
+  $sheet.setAttribute("aria-hidden","true");
+}
 
-    EVENTS = Array.isArray(py.events) ? py.events : [];
-    CATS = Array.isArray(pc.categories) ? pc.categories : [];
+function formatDateFR(date){ // "YYYY-MM-DD"
+  const [y,m,d] = date.split("-").map(Number);
+  const dt = new Date(y, m-1, d);
+  const jours = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+  return `${jours[dt.getDay()]} ${d} ${monthLabelFR(m-1)} ${y}`;
+}
 
-    CATCOLORS = {};
-    for(const c of CATS){
-      const k = normCat(c.category);
-      if(!k) continue;
-      CATCOLORS[k] = c.color || "rgba(255,255,255,.30)";
-    }
-
+/* ================== LOAD (avec cache) ================== */
+async function loadAll(){
+  // 1) tente cache
+  const raw = localStorage.getItem(CACHE_KEY);
+  if(raw){
     try{
-      localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), events: EVENTS, cats: CATS }));
+      const c = JSON.parse(raw);
+      if(Date.now() - c.time < CACHE_TTL){
+        categories = c.categories || [];
+        eventsByDate = new Map(c.eventsByDate || []);
+        buildMaps();
+        renderLegend();
+        renderMonth();
+        return;
+      }
     }catch(e){}
   }
 
-  function loadCache(){
-    const raw = localStorage.getItem(CACHE_KEY);
-    if(!raw) return false;
-    try{
-      const d = JSON.parse(raw);
-      if(!d || !d.t) return false;
-      if(Date.now()-d.t > CACHE_TTL) return false;
+  // 2) sinon API
+  const cb1 = "cbCats_" + Math.random().toString(36).slice(2);
+  const cb2 = "cbYear_" + Math.random().toString(36).slice(2);
 
-      EVENTS = Array.isArray(d.events) ? d.events : [];
-      CATS = Array.isArray(d.cats) ? d.cats : [];
-      CATCOLORS = {};
-      for(const c of CATS){
-        const k = normCat(c.category);
-        if(!k) continue;
-        CATCOLORS[k] = c.color || "rgba(255,255,255,.30)";
-      }
-      return true;
-    }catch(e){ return false; }
+  const catsUrl = `${API}?view=planning_categories&callback=${cb1}`;
+  const yearUrl = `${API}?view=planning_year&year=${YEAR}&callback=${cb2}`;
+
+  const [cats, year] = await Promise.all([
+    jsonp(catsUrl, cb1),
+    jsonp(yearUrl, cb2),
+  ]);
+
+  categories = (cats && cats.ok && Array.isArray(cats.categories)) ? cats.categories : [];
+  const events = (year && year.ok && Array.isArray(year.events)) ? year.events : [];
+
+  // map date -> events
+  eventsByDate = new Map();
+  for(const e of events){
+    const date = String(e.date||"").trim();
+    if(!date) continue;
+    if(!eventsByDate.has(date)) eventsByDate.set(date, []);
+    eventsByDate.get(date).push(e);
   }
 
-  $btnPrev.addEventListener("click", ()=>{
-    if(currentMonth<=0) return;
-    currentMonth--;
-    buildMonth();
-  });
-  $btnNext.addEventListener("click", ()=>{
-    if(currentMonth>=11) return;
-    currentMonth++;
-    buildMonth();
-  });
+  buildMaps();
+  renderLegend();
+  renderMonth();
 
-  async function init(){
-    const ok = loadCache();
-    if(ok){
-      buildLegend();
-      buildMonth();
-      return;
-    }
-    // rendu rapide puis fetch
-    buildLegend();
-    buildMonth();
-    try{
-      await fetchAll();
-      buildLegend();
-      buildMonth();
-    }catch(err){ console.error(err); }
+  // cache
+  try{
+    localStorage.setItem(CACHE_KEY, JSON.stringify({
+      time: Date.now(),
+      categories,
+      eventsByDate: [...eventsByDate.entries()]
+    }));
+  }catch(e){}
+}
+
+/* ================== INIT ================== */
+(function init(){
+  $yearTitle.textContent = "PLANNING " + YEAR;
+
+  // mois courant si YEAR = année actuelle, sinon Janvier
+  const now = new Date();
+  if(now.getFullYear() === YEAR){
+    monthIndex = now.getMonth();
+    selectedDate = ymd(now.getFullYear(), now.getMonth()+1, now.getDate());
+  }else{
+    monthIndex = 0;
+    selectedDate = ymd(YEAR, 1, 1);
   }
 
-  init();
+  document.getElementById("btnBack").addEventListener("click", ()=> location.href = BACK_URL);
+
+  $prev.addEventListener("click", ()=>{
+    if(monthIndex <= 0) return;
+    monthIndex--;
+    renderMonth();
+  });
+  $next.addEventListener("click", ()=>{
+    if(monthIndex >= 11) return;
+    monthIndex++;
+    renderMonth();
+  });
+
+  $sheetClose.addEventListener("click", closeSheet);
+  $sheet.addEventListener("click", (e)=>{ if(e.target === $sheet) closeSheet(); });
+
+  // rendu immédiat (même avant API) : vide mais bien proportionné
+  renderLegend();
+  renderMonth();
+
+  // charge data
+  loadAll().catch(()=>{ /* on laisse l’UI vivre même si API down */ });
+})();
 </script>
 </body>
 </html>
