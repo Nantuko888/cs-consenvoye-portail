@@ -16,7 +16,7 @@
       --orange2:#b95800;
 
       --today:#fff200;
-      --note:#ffd400;
+      --note:#fff200; /* fluo */
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -169,6 +169,8 @@
       -webkit-tap-highlight-color: transparent;
     }
     .day.is-empty{ opacity:.12; pointer-events:none; }
+
+    /* couleur évènement (fond) */
     .day.has-color::before{
       content:"";
       position:absolute; inset:0;
@@ -178,20 +180,35 @@
       z-index:0;
     }
     .day span{ position:relative; z-index:1; }
+
+    /* jour du mois en cours (rouge) */
     .day.is-today{
       box-shadow: inset 0 0 0 4px rgba(255,59,48,.95);
       border-color: rgba(255,59,48,.55);
     }
+
+    /* jour avec NOTE (détails) => jaune fluo + cliquable */
     .day.has-note{
-      box-shadow: inset 0 0 0 4px rgba(255,212,0,.92);
-      border-color: #fff200;
+      box-shadow: inset 0 0 0 4px rgba(255,242,0,.95);
+      border-color: rgba(255,242,0,.80);
       cursor:pointer;
     }
     .day.has-note span{
-  color:#fff200;
-  font-weight:950;
-  text-shadow: 0 0 6px rgba(255,242,0,.8);
-}
+      color:#fff200;
+      font-weight:950;
+      text-shadow: 0 0 6px rgba(255,242,0,.8);
+    }
+    /* petit repère discret en haut à droite */
+    .day.has-note::after{
+      content:"";
+      position:absolute;
+      top:6px; right:6px;
+      width:10px; height:10px;
+      border-radius: 3px;
+      background: rgba(255,242,0,.95);
+      box-shadow: 0 0 10px rgba(255,242,0,.55);
+      z-index:2;
+    }
 
     /* ✅ légende TOUJOURS visible */
     .legend{
@@ -203,7 +220,7 @@
       -webkit-backdrop-filter: blur(10px);
       padding: 10px;
       overflow:hidden;
-      min-height: 92px; /* ✅ évite "vide" visuellement */
+      min-height: 92px;
     }
     .legendGrid{
       display:grid;
@@ -235,7 +252,7 @@
       text-overflow: ellipsis;
     }
 
-    /* mini message d'état (si API HS) */
+    /* mini message d'état */
     .status{
       position:fixed;
       left:12px; right:12px;
@@ -263,6 +280,122 @@
     }
     .status .small{font-weight:800; opacity:.85; font-size:13px}
 
+    /* ======= NOTE MODAL (demi-page) ======= */
+    .noteOverlay{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index:120;
+      display:none;
+    }
+    .noteOverlay.show{display:block;}
+    .noteSheet{
+      position:absolute;
+      left:12px; right:12px;
+      bottom: calc(env(safe-area-inset-bottom) + 12px);
+      max-width: 980px;
+      margin: 0 auto;
+      height: min(52vh, 520px);
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(0,0,0,.72), rgba(0,0,0,.58));
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+    .noteHead{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding: 12px 12px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+    }
+    .noteTitle{
+      font-weight:950;
+      letter-spacing:.2px;
+      font-size: 16px;
+      color: rgba(255,255,255,.92);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .noteClose{
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      color:var(--txt);
+      padding: 8px 10px;
+      border-radius: 14px;
+      font-weight:950;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .noteClose:active{transform: translateY(1px)}
+    .noteBody{
+      padding: 12px;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .evCard{
+      border-radius: 18px;
+      background: rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.10);
+      padding: 10px 12px;
+    }
+    .evTop{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom: 6px;
+    }
+    .evName{
+      font-weight: 950;
+      font-size: 16px;
+      line-height:1.1;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .evTime{
+      font-weight: 900;
+      font-size: 13px;
+      color: rgba(255,255,255,.78);
+      white-space:nowrap;
+      flex:0 0 auto;
+    }
+    .evMeta{
+      font-weight: 850;
+      font-size: 13px;
+      color: rgba(255,255,255,.78);
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom: 8px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .chipDot{
+      width:10px; height:10px;
+      border-radius: 3px;
+      border:1px solid rgba(255,255,255,.20);
+      background: rgba(255,255,255,.25);
+    }
+    .evDetails{
+      font-size: 15px;
+      font-weight: 850;
+      color: rgba(255,255,255,.92);
+      line-height:1.25;
+      white-space:pre-wrap;
+    }
+
     @media (max-width: 360px){
       .monthname{font-size:20px}
       .day{font-size:20px; border-radius:16px}
@@ -270,6 +403,7 @@
       .grid{grid-auto-rows: minmax(50px, 1fr);}
       .legTxt{font-size:16px}
       .sq{width:18px;height:18px}
+      .noteSheet{height: min(56vh, 520px);}
     }
   </style>
 </head>
@@ -311,27 +445,41 @@
     </div>
   </div>
 
+  <!-- ✅ MODAL NOTE (demi-page) -->
+  <div class="noteOverlay" id="noteOverlay" aria-hidden="true">
+    <div class="noteSheet" role="dialog" aria-modal="true" aria-label="Note du jour">
+      <div class="noteHead">
+        <div class="noteTitle" id="noteTitle">—</div>
+        <button class="noteClose" id="noteClose">Fermer</button>
+      </div>
+      <div class="noteBody" id="noteBody"></div>
+    </div>
+  </div>
+
 <script>
   /********** CONFIG **********/
   const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
- // ✅ OBLIGATOIRE
   const BACK_URL = "index.html";
   const YEAR = 2026;
 
   // ✅ Légende par défaut (affichée même si l’API plante)
   const DEFAULT_CATEGORIES = [
-    { category:"FMA centre",   color:"#ff2d2d", order:1 },
+    { category:"FMA centre", color:"#ff2d2d", order:1 },
     { category:"FMA équipe 1", color:"#24d36a", order:2 },
     { category:"FMA équipe 2", color:"#f6a000", order:3 },
-    { category:"JSP",          color:"#4aa8ff", order:4 },
-    { category:"Navette",      color:"#2f79ff", order:5 },
-    { category:"RECSEC",       color:"#a081ff", order:6 },
+    { category:"JSP", color:"#4aa8ff", order:4 },
+    { category:"Navette", color:"#2f79ff", order:5 },
+    { category:"RECSEC", color:"#a081ff", order:6 },
     { category:"Sainte Barbe", color:"#ff5a5a", order:7 },
   ];
 
-  // ✅ Overrides interface (si tu veux forcer une couleur sans toucher Sheets)
+  // ✅ Overrides (change ICI les couleurs interface légende + jours)
+  // -> clef = nom de catégorie en minuscules (peu importe accents/espaces)
   const OVERRIDE_COLORS = {
     "fma centre": "#ff2d2d",
+    // exemples :
+    // "navette": "#00ff7a",
+    // "jsp": "#00b7ff",
   };
 
   /********** DOM **********/
@@ -345,7 +493,13 @@
   const $statusTxt = $("statusTxt");
   const $statusSub = $("statusSub");
 
+  const $noteOverlay = $("noteOverlay");
+  const $noteTitle = $("noteTitle");
+  const $noteBody = $("noteBody");
+  const $noteClose = $("noteClose");
+
   const monthsFR = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  const dowsFR = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"]; // JS getDay()
 
   function norm(s){
     return String(s||"").trim().toLowerCase()
@@ -372,6 +526,22 @@
     d.setHours(12,0,0,0);
     return d;
   }
+  function toFRDate(ymdStr){
+    // ymd -> "Ven 20/02/2026"
+    const [y,m,d] = String(ymdStr||"").split("-");
+    if(!y||!m||!d) return ymdStr;
+    const dt = new Date(Number(y), Number(m)-1, Number(d), 12,0,0,0);
+    const dow = dowsFR[dt.getDay()];
+    return `${dow} ${String(d).padStart(2,"0")}/${String(m).padStart(2,"0")}/${y}`;
+  }
+  function formatTimeRange(start,end){
+    const s = String(start||"").trim();
+    const e = String(end||"").trim();
+    if(s && e) return `${s}–${e}`;
+    if(s) return s;
+    if(e) return e;
+    return "";
+  }
 
   function jsonp(url, cbName){
     return new Promise((resolve, reject) => {
@@ -390,13 +560,13 @@
 
   /********** DATA **********/
   let events = [];
-  let categoriesRaw = DEFAULT_CATEGORIES.slice(); // ✅ toujours quelque chose
+  let categoriesRaw = DEFAULT_CATEGORIES.slice();
   let eventsByDate = new Map();
   let catColor = new Map();
   let catLabel = new Map();
   let catOrder = new Map();
   let firstCatByDate = new Map();
-  let hasNoteByDate = new Map();
+  let hasNoteByDate = new Map(); // ✅ seulement si details non vide
   let currentMonth = 0;
 
   function showStatus(txt, sub){
@@ -418,10 +588,11 @@
       if(!eventsByDate.has(date)) eventsByDate.set(date, []);
       eventsByDate.get(date).push(ev);
 
+      // NOTE = details remplis
       if(String(ev.details||"").trim()) hasNoteByDate.set(date, true);
     }
 
-    // catégories dédoublonnées (navette/Navette)
+    // catégories dédoublonnées
     catColor = new Map();
     catLabel = new Map();
     catOrder = new Map();
@@ -446,6 +617,7 @@
       catOrder.set(k, c.order);
     }
 
+    // couleur du jour = 1ère catégorie (selon order)
     firstCatByDate = new Map();
     for(const [date, arr] of eventsByDate.entries()){
       let best = null;
@@ -499,6 +671,8 @@
       cell.className = "day" + (inMonth ? "" : " is-empty");
 
       if(inMonth){
+        cell.dataset.date = dateStr;
+
         const catKey = firstCatByDate.get(dateStr);
         if(catKey){
           cell.classList.add("has-color");
@@ -507,10 +681,77 @@
         if(dateStr===todayStr) cell.classList.add("is-today");
         if(hasNoteByDate.get(dateStr)===true) cell.classList.add("has-note");
       }
+
       cell.innerHTML = `<span>${inMonth ? d.getDate() : ""}</span>`;
       $grid.appendChild(cell);
     }
   }
+
+  /********** NOTES (modal demi-page) **********/
+  function openNote(dateStr){
+    const arr = eventsByDate.get(dateStr) || [];
+    const withDetails = arr.filter(ev => String(ev.details||"").trim());
+    if(!withDetails.length) return; // ✅ on ouvre uniquement si NOTE
+
+    $noteTitle.textContent = `Note — ${toFRDate(dateStr)}`;
+    $noteBody.innerHTML = "";
+
+    for(const ev of withDetails){
+      const name = String(ev.title||"").trim() || "—";
+      const time = formatTimeRange(ev.start, ev.end);
+      const catK = norm(ev.category || "");
+      const catLabelTxt = (ev.category || "").trim();
+      const loc = String(ev.location||"").trim();
+      const details = String(ev.details||"").trim();
+
+      const dotCol = getColorForCategory(catK);
+
+      const card = document.createElement("div");
+      card.className = "evCard";
+      card.innerHTML = `
+        <div class="evTop">
+          <div class="evName">${escapeHtml(name)}</div>
+          <div class="evTime">${escapeHtml(time)}</div>
+        </div>
+        <div class="evMeta">
+          ${catLabelTxt ? `
+            <div class="chip">
+              <span class="chipDot" style="background:${escapeHtml(dotCol)}"></span>
+              <span>${escapeHtml(catLabelTxt)}</span>
+            </div>` : ""
+          }
+          ${loc ? `<div class="chip">📍 <span>${escapeHtml(loc)}</span></div>` : ""}
+        </div>
+        <div class="evDetails">${escapeHtml(details)}</div>
+      `;
+      $noteBody.appendChild(card);
+    }
+
+    $noteOverlay.classList.add("show");
+    $noteOverlay.setAttribute("aria-hidden","false");
+  }
+
+  function closeNote(){
+    $noteOverlay.classList.remove("show");
+    $noteOverlay.setAttribute("aria-hidden","true");
+  }
+
+  // ✅ clic : uniquement si .day.has-note
+  $grid.addEventListener("click", (e)=>{
+    const el = e.target.closest(".day.has-note");
+    if(!el) return;
+    const dateStr = el.dataset.date;
+    if(!dateStr) return;
+    openNote(dateStr);
+  });
+
+  $noteClose.addEventListener("click", closeNote);
+  $noteOverlay.addEventListener("click", (e)=>{
+    if(e.target === $noteOverlay) closeNote();
+  });
+  document.addEventListener("keydown", (e)=>{
+    if(e.key === "Escape") closeNote();
+  });
 
   /********** LOAD **********/
   async function loadApi(){
@@ -541,7 +782,6 @@
 
       hideStatus();
     }catch(e){
-      // ✅ on garde au moins la légende par défaut
       categoriesRaw = DEFAULT_CATEGORIES.slice();
       events = [];
       rebuildMaps();
@@ -552,13 +792,12 @@
   }
 
   /********** UI **********/
-  $("btnBack").addEventListener("click", ()=>location.href="index.html");
+  $("btnBack").addEventListener("click", ()=>location.href=BACK_URL);
   $btnPrev.addEventListener("click", ()=>{ if(currentMonth>0){ currentMonth--; renderMonth(); }});
   $btnNext.addEventListener("click", ()=>{ if(currentMonth<11){ currentMonth++; renderMonth(); }});
 
   /********** BOOT **********/
   (function(){
-    // ✅ affiche direct la légende (défaut) puis met à jour avec l’API
     rebuildMaps();
     renderLegend();
 
