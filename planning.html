@@ -8,317 +8,272 @@
   <style>
     :root{
       --txt:#f4f4f4;
-      --muted:rgba(255,255,255,.75);
       --shadow: 0 14px 34px rgba(0,0,0,.38);
-      --radius: 22px;
-      --glass: rgba(0,0,0,.38);
-      --glass2: rgba(0,0,0,.24);
       --line: rgba(255,255,255,.10);
+      --glass1: rgba(0,0,0,.50);
+      --glass2: rgba(0,0,0,.28);
       --orange1:#f07a00;
       --orange2:#d35d00;
       --red:#ff2d2d;
     }
-
     *{box-sizing:border-box}
-    html, body{height:100%}
+    html,body{height:100%}
     body{
       margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--txt);
       background:#0b0b0b;
-      overflow:hidden; /* ✅ pas de scroll page */
+      overflow:hidden; /* pas de scroll */
     }
 
-    /* ✅ Background FIXE (ne bouge pas) */
+    /* Background FIXE */
     .bg{
       position:fixed; inset:0;
       background:
-        linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.60)),
+        linear-gradient(180deg, rgba(0,0,0,.40), rgba(0,0,0,.62)),
         url("background.png") center top/cover no-repeat;
       z-index:-2;
     }
     .bg::after{
       content:"";
       position:absolute; inset:0;
-      background: radial-gradient(circle at 50% 10%, rgba(255,170,60,.18), rgba(0,0,0,.65) 62%);
+      background: radial-gradient(circle at 50% 10%, rgba(255,170,60,.18), rgba(0,0,0,.66) 62%);
       z-index:-1;
     }
 
-    /* Layout */
     .wrap{
       height:100%;
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 12px 14px 14px;
+      max-width:980px;
+      margin:0 auto;
+      padding:12px 14px 14px;
       display:flex;
       flex-direction:column;
-      gap: 10px;
-    }
-
-    /* Top title */
-    .topbar{
-      border-radius: 16px;
-      background: linear-gradient(180deg, rgba(230,110,0,.98), rgba(200,80,0,.92));
-      padding: 14px 14px;
-      box-shadow: var(--shadow);
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      gap:10px;
       position:relative;
-      flex:0 0 auto;
     }
-    .topbar h1{
-      margin:0;
-      font-size: 22px;
-      font-weight: 950;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-    .btnRetour{
-      position:absolute;
-      right:10px;
-      top:50%;
-      transform:translateY(-50%);
-      border:1px solid rgba(255,255,255,.20);
-      background: rgba(0,0,0,.22);
-      color:var(--txt);
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-weight: 900;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btnRetour:active{ transform:translateY(-50%) translateY(1px); }
 
-    /* Month band with integrated arrows */
-    .monthband{
+    /* ✅ UN SEUL BANDEAU (compact) */
+    .band{
       flex:0 0 auto;
-      border-radius: 22px;
+      border-radius:22px;
       background: linear-gradient(180deg, rgba(245,120,0,.98), rgba(210,80,0,.92));
       box-shadow: var(--shadow);
-      border: 1px solid rgba(255,255,255,.10);
-      padding: 12px;
+      border:1px solid rgba(255,255,255,.10);
+      padding:10px 12px;
       display:grid;
-      grid-template-columns: 52px 1fr 52px;
+      grid-template-columns: 44px 1fr 44px 92px;
       align-items:center;
-      gap: 10px;
+      gap:10px;
     }
-    .navbtn{
-      width: 52px; height: 52px;
-      border-radius: 16px;
+    .nav{
+      width:44px;height:44px;
+      border-radius:16px;
       border:1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.22);
+      background: rgba(0,0,0,.18);
       color:var(--txt);
-      font-size: 22px;
-      font-weight: 950;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
+      font-size:22px;
+      font-weight:950;
       display:flex;
       align-items:center;
       justify-content:center;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
     }
-    .navbtn:active{ transform: translateY(1px); }
-    .navbtn[disabled]{
-      opacity:.30;
-      cursor: default;
-      transform:none;
-    }
-    .monthtitle{
+    .nav:active{transform:translateY(1px)}
+    .nav[disabled]{opacity:.30;cursor:default;transform:none}
+
+    .bandTitle{
       text-align:center;
-      font-size: 30px;
-      font-weight: 950;
-      letter-spacing: .6px;
-      text-shadow: 0 10px 22px rgba(0,0,0,.55);
+      line-height:1.1;
+    }
+    .bandTitle .top{
+      font-weight:950;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      font-size:16px;
+      opacity:.95;
+    }
+    .bandTitle .month{
+      font-weight:950;
+      font-size:30px;
+      text-shadow:0 10px 22px rgba(0,0,0,.55);
     }
 
-    /* Calendar glass card */
+    .btnBack{
+      justify-self:end;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      color:var(--txt);
+      padding:10px 14px;
+      font-weight:950;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .btnBack:active{transform:translateY(1px)}
+
+    /* Calendrier */
     .card{
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(0,0,0,.52), rgba(0,0,0,.30));
+      flex:1 1 auto;
+      min-height:0;
+      border-radius:22px;
+      background: linear-gradient(180deg, var(--glass1), var(--glass2));
       border:1px solid var(--line);
       box-shadow: var(--shadow);
       overflow:hidden;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-    }
-
-    .calendar{
-      flex: 1 1 auto;
+      padding:10px;
       display:flex;
       flex-direction:column;
-      padding: 10px 10px 8px;
-      gap: 8px;
-      min-height: 0; /* important for flex */
+      gap:8px;
     }
 
     .dow{
       display:grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
-      padding: 4px 4px 0;
-      color: rgba(255,255,255,.70);
-      font-weight: 900;
-      letter-spacing: .6px;
-      text-transform: capitalize;
+      grid-template-columns:repeat(7,1fr);
+      gap:10px;
+      padding:4px 6px 0;
+      color:rgba(255,255,255,.72);
+      font-weight:950;
+      font-size:15px;
+      letter-spacing:.6px;
       text-align:center;
     }
-    .dow div{ padding: 4px 0; }
 
-    /* ✅ Bigger day cells */
     .grid{
-      flex: 1 1 auto;
-      min-height: 0;
+      flex:1 1 auto;
+      min-height:0;
       display:grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 12px;
-      padding: 6px 4px 10px;
+      grid-template-columns:repeat(7,1fr);
+      gap:12px;
+      padding:6px;
       align-content:start;
     }
 
+    /* ✅ Cases plus grosses + style proche ton modèle */
     .day{
-      position:relative;
-      border-radius: 18px;
-      background: rgba(0,0,0,.28);
+      height:66px;
+      border-radius:18px;
+      background: rgba(0,0,0,.26);
       border:1px solid rgba(255,255,255,.10);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
       display:flex;
       align-items:center;
-      justify-content:flex-start;
-      padding: 12px 12px;
-      font-size: 22px;
-      font-weight: 950;
-      height: 64px; /* ✅ taille inspirée “modèle” */
+      justify-content:center;
+      font-size:22px;
+      font-weight:950;
       user-select:none;
-      -webkit-tap-highlight-color: transparent;
+      -webkit-tap-highlight-color:transparent;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
     }
-    .day.empty{
-      opacity:.0;
-      pointer-events:none;
-    }
-    .day span{ filter: drop-shadow(0 10px 18px rgba(0,0,0,.55)); }
+    .day.empty{opacity:0;pointer-events:none}
 
-    /* ✅ Color fill when event exists */
     .day.has-event{
-      border-color: rgba(255,255,255,.14);
+      border-color: rgba(255,255,255,.16);
     }
 
-    /* ✅ Today red outline */
     .day.today{
-      outline: 4px solid var(--red);
-      outline-offset: -4px;
-      border-color: rgba(255,45,45,.9);
+      outline:4px solid var(--red);
+      outline-offset:-4px;
     }
 
-    /* Clickable only if note/details exists */
-    .day.clickable{
-      cursor:pointer;
-    }
-    .day.clickable:active{
-      transform: translateY(1px);
-    }
+    .day.clickable{cursor:pointer}
+    .day.clickable:active{transform:translateY(1px)}
 
-    /* Legend (bottom) */
-    .legendWrap{
-      flex:0 0 auto;
-      padding: 0;
-    }
-    .legend{
-      padding: 10px 10px 12px;
-    }
-    .legendGrid{
+    /* ✅ MINI légende (discrète, bas-gauche) */
+    .legendMini{
+      position:absolute;
+      left:14px;
+      bottom:14px;
+      width:min(420px, calc(100% - 28px));
+      border-radius:18px;
+      background: rgba(0,0,0,.35);
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding:10px 10px;
       display:grid;
-      grid-template-columns: 1fr 1fr; /* ✅ 2 colonnes */
-      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+      gap:8px 12px;
+      pointer-events:auto;
     }
-    .legendItem{
+    .legItem{
       display:flex;
       align-items:center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 18px;
-      background: rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.10);
-      font-weight: 900;
-      font-size: 18px; /* ✅ plus gros */
-      min-height: 50px;
-      overflow:hidden;
+      gap:10px;
+      font-weight:950;
+      font-size:16px;
       white-space:nowrap;
+      overflow:hidden;
       text-overflow:ellipsis;
     }
     .sq{
-      width: 18px; height: 18px;
-      border-radius: 5px; /* ✅ carrés */
+      width:16px;height:16px;
+      border-radius:4px;
       border:1px solid rgba(255,255,255,.18);
       background: rgba(255,255,255,.30);
       flex:0 0 auto;
     }
 
-    /* Modal note (half page) */
+    /* Modal demi page */
     .overlay{
       position:fixed; inset:0;
       display:none;
       background: rgba(0,0,0,.62);
-      z-index: 50;
-      padding: 14px;
+      z-index:50;
+      padding:14px;
     }
-    .overlay.open{ display:block; }
-
+    .overlay.open{display:block}
     .modal{
-      max-width: 980px;
-      margin: 0 auto;
-      height: 52vh; /* ✅ demi page */
-      border-radius: 22px;
+      max-width:980px;
+      margin:0 auto;
+      height:52vh;
+      border-radius:22px;
       background: linear-gradient(180deg, rgba(0,0,0,.72), rgba(0,0,0,.45));
       border:1px solid rgba(255,255,255,.12);
       box-shadow: var(--shadow);
+      overflow:hidden;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      overflow:hidden;
       display:flex;
       flex-direction:column;
     }
     .modalHead{
-      padding: 12px 14px;
+      padding:12px 14px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 10px;
+      gap:10px;
       border-bottom:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.06);
-      font-weight: 950;
-    }
-    .modalTitle{
-      font-size: 18px;
-      font-weight: 950;
-      letter-spacing: .4px;
+      font-weight:950;
     }
     .close{
       border:1px solid rgba(255,255,255,.18);
       background: rgba(255,255,255,.10);
       color:var(--txt);
       padding:10px 14px;
-      border-radius: 16px;
+      border-radius:16px;
       font-weight:950;
       cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
+      -webkit-tap-highlight-color:transparent;
     }
-    .close:active{ transform: translateY(1px); }
-
+    .close:active{transform:translateY(1px)}
     .modalBody{
-      padding: 14px;
+      padding:14px;
       overflow:auto;
-      color: rgba(255,255,255,.92);
-      font-size: 16px;
-      line-height: 1.35;
+      font-size:16px;
+      line-height:1.35;
+      color:rgba(255,255,255,.92);
     }
-    .muted{ color: rgba(255,255,255,.70); font-style: italic; }
+    .muted{color:rgba(255,255,255,.70);font-style:italic}
 
-    /* Small phones: keep big but fit */
-    @media (max-width: 380px){
-      .day{ height: 58px; font-size: 20px; padding: 10px 10px; }
-      .monthtitle{ font-size: 26px; }
-      .legendItem{ font-size: 16px; }
+    @media (max-width:380px){
+      .day{height:60px;font-size:20px}
+      .bandTitle .month{font-size:26px}
+      .legendMini{padding:9px}
+      .legItem{font-size:15px}
     }
   </style>
 </head>
@@ -327,36 +282,35 @@
   <div class="bg"></div>
 
   <div class="wrap">
-    <div class="topbar">
-      <h1>PLANNING 2026</h1>
-      <button class="btnRetour" id="btnBack">Retour</button>
+    <div class="band">
+      <button class="nav" id="btnPrev" aria-label="Mois précédent">‹</button>
+
+      <div class="bandTitle">
+        <div class="top">PLANNING 2026</div>
+        <div class="month" id="monthTitle">—</div>
+      </div>
+
+      <button class="nav" id="btnNext" aria-label="Mois suivant">›</button>
+
+      <button class="btnBack" id="btnBack">Retour</button>
     </div>
 
-    <div class="monthband">
-      <button class="navbtn" id="btnPrev" aria-label="Mois précédent">‹</button>
-      <div class="monthtitle" id="monthTitle">—</div>
-      <button class="navbtn" id="btnNext" aria-label="Mois suivant">›</button>
-    </div>
-
-    <section class="card calendar">
+    <section class="card">
       <div class="dow">
         <div>Lun</div><div>Mar</div><div>Mer</div><div>Jeu</div><div>Ven</div><div>Sam</div><div>Dim</div>
       </div>
       <div class="grid" id="grid"></div>
     </section>
 
-    <section class="card legendWrap">
-      <div class="legend">
-        <div class="legendGrid" id="legendGrid"></div>
-      </div>
-    </section>
+    <!-- ✅ Légende mini -->
+    <div class="legendMini" id="legendMini"></div>
   </div>
 
   <!-- Modal note -->
   <div class="overlay" id="overlay" aria-hidden="true">
     <div class="modal">
       <div class="modalHead">
-        <div class="modalTitle" id="modalTitle">—</div>
+        <div id="modalTitle">—</div>
         <button class="close" id="btnClose">Fermer</button>
       </div>
       <div class="modalBody" id="modalBody"></div>
@@ -364,68 +318,45 @@
   </div>
 
 <script>
-  /** ✅ Mets TON URL /exec */
   const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
   const BACK_URL = "index.html";
-
   const YEAR = 2026;
+
+  const MONTHS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
 
   const $grid = document.getElementById("grid");
   const $monthTitle = document.getElementById("monthTitle");
-  const $legendGrid = document.getElementById("legendGrid");
+  const $legendMini = document.getElementById("legendMini");
   const $btnPrev = document.getElementById("btnPrev");
   const $btnNext = document.getElementById("btnNext");
+
   const $overlay = document.getElementById("overlay");
   const $modalTitle = document.getElementById("modalTitle");
   const $modalBody = document.getElementById("modalBody");
 
-  document.getElementById("btnBack").addEventListener("click", ()=> location.href = BACK_URL);
+  document.getElementById("btnBack").addEventListener("click", ()=>location.href=BACK_URL);
   document.getElementById("btnClose").addEventListener("click", closeModal);
   $overlay.addEventListener("click", (e)=>{ if(e.target === $overlay) closeModal(); });
 
   function jsonp(url, cbName){
     return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      const cleanup = () => {
-        script.remove();
-        try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
-      };
-      const timer = setTimeout(() => { cleanup(); reject(new Error("Timeout JSONP")); }, 12000);
-      window[cbName] = (data) => { clearTimeout(timer); cleanup(); resolve(data); };
-      script.src = url;
-      script.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error("Erreur JSONP")); };
-      document.head.appendChild(script);
+      const s = document.createElement("script");
+      const cleanup = () => { s.remove(); try{ delete window[cbName]; }catch(e){ window[cbName]=undefined; } };
+      const t = setTimeout(()=>{ cleanup(); reject(new Error("Timeout JSONP")); }, 12000);
+      window[cbName] = (data)=>{ clearTimeout(t); cleanup(); resolve(data); };
+      s.src = url;
+      s.onerror = ()=>{ clearTimeout(t); cleanup(); reject(new Error("Erreur JSONP")); };
+      document.head.appendChild(s);
     });
   }
-
-  function esc(s){
-    return (s==null ? "" : String(s))
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
+  function esc(x){
+    return (x==null?"":String(x))
+      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
   }
-
-  const MONTHS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-
-  // ===== Cache local (évite re-chargement pénible) =====
-  const CACHE_KEY = "cs_planning_cache_v1_" + YEAR;
-  const CACHE_TTL = 12 * 60 * 60 * 1000; // 12h
-
-  let EVENTS = []; // [{date,start,end,title,category,details,location}]
-  let CATCOLORS = {}; // { "navette": "#..." }
-  let CATS_ORDER = []; // [{category,color,order}]
-  let currentMonth = new Date().getFullYear() === YEAR ? new Date().getMonth() : 0;
-
-  function normCat(s){
-    return String(s||"").trim().toLowerCase();
-  }
-
+  function normCat(s){ return String(s||"").trim().toLowerCase(); }
   function dateKey(y,m,d){
-    const mm = String(m+1).padStart(2,"0");
-    const dd = String(d).padStart(2,"0");
-    return `${y}-${mm}-${dd}`;
+    return `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
   }
 
   function openModal(title, html){
@@ -439,88 +370,81 @@
     $overlay.setAttribute("aria-hidden","true");
   }
 
+  // Cache local (évite reload pénible)
+  const CACHE_KEY = "cs_planning_cache_compact_" + YEAR;
+  const CACHE_TTL = 12 * 60 * 60 * 1000;
+
+  let EVENTS = [];
+  let CATCOLORS = {};
+  let CATS = []; // [{category,color,order}]
+  let currentMonth = (new Date().getFullYear() === YEAR) ? new Date().getMonth() : 0;
+
   function setNavDisabled(){
     $btnPrev.disabled = (currentMonth === 0);
     $btnNext.disabled = (currentMonth === 11);
   }
 
   function buildLegend(){
-    // ✅ Légende globale (toutes catégories connues), en 2 colonnes
-    $legendGrid.innerHTML = "";
-    const list = (CATS_ORDER.length ? CATS_ORDER : Object.keys(CATCOLORS).map(c=>({category:c,color:CATCOLORS[c],order:9999})))
+    $legendMini.innerHTML = "";
+    const list = (CATS.length ? CATS : Object.keys(CATCOLORS).map(c=>({category:c,color:CATCOLORS[c],order:9999})))
       .slice()
       .sort((a,b)=>(a.order-b.order)||a.category.localeCompare(b.category));
 
     for(const it of list){
-      const name = it.category;
-      const col = it.color || "rgba(255,255,255,.30)";
       const div = document.createElement("div");
-      div.className = "legendItem";
-      div.innerHTML = `<span class="sq" style="background:${esc(col)}"></span><span>${esc(name)}</span>`;
-      $legendGrid.appendChild(div);
+      div.className = "legItem";
+      div.innerHTML = `<span class="sq" style="background:${esc(it.color||"rgba(255,255,255,.30)")};"></span><span>${esc(it.category)}</span>`;
+      $legendMini.appendChild(div);
     }
   }
 
   function buildMonth(){
     $grid.innerHTML = "";
-
     $monthTitle.textContent = MONTHS[currentMonth];
     setNavDisabled();
 
-    // 1er jour du mois (Lun=0)
     const first = new Date(YEAR, currentMonth, 1);
     const jsDay = first.getDay(); // 0=dim
-    const offset = (jsDay === 0) ? 6 : (jsDay - 1);
-
+    const offset = (jsDay===0)?6:(jsDay-1);
     const daysInMonth = new Date(YEAR, currentMonth+1, 0).getDate();
 
-    // map date -> event summary (1 seule couleur par jour = 1ère catégorie trouvée)
     const byDate = new Map();
     for(const ev of EVENTS){
       if(!ev.date) continue;
-      const d = ev.date;
-      if(!byDate.has(d)) byDate.set(d, []);
-      byDate.get(d).push(ev);
+      if(!byDate.has(ev.date)) byDate.set(ev.date, []);
+      byDate.get(ev.date).push(ev);
     }
 
-    // empty cells before
     for(let i=0;i<offset;i++){
-      const cell = document.createElement("div");
-      cell.className = "day empty";
-      $grid.appendChild(cell);
+      const c = document.createElement("div");
+      c.className = "day empty";
+      $grid.appendChild(c);
     }
 
-    const today = new Date();
-    const isThisYear = (today.getFullYear() === YEAR);
-    const todayKey = isThisYear ? dateKey(YEAR, today.getMonth(), today.getDate()) : "";
+    const now = new Date();
+    const todayKey = (now.getFullYear()===YEAR) ? dateKey(YEAR, now.getMonth(), now.getDate()) : "";
 
     for(let d=1; d<=daysInMonth; d++){
+      const key = dateKey(YEAR, currentMonth, d);
       const cell = document.createElement("div");
       cell.className = "day";
-      cell.innerHTML = `<span>${d}</span>`;
+      cell.textContent = d;
 
-      const key = dateKey(YEAR, currentMonth, d);
-
-      // today red outline
       if(key === todayKey) cell.classList.add("today");
 
       const list = byDate.get(key) || [];
       if(list.length){
-        // couleur = couleur de la catégorie du 1er event du jour
         const cat = normCat(list[0].category);
-        const col = CATCOLORS[cat] || CATCOLORS[list[0].category] || "rgba(255,255,255,.22)";
+        const col = CATCOLORS[cat] || "rgba(255,255,255,.22)";
         cell.classList.add("has-event");
-        // remplissage visible
-        cell.style.background = `linear-gradient(180deg, ${col}, rgba(0,0,0,.28))`;
+        cell.style.background = `linear-gradient(180deg, ${col}, rgba(0,0,0,.26))`;
 
-        // clickable only if at least one has details/note
         const withNote = list.find(x => String(x.details||"").trim() !== "");
         if(withNote){
           cell.classList.add("clickable");
           cell.addEventListener("click", ()=>{
             const title = `${d} ${MONTHS[currentMonth]} ${YEAR}`;
-            // affiche tout ce jour (titres + heures + détails)
-            const lines = list.map(ev=>{
+            const html = list.map(ev=>{
               const h = [ev.start, ev.end].filter(Boolean).join(" - ");
               const t = ev.title || "";
               const c = ev.category ? ` <span class="muted">(${esc(ev.category)})</span>` : "";
@@ -530,7 +454,7 @@
                         ${det}
                       </div>`;
             }).join("");
-            openModal(title, lines);
+            openModal(title, html);
           });
         }
       }
@@ -542,94 +466,75 @@
   async function fetchAll(){
     const cb1 = "cb_py_" + Math.random().toString(36).slice(2);
     const cb2 = "cb_pc_" + Math.random().toString(36).slice(2);
-
     const urlEvents = `${API}?view=planning_year&year=${YEAR}&callback=${cb1}`;
     const urlCats = `${API}?view=planning_categories&callback=${cb2}`;
 
     const [py, pc] = await Promise.all([jsonp(urlEvents, cb1), jsonp(urlCats, cb2)]);
-
-    if(!py || py.ok === false) throw new Error(py?.error || "planning_year invalide");
-    if(!pc || pc.ok === false) throw new Error(pc?.error || "planning_categories invalide");
+    if(!py || py.ok===false) throw new Error(py?.error || "planning_year invalide");
+    if(!pc || pc.ok===false) throw new Error(pc?.error || "planning_categories invalide");
 
     EVENTS = Array.isArray(py.events) ? py.events : [];
+    CATS = Array.isArray(pc.categories) ? pc.categories : [];
 
-    // categories
-    const cats = Array.isArray(pc.categories) ? pc.categories : [];
-    CATS_ORDER = cats.slice();
     CATCOLORS = {};
-    for(const c of cats){
+    for(const c of CATS){
       const k = normCat(c.category);
       if(!k) continue;
       CATCOLORS[k] = c.color || "rgba(255,255,255,.30)";
     }
 
-    // ✅ sauvegarde cache
     try{
-      localStorage.setItem(CACHE_KEY, JSON.stringify({
-        t: Date.now(),
-        events: EVENTS,
-        cats: cats
-      }));
+      localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), events: EVENTS, cats: CATS }));
     }catch(e){}
   }
 
-  function loadFromCache(){
+  function loadCache(){
     const raw = localStorage.getItem(CACHE_KEY);
     if(!raw) return false;
     try{
-      const data = JSON.parse(raw);
-      if(!data || !data.t) return false;
-      if(Date.now() - data.t > CACHE_TTL) return false;
+      const d = JSON.parse(raw);
+      if(!d || !d.t) return false;
+      if(Date.now()-d.t > CACHE_TTL) return false;
 
-      EVENTS = Array.isArray(data.events) ? data.events : [];
-      const cats = Array.isArray(data.cats) ? data.cats : [];
-      CATS_ORDER = cats.slice();
+      EVENTS = Array.isArray(d.events) ? d.events : [];
+      CATS = Array.isArray(d.cats) ? d.cats : [];
       CATCOLORS = {};
-      for(const c of cats){
+      for(const c of CATS){
         const k = normCat(c.category);
         if(!k) continue;
         CATCOLORS[k] = c.color || "rgba(255,255,255,.30)";
       }
       return true;
-    }catch(e){
-      return false;
-    }
-  }
-
-  async function init(){
-    // 1) essaie cache => affichage immédiat
-    const okCache = loadFromCache();
-    if(okCache){
-      buildLegend();
-      buildMonth();
-      return;
-    }
-
-    // 2) sinon fetch (1 seule fois)
-    // petit rendu “vide” rapide
-    buildLegend();
-    buildMonth();
-
-    try{
-      await fetchAll();
-      buildLegend();
-      buildMonth();
-    }catch(err){
-      console.error(err);
-      // si erreur, on laisse l’UI mais sans couleurs
-    }
+    }catch(e){ return false; }
   }
 
   $btnPrev.addEventListener("click", ()=>{
-    if(currentMonth <= 0) return;
+    if(currentMonth<=0) return;
     currentMonth--;
     buildMonth();
   });
   $btnNext.addEventListener("click", ()=>{
-    if(currentMonth >= 11) return;
+    if(currentMonth>=11) return;
     currentMonth++;
     buildMonth();
   });
+
+  async function init(){
+    const ok = loadCache();
+    if(ok){
+      buildLegend();
+      buildMonth();
+      return;
+    }
+    // rendu rapide puis fetch
+    buildLegend();
+    buildMonth();
+    try{
+      await fetchAll();
+      buildLegend();
+      buildMonth();
+    }catch(err){ console.error(err); }
+  }
 
   init();
 </script>
