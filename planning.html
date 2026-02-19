@@ -132,7 +132,7 @@ header{
   z-index:2;
 }
 
-/* ✅ LÉGENDE 2 COLONNES bas-gauche */
+/* ✅ LÉGENDE 2 COLONNES (compacte) */
 .legend{
   position: fixed;
   left: 10px;
@@ -140,7 +140,7 @@ header{
   z-index: 5;
 
   display:grid;
-  grid-template-columns: 1fr 1fr;   /* ✅ 2 colonnes */
+  grid-template-columns: 1fr 1fr;
   gap:8px;
 
   padding:10px;
@@ -263,7 +263,8 @@ header{
 </div>
 
 <script>
-const API="https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec"; // ✅ METS TON /exec
+/* ✅ mets TON /exec ici */
+const API="https://script.google.com/macros/s/XXXX/exec";
 const YEAR=2026;
 
 const MONTHS=["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
@@ -302,6 +303,11 @@ function escapeHtml(s){
     .replaceAll(">","&gt;")
     .replaceAll('"',"&quot;")
     .replaceAll("'","&#039;");
+}
+
+/* ✅ IMPORTANT : normalise date en YYYY-MM-DD (si API renvoie ISO avec heure) */
+function normDate10_(v){
+  return String(v || "").slice(0,10);
 }
 
 function mergeDefaultCats_(){
@@ -365,7 +371,7 @@ function buildCalendar(){
   const startDay=(first.getDay()+6)%7;
 
   const monthPrefix = `${YEAR}-${String(currentMonth+1).padStart(2,"0")}-`;
-  const monthEvents = EVENTS.filter(e => String(e.date||"").startsWith(monthPrefix));
+  const monthEvents = EVENTS.filter(e => normDate10_(e.date).startsWith(monthPrefix));
 
   for(let i=0;i<42;i++){
     const dayNum=i-startDay+1;
@@ -381,7 +387,7 @@ function buildCalendar(){
     cell.innerHTML = `<div class="num">${dayNum}</div>`;
 
     const dateStr=`${YEAR}-${String(currentMonth+1).padStart(2,"0")}-${String(dayNum).padStart(2,"0")}`;
-    const dayEvents=monthEvents.filter(e=>e.date===dateStr);
+    const dayEvents = monthEvents.filter(e => normDate10_(e.date) === dateStr);
 
     if(dayEvents.length){
       const cats=[...new Set(dayEvents.map(e=>String(e.category||"").trim()).filter(Boolean))];
