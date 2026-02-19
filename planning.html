@@ -46,6 +46,7 @@ header{
   height:calc(100% - 52px);
 }
 
+/* top bar */
 .monthbar{
   display:flex;
   justify-content:space-between;
@@ -79,49 +80,66 @@ header{
   opacity:.7;
 }
 
+/* day cells */
 .day{
   background:var(--card);
   border-radius:8px;
   padding:6px;
   text-align:right;
-  font-weight:800;
+  font-weight:900;
   font-size:13px;
   min-height:42px;
+  position:relative;
 }
 .day.disabled{opacity:.25}
 .day.clickable{cursor:pointer}
 .day.clickable:active{transform:scale(.95)}
 
-/* ✅ LÉGENDE DISCRÈTE (TOUJOURS) */
+/* ✅ LÉGENDE : colonne bas-gauche, + gros, carrés */
 .legend{
-  margin-top:10px;
+  position: fixed;
+  left: 12px;
+  bottom: 18px;
+  z-index: 5;
+
   display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  font-size:11px;
-  line-height:1;
-  max-height: 64px; /* limite place */
-  overflow:auto; /* scroll interne si beaucoup */
-  padding-bottom:2px;
+  flex-direction:column;
+  gap:10px;
+
+  max-height: 45vh;
+  overflow:auto;
+
+  padding:10px 10px;
+  border-radius:14px;
+  background: rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.10);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 .legend-item{
   display:flex;
   align-items:center;
-  gap:6px;
-  background:rgba(0,0,0,.40);
-  padding:4px 8px;
-  border-radius:999px;
+  gap:10px;
+
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: .2px;
+
+  background: rgba(0,0,0,.22);
+  padding: 8px 10px;
+  border-radius: 12px;
   border:1px solid rgba(255,255,255,.10);
   white-space:nowrap;
 }
 .legend-dot{
-  width:10px;
-  height:10px;
-  border-radius:50%;
+  width:16px;
+  height:16px;
+  border-radius:4px;
   border:1px solid rgba(255,255,255,.18);
+  flex:0 0 auto;
 }
 
-/* PANEL SLIDE */
+/* panel slide */
 .panel-overlay{
   position:fixed;
   inset:0;
@@ -194,10 +212,10 @@ header{
   </div>
 
   <div class="grid" id="grid"></div>
-
-  <!-- ✅ Légende globale avec couleurs -->
-  <div class="legend" id="legend"></div>
 </div>
+
+<!-- ✅ Légende globale -->
+<div class="legend" id="legend"></div>
 
 <div class="panel-overlay" id="overlay">
   <div class="panel">
@@ -212,7 +230,7 @@ const YEAR=2026;
 
 const MONTHS=["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
 
-/* ✅ Fallback couleurs si l'onglet categories est vide */
+/* ✅ Fallback couleurs si categories vide */
 const DEFAULT_CATS = [
   ["Navette", "#2f7bd3"],
   ["FMA centre", "#ffb15a"],
@@ -239,8 +257,16 @@ function jsonp(url,cb){
   });
 }
 
+function escapeHtml(s){
+  return (s==null ? "" : String(s))
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
 function mergeDefaultCats_(){
-  // si CAT_COLORS vide ou partiel, on complète
   const def = Object.fromEntries(DEFAULT_CATS);
   CAT_COLORS = { ...def, ...CAT_COLORS };
 }
@@ -278,17 +304,19 @@ async function loadData(){
       }
       CAT_COLORS = map;
     }
-  }catch(e){
-    // ignore
-  }
+  }catch(e){}
 
   mergeDefaultCats_();
   buildLegendGlobal_();
 
   // 2) events année
-  const cb2="cb_year_"+Math.random().toString(36).slice(2);
-  const data=await jsonp(`${API}?view=planning_year&year=${YEAR}&callback=${cb2}`, cb2);
-  EVENTS=(data && data.ok && Array.isArray(data.events)) ? data.events : [];
+  try{
+    const cb2="cb_year_"+Math.random().toString(36).slice(2);
+    const data=await jsonp(`${API}?view=planning_year&year=${YEAR}&callback=${cb2}`, cb2);
+    EVENTS=(data && data.ok && Array.isArray(data.events)) ? data.events : [];
+  }catch(e){
+    EVENTS=[];
+  }
 
   buildCalendar();
 }
@@ -323,7 +351,6 @@ function buildCalendar(){
     const dayEvents=monthEvents.filter(e=>e.date===dateStr);
 
     if(dayEvents.length){
-      // catégories uniques
       const cats=[...new Set(dayEvents.map(e=>String(e.category||"").trim()).filter(Boolean))];
       const colors=cats.map(c=>CAT_COLORS[c]||"#666");
 
@@ -331,9 +358,8 @@ function buildCalendar(){
         cell.style.background=colors[0];
       }else if(colors.length===2){
         cell.style.background=`linear-gradient(135deg, ${colors[0]} 50%, ${colors[1]} 50%)`;
-      }else if(colors.length>=3){
+      }else{
         cell.style.background=colors[0];
-        // petit badge "+N" discret
         const badge=document.createElement("div");
         badge.textContent="+"+(colors.length-1);
         badge.style.position="absolute";
@@ -345,11 +371,10 @@ function buildCalendar(){
         badge.style.borderRadius="999px";
         badge.style.background="rgba(0,0,0,.35)";
         badge.style.border="1px solid rgba(255,255,255,.18)";
-        cell.style.position="relative";
         cell.appendChild(badge);
       }
 
-      // ✅ cliquable seulement si note (details) non vide
+      // cliquable seulement si note
       const hasNote = dayEvents.some(e => String(e.details||"").trim() !== "");
       if(hasNote){
         cell.classList.add("clickable");
@@ -391,22 +416,20 @@ function openPanel(date,events){
   overlay.classList.add("active");
 }
 
-function escapeHtml(s){
-  return (s==null ? "" : String(s))
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
+/* ✅ NAVIGATION : boucle sur 12 mois */
+document.getElementById("prev").onclick=()=>{
+  currentMonth = (currentMonth + 11) % 12;
+  buildCalendar();
+};
+document.getElementById("next").onclick=()=>{
+  currentMonth = (currentMonth + 1) % 12;
+  buildCalendar();
+};
 
 document.getElementById("close").onclick=()=>document.getElementById("overlay").classList.remove("active");
 document.getElementById("overlay").onclick=e=>{
   if(e.target.id==="overlay") document.getElementById("overlay").classList.remove("active");
 };
-
-document.getElementById("prev").onclick=()=>{ if(currentMonth>0){currentMonth--;buildCalendar();}};
-document.getElementById("next").onclick=()=>{ if(currentMonth<11){currentMonth++;buildCalendar();}};
 
 loadData();
 </script>
