@@ -380,7 +380,7 @@
 
       <div class="grid" id="grid"></div>
 
-      <!-- ✅ Légende : seulement ce qui est présent dans le mois -->
+      <!-- ✅ Légende : seulement ce qui est présent dans l'année (et donc le mois) -->
       <div class="legend" id="legend"></div>
 
       <div class="status" id="status"></div>
@@ -403,8 +403,11 @@
   const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
   const BACK_URL = "index.html";
 
+  // ✅ Année affichée (tu changeras en 2027, 2028...)
+  const YEAR = 2026;
+
   // Cache local
-  const CACHE_KEY = "cs_planning_cache_v3";
+  const CACHE_KEY = "cs_planning_cache_year_v1_" + YEAR;
   const CACHE_TIME = 5 * 60 * 1000; // 5 minutes
 
   const $grid = document.getElementById("grid");
@@ -457,7 +460,7 @@
   }
 
   // ===== Data =====
-  let current = new Date();
+  let current = new Date(YEAR, 0, 1);
   current.setDate(1);
 
   let EVENTS = [];
@@ -490,7 +493,9 @@
   function mondayIndex(jsDay){ return (jsDay + 6) % 7; } // 0=Lun..6=Dim
 
   function shiftMonth(delta){
-    current = new Date(current.getFullYear(), current.getMonth()+delta, 1);
+    const next = new Date(current.getFullYear(), current.getMonth()+delta, 1);
+    if(next.getFullYear() !== YEAR) return; // bloque hors année
+    current = next;
     clearDaySelection_();
     loadMonthWithCache();
   }
@@ -503,12 +508,11 @@
   }
 
   function renderLegend(){
-    // couleurs dispo : API -> sinon defaults
     if(!Object.keys(CAT_COLORS).length){
       CAT_COLORS = Object.fromEntries(DEFAULT_CATS);
     }
 
-    // catégories réellement utilisées dans le mois
+    // catégories réellement utilisées (mois affiché)
     const used = new Set();
     for(const ev of EVENTS){
       const c = (ev.category || "").trim();
@@ -516,7 +520,6 @@
     }
 
     $legend.innerHTML = "";
-
     if(used.size === 0){
       $legend.innerHTML = `<div class="muted">Aucun évènement ce mois-ci.</div>`;
       return;
@@ -538,9 +541,8 @@
   }
 
   function renderCalendar(){
-    const y = current.getFullYear();
     const m = current.getMonth();
-    $monthTitle.textContent = `${MONTHS[m]} ${y}`;
+    $monthTitle.textContent = `${MONTHS[m]} ${YEAR}`;
 
     const { start, end } = startEndOfMonth(current);
     const firstDow = mondayIndex(start.getDay());
@@ -566,11 +568,10 @@
         continue;
       }
 
-      const d = new Date(y, m, dayNum);
+      const d = new Date(YEAR, m, dayNum);
       const key = ymd(d);
       const list = byDate.get(key) || [];
 
-      // catégories uniques pour les pastilles
       const catSet = [];
       for(const ev of list){
         const c = (ev.category || "").trim();
@@ -677,7 +678,7 @@
     try{
       localStorage.setItem(CACHE_KEY, JSON.stringify({
         time: Date.now(),
-        month: `${current.getFullYear()}-${String(current.getMonth()+1).padStart(2,"0")}`,
+        month: `${YEAR}-${String(current.getMonth()+1).padStart(2,"0")}`,
         events: EVENTS,
         colors: CAT_COLORS
       }));
@@ -698,7 +699,7 @@
   async function loadMonthWithCache(){
     setStatus("Chargement…", true);
 
-    const wantedMonth = `${current.getFullYear()}-${String(current.getMonth()+1).padStart(2,"0")}`;
+    const wantedMonth = `${YEAR}-${String(current.getMonth()+1).padStart(2,"0")}`;
     const cache = cacheRead();
 
     if(cache && cache.month === wantedMonth){
