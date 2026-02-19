@@ -17,17 +17,14 @@
     }
     *{box-sizing:border-box}
     html, body{height:100%}
-
-    /* ✅ Page FIXE : pas de scroll global */
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--txt);
       background:#0b0b0b;
-      overflow: hidden;
+      overflow:hidden; /* page fixe */
     }
 
-    /* ✅ Fond VRAIMENT fixe (anti “ça bouge”) */
     .bg{
       position:fixed;
       top:0; left:0;
@@ -46,15 +43,14 @@
       z-index:-1;
     }
 
-    /* ✅ Layout fixe (header + contenu) */
     .wrap{
       max-width: 980px;
       margin: 0 auto;
-      padding: 14px 14px 14px;
+      padding: 14px;
       height: 100svh;
       display:flex;
       flex-direction:column;
-      gap: 12px;
+      gap:12px;
     }
 
     header{
@@ -62,7 +58,7 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      flex: 0 0 auto;
+      flex:0 0 auto;
     }
     h1{
       margin:0;
@@ -93,7 +89,6 @@
     .btn:active{transform: translateY(1px)}
     .btn.secondary{ border-color: rgba(255,170,60,.35); }
 
-    /* petite clé admin */
     .iconbtn{
       width: 44px;
       height: 42px;
@@ -110,7 +105,6 @@
     .iconbtn svg{ width:20px; height:20px; fill: rgba(255,255,255,.92); }
     .iconbtn:active{transform: translateY(1px)}
 
-    /* Carte (verre) */
     .card{
       border-radius: var(--radius);
       background: linear-gradient(180deg, rgba(0,0,0,.58), rgba(0,0,0,.36));
@@ -131,7 +125,6 @@
       display:none;
     }
 
-    /* ===== Planning UI ===== */
     .planner{
       flex: 1;
       display:flex;
@@ -146,7 +139,7 @@
       align-items:center;
       justify-content:space-between;
       gap:10px;
-      flex: 0 0 auto;
+      flex:0 0 auto;
     }
     .month-title{
       font-weight:950;
@@ -175,7 +168,7 @@
       display:grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 8px;
-      flex: 0 0 auto;
+      flex:0 0 auto;
     }
     .weekdays{
       opacity: .9;
@@ -186,7 +179,6 @@
     }
     .weekdays div{ text-align:center; color: rgba(255,255,255,.80); }
 
-    /* ✅ Taille adaptable pour tenir sans scroll */
     .day{
       border-radius: 18px;
       border:1px solid rgba(255,255,255,.10);
@@ -197,36 +189,24 @@
       -webkit-tap-highlight-color: transparent;
       min-height: 56px;
     }
-    @media (min-height: 800px){
-      .day{ min-height: 70px; }
-    }
-    .day.disabled{
-      opacity: .35;
-      cursor: default;
-    }
+    @media (min-height: 800px){ .day{ min-height: 70px; } }
+    .day.disabled{ opacity:.35; cursor:default; }
     .day.selected{
       border-color: rgba(255,177,90,.55);
       box-shadow: 0 0 0 2px rgba(255,177,90,.14) inset;
     }
-    .day .num{
-      font-weight: 950;
-      font-size: 14px;
-      opacity: .95;
-    }
+    .day .num{ font-weight:950; font-size:14px; opacity:.95; }
     .dots{
       position:absolute;
-      left:10px;
-      right:10px;
-      bottom:7px;
+      left:10px; right:10px; bottom:7px;
       display:flex;
       gap:6px;
       flex-wrap:wrap;
       align-items:center;
     }
     .dot{
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
+      width:10px; height:10px;
+      border-radius:999px;
       border: 1px solid rgba(255,255,255,.25);
       background: rgba(255,255,255,.20);
     }
@@ -240,7 +220,6 @@
       background: rgba(0,0,0,.22);
     }
 
-    /* ===== Légende (alignée) ===== */
     .legend{
       flex: 0 0 auto;
       display:grid;
@@ -251,9 +230,7 @@
       border:1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.28);
     }
-    @media (min-width: 720px){
-      .legend{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    }
+    @media (min-width: 720px){ .legend{ grid-template-columns: repeat(3, minmax(0, 1fr)); } }
     .legend-item{
       display:flex;
       align-items:center;
@@ -264,30 +241,20 @@
       background: rgba(0,0,0,.22);
       font-weight:900;
       font-size:13px;
-      min-width: 0;
+      min-width:0;
     }
-    .legend-item .dot{
-      width:12px;
-      height:12px;
-      border:none;
-      flex: 0 0 auto;
-    }
-    .legend-item span:last-child{
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-    }
+    .legend-item .dot{ width:12px; height:12px; border:none; flex:0 0 auto; }
+    .legend-item span:last-child{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
-    /* ===== Détails du jour : panneau fixe, scroll interne ===== */
     #dayDetailsCard{
       flex: 1;
       display:flex;
       flex-direction:column;
-      min-height: 0;
+      min-height:0;
       overflow:hidden;
     }
     .daydetails-head{
-      flex: 0 0 auto;
+      flex:0 0 auto;
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -304,9 +271,9 @@
       text-transform: uppercase;
     }
     .daydetails-body{
-      flex: 1;
-      overflow:auto;
-      min-height: 0;
+      flex:1;
+      overflow:auto; /* scroll interne seulement */
+      min-height:0;
       padding: 12px;
       background: rgba(0,0,0,.22);
     }
@@ -323,8 +290,8 @@
       justify-content:space-between;
       gap:10px;
     }
-    .evt-title{ font-weight: 950; margin:0; }
-    .evt-time{ font-weight: 950; opacity:.9; white-space:nowrap; }
+    .evt-title{ font-weight:950; margin:0; }
+    .evt-time{ font-weight:950; opacity:.9; white-space:nowrap; }
     .tag{
       display:inline-flex;
       align-items:center;
@@ -344,7 +311,6 @@
       color: rgba(255,255,255,.86);
       white-space: pre-wrap;
     }
-
     .muted{ color: var(--muted); font-style: italic; margin:0; padding: 6px 2px; }
   </style>
 </head>
@@ -356,13 +322,11 @@
     <header>
       <h1>Planning</h1>
       <div class="actions">
-        <!-- ✅ petite clé (connexion admin plus tard) -->
         <button class="iconbtn" id="btnAdmin" aria-label="Connexion administrateur" title="Admin">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M7.5 14a4.5 4.5 0 1 1 4.2-6H22v4h-2v2h-2v2h-3.3A4.5 4.5 0 0 1 7.5 14Zm0-3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/>
           </svg>
         </button>
-
         <button class="btn secondary" id="btnBack">Retour</button>
       </div>
     </header>
@@ -379,14 +343,10 @@
       </div>
 
       <div class="grid" id="grid"></div>
-
-      <!-- ✅ Légende : seulement ce qui est présent dans l'année (et donc le mois) -->
       <div class="legend" id="legend"></div>
-
       <div class="status" id="status"></div>
     </section>
 
-    <!-- ✅ Détails du jour : panneau fixe -->
     <section class="card" id="dayDetailsCard">
       <div class="daydetails-head">
         <p class="daydetails-title" id="dayDetailsTitle">Sélectionne un jour</p>
@@ -400,15 +360,16 @@
 
 <script>
   /** ✅ Mets ici TON URL /exec */
-  const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+  const API = "https://script.google.com/macros/s/XXXX/exec";
   const BACK_URL = "index.html";
 
-  // ✅ Année affichée (tu changeras en 2027, 2028...)
+  /** ✅ Année affichée */
   const YEAR = 2026;
 
-  // Cache local
-  const CACHE_KEY = "cs_planning_cache_year_v1_" + YEAR;
-  const CACHE_TIME = 5 * 60 * 1000; // 5 minutes
+  /** ✅ Cache annuel côté navigateur (évite la latence) */
+  const CACHE_VERSION = 1;
+  const CACHE_TTL = 30 * 24 * 60 * 60 * 1000; // 30 jours
+  const CACHE_KEY = `cs_planning_year_${YEAR}_v${CACHE_VERSION}`;
 
   const $grid = document.getElementById("grid");
   const $monthTitle = document.getElementById("monthTitle");
@@ -422,8 +383,6 @@
   document.getElementById("btnBack").addEventListener("click", () => location.href = BACK_URL);
   document.getElementById("prevMonth").addEventListener("click", () => shiftMonth(-1));
   document.getElementById("nextMonth").addEventListener("click", () => shiftMonth(+1));
-
-  // Hook admin pour plus tard
   document.getElementById("btnAdmin").addEventListener("click", () => {
     setStatus("Connexion admin à brancher 🔑", true);
     setTimeout(()=>setStatus("", false), 1200);
@@ -434,7 +393,6 @@
     $status.style.display = show ? "block" : "none";
   }
 
-  /** JSONP */
   function jsonp(url, cbName){
     return new Promise((resolve, reject) => {
       const script = document.createElement("script");
@@ -459,14 +417,25 @@
       .replaceAll("'","&#039;");
   }
 
-  // ===== Data =====
+  const MONTHS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+
+  function ymd(d){
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const day = String(d.getDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
+  }
+  function mondayIndex(jsDay){ return (jsDay + 6) % 7; }
+
+  // ===== Etat local (1 seul chargement annuel) =====
   let current = new Date(YEAR, 0, 1);
   current.setDate(1);
 
-  let EVENTS = [];
-  let CAT_COLORS = {};
+  let YEAR_EVENTS = []; // tous les évènements de l’année
+  let CAT_COLORS = {}; // category -> color
+  let MONTH_EVENTS = []; // évènements du mois affiché
 
-  // Fallback couleurs (si API catégories pas prête)
+  // fallback si categories vide
   const DEFAULT_CATS = [
     ["Navette", "#2f7bd3"],
     ["FMA centre", "#ffb15a"],
@@ -477,29 +446,6 @@
     ["JSP", "#4dabf7"]
   ];
 
-  const MONTHS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-
-  function ymd(d){
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,"0");
-    const day = String(d.getDate()).padStart(2,"0");
-    return `${y}-${m}-${day}`;
-  }
-  function startEndOfMonth(d){
-    const start = new Date(d.getFullYear(), d.getMonth(), 1);
-    const end = new Date(d.getFullYear(), d.getMonth()+1, 0);
-    return { start, end };
-  }
-  function mondayIndex(jsDay){ return (jsDay + 6) % 7; } // 0=Lun..6=Dim
-
-  function shiftMonth(delta){
-    const next = new Date(current.getFullYear(), current.getMonth()+delta, 1);
-    if(next.getFullYear() !== YEAR) return; // bloque hors année
-    current = next;
-    clearDaySelection_();
-    loadMonthWithCache();
-  }
-
   function clearDaySelection_(){
     $dayTitle.textContent = "Sélectionne un jour";
     $dayEvents.innerHTML = "";
@@ -507,14 +453,31 @@
     document.querySelectorAll(".day.selected").forEach(el => el.classList.remove("selected"));
   }
 
-  function renderLegend(){
+  function shiftMonth(delta){
+    const next = new Date(current.getFullYear(), current.getMonth()+delta, 1);
+    if(next.getFullYear() !== YEAR) return; // verrou année
+    current = next;
+    clearDaySelection_();
+    buildMonthEvents_();
+    renderLegend_();
+    renderCalendar_();
+  }
+
+  function buildMonthEvents_(){
+    const m = current.getMonth();
+    const mm = String(m+1).padStart(2,"0");
+    const prefix = `${YEAR}-${mm}-`;
+    MONTH_EVENTS = YEAR_EVENTS.filter(ev => String(ev.date||"").startsWith(prefix));
+  }
+
+  function renderLegend_(){
     if(!Object.keys(CAT_COLORS).length){
       CAT_COLORS = Object.fromEntries(DEFAULT_CATS);
     }
 
-    // catégories réellement utilisées (mois affiché)
+    // catégories réellement utilisées dans le mois affiché
     const used = new Set();
-    for(const ev of EVENTS){
+    for(const ev of MONTH_EVENTS){
       const c = (ev.category || "").trim();
       if(c) used.add(c);
     }
@@ -532,28 +495,28 @@
     for(const [name, color] of entries){
       const div = document.createElement("div");
       div.className = "legend-item";
-      div.innerHTML = `
-        <span class="dot" style="background:${color}"></span>
-        <span>${escapeHtml(name)}</span>
-      `;
+      div.innerHTML = `<span class="dot" style="background:${color}"></span><span>${escapeHtml(name)}</span>`;
       $legend.appendChild(div);
     }
   }
 
-  function renderCalendar(){
+  function renderCalendar_(){
+    const y = YEAR;
     const m = current.getMonth();
-    $monthTitle.textContent = `${MONTHS[m]} ${YEAR}`;
+    $monthTitle.textContent = `${MONTHS[m]} ${y}`;
 
-    const { start, end } = startEndOfMonth(current);
-    const firstDow = mondayIndex(start.getDay());
-    const daysInMonth = end.getDate();
-
+    // index par date
     const byDate = new Map();
-    for(const ev of EVENTS){
+    for(const ev of MONTH_EVENTS){
       if(!ev.date) continue;
       if(!byDate.has(ev.date)) byDate.set(ev.date, []);
       byDate.get(ev.date).push(ev);
     }
+
+    const start = new Date(y, m, 1);
+    const end = new Date(y, m+1, 0);
+    const firstDow = mondayIndex(start.getDay());
+    const daysInMonth = end.getDate();
 
     $grid.innerHTML = "";
     for(let i=0;i<42;i++){
@@ -568,10 +531,11 @@
         continue;
       }
 
-      const d = new Date(YEAR, m, dayNum);
+      const d = new Date(y, m, dayNum);
       const key = ymd(d);
       const list = byDate.get(key) || [];
 
+      // dots par catégorie unique
       const catSet = [];
       for(const ev of list){
         const c = (ev.category || "").trim();
@@ -596,14 +560,14 @@
       cell.addEventListener("click", () => {
         document.querySelectorAll(".day.selected").forEach(el => el.classList.remove("selected"));
         cell.classList.add("selected");
-        renderDayDetails(key, list);
+        renderDayDetails_(key, list);
       });
 
       $grid.appendChild(cell);
     }
   }
 
-  function renderDayDetails(dateYmd, list){
+  function renderDayDetails_(dateYmd, list){
     $dayTitle.textContent = dateYmd.split("-").reverse().join("/");
 
     $dayEvents.innerHTML = "";
@@ -611,8 +575,8 @@
       $dayEmpty.style.display = "block";
       return;
     }
-
     $dayEmpty.style.display = "none";
+
     const arr = [...list].sort((a,b)=>
       (String(a.start||"").localeCompare(String(b.start||"")) || String(a.title||"").localeCompare(String(b.title||"")))
     );
@@ -642,7 +606,32 @@
     }
   }
 
-  async function fetchCategories(){
+  function readCache_(){
+    const raw = localStorage.getItem(CACHE_KEY);
+    if(!raw) return null;
+    try{
+      const obj = JSON.parse(raw);
+      if(!obj || !obj.time) return null;
+      if(Date.now() - obj.time > CACHE_TTL) return null;
+      if(obj.year !== YEAR) return null;
+      return obj;
+    }catch(e){
+      return null;
+    }
+  }
+
+  function writeCache_(){
+    try{
+      localStorage.setItem(CACHE_KEY, JSON.stringify({
+        time: Date.now(),
+        year: YEAR,
+        events: YEAR_EVENTS,
+        colors: CAT_COLORS
+      }));
+    }catch(e){}
+  }
+
+  async function fetchCategories_(){
     const cb = "cb_pc_" + Math.random().toString(36).slice(2);
     const url = `${API}?view=planning_categories&callback=${cb}`;
     const data = await jsonp(url, cb);
@@ -658,87 +647,64 @@
     if(Object.keys(map).length) CAT_COLORS = map;
   }
 
-  async function fetchEventsForCurrentMonth(){
-    const { start, end } = startEndOfMonth(current);
-    const from = ymd(start);
-    const to = ymd(end);
-
-    const cb = "cb_pe_" + Math.random().toString(36).slice(2);
-    const url = `${API}?view=planning&from=${from}&to=${to}&callback=${cb}`;
+  async function fetchYearEvents_(){
+    const cb = "cb_py_" + Math.random().toString(36).slice(2);
+    const url = `${API}?view=planning_year&year=${YEAR}&callback=${cb}`;
     const data = await jsonp(url, cb);
-
-    if(!data || data.ok === false){
-      EVENTS = [];
+    if(!data || data.ok === false) {
+      YEAR_EVENTS = [];
       return;
     }
-    EVENTS = Array.isArray(data.events) ? data.events : [];
+    YEAR_EVENTS = Array.isArray(data.events) ? data.events : [];
   }
 
-  function cacheWrite(){
-    try{
-      localStorage.setItem(CACHE_KEY, JSON.stringify({
-        time: Date.now(),
-        month: `${YEAR}-${String(current.getMonth()+1).padStart(2,"0")}`,
-        events: EVENTS,
-        colors: CAT_COLORS
-      }));
-    }catch(e){}
-  }
+  async function boot_(){
+    clearDaySelection_();
 
-  function cacheRead(){
-    const raw = localStorage.getItem(CACHE_KEY);
-    if(!raw) return null;
-    try{
-      const cache = JSON.parse(raw);
-      const age = Date.now() - cache.time;
-      if(age > CACHE_TIME) return null;
-      return cache;
-    }catch(e){ return null; }
-  }
-
-  async function loadMonthWithCache(){
-    setStatus("Chargement…", true);
-
-    const wantedMonth = `${YEAR}-${String(current.getMonth()+1).padStart(2,"0")}`;
-    const cache = cacheRead();
-
-    if(cache && cache.month === wantedMonth){
-      EVENTS = Array.isArray(cache.events) ? cache.events : [];
-      CAT_COLORS = cache.colors || CAT_COLORS;
+    // 1) cache navigateur d’abord => instantané
+    const cache = readCache_();
+    if(cache){
+      YEAR_EVENTS = Array.isArray(cache.events) ? cache.events : [];
+      CAT_COLORS = cache.colors || {};
       if(!Object.keys(CAT_COLORS).length) CAT_COLORS = Object.fromEntries(DEFAULT_CATS);
 
-      renderLegend();
-      renderCalendar();
+      buildMonthEvents_();
+      renderLegend_();
+      renderCalendar_();
       setStatus("", false);
       return;
     }
 
+    // 2) sinon on charge une fois (année + catégories)
     try{
-      await fetchCategories().catch(()=>{});
+      setStatus("Chargement… (1 seule fois)", true);
+
+      await Promise.all([
+        fetchCategories_().catch(()=>{}),
+        fetchYearEvents_()
+      ]);
+
       if(!Object.keys(CAT_COLORS).length) CAT_COLORS = Object.fromEntries(DEFAULT_CATS);
 
-      await fetchEventsForCurrentMonth();
+      buildMonthEvents_();
+      renderLegend_();
+      renderCalendar_();
 
-      renderLegend();
-      renderCalendar();
+      writeCache_();
 
-      cacheWrite();
       setStatus("", false);
     }catch(err){
       console.error(err);
-      EVENTS = [];
       if(!Object.keys(CAT_COLORS).length) CAT_COLORS = Object.fromEntries(DEFAULT_CATS);
-
-      renderLegend();
-      renderCalendar();
-
+      YEAR_EVENTS = [];
+      buildMonthEvents_();
+      renderLegend_();
+      renderCalendar_();
       setStatus("Erreur de chargement (API).", true);
     }
   }
 
-  // GO
-  clearDaySelection_();
-  loadMonthWithCache();
+  boot_();
 </script>
 </body>
 </html>
