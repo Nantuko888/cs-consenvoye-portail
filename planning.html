@@ -9,7 +9,6 @@
 :root{
   --orange:#ff6b00;
   --text:#f4f4f4;
-  --card:rgba(0,0,0,.55);
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -18,7 +17,7 @@ body{
   font-family:system-ui,-apple-system,Segoe UI,Roboto;
   color:var(--text);
   background:#000;
-  overflow:hidden; /* page fixe */
+  overflow:hidden; /* ✅ page fixe */
 }
 
 /* ✅ BACKGROUND */
@@ -47,94 +46,87 @@ header{
   height:calc(100% - 52px);
 }
 
+/* month bar */
 .monthbar{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:10px;
+  margin:10px 0 10px;
 }
 .monthbar button{
   background:rgba(0,0,0,.45);
   border:1px solid rgba(255,255,255,.10);
   color:white;
-  width:40px;
-  height:40px;
-  border-radius:12px;
-  font-size:18px;
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  font-size:20px;
   cursor:pointer;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
 .monthbar h2{
   margin:0;
-  font-size:18px;
+  font-size:22px;
   font-weight:950;
   text-shadow: 0 10px 20px rgba(0,0,0,.45);
 }
 
-.weekdays,.grid{
+/* weekdays */
+.weekdays{
   display:grid;
   grid-template-columns:repeat(7,1fr);
-  gap:6px;
+  gap:8px;
+  margin-bottom:8px;
 }
 .weekdays div{
   text-align:center;
-  font-size:11px;
-  opacity:.75;
+  font-size:12px;
+  font-weight:900;
+  opacity:.78;
 }
 
-/* ✅ DAYS : lisibles + couleurs visibles */
+/* ✅ GRID “Samsung-like” : gros jours, plus d’espace */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:10px; /* ✅ espace */
+  flex:1;
+  align-content:start;
+}
+
+/* ✅ DAY */
 .day{
-  border-radius:12px;
-  min-height:46px;
-  padding:8px;
   position:relative;
-
-  background: rgba(0,0,0,.62);
-  border:1px solid rgba(255,255,255,.10);
-  box-shadow: 0 10px 24px rgba(0,0,0,.28);
-
+  border-radius:18px;
+  height:62px; /* ✅ taille “gros jours” */
   display:flex;
-  justify-content:flex-end;
-  align-items:flex-start;
-}
-.day{
-  border-radius:12px;
-  min-height:46px;
-  padding:8px;
-  position:relative;
+  align-items:center;
+  justify-content:center;
 
   background: rgba(0,0,0,.55);
   border:1px solid rgba(255,255,255,.10);
-
-  display:flex;
-  justify-content:flex-end;
-  align-items:flex-start;
-  transition:.2s;
+  box-shadow: 0 14px 28px rgba(0,0,0,.28);
 }
 
 .day.disabled{
   opacity:.18;
+  box-shadow:none;
 }
 
-.day[data-colored="1"]{
-  border:2px solid rgba(255,255,255,.25);
-  box-shadow:0 0 0 1px rgba(0,0,0,.4) inset;
-}
-
-/* badge +N */
-.badge{
-  position:absolute;
-  left:7px;
-  bottom:7px;
-  font-size:10px;
+.day .num{
   font-weight:950;
-  padding:2px 7px;
-  border-radius:999px;
-  background: rgba(0,0,0,.35);
-  border:1px solid rgba(255,255,255,.18);
-  z-index:2;
+  font-size:18px; /* ✅ gros chiffre */
+  text-shadow: 0 10px 18px rgba(0,0,0,.6);
 }
+
+/* ✅ jour coloré = couleur pleine visible */
+.day[data-colored="1"]{
+  border:2px solid rgba(255,255,255,.18);
+}
+
+.day.clickable{cursor:pointer}
+.day.clickable:active{transform:scale(.97)}
 
 /* ✅ LÉGENDE 2 COLONNES (compacte) */
 .legend{
@@ -154,7 +146,7 @@ header{
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 
-  max-height: 38vh;
+  max-height: 34vh;
   overflow:auto;
   width: min(360px, calc(100vw - 20px));
 }
@@ -163,7 +155,6 @@ header{
   display:flex;
   align-items:center;
   gap:10px;
-
   font-size:13px;
   font-weight:950;
 
@@ -176,7 +167,7 @@ header{
 .legend-dot{
   width:16px;
   height:16px;
-  border-radius:4px; /* carré */
+  border-radius:4px;
   border:1px solid rgba(255,255,255,.18);
   flex:0 0 auto;
 }
@@ -193,10 +184,7 @@ header{
   transition:.25s;
   z-index: 20;
 }
-.panel-overlay.active{
-  opacity:1;
-  pointer-events:auto;
-}
+.panel-overlay.active{ opacity:1; pointer-events:auto; }
 .panel{
   width:100%;
   height:55%;
@@ -267,13 +255,11 @@ header{
 </div>
 
 <script>
-/* ✅ mets TON /exec ici */
-const API="https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+const API="https://script.google.com/macros/s/XXXX/exec"; // ✅ mets ton /exec
 const YEAR=2026;
 
 const MONTHS=["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
 
-/* fallback couleurs */
 const DEFAULT_CATS = [
   ["Navette", "#2f7bd3"],
   ["FMA centre", "#ffb15a"],
@@ -284,7 +270,7 @@ const DEFAULT_CATS = [
   ["JSP", "#4dabf7"]
 ];
 
-let currentMonth=0;
+let currentMonth=1; // ✅ démarre sur février si tu veux (0=janv). Mets 0 si tu veux janvier.
 let EVENTS=[];
 let CAT_COLORS={};
 
@@ -309,10 +295,7 @@ function escapeHtml(s){
     .replaceAll("'","&#039;");
 }
 
-/* ✅ IMPORTANT : normalise date en YYYY-MM-DD (si API renvoie ISO avec heure) */
-function normDate10_(v){
-  return String(v || "").slice(0,10);
-}
+function normDate10_(v){ return String(v||"").slice(0,10); }
 
 function mergeDefaultCats_(){
   const def = Object.fromEntries(DEFAULT_CATS);
@@ -398,15 +381,10 @@ function buildCalendar(){
       const colors=cats.map(c=>CAT_COLORS[c]||"#666");
 
       if(colors.length===1){
-        cell.style.background=colors[0];
-      }else if(colors.length===2){
-        cell.style.background=`linear-gradient(135deg, ${colors[0]} 50%, ${colors[1]} 50%)`;
+        cell.style.background = colors[0];
       }else{
-        cell.style.background=colors[0];
-        const badge=document.createElement("div");
-        badge.className="badge";
-        badge.textContent="+"+(colors.length-1);
-        cell.appendChild(badge);
+        // ✅ 2+ catégories : diagonale sur les 2 premières
+        cell.style.background = `linear-gradient(135deg, ${colors[0]} 50%, ${colors[1] || colors[0]} 50%)`;
       }
 
       cell.dataset.colored = "1";
@@ -433,21 +411,17 @@ function openPanel(date,events){
 
   content.innerHTML=`<h3>${date.split("-").reverse().join("/")}</h3>`;
 
-  if(!list.length){
-    content.innerHTML+=`<div style="opacity:.75;font-size:12px">Aucune note.</div>`;
-  }else{
-    for(const e of list){
-      const cat = String(e.category||"").trim();
-      const col = CAT_COLORS[cat] || "#666";
-      const div=document.createElement("div");
-      div.className="event";
-      div.innerHTML=`
-        <div class="event-title">${escapeHtml(e.title||"")}</div>
-        <div class="event-time">${escapeHtml(e.start||"")}${e.end?(" – "+escapeHtml(e.end)):""} • <span style="font-weight:950;color:${col}">${escapeHtml(cat||"")}</span></div>
-        <div class="event-note">${escapeHtml(e.details||"")}</div>
-      `;
-      content.appendChild(div);
-    }
+  for(const e of list){
+    const cat = String(e.category||"").trim();
+    const col = CAT_COLORS[cat] || "#666";
+    const div=document.createElement("div");
+    div.className="event";
+    div.innerHTML=`
+      <div class="event-title">${escapeHtml(e.title||"")}</div>
+      <div class="event-time">${escapeHtml(e.start||"")}${e.end?(" – "+escapeHtml(e.end)):""} • <span style="font-weight:950;color:${col}">${escapeHtml(cat||"")}</span></div>
+      <div class="event-note">${escapeHtml(e.details||"")}</div>
+    `;
+    content.appendChild(div);
   }
 
   overlay.classList.add("active");
