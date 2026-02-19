@@ -18,21 +18,22 @@
     *{box-sizing:border-box}
     html, body{height:100%}
 
+    /* ✅ Page FIXE : pas de scroll global */
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--txt);
       background:#0b0b0b;
-      overflow-x:hidden;
+      overflow: hidden;
     }
 
-    /* ✅ Fond VRAIMENT fixe (anti "ça bouge" sur mobile) */
+    /* ✅ Fond VRAIMENT fixe (anti “ça bouge”) */
     .bg{
       position:fixed;
       top:0; left:0;
       width:100%;
       height:100vh;
-      height:100svh; /* iOS/Android moderne */
+      height:100svh;
       background:
         linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.55)),
         url("background.png") center top/cover no-repeat;
@@ -45,10 +46,15 @@
       z-index:-1;
     }
 
+    /* ✅ Layout fixe (header + contenu) */
     .wrap{
       max-width: 980px;
       margin: 0 auto;
-      padding: 14px 14px 40px;
+      padding: 14px 14px 14px;
+      height: 100svh;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
     }
 
     header{
@@ -56,7 +62,7 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      margin-bottom:10px;
+      flex: 0 0 auto;
     }
     h1{
       margin:0;
@@ -65,7 +71,12 @@
       letter-spacing:.4px;
       text-shadow: 0 10px 22px rgba(0,0,0,.6);
     }
-    .actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
     .btn{
       border:1px solid rgba(255,255,255,.18);
       background: rgba(255,255,255,.12);
@@ -99,6 +110,7 @@
     .iconbtn svg{ width:20px; height:20px; fill: rgba(255,255,255,.92); }
     .iconbtn:active{transform: translateY(1px)}
 
+    /* Carte (verre) */
     .card{
       border-radius: var(--radius);
       background: linear-gradient(180deg, rgba(0,0,0,.58), rgba(0,0,0,.36));
@@ -110,7 +122,7 @@
     }
 
     .status{
-      margin-top: 12px;
+      margin-top: 10px;
       padding: 10px 12px;
       border-radius: 14px;
       border:1px dashed rgba(255,170,60,.35);
@@ -120,14 +132,21 @@
     }
 
     /* ===== Planning UI ===== */
-    .planner{ padding: 14px; margin-top: 12px; }
+    .planner{
+      flex: 1;
+      display:flex;
+      flex-direction:column;
+      padding: 14px;
+      min-height: 0;
+      gap: 10px;
+    }
 
     .monthbar{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:10px;
-      margin-bottom: 12px;
+      flex: 0 0 auto;
     }
     .month-title{
       font-weight:950;
@@ -156,9 +175,9 @@
       display:grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 8px;
+      flex: 0 0 auto;
     }
     .weekdays{
-      margin-bottom: 8px;
       opacity: .9;
       font-weight: 900;
       letter-spacing:.3px;
@@ -167,15 +186,19 @@
     }
     .weekdays div{ text-align:center; color: rgba(255,255,255,.80); }
 
+    /* ✅ Taille adaptable pour tenir sans scroll */
     .day{
-      min-height: 74px;
       border-radius: 18px;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.28);
-      padding: 10px 10px 8px;
+      padding: 8px 10px 8px;
       position:relative;
       cursor:pointer;
       -webkit-tap-highlight-color: transparent;
+      min-height: 56px;
+    }
+    @media (min-height: 800px){
+      .day{ min-height: 70px; }
     }
     .day.disabled{
       opacity: .35;
@@ -194,7 +217,7 @@
       position:absolute;
       left:10px;
       right:10px;
-      bottom:8px;
+      bottom:7px;
       display:flex;
       gap:6px;
       flex-wrap:wrap;
@@ -217,54 +240,74 @@
       background: rgba(0,0,0,.22);
     }
 
-    /* ===== Légende (toujours visible) ===== */
+    /* ===== Légende (alignée) ===== */
     .legend{
-      display:flex;
-      flex-wrap:wrap;
+      flex: 0 0 auto;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap:10px;
       padding: 12px;
       border-radius: 18px;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.28);
-      margin-top: 14px;
+    }
+    @media (min-width: 720px){
+      .legend{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
     .legend-item{
-      display:inline-flex;
+      display:flex;
       align-items:center;
-      gap:8px;
-      padding:6px 12px;
+      gap:10px;
+      padding:8px 12px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,.18);
       background: rgba(0,0,0,.22);
       font-weight:900;
       font-size:13px;
+      min-width: 0;
     }
     .legend-item .dot{
       width:12px;
       height:12px;
       border:none;
+      flex: 0 0 auto;
+    }
+    .legend-item span:last-child{
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
     }
 
-    /* ===== Détails du jour (sur la page, pas d’overlay) ===== */
-    .daydetails{ padding: 14px; margin-top: 12px; }
+    /* ===== Détails du jour : panneau fixe, scroll interne ===== */
+    #dayDetailsCard{
+      flex: 1;
+      display:flex;
+      flex-direction:column;
+      min-height: 0;
+      overflow:hidden;
+    }
     .daydetails-head{
+      flex: 0 0 auto;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:10px;
-      padding: 14px 16px;
+      padding: 12px 16px;
       background: linear-gradient(180deg, rgba(255,177,90,.95), rgba(255,177,90,.78));
       color:#111;
     }
     .daydetails-title{
       margin:0;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 950;
       letter-spacing: .6px;
       text-transform: uppercase;
     }
     .daydetails-body{
-      padding: 14px;
+      flex: 1;
+      overflow:auto;
+      min-height: 0;
+      padding: 12px;
       background: rgba(0,0,0,.22);
     }
     .evt{
@@ -301,6 +344,7 @@
       color: rgba(255,255,255,.86);
       white-space: pre-wrap;
     }
+
     .muted{ color: var(--muted); font-style: italic; margin:0; padding: 6px 2px; }
   </style>
 </head>
@@ -312,7 +356,7 @@
     <header>
       <h1>Planning</h1>
       <div class="actions">
-        <!-- ✅ petite clé (on branchera la connexion admin ensuite) -->
+        <!-- ✅ petite clé (connexion admin plus tard) -->
         <button class="iconbtn" id="btnAdmin" aria-label="Connexion administrateur" title="Admin">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M7.5 14a4.5 4.5 0 1 1 4.2-6H22v4h-2v2h-2v2h-3.3A4.5 4.5 0 0 1 7.5 14Zm0-3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/>
@@ -336,14 +380,14 @@
 
       <div class="grid" id="grid"></div>
 
-      <!-- ✅ Légende visible -->
+      <!-- ✅ Légende : seulement ce qui est présent dans le mois -->
       <div class="legend" id="legend"></div>
 
       <div class="status" id="status"></div>
     </section>
 
-    <!-- ✅ Détails du jour : toujours dans la même page -->
-    <section class="card" id="dayDetailsCard" style="margin-top:12px; overflow:hidden;">
+    <!-- ✅ Détails du jour : panneau fixe -->
+    <section class="card" id="dayDetailsCard">
       <div class="daydetails-head">
         <p class="daydetails-title" id="dayDetailsTitle">Sélectionne un jour</p>
       </div>
@@ -360,7 +404,7 @@
   const BACK_URL = "index.html";
 
   // Cache local
-  const CACHE_KEY = "cs_planning_cache_v2";
+  const CACHE_KEY = "cs_planning_cache_v3";
   const CACHE_TIME = 5 * 60 * 1000; // 5 minutes
 
   const $grid = document.getElementById("grid");
@@ -371,15 +415,14 @@
   const $dayTitle = document.getElementById("dayDetailsTitle");
   const $dayEvents = document.getElementById("dayDetailsEvents");
   const $dayEmpty = document.getElementById("dayDetailsEmpty");
-  const $dayCard = document.getElementById("dayDetailsCard");
 
   document.getElementById("btnBack").addEventListener("click", () => location.href = BACK_URL);
   document.getElementById("prevMonth").addEventListener("click", () => shiftMonth(-1));
   document.getElementById("nextMonth").addEventListener("click", () => shiftMonth(+1));
 
-  // Juste un “hook” pour plus tard
+  // Hook admin pour plus tard
   document.getElementById("btnAdmin").addEventListener("click", () => {
-    setStatus("Mode admin : à brancher (clé) 🔑", true);
+    setStatus("Connexion admin à brancher 🔑", true);
     setTimeout(()=>setStatus("", false), 1200);
   });
 
@@ -413,14 +456,14 @@
       .replaceAll("'","&#039;");
   }
 
-  // ===== Planning data =====
+  // ===== Data =====
   let current = new Date();
   current.setDate(1);
 
   let EVENTS = [];
   let CAT_COLORS = {};
 
-  // ✅ légende par défaut (affichée même si API catégories pas prête)
+  // Fallback couleurs (si API catégories pas prête)
   const DEFAULT_CATS = [
     ["Navette", "#2f7bd3"],
     ["FMA centre", "#ffb15a"],
@@ -444,35 +487,54 @@
     const end = new Date(d.getFullYear(), d.getMonth()+1, 0);
     return { start, end };
   }
+  function mondayIndex(jsDay){ return (jsDay + 6) % 7; } // 0=Lun..6=Dim
+
   function shiftMonth(delta){
     current = new Date(current.getFullYear(), current.getMonth()+delta, 1);
     clearDaySelection_();
     loadMonthWithCache();
-  }
-  function mondayIndex(jsDay){ return (jsDay + 6) % 7; } // 0=Lun..6=Dim
-
-  function renderLegend(){
-    // si aucune catégorie chargée, on prend les défauts
-    if(!Object.keys(CAT_COLORS).length){
-      CAT_COLORS = Object.fromEntries(DEFAULT_CATS);
-    }
-
-    $legend.innerHTML = "";
-    const entries = Object.entries(CAT_COLORS).sort((a,b)=> a[0].localeCompare(b[0]));
-    for(const [name, color] of entries){
-      const div = document.createElement("div");
-      div.className = "legend-item";
-      div.innerHTML = `<span class="dot" style="background:${color}"></span>${escapeHtml(name)}`;
-      $legend.appendChild(div);
-    }
   }
 
   function clearDaySelection_(){
     $dayTitle.textContent = "Sélectionne un jour";
     $dayEvents.innerHTML = "";
     $dayEmpty.style.display = "block";
-    // retire la sélection visuelle
     document.querySelectorAll(".day.selected").forEach(el => el.classList.remove("selected"));
+  }
+
+  function renderLegend(){
+    // couleurs dispo : API -> sinon defaults
+    if(!Object.keys(CAT_COLORS).length){
+      CAT_COLORS = Object.fromEntries(DEFAULT_CATS);
+    }
+
+    // catégories réellement utilisées dans le mois
+    const used = new Set();
+    for(const ev of EVENTS){
+      const c = (ev.category || "").trim();
+      if(c) used.add(c);
+    }
+
+    $legend.innerHTML = "";
+
+    if(used.size === 0){
+      $legend.innerHTML = `<div class="muted">Aucun évènement ce mois-ci.</div>`;
+      return;
+    }
+
+    const entries = [...used]
+      .map(name => [name, CAT_COLORS[name] || "rgba(255,255,255,.30)"])
+      .sort((a,b)=> a[0].localeCompare(b[0]));
+
+    for(const [name, color] of entries){
+      const div = document.createElement("div");
+      div.className = "legend-item";
+      div.innerHTML = `
+        <span class="dot" style="background:${color}"></span>
+        <span>${escapeHtml(name)}</span>
+      `;
+      $legend.appendChild(div);
+    }
   }
 
   function renderCalendar(){
@@ -484,7 +546,6 @@
     const firstDow = mondayIndex(start.getDay());
     const daysInMonth = end.getDate();
 
-    // index events par date
     const byDate = new Map();
     for(const ev of EVENTS){
       if(!ev.date) continue;
@@ -509,14 +570,13 @@
       const key = ymd(d);
       const list = byDate.get(key) || [];
 
-      // catégories uniques
+      // catégories uniques pour les pastilles
       const catSet = [];
       for(const ev of list){
         const c = (ev.category || "").trim();
         if(c && !catSet.includes(c)) catSet.push(c);
       }
 
-      // dots: max 4 + "+n"
       let dotsHtml = "";
       const maxDots = 4;
       for(const c of catSet.slice(0, maxDots)){
@@ -543,46 +603,42 @@
   }
 
   function renderDayDetails(dateYmd, list){
-    // titre dd/mm/yyyy
     $dayTitle.textContent = dateYmd.split("-").reverse().join("/");
 
     $dayEvents.innerHTML = "";
     if(!list || !list.length){
       $dayEmpty.style.display = "block";
-    }else{
-      $dayEmpty.style.display = "none";
-
-      const arr = [...list].sort((a,b)=>
-        (String(a.start||"").localeCompare(String(b.start||"")) || String(a.title||"").localeCompare(String(b.title||"")))
-      );
-
-      for(const ev of arr){
-        const title = escapeHtml(ev.title || "—");
-        const start = escapeHtml(ev.start || "");
-        const end = escapeHtml(ev.end || "");
-        const time = (start || end) ? `${start}${(start && end) ? "–" : ""}${end}` : "";
-        const cat = escapeHtml(ev.category || "—");
-        const details = (ev.details != null && String(ev.details).trim() !== "") ? escapeHtml(ev.details) : "";
-        const loc = (ev.location != null && String(ev.location).trim() !== "") ? escapeHtml(ev.location) : "";
-        const color = CAT_COLORS[ev.category] || "rgba(255,255,255,.30)";
-
-        const div = document.createElement("div");
-        div.className = "evt";
-        div.innerHTML = `
-          <div class="evt-top">
-            <p class="evt-title">${title}</p>
-            <div class="evt-time">${time}</div>
-          </div>
-          <div class="tag"><span class="dot" style="background:${color}"></span>${cat}</div>
-          ${loc ? `<div class="evt-details"><b>Lieu :</b> ${loc}</div>` : ``}
-          ${details ? `<div class="evt-details">${details}</div>` : ``}
-        `;
-        $dayEvents.appendChild(div);
-      }
+      return;
     }
 
-    // optionnel : on amène doucement vers le bloc détails
-    $dayCard.scrollIntoView({ behavior:"smooth", block:"start" });
+    $dayEmpty.style.display = "none";
+    const arr = [...list].sort((a,b)=>
+      (String(a.start||"").localeCompare(String(b.start||"")) || String(a.title||"").localeCompare(String(b.title||"")))
+    );
+
+    for(const ev of arr){
+      const title = escapeHtml(ev.title || "—");
+      const start = escapeHtml(ev.start || "");
+      const end = escapeHtml(ev.end || "");
+      const time = (start || end) ? `${start}${(start && end) ? "–" : ""}${end}` : "";
+      const cat = escapeHtml(ev.category || "—");
+      const details = (ev.details != null && String(ev.details).trim() !== "") ? escapeHtml(ev.details) : "";
+      const loc = (ev.location != null && String(ev.location).trim() !== "") ? escapeHtml(ev.location) : "";
+      const color = CAT_COLORS[ev.category] || "rgba(255,255,255,.30)";
+
+      const div = document.createElement("div");
+      div.className = "evt";
+      div.innerHTML = `
+        <div class="evt-top">
+          <p class="evt-title">${title}</p>
+          <div class="evt-time">${time}</div>
+        </div>
+        <div class="tag"><span class="dot" style="background:${color}"></span>${cat}</div>
+        ${loc ? `<div class="evt-details"><b>Lieu :</b> ${loc}</div>` : ``}
+        ${details ? `<div class="evt-details">${details}</div>` : ``}
+      `;
+      $dayEvents.appendChild(div);
+    }
   }
 
   async function fetchCategories(){
@@ -645,12 +701,11 @@
     const wantedMonth = `${current.getFullYear()}-${String(current.getMonth()+1).padStart(2,"0")}`;
     const cache = cacheRead();
 
-    // Toujours : légende visible
-    renderLegend();
-
     if(cache && cache.month === wantedMonth){
       EVENTS = Array.isArray(cache.events) ? cache.events : [];
       CAT_COLORS = cache.colors || CAT_COLORS;
+      if(!Object.keys(CAT_COLORS).length) CAT_COLORS = Object.fromEntries(DEFAULT_CATS);
+
       renderLegend();
       renderCalendar();
       setStatus("", false);
@@ -659,15 +714,23 @@
 
     try{
       await fetchCategories().catch(()=>{});
-      renderLegend();
+      if(!Object.keys(CAT_COLORS).length) CAT_COLORS = Object.fromEntries(DEFAULT_CATS);
+
       await fetchEventsForCurrentMonth();
+
+      renderLegend();
       renderCalendar();
+
       cacheWrite();
       setStatus("", false);
     }catch(err){
       console.error(err);
       EVENTS = [];
+      if(!Object.keys(CAT_COLORS).length) CAT_COLORS = Object.fromEntries(DEFAULT_CATS);
+
+      renderLegend();
       renderCalendar();
+
       setStatus("Erreur de chargement (API).", true);
     }
   }
