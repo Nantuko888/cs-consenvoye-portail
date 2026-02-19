@@ -178,6 +178,7 @@
       display:flex;
       gap:6px;
       flex-wrap:wrap;
+      align-items:center;
     }
     .dot{
       width: 10px;
@@ -195,6 +196,35 @@
       border:1px solid rgba(255,255,255,.18);
       background: rgba(0,0,0,.22);
     }
+
+    /* ===== Légende ===== */
+    .legend{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      padding: 12px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.28);
+      margin-top: 14px;
+    }
+    .legend-item{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.22);
+      font-weight:900;
+      font-size:13px;
+    }
+    .legend-item .dot{
+      width:12px;
+      height:12px;
+      border:none;
+    }
+    .muted{ color: var(--muted); font-style: italic; margin:0; padding: 6px 2px; }
 
     /* ===== Overlay détails jour ===== */
     .overlay{
@@ -288,7 +318,6 @@
       color: rgba(255,255,255,.86);
       white-space: pre-wrap;
     }
-    .muted{ color: var(--muted); font-style: italic; margin:0; padding: 6px 2px; }
   </style>
 </head>
 
@@ -315,6 +344,10 @@
       </div>
 
       <div class="grid" id="grid"></div>
+
+      <!-- ✅ Légende en bas -->
+      <div class="legend" id="legend"></div>
+
       <div class="status" id="status"></div>
     </section>
   </div>
@@ -345,6 +378,7 @@
   const $grid = document.getElementById("grid");
   const $monthTitle = document.getElementById("monthTitle");
   const $status = document.getElementById("status");
+  const $legend = document.getElementById("legend");
 
   const $overlay = document.getElementById("overlay");
   const $panelTitle = document.getElementById("panelTitle");
@@ -363,7 +397,7 @@
     $status.style.display = show ? "block" : "none";
   }
 
-  /** JSONP (identique à ta page) */
+  /** JSONP */
   function jsonp(url, cbName){
     return new Promise((resolve, reject) => {
       const script = document.createElement("script");
@@ -389,10 +423,11 @@
   }
 
   // ===== Planning data =====
-  let current = new Date(); // mois affiché
+  let current = new Date();
   current.setDate(1);
-  let EVENTS = []; // events du mois chargé
-  let CAT_COLORS = {}; // category -> color (optionnel)
+
+  let EVENTS = [];
+  let CAT_COLORS = {};
 
   const MONTHS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
 
@@ -413,8 +448,29 @@
     loadMonthWithCache();
   }
 
-  function mondayIndex(jsDay){ // JS: 0=Dim..6=Sam => nous: 0=Lun..6=Dim
-    return (jsDay + 6) % 7;
+  function mondayIndex(jsDay){
+    return (jsDay + 6) % 7; // 0=Lun..6=Dim
+  }
+
+  function renderLegend(){
+    $legend.innerHTML = "";
+    const entries = Object.entries(CAT_COLORS);
+
+    if(!entries.length){
+      $legend.innerHTML = `<div class="muted">Aucune catégorie définie.</div>`;
+      return;
+    }
+
+    entries.sort((a,b)=> a[0].localeCompare(b[0]));
+    for(const [name, color] of entries){
+      const div = document.createElement("div");
+      div.className = "legend-item";
+      div.innerHTML = `
+        <span class="dot" style="background:${color || "rgba(255,255,255,.30)"}"></span>
+        ${escapeHtml(name)}
+      `;
+      $legend.appendChild(div);
+    }
   }
 
   function render(){
@@ -423,10 +479,9 @@
     $monthTitle.textContent = `${MONTHS[m]} ${y}`;
 
     const { start, end } = startEndOfMonth(current);
-    const firstDow = mondayIndex(start.getDay()); // 0..6
+    const firstDow = mondayIndex(start.getDay());
     const daysInMonth = end.getDate();
 
-    // index events par date
     const byDate = new Map();
     for(const ev of EVENTS){
       if(!ev.date) continue;
@@ -434,7 +489,6 @@
       byDate.get(ev.date).push(ev);
     }
 
-    // build grid cells (42 cases)
     $grid.innerHTML = "";
     const total = 42;
     for(let i=0;i<total;i++){
@@ -453,7 +507,6 @@
       const key = ymd(d);
       const list = byDate.get(key) || [];
 
-      // dots: max 4 + "+n"
       const catSet = [];
       for(const ev of list){
         const c = (ev.category || "").trim();
@@ -482,15 +535,13 @@
   }
 
   function openDay(dateYmd, list){
-    $panelTitle.textContent = dateYmd.split("-").reverse().join("/"); // dd/mm/yyyy
+    $panelTitle.textContent = dateYmd.split("-").reverse().join("/");
 
     $panelEvents.innerHTML = "";
     if(!list || !list.length){
       $panelEmpty.style.display = "block";
     }else{
       $panelEmpty.style.display = "none";
-
-      // tri heure
       const arr = [...list].sort((a,b)=> (String(a.start||"").localeCompare(String(b.start||"")) || String(a.title||"").localeCompare(String(b.title||""))));
 
       for(const ev of arr){
@@ -531,7 +582,6 @@
   }
 
   async function fetchCategories(){
-    // Optionnel : si ton Apps Script ne l'a pas encore, ça ne bloque pas
     const cb = "cb_pc_" + Math.random().toString(36).slice(2);
     const url = `${API}?view=planning_categories&callback=${cb}`;
     const data = await jsonp(url, cb);
@@ -540,7 +590,9 @@
     const cats = data.categories || [];
     const map = {};
     for(const c of cats){
-      if(c && c.category && c.color) map[c.category] = c.color;
+      if(c && c.category){
+        map[c.category] = c.color || "rgba(255,255,255,.30)";
+      }
     }
     CAT_COLORS = map;
   }
@@ -555,7 +607,6 @@
     const data = await jsonp(url, cb);
 
     if(!data || data.ok === false){
-      // si API pas prête => on affiche vide mais sans casser
       EVENTS = [];
       return;
     }
@@ -594,21 +645,23 @@
       EVENTS = Array.isArray(cache.events) ? cache.events : [];
       CAT_COLORS = cache.colors || {};
       render();
+      renderLegend();
       setStatus("", false);
       return;
     }
 
     try{
-      // catégories optionnelles (ne bloque pas)
       await fetchCategories().catch(()=>{});
       await fetchEventsForCurrentMonth();
       render();
+      renderLegend();
       cacheWrite();
       setStatus("", false);
     }catch(err){
       console.error(err);
       EVENTS = [];
       render();
+      renderLegend();
       setStatus("Erreur de chargement (API).", true);
     }
   }
@@ -618,4 +671,3 @@
 </script>
 </body>
 </html>
-
