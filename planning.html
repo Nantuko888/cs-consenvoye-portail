@@ -1,1 +1,621 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Planning — CS Consenvoye</title>
+
+  <style>
+    :root{
+      --txt:#f4f4f4;
+      --muted:#cfcfcf;
+      --shadow: 0 14px 34px rgba(0,0,0,.38);
+      --radius: 22px;
+      --gold: #ffb15a;
+      --chip: rgba(255,255,255,.12);
+      --chipBorder: rgba(255,255,255,.18);
+    }
+    *{box-sizing:border-box}
+    html, body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--txt);
+      background:#0b0b0b;
+      overflow-x:hidden;
+    }
+
+    .bg{
+      position:fixed; inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.55)),
+        url("background.png") center top/cover no-repeat;
+      z-index:-2;
+      transform: translateZ(0);
+    }
+    .bg::after{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(circle at 50% 10%, rgba(255,170,60,.18), rgba(0,0,0,.62) 62%);
+      z-index:-1;
+    }
+
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 14px 14px 40px;
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+    }
+    h1{
+      margin:0;
+      font-size:30px;
+      font-weight:900;
+      letter-spacing:.4px;
+      text-shadow: 0 10px 22px rgba(0,0,0,.6);
+    }
+    .actions{display:flex; gap:10px; flex-wrap:wrap;}
+    .btn{
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.12);
+      color:var(--txt);
+      padding:10px 14px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      cursor:pointer;
+      font-weight:800;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active{transform: translateY(1px)}
+    .btn.secondary{ border-color: rgba(255,170,60,.35); }
+
+    .card{
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(0,0,0,.58), rgba(0,0,0,.36));
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .status{
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border:1px dashed rgba(255,170,60,.35);
+      background: rgba(0,0,0,.25);
+      color:#ffd19a;
+      display:none;
+    }
+
+    /* ===== Planning UI ===== */
+    .planner{
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .monthbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom: 12px;
+    }
+    .month-title{
+      font-weight:950;
+      letter-spacing:.8px;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-shadow: 0 10px 22px rgba(0,0,0,.6);
+      text-align:center;
+      flex: 1;
+      user-select:none;
+    }
+    .iconbtn{
+      width: 46px;
+      height: 42px;
+      border-radius: 16px;
+      border:1px solid var(--chipBorder);
+      background: var(--chip);
+      box-shadow: var(--shadow);
+      color: var(--txt);
+      font-weight: 950;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .weekdays, .grid{
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+    .weekdays{
+      margin-bottom: 8px;
+      opacity: .9;
+      font-weight: 900;
+      letter-spacing:.3px;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    .weekdays div{
+      text-align:center;
+      color: rgba(255,255,255,.80);
+    }
+
+    .day{
+      min-height: 74px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.28);
+      padding: 10px 10px 8px;
+      position:relative;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .day.disabled{
+      opacity: .35;
+      cursor: default;
+    }
+    .day .num{
+      font-weight: 950;
+      font-size: 14px;
+      opacity: .95;
+    }
+    .dots{
+      position:absolute;
+      left:10px;
+      right:10px;
+      bottom:8px;
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+    }
+    .dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.25);
+      background: rgba(255,255,255,.20);
+    }
+    .more{
+      font-size: 11px;
+      font-weight: 900;
+      color: rgba(255,255,255,.85);
+      padding: 2px 8px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.22);
+    }
+
+    /* ===== Overlay détails jour ===== */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(0,0,0,.62);
+      display:none;
+      padding: env(safe-area-inset-top) 12px env(safe-area-inset-bottom) 12px;
+    }
+    .overlay.is-open{ display:block; }
+
+    .panel{
+      height: 100%;
+      max-width: 980px;
+      margin: 0 auto;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+    .panel-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 14px 16px;
+      background: linear-gradient(180deg, rgba(255,177,90,.95), rgba(255,177,90,.78));
+      color: #111;
+    }
+    .panel-title{
+      margin:0;
+      font-size: 18px;
+      font-weight: 950;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+    }
+    .close{
+      border:1px solid rgba(0,0,0,.18);
+      background: rgba(255,255,255,.35);
+      color:#111;
+      padding:10px 14px;
+      border-radius: 16px;
+      font-weight:950;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .panel-body{
+      flex:1;
+      overflow:auto;
+      padding: 14px;
+      background: rgba(0,0,0,.22);
+    }
+    .evt{
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.32);
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+    .evt-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .evt-title{
+      font-weight: 950;
+      margin:0;
+    }
+    .evt-time{
+      font-weight: 950;
+      opacity:.9;
+      white-space:nowrap;
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-top: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.22);
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing:.2px;
+    }
+    .tag .dot{ width:10px; height:10px; border:none; }
+    .evt-details{
+      margin-top: 8px;
+      color: rgba(255,255,255,.86);
+      white-space: pre-wrap;
+    }
+    .muted{ color: var(--muted); font-style: italic; margin:0; padding: 6px 2px; }
+  </style>
+</head>
+
+<body>
+  <div class="bg"></div>
+
+  <div class="wrap">
+    <header>
+      <h1>Planning</h1>
+      <div class="actions">
+        <button class="btn secondary" id="btnBack">Retour</button>
+      </div>
+    </header>
+
+    <section class="card planner">
+      <div class="monthbar">
+        <button class="iconbtn" id="prevMonth" aria-label="Mois précédent">‹</button>
+        <div class="month-title" id="monthTitle">—</div>
+        <button class="iconbtn" id="nextMonth" aria-label="Mois suivant">›</button>
+      </div>
+
+      <div class="weekdays">
+        <div>Lun</div><div>Mar</div><div>Mer</div><div>Jeu</div><div>Ven</div><div>Sam</div><div>Dim</div>
+      </div>
+
+      <div class="grid" id="grid"></div>
+      <div class="status" id="status"></div>
+    </section>
+  </div>
+
+  <!-- Overlay détails jour -->
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="panel card">
+      <div class="panel-head">
+        <div class="panel-title" id="panelTitle">—</div>
+        <button class="close" id="btnClose">Fermer</button>
+      </div>
+      <div class="panel-body">
+        <div id="panelEvents"></div>
+        <p class="muted" id="panelEmpty" style="display:none;">Aucun évènement ce jour.</p>
+      </div>
+    </div>
+  </div>
+
+<script>
+  /** ✅ Mets ici TON URL /exec */
+  const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+  const BACK_URL = "index.html";
+
+  // Cache local (comme ton equipes.html)
+  const CACHE_KEY = "cs_planning_cache_v1";
+  const CACHE_TIME = 5 * 60 * 1000; // 5 minutes
+
+  const $grid = document.getElementById("grid");
+  const $monthTitle = document.getElementById("monthTitle");
+  const $status = document.getElementById("status");
+
+  const $overlay = document.getElementById("overlay");
+  const $panelTitle = document.getElementById("panelTitle");
+  const $panelEvents = document.getElementById("panelEvents");
+  const $panelEmpty = document.getElementById("panelEmpty");
+
+  document.getElementById("btnBack").addEventListener("click", () => location.href = BACK_URL);
+  document.getElementById("btnClose").addEventListener("click", closeOverlay);
+  $overlay.addEventListener("click", (e) => { if(e.target === $overlay) closeOverlay(); });
+
+  document.getElementById("prevMonth").addEventListener("click", () => shiftMonth(-1));
+  document.getElementById("nextMonth").addEventListener("click", () => shiftMonth(+1));
+
+  function setStatus(msg, show=true){
+    $status.textContent = msg || "";
+    $status.style.display = show ? "block" : "none";
+  }
+
+  /** JSONP (identique à ta page) */
+  function jsonp(url, cbName){
+    return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      const cleanup = () => {
+        script.remove();
+        try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+      };
+      const timer = setTimeout(() => { cleanup(); reject(new Error("Timeout JSONP")); }, 12000);
+      window[cbName] = (data) => { clearTimeout(timer); cleanup(); resolve(data); };
+      script.src = url;
+      script.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error("Erreur JSONP")); };
+      document.head.appendChild(script);
+    });
+  }
+
+  function escapeHtml(s){
+    return (s==null ? "" : String(s))
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  // ===== Planning data =====
+  let current = new Date(); // mois affiché
+  current.setDate(1);
+  let EVENTS = []; // events du mois chargé
+  let CAT_COLORS = {}; // category -> color (optionnel)
+
+  const MONTHS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+
+  function ymd(d){
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const day = String(d.getDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
+  }
+  function startEndOfMonth(d){
+    const start = new Date(d.getFullYear(), d.getMonth(), 1);
+    const end = new Date(d.getFullYear(), d.getMonth()+1, 0);
+    return { start, end };
+  }
+
+  function shiftMonth(delta){
+    current = new Date(current.getFullYear(), current.getMonth()+delta, 1);
+    loadMonthWithCache();
+  }
+
+  function mondayIndex(jsDay){ // JS: 0=Dim..6=Sam => nous: 0=Lun..6=Dim
+    return (jsDay + 6) % 7;
+  }
+
+  function render(){
+    const y = current.getFullYear();
+    const m = current.getMonth();
+    $monthTitle.textContent = `${MONTHS[m]} ${y}`;
+
+    const { start, end } = startEndOfMonth(current);
+    const firstDow = mondayIndex(start.getDay()); // 0..6
+    const daysInMonth = end.getDate();
+
+    // index events par date
+    const byDate = new Map();
+    for(const ev of EVENTS){
+      if(!ev.date) continue;
+      if(!byDate.has(ev.date)) byDate.set(ev.date, []);
+      byDate.get(ev.date).push(ev);
+    }
+
+    // build grid cells (42 cases)
+    $grid.innerHTML = "";
+    const total = 42;
+    for(let i=0;i<total;i++){
+      const cell = document.createElement("div");
+      cell.className = "day";
+
+      const dayNum = i - firstDow + 1;
+      if(dayNum < 1 || dayNum > daysInMonth){
+        cell.classList.add("disabled");
+        cell.innerHTML = `<div class="num"> </div>`;
+        $grid.appendChild(cell);
+        continue;
+      }
+
+      const d = new Date(y, m, dayNum);
+      const key = ymd(d);
+      const list = byDate.get(key) || [];
+
+      // dots: max 4 + "+n"
+      const catSet = [];
+      for(const ev of list){
+        const c = (ev.category || "").trim();
+        if(c && !catSet.includes(c)) catSet.push(c);
+      }
+
+      let dotsHtml = "";
+      const maxDots = 4;
+      const shown = catSet.slice(0, maxDots);
+      for(const c of shown){
+        const color = CAT_COLORS[c] || "rgba(255,255,255,.30)";
+        dotsHtml += `<span class="dot" style="background:${color}"></span>`;
+      }
+      if(catSet.length > maxDots){
+        dotsHtml += `<span class="more">+${catSet.length - maxDots}</span>`;
+      }
+
+      cell.innerHTML = `
+        <div class="num">${dayNum}</div>
+        <div class="dots">${dotsHtml}</div>
+      `;
+
+      cell.addEventListener("click", () => openDay(key, list));
+      $grid.appendChild(cell);
+    }
+  }
+
+  function openDay(dateYmd, list){
+    $panelTitle.textContent = dateYmd.split("-").reverse().join("/"); // dd/mm/yyyy
+
+    $panelEvents.innerHTML = "";
+    if(!list || !list.length){
+      $panelEmpty.style.display = "block";
+    }else{
+      $panelEmpty.style.display = "none";
+
+      // tri heure
+      const arr = [...list].sort((a,b)=> (String(a.start||"").localeCompare(String(b.start||"")) || String(a.title||"").localeCompare(String(b.title||""))));
+
+      for(const ev of arr){
+        const title = escapeHtml(ev.title || "—");
+        const start = escapeHtml(ev.start || "");
+        const end = escapeHtml(ev.end || "");
+        const time = (start || end) ? `${start}${(start && end) ? "–" : ""}${end}` : "";
+        const cat = escapeHtml(ev.category || "—");
+        const details = (ev.details != null && String(ev.details).trim() !== "") ? escapeHtml(ev.details) : "";
+        const loc = (ev.location != null && String(ev.location).trim() !== "") ? escapeHtml(ev.location) : "";
+
+        const color = CAT_COLORS[ev.category] || "rgba(255,255,255,.30)";
+
+        const div = document.createElement("div");
+        div.className = "evt";
+        div.innerHTML = `
+          <div class="evt-top">
+            <p class="evt-title">${title}</p>
+            <div class="evt-time">${time}</div>
+          </div>
+          <div class="tag"><span class="dot" style="background:${color}"></span>${cat}</div>
+          ${loc ? `<div class="evt-details"><b>Lieu :</b> ${loc}</div>` : ``}
+          ${details ? `<div class="evt-details">${details}</div>` : ``}
+        `;
+        $panelEvents.appendChild(div);
+      }
+    }
+
+    $overlay.classList.add("is-open");
+    $overlay.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeOverlay(){
+    $overlay.classList.remove("is-open");
+    $overlay.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  async function fetchCategories(){
+    // Optionnel : si ton Apps Script ne l'a pas encore, ça ne bloque pas
+    const cb = "cb_pc_" + Math.random().toString(36).slice(2);
+    const url = `${API}?view=planning_categories&callback=${cb}`;
+    const data = await jsonp(url, cb);
+    if(!data || data.ok === false) return;
+
+    const cats = data.categories || [];
+    const map = {};
+    for(const c of cats){
+      if(c && c.category && c.color) map[c.category] = c.color;
+    }
+    CAT_COLORS = map;
+  }
+
+  async function fetchEventsForCurrentMonth(){
+    const { start, end } = startEndOfMonth(current);
+    const from = ymd(start);
+    const to = ymd(end);
+
+    const cb = "cb_pe_" + Math.random().toString(36).slice(2);
+    const url = `${API}?view=planning&from=${from}&to=${to}&callback=${cb}`;
+    const data = await jsonp(url, cb);
+
+    if(!data || data.ok === false){
+      // si API pas prête => on affiche vide mais sans casser
+      EVENTS = [];
+      return;
+    }
+    EVENTS = Array.isArray(data.events) ? data.events : [];
+  }
+
+  function cacheWrite(){
+    try{
+      localStorage.setItem(CACHE_KEY, JSON.stringify({
+        time: Date.now(),
+        month: `${current.getFullYear()}-${String(current.getMonth()+1).padStart(2,"0")}`,
+        events: EVENTS,
+        colors: CAT_COLORS
+      }));
+    }catch(e){}
+  }
+
+  function cacheRead(){
+    const raw = localStorage.getItem(CACHE_KEY);
+    if(!raw) return null;
+    try{
+      const cache = JSON.parse(raw);
+      const age = Date.now() - cache.time;
+      if(age > CACHE_TIME) return null;
+      return cache;
+    }catch(e){ return null; }
+  }
+
+  async function loadMonthWithCache(){
+    setStatus("Chargement…", true);
+
+    const wantedMonth = `${current.getFullYear()}-${String(current.getMonth()+1).padStart(2,"0")}`;
+    const cache = cacheRead();
+
+    if(cache && cache.month === wantedMonth){
+      EVENTS = Array.isArray(cache.events) ? cache.events : [];
+      CAT_COLORS = cache.colors || {};
+      render();
+      setStatus("", false);
+      return;
+    }
+
+    try{
+      // catégories optionnelles (ne bloque pas)
+      await fetchCategories().catch(()=>{});
+      await fetchEventsForCurrentMonth();
+      render();
+      cacheWrite();
+      setStatus("", false);
+    }catch(err){
+      console.error(err);
+      EVENTS = [];
+      render();
+      setStatus("Erreur de chargement (API).", true);
+    }
+  }
+
+  // GO
+  loadMonthWithCache();
+</script>
+</body>
+</html>
 
