@@ -17,6 +17,7 @@
     }
     *{box-sizing:border-box}
     html, body{height:100%}
+
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -25,13 +26,17 @@
       overflow-x:hidden;
     }
 
+    /* ✅ Fond VRAIMENT fixe (anti "ça bouge" sur mobile) */
     .bg{
-      position:fixed; inset:0;
+      position:fixed;
+      top:0; left:0;
+      width:100%;
+      height:100vh;
+      height:100svh; /* iOS/Android moderne */
       background:
         linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.55)),
         url("background.png") center top/cover no-repeat;
       z-index:-2;
-      transform: translateZ(0);
     }
     .bg::after{
       content:"";
@@ -60,7 +65,7 @@
       letter-spacing:.4px;
       text-shadow: 0 10px 22px rgba(0,0,0,.6);
     }
-    .actions{display:flex; gap:10px; flex-wrap:wrap;}
+    .actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
     .btn{
       border:1px solid rgba(255,255,255,.18);
       background: rgba(255,255,255,.12);
@@ -76,6 +81,23 @@
     }
     .btn:active{transform: translateY(1px)}
     .btn.secondary{ border-color: rgba(255,170,60,.35); }
+
+    /* petite clé admin */
+    .iconbtn{
+      width: 44px;
+      height: 42px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.12);
+      box-shadow: var(--shadow);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .iconbtn svg{ width:20px; height:20px; fill: rgba(255,255,255,.92); }
+    .iconbtn:active{transform: translateY(1px)}
 
     .card{
       border-radius: var(--radius);
@@ -98,10 +120,7 @@
     }
 
     /* ===== Planning UI ===== */
-    .planner{
-      padding: 14px;
-      margin-top: 12px;
-    }
+    .planner{ padding: 14px; margin-top: 12px; }
 
     .monthbar{
       display:flex;
@@ -120,7 +139,7 @@
       flex: 1;
       user-select:none;
     }
-    .iconbtn{
+    .navbtn{
       width: 46px;
       height: 42px;
       border-radius: 16px;
@@ -146,10 +165,7 @@
       font-size: 12px;
       text-transform: uppercase;
     }
-    .weekdays div{
-      text-align:center;
-      color: rgba(255,255,255,.80);
-    }
+    .weekdays div{ text-align:center; color: rgba(255,255,255,.80); }
 
     .day{
       min-height: 74px;
@@ -164,6 +180,10 @@
     .day.disabled{
       opacity: .35;
       cursor: default;
+    }
+    .day.selected{
+      border-color: rgba(255,177,90,.55);
+      box-shadow: 0 0 0 2px rgba(255,177,90,.14) inset;
     }
     .day .num{
       font-weight: 950;
@@ -197,7 +217,7 @@
       background: rgba(0,0,0,.22);
     }
 
-    /* ===== Légende ===== */
+    /* ===== Légende (toujours visible) ===== */
     .legend{
       display:flex;
       flex-wrap:wrap;
@@ -224,56 +244,26 @@
       height:12px;
       border:none;
     }
-    .muted{ color: var(--muted); font-style: italic; margin:0; padding: 6px 2px; }
 
-    /* ===== Overlay détails jour ===== */
-    .overlay{
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      background: rgba(0,0,0,.62);
-      display:none;
-      padding: env(safe-area-inset-top) 12px env(safe-area-inset-bottom) 12px;
-    }
-    .overlay.is-open{ display:block; }
-
-    .panel{
-      height: 100%;
-      max-width: 980px;
-      margin: 0 auto;
-      display:flex;
-      flex-direction:column;
-      gap: 12px;
-    }
-    .panel-head{
+    /* ===== Détails du jour (sur la page, pas d’overlay) ===== */
+    .daydetails{ padding: 14px; margin-top: 12px; }
+    .daydetails-head{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:10px;
       padding: 14px 16px;
       background: linear-gradient(180deg, rgba(255,177,90,.95), rgba(255,177,90,.78));
-      color: #111;
+      color:#111;
     }
-    .panel-title{
+    .daydetails-title{
       margin:0;
       font-size: 18px;
       font-weight: 950;
       letter-spacing: .6px;
       text-transform: uppercase;
     }
-    .close{
-      border:1px solid rgba(0,0,0,.18);
-      background: rgba(255,255,255,.35);
-      color:#111;
-      padding:10px 14px;
-      border-radius: 16px;
-      font-weight:950;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .panel-body{
-      flex:1;
-      overflow:auto;
+    .daydetails-body{
       padding: 14px;
       background: rgba(0,0,0,.22);
     }
@@ -290,15 +280,8 @@
       justify-content:space-between;
       gap:10px;
     }
-    .evt-title{
-      font-weight: 950;
-      margin:0;
-    }
-    .evt-time{
-      font-weight: 950;
-      opacity:.9;
-      white-space:nowrap;
-    }
+    .evt-title{ font-weight: 950; margin:0; }
+    .evt-time{ font-weight: 950; opacity:.9; white-space:nowrap; }
     .tag{
       display:inline-flex;
       align-items:center;
@@ -318,6 +301,7 @@
       color: rgba(255,255,255,.86);
       white-space: pre-wrap;
     }
+    .muted{ color: var(--muted); font-style: italic; margin:0; padding: 6px 2px; }
   </style>
 </head>
 
@@ -328,15 +312,22 @@
     <header>
       <h1>Planning</h1>
       <div class="actions">
+        <!-- ✅ petite clé (on branchera la connexion admin ensuite) -->
+        <button class="iconbtn" id="btnAdmin" aria-label="Connexion administrateur" title="Admin">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7.5 14a4.5 4.5 0 1 1 4.2-6H22v4h-2v2h-2v2h-3.3A4.5 4.5 0 0 1 7.5 14Zm0-3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/>
+          </svg>
+        </button>
+
         <button class="btn secondary" id="btnBack">Retour</button>
       </div>
     </header>
 
     <section class="card planner">
       <div class="monthbar">
-        <button class="iconbtn" id="prevMonth" aria-label="Mois précédent">‹</button>
+        <button class="navbtn" id="prevMonth" aria-label="Mois précédent">‹</button>
         <div class="month-title" id="monthTitle">—</div>
-        <button class="iconbtn" id="nextMonth" aria-label="Mois suivant">›</button>
+        <button class="navbtn" id="nextMonth" aria-label="Mois suivant">›</button>
       </div>
 
       <div class="weekdays">
@@ -345,25 +336,22 @@
 
       <div class="grid" id="grid"></div>
 
-      <!-- ✅ Légende en bas -->
+      <!-- ✅ Légende visible -->
       <div class="legend" id="legend"></div>
 
       <div class="status" id="status"></div>
     </section>
-  </div>
 
-  <!-- Overlay détails jour -->
-  <div class="overlay" id="overlay" aria-hidden="true">
-    <div class="panel card">
-      <div class="panel-head">
-        <div class="panel-title" id="panelTitle">—</div>
-        <button class="close" id="btnClose">Fermer</button>
+    <!-- ✅ Détails du jour : toujours dans la même page -->
+    <section class="card" id="dayDetailsCard" style="margin-top:12px; overflow:hidden;">
+      <div class="daydetails-head">
+        <p class="daydetails-title" id="dayDetailsTitle">Sélectionne un jour</p>
       </div>
-      <div class="panel-body">
-        <div id="panelEvents"></div>
-        <p class="muted" id="panelEmpty" style="display:none;">Aucun évènement ce jour.</p>
+      <div class="daydetails-body">
+        <div id="dayDetailsEvents"></div>
+        <p class="muted" id="dayDetailsEmpty">Aucun évènement.</p>
       </div>
-    </div>
+    </section>
   </div>
 
 <script>
@@ -371,8 +359,8 @@
   const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
   const BACK_URL = "index.html";
 
-  // Cache local (comme ton equipes.html)
-  const CACHE_KEY = "cs_planning_cache_v1";
+  // Cache local
+  const CACHE_KEY = "cs_planning_cache_v2";
   const CACHE_TIME = 5 * 60 * 1000; // 5 minutes
 
   const $grid = document.getElementById("grid");
@@ -380,17 +368,20 @@
   const $status = document.getElementById("status");
   const $legend = document.getElementById("legend");
 
-  const $overlay = document.getElementById("overlay");
-  const $panelTitle = document.getElementById("panelTitle");
-  const $panelEvents = document.getElementById("panelEvents");
-  const $panelEmpty = document.getElementById("panelEmpty");
+  const $dayTitle = document.getElementById("dayDetailsTitle");
+  const $dayEvents = document.getElementById("dayDetailsEvents");
+  const $dayEmpty = document.getElementById("dayDetailsEmpty");
+  const $dayCard = document.getElementById("dayDetailsCard");
 
   document.getElementById("btnBack").addEventListener("click", () => location.href = BACK_URL);
-  document.getElementById("btnClose").addEventListener("click", closeOverlay);
-  $overlay.addEventListener("click", (e) => { if(e.target === $overlay) closeOverlay(); });
-
   document.getElementById("prevMonth").addEventListener("click", () => shiftMonth(-1));
   document.getElementById("nextMonth").addEventListener("click", () => shiftMonth(+1));
+
+  // Juste un “hook” pour plus tard
+  document.getElementById("btnAdmin").addEventListener("click", () => {
+    setStatus("Mode admin : à brancher (clé) 🔑", true);
+    setTimeout(()=>setStatus("", false), 1200);
+  });
 
   function setStatus(msg, show=true){
     $status.textContent = msg || "";
@@ -429,6 +420,17 @@
   let EVENTS = [];
   let CAT_COLORS = {};
 
+  // ✅ légende par défaut (affichée même si API catégories pas prête)
+  const DEFAULT_CATS = [
+    ["Navette", "#2f7bd3"],
+    ["FMA centre", "#ffb15a"],
+    ["FMA équipe 1", "#2fd36b"],
+    ["FMA équipe 2", "#d98910"],
+    ["RECSEC", "#9b7bff"],
+    ["Sainte Barbe", "#ff4d4d"],
+    ["JSP", "#4dabf7"]
+  ];
+
   const MONTHS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
 
   function ymd(d){
@@ -442,38 +444,38 @@
     const end = new Date(d.getFullYear(), d.getMonth()+1, 0);
     return { start, end };
   }
-
   function shiftMonth(delta){
     current = new Date(current.getFullYear(), current.getMonth()+delta, 1);
+    clearDaySelection_();
     loadMonthWithCache();
   }
-
-  function mondayIndex(jsDay){
-    return (jsDay + 6) % 7; // 0=Lun..6=Dim
-  }
+  function mondayIndex(jsDay){ return (jsDay + 6) % 7; } // 0=Lun..6=Dim
 
   function renderLegend(){
-    $legend.innerHTML = "";
-    const entries = Object.entries(CAT_COLORS);
-
-    if(!entries.length){
-      $legend.innerHTML = `<div class="muted">Aucune catégorie définie.</div>`;
-      return;
+    // si aucune catégorie chargée, on prend les défauts
+    if(!Object.keys(CAT_COLORS).length){
+      CAT_COLORS = Object.fromEntries(DEFAULT_CATS);
     }
 
-    entries.sort((a,b)=> a[0].localeCompare(b[0]));
+    $legend.innerHTML = "";
+    const entries = Object.entries(CAT_COLORS).sort((a,b)=> a[0].localeCompare(b[0]));
     for(const [name, color] of entries){
       const div = document.createElement("div");
       div.className = "legend-item";
-      div.innerHTML = `
-        <span class="dot" style="background:${color || "rgba(255,255,255,.30)"}"></span>
-        ${escapeHtml(name)}
-      `;
+      div.innerHTML = `<span class="dot" style="background:${color}"></span>${escapeHtml(name)}`;
       $legend.appendChild(div);
     }
   }
 
-  function render(){
+  function clearDaySelection_(){
+    $dayTitle.textContent = "Sélectionne un jour";
+    $dayEvents.innerHTML = "";
+    $dayEmpty.style.display = "block";
+    // retire la sélection visuelle
+    document.querySelectorAll(".day.selected").forEach(el => el.classList.remove("selected"));
+  }
+
+  function renderCalendar(){
     const y = current.getFullYear();
     const m = current.getMonth();
     $monthTitle.textContent = `${MONTHS[m]} ${y}`;
@@ -482,6 +484,7 @@
     const firstDow = mondayIndex(start.getDay());
     const daysInMonth = end.getDate();
 
+    // index events par date
     const byDate = new Map();
     for(const ev of EVENTS){
       if(!ev.date) continue;
@@ -490,8 +493,7 @@
     }
 
     $grid.innerHTML = "";
-    const total = 42;
-    for(let i=0;i<total;i++){
+    for(let i=0;i<42;i++){
       const cell = document.createElement("div");
       cell.className = "day";
 
@@ -507,16 +509,17 @@
       const key = ymd(d);
       const list = byDate.get(key) || [];
 
+      // catégories uniques
       const catSet = [];
       for(const ev of list){
         const c = (ev.category || "").trim();
         if(c && !catSet.includes(c)) catSet.push(c);
       }
 
+      // dots: max 4 + "+n"
       let dotsHtml = "";
       const maxDots = 4;
-      const shown = catSet.slice(0, maxDots);
-      for(const c of shown){
+      for(const c of catSet.slice(0, maxDots)){
         const color = CAT_COLORS[c] || "rgba(255,255,255,.30)";
         dotsHtml += `<span class="dot" style="background:${color}"></span>`;
       }
@@ -529,20 +532,29 @@
         <div class="dots">${dotsHtml}</div>
       `;
 
-      cell.addEventListener("click", () => openDay(key, list));
+      cell.addEventListener("click", () => {
+        document.querySelectorAll(".day.selected").forEach(el => el.classList.remove("selected"));
+        cell.classList.add("selected");
+        renderDayDetails(key, list);
+      });
+
       $grid.appendChild(cell);
     }
   }
 
-  function openDay(dateYmd, list){
-    $panelTitle.textContent = dateYmd.split("-").reverse().join("/");
+  function renderDayDetails(dateYmd, list){
+    // titre dd/mm/yyyy
+    $dayTitle.textContent = dateYmd.split("-").reverse().join("/");
 
-    $panelEvents.innerHTML = "";
+    $dayEvents.innerHTML = "";
     if(!list || !list.length){
-      $panelEmpty.style.display = "block";
+      $dayEmpty.style.display = "block";
     }else{
-      $panelEmpty.style.display = "none";
-      const arr = [...list].sort((a,b)=> (String(a.start||"").localeCompare(String(b.start||"")) || String(a.title||"").localeCompare(String(b.title||""))));
+      $dayEmpty.style.display = "none";
+
+      const arr = [...list].sort((a,b)=>
+        (String(a.start||"").localeCompare(String(b.start||"")) || String(a.title||"").localeCompare(String(b.title||"")))
+      );
 
       for(const ev of arr){
         const title = escapeHtml(ev.title || "—");
@@ -552,7 +564,6 @@
         const cat = escapeHtml(ev.category || "—");
         const details = (ev.details != null && String(ev.details).trim() !== "") ? escapeHtml(ev.details) : "";
         const loc = (ev.location != null && String(ev.location).trim() !== "") ? escapeHtml(ev.location) : "";
-
         const color = CAT_COLORS[ev.category] || "rgba(255,255,255,.30)";
 
         const div = document.createElement("div");
@@ -566,19 +577,12 @@
           ${loc ? `<div class="evt-details"><b>Lieu :</b> ${loc}</div>` : ``}
           ${details ? `<div class="evt-details">${details}</div>` : ``}
         `;
-        $panelEvents.appendChild(div);
+        $dayEvents.appendChild(div);
       }
     }
 
-    $overlay.classList.add("is-open");
-    $overlay.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeOverlay(){
-    $overlay.classList.remove("is-open");
-    $overlay.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
+    // optionnel : on amène doucement vers le bloc détails
+    $dayCard.scrollIntoView({ behavior:"smooth", block:"start" });
   }
 
   async function fetchCategories(){
@@ -594,7 +598,7 @@
         map[c.category] = c.color || "rgba(255,255,255,.30)";
       }
     }
-    CAT_COLORS = map;
+    if(Object.keys(map).length) CAT_COLORS = map;
   }
 
   async function fetchEventsForCurrentMonth(){
@@ -641,32 +645,35 @@
     const wantedMonth = `${current.getFullYear()}-${String(current.getMonth()+1).padStart(2,"0")}`;
     const cache = cacheRead();
 
+    // Toujours : légende visible
+    renderLegend();
+
     if(cache && cache.month === wantedMonth){
       EVENTS = Array.isArray(cache.events) ? cache.events : [];
-      CAT_COLORS = cache.colors || {};
-      render();
+      CAT_COLORS = cache.colors || CAT_COLORS;
       renderLegend();
+      renderCalendar();
       setStatus("", false);
       return;
     }
 
     try{
       await fetchCategories().catch(()=>{});
-      await fetchEventsForCurrentMonth();
-      render();
       renderLegend();
+      await fetchEventsForCurrentMonth();
+      renderCalendar();
       cacheWrite();
       setStatus("", false);
     }catch(err){
       console.error(err);
       EVENTS = [];
-      render();
-      renderLegend();
+      renderCalendar();
       setStatus("Erreur de chargement (API).", true);
     }
   }
 
   // GO
+  clearDaySelection_();
   loadMonthWithCache();
 </script>
 </body>
