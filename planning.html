@@ -181,11 +181,13 @@
     }
     .day span{ position:relative; z-index:1; }
 
-    /* jour du mois en cours (rouge) */
+    /* jour du mois en cours  */
     .day.is-today{
-      box-shadow: inset 0 0 0 4px rgba(255,59,48,.95);
-      border-color: rgba(255,59,48,.55);
-    }
+  box-shadow:
+    inset 0 0 0 4px #ffffff,
+    0 0 8px rgba(0,0,0,.6);
+  border-color: #ffffff;
+}
 
     /* jour avec NOTE (détails) => jaune fluo + cliquable */
     .day.has-note{
