@@ -1,48 +1,35 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CS Consenvoye</title>
 
-  <title>CS Consenvoye</title>
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+<link rel="manifest" href="manifest.json">
 
-  <!-- Icônes -->
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
-  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#d46a00">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <!-- PWA -->
-  <meta name="theme-color" content="#d46a00">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-  <style>
-
+<style>
 :root{
-  --maxw: 760px;
-
-  /* Titre très haut (petite marge + safe-area) */
-  --titleTop: calc(env(safe-area-inset-top) + Xpx);
-
-  /* Le titre ne doit jamais bouffer l'écran : limite en hauteur */
-  --titleMaxH: 28vh;
-
-  /* Boutons: on tient compte de la HAUTEUR pour tout faire rentrer */
-  --btn: clamp(110px, min(26vw, 16vh), 190px);
-
-  /* Espacement qui s'adapte aussi à la hauteur */
-  --gap: clamp(10px, min(3vw, 2vh), 18px);
+  --maxw: 820px;
+  --btn: clamp(110px, 23vw, 180px);
+  --gap: clamp(12px, 2vw, 18px);
 }
 
-/* Reset */
-html, body{
+*{ box-sizing:border-box; }
+
+html,body{
   margin:0;
   padding:0;
   height:100%;
-  overflow:auto; /* fixe, pas de scroll */
-  background:#000;
+  overflow:hidden;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:#000;
 }
 
 /* Background fixe */
@@ -50,49 +37,47 @@ body::before{
   content:"";
   position:fixed;
   inset:0;
-  background:url("background.png") center top / cover no-repeat;
-  z-index:0;
+  background:url("background.png") center / cover no-repeat;
+  z-index:-1;
 }
 
-/* Layout plein écran */
+/* Layout stable Android */
 .wrap{
-  min-height:100vh;
-  width:100%;
-  z-index:1;
+  min-height:100dvh;
   display:flex;
   flex-direction:column;
   align-items:center;
+  padding:
+    calc(env(safe-area-inset-top) + 12px)
+    12px
+    calc(env(safe-area-inset-bottom) + 20px);
 }
 
-/* Titre (plus haut + contrôlé en hauteur) */
+/* Titre */
 .title{
-  margin-top: var(--titleTop);
-  width: min(94vw, 680px);
-  max-height: var(--titleMaxH);
-  height: auto;
-  display:block;
-  object-fit: contain;
+  width:min(92vw, 680px);
+  height:auto;
+  max-height:25vh;
+  object-fit:contain;
+  margin-bottom: clamp(10px, 2vh, 20px);
   pointer-events:none;
-  user-select:none;
 }
 
 /* Grille */
 .grid{
-  width: min(94vw, var(--maxw));
-  margin-top: clamp(8px, 1.5vh, 16px);
+  width:min(94vw, var(--maxw));
   display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--gap);
+  grid-template-columns:repeat(3,1fr);
+  gap:var(--gap);
   justify-items:center;
-  align-content:start;
 }
 
 .btn{
-  width: var(--btn);
-  height: var(--btn);
+  width:var(--btn);
+  height:var(--btn);
   display:block;
   text-decoration:none;
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color:transparent;
 }
 
 .btn img{
@@ -103,19 +88,9 @@ body::before{
 }
 
 /* Tablettes */
-@media (min-width: 768px){
+@media (min-width:768px){
   :root{
-    --btn: clamp(140px, min(18vw, 18vh), 220px);
-    --titleMaxH: 16vh;
-    --maxw: 900px;
-  }
-}
-
-/* Ecrans très bas (petits vieux tel) */
-@media (max-height: 700px){
-  :root{
-    --btn: clamp(95px, min(24vw, 15vh), 150px);
-    --titleMaxH: 28vh;
+    --btn: clamp(140px, 16vw, 220px);
   }
 }
 </style>
@@ -123,31 +98,60 @@ body::before{
 
 <body>
 <main class="wrap">
-  <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
 
-  <section class="grid" aria-label="Menu">
-    <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/" target="_self"><img src="entretien.png" alt="Entretien"></a>
-    <a class="btn" href="documents.html"><img src="documents.png" alt="Documents"></a>
+<img class="title" src="titre.png" alt="CS Consenvoye">
 
-    <a class="btn" href="organigramme.html"><img src="organigramme.png" alt="Organigramme"></a>
-    <a class="btn" href="construction.png"><img src="informations.png" alt="Informations"></a>
+<section class="grid">
 
-    <a class="btn" href="planning.html"><img src="planning.png" alt="Planning"></a>
-    <a class="btn" href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
+<a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/">
+<img src="entretien.png" alt="Entretien">
+</a>
 
-    <a class="btn" href="construction.png"><img src="book.png" alt="Book"></a>
-    <a class="btn" href="construction.png"><img src="galerie.png" alt="Galerie"></a>
-    
-    <a class="btn" href="construction.png"><img src="admin.png" alt="Admin"></a>
-    <a class="btn" href="construction.png"><img src="gardes postées.png" alt="gardes postées"></a>
+<a class="btn" href="documents.html">
+<img src="documents.png" alt="Documents">
+</a>
 
-     <a class="btn" href="construction.png"><img src="tickets carburant.png" alt="tickets carburants"></a>
-    <a class="btn" href="construction.png"><img src="désinfection VSAV.png" alt="désinfection VSAV"></a>
+<a class="btn" href="organigramme.html">
+<img src="organigramme.png" alt="Organigramme">
+</a>
 
-    
-  </section>
-  </section>
-  </section>
+<a class="btn" href="construction.png">
+<img src="informations.png" alt="Informations">
+</a>
+
+<a class="btn" href="planning.html">
+<img src="planning.png" alt="Planning">
+</a>
+
+<a class="btn" href="equipes.html">
+<img src="equipes.png" alt="Équipes">
+</a>
+
+<a class="btn" href="construction.png">
+<img src="book.png" alt="Book">
+</a>
+
+<a class="btn" href="construction.png">
+<img src="galerie.png" alt="Galerie">
+</a>
+
+<a class="btn" href="construction.png">
+<img src="admin.png" alt="Admin">
+</a>
+
+<a class="btn" href="construction.png">
+<img src="gardes postées.png" alt="Gardes postées">
+</a>
+
+<a class="btn" href="construction.png">
+<img src="tickets carburant.png" alt="Tickets carburant">
+</a>
+
+<a class="btn" href="construction.png">
+<img src="désinfection VSAV.png" alt="Désinfection VSAV">
+</a>
+
+</section>
 </main>
 </body>
 </html>
