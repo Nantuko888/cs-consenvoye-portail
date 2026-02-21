@@ -56,25 +56,24 @@
       padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
     }
 
-    /* ✅ Réserve la place du titre AVANT chargement => plus de décalage */
     .titleBox{
-      margin-top: calc(env(safe-area-inset-top) + 10px);
-      width: min(94vw, 680px);
-      height: clamp(140px, 28vh, 260px); /* réserve la hauteur */
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex: 0 0 auto;
-    }
-    .title{
-      width:100%;
-      height:100%;
-      object-fit:contain;
-      display:block;
-      pointer-events:none;
-      user-select:none;
-    }
+  margin-top: calc(env(safe-area-inset-top) + 10px);
+  width: min(94vw, 680px);
+  height: clamp(90px, 18vh, 160px); /* on NE change PAS */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:visible;
+}
 
+.title{
+  width:115%;      /* 👈 augmente visuellement */
+  height:115%;     /* 👈 augmente visuellement */
+  object-fit:contain;
+  display:block;
+  pointer-events:none;
+  user-select:none;
+}
     /* Grille */
     .grid{
       width: min(94vw, var(--maxw));
