@@ -1,1 +1,115 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Désinfection VSAV</title>
 
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <style>
+    body{margin:0;font-family:system-ui;background:#0b0b0b;color:#fff;padding:16px}
+    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px;margin-bottom:12px}
+    button,select{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.25);color:#fff;font-weight:900}
+    .ok{color:#9cff9c;font-weight:900}
+    .err{color:#ff9c9c;font-weight:900}
+    .small{opacity:.85;font-size:13px}
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div style="font-weight:950;font-size:18px;margin-bottom:8px;">Désinfection VSAV</div>
+    <div class="small">Connexion Google obligatoire (pour verrouiller l’inscription à ton propre compte).</div>
+  </div>
+
+  <div class="card">
+    <div id="g_id_onload"
+      data-client_id="TON_CLIENT_ID_GOOGLE_ICI"
+      data-callback="onGoogleCredential"
+      data-auto_prompt="false">
+    </div>
+
+    <div class="g_id_signin"
+      data-type="standard"
+      data-size="large"
+      data-theme="outline"
+      data-text="signin_with"
+      data-shape="pill"
+      data-logo_alignment="left">
+    </div>
+
+    <div style="margin-top:10px" class="small">
+      Statut : <span id="authState">non connecté</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="small">Choisir le mois</label>
+    <select id="month">
+      <option>JANVIER</option><option>FÉVRIER</option><option>MARS</option><option>AVRIL</option>
+      <option>MAI</option><option>JUIN</option><option>JUILLET</option><option>AOÛT</option>
+      <option>SEPTEMBRE</option><option>OCTOBRE</option><option>NOVEMBRE</option><option>DÉCEMBRE</option>
+    </select>
+
+    <div style="height:10px"></div>
+    <button id="btnSignup">Je m’inscris sur ce mois</button>
+
+    <div style="margin-top:10px" id="msg"></div>
+  </div>
+
+<script>
+  // >>>> CONFIG <<<<
+  const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+
+  let idToken = ""; // token Google
+  const $ = (id)=>document.getElementById(id);
+
+  function setMsg(txt, ok){
+    $("msg").innerHTML = `<div class="${ok?'ok':'err'}">${txt}</div>`;
+  }
+
+  // Callback Google Sign-In
+  window.onGoogleCredential = (response) => {
+    idToken = response.credential || "";
+    $("authState").textContent = idToken ? "connecté ✅" : "non connecté";
+  };
+
+  // JSONP helper
+  function jsonp(url, cbName){
+    return new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      const cleanup = ()=>{ s.remove(); try{delete window[cbName]}catch(e){window[cbName]=undefined} };
+      const t = setTimeout(()=>{ cleanup(); reject(new Error("timeout")); }, 12000);
+      window[cbName] = (data)=>{ clearTimeout(t); cleanup(); resolve(data); };
+      s.src = url;
+      s.onerror = ()=>{ clearTimeout(t); cleanup(); reject(new Error("jsonp error")); };
+      document.head.appendChild(s);
+    });
+  }
+
+  $("btnSignup").addEventListener("click", async ()=>{
+    const month = $("month").value.trim();
+    if(!idToken){
+      setMsg("Connecte-toi avec Google avant de t’inscrire.", false);
+      return;
+    }
+    try{
+      setMsg("Inscription en cours…", true);
+      const cb = "cb_" + Math.random().toString(36).slice(2);
+      const url = `${API}?view=vsav&action=signup&month=${encodeURIComponent(month)}&token=${encodeURIComponent(idToken)}&callback=${cb}`;
+      const res = await jsonp(url, cb);
+      if(res && res.ok){
+        setMsg(`✅ Inscription OK : ${res.nom} (${res.month})`, true);
+      }else{
+        setMsg(`❌ Refus : ${res && res.error ? res.error : "erreur"}`, false);
+      }
+    }catch(e){
+      setMsg("❌ API HS / lente", false);
+    }
+  });
+</script>
+
+</body>
+</html>
