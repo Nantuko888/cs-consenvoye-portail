@@ -58,6 +58,7 @@ body{
 
 /* Titre */
 .title{
+.title{
   margin-top: calc(env(safe-area-inset-top) + 10px);
   width: min(94vw, 680px);
   max-height: var(--titleMaxH);
@@ -66,6 +67,9 @@ body{
   display:block;
   pointer-events:none;
   user-select:none;
+
+  transform: scale(1.15);      /* 👈 agrandit visuellement */
+  transform-origin: center top; /* 👈 reste ancré en haut */
 }
 
 /* Grille */
