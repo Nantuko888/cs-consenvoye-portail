@@ -20,16 +20,10 @@
     :root{
       --maxw: 760px;
 
-      /* marge haute + safe-area */
-      --titleTop: calc(env(safe-area-inset-top) + 10px);
-
-      /* limite hauteur du titre */
-      --titleMaxH: 26vh;
-
-      /* boutons */
+      /* Boutons */
       --btn: clamp(110px, min(26vw, 16vh), 190px);
 
-      /* espacement */
+      /* Espacement */
       --gap: clamp(10px, min(3vw, 2vh), 18px);
     }
 
@@ -43,15 +37,15 @@
       overscroll-behavior-y: auto;   /* ✅ autorise le geste */
       background:#000;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      -webkit-text-size-adjust: 100%;
+      -webkit-text-size-adjust:100%;
     }
 
-    /* ✅ Background fiable (pas de pseudo-element) */
+    /* ✅ Background fiable */
     body{
-      background: #000 url("background.png") center top / cover no-repeat fixed;
+      background:#000 url("background.png") center top / cover no-repeat fixed;
     }
 
-    /* Layout plein écran stable */
+    /* Layout */
     .wrap{
       min-height:100vh;
       min-height:100dvh;
@@ -62,14 +56,21 @@
       padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
     }
 
-    /* Titre */
-    .title{
-      margin-top: var(--titleTop);
+    /* ✅ Réserve la place du titre AVANT chargement => plus de décalage */
+    .titleBox{
+      margin-top: calc(env(safe-area-inset-top) + 10px);
       width: min(94vw, 680px);
-      max-height: var(--titleMaxH);
-      height:auto;
-      display:block;
+      height: clamp(90px, 18vh, 160px); /* réserve la hauteur */
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+    }
+    .title{
+      width:100%;
+      height:100%;
       object-fit:contain;
+      display:block;
       pointer-events:none;
       user-select:none;
     }
@@ -92,7 +93,6 @@
       text-decoration:none;
       -webkit-tap-highlight-color: transparent;
     }
-
     .btn img{
       width:100%;
       height:100%;
@@ -104,16 +104,17 @@
     @media (min-width: 768px){
       :root{
         --btn: clamp(140px, min(18vw, 18vh), 220px);
-        --titleMaxH: 18vh;
         --maxw: 900px;
       }
     }
 
-    /* Ecrans très bas */
+    /* Ecrans bas */
     @media (max-height: 700px){
       :root{
         --btn: clamp(95px, min(24vw, 15vh), 150px);
-        --titleMaxH: 26vh;
+      }
+      .titleBox{
+        height: clamp(80px, 18vh, 140px);
       }
     }
   </style>
@@ -121,7 +122,10 @@
 
 <body>
   <main class="wrap">
-    <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
+
+    <div class="titleBox">
+      <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
+    </div>
 
     <section class="grid" aria-label="Menu">
       <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/" target="_self">
@@ -172,6 +176,7 @@
         <img src="désinfection VSAV.png" alt="désinfection VSAV">
       </a>
     </section>
+
   </main>
 </body>
 </html>
