@@ -204,25 +204,54 @@ function parseJwtEmail(credential){
 }
 
 /* ====== JSONP ====== */
-function jsonp(url, cbName){
+function jsonp(url, cbName, timeoutMs = 30000){
   return new Promise((resolve, reject) => {
     const script = document.createElement("script");
+    script.async = true;
+    script.defer = true;
+    script.crossOrigin = "anonymous";
+
     const cleanup = () => {
       script.remove();
       try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
     };
-    const timer = setTimeout(() => { cleanup(); reject(new Error("Timeout JSONP")); }, 12000);
-    window[cbName] = (data) => { clearTimeout(timer); cleanup(); resolve(data); };
-    script.src = url;
-    script.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error("Erreur JSONP")); };
+
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error("Timeout JSONP"));
+    }, timeoutMs);
+
+    window[cbName] = (data) => {
+      clearTimeout(timer);
+      cleanup();
+      resolve(data);
+    };
+
+    // cache-buster (mobile/proxy)
+    const sep = url.includes("?") ? "&" : "?";
+    script.src = url + sep + "_t=" + Date.now();
+
+    script.onerror = () => {
+      clearTimeout(timer);
+      cleanup();
+      reject(new Error("Erreur JSONP (script bloqué)"));
+    };
+
     document.head.appendChild(script);
   });
 }
 
+
 async function authCheck(email){
   const cb = "cb_auth_" + Math.random().toString(36).slice(2);
-  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}&_=${Date.now()}`;
-  return await jsonp(url, cb);
+  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
+
+  // 2 tentatives (mobile capricieux)
+  try {
+    return await jsonp(url, cb, 30000);
+  } catch(e1){
+    return await jsonp(url, cb, 30000);
+  }
 }
 
 /* ====== Google callback ====== */
