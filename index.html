@@ -22,19 +22,20 @@
   --gap: clamp(10px, min(3vw, 2vh), 18px);
 }
 *{ box-sizing:border-box; }
+
 html, body{
-  margin:0; padding:0; height:100%;
+  margin:0; padding:0;
+  min-height:100%;
   background:#000;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   -webkit-text-size-adjust:100%;
 }
 
-/* ✅ BACKGROUND UNIQUE (et stable) */
 body{
   background:#000 url("background.png") center top / cover no-repeat fixed;
 }
 
-/* ===== PORTAIL ===== */
+/* ===== PORTAIL (inchangé) ===== */
 .wrap{
   min-height:100vh;
   min-height:100dvh;
@@ -44,7 +45,6 @@ body{
   align-items:center;
   padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
 }
-
 .title{
   margin-top: calc(env(safe-area-inset-top) + 2px);
   width: min(94vw, 680px);
@@ -57,7 +57,6 @@ body{
   transform: scale(1.25);
   transform-origin: center top;
 }
-
 .grid{
   width: min(94vw, var(--maxw));
   margin-top: clamp(8px, 1.5vh, 16px);
@@ -67,7 +66,6 @@ body{
   justify-items:center;
   align-content:start;
 }
-
 .btn{
   width: var(--btn);
   height: var(--btn);
@@ -81,51 +79,49 @@ body{
   :root{ --btn: clamp(110px, 16vw, 180px); --titleMaxH: 26vh; --maxw:900px; }
 }
 
-/* ===== LOGIN (overlay centré, sans toucher au body) ===== */
-#loginScreen{
+/* ===== LOGIN (overlay centré, SANS toucher body) ===== */
+#loginOverlay{
   position:fixed;
   inset:0;
   display:flex;
+  align-items:center;
   justify-content:center;
-  align-items:flex-start; /* remonte un peu */
-  padding-top: calc(env(safe-area-inset-top) + 70px);
-  padding-left: 12px;
-  padding-right: 12px;
-  z-index:9999;
+  padding: calc(env(safe-area-inset-top) + 14px) 14px calc(env(safe-area-inset-bottom) + 14px);
+  background: rgba(0,0,0,.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 #loginBox{
   width:min(92vw, 420px);
-  padding: 18px 16px 14px;
+  padding: 18px 16px;
   border-radius: 18px;
-  background: rgba(0,0,0,.62);
+  background: rgba(0,0,0,.60);
   border: 1px solid rgba(255,255,255,.14);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 14px 38px rgba(0,0,0,.55);
   text-align:center;
-  box-shadow: 0 10px 40px rgba(0,0,0,.55);
 }
 
-#loginTitleImg{
-  width: min(86vw, 340px);
-  height:auto;
-  display:block;
-  margin: 4px auto 12px auto;
-  object-fit:contain;
+#loginTitle{
+  margin: 0 0 10px 0;
+  font-weight: 950;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.92);
 }
 
 #loginMsg{
   margin: 10px 0 0 0;
-  min-height: 18px;
   font-weight: 800;
+  color: rgba(255,255,255,.80);
   font-size: 14px;
-  color: rgba(255,255,255,.85);
+  min-height: 18px;
 }
 
 #logoutBtn{
-  margin-top: 10px;
+  margin-top: 12px;
   border:1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.22);
+  background: rgba(0,0,0,.18);
   color: rgba(255,255,255,.92);
   padding: 10px 12px;
   border-radius: 14px;
@@ -141,14 +137,12 @@ body{
 <body>
 
 <!-- LOGIN OVERLAY -->
-<div id="loginScreen">
+<div id="loginOverlay">
   <div id="loginBox">
-    <!-- ✅ Mets ton image "ACCES PORTAIL" ici (sinon laisse et ça affiche rien) -->
-    <img id="loginTitleImg" src="acces-portail.png" alt="Accès Portail"
-         onerror="this.style.display='none'">
+    <h2 id="loginTitle">Accès Portail</h2>
 
     <div id="g_id_onload"
-         data-client_id="PLACEHOLDER_CLIENT_ID"
+         data-client_id="690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com"
          data-callback="handleCredentialResponse"
          data-auto_prompt="false">
     </div>
@@ -171,63 +165,57 @@ body{
   <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
 
   <section class="grid" aria-label="Menu">
-    <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/"><img src="entretien.png" alt="Entretien"></a>
-    <a class="btn" href="documents.html"><img src="documents.png" alt="Documents"></a>
-    <a class="btn" href="organigramme.html"><img src="organigramme.png" alt="Organigramme"></a>
-    <a class="btn" href="construction.png"><img src="informations.png" alt="Informations"></a>
-    <a class="btn" href="planning.html"><img src="planning.png" alt="Planning"></a>
-    <a class="btn" href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
-    <a class="btn" href="construction.png"><img src="book.png" alt="Book"></a>
-    <a class="btn" href="construction.png"><img src="galerie.png" alt="Galerie"></a>
-    <a class="btn" href="construction.png"><img src="admin.png" alt="Admin"></a>
-    <a class="btn" href="construction.png"><img src="gardes postées.png" alt="Gardes postées"></a>
-    <a class="btn" href="construction.png"><img src="tickets carburant.png" alt="Tickets carburant"></a>
-    <a class="btn" href="construction.png"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>
+    <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/" target="_self"><img src="entretien.png" alt="Entretien"></a>
+    <a class="btn" href="documents.html" target="_self"><img src="documents.png" alt="Documents"></a>
+    <a class="btn" href="organigramme.html" target="_self"><img src="organigramme.png" alt="Organigramme"></a>
+    <a class="btn" href="construction.png" target="_self"><img src="informations.png" alt="Informations"></a>
+    <a class="btn" href="planning.html" target="_self"><img src="planning.png" alt="Planning"></a>
+    <a class="btn" href="equipes.html" target="_self"><img src="equipes.png" alt="Équipes"></a>
+    <a class="btn" href="construction.png" target="_self"><img src="book.png" alt="Book"></a>
+    <a class="btn" href="construction.png" target="_self"><img src="galerie.png" alt="Galerie"></a>
+    <a class="btn" href="construction.png" target="_self"><img src="admin.png" alt="Admin"></a>
+    <a class="btn" href="construction.png" target="_self"><img src="gardes postées.png" alt="Gardes postées"></a>
+    <a class="btn" href="construction.png" target="_self"><img src="tickets carburant.png" alt="Tickets carburant"></a>
+    <a class="btn" href="construction.png" target="_self"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>
   </section>
 </main>
 
 <script>
-/* ====== CONFIG (NE CHANGE PAS LE RESTE) ====== */
-const GOOGLE_CLIENT_ID = "690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com";
+/* ====== CONFIG ====== */
 const API = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec";
 const LS_KEY = "cs_portail_email_v1";
 
 /* ====== DOM ====== */
-const $loginBox = document.getElementById("loginBox");
-const $portal = document.getElementById("portal");
-const $msg = document.getElementById("loginMsg");
-const $logout = document.getElementById("logoutBtn");
+const $overlay = document.getElementById("loginOverlay");
+const $portal  = document.getElementById("portal");
+const $msg     = document.getElementById("loginMsg");
+const $logout  = document.getElementById("logoutBtn");
 
 /* ====== UI ====== */
 function showMsg(t){ $msg.textContent = t || ""; }
 
-function showPortal(push=true){
-  $loginBox.style.display = "none";
+function showPortal(){
+  $overlay.style.display = "none";
   $portal.style.display = "flex";
-  if(push){
-    const url = new URL(location.href);
-    url.searchParams.set("portal","1");
-    history.pushState({page:"portal"}, "", url.toString());
-  }
+  // ✅ IMPORTANT : on remplace l’état "login" par "portal" pour éviter que le bouton retour revienne au login
+  history.replaceState({page:"portal"}, "", location.pathname);
 }
 
-function showLogin(push=true){
+function showLogin(){
   $portal.style.display = "none";
-  $loginBox.style.display = "block";
-  if(push){
-    const url = new URL(location.href);
-    url.searchParams.delete("portal");
-    history.pushState({page:"login"}, "", url.toString());
-  }
+  $overlay.style.display = "flex";
+  history.replaceState({page:"login"}, "", location.pathname);
 }
 
-/* ====== JWT email (ROBUSTE) ====== */
+/* ====== JWT email ====== */
 function b64urlToUtf8(b64url){
   let s = String(b64url || "").replace(/-/g, "+").replace(/_/g, "/");
   while (s.length % 4) s += "=";
   const bin = atob(s);
   let out = "";
-  for (let i=0;i<bin.length;i++) out += "%" + bin.charCodeAt(i).toString(16).padStart(2,"0");
+  for (let i=0;i<bin.length;i++){
+    out += "%" + bin.charCodeAt(i).toString(16).padStart(2,"0");
+  }
   return decodeURIComponent(out);
 }
 function parseJwtEmail(credential){
@@ -237,138 +225,101 @@ function parseJwtEmail(credential){
   return String(payload.email || "").trim().toLowerCase();
 }
 
-/* ====== JSONP STABLE (baseUrl + params) ====== */
-function jsonp(baseUrl, params={}, timeoutMs=20000){
+/* ====== JSONP ====== */
+function jsonp(url, cbName, timeoutMs = 15000){
   return new Promise((resolve, reject) => {
-    const cb = "__cb_" + Math.random().toString(36).slice(2);
-
-    // callback global
-    window[cb] = (data) => {
-      cleanup();
-      resolve(data);
+    const script = document.createElement("script");
+    const cleanup = () => {
+      script.remove();
+      try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
     };
-
-    const qs = new URLSearchParams({
-      ...params,
-      callback: cb,
-      _t: String(Date.now())
-    }).toString();
-
-    const s = document.createElement("script");
-    s.src = baseUrl + (baseUrl.includes("?") ? "&" : "?") + qs;
-
-    const timer = setTimeout(() => {
-      cleanup();
-      reject(new Error("timeout"));
-    }, timeoutMs);
-
-    function cleanup(){
-      clearTimeout(timer);
-      if (s && s.parentNode) s.parentNode.removeChild(s);
-      try { delete window[cb]; } catch(e){ window[cb] = undefined; }
-    }
-
-    s.onerror = () => {
-      cleanup();
-      reject(new Error("load_error"));
-    };
-
-    document.head.appendChild(s);
+    const timer = setTimeout(() => { cleanup(); reject(new Error("timeout")); }, timeoutMs);
+    window[cbName] = (data) => { clearTimeout(timer); cleanup(); resolve(data); };
+    script.src = url;
+    script.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error("jsonp_error")); };
+    document.head.appendChild(script);
   });
 }
-const API1 = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec";
-const API2 = "https://script.googleusercontent.com/macros/echo?user_content_key=AY5xjrQECihV3Ai1WremzIBEs8fF7DpOa89vP0XYnwXBL0fxr3AH3PaZgPi823TJp5qY9ZdM1eE8Bzm5AcuPY9dvLFQA1EvwoUZnIjFZI174wp5hGb8BfFzxLN0HGCBlfDyVdkN0ettZvdhRggb3wvSisthFFMqVEFXtpbcTMAD9S7fCIe71OqBii4iM08Gy5utyTdzgLAZ1NdxSxWbPyRjgYY94JhKeiSQSs61HM99Ot03fPib_ITXlNTeaTlCiiqkY4L9pcfxON8c13fhD9RwPSPZmWYScsA&lib=MUrxZm6e_GZu_nx92INa1hxWMXI2VoG64";
 
 async function authCheck(email){
-  try {
-    // 1) tente script.google.com
-    return await jsonp(API1, { view:"auth_check", email, nocache:"1" }, 20000);
-  } catch(e1) {
-    // 2) fallback script.googleusercontent.com
-    return await jsonp(API2, { view:"auth_check", email, nocache:"1" }, 20000);
-  }
+  const cb = "cb_auth_" + Math.random().toString(36).slice(2);
+  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
+  return await jsonp(url, cb);
 }
-
-
 
 /* ====== Google callback ====== */
 async function handleCredentialResponse(response){
   try{
     showMsg("Vérification…");
-
     const email = parseJwtEmail(response.credential);
     if(!email){
       localStorage.removeItem(LS_KEY);
-      showLogin(false);
-      showMsg("Erreur : email introuvable.");
+      showLogin();
+      showMsg("Erreur email.");
       return;
     }
 
     const res = await authCheck(email);
-
     if(res && res.ok === true){
       localStorage.setItem(LS_KEY, email);
       showMsg("");
-      showPortal(true);
+      showPortal();
     }else{
       localStorage.removeItem(LS_KEY);
-      showLogin(false);
+      showLogin();
       showMsg("Accès refusé.");
     }
   }catch(e){
     localStorage.removeItem(LS_KEY);
-    showLogin(false);
-    showMsg("Erreur réseau / serveur.");
+    showLogin();
+    showMsg("Erreur réseau.");
   }
 }
 
 /* ====== Boot ====== */
-(function(){
-  // client_id au bon endroit
-  const g = document.getElementById("g_id_onload");
-  if(g) g.setAttribute("data-client_id", GOOGLE_CLIENT_ID);
+(async function(){
+  showLogin();
+  showMsg("");
 
-  // état initial depuis l’URL
-  const url = new URL(location.href);
-  if(url.searchParams.get("portal")==="1") showPortal(false);
-  else showLogin(false);
-
-  // si email mémorisé => recheck
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
   if(saved){
-    showMsg("Vérification…");
-    authCheck(saved).then(res=>{
+    try{
+      showMsg("Vérification…");
+      const res = await authCheck(saved);
       if(res && res.ok === true){
         showMsg("");
-        showPortal(true);
+        showPortal();
       }else{
         localStorage.removeItem(LS_KEY);
         showMsg("Accès refusé.");
       }
-    }).catch(()=>{
+    }catch(e){
       localStorage.removeItem(LS_KEY);
-      showMsg("Erreur réseau / serveur.");
-    });
-  }else{
-    showMsg("");
+      showMsg("Erreur réseau.");
+    }
   }
 })();
 
 /* Déconnexion */
-$logout?.addEventListener("click", ()=>{
+$logout.addEventListener("click", ()=>{
   localStorage.removeItem(LS_KEY);
-  showLogin(true);
+  showLogin();
   showMsg("Déconnecté.");
 });
 
-/* Bouton retour (Android) */
-window.onpopstate = () => {
-  const url = new URL(location.href);
-  if(url.searchParams.get("portal")==="1") showPortal(false);
-  else showLogin(false);
-};
+/* ✅ RETOUR TÉLÉPHONE :
+   - Si on est connecté => on reste/retourne au portail
+   - Sinon => login
+*/
+window.addEventListener("popstate", ()=>{
+  const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
+  if(saved){
+    showPortal();
+  }else{
+    showLogin();
+  }
+});
 </script>
-
 
 </body>
 </html>
