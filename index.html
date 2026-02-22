@@ -22,24 +22,17 @@
   --gap: clamp(10px, min(3vw, 2vh), 18px);
 }
 *{ box-sizing:border-box; }
-
 html, body{
-  margin:0;
-  padding:0;
-  height:100%;
+  margin:0; padding:0; height:100%;
   overflow:auto;
   overscroll-behavior-y:auto;
   background:#000;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   -webkit-text-size-adjust:100%;
 }
-
-/* Background stable */
 body{
   background:#000 url("background.png") center top / cover no-repeat fixed;
 }
-
-/* Layout */
 .wrap{
   min-height:100vh;
   min-height:100dvh;
@@ -49,8 +42,6 @@ body{
   align-items:center;
   padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
 }
-
-/* Titre */
 .title{
   margin-top: calc(env(safe-area-inset-top) + 2px);
   width: min(94vw, 680px);
@@ -60,12 +51,9 @@ body{
   display:block;
   pointer-events:none;
   user-select:none;
-
   transform: scale(1.25);
   transform-origin: center top;
 }
-
-/* Grille */
 .grid{
   width: min(94vw, var(--maxw));
   margin-top: clamp(8px, 1.5vh, 16px);
@@ -75,7 +63,6 @@ body{
   justify-items:center;
   align-content:start;
 }
-
 .btn{
   width: var(--btn);
   height: var(--btn);
@@ -83,62 +70,60 @@ body{
   text-decoration:none;
   -webkit-tap-highlight-color:transparent;
 }
+.btn img{ width:100%; height:100%; object-fit:contain; display:block; }
 
-.btn img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  display:block;
+@media (min-width:768px){
+  :root{ --btn: clamp(110px, 16vw, 180px); --titleMaxH: 26vh; --maxw:900px; }
 }
 
-/* Login box */
+/* ---- LOGIN ---- */
 #loginBox{
-  width: min(94vw, 520px);
-  margin-top: clamp(40px, 12vh, 140px);
-  padding: 14px;
+  width:min(92vw, 520px);
+  margin-top: calc(env(safe-area-inset-top) + 70px);
+  padding: 16px 14px;
   border-radius: 18px;
   background: rgba(0,0,0,.55);
-  border:1px solid rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.14);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   text-align:center;
 }
-
-#loginHint{
-  color: rgba(255,255,255,.85);
-  font-weight: 900;
+#loginTitle{
   margin: 0 0 10px 0;
-  letter-spacing:.2px;
+  font-weight: 950;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.92);
 }
-
-#loginSub{
-  color: rgba(255,255,255,.70);
+#loginMsg{
+  margin: 8px 0 0 0;
   font-weight: 800;
-  margin: 0 0 14px 0;
-  font-size: 13px;
+  color: rgba(255,255,255,.78);
+  font-size: 14px;
+  min-height: 18px;
 }
-
-/* Tablettes */
-@media (min-width:768px){
-  :root{
-    --btn: clamp(110px, 16vw, 180px);
-    --titleMaxH: 26vh;
-    --maxw:900px;
-  }
+#logoutBtn{
+  margin-top: 10px;
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.18);
+  color: rgba(255,255,255,.92);
+  padding: 10px 12px;
+  border-radius: 14px;
+  font-weight: 900;
+  cursor:pointer;
 }
 </style>
 
-<!-- Google Identity Services -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body>
 
 <!-- LOGIN -->
-<div id="loginBox" style="display:none;">
-  <p id="loginHint">Connexion requise</p>
-  <p id="loginSub">Utilise ton compte Google autorisé.</p>
+<div id="loginBox">
+  <h2 id="loginTitle">Accès Portail</h2>
 
+  <!-- Google button -->
   <div id="g_id_onload"
        data-client_id="690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com"
        data-callback="handleCredentialResponse"
@@ -152,52 +137,61 @@ body{
        data-text="sign_in_with"
        data-shape="rectangular">
   </div>
+
+  <p id="loginMsg"></p>
+
+  <!-- Déconnexion local (utile tests) -->
+  <button id="logoutBtn" type="button">Déconnexion</button>
 </div>
 
 <!-- PORTAIL -->
-<main class="wrap" id="app" style="display:none;">
+<main class="wrap" id="portal" style="display:none;">
   <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
 
   <section class="grid" aria-label="Menu">
-
-    <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/" target="_self">
-      <img src="entretien.png" alt="Entretien">
-    </a>
-
+    <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/"><img src="entretien.png" alt="Entretien"></a>
     <a class="btn" href="documents.html"><img src="documents.png" alt="Documents"></a>
     <a class="btn" href="organigramme.html"><img src="organigramme.png" alt="Organigramme"></a>
     <a class="btn" href="construction.png"><img src="informations.png" alt="Informations"></a>
     <a class="btn" href="planning.html"><img src="planning.png" alt="Planning"></a>
     <a class="btn" href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
-
     <a class="btn" href="construction.png"><img src="book.png" alt="Book"></a>
     <a class="btn" href="construction.png"><img src="galerie.png" alt="Galerie"></a>
-
     <a class="btn" href="construction.png"><img src="admin.png" alt="Admin"></a>
     <a class="btn" href="construction.png"><img src="gardes postées.png" alt="Gardes postées"></a>
-
     <a class="btn" href="construction.png"><img src="tickets carburant.png" alt="Tickets carburant"></a>
     <a class="btn" href="construction.png"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>
-
   </section>
 </main>
 
 <script>
-/*** CONFIG ***/
-const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
-const LS_KEY_EMAIL = "cs_portail_email";
+/* ====== CONFIG ====== */
+const API = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec";
+const LS_KEY = "cs_portail_email_v1";
 
-/*** UI helpers ***/
+/* ====== DOM ====== */
+const $loginBox = document.getElementById("loginBox");
+const $portal = document.getElementById("portal");
+const $msg = document.getElementById("loginMsg");
+const $logout = document.getElementById("logoutBtn");
+
+/* ====== Utils ====== */
+function showMsg(t){ $msg.textContent = t || ""; }
+function showPortal(){
+  $loginBox.style.display = "none";
+  $portal.style.display = "flex";
+}
 function showLogin(){
-  document.getElementById("app").style.display = "none";
-  document.getElementById("loginBox").style.display = "block";
-}
-function showApp(){
-  document.getElementById("loginBox").style.display = "none";
-  document.getElementById("app").style.display = "flex";
+  $portal.style.display = "none";
+  $loginBox.style.display = "block";
 }
 
-/*** JSONP (compatible GitHub Pages + Apps Script) ***/
+function parseJwtEmail(credential){
+  const payload = credential.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+  const json = JSON.parse(decodeURIComponent(escape(atob(payload))));
+  return (json.email || "").trim().toLowerCase();
+}
+
 function jsonp(url, cbName){
   return new Promise((resolve, reject) => {
     const script = document.createElement("script");
@@ -213,62 +207,72 @@ function jsonp(url, cbName){
   });
 }
 
-/*** Vérifie l'accès côté Apps Script (pas de fetch) ***/
 async function authCheck(email){
   const cb = "cb_auth_" + Math.random().toString(36).slice(2);
   const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
-  const res = await jsonp(url, cb);
-  return !!(res && res.ok);
+  return await jsonp(url, cb);
 }
 
-/*** Google Credential callback ***/
-async function handleCredentialResponse(response) {
+/* ====== Google callback ====== */
+async function handleCredentialResponse(response){
   try{
-    // decode JWT payload (email)
-    const payload = response.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-    const data = JSON.parse(decodeURIComponent(escape(atob(payload))));
-    const email = (data.email || "").trim().toLowerCase();
-
+    showMsg("Vérification de l’accès…");
+    const email = parseJwtEmail(response.credential);
     if(!email){
-      alert("Erreur : email introuvable.");
-      showLogin();
+      showMsg("Erreur : email introuvable.");
       return;
     }
 
-    const ok = await authCheck(email);
-    if(ok){
-      localStorage.setItem(LS_KEY_EMAIL, email);
-      showApp();
+    const res = await authCheck(email);
+
+    if(res && res.ok === true){
+      localStorage.setItem(LS_KEY, email);
+      showMsg("");
+      showPortal();
     }else{
-      localStorage.removeItem(LS_KEY_EMAIL);
-      alert("Accès refusé");
+      localStorage.removeItem(LS_KEY);
+      showMsg("Accès refusé.");
       showLogin();
     }
   }catch(err){
-    console.error(err);
-    alert("Erreur réseau / serveur");
+    localStorage.removeItem(LS_KEY);
+    showMsg("Erreur de connexion (API).");
     showLogin();
   }
 }
 
-/*** BOOT : si email déjà connu -> on REVALIDE à chaque ouverture ***/
-(async function boot(){
-  const saved = (localStorage.getItem(LS_KEY_EMAIL) || "").trim().toLowerCase();
+/* ====== Boot ====== */
+(async function(){
+  // Toujours cacher le portail au départ
+  showLogin();
+  showMsg("");
+
+  // Si un email est mémorisé, on revalide (suppression mail = plus accès)
+  const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
   if(saved){
     try{
-      const ok = await authCheck(saved);
-      if(ok){
-        showApp();
-        return;
+      showMsg("Vérification…");
+      const res = await authCheck(saved);
+      if(res && res.ok === true){
+        showMsg("");
+        showPortal();
+      }else{
+        localStorage.removeItem(LS_KEY);
+        showMsg("Accès refusé.");
       }
-      localStorage.removeItem(LS_KEY_EMAIL);
     }catch(e){
-      // si API tombe, on ne laisse pas passer
-      localStorage.removeItem(LS_KEY_EMAIL);
+      localStorage.removeItem(LS_KEY);
+      showMsg("Erreur de connexion (API).");
     }
   }
-  showLogin();
 })();
+
+/* Déconnexion (tests / forcer nouveau compte) */
+$logout.addEventListener("click", ()=>{
+  localStorage.removeItem(LS_KEY);
+  showLogin();
+  showMsg("Déconnecté.");
+});
 </script>
 
 </body>
