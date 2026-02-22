@@ -17,60 +17,21 @@
 <style>
 :root{
   --maxw: 760px;
-
-  /* 🔥 Titre dominant */
   --titleMaxH: 34vh;
-
-  /* 🔥 Icônes équilibrées */
   --btn: clamp(100px, min(22vw, 15vh), 170px);
-
   --gap: clamp(10px, min(3vw, 2vh), 18px);
 }
-
 *{ box-sizing:border-box; }
-
 html, body{
-  margin:0;
-  padding:0;
-  height:100%;
-  overflow:auto;
-  overscroll-behavior-y:auto; /* garde le pull-to-refresh */
+  margin:0; padding:0; height:100%;
+  overflow:auto; overscroll-behavior-y:auto;
   background:#000;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   -webkit-text-size-adjust:100%;
 }
-
-/* Background stable */
 body{
   background:#000 url("background.png") center top / cover no-repeat fixed;
 }
-
-/* ===== LOGIN ===== */
-#loginBox{
-  min-height: 100vh;
-  min-height: 100dvh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-start;
-  padding-top: calc(env(safe-area-inset-top) + 110px);
-  gap: 14px;
-  text-align:center;
-}
-#loginBox .hint{
-  color: rgba(255,255,255,.92);
-  font-weight: 800;
-  text-shadow: 0 2px 10px rgba(0,0,0,.65);
-  padding: 0 14px;
-}
-#loginBox .sub{
-  color: rgba(255,255,255,.78);
-  font-weight: 700;
-  font-size: 14px;
-  padding: 0 14px;
-}
-
-/* ===== PORTAIL ===== */
 .wrap{
   min-height:100vh;
   min-height:100dvh;
@@ -80,8 +41,6 @@ body{
   align-items:center;
   padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
 }
-
-/* Titre */
 .title{
   margin-top: calc(env(safe-area-inset-top) + 2px);
   width: min(94vw, 680px);
@@ -91,12 +50,9 @@ body{
   display:block;
   pointer-events:none;
   user-select:none;
-
   transform: scale(1.25);
   transform-origin: center top;
 }
-
-/* Grille */
 .grid{
   width: min(94vw, var(--maxw));
   margin-top: clamp(8px, 1.5vh, 16px);
@@ -106,7 +62,6 @@ body{
   justify-items:center;
   align-content:start;
 }
-
 .btn{
   width: var(--btn);
   height: var(--btn);
@@ -121,12 +76,44 @@ body{
   display:block;
 }
 
-/* Tablettes */
+/* Login box */
+#loginBox{
+  min-height:100vh;
+  min-height:100dvh;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:14px;
+  padding:24px;
+  background:rgba(0,0,0,.35);
+  backdrop-filter: blur(2px);
+}
+#loginTitle{
+  color:#fff;
+  font-weight:700;
+  text-align:center;
+  text-shadow:0 2px 10px rgba(0,0,0,.7);
+  line-height:1.2;
+}
+#loginSub{
+  color:#ddd;
+  font-size:14px;
+  text-align:center;
+  max-width:520px;
+}
+#status{
+  color:#ffd;
+  font-size:13px;
+  opacity:.9;
+}
+
 @media (min-width:768px){
   :root{
     --btn: clamp(110px, 16vw, 180px);
     --titleMaxH: 26vh;
-    --maxw: 900px;
+    --maxw:900px;
   }
 }
 </style>
@@ -138,13 +125,15 @@ body{
 <body>
 
 <!-- LOGIN -->
-<div id="loginBox">
-  <div class="hint">Connexion Google requise</div>
-  <div class="sub">Accès réservé aux agents autorisés</div>
+<div id="loginBox" style="display:none;">
+  <div id="loginTitle">Connexion Google requise</div>
+  <div id="loginSub">Accès réservé aux agents autorisés.</div>
 
+  <!-- GIS config -->
   <div id="g_id_onload"
        data-client_id="690765229829-9bbdccrsm9dd8c1sj01k06bqsdna3hgs.apps.googleusercontent.com"
-       data-callback="handleCredentialResponse">
+       data-callback="handleCredentialResponse"
+       data-auto_prompt="false">
   </div>
 
   <div class="g_id_signin"
@@ -154,186 +143,195 @@ body{
        data-text="sign_in_with"
        data-shape="rectangular">
   </div>
+
+  <div id="status"></div>
 </div>
 
 <!-- PORTAIL -->
-<main class="wrap" id="portal" style="display:none;">
+<main id="portal" class="wrap" style="display:none;">
+
   <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
 
-  <section class="grid" aria-label="Menu">
+  <section class="grid">
 
-    <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/" target="_self">
+    <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/">
       <img src="entretien.png" alt="Entretien">
     </a>
 
-    <a class="btn" href="documents.html" target="_self">
+    <a class="btn" href="documents.html">
       <img src="documents.png" alt="Documents">
     </a>
 
-    <a class="btn" href="organigramme.html" target="_self">
+    <a class="btn" href="organigramme.html">
       <img src="organigramme.png" alt="Organigramme">
     </a>
 
-    <a class="btn" href="construction.png" target="_self">
+    <a class="btn" href="construction.png">
       <img src="informations.png" alt="Informations">
     </a>
 
-    <a class="btn" href="planning.html" target="_self">
+    <a class="btn" href="planning.html">
       <img src="planning.png" alt="Planning">
     </a>
 
-    <a class="btn" href="equipes.html" target="_self">
+    <a class="btn" href="equipes.html">
       <img src="equipes.png" alt="Équipes">
     </a>
 
-    <a class="btn" href="construction.png" target="_self">
+    <a class="btn" href="construction.png">
       <img src="book.png" alt="Book">
     </a>
 
-    <a class="btn" href="construction.png" target="_self">
+    <a class="btn" href="construction.png">
       <img src="galerie.png" alt="Galerie">
     </a>
 
-    <a class="btn" href="construction.png" target="_self">
+    <a class="btn" href="construction.png">
       <img src="admin.png" alt="Admin">
     </a>
 
-    <!-- ✅ noms encodés (espaces/accents) pour éviter les bugs -->
-    <a class="btn" href="construction.png" target="_self">
-      <img src="gardes%20post%C3%A9es.png" alt="Gardes postées">
+    <a class="btn" href="construction.png">
+      <img src="gardes postées.png" alt="Gardes postées">
     </a>
 
-    <a class="btn" href="construction.png" target="_self">
-      <img src="tickets%20carburant.png" alt="Tickets carburant">
+    <a class="btn" href="construction.png">
+      <img src="tickets carburant.png" alt="Tickets carburant">
     </a>
 
-    <a class="btn" href="d%C3%A9sinfection%20VSAV.png" target="_self">
-      <img src="d%C3%A9sinfection%20VSAV.png" alt="Désinfection VSAV">
+    <a class="btn" href="construction.png">
+      <img src="désinfection VSAV.png" alt="Désinfection VSAV">
     </a>
 
   </section>
 </main>
 
 <script>
-/* ===== CONFIG ===== */
+/* ================== CONFIG ================== */
 const API_BASE = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 const AUTH_KEY = "cs_auth_email";
 
-function showPortal(){
-  document.getElementById("loginBox").style.display = "none";
-  document.getElementById("portal").style.display = "flex";
+/* ================== UI ================== */
+const $login = () => document.getElementById("loginBox");
+const $portal = () => document.getElementById("portal");
+const $status = () => document.getElementById("status");
+
+function setStatus(msg){
+  if ($status()) $status().textContent = msg || "";
 }
-function showLogin(){
-  document.getElementById("loginBox").style.display = "flex";
-  document.getElementById("portal").style.display = "none";
+function showLogin(msg){
+  $portal().style.display = "none";
+  $login().style.display = "flex";
+  setStatus(msg || "");
+}
+function showPortal(){
+  $login().style.display = "none";
+  $portal().style.display = "flex";
+  setStatus("");
 }
 
+/* ================== STORAGE ================== */
 function saveAuth(email){
-  localStorage.setItem(AUTH_KEY, email.toLowerCase());
+  localStorage.setItem(AUTH_KEY, String(email || "").toLowerCase());
 }
 function loadAuth(){
   return (localStorage.getItem(AUTH_KEY) || "").toLowerCase();
 }
 function clearAuth(){
   localStorage.removeItem(AUTH_KEY);
-  }
+}
 
-/* ===== JSONP helper (évite CORS) ===== */
-function jsonp(url){
-  return new Promise((resolve, reject) => {
-    const cb = "cb_" + Math.random().toString(36).slice(2);
-    const s = document.createElement("script");
+/* ================== JSONP PARSER (Apps Script renvoie callback(...)) ================== */
+function parseCallbackText(txt){
+  // txt = callback({...});
+  const cleaned = String(txt || "").replace(/^callback\(/, "").replace(/\);\s*$/, "");
+  return JSON.parse(cleaned);
+}
 
-    window[cb] = (data) => { cleanup(); resolve(data); };
+/* ================== AUTH CHECK (anti-boucle) ================== */
+let checking = false;
 
-    function cleanup(){
-      try { delete window[cb]; } catch(e){}
-      s.remove();
+function authCheck(email){
+  const e = encodeURIComponent(email || "");
+  // IMPORTANT : on passe bien ?email=
+  const url = `${API_BASE}?view=auth_check&email=${e}&callback=callback&nocache=1`;
+
+  // on lit en text puis parse callback(...)
+  return fetch(url, { cache: "no-store" })
+    .then(r => r.text())
+    .then(parseCallbackText);
+}
+
+/* ================== GOOGLE SIGN-IN CALLBACK ================== */
+function handleCredentialResponse(response){
+  try{
+    if(!response || !response.credential){
+      showLogin("Erreur: pas de jeton Google.");
+      return;
     }
 
-    s.onerror = () => { cleanup(); reject(new Error("JSONP load error")); };
+    // Décodage JWT (payload)
+    const payload = response.credential.split(".")[1]
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
+    const json = JSON.parse(decodeURIComponent(escape(atob(payload))));
+    const email = (json.email || "").toLowerCase();
 
-    s.src = url + (url.includes("?") ? "&" : "?") + "callback=" + cb;
-    document.head.appendChild(s);
-  });
-}
+    if(!email){
+      showLogin("Impossible de lire l'email Google.");
+      return;
+    }
 
-/* ===== Auth check via Apps Script ===== */
-function authCheck(email){
-  const url = API_BASE
-    + "?view=auth_check"
-    + "&email=" + encodeURIComponent(email)
-    + "&nocache=1";
-  return jsonp(url);
-}
+    setStatus("Vérification de l'accès…");
 
-/* ===== Google callback ===== */
-function handleCredentialResponse(response) {
-  try{
-    const payload = response.credential.split('.')[1]
-      .replace(/-/g, '+')
-      .replace(/_/g, '/');
+    authCheck(email).then(res => {
+      if(res && res.ok){
+        saveAuth(email); // reste connecté illimité (sur l’appareil)
+        showPortal();
+      }else{
+        clearAuth();
+        showLogin("Accès refusé.");
+      }
+    }).catch(err => {
+      console.error(err);
+      showLogin("Erreur de connexion (API).");
+    });
 
-    const data = JSON.parse(decodeURIComponent(escape(atob(payload))));
-    const email = (data.email || "").toLowerCase();
-
-    console.log("Email connecté :", email);
-
-    authCheck(email)
-      .then((json) => {
-        if (json && json.ok) {
-          saveAuth(email);
-          showPortal();
-        } else {
-          clearAuth();
-          alert("Accès refusé");
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        alert("Erreur de connexion");
-      });
-
-  } catch(e){
+  }catch(e){
     console.error(e);
-    alert("Erreur de connexion");
+    showLogin("Erreur de traitement.");
   }
 }
 
-/* ===== Auto-login (reste connecté) ===== */
+/* ================== BOOT ================== */
 window.addEventListener("load", () => {
-
   const saved = loadAuth();
 
-  // Si aucun email stocké → login
   if(!saved){
-    showLogin();
+    // pas d'email sauvegardé -> login
+    showLogin("");
     return;
   }
 
-  // Sinon on vérifie côté Apps Script
-  authCheck(saved)
-    .then((json) => {
+  // email sauvegardé -> revalide une seule fois (anti-boucle)
+  if(checking) return;
+  checking = true;
 
-      if(json && json.ok){
-        showPortal(); // accès direct
-      } else {
-        clearAuth(); // supprimé côté whitelist
-        showLogin(); // retour login
-      }
+  showLogin("Vérification en cours…");
 
-    })
-    .catch(() => {
-      showLogin();
-    });
-
-});
-
-    })
-    .catch(() => {
-      // si réseau KO → on laisse login (propre)
-      showLogin();
-    });
+  authCheck(saved).then(res => {
+    checking = false;
+    if(res && res.ok){
+      showPortal();
+    }else{
+      clearAuth();
+      showLogin("Accès refusé.");
+    }
+  }).catch(err => {
+    checking = false;
+    console.error(err);
+    // si API KO, on revient au login (pas de boucle)
+    showLogin("Erreur de connexion (API).");
+  });
 });
 </script>
 
