@@ -22,20 +22,20 @@
   --gap: clamp(10px, min(3vw, 2vh), 18px);
 }
 *{ box-sizing:border-box; }
-
 html, body{
   margin:0; padding:0;
-  height:100%;
-  background:#000;
+  min-height:100%;
+  overflow:auto;
+  overscroll-behavior-y:auto;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   -webkit-text-size-adjust:100%;
+  background:#000;
 }
-
 body{
   background:#000 url("background.png") center top / cover no-repeat fixed;
 }
 
-/* --- PORTAIL --- */
+/* ===== PORTAIL ===== */
 .wrap{
   min-height:100vh;
   min-height:100dvh;
@@ -79,55 +79,42 @@ body{
   :root{ --btn: clamp(110px, 16vw, 180px); --titleMaxH: 26vh; --maxw:900px; }
 }
 
-/* --- LOGIN (centré + un peu remonté) --- */
-#gate{
-  position:fixed;
-  inset:0;
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  padding-top: calc(env(safe-area-inset-top) + 70px);
-  background: transparent;
-  z-index: 50;
-}
+/* ===== LOGIN (comme avant) ===== */
 #loginBox{
-  width: min(92vw, 420px);
-  padding: 18px 14px 14px;
+  width:min(92vw, 520px);
+  margin-top: calc(env(safe-area-inset-top) + 70px);
+  padding: 16px 14px;
   border-radius: 18px;
-  background: rgba(0,0,0,.62);
+  background: rgba(0,0,0,.55);
   border: 1px solid rgba(255,255,255,.14);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   text-align:center;
-  box-shadow: 0 10px 40px rgba(0,0,0,.55);
 }
-#loginImg{
-  width: min(86vw, 320px);
-  height: auto;
-  display:block;
-  margin: 0 auto 10px;
-  object-fit: contain;
+#loginTitle{
+  margin: 0 0 10px 0;
+  font-weight: 950;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.92);
 }
 #loginMsg{
-  margin: 10px 0 0;
-  min-height: 18px;
+  margin: 8px 0 0 0;
   font-weight: 800;
+  color: rgba(255,255,255,.78);
   font-size: 14px;
-  color: rgba(255,255,255,.82);
+  min-height: 18px;
 }
-#loginMsg.err{ color: #ff6b6b; }
-
 #logoutBtn{
   margin-top: 10px;
-  padding: 9px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.18);
   color: rgba(255,255,255,.92);
+  padding: 10px 12px;
+  border-radius: 14px;
   font-weight: 900;
   cursor:pointer;
 }
-#logoutBtn:active{ transform: translateY(1px); }
 </style>
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -135,29 +122,27 @@ body{
 
 <body>
 
-<!-- LOGIN GATE -->
-<div id="gate" style="display:none;">
-  <div id="loginBox">
-    <!-- 👇 Mets une image si tu veux (genre acces-portail.png). Sinon laisse titre.png -->
-    <img id="loginImg" src="titre.png" alt="Accès Portail">
+<!-- LOGIN -->
+<div id="loginBox">
+  <h2 id="loginTitle">Accès Portail</h2>
 
-    <div id="g_id_onload"
-         data-client_id="690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com"
-         data-callback="handleCredentialResponse"
-         data-auto_prompt="false">
-    </div>
-
-    <div class="g_id_signin"
-         data-type="standard"
-         data-size="large"
-         data-theme="outline"
-         data-text="sign_in_with"
-         data-shape="rectangular">
-    </div>
-
-    <p id="loginMsg"></p>
-    <button id="logoutBtn" type="button">Déconnexion</button>
+  <div id="g_id_onload"
+       data-client_id="690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com"
+       data-callback="handleCredentialResponse"
+       data-auto_prompt="false">
   </div>
+
+  <div class="g_id_signin"
+       data-type="standard"
+       data-size="large"
+       data-theme="outline"
+       data-text="sign_in_with"
+       data-shape="rectangular">
+  </div>
+
+  <p id="loginMsg"></p>
+
+  <button id="logoutBtn" type="button">Déconnexion</button>
 </div>
 
 <!-- PORTAIL -->
@@ -186,26 +171,23 @@ const API = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjz
 const LS_KEY = "cs_portail_email_v1";
 
 /* ====== DOM ====== */
-const $gate = document.getElementById("gate");
+const $loginBox = document.getElementById("loginBox");
 const $portal = document.getElementById("portal");
 const $msg = document.getElementById("loginMsg");
 const $logout = document.getElementById("logoutBtn");
 
 /* ====== UI ====== */
-function msg(txt, isErr=false){
-  $msg.textContent = txt || "";
-  $msg.classList.toggle("err", !!isErr);
-}
-function showGate(){
-  $portal.style.display = "none";
-  $gate.style.display = "flex";
-}
+function showMsg(t){ $msg.textContent = t || ""; }
 function showPortal(){
-  $gate.style.display = "none";
+  $loginBox.style.display = "none";
   $portal.style.display = "flex";
 }
+function showLogin(){
+  $portal.style.display = "none";
+  $loginBox.style.display = "block";
+}
 
-/* ====== JWT -> email (robuste) ====== */
+/* ====== JWT email (plus robuste que escape/decodeURIComponent) ====== */
 function b64urlToUtf8(b64url){
   let s = String(b64url || "").replace(/-/g, "+").replace(/_/g, "/");
   while (s.length % 4) s += "=";
@@ -223,102 +205,84 @@ function parseJwtEmail(credential){
   return String(payload.email || "").trim().toLowerCase();
 }
 
-/* ====== JSONP ====== */
-function jsonp(url, cbName, timeoutMs = 25000){
+/* ====== JSONP (simple, comme avant) ====== */
+function jsonp(url, cbName){
   return new Promise((resolve, reject) => {
     const script = document.createElement("script");
-    script.async = true;
-
     const cleanup = () => {
       script.remove();
       try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
     };
+    const timer = setTimeout(() => { cleanup(); reject(new Error("Timeout JSONP")); }, 12000);
 
-    const timer = setTimeout(() => {
-      cleanup();
-      reject(new Error("Timeout JSONP"));
-    }, timeoutMs);
+    window[cbName] = (data) => { clearTimeout(timer); cleanup(); resolve(data); };
 
-    window[cbName] = (data) => {
-      clearTimeout(timer);
-      cleanup();
-      resolve(data);
-    };
-
-    // Cache-buster (évite mobile qui garde un vieux résultat)
+    // petit anti-cache (mobile)
     const sep = url.includes("?") ? "&" : "?";
     script.src = url + sep + "_t=" + Date.now();
 
-    script.onerror = () => {
-      clearTimeout(timer);
-      cleanup();
-      reject(new Error("Erreur chargement script JSONP"));
-    };
-
+    script.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error("Erreur JSONP")); };
     document.head.appendChild(script);
   });
 }
 
 async function authCheck(email){
   const cb = "cb_auth_" + Math.random().toString(36).slice(2);
-  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&callback=${cb}`;
-  // 2 tentatives
-  try { return await jsonp(url, cb, 25000); }
-  catch(e1){ return await jsonp(url, cb, 25000); }
+  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
+  return await jsonp(url, cb);
 }
 
 /* ====== Google callback ====== */
 async function handleCredentialResponse(response){
   try{
-    msg("Vérification de l’accès…");
+    showMsg("Vérification de l’accès…");
     const email = parseJwtEmail(response.credential);
+
     if(!email){
       localStorage.removeItem(LS_KEY);
-      showGate();
-      msg("Erreur : email introuvable.", true);
+      showMsg("Erreur : email introuvable.");
       return;
     }
 
     const res = await authCheck(email);
+
     if(res && res.ok === true){
       localStorage.setItem(LS_KEY, email);
-      msg("");
+      showMsg("");
       showPortal();
     }else{
       localStorage.removeItem(LS_KEY);
-      showGate();
-      msg("Accès refusé.", true);
+      showLogin();
+      showMsg("Accès refusé.");
     }
   }catch(err){
     localStorage.removeItem(LS_KEY);
-    showGate();
-    msg("Erreur réseau / serveur.", true);
+    showLogin();
+    showMsg("Erreur réseau / serveur.");
   }
 }
 
 /* ====== Boot ====== */
 (async function(){
-  // Au démarrage : on montre le gate (pas de flash)
-  showGate();
-  msg("");
+  showLogin();
+  showMsg("");
 
+  // si email mémorisé => revalidation obligatoire (suppression dans Sheets = plus d’accès)
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
   if(saved){
     try{
-      msg("Vérification…");
+      showMsg("Vérification…");
       const res = await authCheck(saved);
       if(res && res.ok === true){
-        msg("");
+        showMsg("");
         showPortal();
       }else{
         localStorage.removeItem(LS_KEY);
-        msg("Accès refusé.", true);
-        showGate();
+        showMsg("Accès refusé.");
       }
     }catch(e){
       localStorage.removeItem(LS_KEY);
-      msg("Erreur réseau / serveur.", true);
-      showGate();
+      showMsg("Erreur réseau / serveur.");
     }
   }
 })();
@@ -326,8 +290,8 @@ async function handleCredentialResponse(response){
 /* Déconnexion */
 $logout.addEventListener("click", ()=>{
   localStorage.removeItem(LS_KEY);
-  showGate();
-  msg("Déconnecté.");
+  showLogin();
+  showMsg("Déconnecté.");
 });
 </script>
 
