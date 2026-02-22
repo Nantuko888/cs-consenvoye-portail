@@ -195,22 +195,34 @@ const $logout = document.getElementById("logoutBtn");
 
 /* ====== UI ====== */
 function showMsg(t){ $msg.textContent = t || ""; }
-function showPortal(push = true){
+ffunction showPortal(push = true){
   $loginBox.style.display = "none";
   $portal.style.display = "flex";
 
-  if(push){
-    history.pushState({page:"portal"}, "", "?portal=1");
+  // IMPORTANT : garder l'URL en mode portail pour que "Retour" ne réaffiche pas le login
+  if (push) {
+    if (!location.search.includes("portal=1")) {
+      history.pushState({page:"portal"}, "", "?portal=1");
+    } else {
+      history.replaceState({page:"portal"}, "", "?portal=1");
+    }
   }
 }
+
 function showLogin(push = true){
   $portal.style.display = "none";
   $loginBox.style.display = "block";
 
-  if(push){
-    history.pushState({page:"login"}, "", "?");
+  // IMPORTANT : enlever l'URL portail quand on est au login
+  if (push) {
+    if (location.search.includes("portal=1")) {
+      history.replaceState({page:"login"}, "", location.pathname);
+    } else {
+      history.replaceState({page:"login"}, "", location.pathname);
+    }
   }
 }
+
 
 /* ====== JWT email (ROBUSTE) ====== */
 function b64urlToUtf8(b64url){
@@ -300,7 +312,7 @@ async function handleCredentialResponse(response){
     if(res && res.ok === true){
       localStorage.setItem(LS_KEY, email);
       showMsg("");
-      showPortal();
+      showPortal(true);
     }else{
       localStorage.removeItem(LS_KEY);
       showLogin();
@@ -335,7 +347,7 @@ async function handleCredentialResponse(response){
       const res = await authCheck(saved);
       if(res && res.ok === true){
         showMsg("");
-        showPortal();
+        showPortal(true);
       }else{
         localStorage.removeItem(LS_KEY);
         showMsg("Accès refusé.");
