@@ -1,208 +1,225 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>CS Consenvoye</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>CS Consenvoye</title>
 
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
-<link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#d46a00">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-<meta name="theme-color" content="#d46a00">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <style>
+    :root{
+      --maxw: 760px;
+      --titleMaxH: 34vh;
+      --btn: clamp(100px, min(22vw, 15vh), 170px);
+      --gap: clamp(10px, min(3vw, 2vh), 18px);
+    }
+    *{ box-sizing:border-box; }
+    html, body{
+      margin:0; padding:0; min-height:100%;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      -webkit-text-size-adjust:100%;
+      background:#000;
+    }
 
-<style>
-:root{
-  --maxw: 760px;
-  --titleMaxH: 34vh;
-  --btn: clamp(100px, min(22vw, 15vh), 170px);
-  --gap: clamp(10px, min(3vw, 2vh), 18px);
-}
-*{ box-sizing:border-box; }
+    /* Background (évite le "fixed" qui bug sur mobile) */
+    body{
+      background:#000 url("background.png") center top / cover no-repeat;
+    }
 
-html, body{
-  margin:0; padding:0;
-  min-height:100%;
-  background:#000;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  -webkit-text-size-adjust:100%;
-}
+    /* ===== PORTAIL ===== */
+    .wrap{
+      min-height:100vh;
+      min-height:100dvh;
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
+    }
+    .title{
+      margin-top: calc(env(safe-area-inset-top) + 8px);
+      width: min(94vw, 680px);
+      max-height: var(--titleMaxH);
+      height:auto;
+      object-fit:contain;
+      display:block;
+      pointer-events:none;
+      user-select:none;
+    }
+    .grid{
+      width: min(94vw, var(--maxw));
+      margin-top: clamp(10px, 1.5vh, 18px);
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--gap);
+      justify-items:center;
+      align-content:start;
+    }
+    .btn{
+      width: var(--btn);
+      height: var(--btn);
+      display:block;
+      text-decoration:none;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .btn img{ width:100%; height:100%; object-fit:contain; display:block; }
 
-/* Background stable */
-body{
-  background:#000 url("background.png") center top / cover no-repeat fixed;
-}
+    @media (min-width:768px){
+      :root{ --btn: clamp(110px, 16vw, 180px); --titleMaxH: 26vh; --maxw:900px; }
+    }
 
-/* ===== LOGIN (simple, centré propre) ===== */
-#loginBox{
-  width:min(92vw, 420px);
-  margin: 0 auto;
-  margin-top: calc(env(safe-area-inset-top) + 70px);
-  padding: 18px 16px;
-  border-radius: 18px;
-  background: rgba(0,0,0,.55);
-  border: 1px solid rgba(255,255,255,.14);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  text-align:center;
-}
-#loginTitle{
-  margin: 0 0 10px 0;
-  font-weight: 950;
-  letter-spacing: .6px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.92);
-}
-#loginMsg{
-  margin: 10px 0 0 0;
-  font-weight: 800;
-  color: rgba(255,255,255,.78);
-  font-size: 14px;
-  min-height: 18px;
-}
-#logoutBtn{
-  margin-top: 10px;
-  border:1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.18);
-  color: rgba(255,255,255,.92);
-  padding: 10px 12px;
-  border-radius: 14px;
-  font-weight: 900;
-  cursor:pointer;
-  -webkit-tap-highlight-color: transparent;
-}
+    /* ===== LOGIN OVERLAY (CENTRÉ SANS CASSER LE PORTAIL) ===== */
+    #loginOverlay{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: calc(env(safe-area-inset-top) + 18px) 16px calc(env(safe-area-inset-bottom) + 18px);
+      background: rgba(0,0,0,.25);
+      backdrop-filter: blur(2px);
+      z-index: 9999;
+    }
+    #loginBox{
+      width: min(92vw, 420px);
+      border-radius: 18px;
+      padding: 22px 18px 18px;
+      background: rgba(0,0,0,0.62);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.65);
+      text-align:center;
+    }
+    #loginTitle{
+      margin:0 0 12px;
+      color:#fff;
+      font-weight:800;
+      letter-spacing:2px;
+      font-size: clamp(22px, 3.4vw, 30px);
+      text-transform: uppercase;
+    }
+    #loginMsg{
+      margin: 10px 0 0;
+      font-size: 14px;
+      color: #ff6b6b;
+      min-height: 18px;
+    }
+    #logoutBtn{
+      margin-top: 14px;
+      padding: 9px 18px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      cursor: pointer;
+    }
+    #logoutBtn:active{ transform: scale(0.99); }
+    .g_id_signin{ display:flex; justify-content:center; }
+    /* Petit ajustement: le bouton Google est parfois trop large */
+    .g_id_signin > div { max-width: 100% !important; }
+  </style>
 
-/* ===== PORTAIL ===== */
-.wrap{
-  min-height:100vh;
-  min-height:100dvh;
-  width:100%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
-}
-
-.title{
-  margin-top: calc(env(safe-area-inset-top) + 2px);
-  width: min(94vw, 680px);
-  max-height: var(--titleMaxH);
-  height:auto;
-  object-fit:contain;
-  display:block;
-  pointer-events:none;
-  user-select:none;
-  transform: scale(1.25);
-  transform-origin: center top;
-}
-
-.grid{
-  width: min(94vw, var(--maxw));
-  margin-top: clamp(8px, 1.5vh, 16px);
-  display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--gap);
-  justify-items:center;
-  align-content:start;
-}
-
-.btn{
-  width: var(--btn);
-  height: var(--btn);
-  display:block;
-  text-decoration:none;
-  -webkit-tap-highlight-color:transparent;
-}
-.btn img{ width:100%; height:100%; object-fit:contain; display:block; }
-
-@media (min-width:768px){
-  :root{ --btn: clamp(110px, 16vw, 180px); --titleMaxH: 26vh; --maxw:900px; }
-}
-</style>
-
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div id="loginBox">
-  <h2 id="loginTitle">Accès Portail</h2>
+  <!-- PORTAIL -->
+  <main class="wrap" id="portal" style="display:none;">
+    <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
+    <section class="grid" aria-label="Menu">
+      <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/"><img src="entretien.png" alt="Entretien"></a>
+      <a class="btn" href="documents.html"><img src="documents.png" alt="Documents"></a>
+      <a class="btn" href="organigramme.html"><img src="organigramme.png" alt="Organigramme"></a>
+      <a class="btn" href="construction.png"><img src="informations.png" alt="Informations"></a>
+      <a class="btn" href="planning.html"><img src="planning.png" alt="Planning"></a>
+      <a class="btn" href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
+      <a class="btn" href="construction.png"><img src="book.png" alt="Book"></a>
+      <a class="btn" href="construction.png"><img src="galerie.png" alt="Galerie"></a>
+      <a class="btn" href="construction.png"><img src="admin.png" alt="Admin"></a>
+      <a class="btn" href="construction.png"><img src="gardes postées.png" alt="Gardes postées"></a>
+      <a class="btn" href="construction.png"><img src="tickets carburant.png" alt="Tickets carburant"></a>
+      <a class="btn" href="construction.png"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>
+    </section>
+  </main>
 
-  <div id="g_id_onload"
-       data-client_id="690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com"
-       data-callback="handleCredentialResponse"
-       data-auto_prompt="false">
+  <!-- LOGIN OVERLAY -->
+  <div id="loginOverlay">
+    <div id="loginBox">
+      <h2 id="loginTitle">Accès Portail</h2>
+
+      <div id="g_id_onload"
+        data-client_id=""
+        data-callback="handleCredentialResponse"
+        data-auto_prompt="false">
+      </div>
+
+      <div class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="sign_in_with"
+        data-shape="rectangular">
+      </div>
+
+      <p id="loginMsg"></p>
+      <button id="logoutBtn" type="button">Déconnexion</button>
+    </div>
   </div>
-
-  <div class="g_id_signin"
-       data-type="standard"
-       data-size="large"
-       data-theme="outline"
-       data-text="sign_in_with"
-       data-shape="rectangular">
-  </div>
-
-  <p id="loginMsg"></p>
-  <button id="logoutBtn" type="button">Déconnexion</button>
-</div>
-
-<!-- PORTAIL -->
-<main class="wrap" id="portal" style="display:none;">
-  <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
-
-  <section class="grid" aria-label="Menu">
-    <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/"><img src="entretien.png" alt="Entretien"></a>
-    <a class="btn" href="documents.html"><img src="documents.png" alt="Documents"></a>
-    <a class="btn" href="organigramme.html"><img src="organigramme.png" alt="Organigramme"></a>
-    <a class="btn" href="construction.png"><img src="informations.png" alt="Informations"></a>
-    <a class="btn" href="planning.html"><img src="planning.png" alt="Planning"></a>
-    <a class="btn" href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
-    <a class="btn" href="construction.png"><img src="book.png" alt="Book"></a>
-    <a class="btn" href="construction.png"><img src="galerie.png" alt="Galerie"></a>
-    <a class="btn" href="construction.png"><img src="admin.png" alt="Admin"></a>
-    <a class="btn" href="construction.png"><img src="gardes postées.png" alt="Gardes postées"></a>
-    <a class="btn" href="construction.png"><img src="tickets carburant.png" alt="Tickets carburant"></a>
-    <a class="btn" href="construction.png"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>
-  </section>
-</main>
 
 <script>
-/* ====== CONFIG ====== */
+/* =================== CONFIG (2 CHOSES) =================== */
 const GOOGLE_CLIENT_ID = "690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com";
 
-/* ✅ Tu peux mettre ICI soit l’URL /exec, soit TON URL script.googleusercontent… */
-const API = "https://script.googleusercontent.com/macros/echo?user_content_key=AY5xjrQECihV3Ai1WremzIBEs8fF7DpOa89vP0XYnwXBL0fxr3AH3PaZgPi823TJp5qY9ZdM1eE8Bzm5AcuPY9dvLFQA1EvwoUZnIjFZI174wp5hGb8BfFzxLN0HGCBlfDyVdkN0ettZvdhRggb3wvSisthFFMqVEFXtpbcTMAD9S7fCIe71OqBii4iM08Gy5utyTdzgLAZ1NdxSxWbPyRjgYY94JhKeiSQSs61HM99Ot03fPib_ITXlNTeaTlCiiqkY4L9pcfxON8c13fhD9RwPSPZmWYScsA&lib=MUrxZm6e_GZu_nx92INa1hxWMXI2VoG64";
+/* IMPORTANT : ICI c’est /exec (pas echo/lib) */
+const API = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec";
 
 const LS_KEY = "cs_portail_email_v1";
 
-/* ====== DOM ====== */
-const $loginBox = document.getElementById("loginBox");
+/* =================== DOM =================== */
+const $overlay = document.getElementById("loginOverlay");
 const $portal = document.getElementById("portal");
 const $msg = document.getElementById("loginMsg");
 const $logout = document.getElementById("logoutBtn");
 
-/* ====== UI ====== */
+/* =================== UI =================== */
 function showMsg(t){ $msg.textContent = t || ""; }
-function showPortal(){
-  $loginBox.style.display = "none";
+
+function showPortal(push=true){
+  $overlay.style.display = "none";
   $portal.style.display = "flex";
-}
-function showLogin(){
-  $portal.style.display = "none";
-  $loginBox.style.display = "block";
+  if(push){
+    if(!location.search.includes("portal=1")){
+      history.pushState({page:"portal"}, "", location.pathname + "?portal=1");
+    }else{
+      history.replaceState({page:"portal"}, "", location.pathname + "?portal=1");
+    }
+  }
 }
 
-/* ====== JWT email (robuste) ====== */
+function showLogin(push=true){
+  $portal.style.display = "none";
+  $overlay.style.display = "flex";
+  if(push){
+    history.replaceState({page:"login"}, "", location.pathname);
+  }
+}
+
+/* =================== JWT email =================== */
 function b64urlToUtf8(b64url){
   let s = String(b64url || "").replace(/-/g, "+").replace(/_/g, "/");
   while (s.length % 4) s += "=";
   const bin = atob(s);
   let out = "";
-  for (let i=0;i<bin.length;i++) out += "%" + bin.charCodeAt(i).toString(16).padStart(2,"0");
+  for (let i=0;i<bin.length;i++){
+    out += "%" + bin.charCodeAt(i).toString(16).padStart(2,"0");
+  }
   return decodeURIComponent(out);
 }
 function parseJwtEmail(credential){
@@ -212,52 +229,77 @@ function parseJwtEmail(credential){
   return String(payload.email || "").trim().toLowerCase();
 }
 
-/* ====== JSONP ====== */
-function jsonp(url, cbName, timeoutMs = 20000){
+/* =================== JSONP SOLIDE =================== */
+function jsonp(url, cbName, timeoutMs=20000){
   return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
+    const s = document.createElement("script");
+    s.async = true;
+
+    let done = false;
     const cleanup = () => {
-      script.remove();
-      try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+      if(done) return;
+      done = true;
+      try{ delete window[cbName]; }catch(_){ window[cbName] = undefined; }
+      s.remove();
     };
-    const timer = setTimeout(() => { cleanup(); reject(new Error("timeout")); }, timeoutMs);
 
-    window[cbName] = (data) => { clearTimeout(timer); cleanup(); resolve(data); };
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error("Timeout JSONP"));
+    }, timeoutMs);
 
-    // cache buster
+    window[cbName] = (data) => {
+      clearTimeout(timer);
+      cleanup();
+      resolve(data);
+    };
+
     const sep = url.includes("?") ? "&" : "?";
-    script.src = url + sep + "_t=" + Date.now();
-    script.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error("script_error")); };
+    s.src = url + sep + "_t=" + Date.now();
 
-    document.head.appendChild(script);
+    s.onerror = () => {
+      clearTimeout(timer);
+      cleanup();
+      reject(new Error("JSONP script error"));
+    };
+
+    document.head.appendChild(s);
   });
 }
 
-/* ✅ FIX IMPORTANT : si API contient déjà '?', on met '&' */
-function buildApiUrl(paramsObj){
+function buildApiUrl(params){
   const baseSep = API.includes("?") ? "&" : "?";
-  const qs = Object.entries(paramsObj)
+  const qs = Object.entries(params)
     .map(([k,v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
     .join("&");
   return API + baseSep + qs;
 }
 
 async function authCheck(email){
-  const cb = "cb_auth_" + Math.random().toString(36).slice(2);
-  const url = buildApiUrl({
-    view: "auth_check",
-    email,
-    nocache: "1",
-    callback: cb
-  });
-  return await jsonp(url, cb, 20000);
+  // 2 essais, mais callback différent à chaque fois
+  for(let i=0;i<2;i++){
+    const cb = "cb_auth_" + Math.random().toString(36).slice(2);
+    const url = buildApiUrl({
+      view: "auth_check",
+      email,
+      nocache: "1",
+      callback: cb
+    });
+    try{
+      return await jsonp(url, cb, 20000);
+    }catch(_){
+      // continue
+    }
+  }
+  throw new Error("AuthCheck failed");
 }
 
-/* ====== Google callback ====== */
+/* =================== Google callback =================== */
 async function handleCredentialResponse(response){
   try{
     showMsg("Vérification de l’accès…");
     const email = parseJwtEmail(response.credential);
+
     if(!email){
       localStorage.removeItem(LS_KEY);
       showLogin();
@@ -270,54 +312,70 @@ async function handleCredentialResponse(response){
     if(res && res.ok === true){
       localStorage.setItem(LS_KEY, email);
       showMsg("");
-      showPortal();
+      showPortal(true);
     }else{
       localStorage.removeItem(LS_KEY);
-      showLogin();
+      showLogin(true);
       showMsg("Accès refusé.");
     }
-  }catch(err){
+  }catch(_){
     localStorage.removeItem(LS_KEY);
-    showLogin();
-    // message lisible (sans console)
+    showLogin(true);
     showMsg("Erreur réseau / serveur.");
   }
 }
 
-/* ====== Boot ====== */
-(function(){
-  // s'assure que le client_id est bien le bon (1 seul endroit)
-  document.getElementById("g_id_onload").setAttribute("data-client_id", GOOGLE_CLIENT_ID);
+/* =================== Boot =================== */
+(async function(){
+  // inject client id
+  const g = document.getElementById("g_id_onload");
+  g.setAttribute("data-client_id", GOOGLE_CLIENT_ID);
 
-  showLogin();
+  // état URL
+  if(location.search.includes("portal=1")){
+    showPortal(false);
+  }else{
+    showLogin(false);
+  }
   showMsg("");
 
+  // si email mémorisé => recheck
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
   if(saved){
-    showMsg("Vérification…");
-    authCheck(saved)
-      .then(res => {
-        if(res && res.ok === true){
-          showMsg("");
-          showPortal();
-        }else{
-          localStorage.removeItem(LS_KEY);
-          showMsg("Accès refusé.");
-        }
-      })
-      .catch(_ => {
+    try{
+      showMsg("Vérification…");
+      const res = await authCheck(saved);
+      if(res && res.ok === true){
+        showMsg("");
+        showPortal(true);
+      }else{
         localStorage.removeItem(LS_KEY);
-        showMsg("Erreur réseau / serveur.");
-      });
+        showLogin(true);
+        showMsg("Accès refusé.");
+      }
+    }catch(_){
+      localStorage.removeItem(LS_KEY);
+      showLogin(true);
+      showMsg("Erreur réseau / serveur.");
+    }
   }
 })();
 
 /* Déconnexion */
 $logout.addEventListener("click", ()=>{
   localStorage.removeItem(LS_KEY);
-  showLogin();
+  showLogin(true);
   showMsg("Déconnecté.");
 });
+
+/* Retour navigateur */
+window.onpopstate = function(){
+  if(location.search.includes("portal=1")){
+    showPortal(false);
+  }else{
+    showLogin(false);
+  }
+};
 </script>
 
 </body>
