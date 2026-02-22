@@ -230,22 +230,34 @@ function parseJwtEmail(credential){
 }
 
 /* =================== JSONP SOLIDE =================== */
-function jsonp(url, cbName, timeoutMs=20000){
+function jsonp(baseUrl, params, timeoutMs = 20000){
   return new Promise((resolve, reject) => {
-    const s = document.createElement("script");
-    s.async = true;
+    const cbName = "cb_" + Math.random().toString(36).slice(2);
+
+    // Construire URL proprement
+    const u = new URL(baseUrl);
+    if (params && typeof params === "object") {
+      for (const [k,v] of Object.entries(params)) u.searchParams.set(k, String(v));
+    }
+    u.searchParams.set("callback", cbName);
+    u.searchParams.set("_t", String(Date.now())); // anti-cache
+
+    const script = document.createElement("script");
+    script.src = u.toString();
+    script.async = true;
 
     let done = false;
+
     const cleanup = () => {
-      if(done) return;
+      if (done) return;
       done = true;
-      try{ delete window[cbName]; }catch(_){ window[cbName] = undefined; }
-      s.remove();
+      try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+      if (script.parentNode) script.parentNode.removeChild(script);
     };
 
     const timer = setTimeout(() => {
       cleanup();
-      reject(new Error("Timeout JSONP"));
+      reject(new Error("timeout"));
     }, timeoutMs);
 
     window[cbName] = (data) => {
@@ -254,16 +266,13 @@ function jsonp(url, cbName, timeoutMs=20000){
       resolve(data);
     };
 
-    const sep = url.includes("?") ? "&" : "?";
-    s.src = url + sep + "_t=" + Date.now();
-
-    s.onerror = () => {
+    script.onerror = () => {
       clearTimeout(timer);
       cleanup();
-      reject(new Error("JSONP script error"));
+      reject(new Error("script_load_error"));
     };
 
-    document.head.appendChild(s);
+    document.head.appendChild(script);
   });
 }
 
@@ -276,22 +285,19 @@ function buildApiUrl(params){
 }
 
 async function authCheck(email){
-  // 2 essais, mais callback différent à chaque fois
-  for(let i=0;i<2;i++){
-    const cb = "cb_auth_" + Math.random().toString(36).slice(2);
-    const url = buildApiUrl({
-      view: "auth_check",
-      email,
-      nocache: "1",
-      callback: cb
-    });
-    try{
-      return await jsonp(url, cb, 20000);
-    }catch(_){
-      // continue
+  // 2 tentatives rapides (mobile)
+  for (let i = 0; i < 2; i++) {
+    try {
+      return await jsonp(API, {
+        view: "auth_check",
+        email: email,
+        nocache: "1"
+      }, 20000);
+    } catch (e) {
+      // on retente une fois
     }
   }
-  throw new Error("AuthCheck failed");
+  throw new Error("authCheck_failed");
 }
 
 /* =================== Google callback =================== */
