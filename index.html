@@ -240,57 +240,47 @@ function parseJwtEmail(credential){
 /* ====== JSONP STABLE (baseUrl + params) ====== */
 function jsonp(baseUrl, params={}, timeoutMs=20000){
   return new Promise((resolve, reject) => {
-    const cb = "cb_" + Math.random().toString(36).slice(2);
+    const cb = "__cb_" + Math.random().toString(36).slice(2);
+
+    // callback global
+    window[cb] = (data) => {
+      cleanup();
+      resolve(data);
+    };
 
     const qs = new URLSearchParams({
       ...params,
       callback: cb,
-      _t: Date.now()
+      _t: String(Date.now())
     }).toString();
 
-    const src = baseUrl + (baseUrl.includes("?") ? "&" : "?") + qs;
-
     const s = document.createElement("script");
-    s.async = true;
-    s.referrerPolicy = "no-referrer";
-
-    const cleanup = () => {
-      try { delete window[cb]; } catch(e){ window[cb] = undefined; }
-      s.remove();
-    };
+    s.src = baseUrl + (baseUrl.includes("?") ? "&" : "?") + qs;
 
     const timer = setTimeout(() => {
       cleanup();
       reject(new Error("timeout"));
     }, timeoutMs);
 
-    window[cb] = (data) => {
+    function cleanup(){
       clearTimeout(timer);
-      cleanup();
-      resolve(data);
-    };
+      if (s && s.parentNode) s.parentNode.removeChild(s);
+      try { delete window[cb]; } catch(e){ window[cb] = undefined; }
+    }
 
     s.onerror = () => {
-      clearTimeout(timer);
       cleanup();
       reject(new Error("load_error"));
     };
 
-    s.src = src;
     document.head.appendChild(s);
   });
 }
 
-async function authCheck(email){
-  // 2 tentatives (mobile)
-  for(let i=0;i<2;i++){
-    try{
-      return await jsonp(API, { view:"auth_check", email, nocache:"1" }, 20000);
-    }catch(e){}
-  }
-  throw new Error("auth_failed");
-}
 
+async function authCheck(email){
+  return await jsonp(API, { view:"auth_check", email: email, nocache:"1" }, 20000);
+}
 /* ====== Google callback ====== */
 async function handleCredentialResponse(response){
   try{
