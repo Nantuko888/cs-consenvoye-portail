@@ -30,9 +30,7 @@ html, body{
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   -webkit-text-size-adjust:100%;
 }
-body{
-  background:#000 url("background.png") center top / cover no-repeat fixed;
-}
+body{ background:#000 url("background.png") center top / cover no-repeat fixed; }
 .wrap{
   min-height:100vh;
   min-height:100dvh;
@@ -71,7 +69,6 @@ body{
   -webkit-tap-highlight-color:transparent;
 }
 .btn img{ width:100%; height:100%; object-fit:contain; display:block; }
-
 @media (min-width:768px){
   :root{ --btn: clamp(110px, 16vw, 180px); --titleMaxH: 26vh; --maxw:900px; }
 }
@@ -125,7 +122,7 @@ body{
 
   <!-- Google button -->
   <div id="g_id_onload"
-       data-client_id="690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com"
+       data-client_id=""
        data-callback="handleCredentialResponse"
        data-auto_prompt="false">
   </div>
@@ -140,7 +137,6 @@ body{
 
   <p id="loginMsg"></p>
 
-  <!-- Déconnexion local (utile tests) -->
   <button id="logoutBtn" type="button">Déconnexion</button>
 </div>
 
@@ -165,8 +161,10 @@ body{
 </main>
 
 <script>
-/* ====== CONFIG ====== */
-const API = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec";
+/* ====== CONFIG (SEULS 2 TRUCS À METTRE) ====== */
+const GOOGLE_CLIENT_ID = "690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com";
+const API = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec"; // https://script.google.com/macros/s/XXXX/exec
+
 const LS_KEY = "cs_portail_email_v1";
 
 /* ====== DOM ====== */
@@ -175,7 +173,7 @@ const $portal = document.getElementById("portal");
 const $msg = document.getElementById("loginMsg");
 const $logout = document.getElementById("logoutBtn");
 
-/* ====== Utils ====== */
+/* ====== UI ====== */
 function showMsg(t){ $msg.textContent = t || ""; }
 function showPortal(){
   $loginBox.style.display = "none";
@@ -186,12 +184,26 @@ function showLogin(){
   $loginBox.style.display = "block";
 }
 
+/* ====== JWT email (ROBUSTE) ====== */
+function b64urlToUtf8(b64url){
+  let s = String(b64url || "").replace(/-/g, "+").replace(/_/g, "/");
+  while (s.length % 4) s += "="; // padding
+  const bin = atob(s);
+  let out = "";
+  for (let i=0;i<bin.length;i++){
+    out += "%" + bin.charCodeAt(i).toString(16).padStart(2,"0");
+  }
+  return decodeURIComponent(out);
+}
 function parseJwtEmail(credential){
-  const payload = credential.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
-  const json = JSON.parse(decodeURIComponent(escape(atob(payload))));
-  return (json.email || "").trim().toLowerCase();
+  const parts = String(credential || "").split(".");
+  if (parts.length < 2) return "";
+  const payloadJson = b64urlToUtf8(parts[1]);
+  const payload = JSON.parse(payloadJson);
+  return String(payload.email || "").trim().toLowerCase();
 }
 
+/* ====== JSONP ====== */
 function jsonp(url, cbName){
   return new Promise((resolve, reject) => {
     const script = document.createElement("script");
@@ -209,7 +221,7 @@ function jsonp(url, cbName){
 
 async function authCheck(email){
   const cb = "cb_auth_" + Math.random().toString(36).slice(2);
-  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
+  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}&_=${Date.now()}`;
   return await jsonp(url, cb);
 }
 
@@ -217,8 +229,11 @@ async function authCheck(email){
 async function handleCredentialResponse(response){
   try{
     showMsg("Vérification de l’accès…");
+
     const email = parseJwtEmail(response.credential);
     if(!email){
+      localStorage.removeItem(LS_KEY);
+      showLogin();
       showMsg("Erreur : email introuvable.");
       return;
     }
@@ -231,23 +246,26 @@ async function handleCredentialResponse(response){
       showPortal();
     }else{
       localStorage.removeItem(LS_KEY);
-      showMsg("Accès refusé.");
       showLogin();
+      showMsg("Accès refusé.");
     }
   }catch(err){
     localStorage.removeItem(LS_KEY);
-    showMsg("Erreur de connexion (API).");
     showLogin();
+    showMsg("Erreur réseau / serveur.");
   }
 }
 
 /* ====== Boot ====== */
 (async function(){
-  // Toujours cacher le portail au départ
+  // inject client_id (UN SEUL ENDROIT)
+  const g = document.getElementById("g_id_onload");
+  g.setAttribute("data-client_id", GOOGLE_CLIENT_ID);
+
   showLogin();
   showMsg("");
 
-  // Si un email est mémorisé, on revalide (suppression mail = plus accès)
+  // si email mémorisé => RECHECK obligatoire
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
   if(saved){
     try{
@@ -262,12 +280,12 @@ async function handleCredentialResponse(response){
       }
     }catch(e){
       localStorage.removeItem(LS_KEY);
-      showMsg("Erreur de connexion (API).");
+      showMsg("Erreur réseau / serveur.");
     }
   }
 })();
 
-/* Déconnexion (tests / forcer nouveau compte) */
+/* Déconnexion */
 $logout.addEventListener("click", ()=>{
   localStorage.removeItem(LS_KEY);
   showLogin();
