@@ -21,6 +21,7 @@
   --btn: clamp(100px, min(22vw, 15vh), 170px);
   --gap: clamp(10px, min(3vw, 2vh), 18px);
 }
+
 *{ box-sizing:border-box; }
 
 html, body{
@@ -28,7 +29,7 @@ html, body{
   padding:0;
   height:100%;
   overflow:auto;
-  overscroll-behavior-y:auto; /* ✅ pull-to-refresh OK */
+  overscroll-behavior-y:auto;
   background:#000;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   -webkit-text-size-adjust:100%;
@@ -39,6 +40,7 @@ body{
   background:#000 url("background.png") center top / cover no-repeat fixed;
 }
 
+/* Layout */
 .wrap{
   min-height:100vh;
   min-height:100dvh;
@@ -49,6 +51,7 @@ body{
   padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
 }
 
+/* Titre */
 .title{
   margin-top: calc(env(safe-area-inset-top) + 2px);
   width: min(94vw, 680px);
@@ -62,6 +65,7 @@ body{
   transform-origin: center top;
 }
 
+/* Grille */
 .grid{
   width: min(94vw, var(--maxw));
   margin-top: clamp(8px, 1.5vh, 16px);
@@ -79,7 +83,6 @@ body{
   text-decoration:none;
   -webkit-tap-highlight-color:transparent;
 }
-
 .btn img{
   width:100%;
   height:100%;
@@ -89,34 +92,52 @@ body{
 
 /* Login box */
 #loginBox{
-  width: min(94vw, 520px);
-  margin-top: calc(env(safe-area-inset-top) + 110px);
+  min-height: 100vh;
+  min-height: 100dvh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  padding-top: 110px;
   text-align:center;
-  padding: 14px;
 }
 
 .loginCard{
-  border-radius: 18px;
+  width:min(92vw, 420px);
+  padding:18px 16px;
+  border-radius:18px;
   background: rgba(0,0,0,.55);
-  border: 1px solid rgba(255,255,255,.12);
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  padding: 16px 14px;
+  color:#fff;
+  box-shadow: 0 10px 30px rgba(0,0,0,.45);
 }
 
 .loginTitle{
-  margin: 0 0 10px 0;
-  font-weight: 950;
-  letter-spacing: .6px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.92);
+  font-weight:800;
+  letter-spacing:.06em;
+  font-size: 28px;
+  opacity:.92;
+  margin:0 0 6px;
 }
 
 .loginSub{
-  margin: 0 0 14px 0;
-  color: rgba(255,255,255,.72);
-  font-weight: 800;
-  font-size: 13px;
+  opacity:.85;
+  margin:0 0 14px;
+}
+
+/* Discret logout button */
+#logoutBtn{
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  z-index: 20;
+  display:none;
+  padding:10px 12px;
+  border-radius:12px;
+  background: rgba(0,0,0,.55);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.18);
+  font-size:14px;
 }
 
 /* Tablettes */
@@ -137,7 +158,7 @@ body{
 <!-- LOGIN -->
 <div id="loginBox">
   <div class="loginCard">
-    <h2 class="loginTitle">Accès CS</h2>
+    <h1 class="loginTitle">ACCÈS CS</h1>
     <p class="loginSub">Connexion Google obligatoire</p>
 
     <div id="g_id_onload"
@@ -156,112 +177,220 @@ body{
 </div>
 
 <!-- PORTAIL -->
-<main class="wrap" id="portal" style="display:none;">
+<main id="portal" class="wrap" style="display:none;">
   <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
 
-  <section class="grid" aria-label="Menu">
-    <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/" target="_self"><img src="entretien.png" alt="Entretien"></a>
-    <a class="btn" href="documents.html"><img src="documents.png" alt="Documents"></a>
+  <section class="grid">
 
-    <a class="btn" href="organigramme.html"><img src="organigramme.png" alt="Organigramme"></a>
-    <a class="btn" href="construction.png"><img src="informations.png" alt="Informations"></a>
+    <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/">
+      <img src="entretien.png" alt="Entretien">
+    </a>
 
-    <a class="btn" href="planning.html"><img src="planning.png" alt="Planning"></a>
-    <a class="btn" href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
+    <a class="btn" href="documents.html">
+      <img src="documents.png" alt="Documents">
+    </a>
 
-    <a class="btn" href="construction.png"><img src="book.png" alt="Book"></a>
-    <a class="btn" href="construction.png"><img src="galerie.png" alt="Galerie"></a>
+    <a class="btn" href="organigramme.html">
+      <img src="organigramme.png" alt="Organigramme">
+    </a>
 
-    <a class="btn" href="construction.png"><img src="admin.png" alt="Admin"></a>
-    <a class="btn" href="construction.png"><img src="gardes postées.png" alt="Gardes postées"></a>
+    <a class="btn" href="construction.png">
+      <img src="informations.png" alt="Informations">
+    </a>
 
-    <a class="btn" href="construction.png"><img src="tickets carburant.png" alt="Tickets carburant"></a>
-    <a class="btn" href="construction.png"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>
+    <a class="btn" href="planning.html">
+      <img src="planning.png" alt="Planning">
+    </a>
+
+    <a class="btn" href="equipes.html">
+      <img src="equipes.png" alt="Équipes">
+    </a>
+
+    <a class="btn" href="construction.png">
+      <img src="book.png" alt="Book">
+    </a>
+
+    <a class="btn" href="construction.png">
+      <img src="galerie.png" alt="Galerie">
+    </a>
+
+    <a class="btn" href="construction.png">
+      <img src="admin.png" alt="Admin">
+    </a>
+
+    <a class="btn" href="construction.png">
+      <img src="gardes postées.png" alt="Gardes postées">
+    </a>
+
+    <a class="btn" href="construction.png">
+      <img src="tickets carburant.png" alt="Tickets carburant">
+    </a>
+
+    <a class="btn" href="construction.png">
+      <img src="désinfection VSAV.png" alt="Désinfection VSAV">
+    </a>
+
   </section>
 </main>
 
-<script>
-/*** CONFIG ***/
-const API_BASE = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec"; // <-- COLLE TON /exec CS ICI
-const STORAGE_KEY = "cs_portail_email";
+<button id="logoutBtn" type="button">Déconnexion</button>
 
-/*** UI ***/
+<script>
+/* ======================
+   CONFIG (2 trucs à remplacer)
+   ====================== */
+const GOOGLE_CLIENT_ID = "690765229829-9bbdccrsm9dd8c1sj01k06bqsdna3hgs.apps.googleusercontent.com";
+const APPS_SCRIPT_EXEC = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec"; 
+// exemple: https://script.google.com/macros/s/AKfycbxxxx/exec
+
+/* ======================
+   STOCKAGE (illimité)
+   ====================== */
+const AUTH_KEY = "cs_auth_email";
+
+function saveAuth(email){
+  localStorage.setItem(AUTH_KEY, (email || "").toLowerCase());
+}
+function loadAuth(){
+  return (localStorage.getItem(AUTH_KEY) || "").toLowerCase();
+}
+function clearAuth(){
+  localStorage.removeItem(AUTH_KEY);
+}
+
+/* ======================
+   UI
+   ====================== */
 function showPortal(){
   document.getElementById("loginBox").style.display = "none";
   document.getElementById("portal").style.display = "flex";
+  document.getElementById("logoutBtn").style.display = "block";
 }
 function showLogin(){
+  document.getElementById("loginBox").style.display = "flex";
   document.getElementById("portal").style.display = "none";
-  document.getElementById("loginBox").style.display = "block";
+  document.getElementById("logoutBtn").style.display = "none";
 }
 
-/*** JSONP helper ***/
-function jsonp(url, cbName){
+/* ======================
+   JSONP helper (car Apps Script renvoie cb({...}))
+   ====================== */
+function jsonp(url){
   return new Promise((resolve, reject) => {
-    const s = document.createElement("script");
-    const cleanup = () => {
-      s.remove();
-      try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+    const cbName = "cb_" + Math.random().toString(36).slice(2);
+    const script = document.createElement("script");
+
+    window[cbName] = (data) => {
+      try { delete window[cbName]; } catch(e){}
+      script.remove();
+      resolve(data);
     };
-    const timer = setTimeout(() => { cleanup(); reject(new Error("Timeout JSONP")); }, 12000);
-    window[cbName] = (data) => { clearTimeout(timer); cleanup(); resolve(data); };
-    s.src = url;
-    s.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error("Erreur JSONP")); };
-    document.head.appendChild(s);
+
+    script.src = url + (url.includes("?") ? "&" : "?") + "callback=" + cbName;
+    script.onerror = () => {
+      try { delete window[cbName]; } catch(e){}
+      script.remove();
+      reject(new Error("JSONP error"));
+    };
+
+    document.body.appendChild(script);
   });
 }
 
-/*** Check whitelist (NO CACHE) ***/
-async function authCheck(email){
-  const cb = "cb_auth_" + Math.random().toString(36).slice(2);
-  const url = `${API_BASE}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
-  return await jsonp(url, cb);
+/* ======================
+   AUTH CHECK (whitelist côté Sheets)
+   ====================== */
+function authCheck(email){
+  const url = APPS_SCRIPT_EXEC
+    + "?view=auth_check"
+    + "&email=" + encodeURIComponent(email)
+    + "&nocache=1";
+  return jsonp(url);
 }
 
-/*** Decode JWT email ***/
-function jwtEmail(credential){
-  const payload = credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+/* ======================
+   Google credential -> email
+   ====================== */
+function getEmailFromCredential(credential){
+  const payload = credential.split('.')[1]
+    .replace(/-/g, '+')
+    .replace(/_/g, '/');
   const data = JSON.parse(decodeURIComponent(escape(atob(payload))));
-  return String(data.email || "").trim().toLowerCase();
+  return (data && data.email) ? String(data.email).toLowerCase() : "";
 }
 
-/*** Google callback ***/
-async function handleCredentialResponse(response) {
+/* ======================
+   CALLBACK Google
+   ====================== */
+function handleCredentialResponse(response){
   try{
-    const email = jwtEmail(response.credential);
-    if(!email){ alert("Email introuvable"); return; }
-
-    const res = await authCheck(email);
-    if(res && res.ok){
-      localStorage.setItem(STORAGE_KEY, email);
-      showPortal();
-    }else{
-      localStorage.removeItem(STORAGE_KEY);
-      alert("Accès refusé");
-      showLogin();
+    const email = getEmailFromCredential(response.credential || "");
+    if(!email){
+      alert("Impossible de récupérer l'email");
+      return;
     }
-  }catch(err){
-    console.error(err);
+
+    authCheck(email)
+      .then(res => {
+        if(res && res.ok){
+          saveAuth(email);
+          showPortal();
+        }else{
+          clearAuth();
+          alert("Accès refusé");
+          showLogin();
+        }
+      })
+      .catch(() => {
+        alert("Erreur de connexion");
+        showLogin();
+      });
+
+  }catch(e){
+    console.error(e);
     alert("Erreur de connexion");
     showLogin();
   }
 }
 
-/*** Boot: recheck saved email on every open (cuts access immediately if removed) ***/
-(async function(){
-  showLogin();
-  const saved = String(localStorage.getItem(STORAGE_KEY) || "").trim().toLowerCase();
-  if(saved){
-    try{
-      const res = await authCheck(saved);
+/* ======================
+   AUTO-LOGIN au chargement
+   - illimité (localStorage)
+   - mais revalide à chaque ouverture => si tu supprimes le mail dans Sheets, ça coupe.
+   ====================== */
+window.addEventListener("load", () => {
+  // injecter le client id dans le HTML (sécurité si tu oublies)
+  const onload = document.getElementById("g_id_onload");
+  if(onload) onload.setAttribute("data-client_id", GOOGLE_CLIENT_ID);
+
+  const saved = loadAuth();
+  if(!saved){
+    showLogin();
+    return;
+  }
+
+  authCheck(saved)
+    .then(res => {
       if(res && res.ok){
         showPortal();
-        return;
+      }else{
+        clearAuth();
+        showLogin();
       }
-    }catch(e){}
-    localStorage.removeItem(STORAGE_KEY);
-  }
-})();
+    })
+    .catch(() => {
+      // si réseau KO : on affiche login proprement
+      showLogin();
+    });
+});
+
+/* ======================
+   LOGOUT
+   ====================== */
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  clearAuth();
+  showLogin();
+});
 </script>
 
 </body>
