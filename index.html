@@ -1,312 +1,274 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>CS Consenvoye</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CS Consenvoye</title>
 
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
-  <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+<link rel="manifest" href="manifest.json">
 
-  <meta name="theme-color" content="#d46a00">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#d46a00">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <style>
-    :root{
-      --maxw: 760px;
-      --titleMaxH: 34vh;
-      --btn: clamp(100px, min(22vw, 15vh), 170px);
-      --gap: clamp(10px, min(3vw, 2vh), 18px);
-    }
-    *{ box-sizing:border-box; }
-    html, body{
-      margin:0; padding:0; height:100%;
-      overflow:auto; overscroll-behavior-y:auto;
-      background:#000;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      -webkit-text-size-adjust:100%;
-    }
-    body{ background:#000 url("background.png") center top / cover no-repeat fixed; }
+<style>
+:root{
+  --maxw: 760px;
+  --titleMaxH: 34vh;
+  --btn: clamp(100px, min(22vw, 15vh), 170px);
+  --gap: clamp(10px, min(3vw, 2vh), 18px);
+}
+*{ box-sizing:border-box; }
 
-    .wrap{
-      min-height:100vh;
-      min-height:100dvh;
-      width:100%;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
-    }
-    .title{
-      margin-top: calc(env(safe-area-inset-top) + 2px);
-      width: min(94vw, 680px);
-      max-height: var(--titleMaxH);
-      height:auto;
-      object-fit:contain;
-      display:block;
-      pointer-events:none;
-      user-select:none;
-      transform: scale(1.25);
-      transform-origin: center top;
-    }
-    .grid{
-      width: min(94vw, var(--maxw));
-      margin-top: clamp(8px, 1.5vh, 16px);
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--gap);
-      justify-items:center;
-      align-content:start;
-    }
-    .btn{
-      width: var(--btn);
-      height: var(--btn);
-      display:block;
-      text-decoration:none;
-      -webkit-tap-highlight-color:transparent;
-    }
-    .btn img{ width:100%; height:100%; object-fit:contain; display:block; }
+html, body{
+  margin:0;
+  padding:0;
+  height:100%;
+  overflow:auto;
+  overscroll-behavior-y:auto;
+  background:#000;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  -webkit-text-size-adjust:100%;
+}
 
-    @media (min-width:768px){
-      :root{ --btn: clamp(110px, 16vw, 180px); --titleMaxH: 26vh; --maxw:900px; }
-    }
+/* Background stable */
+body{
+  background:#000 url("background.png") center top / cover no-repeat fixed;
+}
 
-    /* Login card */
-    #loginBox{
-      min-height:100dvh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:24px;
-    }
-    .loginCard{
-      width:min(92vw, 520px);
-      background:rgba(0,0,0,.55);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-radius:18px;
-      padding:22px 18px;
-      text-align:center;
-      color:#fff;
-      box-shadow: 0 14px 40px rgba(0,0,0,.45);
-    }
-    .loginTitle{
-      margin:0 0 6px;
-      font-size: clamp(26px, 5vw, 42px);
-      letter-spacing:2px;
-    }
-    .loginSub{
-      margin:0 0 14px;
-      opacity:.9;
-      font-size:14px;
-      line-height:1.3;
-    }
-    .loginMsg{
-      margin-top:12px;
-      font-size:14px;
-      opacity:.95;
-      min-height:18px;
-    }
-    .btnSmall{
-      margin-top:12px;
-      background: rgba(255,255,255,.10);
-      border:1px solid rgba(255,255,255,.18);
-      color:#fff;
-      padding:10px 14px;
-      border-radius:12px;
-      cursor:pointer;
-      font-size:14px;
-    }
-  </style>
+/* Layout */
+.wrap{
+  min-height:100vh;
+  min-height:100dvh;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
+}
 
-  <!-- Google Identity -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+/* Titre */
+.title{
+  margin-top: calc(env(safe-area-inset-top) + 2px);
+  width: min(94vw, 680px);
+  max-height: var(--titleMaxH);
+  height:auto;
+  object-fit:contain;
+  display:block;
+  pointer-events:none;
+  user-select:none;
+
+  transform: scale(1.25);
+  transform-origin: center top;
+}
+
+/* Grille */
+.grid{
+  width: min(94vw, var(--maxw));
+  margin-top: clamp(8px, 1.5vh, 16px);
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap);
+  justify-items:center;
+  align-content:start;
+}
+
+.btn{
+  width: var(--btn);
+  height: var(--btn);
+  display:block;
+  text-decoration:none;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.btn img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+
+/* Login box */
+#loginBox{
+  width: min(94vw, 520px);
+  margin-top: clamp(40px, 12vh, 140px);
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(0,0,0,.55);
+  border:1px solid rgba(255,255,255,.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  text-align:center;
+}
+
+#loginHint{
+  color: rgba(255,255,255,.85);
+  font-weight: 900;
+  margin: 0 0 10px 0;
+  letter-spacing:.2px;
+}
+
+#loginSub{
+  color: rgba(255,255,255,.70);
+  font-weight: 800;
+  margin: 0 0 14px 0;
+  font-size: 13px;
+}
+
+/* Tablettes */
+@media (min-width:768px){
+  :root{
+    --btn: clamp(110px, 16vw, 180px);
+    --titleMaxH: 26vh;
+    --maxw:900px;
+  }
+}
+</style>
+
+<!-- Google Identity Services -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body>
 
 <!-- LOGIN -->
-<div id="loginBox">
-  <div class="loginCard">
-    <h1 class="loginTitle">ACCÈS PORTAIL</h1>
-    <p class="loginSub">Connexion Google obligatoire.<br>Accès uniquement si ton email est autorisé.</p>
+<div id="loginBox" style="display:none;">
+  <p id="loginHint">Connexion requise</p>
+  <p id="loginSub">Utilise ton compte Google autorisé.</p>
 
-    <div id="g_id_onload"
-         data-client_id="690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com"
-         data-callback="handleCredentialResponse">
-    </div>
+  <div id="g_id_onload"
+       data-client_id="690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com"
+       data-callback="handleCredentialResponse"
+       data-auto_prompt="false">
+  </div>
 
-    <div class="g_id_signin"
-         data-type="standard"
-         data-size="large"
-         data-theme="outline"
-         data-text="sign_in_with"
-         data-shape="rectangular">
-    </div>
-
-    <button class="btnSmall" id="resetBtn" type="button">Réinitialiser</button>
-    <div class="loginMsg" id="loginMsg"></div>
+  <div class="g_id_signin"
+       data-type="standard"
+       data-size="large"
+       data-theme="outline"
+       data-text="sign_in_with"
+       data-shape="rectangular">
   </div>
 </div>
 
 <!-- PORTAIL -->
-<main id="portal" class="wrap" style="display:none;">
+<main class="wrap" id="app" style="display:none;">
   <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
 
-  <section class="grid">
-    <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/"><img src="entretien.png" alt="Entretien"></a>
+  <section class="grid" aria-label="Menu">
+
+    <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/" target="_self">
+      <img src="entretien.png" alt="Entretien">
+    </a>
+
     <a class="btn" href="documents.html"><img src="documents.png" alt="Documents"></a>
     <a class="btn" href="organigramme.html"><img src="organigramme.png" alt="Organigramme"></a>
-
     <a class="btn" href="construction.png"><img src="informations.png" alt="Informations"></a>
     <a class="btn" href="planning.html"><img src="planning.png" alt="Planning"></a>
     <a class="btn" href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
 
     <a class="btn" href="construction.png"><img src="book.png" alt="Book"></a>
     <a class="btn" href="construction.png"><img src="galerie.png" alt="Galerie"></a>
-    <a class="btn" href="construction.png"><img src="admin.png" alt="Admin"></a>
 
+    <a class="btn" href="construction.png"><img src="admin.png" alt="Admin"></a>
     <a class="btn" href="construction.png"><img src="gardes postées.png" alt="Gardes postées"></a>
+
     <a class="btn" href="construction.png"><img src="tickets carburant.png" alt="Tickets carburant"></a>
     <a class="btn" href="construction.png"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>
+
   </section>
 </main>
 
 <script>
-/* =========================
-   CONFIG (2 trucs à remplir)
-   ========================= */
-const CLIENT_ID = "690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com";
-const APPS_SCRIPT_EXEC = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec"; // doit finir par /exec
+/*** CONFIG ***/
+const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+const LS_KEY_EMAIL = "cs_portail_email";
 
-/* =========================
-   Stockage (illimité) + revalidation obligatoire
-   ========================= */
-const AUTH_KEY = "cs_auth_email";
-
-/* =========================
-   UI helpers
-   ========================= */
-const elLoginBox = document.getElementById("loginBox");
-const elPortal = document.getElementById("portal");
-const elMsg = document.getElementById("loginMsg");
-
-function setMsg(t){ elMsg.textContent = t || ""; }
-
-function showLogin(msg){
-  elPortal.style.display = "none";
-  elLoginBox.style.display = "flex";
-  setMsg(msg || "");
+/*** UI helpers ***/
+function showLogin(){
+  document.getElementById("app").style.display = "none";
+  document.getElementById("loginBox").style.display = "block";
 }
-function showPortal(){
-  elLoginBox.style.display = "none";
-  elPortal.style.display = "flex";
-  setMsg("");
+function showApp(){
+  document.getElementById("loginBox").style.display = "none";
+  document.getElementById("app").style.display = "flex";
 }
 
-/* =========================
-   JSONP (anti-CORS, mobile-safe)
-   ========================= */
-function jsonp(url){
+/*** JSONP (compatible GitHub Pages + Apps Script) ***/
+function jsonp(url, cbName){
   return new Promise((resolve, reject) => {
-    const cb = "cb_" + Math.random().toString(36).slice(2);
-    const s = document.createElement("script");
-
+    const script = document.createElement("script");
     const cleanup = () => {
-      try { delete window[cb]; } catch(e){}
-      if (s && s.parentNode) s.parentNode.removeChild(s);
+      script.remove();
+      try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
     };
-
-    window[cb] = (data) => { cleanup(); resolve(data); };
-
-    const sep = url.includes("?") ? "&" : "?";
-    s.src = url + sep + "callback=" + encodeURIComponent(cb) + "&_ts=" + Date.now();
-    s.onerror = () => { cleanup(); reject(new Error("jsonp_failed")); };
-
-    document.head.appendChild(s);
+    const timer = setTimeout(() => { cleanup(); reject(new Error("Timeout JSONP")); }, 12000);
+    window[cbName] = (data) => { clearTimeout(timer); cleanup(); resolve(data); };
+    script.src = url;
+    script.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error("Erreur JSONP")); };
+    document.head.appendChild(script);
   });
 }
 
-/* =========================
-   API calls
-   ========================= */
-function authCheck(email){
-  // IMPORTANT: view=auth_check pour ton doGet
-  const url = APPS_SCRIPT_EXEC + "?view=auth_check&email=" + encodeURIComponent(email || "");
-  return jsonp(url);
+/*** Vérifie l'accès côté Apps Script (pas de fetch) ***/
+async function authCheck(email){
+  const cb = "cb_auth_" + Math.random().toString(36).slice(2);
+  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
+  const res = await jsonp(url, cb);
+  return !!(res && res.ok);
 }
 
-/* =========================
-   Google callback
-   ========================= */
-function handleCredentialResponse(response){
+/*** Google Credential callback ***/
+async function handleCredentialResponse(response) {
   try{
-    const payload = (response.credential || "").split(".")[1] || "";
-    const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
-    const data = JSON.parse(decodeURIComponent(escape(atob(base64))));
-    const email = String(data.email || "").toLowerCase().trim();
+    // decode JWT payload (email)
+    const payload = response.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    const data = JSON.parse(decodeURIComponent(escape(atob(payload))));
+    const email = (data.email || "").trim().toLowerCase();
 
     if(!email){
-      showLogin("Email introuvable.");
+      alert("Erreur : email introuvable.");
+      showLogin();
       return;
     }
 
-    setMsg("Vérification accès…");
-
-    authCheck(email).then((res) => {
-      if(res && res.ok){
-        localStorage.setItem(AUTH_KEY, email);
-        showPortal();
-      }else{
-        localStorage.removeItem(AUTH_KEY);
-        showLogin("Accès refusé.");
-      }
-    }).catch(() => {
-      // ici c'est un vrai souci réseau / blocage / Apps Script down
-      showLogin("Erreur réseau / serveur.");
-    });
-
-  }catch(e){
-    showLogin("Erreur de connexion.");
+    const ok = await authCheck(email);
+    if(ok){
+      localStorage.setItem(LS_KEY_EMAIL, email);
+      showApp();
+    }else{
+      localStorage.removeItem(LS_KEY_EMAIL);
+      alert("Accès refusé");
+      showLogin();
+    }
+  }catch(err){
+    console.error(err);
+    alert("Erreur réseau / serveur");
+    showLogin();
   }
 }
 
-/* =========================
-   Reset + Auto-login (revalide toujours)
-   ========================= */
-document.getElementById("resetBtn").addEventListener("click", () => {
-  localStorage.removeItem(AUTH_KEY);
-  showLogin("Réinitialisé.");
-});
-
-window.addEventListener("load", () => {
-  // force le client id dans le div g_id_onload (1 seul endroit logique)
-  const g = document.getElementById("g_id_onload");
-  g.setAttribute("data-client_id", CLIENT_ID);
-
-  const saved = (localStorage.getItem(AUTH_KEY) || "").toLowerCase().trim();
-  if(!saved){
-    showLogin("");
-    return;
-  }
-
-  setMsg("Vérification accès…");
-
-  // revalidation obligatoire => si tu supprimes le mail côté sheet, ça coupe direct
-  authCheck(saved).then((res) => {
-    if(res && res.ok){
-      showPortal();
-    }else{
-      localStorage.removeItem(AUTH_KEY);
-      showLogin("Accès refusé.");
+/*** BOOT : si email déjà connu -> on REVALIDE à chaque ouverture ***/
+(async function boot(){
+  const saved = (localStorage.getItem(LS_KEY_EMAIL) || "").trim().toLowerCase();
+  if(saved){
+    try{
+      const ok = await authCheck(saved);
+      if(ok){
+        showApp();
+        return;
+      }
+      localStorage.removeItem(LS_KEY_EMAIL);
+    }catch(e){
+      // si API tombe, on ne laisse pas passer
+      localStorage.removeItem(LS_KEY_EMAIL);
     }
-  }).catch(() => {
-    showLogin("Erreur réseau / serveur.");
-  });
-});
+  }
+  showLogin();
+})();
 </script>
 
 </body>
