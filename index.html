@@ -312,7 +312,7 @@ async function handleCredentialResponse(response){
     if(res && res.ok === true){
       localStorage.setItem(LS_KEY, email);
       showMsg("");
-      showPortal(true);
+      showPortal();
     }else{
       localStorage.removeItem(LS_KEY);
       showLogin();
@@ -347,7 +347,7 @@ async function handleCredentialResponse(response){
       const res = await authCheck(saved);
       if(res && res.ok === true){
         showMsg("");
-        showPortal(true);
+        showPortal();
       }else{
         localStorage.removeItem(LS_KEY);
         showMsg("Accès refusé.");
