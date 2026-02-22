@@ -195,13 +195,21 @@ const $logout = document.getElementById("logoutBtn");
 
 /* ====== UI ====== */
 function showMsg(t){ $msg.textContent = t || ""; }
-function showPortal(){
+function showPortal(push = true){
   $loginBox.style.display = "none";
   $portal.style.display = "flex";
+
+  if(push){
+    history.pushState({page:"portal"}, "", "?portal=1");
+  }
 }
-function showLogin(){
+function showLogin(push = true){
   $portal.style.display = "none";
   $loginBox.style.display = "block";
+
+  if(push){
+    history.pushState({page:"login"}, "", "?");
+  }
 }
 
 /* ====== JWT email (ROBUSTE) ====== */
@@ -311,7 +319,12 @@ async function handleCredentialResponse(response){
   const g = document.getElementById("g_id_onload");
   g.setAttribute("data-client_id", GOOGLE_CLIENT_ID);
 
-  showLogin();
+ if(location.search.includes("portal=1")){
+  showPortal(false);
+}else{
+  showLogin(false);
+}
+
   showMsg("");
 
   // si email mémorisé => RECHECK obligatoire
@@ -340,6 +353,13 @@ $logout.addEventListener("click", ()=>{
   showLogin();
   showMsg("Déconnecté.");
 });
+  window.onpopstate = function(){
+  if(location.search.includes("portal=1")){
+    showPortal(false);
+  }else{
+    showLogin(false);
+  }
+};
 </script>
 
 </body>
