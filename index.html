@@ -1,284 +1,341 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>CS Consenvoye</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CS Consenvoye</title>
 
-  <!-- Icônes -->
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
-  <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+<link rel="manifest" href="manifest.json">
 
-  <!-- PWA -->
-  <meta name="theme-color" content="#d46a00">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#d46a00">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <style>
-    :root{
-      --maxw: 760px;
+<style>
+:root{
+  --maxw: 760px;
 
-      /* Titre */
-      --titleMaxH: 34vh;
-      --titleScale: 1.25; /* ajuste si besoin */
+  /* 🔥 Titre dominant */
+  --titleMaxH: 34vh;
 
-      /* Icônes */
-      --btn: clamp(100px, min(22vw, 15vh), 170px);
-      --gap: clamp(10px, min(3vw, 2vh), 18px);
-    }
+  /* 🔥 Icônes équilibrées */
+  --btn: clamp(100px, min(22vw, 15vh), 170px);
 
-    *{ box-sizing:border-box; }
+  --gap: clamp(10px, min(3vw, 2vh), 18px);
+}
 
-    html, body{
-      margin:0;
-      padding:0;
-      height:100%;
-      overflow:auto;
-      overscroll-behavior-y:auto; /* garde le pull-to-refresh */
-      background:#000;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      -webkit-text-size-adjust:100%;
-    }
+*{ box-sizing:border-box; }
 
-    /* Background stable */
-    body{
-      background:#000 url("background.png") center top / cover no-repeat fixed;
-    }
+html, body{
+  margin:0;
+  padding:0;
+  height:100%;
+  overflow:auto;
+  overscroll-behavior-y:auto; /* garde le pull-to-refresh */
+  background:#000;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  -webkit-text-size-adjust:100%;
+}
 
-    /* Login box */
-    #loginBox{
-      min-height: 100vh;
-      min-height: 100dvh;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:flex-start;
-      padding-top: calc(env(safe-area-inset-top) + 110px);
-      gap: 14px;
-      text-align:center;
-    }
-    #loginBox .hint{
-      color: rgba(255,255,255,.9);
-      font-weight: 700;
-      text-shadow: 0 2px 10px rgba(0,0,0,.65);
-      padding: 0 14px;
-    }
-    #loginBox .sub{
-      color: rgba(255,255,255,.75);
-      font-size: 14px;
-      padding: 0 14px;
-    }
+/* Background stable */
+body{
+  background:#000 url("background.png") center top / cover no-repeat fixed;
+}
 
-    /* Layout portail */
-    main.wrap{
-      min-height:100vh;
-      min-height:100dvh;
-      width:100%;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
-    }
+/* ===== LOGIN ===== */
+#loginBox{
+  min-height: 100vh;
+  min-height: 100dvh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  padding-top: calc(env(safe-area-inset-top) + 110px);
+  gap: 14px;
+  text-align:center;
+}
+#loginBox .hint{
+  color: rgba(255,255,255,.92);
+  font-weight: 800;
+  text-shadow: 0 2px 10px rgba(0,0,0,.65);
+  padding: 0 14px;
+}
+#loginBox .sub{
+  color: rgba(255,255,255,.78);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 0 14px;
+}
 
-    /* Titre */
-    .title{
-      margin-top: calc(env(safe-area-inset-top) + 2px);
-      width: min(94vw, 680px);
-      max-height: var(--titleMaxH);
-      height:auto;
-      object-fit:contain;
-      display:block;
-      pointer-events:none;
-      user-select:none;
+/* ===== PORTAIL ===== */
+.wrap{
+  min-height:100vh;
+  min-height:100dvh;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
+}
 
-      /* Grossit sans déplacer la grille (visuellement) */
-      transform: scale(var(--titleScale));
-      transform-origin: center top;
-    }
+/* Titre */
+.title{
+  margin-top: calc(env(safe-area-inset-top) + 2px);
+  width: min(94vw, 680px);
+  max-height: var(--titleMaxH);
+  height:auto;
+  object-fit:contain;
+  display:block;
+  pointer-events:none;
+  user-select:none;
 
-    /* Grille */
-    .grid{
-      width: min(94vw, var(--maxw));
-      margin-top: clamp(8px, 1.5vh, 16px);
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--gap);
-      justify-items:center;
-      align-content:start;
-    }
+  transform: scale(1.25);
+  transform-origin: center top;
+}
 
-    .btn{
-      width: var(--btn);
-      height: var(--btn);
-      display:block;
-      text-decoration:none;
-      -webkit-tap-highlight-color:transparent;
-    }
-    .btn img{
-      width:100%;
-      height:100%;
-      object-fit:contain;
-      display:block;
-    }
+/* Grille */
+.grid{
+  width: min(94vw, var(--maxw));
+  margin-top: clamp(8px, 1.5vh, 16px);
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap);
+  justify-items:center;
+  align-content:start;
+}
 
-    /* Tablettes */
-    @media (min-width:768px){
-      :root{
-        --btn: clamp(110px, 16vw, 180px);
-        --titleMaxH: 26vh;
-        --maxw: 900px;
-      }
-    }
-  </style>
+.btn{
+  width: var(--btn);
+  height: var(--btn);
+  display:block;
+  text-decoration:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
 
-  <!-- Google Identity Services -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+/* Tablettes */
+@media (min-width:768px){
+  :root{
+    --btn: clamp(110px, 16vw, 180px);
+    --titleMaxH: 26vh;
+    --maxw: 900px;
+  }
+}
+</style>
+
+<!-- Google Identity Services -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body>
 
-  <!-- LOGIN -->
-  <div id="loginBox">
-    <div class="hint">Connexion Google requise</div>
-    <div class="sub">Accès réservé aux agents autorisés</div>
+<!-- LOGIN -->
+<div id="loginBox">
+  <div class="hint">Connexion Google requise</div>
+  <div class="sub">Accès réservé aux agents autorisés</div>
 
-    <div id="g_id_onload"
-         data-client_id="690765229829-9bbdccrsm9dd8c1sj01k06bqsdna3hgs.apps.googleusercontent.com"
-         data-callback="handleCredentialResponse">
-    </div>
-
-    <div class="g_id_signin"
-         data-type="standard"
-         data-size="large"
-         data-theme="outline"
-         data-text="sign_in_with"
-         data-shape="rectangular">
-    </div>
+  <div id="g_id_onload"
+       data-client_id="690765229829-9bbdccrsm9dd8c1sj01k06bqsdna3hgs.apps.googleusercontent.com"
+       data-callback="handleCredentialResponse">
   </div>
 
-  <!-- PORTAIL -->
-  <main class="wrap" id="portal" style="display:none;">
-    <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
+  <div class="g_id_signin"
+       data-type="standard"
+       data-size="large"
+       data-theme="outline"
+       data-text="sign_in_with"
+       data-shape="rectangular">
+  </div>
+</div>
 
-    <section class="grid" aria-label="Menu">
+<!-- PORTAIL -->
+<main class="wrap" id="portal" style="display:none;">
+  <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
 
-      <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/" target="_self">
-        <img src="entretien.png" alt="Entretien">
-      </a>
+  <section class="grid" aria-label="Menu">
 
-      <a class="btn" href="documents.html" target="_self">
-        <img src="documents.png" alt="Documents">
-      </a>
+    <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/" target="_self">
+      <img src="entretien.png" alt="Entretien">
+    </a>
 
-      <a class="btn" href="organigramme.html" target="_self">
-        <img src="organigramme.png" alt="Organigramme">
-      </a>
+    <a class="btn" href="documents.html" target="_self">
+      <img src="documents.png" alt="Documents">
+    </a>
 
-      <a class="btn" href="construction.png" target="_self">
-        <img src="informations.png" alt="Informations">
-      </a>
+    <a class="btn" href="organigramme.html" target="_self">
+      <img src="organigramme.png" alt="Organigramme">
+    </a>
 
-      <a class="btn" href="planning.html" target="_self">
-        <img src="planning.png" alt="Planning">
-      </a>
+    <a class="btn" href="construction.png" target="_self">
+      <img src="informations.png" alt="Informations">
+    </a>
 
-      <a class="btn" href="equipes.html" target="_self">
-        <img src="equipes.png" alt="Équipes">
-      </a>
+    <a class="btn" href="planning.html" target="_self">
+      <img src="planning.png" alt="Planning">
+    </a>
 
-      <a class="btn" href="construction.png" target="_self">
-        <img src="book.png" alt="Book">
-      </a>
+    <a class="btn" href="equipes.html" target="_self">
+      <img src="equipes.png" alt="Équipes">
+    </a>
 
-      <a class="btn" href="construction.png" target="_self">
-        <img src="galerie.png" alt="Galerie">
-      </a>
+    <a class="btn" href="construction.png" target="_self">
+      <img src="book.png" alt="Book">
+    </a>
 
-      <a class="btn" href="construction.png" target="_self">
-        <img src="admin.png" alt="Admin">
-      </a>
+    <a class="btn" href="construction.png" target="_self">
+      <img src="galerie.png" alt="Galerie">
+    </a>
 
-      <!-- ⚠️ Fichiers avec espaces/accents : je les encode pour éviter les bugs -->
-      <a class="btn" href="construction.png" target="_self">
-        <img src="gardes%20post%C3%A9es.png" alt="Gardes postées">
-      </a>
+    <a class="btn" href="construction.png" target="_self">
+      <img src="admin.png" alt="Admin">
+    </a>
 
-      <a class="btn" href="construction.png" target="_self">
-        <img src="tickets%20carburant.png" alt="Tickets carburant">
-      </a>
+    <!-- ✅ noms encodés (espaces/accents) pour éviter les bugs -->
+    <a class="btn" href="construction.png" target="_self">
+      <img src="gardes%20post%C3%A9es.png" alt="Gardes postées">
+    </a>
 
-      <a class="btn" href="construction.png" target="_self">
-        <img src="d%C3%A9sinfection%20VSAV.png" alt="Désinfection VSAV">
-      </a>
+    <a class="btn" href="construction.png" target="_self">
+      <img src="tickets%20carburant.png" alt="Tickets carburant">
+    </a>
 
-    </section>
-  </main>
+    <a class="btn" href="d%C3%A9sinfection%20VSAV.png" target="_self">
+      <img src="d%C3%A9sinfection%20VSAV.png" alt="Désinfection VSAV">
+    </a>
 
-  <script>
-    /* ===== JSONP helper (évite CORS GitHub -> Apps Script) ===== */
-    function jsonp(url){
-      return new Promise((resolve, reject) => {
-        const cb = "cb_" + Math.random().toString(36).slice(2);
-        const s = document.createElement("script");
+  </section>
+</main>
 
-        window[cb] = (data) => { cleanup(); resolve(data); };
+<script>
+/* ===== CONFIG ===== */
+const API_BASE = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+const AUTH_KEY = "cs_auth_email";
 
-        function cleanup(){
-          try { delete window[cb]; } catch(e){}
-          s.remove();
+function showPortal(){
+  document.getElementById("loginBox").style.display = "none";
+  document.getElementById("portal").style.display = "flex";
+}
+function showLogin(){
+  document.getElementById("loginBox").style.display = "flex";
+  document.getElementById("portal").style.display = "none";
+}
+
+function saveAuth(email){
+  localStorage.setItem(AUTH_KEY, email.toLowerCase());
+}
+function loadAuth(){
+  return (localStorage.getItem(AUTH_KEY) || "").toLowerCase();
+}
+function clearAuth(){
+  localStorage.removeItem(AUTH_KEY);
+  }
+
+/* ===== JSONP helper (évite CORS) ===== */
+function jsonp(url){
+  return new Promise((resolve, reject) => {
+    const cb = "cb_" + Math.random().toString(36).slice(2);
+    const s = document.createElement("script");
+
+    window[cb] = (data) => { cleanup(); resolve(data); };
+
+    function cleanup(){
+      try { delete window[cb]; } catch(e){}
+      s.remove();
+    }
+
+    s.onerror = () => { cleanup(); reject(new Error("JSONP load error")); };
+
+    s.src = url + (url.includes("?") ? "&" : "?") + "callback=" + cb;
+    document.head.appendChild(s);
+  });
+}
+
+/* ===== Auth check via Apps Script ===== */
+function authCheck(email){
+  const url = API_BASE
+    + "?view=auth_check"
+    + "&email=" + encodeURIComponent(email)
+    + "&nocache=1";
+  return jsonp(url);
+}
+
+/* ===== Google callback ===== */
+function handleCredentialResponse(response) {
+  try{
+    const payload = response.credential.split('.')[1]
+      .replace(/-/g, '+')
+      .replace(/_/g, '/');
+
+    const data = JSON.parse(decodeURIComponent(escape(atob(payload))));
+    const email = (data.email || "").toLowerCase();
+
+    console.log("Email connecté :", email);
+
+    authCheck(email)
+      .then((json) => {
+        if (json && json.ok) {
+          saveAuth(email);
+          showPortal();
+        } else {
+          clearAuth();
+          alert("Accès refusé");
         }
-
-        s.onerror = () => { cleanup(); reject(new Error("JSONP load error")); };
-
-        s.src = url + (url.includes("?") ? "&" : "?") + "callback=" + cb;
-        document.head.appendChild(s);
-      });
-    }
-
-    function showPortal(){
-      document.getElementById("loginBox").style.display = "none";
-      document.getElementById("portal").style.display = "flex";
-    }
-
-    function handleCredentialResponse(response) {
-      try{
-        const payload = response.credential.split('.')[1]
-          .replace(/-/g, '+')
-          .replace(/_/g, '/');
-
-        const data = JSON.parse(decodeURIComponent(escape(atob(payload))));
-        const email = (data.email || "").toLowerCase();
-
-        console.log("Email connecté :", email);
-
-        const base = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
-
-        const url = base
-          + "?view=auth_check"
-          + "&email=" + encodeURIComponent(email)
-          + "&nocache=1";
-
-        jsonp(url)
-          .then((json) => {
-            if (json && json.ok) {
-              showPortal();
-            } else {
-              alert("Accès refusé");
-            }
-          })
-          .catch((err) => {
-            console.error(err);
-            alert("Erreur de connexion");
-          });
-
-      } catch(e){
-        console.error(e);
+      })
+      .catch((err) => {
+        console.error(err);
         alert("Erreur de connexion");
+      });
+
+  } catch(e){
+    console.error(e);
+    alert("Erreur de connexion");
+  }
+}
+
+/* ===== Auto-login (reste connecté) ===== */
+window.addEventListener("load", () => {
+
+  const saved = loadAuth();
+
+  // Si aucun email stocké → login
+  if(!saved){
+    showLogin();
+    return;
+  }
+
+  // Sinon on vérifie côté Apps Script
+  authCheck(saved)
+    .then((json) => {
+
+      if(json && json.ok){
+        showPortal(); // accès direct
+      } else {
+        clearAuth(); // supprimé côté whitelist
+        showLogin(); // retour login
       }
-    }
-  </script>
+
+    })
+    .catch(() => {
+      showLogin();
+    });
+
+});
+
+    })
+    .catch(() => {
+      // si réseau KO → on laisse login (propre)
+      showLogin();
+    });
+});
+</script>
 
 </body>
 </html>
