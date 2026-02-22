@@ -21,21 +21,87 @@
   --btn: clamp(100px, min(22vw, 15vh), 170px);
   --gap: clamp(10px, min(3vw, 2vh), 18px);
 }
+
 *{ box-sizing:border-box; }
-html, body{
-  margin:0; padding:0;
-  min-height:100%;
-  overflow:auto;
-  overscroll-behavior-y:auto;
+html, body{ height:100%; margin:0; padding:0; }
+body{
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   -webkit-text-size-adjust:100%;
-  background:#000;
+  background:#000 url("background.png") center top / cover no-repeat;
 }
-body{
-  background:#000 url("background.png") center top / cover no-repeat fixed;
+
+/* IMPORTANT: sur mobile, background fixed fout souvent le bordel (écran noir / saccades) */
+@media (min-width: 900px){
+  body{ background-attachment: fixed; }
+}
+
+/* ===== LOGIN (stable, sans casser le portail) ===== */
+#loginBox{
+  position: fixed;
+  inset: 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: calc(env(safe-area-inset-top) + 14px) 14px calc(env(safe-area-inset-bottom) + 14px);
+  z-index: 10;
+}
+
+.loginCard{
+  width: min(92vw, 520px);
+  border-radius: 18px;
+  backdrop-filter: blur(14px);
+  background: rgba(0,0,0,.65);
+  box-shadow: 0 10px 40px rgba(0,0,0,.6);
+  padding: 18px 18px 16px;
+  text-align:center;
+}
+
+.loginTitleImg{
+  width: min(86vw, 440px);
+  height:auto;
+  display:block;
+  margin: 0 auto 10px;
+  object-fit: contain;
+  pointer-events:none;
+  user-select:none;
+}
+
+#loginTitleTxt{
+  margin: 2px 0 14px;
+  font-size: 22px;
+  letter-spacing: 2px;
+  font-weight: 900;
+  color:#fff;
+}
+
+.g_id_signin{
+  display:flex;
+  justify-content:center;
+}
+
+#loginMsg{
+  margin-top:10px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #ff6b6b;
+  min-height: 18px;
+}
+
+#logoutBtn{
+  margin-top: 14px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,0.10);
+  color:#fff;
+  font-weight: 700;
 }
 
 /* ===== PORTAIL ===== */
+#portal{
+  display:none;
+}
+
 .wrap{
   min-height:100vh;
   min-height:100dvh;
@@ -45,8 +111,9 @@ body{
   align-items:center;
   padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
 }
+
 .title{
-  margin-top: calc(env(safe-area-inset-top) + 2px);
+  margin-top: calc(env(safe-area-inset-top) + 6px);
   width: min(94vw, 680px);
   max-height: var(--titleMaxH);
   height:auto;
@@ -54,18 +121,18 @@ body{
   display:block;
   pointer-events:none;
   user-select:none;
-  transform: scale(1.25);
-  transform-origin: center top;
 }
+
 .grid{
   width: min(94vw, var(--maxw));
-  margin-top: clamp(8px, 1.5vh, 16px);
+  margin-top: clamp(10px, 2vh, 18px);
   display:grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--gap);
   justify-items:center;
   align-content:start;
 }
+
 .btn{
   width: var(--btn);
   height: var(--btn);
@@ -78,43 +145,6 @@ body{
 @media (min-width:768px){
   :root{ --btn: clamp(110px, 16vw, 180px); --titleMaxH: 26vh; --maxw:900px; }
 }
-
-/* ===== LOGIN (comme avant) ===== */
-#loginBox{
-  width:min(92vw, 520px);
-  margin-top: calc(env(safe-area-inset-top) + 70px);
-  padding: 16px 14px;
-  border-radius: 18px;
-  background: rgba(0,0,0,.55);
-  border: 1px solid rgba(255,255,255,.14);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  text-align:center;
-}
-#loginTitle{
-  margin: 0 0 10px 0;
-  font-weight: 950;
-  letter-spacing: .6px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.92);
-}
-#loginMsg{
-  margin: 8px 0 0 0;
-  font-weight: 800;
-  color: rgba(255,255,255,.78);
-  font-size: 14px;
-  min-height: 18px;
-}
-#logoutBtn{
-  margin-top: 10px;
-  border:1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.18);
-  color: rgba(255,255,255,.92);
-  padding: 10px 12px;
-  border-radius: 14px;
-  font-weight: 900;
-  cursor:pointer;
-}
 </style>
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -124,29 +154,32 @@ body{
 
 <!-- LOGIN -->
 <div id="loginBox">
-  <h2 id="loginTitle">Accès Portail</h2>
+  <div class="loginCard">
+    <!-- Si tu as une image titre “feu” : mets-la en titre.png (sinon commente la ligne img) -->
+    <!-- <img class="loginTitleImg" src="titre.png" alt="CS Consenvoye"> -->
+    <div id="loginTitleTxt">ACCÈS PORTAIL</div>
 
-  <div id="g_id_onload"
-       data-client_id="690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com"
-       data-callback="handleCredentialResponse"
-       data-auto_prompt="false">
+    <div id="g_id_onload"
+         data-client_id="690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse"
+         data-auto_prompt="false">
+    </div>
+
+    <div class="g_id_signin"
+         data-type="standard"
+         data-size="large"
+         data-theme="outline"
+         data-text="sign_in_with"
+         data-shape="rectangular">
+    </div>
+
+    <div id="loginMsg"></div>
+    <button id="logoutBtn" type="button">Déconnexion</button>
   </div>
-
-  <div class="g_id_signin"
-       data-type="standard"
-       data-size="large"
-       data-theme="outline"
-       data-text="sign_in_with"
-       data-shape="rectangular">
-  </div>
-
-  <p id="loginMsg"></p>
-
-  <button id="logoutBtn" type="button">Déconnexion</button>
 </div>
 
 <!-- PORTAIL -->
-<main class="wrap" id="portal" style="display:none;">
+<main class="wrap" id="portal">
   <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
 
   <section class="grid" aria-label="Menu">
@@ -166,28 +199,34 @@ body{
 </main>
 
 <script>
-/* ====== CONFIG ====== */
+/* ================= CONFIG (NE PAS TOUCHER SI C’EST DÉJÀ BON) ================= */
+const GOOGLE_CLIENT_ID = "690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com";
 const API = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec";
 const LS_KEY = "cs_portail_email_v1";
 
-/* ====== DOM ====== */
+/* ================= DOM ================= */
 const $loginBox = document.getElementById("loginBox");
 const $portal = document.getElementById("portal");
 const $msg = document.getElementById("loginMsg");
 const $logout = document.getElementById("logoutBtn");
 
-/* ====== UI ====== */
+/* ================= UI (STABLE) ================= */
 function showMsg(t){ $msg.textContent = t || ""; }
+
 function showPortal(){
   $loginBox.style.display = "none";
-  $portal.style.display = "flex";
-}
-function showLogin(){
-  $portal.style.display = "none";
-  $loginBox.style.display = "block";
+  $portal.style.display = "block";
+  // back button stable via hash
+  if (location.hash !== "#portal") location.hash = "#portal";
 }
 
-/* ====== JWT email (plus robuste que escape/decodeURIComponent) ====== */
+function showLogin(){
+  $portal.style.display = "none";
+  $loginBox.style.display = "flex";
+  if (location.hash) history.replaceState(null, "", location.pathname);
+}
+
+/* ================= JWT email (robuste) ================= */
 function b64urlToUtf8(b64url){
   let s = String(b64url || "").replace(/-/g, "+").replace(/_/g, "/");
   while (s.length % 4) s += "=";
@@ -205,23 +244,38 @@ function parseJwtEmail(credential){
   return String(payload.email || "").trim().toLowerCase();
 }
 
-/* ====== JSONP (simple, comme avant) ====== */
-function jsonp(url, cbName){
+/* ================= JSONP (mobile-safe) ================= */
+function jsonp(url, cbName, timeoutMs = 20000){
   return new Promise((resolve, reject) => {
     const script = document.createElement("script");
+    script.async = true;
+
     const cleanup = () => {
-      script.remove();
-      try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+      try { script.remove(); } catch(_){}
+      try { delete window[cbName]; } catch(_){ window[cbName] = undefined; }
     };
-    const timer = setTimeout(() => { cleanup(); reject(new Error("Timeout JSONP")); }, 12000);
 
-    window[cbName] = (data) => { clearTimeout(timer); cleanup(); resolve(data); };
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error("timeout"));
+    }, timeoutMs);
 
-    // petit anti-cache (mobile)
+    window[cbName] = (data) => {
+      clearTimeout(timer);
+      cleanup();
+      resolve(data);
+    };
+
+    // cache-buster (mobile/proxy)
     const sep = url.includes("?") ? "&" : "?";
     script.src = url + sep + "_t=" + Date.now();
 
-    script.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error("Erreur JSONP")); };
+    script.onerror = () => {
+      clearTimeout(timer);
+      cleanup();
+      reject(new Error("jsonp_error"));
+    };
+
     document.head.appendChild(script);
   });
 }
@@ -229,17 +283,18 @@ function jsonp(url, cbName){
 async function authCheck(email){
   const cb = "cb_auth_" + Math.random().toString(36).slice(2);
   const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
-  return await jsonp(url, cb);
+  return await jsonp(url, cb, 20000);
 }
 
-/* ====== Google callback ====== */
+/* ================= Google callback ================= */
 async function handleCredentialResponse(response){
   try{
-    showMsg("Vérification de l’accès…");
+    showMsg("Vérification...");
     const email = parseJwtEmail(response.credential);
 
     if(!email){
       localStorage.removeItem(LS_KEY);
+      showLogin();
       showMsg("Erreur : email introuvable.");
       return;
     }
@@ -252,46 +307,61 @@ async function handleCredentialResponse(response){
       showPortal();
     }else{
       localStorage.removeItem(LS_KEY);
-      showLogin();
       showMsg("Accès refusé.");
+      showLogin();
     }
-  }catch(err){
+  }catch(_){
     localStorage.removeItem(LS_KEY);
-    showLogin();
     showMsg("Erreur réseau / serveur.");
+    showLogin();
   }
 }
 
-/* ====== Boot ====== */
-(async function(){
-  showLogin();
-  showMsg("");
+/* ================= Boot (STABLE) ================= */
+(function(){
+  // inject client id (évite les incohérences)
+  const g = document.getElementById("g_id_onload");
+  if (g) g.setAttribute("data-client_id", GOOGLE_CLIENT_ID);
 
-  // si email mémorisé => revalidation obligatoire (suppression dans Sheets = plus d’accès)
+  // état au chargement
+  if (location.hash === "#portal") {
+    showPortal();
+  } else {
+    showLogin();
+  }
+
+  // recheck si email mémorisé
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
   if(saved){
-    try{
-      showMsg("Vérification…");
-      const res = await authCheck(saved);
+    showMsg("Vérification...");
+    authCheck(saved).then(res=>{
       if(res && res.ok === true){
         showMsg("");
         showPortal();
       }else{
         localStorage.removeItem(LS_KEY);
         showMsg("Accès refusé.");
+        showLogin();
       }
-    }catch(e){
+    }).catch(()=>{
       localStorage.removeItem(LS_KEY);
       showMsg("Erreur réseau / serveur.");
-    }
+      showLogin();
+    });
   }
 })();
 
 /* Déconnexion */
 $logout.addEventListener("click", ()=>{
   localStorage.removeItem(LS_KEY);
-  showLogin();
   showMsg("Déconnecté.");
+  showLogin();
+});
+
+/* Back button: si tu reviens en arrière, ça repasse login (normal) */
+window.addEventListener("hashchange", ()=>{
+  if(location.hash === "#portal") showPortal();
+  else showLogin();
 });
 </script>
 
