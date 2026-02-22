@@ -276,11 +276,21 @@ function jsonp(baseUrl, params={}, timeoutMs=20000){
     document.head.appendChild(s);
   });
 }
-
+const API1 = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec";
+const API2 = "https://script.googleusercontent.com/macros/echo?user_content_key=AY5xjrQECihV3Ai1WremzIBEs8fF7DpOa89vP0XYnwXBL0fxr3AH3PaZgPi823TJp5qY9ZdM1eE8Bzm5AcuPY9dvLFQA1EvwoUZnIjFZI174wp5hGb8BfFzxLN0HGCBlfDyVdkN0ettZvdhRggb3wvSisthFFMqVEFXtpbcTMAD9S7fCIe71OqBii4iM08Gy5utyTdzgLAZ1NdxSxWbPyRjgYY94JhKeiSQSs61HM99Ot03fPib_ITXlNTeaTlCiiqkY4L9pcfxON8c13fhD9RwPSPZmWYScsA&lib=MUrxZm6e_GZu_nx92INa1hxWMXI2VoG64";
 
 async function authCheck(email){
-  return await jsonp(API, { view:"auth_check", email: email, nocache:"1" }, 20000);
+  try {
+    // 1) tente script.google.com
+    return await jsonp(API1, { view:"auth_check", email, nocache:"1" }, 20000);
+  } catch(e1) {
+    // 2) fallback script.googleusercontent.com
+    return await jsonp(API2, { view:"auth_check", email, nocache:"1" }, 20000);
+  }
 }
+
+
+
 /* ====== Google callback ====== */
 async function handleCredentialResponse(response){
   try{
