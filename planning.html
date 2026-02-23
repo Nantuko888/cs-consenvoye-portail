@@ -546,19 +546,39 @@
   }
 
   function jsonp(url, cbName){
-    return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      const cleanup = () => {
-        script.remove();
-        try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
-      };
-      const timer = setTimeout(() => { cleanup(); reject(new Error("Timeout JSONP")); }, 12000);
-      window[cbName] = (data) => { clearTimeout(timer); cleanup(); resolve(data); };
-      script.src = url;
-      script.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error("Erreur JSONP")); };
-      document.head.appendChild(script);
-    });
-  }
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+
+    const cleanup = () => {
+      script.remove();
+      try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+    };
+
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error("Timeout JSONP"));
+    }, 12000);
+
+    window[cbName] = (data) => {
+      clearTimeout(timer);
+      cleanup();
+      resolve(data);
+    };
+
+    // ✅ anti-cache (URL unique à chaque appel)
+    const sep = url.includes("?") ? "&" : "?";
+    script.src = url + sep + "t=" + Date.now();
+
+    script.onerror = () => {
+      clearTimeout(timer);
+      cleanup();
+      reject(new Error("Erreur JSONP"));
+    };
+
+    document.head.appendChild(script);
+  });
+}
+
 
   /********** DATA **********/
   let events = [];
