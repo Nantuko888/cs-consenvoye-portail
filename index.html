@@ -115,6 +115,7 @@ body {
   color: #ff6b6b;
 }
 
+/* ✅ MODIF: on ne garde PAS de logout dans le login, donc on peut laisser ce style sans usage */
 #logoutBtn {
   margin-top: 15px;
   padding: 8px 20px;
@@ -124,11 +125,9 @@ body {
   color: white;
   cursor: pointer;
 }
-
 #logoutBtn:hover {
   background: rgba(255,255,255,0.2);
 }
-
 </style>
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -157,7 +156,7 @@ body {
 
   <p id="loginMsg"></p>
 
-  <button id="logoutBtn" type="button">Déconnexion</button>
+  <!-- ✅ MODIF: SUPPRIMÉ ICI -> pas de bouton logout dans l'écran login -->
 </div>
 
 <!-- PORTAIL -->
@@ -179,34 +178,39 @@ body {
     <a class="btn" href="construction.png"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>
   </section>
 
+  <!-- ✅ MODIF: UN SEUL bouton logout, ici, et ID UNIQUE -->
   <div style="margin:30px 0; text-align:center;">
-  <button id="logoutBtn" style="
-    padding:12px 24px;
-    border-radius:14px;
-    border:none;
-    background:#111;
-    color:#fff;
-    font-weight:bold;
-    cursor:pointer;
-  ">
-    Déconnexion
-  </button>
-</div>
+    <button id="logoutBtnPortal" style="
+  padding:10px 18px;
+  border-radius:14px;
+  border:none;
+  background:#111;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+">
+  <img src="deconnexion.png"
+       alt="Déconnexion"
+       style="height:28px; width:auto; display:block;">
+</button>
+  </div>
 
 </main>
 
 <script>
 /* ====== CONFIG (SEULS 2 TRUCS À METTRE) ====== */
 const GOOGLE_CLIENT_ID = "690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com";
-const API = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec"; // https://script.google.com/macros/s/XXXX/exec
-
+const API = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec";
 const LS_KEY = "cs_portail_email_v1";
 
 /* ====== DOM ====== */
 const $loginBox = document.getElementById("loginBox");
 const $portal = document.getElementById("portal");
 const $msg = document.getElementById("loginMsg");
-const $logout = document.getElementById("logoutBtn");
+
+/* ✅ MODIF: on pointe le bouton portail (id unique) */
+const $logoutPortal = document.getElementById("logoutBtnPortal");
 
 /* ====== UI ====== */
 function showMsg(t){ $msg.textContent = t || ""; }
@@ -222,7 +226,7 @@ function showLogin(){
 /* ====== JWT email (ROBUSTE) ====== */
 function b64urlToUtf8(b64url){
   let s = String(b64url || "").replace(/-/g, "+").replace(/_/g, "/");
-  while (s.length % 4) s += "="; // padding
+  while (s.length % 4) s += "=";
   const bin = atob(s);
   let out = "";
   for (let i=0;i<bin.length;i++){
@@ -262,7 +266,6 @@ function jsonp(url, cbName, timeoutMs = 30000){
       resolve(data);
     };
 
-    // cache-buster (mobile/proxy)
     const sep = url.includes("?") ? "&" : "?";
     script.src = url + sep + "_t=" + Date.now();
 
@@ -276,12 +279,9 @@ function jsonp(url, cbName, timeoutMs = 30000){
   });
 }
 
-
 async function authCheck(email){
   const cb = "cb_auth_" + Math.random().toString(36).slice(2);
   const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
-
-  // 2 tentatives (mobile capricieux)
   try {
     return await jsonp(url, cb, 30000);
   } catch(e1){
@@ -322,14 +322,12 @@ async function handleCredentialResponse(response){
 
 /* ====== Boot ====== */
 (async function(){
-  // inject client_id (UN SEUL ENDROIT)
   const g = document.getElementById("g_id_onload");
   g.setAttribute("data-client_id", GOOGLE_CLIENT_ID);
 
   showLogin();
   showMsg("");
 
-  // si email mémorisé => RECHECK obligatoire
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
   if(saved){
     try{
@@ -349,17 +347,12 @@ async function handleCredentialResponse(response){
   }
 })();
 
-/* Déconnexion */
-$logout.addEventListener("click", ()=>{
+/* ✅ MODIF: UN SEUL handler de déconnexion, pour le bouton du portail */
+$logoutPortal.addEventListener("click", ()=>{
   localStorage.removeItem(LS_KEY);
   showLogin();
   showMsg("Déconnecté.");
 });
-  document.getElementById("logoutBtn")?.addEventListener("click", ()=>{
-  localStorage.removeItem("cs_portail_email_v1");
-  location.href = location.pathname;
-});
-
 </script>
 
 </body>
