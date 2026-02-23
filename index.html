@@ -115,7 +115,7 @@ body {
   color: #ff6b6b;
 }
 
-/* ✅ MODIF: on ne garde PAS de logout dans le login, donc on peut laisser ce style sans usage */
+/* (laissé tel quel, même si pas utilisé côté login) */
 #logoutBtn {
   margin-top: 15px;
   padding: 8px 20px;
@@ -155,8 +155,6 @@ body {
   </div>
 
   <p id="loginMsg"></p>
-
-  <!-- ✅ MODIF: SUPPRIMÉ ICI -> pas de bouton logout dans l'écran login -->
 </div>
 
 <!-- PORTAIL -->
@@ -178,24 +176,20 @@ body {
     <a class="btn" href="construction.png"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>
   </section>
 
-  <!-- ✅ MODIF: UN SEUL bouton logout, ici, et ID UNIQUE -->
   <div style="margin:30px 0; text-align:center;">
     <button id="logoutBtnPortal" style="
-  padding:10px 18px;
-  border-radius:14px;
-  border:none;
-  background:#111;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-">
-  <img src="deconnexion.png"
-       alt="Déconnexion"
-       style="height:28px; width:auto; display:block;">
-</button>
+      padding:10px 18px;
+      border-radius:14px;
+      border:none;
+      background:#111;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    ">
+      <img src="deconnexion.png" alt="Déconnexion" style="height:28px; width:auto; display:block;">
+    </button>
   </div>
-
 </main>
 
 <script>
@@ -208,19 +202,36 @@ const LS_KEY = "cs_portail_email_v1";
 const $loginBox = document.getElementById("loginBox");
 const $portal = document.getElementById("portal");
 const $msg = document.getElementById("loginMsg");
-
-/* ✅ MODIF: on pointe le bouton portail (id unique) */
 const $logoutPortal = document.getElementById("logoutBtnPortal");
 
 /* ====== UI ====== */
 function showMsg(t){ $msg.textContent = t || ""; }
+
+/* ✅ MODIF: on marque l’état "portail" dans l’URL pour que RETOUR depuis une page revienne au portail (pas au login) */
+function markPortalUrl_(){
+  if (!location.search.includes("portal=1")) {
+    history.replaceState({page:"portal"}, "", location.pathname + "?portal=1");
+  } else {
+    history.replaceState({page:"portal"}, "", location.pathname + location.search);
+  }
+}
+function clearPortalUrl_(){
+  if (location.search.includes("portal=1")) {
+    history.replaceState({page:"login"}, "", location.pathname);
+  } else {
+    history.replaceState({page:"login"}, "", location.pathname);
+  }
+}
+
 function showPortal(){
   $loginBox.style.display = "none";
   $portal.style.display = "flex";
+  markPortalUrl_(); // ✅ important
 }
 function showLogin(){
   $portal.style.display = "none";
   $loginBox.style.display = "block";
+  clearPortalUrl_(); // ✅ important
 }
 
 /* ====== JWT email (ROBUSTE) ====== */
@@ -289,6 +300,13 @@ async function authCheck(email){
   }
 }
 
+/* ✅ MODIF: une seule fonction de déconnexion */
+function doLogout(){
+  localStorage.removeItem(LS_KEY);
+  showLogin();
+  showMsg("Déconnecté.");
+}
+
 /* ====== Google callback ====== */
 async function handleCredentialResponse(response){
   try{
@@ -325,33 +343,51 @@ async function handleCredentialResponse(response){
   const g = document.getElementById("g_id_onload");
   g.setAttribute("data-client_id", GOOGLE_CLIENT_ID);
 
-  showLogin();
   showMsg("");
 
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
+
+  /* ✅ MODIF CRUCIALE:
+     - si déjà connecté (LS_KEY), on affiche DIRECT le portail (pour éviter le retour sur login)
+     - puis on vérifie en arrière-plan ; si refus -> retour login
+  */
   if(saved){
+    showPortal(); // 👈 affiche portail tout de suite
+    showMsg("Vérification…");
     try{
-      showMsg("Vérification…");
       const res = await authCheck(saved);
       if(res && res.ok === true){
         showMsg("");
-        showPortal();
+        // on reste portail
       }else{
         localStorage.removeItem(LS_KEY);
+        showLogin();
         showMsg("Accès refusé.");
       }
     }catch(e){
+      // si l’API déconne, on ne laisse pas un accès “fantôme”
       localStorage.removeItem(LS_KEY);
+      showLogin();
       showMsg("Erreur réseau / serveur.");
     }
+  } else {
+    showLogin();
   }
 })();
 
-/* ✅ MODIF: UN SEUL handler de déconnexion, pour le bouton du portail */
-$logoutPortal.addEventListener("click", ()=>{
-  localStorage.removeItem(LS_KEY);
-  showLogin();
-  showMsg("Déconnecté.");
+/* ✅ MODIF: bouton déconnexion du portail */
+$logoutPortal.addEventListener("click", doLogout);
+
+/* ✅ MODIF: si l’utilisateur fait “retour” DANS index.html,
+   on ne doit pas réafficher le login si LS_KEY existe.
+*/
+window.addEventListener("popstate", () => {
+  const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
+  if (saved) {
+    showPortal();
+  } else {
+    showLogin();
+  }
 });
 </script>
 
