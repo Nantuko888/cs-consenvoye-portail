@@ -178,6 +178,21 @@ body {
     <a class="btn" href="construction.png"><img src="tickets carburant.png" alt="Tickets carburant"></a>
     <a class="btn" href="construction.png"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>
   </section>
+
+  <div style="margin:30px 0; text-align:center;">
+  <button id="logoutBtn" style="
+    padding:12px 24px;
+    border-radius:14px;
+    border:none;
+    background:#111;
+    color:#fff;
+    font-weight:bold;
+    cursor:pointer;
+  ">
+    Déconnexion
+  </button>
+</div>
+
 </main>
 
 <script>
@@ -340,6 +355,11 @@ $logout.addEventListener("click", ()=>{
   showLogin();
   showMsg("Déconnecté.");
 });
+  document.getElementById("logoutBtn")?.addEventListener("click", ()=>{
+  localStorage.removeItem("cs_portail_email_v1");
+  location.href = location.pathname;
+});
+
 </script>
 
 </body>
