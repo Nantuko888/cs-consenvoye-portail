@@ -159,6 +159,24 @@ body {
 
 <!-- PORTAIL -->
 <main class="wrap" id="portal" style="display:none;">
+
+  <!-- ✅ AJOUT: bouton RETOUR en haut à droite (page d'accueil) -->
+  <button id="btnBackPortal" aria-label="Retour" style="
+    position: fixed;
+    top: calc(env(safe-area-inset-top) + 10px);
+    right: 12px;
+    z-index: 9999;
+    padding: 10px 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(0,0,0,0.35);
+    color: #fff;
+    font-weight: 900;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    backdrop-filter: blur(8px);
+  ">Retour</button>
+
   <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
 
   <section class="grid" aria-label="Menu">
@@ -176,20 +194,7 @@ body {
     <a class="btn" href="construction.html"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>
   </section>
 
-  <div style="margin:30px 0; text-align:center;">
-    <button id="logoutBtnPortal" style="
-      padding:10px 18px;
-      border-radius:14px;
-      border:none;
-      background:#111;
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    ">
-      <img src="deconnexion.png" alt="Déconnexion" style="height:28px; width:auto; display:block;">
-    </button>
-  </div>
+  <!-- ✅ SUPPRIMÉ: le bouton déconnexion en bas (tu l’as demandé) -->
 </main>
 
 <script>
@@ -202,12 +207,14 @@ const LS_KEY = "cs_portail_email_v1";
 const $loginBox = document.getElementById("loginBox");
 const $portal = document.getElementById("portal");
 const $msg = document.getElementById("loginMsg");
-const $logoutPortal = document.getElementById("logoutBtnPortal");
+
+/* ✅ AJOUT: bouton retour en haut à droite */
+const $btnBackPortal = document.getElementById("btnBackPortal");
 
 /* ====== UI ====== */
 function showMsg(t){ $msg.textContent = t || ""; }
 
-/* ✅ MODIF: on marque l’état "portail" dans l’URL pour que RETOUR depuis une page revienne au portail (pas au login) */
+/* ✅ on marque l’état "portail" dans l’URL */
 function markPortalUrl_(){
   if (!location.search.includes("portal=1")) {
     history.replaceState({page:"portal"}, "", location.pathname + "?portal=1");
@@ -226,12 +233,12 @@ function clearPortalUrl_(){
 function showPortal(){
   $loginBox.style.display = "none";
   $portal.style.display = "flex";
-  markPortalUrl_(); // ✅ important
+  markPortalUrl_();
 }
 function showLogin(){
   $portal.style.display = "none";
   $loginBox.style.display = "block";
-  clearPortalUrl_(); // ✅ important
+  clearPortalUrl_();
 }
 
 /* ====== JWT email (ROBUSTE) ====== */
@@ -300,7 +307,7 @@ async function authCheck(email){
   }
 }
 
-/* ✅ MODIF: une seule fonction de déconnexion */
+/* (déconnexion conservée, même si tu l’as retirée de l’UI) */
 function doLogout(){
   localStorage.removeItem(LS_KEY);
   showLogin();
@@ -347,25 +354,19 @@ async function handleCredentialResponse(response){
 
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
 
-  /* ✅ MODIF CRUCIALE:
-     - si déjà connecté (LS_KEY), on affiche DIRECT le portail (pour éviter le retour sur login)
-     - puis on vérifie en arrière-plan ; si refus -> retour login
-  */
   if(saved){
-    showPortal(); // 👈 affiche portail tout de suite
+    showPortal();
     showMsg("Vérification…");
     try{
       const res = await authCheck(saved);
       if(res && res.ok === true){
         showMsg("");
-        // on reste portail
       }else{
         localStorage.removeItem(LS_KEY);
         showLogin();
         showMsg("Accès refusé.");
       }
     }catch(e){
-      // si l’API déconne, on ne laisse pas un accès “fantôme”
       localStorage.removeItem(LS_KEY);
       showLogin();
       showMsg("Erreur réseau / serveur.");
@@ -375,12 +376,18 @@ async function handleCredentialResponse(response){
   }
 })();
 
-/* ✅ MODIF: bouton déconnexion du portail */
-$logoutPortal.addEventListener("click", doLogout);
+/* ✅ AJOUT: action du bouton retour (page d'accueil) */
+$btnBackPortal.addEventListener("click", ()=>{
+  // si possible: retour navigateur
+  if (window.history.length > 1) {
+    history.back();
+    return;
+  }
+  // fallback: rester sur le portail
+  location.href = location.pathname + "?portal=1";
+});
 
-/* ✅ MODIF: si l’utilisateur fait “retour” DANS index.html,
-   on ne doit pas réafficher le login si LS_KEY existe.
-*/
+/* popstate inchangé */
 window.addEventListener("popstate", () => {
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
   if (saved) {
