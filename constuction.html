@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>En construction</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  background:#000;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+
+img{
+  max-width:85%;
+  height:auto;
+}
+
+.backBtn{
+  margin-top:30px;
+  padding:12px 26px;
+  border-radius:18px;
+  border:3px solid #ff9800;
+  background:transparent;
+  color:#ffcc80;
+  font-weight:900;
+  font-size:16px;
+  cursor:pointer;
+}
+.backBtn:active{
+  transform:scale(0.95);
+}
+</style>
+</head>
+
+<body>
+
+<img src="construction.png" alt="En construction">
+
+<button class="backBtn" onclick="goBack()">Retour</button>
+
+<script>
+function goBack(){
+  if(history.length > 1){
+    history.back();
+  } else {
+    location.href = "index.html";
+  }
+}
+</script>
+
+</body>
+</html>
