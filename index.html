@@ -128,6 +128,26 @@ body {
 #logoutBtn:hover {
   background: rgba(255,255,255,0.2);
 }
+
+/* ✅ AJOUT: bouton déconnexion top-right (portail) */
+.logoutTopBtn{
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 10px);
+  right: 12px;
+  z-index: 9999;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.logoutTopBtn img{
+  height: 28px;
+  width: auto;
+  display: block;
+}
+.logoutTopBtn:active{ transform: scale(0.96); }
 </style>
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -160,22 +180,10 @@ body {
 <!-- PORTAIL -->
 <main class="wrap" id="portal" style="display:none;">
 
-  <!-- ✅ AJOUT: bouton RETOUR en haut à droite (page d'accueil) -->
-  <button id="btnBackPortal" aria-label="Retour" style="
-    position: fixed;
-    top: calc(env(safe-area-inset-top) + 10px);
-    right: 12px;
-    z-index: 9999;
-    padding: 10px 14px;
-    border-radius: 14px;
-    border: 1px solid rgba(255,255,255,0.18);
-    background: rgba(0,0,0,0.35);
-    color: #fff;
-    font-weight: 900;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    backdrop-filter: blur(8px);
-  ">Retour</button>
+  <!-- ✅ MODIF: bouton déconnexion en haut à droite -->
+  <button id="logoutBtnPortal" class="logoutTopBtn" aria-label="Déconnexion">
+    <img src="deconnexion.png" alt="Déconnexion">
+  </button>
 
   <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
 
@@ -194,7 +202,7 @@ body {
     <a class="btn" href="construction.html"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>
   </section>
 
-  <!-- ✅ SUPPRIMÉ: le bouton déconnexion en bas (tu l’as demandé) -->
+  <!-- ✅ MODIF: SUPPRIMÉ le bouton du bas -->
 </main>
 
 <script>
@@ -207,14 +215,12 @@ const LS_KEY = "cs_portail_email_v1";
 const $loginBox = document.getElementById("loginBox");
 const $portal = document.getElementById("portal");
 const $msg = document.getElementById("loginMsg");
-
-/* ✅ AJOUT: bouton retour en haut à droite */
-const $btnBackPortal = document.getElementById("btnBackPortal");
+const $logoutPortal = document.getElementById("logoutBtnPortal");
 
 /* ====== UI ====== */
 function showMsg(t){ $msg.textContent = t || ""; }
 
-/* ✅ on marque l’état "portail" dans l’URL */
+/* ✅ MODIF: on marque l’état "portail" dans l’URL pour que RETOUR depuis une page revienne au portail (pas au login) */
 function markPortalUrl_(){
   if (!location.search.includes("portal=1")) {
     history.replaceState({page:"portal"}, "", location.pathname + "?portal=1");
@@ -233,12 +239,12 @@ function clearPortalUrl_(){
 function showPortal(){
   $loginBox.style.display = "none";
   $portal.style.display = "flex";
-  markPortalUrl_();
+  markPortalUrl_(); // ✅ important
 }
 function showLogin(){
   $portal.style.display = "none";
   $loginBox.style.display = "block";
-  clearPortalUrl_();
+  clearPortalUrl_(); // ✅ important
 }
 
 /* ====== JWT email (ROBUSTE) ====== */
@@ -307,7 +313,7 @@ async function authCheck(email){
   }
 }
 
-/* (déconnexion conservée, même si tu l’as retirée de l’UI) */
+/* ✅ MODIF: une seule fonction de déconnexion */
 function doLogout(){
   localStorage.removeItem(LS_KEY);
   showLogin();
@@ -376,25 +382,12 @@ async function handleCredentialResponse(response){
   }
 })();
 
-/* ✅ AJOUT: action du bouton retour (page d'accueil) */
-$btnBackPortal.addEventListener("click", ()=>{
-  // si possible: retour navigateur
-  if (window.history.length > 1) {
-    history.back();
-    return;
-  }
-  // fallback: rester sur le portail
-  location.href = location.pathname + "?portal=1";
-});
+$logoutPortal.addEventListener("click", doLogout);
 
-/* popstate inchangé */
 window.addEventListener("popstate", () => {
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
-  if (saved) {
-    showPortal();
-  } else {
-    showLogin();
-  }
+  if (saved) showPortal();
+  else showLogin();
 });
 </script>
 
