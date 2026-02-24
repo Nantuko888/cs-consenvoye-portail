@@ -480,9 +480,9 @@ function jsonp(url, cbName, timeoutMs=12000){
   });
 }
   function authEmail(){
-  return (localStorage.getItem("cs_portail_email_v1") || "")
-    .trim()
-    .toLowerCase();
+  const email = localStorage.getItem("cs_portail_email_v1");
+  console.log("EMAIL DETECTE:", email);
+  return (email || "").trim().toLowerCase();
 }
 
 function parseSignedAgent(s){
