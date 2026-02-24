@@ -1,115 +1,409 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Désinfection VSAV</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Désinfection VSAV — CS Consenvoye</title>
 
-  <!-- Google Identity Services -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+:root{
+  --bg:#000;
+  --txt:#fff;
+  --muted:rgba(255,255,255,.75);
 
-  <style>
-    body{margin:0;font-family:system-ui;background:#0b0b0b;color:#fff;padding:16px}
-    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px;margin-bottom:12px}
-    button,select{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.25);color:#fff;font-weight:900}
-    .ok{color:#9cff9c;font-weight:900}
-    .err{color:#ff9c9c;font-weight:900}
-    .small{opacity:.85;font-size:13px}
-  </style>
+  --orange:#d46a00;
+  --orange2:#b95800;
+
+  --card: rgba(0,0,0,.50);
+  --stroke: rgba(255,255,255,.12);
+
+  --greenHead:#79b84e; /* bandeau MOIS/REFERENT/AGENT/DATE */
+  --yellowTitle:#fff200; /* titre */
+  --monthA:#bcd5ee; /* alternance mois */
+  --monthB:#ffe39c;
+
+  --shadow: 0 14px 34px rgba(0,0,0,.40);
+  --radius: 18px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background: var(--bg);
+  color: var(--txt);
+  overflow:hidden; /* ✅ jamais de scrollbar */
+  overscroll-behavior:none; /* ✅ pas de bounce */
+}
+
+/* fond portail */
+.bg{
+  position:fixed; inset:0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.55)),
+    url("background.png") center top/cover no-repeat;
+  z-index:-2;
+}
+.bg::after{
+  content:"";
+  position:absolute; inset:0;
+  background: radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.72) 62%);
+  z-index:-1;
+}
+
+/* page layout */
+.wrap{
+  height:100dvh;
+  width:min(980px, 100%);
+  margin:0 auto;
+  padding:
+    calc(env(safe-area-inset-top) + 10px)
+    12px
+    calc(env(safe-area-inset-bottom) + 12px);
+  display:grid;
+  grid-template-rows: auto auto 1fr; /* topbar / tabs / content */
+  gap: 10px;
+  overflow:hidden; /* ✅ */
+}
+
+/* topbar */
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.55));
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  min-height: 46px;
+}
+.topbar .title{
+  margin:0;
+  font-weight:950;
+  letter-spacing:.6px;
+  text-transform: uppercase;
+  font-size: clamp(15px, 2.2vw, 18px);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.btn{
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.18);
+  color:var(--txt);
+  padding: 9px 12px;
+  border-radius: 14px;
+  font-weight:900;
+  cursor:pointer;
+  -webkit-tap-highlight-color: transparent;
+  white-space:nowrap;
+}
+.btn:active{transform: translateY(1px)}
+
+/* tabs */
+.tabs{
+  display:flex; gap:10px;
+}
+.tab{
+  flex:1;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.28);
+  box-shadow: var(--shadow);
+  font-weight:950;
+  letter-spacing:.3px;
+  cursor:pointer;
+  color: rgba(255,255,255,.86);
+  -webkit-tap-highlight-color: transparent;
+}
+.tab.active{
+  background: linear-gradient(180deg, rgba(212,106,0,.62), rgba(185,88,0,.45));
+  color: #fff;
+  border-color: rgba(255,255,255,.16);
+}
+.tab:active{transform: translateY(1px)}
+
+/* content card */
+.card{
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(0,0,0,.52), rgba(0,0,0,.32));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  overflow:hidden; /* ✅ */
+  min-height:0; /* ✅ important pour grid */
+  display:flex;
+  flex-direction:column;
+}
+
+/* title banner */
+.banner{
+  background: var(--yellowTitle);
+  color:#000;
+  font-weight: 950;
+  text-align:center;
+  padding: 10px 10px;
+  border-bottom: 2px solid rgba(0,0,0,.25);
+  letter-spacing:.8px;
+  font-size: clamp(16px, 2.6vw, 22px);
+}
+
+/* table grid (1 header + 12 rows) */
+.table{
+  flex:1;
+  display:grid;
+  grid-template-rows: auto 1fr; /* header + body */
+  min-height:0;
+}
+
+/* header row */
+.thead{
+  display:grid;
+  grid-template-columns: 1.05fr 1fr 1fr .85fr;
+  gap:0;
+  background: var(--greenHead);
+  color:#0a0a0a;
+  font-weight:950;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  border-bottom: 2px solid rgba(0,0,0,.25);
+}
+.th{
+  padding: 10px 10px;
+  text-align:center;
+  border-right: 2px solid rgba(0,0,0,.25);
+  font-size: clamp(12px, 1.9vw, 14px);
+}
+.th:last-child{border-right:none;}
+
+/* body rows fill height => pas de scroll */
+.tbody{
+  display:grid;
+  grid-template-rows: repeat(12, 1fr); /* ✅ 12 mois = prend toute la hauteur restante */
+  min-height:0;
+}
+.tr{
+  display:grid;
+  grid-template-columns: 1.05fr 1fr 1fr .85fr;
+  border-bottom: 2px solid rgba(255,255,255,.12);
+}
+.tr:last-child{border-bottom:none;}
+
+.td{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 6px 8px;
+  text-align:center;
+  border-right: 2px solid rgba(255,255,255,.12);
+  min-width:0;
+  font-weight: 850;
+  font-size: clamp(11px, 1.75vw, 14px);
+  color: rgba(255,255,255,.92);
+}
+.td:last-child{border-right:none;}
+
+.month{
+  color:#111;
+  font-weight: 950;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+}
+.month.a{ background: var(--monthA); }
+.month.b{ background: var(--monthB); }
+
+.ref, .agent, .date{
+  background: rgba(0,0,0,.10);
+}
+
+/* petit style “dropdown” visuel (sans logique pour l’instant) */
+.agent .fakeSelect{
+  width:100%;
+  max-width: 220px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding: 7px 10px;
+  border-radius: 12px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.20);
+  color: rgba(255,255,255,.92);
+  overflow:hidden;
+}
+.agent .fakeSelect span{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.agent .fakeSelect i{
+  font-style:normal;
+  opacity:.9;
+}
+
+/* inventaire placeholder */
+.inv{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 14px;
+  text-align:center;
+  color: rgba(255,255,255,.86);
+  font-weight:900;
+  font-size: clamp(14px, 2.2vw, 18px);
+}
+
+/* petites sécurités écrans très petits */
+@media (max-width:360px){
+  .th{padding:8px 6px}
+  .td{padding:5px 6px}
+  .agent .fakeSelect{padding:6px 8px}
+}
+</style>
 </head>
+
 <body>
+<div class="bg"></div>
 
-  <div class="card">
-    <div style="font-weight:950;font-size:18px;margin-bottom:8px;">Désinfection VSAV</div>
-    <div class="small">Connexion Google obligatoire (pour verrouiller l’inscription à ton propre compte).</div>
+<div class="wrap">
+
+  <div class="topbar">
+    <h1 class="title">Désinfection VSAV</h1>
+    <button class="btn" id="btnBack">Retour</button>
   </div>
 
-  <div class="card">
-    <div id="g_id_onload"
-      data-client_id="TON_CLIENT_ID_GOOGLE_ICI"
-      data-callback="onGoogleCredential"
-      data-auto_prompt="false">
-    </div>
-
-    <div class="g_id_signin"
-      data-type="standard"
-      data-size="large"
-      data-theme="outline"
-      data-text="signin_with"
-      data-shape="pill"
-      data-logo_alignment="left">
-    </div>
-
-    <div style="margin-top:10px" class="small">
-      Statut : <span id="authState">non connecté</span>
-    </div>
+  <div class="tabs" role="tablist" aria-label="Désinfection VSAV onglets">
+    <button class="tab active" id="tabInscription" role="tab" aria-selected="true">Inscription</button>
+    <button class="tab" id="tabInventaire" role="tab" aria-selected="false">Inventaire</button>
   </div>
 
-  <div class="card">
-    <label class="small">Choisir le mois</label>
-    <select id="month">
-      <option>JANVIER</option><option>FÉVRIER</option><option>MARS</option><option>AVRIL</option>
-      <option>MAI</option><option>JUIN</option><option>JUILLET</option><option>AOÛT</option>
-      <option>SEPTEMBRE</option><option>OCTOBRE</option><option>NOVEMBRE</option><option>DÉCEMBRE</option>
-    </select>
+  <section class="card" id="panelInscription" role="tabpanel" aria-labelledby="tabInscription">
+    <div class="banner">DESINFECTION VSAV 2026</div>
 
-    <div style="height:10px"></div>
-    <button id="btnSignup">Je m’inscris sur ce mois</button>
+    <div class="table">
+      <div class="thead">
+        <div class="th">MOIS</div>
+        <div class="th">REFERENT</div>
+        <div class="th">AGENT</div>
+        <div class="th">DATE</div>
+      </div>
 
-    <div style="margin-top:10px" id="msg"></div>
-  </div>
+      <div class="tbody" id="tbody">
+        <!-- ✅ 12 lignes fixes (on ne met pas les noms ici) -->
+        <div class="tr">
+          <div class="td month a">JANVIER</div>
+          <div class="td ref">—</div>
+          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td date">—</div>
+        </div>
+        <div class="tr">
+          <div class="td month b">FÉVRIER</div>
+          <div class="td ref">—</div>
+          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td date">—</div>
+        </div>
+        <div class="tr">
+          <div class="td month a">MARS</div>
+          <div class="td ref">—</div>
+          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td date">—</div>
+        </div>
+        <div class="tr">
+          <div class="td month b">AVRIL</div>
+          <div class="td ref">—</div>
+          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td date">—</div>
+        </div>
+        <div class="tr">
+          <div class="td month a">MAI</div>
+          <div class="td ref">—</div>
+          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td date">—</div>
+        </div>
+        <div class="tr">
+          <div class="td month b">JUIN</div>
+          <div class="td ref">—</div>
+          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td date">—</div>
+        </div>
+        <div class="tr">
+          <div class="td month a">JUILLET</div>
+          <div class="td ref">—</div>
+          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td date">—</div>
+        </div>
+        <div class="tr">
+          <div class="td month b">AOÛT</div>
+          <div class="td ref">—</div>
+          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td date">—</div>
+        </div>
+        <div class="tr">
+          <div class="td month a">SEPTEMBRE</div>
+          <div class="td ref">—</div>
+          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td date">—</div>
+        </div>
+        <div class="tr">
+          <div class="td month b">OCTOBRE</div>
+          <div class="td ref">—</div>
+          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td date">—</div>
+        </div>
+        <div class="tr">
+          <div class="td month a">NOVEMBRE</div>
+          <div class="td ref">—</div>
+          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td date">—</div>
+        </div>
+        <div class="tr">
+          <div class="td month b">DÉCEMBRE</div>
+          <div class="td ref">—</div>
+          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td date">—</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="panelInventaire" role="tabpanel" aria-labelledby="tabInventaire" style="display:none;">
+    <div class="banner">INVENTAIRE VSAV</div>
+    <div class="inv">
+      (Structure inventaire à ajouter ici — pour l’instant c’est le placeholder)
+    </div>
+  </section>
+
+</div>
 
 <script>
-  // >>>> CONFIG <<<<
-  const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+/* ✅ Retour */
+document.getElementById("btnBack").addEventListener("click", ()=>{
+  // adapte si tu veux renvoyer ailleurs
+  location.href = "index.html?portal=1";
+});
 
-  let idToken = ""; // token Google
-  const $ = (id)=>document.getElementById(id);
+/* ✅ Tabs (juste affichage) */
+const tabIns = document.getElementById("tabInscription");
+const tabInv = document.getElementById("tabInventaire");
+const panIns = document.getElementById("panelInscription");
+const panInv = document.getElementById("panelInventaire");
 
-  function setMsg(txt, ok){
-    $("msg").innerHTML = `<div class="${ok?'ok':'err'}">${txt}</div>`;
-  }
-
-  // Callback Google Sign-In
-  window.onGoogleCredential = (response) => {
-    idToken = response.credential || "";
-    $("authState").textContent = idToken ? "connecté ✅" : "non connecté";
-  };
-
-  // JSONP helper
-  function jsonp(url, cbName){
-    return new Promise((resolve, reject) => {
-      const s = document.createElement("script");
-      const cleanup = ()=>{ s.remove(); try{delete window[cbName]}catch(e){window[cbName]=undefined} };
-      const t = setTimeout(()=>{ cleanup(); reject(new Error("timeout")); }, 12000);
-      window[cbName] = (data)=>{ clearTimeout(t); cleanup(); resolve(data); };
-      s.src = url;
-      s.onerror = ()=>{ clearTimeout(t); cleanup(); reject(new Error("jsonp error")); };
-      document.head.appendChild(s);
-    });
-  }
-
-  $("btnSignup").addEventListener("click", async ()=>{
-    const month = $("month").value.trim();
-    if(!idToken){
-      setMsg("Connecte-toi avec Google avant de t’inscrire.", false);
-      return;
-    }
-    try{
-      setMsg("Inscription en cours…", true);
-      const cb = "cb_" + Math.random().toString(36).slice(2);
-      const url = `${API}?view=vsav&action=signup&month=${encodeURIComponent(month)}&token=${encodeURIComponent(idToken)}&callback=${cb}`;
-      const res = await jsonp(url, cb);
-      if(res && res.ok){
-        setMsg(`✅ Inscription OK : ${res.nom} (${res.month})`, true);
-      }else{
-        setMsg(`❌ Refus : ${res && res.error ? res.error : "erreur"}`, false);
-      }
-    }catch(e){
-      setMsg("❌ API HS / lente", false);
-    }
-  });
+function setTab(which){
+  const ins = (which==="ins");
+  tabIns.classList.toggle("active", ins);
+  tabInv.classList.toggle("active", !ins);
+  tabIns.setAttribute("aria-selected", ins ? "true" : "false");
+  tabInv.setAttribute("aria-selected", ins ? "false" : "true");
+  panIns.style.display = ins ? "flex" : "none";
+  panInv.style.display = ins ? "none" : "flex";
+}
+tabIns.addEventListener("click", ()=>setTab("ins"));
+tabInv.addEventListener("click", ()=>setTab("inv"));
 </script>
-
 </body>
 </html>
