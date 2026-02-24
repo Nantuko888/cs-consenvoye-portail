@@ -449,7 +449,6 @@ async function loadVsav(){
   return await jsonp(url, cb, 15000);
 }
 
-/* Remplit les 12 lignes fixes du tableau (référent / agent / date) */
 function fillVsavTable(rows){
   const tbody = document.getElementById("tbody");
   if(!tbody) return;
@@ -458,19 +457,21 @@ function fillVsavTable(rows){
     const tr = tbody.children[i];
     if(!tr) continue;
 
-    const r = rows && rows[i] ? rows[i] : [];
+    const r = (rows && rows[i]) ? rows[i] : null;
 
-    const referent = (r[1] ?? "").toString().trim();
-    const agent = (r[2] ?? "").toString().trim();
-    const dateVal = (r[3] ?? "").toString().trim();
+    const referent = r && r.referent ? String(r.referent).trim() : "";
+    const agent = r && r.agent ? String(r.agent).trim() : "";
+    const dateVal = r && r.date_validation ? String(r.date_validation).trim() : "";
 
-    // colonnes: 0=mois (déjà écrit), 1=référent, 2=agent, 3=date
     tr.children[1].textContent = referent || "—";
+
     const spanAgent = tr.children[2].querySelector(".fakeSelect span");
     if(spanAgent) spanAgent.textContent = agent || "—";
+
     tr.children[3].textContent = dateVal || "—";
   }
 }
+
 
 /* BOOT */
 (async function(){
