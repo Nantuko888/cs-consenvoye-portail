@@ -479,14 +479,9 @@ function jsonp(url, cbName, timeoutMs=12000){
     document.head.appendChild(s);
   });
 }
-  async function authEmail(){
-  // ⚠️ adapte si tu récupères déjà l’email ailleurs
-  // Ici: tu le passes en paramètre depuis index (recommandé)
-  const p = new URLSearchParams(location.search);
-  const email = (p.get("email") || "").trim().toLowerCase();
-  return email;
+  function authEmail(){
+  return (localStorage.getItem("LS_KEY") || "").trim().toLowerCase();
 }
-
 function parseSignedAgent(s){
   s = (s||"").toString().trim();
   if(!s) return { name:"", email:"" };
