@@ -480,8 +480,11 @@ function jsonp(url, cbName, timeoutMs=12000){
   });
 }
   function authEmail(){
-  return (localStorage.getItem("LS_KEY") || "").trim().toLowerCase();
+  return (localStorage.getItem("cs_portail_email_v1") || "")
+    .trim()
+    .toLowerCase();
 }
+
 function parseSignedAgent(s){
   s = (s||"").toString().trim();
   if(!s) return { name:"", email:"" };
