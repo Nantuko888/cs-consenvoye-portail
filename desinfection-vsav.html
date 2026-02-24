@@ -267,6 +267,19 @@ body{
   font-weight:900;
   font-size: clamp(14px, 2.2vw, 18px);
 }
+  .agentBtn{
+  width:100%;
+  max-width: 220px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.20);
+  color: rgba(255,255,255,.95);
+  font-weight: 900;
+  cursor:pointer;
+}
+.agentBtn.locked{ opacity:.55; cursor:not-allowed; }
+.agentBtn.mine{ background: rgba(212,106,0,.45); border-color: rgba(255,255,255,.22); }
 
 /* petites sécurités écrans très petits */
 @media (max-width:360px){
@@ -308,73 +321,97 @@ body{
         <div class="tr">
           <div class="td month a">JANVIER</div>
           <div class="td ref">—</div>
-          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td agent">
+  <button class="agentBtn" data-month="JANVIER">S’inscrire</button>
+</div>
           <div class="td date">—</div>
         </div>
         <div class="tr">
           <div class="td month b">FÉVRIER</div>
           <div class="td ref">—</div>
-          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td agent">
+  <button class="agentBtn" data-month="FÉVRIER">S’inscrire</button>
+</div>
           <div class="td date">—</div>
         </div>
         <div class="tr">
           <div class="td month a">MARS</div>
           <div class="td ref">—</div>
-          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td agent">
+  <button class="agentBtn" data-month="MARS">S’inscrire</button>
+</div>
           <div class="td date">—</div>
         </div>
         <div class="tr">
           <div class="td month b">AVRIL</div>
           <div class="td ref">—</div>
-          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <<div class="td agent">
+  <button class="agentBtn" data-month="AVRIL">S’inscrire</button>
+</div>
           <div class="td date">—</div>
         </div>
         <div class="tr">
           <div class="td month a">MAI</div>
           <div class="td ref">—</div>
-          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td agent">
+  <button class="agentBtn" data-month="MAI">S’inscrire</button>
+</div>
           <div class="td date">—</div>
         </div>
         <div class="tr">
           <div class="td month b">JUIN</div>
           <div class="td ref">—</div>
-          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td agent">
+  <button class="agentBtn" data-month="JUIN">S’inscrire</button>
+</div>
           <div class="td date">—</div>
         </div>
         <div class="tr">
           <div class="td month a">JUILLET</div>
           <div class="td ref">—</div>
-          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td agent">
+  <button class="agentBtn" data-month="JUILLET">S’inscrire</button>
+</div>
           <div class="td date">—</div>
         </div>
         <div class="tr">
           <div class="td month b">AOÛT</div>
           <div class="td ref">—</div>
-          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td agent">
+  <button class="agentBtn" data-month="AOÛT">S’inscrire</button>
+</div>
           <div class="td date">—</div>
         </div>
         <div class="tr">
           <div class="td month a">SEPTEMBRE</div>
           <div class="td ref">—</div>
-          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td agent">
+  <button class="agentBtn" data-month="SEPTEMBRE">S’inscrire</button>
+</div>
           <div class="td date">—</div>
         </div>
         <div class="tr">
           <div class="td month b">OCTOBRE</div>
           <div class="td ref">—</div>
-          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td agent">
+  <button class="agentBtn" data-month="OCTOBRE">S’inscrire</button>
+</div>
           <div class="td date">—</div>
         </div>
         <div class="tr">
           <div class="td month a">NOVEMBRE</div>
           <div class="td ref">—</div>
-          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td agent">
+  <button class="agentBtn" data-month="NOVEMBRE">S’inscrire</button>
+</div>
           <div class="td date">—</div>
         </div>
         <div class="tr">
           <div class="td month b">DÉCEMBRE</div>
           <div class="td ref">—</div>
-          <div class="td agent"><div class="fakeSelect"><span>—</span><i>▾</i></div></div>
+          <div class="td agent">
+  <button class="agentBtn" data-month="DÉCEMBRE">S’inscrire</button>
+</div>
           <div class="td date">—</div>
         </div>
       </div>
@@ -442,6 +479,64 @@ function jsonp(url, cbName, timeoutMs=12000){
     document.head.appendChild(s);
   });
 }
+  async function authEmail(){
+  // ⚠️ adapte si tu récupères déjà l’email ailleurs
+  // Ici: tu le passes en paramètre depuis index (recommandé)
+  const p = new URLSearchParams(location.search);
+  const email = (p.get("email") || "").trim().toLowerCase();
+  return email;
+}
+
+function parseSignedAgent(s){
+  s = (s||"").toString().trim();
+  if(!s) return { name:"", email:"" };
+  if(!s.includes("|")) return { name:s, email:"" };
+  const [name, email] = s.split("|").map(x=>x.trim());
+  return { name, email:(email||"").toLowerCase() };
+}
+
+function setButtonsState(rows, myEmail){
+  const tbody = document.getElementById("tbody");
+  for(let i=0;i<12;i++){
+    const tr = tbody.children[i];
+    if(!tr) continue;
+
+    // rows peut être array d’objets OU array d’arrays -> on gère les 2
+    const r = rows[i] || {};
+    const mois = (r.mois ?? r[0] ?? "").toString().trim().toUpperCase();
+    const agentRaw = (r.agent ?? r[2] ?? "").toString().trim();
+
+    const btn = tr.querySelector(".agentBtn");
+    if(!btn) continue;
+    if(mois) btn.dataset.month = mois;
+
+    const a = parseSignedAgent(agentRaw);
+
+    // Vide => inscription possible
+    if(!agentRaw){
+      btn.textContent = "S’inscrire";
+      btn.classList.remove("locked","mine");
+      btn.disabled = false;
+      continue;
+    }
+
+    // A moi => annulation possible
+    if(a.email && myEmail && a.email === myEmail){
+      btn.textContent = "Annuler";
+      btn.classList.remove("locked");
+      btn.classList.add("mine");
+      btn.disabled = false;
+      continue;
+    }
+
+    // Déjà pris => bloqué
+    btn.textContent = "Pris";
+    btn.classList.add("locked");
+    btn.classList.remove("mine");
+    btn.disabled = true;
+  }
+}
+
 
 async function loadVsav(){
   const cb = "cb_vsav_" + Math.random().toString(36).slice(2);
@@ -476,14 +571,46 @@ function fillVsavTable(rows){
 /* BOOT */
 (async function(){
   try{
+    const myEmail = await authEmail();
     const res = await loadVsav();
     if(res && res.ok){
       fillVsavTable(res.rows || []);
+      setButtonsState(res.rows || [], myEmail);
     }
+
+    document.querySelectorAll(".agentBtn").forEach(btn=>{
+      btn.addEventListener("click", async ()=>{
+        const month = btn.dataset.month;
+        const myEmail2 = await authEmail();
+        if(!myEmail2){ alert("Email non détecté"); return; }
+
+        const action = (btn.textContent === "Annuler") ? "vsav_unset_agent" : "vsav_set_agent";
+        const cb = "cb_act_" + Math.random().toString(36).slice(2);
+        const url = `${API}?view=${action}&month=${encodeURIComponent(month)}&email=${encodeURIComponent(myEmail2)}&callback=${cb}&nocache=1`;
+
+        try{
+          const r = await jsonp(url, cb, 15000);
+          if(!r?.ok){
+            alert(r?.error || "Erreur");
+            return;
+          }
+          // refresh
+          const res2 = await loadVsav();
+          if(res2?.ok){
+            fillVsavTable(res2.rows || []);
+            setButtonsState(res2.rows || [], myEmail2);
+          }
+        }catch(e){
+          alert("Erreur réseau");
+        }
+      });
+    });
+
   }catch(e){
-    // si l’API plante, on garde les "—" (pas de crash)
+    // silence
   }
 })();
+
 </script>
 
 </script>
