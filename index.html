@@ -1,358 +1,497 @@
 <!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CS Consenvoye</title>
 
-<html lang="fr">  
-<head>  
-<meta charset="utf-8">  
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">  
-<title>CS Consenvoye</title>  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">  
-<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">  
-<link rel="manifest" href="manifest.json">  <meta name="theme-color" content="#d46a00">  
-<meta name="mobile-web-app-capable" content="yes">  
-<meta name="apple-mobile-web-app-capable" content="yes">  
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">  <style>  
-:root{  
-  --maxw: 760px;  
-  --titleMaxH: 34vh;  
-  --btn: clamp(100px, min(22vw, 15vh), 170px);  
-  --gap: clamp(10px, min(3vw, 2vh), 18px);  
-}  
-*{ box-sizing:border-box; }  
-html, body{  
-  margin:0; padding:0; height:100%;  
-  overflow:hidden;  
-  overscroll-behavior-y:none;  
-  background:#000;  
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;  
-  -webkit-text-size-adjust:100%;  
-}  
-body{ background:#000 url("background.png") center top / cover no-repeat fixed; }  
-.wrap{  
-  height:100dvh;  
-  width:100%;  
-  display:flex;  
-  flex-direction:column;  
-  align-items:center;  
-  padding-bottom: calc(env(safe-area-inset-bottom) + 12px);  
-}  
-  
-.title{  
-  margin-top: calc(env(safe-area-inset-top) + 2px);  
-  width: min(94vw, 680px);  
-  max-height: var(--titleMaxH);  
-  height:auto;  
-  object-fit:contain;  
-  display:block;  
-  pointer-events:none;  
-  user-select:none;  
-  transform: scale(1.25);  
-  transform-origin: center top;  
-}  
-.grid{  
-  width: min(94vw, var(--maxw));  
-  margin-top: clamp(8px, 1.5vh, 16px);  
-  display:grid;  
-  grid-template-columns: repeat(3, 1fr);  
-  gap: var(--gap);  
-  justify-items:center;  
-  align-content:start;  
-}  
-.btn{  
-  width: var(--btn);  
-  height: var(--btn);  
-  display:block;  
-  text-decoration:none;  
-  -webkit-tap-highlight-color:transparent;  
-}  
-.btn img{ width:100%; height:100%; object-fit:contain; display:block; }  
-@media (min-width:768px){  
-  :root{ --btn: clamp(110px, 16vw, 180px); --titleMaxH: 26vh; --maxw:900px; }  
-}  
-  
-/* ===== LOGIN FULL CENTER ===== */  
-  
-body {  
-  margin: 0;  
-  height: 100vh;  
-  display: flex;  
-  justify-content: center;  
-  align-items: center;  
-  background: url("background.png") center/cover no-repeat fixed;  
-  font-family: 'Segoe UI', sans-serif;  
-}  
-  
-#loginBox {  
-  width: 90%;  
-  max-width: 380px;  
-  padding: 40px 30px;  
-  border-radius: 18px;  
-  backdrop-filter: blur(14px);  
-  background: rgba(0, 0, 0, 0.65);  
-  text-align: center;  
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6);  
-}  
-  
-#loginTitle {  
-  margin: 0 0 30px 0;  
-  font-size: 24px;  
-  letter-spacing: 2px;  
-  color: #ffffff;  
-}  
-  
-.g_id_signin {  
-  display: flex;  
-  justify-content: center;  
-  margin-bottom: 15px;  
-}  
-  
-#loginMsg {  
-  margin-top: 10px;  
-  font-size: 14px;  
-  color: #ff6b6b;  
-}  
-  
-/* (laissé tel quel, même si pas utilisé côté login) */  
-#logoutBtn {  
-  margin-top: 15px;  
-  padding: 8px 20px;  
-  border-radius: 8px;  
-  border: none;  
-  background: rgba(255,255,255,0.1);  
-  color: white;  
-  cursor: pointer;  
-}  
-#logoutBtn:hover {  
-  background: rgba(255,255,255,0.2);  
-}  
-  
-/* ✅ AJOUT: bouton déconnexion top-right (portail) */  
-.logoutTopBtn{  
-  position: fixed;  
-  top: calc(env(safe-area-inset-top) + 10px);  
-  right: 12px;  
-  z-index: 9999;  
-  border: none;  
-  background: transparent;  
-  padding: 0;  
-  margin: 0;  
-  cursor: pointer;  
-  -webkit-tap-highlight-color: transparent;  
-}  
-.logoutTopBtn img{  
-  height: 60px;  
-  width: auto;  
-  display: block;  
-}  
-.logoutTopBtn:active{ transform: scale(0.96); }  
-</style>  <script src="https://accounts.google.com/gsi/client" async defer></script>  </head>  <body>  <!-- LOGIN -->  <div id="loginBox">  
-  <h2 id="loginTitle">Accès Portail</h2>    <!-- Google button -->    <div id="g_id_onload"  
-       data-client_id="690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com"  
-       data-callback="handleCredentialResponse"  
-       data-auto_prompt="false">  
-  </div>    <div class="g_id_signin"  
-       data-type="standard"  
-       data-size="large"  
-       data-theme="outline"  
-       data-text="sign_in_with"  
-       data-shape="rectangular">  
-  </div>    <p id="loginMsg"></p>  
-</div>  <!-- PORTAIL -->  <main class="wrap" id="portal" style="display:none;">    <!-- ✅ MODIF: bouton déconnexion en haut à droite -->    <button id="logoutBtnPortal" class="logoutTopBtn" aria-label="Déconnexion">  
-    <img src="deconnexion.png" alt="Déconnexion">  
-  </button>    <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">    <section class="grid" aria-label="Menu">  
-    <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/"><img src="entretien.png" alt="Entretien"></a>  
-    <a class="btn" href="documents.html"><img src="documents.png" alt="Documents"></a>  
-    <a class="btn" href="organigramme.html"><img src="organigramme.png" alt="Organigramme"></a>  
-    <a class="btn" href="construction.html"><img src="informations.png" alt="Informations"></a>  
-    <a class="btn" href="planning.html"><img src="planning.png" alt="Planning"></a>  
-    <a class="btn" href="equipes.html"><img src="equipes.png" alt="Équipes"></a>  
-    <a class="btn" href="construction.html"><img src="book.png" alt="Book"></a>  
-    <a class="btn" href="construction.html"><img src="galerie.png" alt="Galerie"></a>  
-    <a class="btn" href="construction.html"><img src="admin.png" alt="Admin"></a>  
-    <a class="btn" href="construction.html"><img src="gardes postées.png" alt="Gardes postées"></a>  
-    <a class="btn" href="construction.html"><img src="tickets carburant.png" alt="Tickets carburant"></a>  
-    <a class="btn" href="desinfection-vsav.html"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>  
-  </section>    <!-- ✅ MODIF: SUPPRIMÉ le bouton du bas -->  </main>  <script>  
-/* ====== CONFIG (SEULS 2 TRUCS À METTRE) ====== */  
-const GOOGLE_CLIENT_ID = "690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com";  
-const API = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec";  
-const LS_KEY = "cs_portail_email_v1";  
-  
-/* ====== DOM ====== */  
-const $loginBox = document.getElementById("loginBox");  
-const $portal = document.getElementById("portal");  
-const $msg = document.getElementById("loginMsg");  
-const $logoutPortal = document.getElementById("logoutBtnPortal");  
-  
-/* ====== UI ====== */  
-function showMsg(t){ $msg.textContent = t || ""; }  
-  
-/* ✅ MODIF: on marque l’état "portail" dans l’URL pour que RETOUR depuis une page revienne au portail (pas au login) */  
-function markPortalUrl_(){  
-  if (!location.search.includes("portal=1")) {  
-    history.replaceState({page:"portal"}, "", location.pathname + "?portal=1");  
-  } else {  
-    history.replaceState({page:"portal"}, "", location.pathname + location.search);  
-  }  
-}  
-function clearPortalUrl_(){  
-  if (location.search.includes("portal=1")) {  
-    history.replaceState({page:"login"}, "", location.pathname);  
-  } else {  
-    history.replaceState({page:"login"}, "", location.pathname);  
-  }  
-}  
-  
-function showPortal(){  
-  $loginBox.style.display = "none";  
-  $portal.style.display = "flex";  
-  markPortalUrl_(); // ✅ important  
-}  
-function showLogin(){  
-  $portal.style.display = "none";  
-  $loginBox.style.display = "block";  
-  clearPortalUrl_(); // ✅ important  
-}  
-  
-/* ====== JWT email (ROBUSTE) ====== */  
-function b64urlToUtf8(b64url){  
-  let s = String(b64url || "").replace(/-/g, "+").replace(/_/g, "/");  
-  while (s.length % 4) s += "=";  
-  const bin = atob(s);  
-  let out = "";  
-  for (let i=0;i<bin.length;i++){  
-    out += "%" + bin.charCodeAt(i).toString(16).padStart(2,"0");  
-  }  
-  return decodeURIComponent(out);  
-}  
-function parseJwtEmail(credential){  
-  const parts = String(credential || "").split(".");  
-  if (parts.length < 2) return "";  
-  const payloadJson = b64urlToUtf8(parts[1]);  
-  const payload = JSON.parse(payloadJson);  
-  return String(payload.email || "").trim().toLowerCase();  
-}  
-  
-/* ====== JSONP ====== */  
-function jsonp(url, cbName, timeoutMs = 30000){  
-  return new Promise((resolve, reject) => {  
-    const script = document.createElement("script");  
-    script.async = true;  
-    script.defer = true;  
-    script.crossOrigin = "anonymous";  
-  
-    const cleanup = () => {  
-      script.remove();  
-      try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }  
-    };  
-  
-    const timer = setTimeout(() => {  
-      cleanup();  
-      reject(new Error("Timeout JSONP"));  
-    }, timeoutMs);  
-  
-    window[cbName] = (data) => {  
-      clearTimeout(timer);  
-      cleanup();  
-      resolve(data);  
-    };  
-  
-    const sep = url.includes("?") ? "&" : "?";  
-    script.src = url + sep + "_t=" + Date.now();  
-  
-    script.onerror = () => {  
-      clearTimeout(timer);  
-      cleanup();  
-      reject(new Error("Erreur JSONP (script bloqué)"));  
-    };  
-  
-    document.head.appendChild(script);  
-  });  
-}  
-  
-async function authCheck(email){  
-  const cb = "cb_auth_" + Math.random().toString(36).slice(2);  
-  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;  
-  try {  
-    return await jsonp(url, cb, 30000);  
-  } catch(e1){  
-    return await jsonp(url, cb, 30000);  
-  }  
-}  
-  
-/* ✅ MODIF: une seule fonction de déconnexion */  
-function doLogout(){  
-  localStorage.removeItem(LS_KEY);  
-  showLogin();  
-  showMsg("Déconnecté.");  
-}  
-  
-/* ====== Google callback ====== */  
-async function handleCredentialResponse(response){  
-  try{  
-    showMsg("Vérification de l’accès…");  
-  
-    const email = parseJwtEmail(response.credential);  
-    if(!email){  
-      localStorage.removeItem(LS_KEY);  
-      showLogin();  
-      showMsg("Erreur : email introuvable.");  
-      return;  
-    }  
-  
-    const res = await authCheck(email);  
-  
-    if(res && res.ok === true){  
-      localStorage.setItem(LS_KEY, email);  
-      showMsg("");  
-      showPortal();  
-    }else{  
-      localStorage.removeItem(LS_KEY);  
-      showLogin();  
-      showMsg("Accès refusé.");  
-    }  
-  }catch(err){  
-    localStorage.removeItem(LS_KEY);  
-    showLogin();  
-    showMsg("Erreur réseau / serveur.");  
-  }  
-}  
-  
-/* ====== Boot ====== */  
-(async function(){  
-  const g = document.getElementById("g_id_onload");  
-  g.setAttribute("data-client_id", GOOGLE_CLIENT_ID);  
-  
-  showMsg("");  
-  
-  const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();  
-  
-  if(saved){  
-    showPortal();  
-    showMsg("Vérification…");  
-    try{  
-      const res = await authCheck(saved);  
-      if(res && res.ok === true){  
-        showMsg("");  
-      }else{  
-        localStorage.removeItem(LS_KEY);  
-        showLogin();  
-        showMsg("Accès refusé.");  
-      }  
-    }catch(e){  
-      localStorage.removeItem(LS_KEY);  
-      showLogin();  
-      showMsg("Erreur réseau / serveur.");  
-    }  
-  } else {  
-    showLogin();  
-  }  
-})();  
-  
-$logoutPortal.addEventListener("click", doLogout);  
-  
-window.addEventListener("popstate", () => {  
-  const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();  
-  if (saved) showPortal();  
-  else showLogin();  
-});  
-</script>  </body>  
-</html>  
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#d46a00">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<style>
+:root{
+  --maxw: 760px;
+  --titleMaxH: 34vh;
+  --btn: clamp(100px, min(22vw, 15vh), 170px);
+  --gap: clamp(10px, min(3vw, 2vh), 18px);
+}
+*{ box-sizing:border-box; }
+html, body{
+  margin:0; padding:0; height:100%;
+  overflow:hidden;
+  overscroll-behavior-y:none;
+  background:#000;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  -webkit-text-size-adjust:100%;
+}
+body{ background:#000 url("background.png") center top / cover no-repeat fixed; }
+.wrap{
+  height:100dvh;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
+}
+
+.title{
+  margin-top: calc(env(safe-area-inset-top) + 2px);
+  width: min(94vw, 680px);
+  max-height: var(--titleMaxH);
+  height:auto;
+  object-fit:contain;
+  display:block;
+  pointer-events:none;
+  user-select:none;
+  transform: scale(1.25);
+  transform-origin: center top;
+}
+.grid{
+  width: min(94vw, var(--maxw));
+  margin-top: clamp(8px, 1.5vh, 16px);
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap);
+  justify-items:center;
+  align-content:start;
+}
+.btn{
+  width: var(--btn);
+  height: var(--btn);
+  display:block;
+  text-decoration:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn img{ width:100%; height:100%; object-fit:contain; display:block; }
+@media (min-width:768px){
+  :root{ --btn: clamp(110px, 16vw, 180px); --titleMaxH: 26vh; --maxw:900px; }
+}
+
+/* ===== LOGIN FULL CENTER ===== */
+
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url("background.png") center/cover no-repeat fixed;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+#loginBox {
+  width: 90%;
+  max-width: 380px;
+  padding: 40px 30px;
+  border-radius: 18px;
+  backdrop-filter: blur(14px);
+  background: rgba(0, 0, 0, 0.65);
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+
+#loginTitle {
+  margin: 0 0 30px 0;
+  font-size: 24px;
+  letter-spacing: 2px;
+  color: #ffffff;
+}
+
+.g_id_signin {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+#loginMsg {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #ff6b6b;
+}
+
+/* (laissé tel quel, même si pas utilisé côté login) */
+#logoutBtn {
+  margin-top: 15px;
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  cursor: pointer;
+}
+#logoutBtn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* ✅ AJOUT: bouton déconnexion top-right (portail) */
+.logoutTopBtn{
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 10px);
+  right: 12px;
+  z-index: 9999;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.logoutTopBtn img{
+  height: 60px;
+  width: auto;
+  display: block;
+}
+.logoutTopBtn:active{ transform: scale(0.96); }
+</style>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginBox">
+  <h2 id="loginTitle">Accès Portail</h2>
+
+  <!-- Google button -->
+  <div id="g_id_onload"
+       data-client_id="690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com"
+       data-callback="handleCredentialResponse"
+       data-auto_prompt="false">
+  </div>
+
+  <div class="g_id_signin"
+       data-type="standard"
+       data-size="large"
+       data-theme="outline"
+       data-text="sign_in_with"
+       data-shape="rectangular">
+  </div>
+
+  <p id="loginMsg"></p>
+</div>
+
+<!-- PORTAIL -->
+<main class="wrap" id="portal" style="display:none;">
+
+  <!-- ✅ MODIF: bouton déconnexion en haut à droite -->
+  <button id="logoutBtnPortal" class="logoutTopBtn" aria-label="Déconnexion">
+    <img src="deconnexion.png" alt="Déconnexion">
+  </button>
+
+  <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
+
+  <section class="grid" aria-label="Menu">
+    <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/"><img src="entretien.png" alt="Entretien"></a>
+    <a class="btn" href="documents.html"><img src="documents.png" alt="Documents"></a>
+    <a class="btn" href="organigramme.html"><img src="organigramme.png" alt="Organigramme"></a>
+    <a class="btn" href="construction.html"><img src="informations.png" alt="Informations"></a>
+    <a class="btn" href="planning.html"><img src="planning.png" alt="Planning"></a>
+    <a class="btn" href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
+    <a class="btn" href="construction.html"><img src="book.png" alt="Book"></a>
+    <a class="btn" href="construction.html"><img src="galerie.png" alt="Galerie"></a>
+    <a class="btn" href="construction.html"><img src="admin.png" alt="Admin"></a>
+    <a class="btn" href="construction.html"><img src="gardes postées.png" alt="Gardes postées"></a>
+    <a class="btn" href="construction.html"><img src="tickets carburant.png" alt="Tickets carburant"></a>
+    <a class="btn" href="desinfection-vsav.html"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>
+  </section>
+
+  <!-- ✅ MODIF: SUPPRIMÉ le bouton du bas -->
+</main>
+
+<script>
+/* ====== CONFIG (SEULS 2 TRUCS À METTRE) ====== */
+const GOOGLE_CLIENT_ID = "690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com";
+const API = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec";
+const LS_KEY = "cs_portail_email_v1";
+
+/* ====== DOM ====== */
+const $loginBox = document.getElementById("loginBox");
+const $portal = document.getElementById("portal");
+const $msg = document.getElementById("loginMsg");
+const $logoutPortal = document.getElementById("logoutBtnPortal");
+
+/* ====== UI ====== */
+function showMsg(t){ $msg.textContent = t || ""; }
+
+/* ✅ MODIF: on marque l’état "portail" dans l’URL pour que RETOUR depuis une page revienne au portail (pas au login) */
+function markPortalUrl_(){
+  if (!location.search.includes("portal=1")) {
+    history.replaceState({page:"portal"}, "", location.pathname + "?portal=1");
+  } else {
+    history.replaceState({page:"portal"}, "", location.pathname + location.search);
+  }
+}
+function clearPortalUrl_(){
+  if (location.search.includes("portal=1")) {
+    history.replaceState({page:"login"}, "", location.pathname);
+  } else {
+    history.replaceState({page:"login"}, "", location.pathname);
+  }
+}
+
+function showPortal(){
+  $loginBox.style.display = "none";
+  $portal.style.display = "flex";
+  markPortalUrl_(); // ✅ important
+}
+function showLogin(){
+  $portal.style.display = "none";
+  $loginBox.style.display = "block";
+  clearPortalUrl_(); // ✅ important
+}
+
+/* ====== JWT email (ROBUSTE) ====== */
+function b64urlToUtf8(b64url){
+  let s = String(b64url || "").replace(/-/g, "+").replace(/_/g, "/");
+  while (s.length % 4) s += "=";
+  const bin = atob(s);
+  let out = "";
+  for (let i=0;i<bin.length;i++){
+    out += "%" + bin.charCodeAt(i).toString(16).padStart(2,"0");
+  }
+  return decodeURIComponent(out);
+}
+function parseJwtEmail(credential){
+  const parts = String(credential || "").split(".");
+  if (parts.length < 2) return "";
+  const payloadJson = b64urlToUtf8(parts[1]);
+  const payload = JSON.parse(payloadJson);
+  return String(payload.email || "").trim().toLowerCase();
+}
+
+/* ====== JSONP ====== */
+function jsonp(url, cbName, timeoutMs = 30000){
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.async = true;
+    script.defer = true;
+    script.crossOrigin = "anonymous";
+
+    const cleanup = () => {
+      script.remove();
+      try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+    };
+
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error("Timeout JSONP"));
+    }, timeoutMs);
+
+    window[cbName] = (data) => {
+      clearTimeout(timer);
+      cleanup();
+      resolve(data);
+    };
+
+    const sep = url.includes("?") ? "&" : "?";
+    script.src = url + sep + "_t=" + Date.now();
+
+    script.onerror = () => {
+      clearTimeout(timer);
+      cleanup();
+      reject(new Error("Erreur JSONP (script bloqué)"));
+    };
+
+    document.head.appendChild(script);
+  });
+}
+<script>
+/* ====== CONFIG ====== */
+const GOOGLE_CLIENT_ID = "690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com";
+const API = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec";
+const LS_KEY = "cs_portail_email_v1";
+
+/* ====== DOM ====== */
+const $loginBox = document.getElementById("loginBox");
+const $portal = document.getElementById("portal");
+const $msg = document.getElementById("loginMsg");
+const $logoutPortal = document.getElementById("logoutBtnPortal");
+
+/* ====== UI ====== */
+function showMsg(t){ $msg.textContent = t || ""; }
+
+function markPortalUrl_(){
+  history.replaceState({page:"portal"}, "", location.pathname + "?portal=1");
+}
+function clearPortalUrl_(){
+  history.replaceState({page:"login"}, "", location.pathname);
+}
+
+function showPortal(){
+  $loginBox.style.display = "none";
+  $portal.style.display = "flex";
+  markPortalUrl_();
+}
+function showLogin(){
+  $portal.style.display = "none";
+  $loginBox.style.display = "block";
+  clearPortalUrl_();
+}
+
+/* ====== JWT ====== */
+function b64urlToUtf8(b64url){
+  let s = String(b64url || "").replace(/-/g, "+").replace(/_/g, "/");
+  while (s.length % 4) s += "=";
+  const bin = atob(s);
+  let out = "";
+  for (let i=0;i<bin.length;i++){
+    out += "%" + bin.charCodeAt(i).toString(16).padStart(2,"0");
+  }
+  return decodeURIComponent(out);
+}
+function parseJwtEmail(credential){
+  const parts = String(credential || "").split(".");
+  if (parts.length < 2) return "";
+  const payloadJson = b64urlToUtf8(parts[1]);
+  const payload = JSON.parse(payloadJson);
+  return String(payload.email || "").trim().toLowerCase();
+}
+
+/* ====== JSONP ====== */
+function jsonp(url, cbName, timeoutMs = 30000){
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.async = true;
+    script.defer = true;
+    script.crossOrigin = "anonymous";
+
+    const cleanup = () => {
+      script.remove();
+      try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+    };
+
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error("Timeout JSONP"));
+    }, timeoutMs);
+
+    window[cbName] = (data) => {
+      clearTimeout(timer);
+      cleanup();
+      resolve(data);
+    };
+
+    const sep = url.includes("?") ? "&" : "?";
+    script.src = url + sep + "_t=" + Date.now();
+
+    script.onerror = () => {
+      clearTimeout(timer);
+      cleanup();
+      reject(new Error("Erreur JSONP"));
+    };
+
+    document.head.appendChild(script);
+  });
+}
+
+async function authCheck(email){
+  const cb = "cb_auth_" + Math.random().toString(36).slice(2);
+  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
+  return await jsonp(url, cb, 30000);
+}
+
+/* ====== Logout ====== */
+function doLogout(){
+  localStorage.removeItem(LS_KEY);
+  showLogin();
+  showMsg("Déconnecté.");
+}
+
+/* ====== Google callback ====== */
+async function handleCredentialResponse(response){
+  try{
+    showMsg("Vérification de l’accès…");
+
+    const email = parseJwtEmail(response.credential);
+    if(!email){
+      localStorage.removeItem(LS_KEY);
+      showLogin();
+      showMsg("Erreur : email introuvable.");
+      return;
+    }
+
+    const res = await authCheck(email);
+
+    if(res && res.ok === true){
+      localStorage.setItem(LS_KEY, email);
+      showMsg("");
+      showPortal();
+    }else{
+      localStorage.removeItem(LS_KEY);
+      showLogin();
+      showMsg("Accès refusé.");
+    }
+  }catch(err){
+    localStorage.removeItem(LS_KEY);
+    showLogin();
+    showMsg("Erreur réseau / serveur.");
+  }
+}
+
+/* ====== Boot (VERROUILLÉ) ====== */
+(async function(){
+  const g = document.getElementById("g_id_onload");
+  g.setAttribute("data-client_id", GOOGLE_CLIENT_ID);
+
+  showMsg("");
+
+  const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
+
+  if(saved){
+    showMsg("Vérification…");
+    try{
+      const res = await authCheck(saved);
+      if(res && res.ok === true){
+        showMsg("");
+        showPortal();   // ✅ portail affiché seulement si autorisé
+      }else{
+        localStorage.removeItem(LS_KEY);
+        showLogin();
+        showMsg("Accès refusé.");
+      }
+    }catch(e){
+      localStorage.removeItem(LS_KEY);
+      showLogin();
+      showMsg("Erreur réseau / serveur.");
+    }
+  } else {
+    showLogin();
+  }
+})();
+
+/* ====== Bouton logout ====== */
+$logoutPortal.addEventListener("click", doLogout);
+
+/* ====== Popstate sécurisé ====== */
+window.addEventListener("popstate", async () => {
+  const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
+  if(!saved){ showLogin(); return; }
+
+  showMsg("Vérification…");
+  try{
+    const res = await authCheck(saved);
+    if(res && res.ok === true){
+      showMsg("");
+      showPortal();
+    }else{
+      localStorage.removeItem(LS_KEY);
+      showLogin();
+      showMsg("Accès refusé.");
+    }
+  }catch(e){
+    localStorage.removeItem(LS_KEY);
+    showLogin();
+    showMsg("Erreur réseau / serveur.");
+  }
+});
+</script>
+
+</body>
+</html>
