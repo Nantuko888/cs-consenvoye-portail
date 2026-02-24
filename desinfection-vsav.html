@@ -24,10 +24,14 @@
 
   --shadow: 0 14px 34px rgba(0,0,0,.40);
   --radius: 18px;
+
+  /* ✅ hauteur réelle écran (Samsung/Android) */
+  --appH: 100dvh;
 }
 
 *{box-sizing:border-box}
 html,body{height:100%}
+
 body{
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
@@ -35,6 +39,9 @@ body{
   color: var(--txt);
   overflow:hidden; /* ✅ jamais de scrollbar */
   overscroll-behavior:none; /* ✅ pas de bounce */
+
+  /* ✅ FIX ANDROID : on force la vraie hauteur */
+  height: var(--appH);
 }
 
 /* fond portail */
@@ -54,7 +61,9 @@ body{
 
 /* page layout */
 .wrap{
-  height:100dvh;
+  /* ✅ FIX ANDROID : même hauteur que body */
+  height: var(--appH);
+
   width:min(980px, 100%);
   margin:0 auto;
   padding:
@@ -65,6 +74,7 @@ body{
   grid-template-rows: auto auto 1fr; /* topbar / tabs / content */
   gap: 10px;
   overflow:hidden; /* ✅ */
+  min-height:0; /* ✅ */
 }
 
 /* topbar */
@@ -381,6 +391,14 @@ body{
 </div>
 
 <script>
+/* ✅ FIX ANDROID / SAMSUNG : vraie hauteur sans barre système qui bouffe le bas */
+function setAppHeight(){
+  document.documentElement.style.setProperty("--appH", window.innerHeight + "px");
+}
+window.addEventListener("resize", setAppHeight);
+window.addEventListener("orientationchange", setAppHeight);
+setAppHeight();
+
 /* ✅ Retour */
 document.getElementById("btnBack").addEventListener("click", ()=>{
   // adapte si tu veux renvoyer ailleurs
