@@ -550,19 +550,15 @@ function fillVsavTable(rows){
     const tr = tbody.children[i];
     if(!tr) continue;
 
-    const r = (rows && rows[i]) ? rows[i] : null;
-
-    const referent = r && r.referent ? String(r.referent).trim() : "";
-    const agent = r && r.agent ? String(r.agent).trim() : "";
-    const dateVal = r && r.date_validation ? String(r.date_validation).trim() : "";
+    const r = rows && rows[i] ? rows[i] : {};
+    const referent = (r.referent ?? r[1] ?? "").toString().trim();
+    const dateVal = (r.date_validation ?? r[3] ?? "").toString().trim();
 
     tr.children[1].textContent = referent || "—";
-
-    const spanAgent = tr.children[2].querySelector(".fakeSelect span");
-    if(spanAgent) spanAgent.textContent = agent || "—";
-
     tr.children[3].textContent = dateVal || "—";
   }
+}
+
 }
 
 
@@ -608,8 +604,6 @@ function fillVsavTable(rows){
     // silence
   }
 })();
-
-</script>
 
 </script>
 </body>
