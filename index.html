@@ -361,24 +361,27 @@ async function handleCredentialResponse(response){
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
 
   if(saved){
-        showMsg("Vérification…");
-    try{
-      const res = await authCheck(saved);
-      if(res && res.ok === true){
-        showMsg("");
-      }else{
-        localStorage.removeItem(LS_KEY);
-        showLogin();
-        showMsg("Accès refusé.");
-      }
-    }catch(e){
+  showPortal(); // ✅ IMPORTANT : revient au portail direct
+  showMsg("Vérification…");
+  try{
+    const res = await authCheck(saved);
+    if(res && res.ok === true){
+      showMsg("");
+      showPortal(); // ✅ garde portail (au cas où)
+    }else{
       localStorage.removeItem(LS_KEY);
       showLogin();
-      showMsg("Erreur réseau / serveur.");
+      showMsg("Accès refusé.");
     }
-  } else {
+  }catch(e){
+    localStorage.removeItem(LS_KEY);
     showLogin();
+    showMsg("Erreur réseau / serveur.");
   }
+} else {
+  showLogin();
+}
+
 })();
 
 $logoutPortal.addEventListener("click", doLogout);
