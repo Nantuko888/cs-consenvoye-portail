@@ -74,7 +74,7 @@ body{ background:#000 url("background.png") center top / cover no-repeat fixed; 
 }
 
 /* ===== LOGIN FULL CENTER ===== */
-
+/* (je laisse ton style tel quel) */
 body {
   margin: 0;
   height: 100vh;
@@ -129,7 +129,7 @@ body {
   background: rgba(255,255,255,0.2);
 }
 
-/* ✅ AJOUT: bouton déconnexion top-right (portail) */
+/* ✅ bouton déconnexion top-right (portail) */
 .logoutTopBtn{
   position: fixed;
   top: calc(env(safe-area-inset-top) + 10px);
@@ -180,7 +180,6 @@ body {
 <!-- PORTAIL -->
 <main class="wrap" id="portal" style="display:none;">
 
-  <!-- ✅ MODIF: bouton déconnexion en haut à droite -->
   <button id="logoutBtnPortal" class="logoutTopBtn" aria-label="Déconnexion">
     <img src="deconnexion.png" alt="Déconnexion">
   </button>
@@ -201,12 +200,10 @@ body {
     <a class="btn" href="construction.html"><img src="tickets carburant.png" alt="Tickets carburant"></a>
     <a class="btn" href="desinfection-vsav.html"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>
   </section>
-
-  <!-- ✅ MODIF: SUPPRIMÉ le bouton du bas -->
 </main>
 
 <script>
-/* ====== CONFIG (SEULS 2 TRUCS À METTRE) ====== */
+/* ====== CONFIG ====== */
 const GOOGLE_CLIENT_ID = "690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com";
 const API = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec";
 const LS_KEY = "cs_portail_email_v1";
@@ -220,7 +217,6 @@ const $logoutPortal = document.getElementById("logoutBtnPortal");
 /* ====== UI ====== */
 function showMsg(t){ $msg.textContent = t || ""; }
 
-/* ✅ MODIF: on marque l’état "portail" dans l’URL pour que RETOUR depuis une page revienne au portail (pas au login) */
 function markPortalUrl_(){
   if (!location.search.includes("portal=1")) {
     history.replaceState({page:"portal"}, "", location.pathname + "?portal=1");
@@ -229,22 +225,18 @@ function markPortalUrl_(){
   }
 }
 function clearPortalUrl_(){
-  if (location.search.includes("portal=1")) {
-    history.replaceState({page:"login"}, "", location.pathname);
-  } else {
-    history.replaceState({page:"login"}, "", location.pathname);
-  }
+  history.replaceState({page:"login"}, "", location.pathname);
 }
 
 function showPortal(){
   $loginBox.style.display = "none";
   $portal.style.display = "flex";
-  markPortalUrl_(); // ✅ important
+  markPortalUrl_();
 }
 function showLogin(){
   $portal.style.display = "none";
   $loginBox.style.display = "block";
-  clearPortalUrl_(); // ✅ important
+  clearPortalUrl_();
 }
 
 /* ====== JWT email (ROBUSTE) ====== */
@@ -313,7 +305,7 @@ async function authCheck(email){
   }
 }
 
-/* ✅ MODIF: une seule fonction de déconnexion */
+/* ✅ Déconnexion */
 function doLogout(){
   localStorage.removeItem(LS_KEY);
   showLogin();
@@ -323,6 +315,7 @@ function doLogout(){
 /* ====== Google callback ====== */
 async function handleCredentialResponse(response){
   try{
+    showLogin(); // ✅ on force l’écran login pendant la vérif
     showMsg("Vérification de l’accès…");
 
     const email = parseJwtEmail(response.credential);
@@ -338,7 +331,7 @@ async function handleCredentialResponse(response){
     if(res && res.ok === true){
       localStorage.setItem(LS_KEY, email);
       showMsg("");
-      showPortal();
+      showPortal(); // ✅ portail UNIQUEMENT ici si ok:true
     }else{
       localStorage.removeItem(LS_KEY);
       showLogin();
@@ -356,38 +349,61 @@ async function handleCredentialResponse(response){
   const g = document.getElementById("g_id_onload");
   g.setAttribute("data-client_id", GOOGLE_CLIENT_ID);
 
+  // ✅ IMPORTANT: au chargement, on affiche login par défaut,
+  // et le portail ne s’affiche QUE si auth_check ok:true
+  showLogin();
   showMsg("");
 
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
+  if(!saved){
+    return; // reste sur login
+  }
 
-  if(saved){
-    showPortal();
-    showMsg("Vérification…");
-    try{
-      const res = await authCheck(saved);
-      if(res && res.ok === true){
-        showMsg("");
-      }else{
-        localStorage.removeItem(LS_KEY);
-        showLogin();
-        showMsg("Accès refusé.");
-      }
-    }catch(e){
+  showMsg("Vérification…");
+  try{
+    const res = await authCheck(saved);
+    if(res && res.ok === true){
+      showMsg("");
+      showPortal(); // ✅ portail UNIQUEMENT si ok:true
+    }else{
       localStorage.removeItem(LS_KEY);
       showLogin();
-      showMsg("Erreur réseau / serveur.");
+      showMsg("Accès refusé.");
     }
-  } else {
+  }catch(e){
+    localStorage.removeItem(LS_KEY);
     showLogin();
+    showMsg("Erreur réseau / serveur.");
   }
 })();
 
 $logoutPortal.addEventListener("click", doLogout);
 
-window.addEventListener("popstate", () => {
+/* ====== Retour navigateur ====== */
+window.addEventListener("popstate", async () => {
+  // ✅ même règle: jamais portail si pas autorisé
+  showLogin();
+  showMsg("");
+
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
-  if (saved) showPortal();
-  else showLogin();
+  if(!saved) return;
+
+  showMsg("Vérification…");
+  try{
+    const res = await authCheck(saved);
+    if(res && res.ok === true){
+      showMsg("");
+      showPortal();
+    }else{
+      localStorage.removeItem(LS_KEY);
+      showLogin();
+      showMsg("Accès refusé.");
+    }
+  }catch(e){
+    localStorage.removeItem(LS_KEY);
+    showLogin();
+    showMsg("Erreur réseau / serveur.");
+  }
 });
 </script>
 
