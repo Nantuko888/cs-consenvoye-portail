@@ -16,32 +16,17 @@
   --card: rgba(0,0,0,.50);
   --stroke: rgba(255,255,255,.12);
 
-  --head:#d9d9d9;         /* ✅ entêtes gris clair */
-  --headTxt:#111;
-
-  --yellowTitle:#fff200;  /* titre bandeau */
+  --headGray:#d6d6d6;      /* ✅ entêtes gris clair */
   --monthA:#bcd5ee;
   --monthB:#ffe39c;
 
   --shadow: 0 14px 34px rgba(0,0,0,.40);
   --radius: 18px;
 
-  /* ✅ vraie hauteur écran */
+  --okGreen: rgba(50, 190, 90, .65);
+  --badRed: rgba(210, 60, 60, .65);
+
   --appH: 100dvh;
-
-  /* ✅ compaction pour que décembre tienne */
-  --padTop: 10px;
-  --padBottom: 10px;
-  --gap: 8px;
-
-  --cellPadY: clamp(4px, 0.6vh, 8px);
-  --cellPadX: 8px;
-
-  --doneBg: rgba(70, 170, 80, .75);
-  --doneBorder: rgba(255,255,255,.22);
-
-  --noBg: rgba(210, 60, 60, .70);
-  --noBorder: rgba(255,255,255,.22);
 }
 
 *{box-sizing:border-box}
@@ -52,12 +37,11 @@ body{
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   background: var(--bg);
   color: var(--txt);
-  overflow:hidden;            /* ✅ jamais de scrollbar */
-  overscroll-behavior:none;   /* ✅ pas de bounce */
+  overflow:hidden;
+  overscroll-behavior:none;
   height: var(--appH);
 }
 
-/* fond portail */
 .bg{
   position:fixed; inset:0;
   background:
@@ -72,23 +56,21 @@ body{
   z-index:-1;
 }
 
-/* page layout */
 .wrap{
   height: var(--appH);
-  width:min(980px, 100%);
+  width:min(1100px, 100%);
   margin:0 auto;
   padding:
-    calc(env(safe-area-inset-top) + var(--padTop))
+    calc(env(safe-area-inset-top) + 10px)
     10px
-    calc(env(safe-area-inset-bottom) + var(--padBottom));
+    calc(env(safe-area-inset-bottom) + 12px);
   display:grid;
-  grid-template-rows: auto auto 1fr; /* topbar / tabs / content */
-  gap: var(--gap);
+  grid-template-rows: auto auto 1fr;
+  gap: 10px;
   overflow:hidden;
   min-height:0;
 }
 
-/* topbar */
 .topbar{
   display:flex; align-items:center; justify-content:space-between; gap:10px;
   padding: 10px 12px;
@@ -123,8 +105,7 @@ body{
 }
 .btn:active{transform: translateY(1px)}
 
-/* tabs */
-.tabs{ display:flex; gap:10px; }
+.tabs{display:flex; gap:10px;}
 .tab{
   flex:1;
   padding: 10px 12px;
@@ -145,7 +126,6 @@ body{
 }
 .tab:active{transform: translateY(1px)}
 
-/* content card */
 .card{
   border-radius: 22px;
   background: linear-gradient(180deg, rgba(0,0,0,.52), rgba(0,0,0,.32));
@@ -159,19 +139,18 @@ body{
   flex-direction:column;
 }
 
-/* title banner */
 .banner{
-  background: var(--yellowTitle);
-  color:#000;
+  background: rgba(255,255,255,.10);
+  color:#fff;
   font-weight: 950;
   text-align:center;
-  padding: 9px 10px;
-  border-bottom: 2px solid rgba(0,0,0,.25);
+  padding: 10px 10px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
   letter-spacing:.8px;
-  font-size: clamp(15px, 2.4vw, 20px);
+  font-size: clamp(16px, 2.6vw, 22px);
+  text-transform: uppercase;
 }
 
-/* table grid */
 .table{
   flex:1;
   display:grid;
@@ -179,34 +158,32 @@ body{
   min-height:0;
 }
 
-/* header row */
 .thead{
   display:grid;
-  grid-template-columns: 1.05fr 1fr 1fr .85fr;
-  background: var(--head);          /* ✅ gris clair */
-  color: var(--headTxt);
+  grid-template-columns: 1.05fr 1fr 1fr .9fr 1.1fr; /* ✅ + justificatif */
+  background: var(--headGray);
+  color:#111;
   font-weight:950;
   text-transform:uppercase;
   letter-spacing:.6px;
   border-bottom: 2px solid rgba(0,0,0,.25);
 }
 .th{
-  padding: 9px 8px;
+  padding: 10px 8px;
   text-align:center;
-  border-right: 2px solid rgba(0,0,0,.18);
+  border-right: 2px solid rgba(0,0,0,.25);
   font-size: clamp(12px, 1.9vw, 14px);
 }
 .th:last-child{border-right:none;}
 
-/* body rows fill height */
 .tbody{
   display:grid;
-  grid-template-rows: repeat(12, 1fr);
+  grid-template-rows: repeat(12, 1fr); /* ✅ 12 mois prennent toute la hauteur */
   min-height:0;
 }
 .tr{
   display:grid;
-  grid-template-columns: 1.05fr 1fr 1fr .85fr;
+  grid-template-columns: 1.05fr 1fr 1fr .9fr 1.1fr;
   border-bottom: 2px solid rgba(255,255,255,.12);
 }
 .tr:last-child{border-bottom:none;}
@@ -215,12 +192,12 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  padding: var(--cellPadY) var(--cellPadX);
+  padding: 4px 6px;
   text-align:center;
   border-right: 2px solid rgba(255,255,255,.12);
   min-width:0;
   font-weight: 850;
-  font-size: clamp(11px, 1.75vw, 14px);
+  font-size: clamp(11px, 1.7vw, 13.5px);
   color: rgba(255,255,255,.92);
 }
 .td:last-child{border-right:none;}
@@ -234,152 +211,86 @@ body{
 .month.a{ background: var(--monthA); }
 .month.b{ background: var(--monthB); }
 
-.ref, .agent, .fait{
+.ref, .agent, .fait, .justif{
   background: rgba(0,0,0,.10);
 }
 
-/* Agent cell */
-.agentWrap{
+.agentBox{
   width:100%;
   max-width: 260px;
   display:flex;
   align-items:center;
-  justify-content:center;
+  justify-content:space-between;
   gap:8px;
 }
 .agentName{
   flex:1;
-  min-width:0;
-  font-weight:950;
+  text-align:left;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
+  font-weight:950;
 }
 .agentBtn{
-  width:100%;
-  max-width: 220px;
-  padding: 8px 10px;
+  flex:0 0 auto;
+  padding: 7px 10px;
   border-radius: 12px;
   border:1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.20);
+  background: rgba(0,0,0,.22);
   color: rgba(255,255,255,.95);
-  font-weight: 900;
+  font-weight: 950;
   cursor:pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.smallBtn{
-  border-radius: 12px;
-  padding: 8px 10px;
-  border:1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.20);
-  color:#fff;
-  font-weight:900;
-  cursor:pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.smallBtn:active, .agentBtn:active{transform: translateY(1px)}
-.smallBtn.locked{opacity:.55; cursor:not-allowed}
+.agentBtn:active{transform: translateY(1px)}
+.agentBtn.locked{ opacity:.55; cursor:not-allowed; }
+.agentBtn.mine{ background: rgba(212,106,0,.45); border-color: rgba(255,255,255,.22); }
 
-/* Fait cell states */
 .faitBtn{
   width:100%;
-  max-width: 190px;
-  padding: 8px 10px;
+  max-width: 160px;
+  padding: 7px 10px;
   border-radius: 12px;
   border:1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.20);
+  background: rgba(0,0,0,.22);
   color: rgba(255,255,255,.95);
   font-weight: 950;
   cursor:pointer;
   -webkit-tap-highlight-color: transparent;
 }
+.faitBtn:active{transform: translateY(1px)}
 .faitBtn.locked{ opacity:.55; cursor:not-allowed; }
-.faitBox{
+
+.faitCell.ok{ background: var(--okGreen); }
+.faitCell.bad{ background: var(--badRed); }
+
+.justifText{
   width:100%;
-  max-width: 190px;
-  padding: 8px 10px;
-  border-radius: 12px;
-  border:1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.20);
-  font-weight: 950;
-}
-.faitBox.done{
-  background: var(--doneBg);
-  border-color: var(--doneBorder);
-  color:#fff;
-}
-.faitBox.no{
-  background: var(--noBg);
-  border-color: var(--noBorder);
-  color:#fff;
+  padding: 0 6px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  opacity:.95;
+  text-align:left;
 }
 
-/* modal */
-.modal{
-  position:fixed; inset:0;
-  background: rgba(0,0,0,.65);
-  display:none;
+/* inventaire placeholder */
+.inv{
+  flex:1;
+  display:flex;
   align-items:center;
   justify-content:center;
-  padding: 18px;
-  z-index: 99999;
+  padding: 14px;
+  text-align:center;
+  color: rgba(255,255,255,.86);
+  font-weight:900;
+  font-size: clamp(14px, 2.2vw, 18px);
 }
-.modalCard{
-  width:min(420px, 100%);
-  border-radius: 18px;
-  background: rgba(0,0,0,.78);
-  border:1px solid rgba(255,255,255,.14);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  padding: 14px 14px 12px;
-}
-.modalTitle{
-  margin:0 0 10px 0;
-  font-weight: 950;
-  letter-spacing:.4px;
-}
-.modalRow{ display:flex; gap:10px; flex-wrap:wrap; }
-.modalRow .btn2{
-  flex:1;
-  min-width: 120px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  border:1px solid rgba(255,255,255,.16);
-  background: rgba(255,255,255,.08);
-  color:#fff;
-  font-weight: 950;
-  cursor:pointer;
-}
-.modalRow .btn2:active{transform: translateY(1px)}
-.modalField{
-  width:100%;
-  margin-top:10px;
-}
-.modalField input, .modalField textarea{
-  width:100%;
-  border-radius: 14px;
-  border:1px solid rgba(255,255,255,.16);
-  background: rgba(255,255,255,.06);
-  color:#fff;
-  padding: 10px 12px;
-  font-weight: 850;
-  outline:none;
-}
-.modalField textarea{ min-height: 92px; resize:none; }
-.modalHint{ opacity:.85; font-size: 13px; margin:8px 0 0; }
 
-/* petites sécurités écrans très petits */
 @media (max-width:360px){
-  :root{
-    --padTop: 8px;
-    --padBottom: 8px;
-    --gap: 7px;
-    --cellPadY: 4px;
-  }
-  .th{padding:8px 6px}
-  .td{padding:4px 6px}
-  .agentBtn, .faitBtn{padding:7px 8px}
+  .th{padding:8px 5px}
+  .td{padding:4px 5px}
+  .agentBtn,.faitBtn{padding:6px 8px}
 }
 </style>
 </head>
@@ -388,7 +299,6 @@ body{
 <div class="bg"></div>
 
 <div class="wrap">
-
   <div class="topbar">
     <h1 class="title">Désinfection VSAV 2026</h1>
     <button class="btn" id="btnBack">Retour</button>
@@ -400,7 +310,7 @@ body{
   </div>
 
   <section class="card" id="panelInscription" role="tabpanel" aria-labelledby="tabInscription">
-    <div class="banner">DÉSINFECTION VSAV 2026</div>
+    <div class="banner">Désinfection VSAV 2026</div>
 
     <div class="table">
       <div class="thead">
@@ -408,67 +318,29 @@ body{
         <div class="th">RÉFÉRENT</div>
         <div class="th">AGENT</div>
         <div class="th">FAIT</div>
+        <div class="th">JUSTIFICATIF</div>
       </div>
 
       <div class="tbody" id="tbody">
         <!-- 12 lignes fixes -->
-        <div class="tr"><div class="td month a">JANVIER</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn" data-month="JANVIER">S’inscrire</button></div><div class="td fait"><button class="faitBtn locked" data-month="JANVIER" disabled>—</button></div></div>
-        <div class="tr"><div class="td month b">FÉVRIER</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn" data-month="FÉVRIER">S’inscrire</button></div><div class="td fait"><button class="faitBtn locked" data-month="FÉVRIER" disabled>—</button></div></div>
-        <div class="tr"><div class="td month a">MARS</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn" data-month="MARS">S’inscrire</button></div><div class="td fait"><button class="faitBtn locked" data-month="MARS" disabled>—</button></div></div>
-        <div class="tr"><div class="td month b">AVRIL</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn" data-month="AVRIL">S’inscrire</button></div><div class="td fait"><button class="faitBtn locked" data-month="AVRIL" disabled>—</button></div></div>
-        <div class="tr"><div class="td month a">MAI</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn" data-month="MAI">S’inscrire</button></div><div class="td fait"><button class="faitBtn locked" data-month="MAI" disabled>—</button></div></div>
-        <div class="tr"><div class="td month b">JUIN</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn" data-month="JUIN">S’inscrire</button></div><div class="td fait"><button class="faitBtn locked" data-month="JUIN" disabled>—</button></div></div>
-        <div class="tr"><div class="td month a">JUILLET</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn" data-month="JUILLET">S’inscrire</button></div><div class="td fait"><button class="faitBtn locked" data-month="JUILLET" disabled>—</button></div></div>
-        <div class="tr"><div class="td month b">AOÛT</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn" data-month="AOÛT">S’inscrire</button></div><div class="td fait"><button class="faitBtn locked" data-month="AOÛT" disabled>—</button></div></div>
-        <div class="tr"><div class="td month a">SEPTEMBRE</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn" data-month="SEPTEMBRE">S’inscrire</button></div><div class="td fait"><button class="faitBtn locked" data-month="SEPTEMBRE" disabled>—</button></div></div>
-        <div class="tr"><div class="td month b">OCTOBRE</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn" data-month="OCTOBRE">S’inscrire</button></div><div class="td fait"><button class="faitBtn locked" data-month="OCTOBRE" disabled>—</button></div></div>
-        <div class="tr"><div class="td month a">NOVEMBRE</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn" data-month="NOVEMBRE">S’inscrire</button></div><div class="td fait"><button class="faitBtn locked" data-month="NOVEMBRE" disabled>—</button></div></div>
-        <div class="tr"><div class="td month b">DÉCEMBRE</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn" data-month="DÉCEMBRE">S’inscrire</button></div><div class="td fait"><button class="faitBtn locked" data-month="DÉCEMBRE" disabled>—</button></div></div>
       </div>
     </div>
   </section>
 
   <section class="card" id="panelInventaire" role="tabpanel" aria-labelledby="tabInventaire" style="display:none;">
-    <div class="banner">INVENTAIRE VSAV</div>
-    <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:14px;font-weight:900;opacity:.9;">
-      (Structure inventaire à ajouter ensuite)
-    </div>
+    <div class="banner">Inventaire VSAV</div>
+    <div class="inv">(Structure inventaire à ajouter plus tard)</div>
   </section>
 </div>
 
-<!-- Modal (choix Fait/Non fait + date/justif) -->
-<div class="modal" id="modal">
-  <div class="modalCard">
-    <h3 class="modalTitle" id="modalTitle">Validation</h3>
-
-    <div class="modalRow" id="modalRowChoice">
-      <button class="btn2" id="btnChoiceFait">Fait</button>
-      <button class="btn2" id="btnChoiceNon">Non fait</button>
-      <button class="btn2" id="btnChoiceCancel">Annuler</button>
-    </div>
-
-    <div class="modalField" id="fieldDate" style="display:none;">
-      <div class="modalHint">Choisis la date (jour/mois/année).</div>
-      <input type="date" id="inputDate">
-      <div class="modalRow" style="margin-top:10px;">
-        <button class="btn2" id="btnDateOk">Valider</button>
-        <button class="btn2" id="btnDateCancel">Annuler</button>
-      </div>
-    </div>
-
-    <div class="modalField" id="fieldJustif" style="display:none;">
-      <div class="modalHint">Justificatif obligatoire.</div>
-      <textarea id="inputJustif" placeholder="Écris le justificatif…"></textarea>
-      <div class="modalRow" style="margin-top:10px;">
-        <button class="btn2" id="btnJustifOk">Valider</button>
-        <button class="btn2" id="btnJustifCancel">Annuler</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
-/* ✅ hauteur réelle Android/Samsung */
+/* =========================
+   CONFIG
+   ========================= */
+const API = "TON_URL_EXEC_ICI";                 // ✅ METS TON /exec ICI
+const LS_KEY = "cs_portail_email_v1";           // ✅ email stocké par le portail
+
+/* ✅ Fix Android / Samsung */
 function setAppHeight(){
   document.documentElement.style.setProperty("--appH", window.innerHeight + "px");
 }
@@ -476,12 +348,12 @@ window.addEventListener("resize", setAppHeight);
 window.addEventListener("orientationchange", setAppHeight);
 setAppHeight();
 
-/* ✅ Retour (IMPORTANT : renvoie au portail, pas au login) */
+/* ✅ Retour vers portail (évite retour login) */
 document.getElementById("btnBack").addEventListener("click", ()=>{
   location.href = "index.html?portal=1";
 });
 
-/* ✅ Tabs */
+/* Tabs */
 const tabIns = document.getElementById("tabInscription");
 const tabInv = document.getElementById("tabInventaire");
 const panIns = document.getElementById("panelInscription");
@@ -498,12 +370,9 @@ function setTab(which){
 tabIns.addEventListener("click", ()=>setTab("ins"));
 tabInv.addEventListener("click", ()=>setTab("inv"));
 
-/* =======================
-   CONFIG API
-   ======================= */
-const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
-const LS_KEY = "cs_portail_email_v1";
-
+/* =========================
+   JSONP
+   ========================= */
 function jsonp(url, cbName, timeoutMs=15000){
   return new Promise((resolve, reject)=>{
     const s = document.createElement("script");
@@ -523,329 +392,294 @@ function myEmail(){
   return (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
 }
 
-async function authCheck(email){
+/* =========================
+   API CALLS attendus
+   =========================
+   - auth_check : ?view=auth_check&email=...
+   - vsav_get   : retourne rows[12] avec:
+        mois, referent_name, referent_email, agent_name, agent_email,
+        fait_status ("OK"/"NO"/""), fait_date ("jj/mm/aaaa" ou ""), justificatif ("")
+   - vsav_set_agent   : month + email
+   - vsav_unset_agent : month + email
+   - vsav_set_fait    : month + email + date
+   - vsav_set_nonfait : month + email + justificatif
+*/
+async function apiAuthCheck(email){
   const cb = "cb_auth_" + Math.random().toString(36).slice(2);
-  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
+  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&callback=${cb}&nocache=1`;
+  return await jsonp(url, cb, 15000);
+}
+async function apiVsavGet(){
+  const cb = "cb_get_" + Math.random().toString(36).slice(2);
+  const url = `${API}?view=vsav_get&callback=${cb}&nocache=1`;
+  return await jsonp(url, cb, 15000);
+}
+async function apiAction(view, params){
+  const cb = "cb_act_" + Math.random().toString(36).slice(2);
+  const qs = Object.entries(params||{}).map(([k,v])=>`${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join("&");
+  const url = `${API}?view=${encodeURIComponent(view)}&${qs}&callback=${cb}&nocache=1`;
   return await jsonp(url, cb, 15000);
 }
 
-async function vsavGet(){
-  const cb = "cb_vsav_" + Math.random().toString(36).slice(2);
-  const url = `${API}?view=vsav_get&nocache=1&callback=${cb}`;
-  return await jsonp(url, cb, 15000);
+/* =========================
+   UI BUILD
+   ========================= */
+const MONTHS = ["JANVIER","FÉVRIER","MARS","AVRIL","MAI","JUIN","JUILLET","AOÛT","SEPTEMBRE","OCTOBRE","NOVEMBRE","DÉCEMBRE"];
+
+function buildRows(){
+  const tbody = document.getElementById("tbody");
+  tbody.innerHTML = "";
+  for(let i=0;i<12;i++){
+    const m = MONTHS[i];
+    const ab = (i%2===0) ? "a" : "b";
+
+    const row = document.createElement("div");
+    row.className = "tr";
+    row.innerHTML = `
+      <div class="td month ${ab}">${m}</div>
+      <div class="td ref" data-cell="ref">—</div>
+
+      <div class="td agent" data-cell="agent">
+        <div class="agentBox">
+          <div class="agentName" data-cell="agentName">—</div>
+          <button class="agentBtn" data-month="${m}">S’inscrire</button>
+        </div>
+      </div>
+
+      <div class="td fait faitCell" data-cell="fait">
+        <button class="faitBtn" data-month="${m}">—</button>
+      </div>
+
+      <div class="td justif" data-cell="justif">
+        <div class="justifText" title="" data-cell="justifText">—</div>
+      </div>
+    `;
+    tbody.appendChild(row);
+  }
 }
 
-async function vsavSetAgent(month, email){
-  const cb = "cb_set_" + Math.random().toString(36).slice(2);
-  const url = `${API}?view=vsav_set_agent&month=${encodeURIComponent(month)}&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
-  return await jsonp(url, cb, 15000);
+/* Helpers */
+function isSameEmail(a,b){
+  return String(a||"").trim().toLowerCase() === String(b||"").trim().toLowerCase();
 }
-
-async function vsavUnsetAgent(month, email){
-  const cb = "cb_unset_" + Math.random().toString(36).slice(2);
-  const url = `${API}?view=vsav_unset_agent&month=${encodeURIComponent(month)}&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
-  return await jsonp(url, cb, 15000);
-}
-
-async function vsavSetFait(month, email, dateIso){
-  const cb = "cb_fait_" + Math.random().toString(36).slice(2);
-  const url = `${API}?view=vsav_set_fait&month=${encodeURIComponent(month)}&email=${encodeURIComponent(email)}&date=${encodeURIComponent(dateIso)}&nocache=1&callback=${cb}`;
-  return await jsonp(url, cb, 15000);
-}
-
-async function vsavSetNonFait(month, email, justificatif){
-  const cb = "cb_non_" + Math.random().toString(36).slice(2);
-  const url = `${API}?view=vsav_set_nonfait&month=${encodeURIComponent(month)}&email=${encodeURIComponent(email)}&justif=${encodeURIComponent(justificatif)}&nocache=1&callback=${cb}`;
-  return await jsonp(url, cb, 15000);
-}
-
-/* =======================
-   RENDER TABLE
-   rows attendus: [{mois, referent, agent, fait, date, justificatif}] x12
-   agent peut être "Nom Prénom|email" (si tu veux bloquer par email) ou juste nom
-   ======================= */
-function parseSigned(s){
-  s = (s||"").toString().trim();
-  if(!s) return { name:"", email:"" };
-  if(!s.includes("|")) return { name:s, email:"" };
-  const [name,email] = s.split("|").map(x=>x.trim());
-  return { name, email:(email||"").toLowerCase() };
-}
-
 function fmtDateFR(iso){
-  const s = (iso||"").toString().trim();
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
-  const [y,m,d] = s.split("-");
-  return `${d}/${m}/${y}`;
+  // iso yyyy-mm-dd -> dd/mm/yyyy
+  if(!iso) return "";
+  const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(!m) return iso;
+  return `${m[3]}/${m[2]}/${m[1]}`;
+}
+function isoFromFR(fr){
+  const m = String(fr||"").match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if(!m) return "";
+  return `${m[3]}-${m[2]}-${m[1]}`;
 }
 
-function render(rows, myMail, canValidate){
+/* Fill from API rows */
+function render(rows, me){
   const tbody = document.getElementById("tbody");
   for(let i=0;i<12;i++){
     const tr = tbody.children[i];
-    if(!tr) continue;
+    const r = rows && rows[i] ? rows[i] : {};
 
-    const r = rows[i] || {};
-    const referent = (r.referent ?? r[1] ?? "").toString().trim();
-    const agentRaw = (r.agent ?? r[2] ?? "").toString().trim();
-    const fait = (r.fait ?? r[4] ?? "").toString().trim().toLowerCase();     // "fait" / "nonfait" / ""
-    const dateIso = (r.date ?? r.date_validation ?? r[3] ?? "").toString().trim();
+    const mois = (r.mois ?? r[0] ?? MONTHS[i]).toString().trim().toUpperCase();
+    const refName = (r.referent_name ?? r.referent ?? r[1] ?? "").toString().trim();
+    const refEmail= (r.referent_email ?? r.ref_email ?? r[2] ?? "").toString().trim().toLowerCase();
 
-    // référent
-    tr.children[1].textContent = referent || "—";
+    const agentName = (r.agent_name ?? r.agent ?? r[3] ?? "").toString().trim();
+    const agentEmail= (r.agent_email ?? r.agent_mail ?? r[4] ?? "").toString().trim().toLowerCase();
+
+    const faitStatus = (r.fait_status ?? r.status ?? r[5] ?? "").toString().trim().toUpperCase(); // OK / NO / ""
+    const faitDate   = (r.fait_date ?? r.date ?? r[6] ?? "").toString().trim();                  // "dd/mm/yyyy"
+    const justificatif = (r.justificatif ?? r[7] ?? "").toString().trim();
+
+    // ref
+    tr.querySelector('[data-cell="ref"]').textContent = refName || "—";
 
     // agent cell
-    const tdAgent = tr.children[2];
-    const month = tdAgent.querySelector(".agentBtn")?.dataset?.month || tdAgent.querySelector(".agentWrap")?.dataset?.month || "";
-    const a = parseSigned(agentRaw);
+    const nameEl = tr.querySelector('[data-cell="agentName"]');
+    nameEl.textContent = agentName || "—";
 
-    tdAgent.innerHTML = ""; // reset
+    const btn = tr.querySelector(".agentBtn");
+    btn.dataset.month = mois;
 
-    if(!agentRaw){
-      // libre
-      const b = document.createElement("button");
-      b.className = "agentBtn";
-      b.dataset.month = tr.querySelector(".agentBtn")?.dataset?.month || tr.querySelector(".faitBtn")?.dataset?.month || "";
-      if(!b.dataset.month){
-        // fallback depuis colonne mois
-        b.dataset.month = (tr.children[0].textContent||"").trim().toUpperCase();
-      }
-      b.textContent = "S’inscrire";
-      tdAgent.appendChild(b);
+    // état bouton agent
+    if(!agentEmail){
+      btn.textContent = "S’inscrire";
+      btn.classList.remove("locked","mine");
+      btn.disabled = false;
+    }else if(isSameEmail(agentEmail, me)){
+      btn.textContent = "Annuler";
+      btn.classList.remove("locked");
+      btn.classList.add("mine");
+      btn.disabled = false;
     }else{
-      // pris -> on affiche le NOM
-      const wrap = document.createElement("div");
-      wrap.className = "agentWrap";
-      wrap.dataset.month = (tr.children[0].textContent||"").trim().toUpperCase();
-
-      const name = document.createElement("div");
-      name.className = "agentName";
-      name.textContent = a.name || "—";
-      wrap.appendChild(name);
-
-      // si c'est moi -> bouton Annuler à côté
-      if(a.email && myMail && a.email === myMail){
-        const cancelBtn = document.createElement("button");
-        cancelBtn.className = "smallBtn";
-        cancelBtn.textContent = "Annuler";
-        cancelBtn.dataset.month = wrap.dataset.month;
-        wrap.appendChild(cancelBtn);
-      }
-
-      tdAgent.appendChild(wrap);
+      btn.textContent = "Pris";
+      btn.classList.add("locked");
+      btn.classList.remove("mine");
+      btn.disabled = true;
     }
 
-    // fait cell
-    const tdFait = tr.children[3];
-    tdFait.innerHTML = "";
-    const monthKey = (tr.children[0].textContent||"").trim().toUpperCase();
+    // FAIT
+    const faitBtn = tr.querySelector(".faitBtn");
+    faitBtn.dataset.month = mois;
 
-    if(fait === "fait"){
-      const box = document.createElement("div");
-      box.className = "faitBox done";
-      box.textContent = fmtDateFR(dateIso) || "Fait";
-      tdFait.appendChild(box);
-    } else if(fait === "nonfait"){
-      const box = document.createElement("div");
-      box.className = "faitBox no";
-      box.textContent = "NON FAIT";
-      tdFait.appendChild(box);
-    } else {
-      const b = document.createElement("button");
-      b.className = "faitBtn";
-      b.dataset.month = monthKey;
+    const faitCell = tr.querySelector(".faitCell");
+    faitCell.classList.remove("ok","bad");
 
-      // verrouillé si pas référent / ou si pas d'agent inscrit
-      if(!canValidate || !agentRaw){
-        b.classList.add("locked");
-        b.disabled = true;
-        b.textContent = "—";
-      }else{
-        b.textContent = "Valider";
-      }
-      tdFait.appendChild(b);
+    // bouton FAIT visible (mais cliquable seulement si je suis référent email)
+    const isRef = !!refEmail && isSameEmail(refEmail, me);
+
+    if(faitStatus === "OK"){
+      faitBtn.textContent = faitDate ? faitDate : "Fait";
+      faitCell.classList.add("ok");
+    }else if(faitStatus === "NO"){
+      faitBtn.textContent = "Non fait";
+      faitCell.classList.add("bad");
+    }else{
+      faitBtn.textContent = "—";
     }
+
+    // lock si pas référent
+    faitBtn.disabled = !isRef;
+    faitBtn.classList.toggle("locked", !isRef);
+
+    // justificatif
+    const jEl = tr.querySelector('[data-cell="justifText"]');
+    jEl.textContent = justificatif ? justificatif : "—";
+    jEl.title = justificatif || "";
   }
 }
 
-/* =======================
-   MODAL FLOW
-   ======================= */
-const $modal = document.getElementById("modal");
-const $modalTitle = document.getElementById("modalTitle");
-const $rowChoice = document.getElementById("modalRowChoice");
-const $fieldDate = document.getElementById("fieldDate");
-const $fieldJustif = document.getElementById("fieldJustif");
-const $inputDate = document.getElementById("inputDate");
-const $inputJustif = document.getElementById("inputJustif");
-
-let modalCtx = null; // {month}
-
-function openModalChoice(month){
-  modalCtx = { month };
-  $modalTitle.textContent = `Validation — ${month}`;
-  $rowChoice.style.display = "flex";
-  $fieldDate.style.display = "none";
-  $fieldJustif.style.display = "none";
-  $inputDate.value = "";
-  $inputJustif.value = "";
-  $modal.style.display = "flex";
-}
-function closeModal(){
-  $modal.style.display = "none";
-  modalCtx = null;
-}
-
-document.getElementById("btnChoiceCancel").addEventListener("click", closeModal);
-
-document.getElementById("btnChoiceFait").addEventListener("click", ()=>{
-  $rowChoice.style.display = "none";
-  $fieldDate.style.display = "block";
-  $fieldJustif.style.display = "none";
-});
-
-document.getElementById("btnChoiceNon").addEventListener("click", ()=>{
-  $rowChoice.style.display = "none";
-  $fieldDate.style.display = "none";
-  $fieldJustif.style.display = "block";
-});
-
-document.getElementById("btnDateCancel").addEventListener("click", closeModal);
-document.getElementById("btnJustifCancel").addEventListener("click", closeModal);
-
-/* =======================
-   BOOT + EVENTS
-   ======================= */
-let g_canValidate = false;
-
+/* =========================
+   ACTIONS
+   ========================= */
 async function refresh(){
-  const mail = myEmail();
-  if(!mail) return;
+  const me = myEmail();
+  const res = await apiVsavGet();
+  if(res && res.ok){
+    render(res.rows || [], me);
+  }
+}
 
-  // rôle
-  try{
-    const a = await authCheck(mail);
-    const role = (a?.role || "").toString().toLowerCase();
-    // ✅ règle simple pour maintenant : role "referent" ou "admin" valide
-    g_canValidate = (role === "referent" || role === "admin" || role === "responsable" || role === "chef");
-  }catch(e){
-    g_canValidate = false;
+function attachHandlers(){
+  document.querySelectorAll(".agentBtn").forEach(btn=>{
+    btn.addEventListener("click", async ()=>{
+      const me = myEmail();
+      if(!me){ alert("Email non détecté (reviens au portail)."); return; }
+
+      const month = btn.dataset.month;
+      const doUnset = (btn.textContent === "Annuler");
+
+      try{
+        const view = doUnset ? "vsav_unset_agent" : "vsav_set_agent";
+        const r = await apiAction(view, { month, email: me });
+        if(!r || !r.ok){ alert((r && r.error) ? r.error : "Erreur"); return; }
+        await refresh();
+      }catch(e){
+        alert("Erreur réseau");
+      }
+    });
+  });
+
+  document.querySelectorAll(".faitBtn").forEach(btn=>{
+    btn.addEventListener("click", async ()=>{
+      const me = myEmail();
+      if(!me){ alert("Email non détecté (reviens au portail)."); return; }
+
+      const month = btn.dataset.month;
+
+      // choix Fait / Non fait
+      const choice = prompt('Tape "F" pour Fait, "N" pour Non fait', "F");
+      if(!choice) return;
+
+      const c = choice.trim().toUpperCase();
+
+      if(c === "F"){
+        // calendrier
+        const iso = prompt("Date (format AAAA-MM-JJ) :", "");
+        if(!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)){
+          alert("Date invalide. Exemple: 2026-04-12");
+          return;
+        }
+        const fr = fmtDateFR(iso);
+
+        const ok = confirm(`Confirmer validation FAIT au ${fr} ?`);
+        if(!ok) return;
+
+        try{
+          const r = await apiAction("vsav_set_fait", { month, email: me, date: fr });
+          if(!r || !r.ok){ alert((r && r.error) ? r.error : "Erreur"); return; }
+          await refresh();
+        }catch(e){
+          alert("Erreur réseau");
+        }
+
+      }else if(c === "N"){
+        const justif = prompt("Justificatif (obligatoire) :", "");
+        if(!justif || !justif.trim()){
+          alert("Justificatif obligatoire.");
+          return;
+        }
+        const ok = confirm("Confirmer NON FAIT ?");
+        if(!ok) return;
+
+        try{
+          const r = await apiAction("vsav_set_nonfait", { month, email: me, justificatif: justif.trim() });
+          if(!r || !r.ok){ alert((r && r.error) ? r.error : "Erreur"); return; }
+          await refresh();
+        }catch(e){
+          alert("Erreur réseau");
+        }
+
+      }else{
+        alert("Choix invalide.");
+      }
+    });
+  });
+}
+
+/* =========================
+   BOOT (sécurisé)
+   ========================= */
+(async function(){
+  buildRows();
+
+  // ⚠️ Sécurité: si pas d’email stocké -> retour portail
+  const me = myEmail();
+  if(!me){
+    // pas de blabla : on évite les écrans “bizarres”
+    location.href = "index.html";
+    return;
   }
 
-  // data
+  // Vérif accès côté Acces (bloque si non autorisé)
   try{
-    const res = await vsavGet();
-    if(res?.ok){
-      render(res.rows || [], mail, g_canValidate);
-      bindEvents();
+    const a = await apiAuthCheck(me);
+    if(!a || a.ok !== true){
+      localStorage.removeItem(LS_KEY);
+      location.href = "index.html";
+      return;
     }
   }catch(e){
-    // silence
-  }
-}
-
-function bindEvents(){
-  // inscription
-  document.querySelectorAll(".agentBtn").forEach(btn=>{
-    btn.onclick = async ()=>{
-      const month = btn.dataset.month;
-      const mail = myEmail();
-      if(!mail){ alert("Non connecté"); return; }
-      const ok = confirm(`Confirmer l’inscription sur ${month} ?`);
-      if(!ok) return;
-
-      try{
-        const r = await vsavSetAgent(month, mail);
-        if(!r?.ok){ alert(r?.error || "Erreur"); return; }
-        await refresh();
-      }catch(e){
-        alert("Erreur réseau");
-      }
-    };
-  });
-
-  // annuler
-  document.querySelectorAll(".smallBtn").forEach(btn=>{
-    if(btn.textContent.trim() !== "Annuler") return;
-    btn.onclick = async ()=>{
-      const month = btn.dataset.month;
-      const mail = myEmail();
-      const ok = confirm(`Annuler ton inscription sur ${month} ?`);
-      if(!ok) return;
-
-      try{
-        const r = await vsavUnsetAgent(month, mail);
-        if(!r?.ok){ alert(r?.error || "Erreur"); return; }
-        await refresh();
-      }catch(e){
-        alert("Erreur réseau");
-      }
-    };
-  });
-
-  // fait (valider)
-  document.querySelectorAll(".faitBtn").forEach(btn=>{
-    btn.onclick = ()=>{
-      if(btn.disabled) return;
-      openModalChoice(btn.dataset.month);
-    };
-  });
-}
-
-/* Valider date fait */
-document.getElementById("btnDateOk").addEventListener("click", async ()=>{
-  const month = modalCtx?.month;
-  const mail = myEmail();
-  const dateIso = ($inputDate.value || "").trim();
-  if(!month) return;
-
-  if(!dateIso){
-    alert("Choisis une date.");
+    // si API HS : on bloque (pas d’accès fantôme)
+    location.href = "index.html";
     return;
   }
 
-  const ok = confirm(`Confirmer “FAIT” pour ${month} le ${fmtDateFR(dateIso)} ?`);
-  if(!ok) return;
-
+  // load table
   try{
-    const r = await vsavSetFait(month, mail, dateIso);
-    if(!r?.ok){ alert(r?.error || "Erreur"); return; }
-    closeModal();
-    await refresh();
+    const res = await apiVsavGet();
+    if(res && res.ok){
+      render(res.rows || [], me);
+    }
   }catch(e){
-    alert("Erreur réseau");
-  }
-});
-
-/* Valider non fait + justif */
-document.getElementById("btnJustifOk").addEventListener("click", async ()=>{
-  const month = modalCtx?.month;
-  const mail = myEmail();
-  const justif = ($inputJustif.value || "").trim();
-  if(!month) return;
-
-  if(!justif){
-    alert("Justificatif obligatoire.");
-    return;
+    // on laisse les —
   }
 
-  const ok = confirm(`Confirmer “NON FAIT” pour ${month} ?`);
-  if(!ok) return;
-
-  try{
-    const r = await vsavSetNonFait(month, mail, justif);
-    if(!r?.ok){ alert(r?.error || "Erreur"); return; }
-    closeModal();
-    await refresh();
-  }catch(e){
-    alert("Erreur réseau");
-  }
-});
-
-/* Boot */
-(async function(){
-  await refresh();
+  attachHandlers();
 })();
 </script>
+
 </body>
-  </html>
+</html>
