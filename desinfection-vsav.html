@@ -16,15 +16,18 @@
   --card: rgba(0,0,0,.50);
   --stroke: rgba(255,255,255,.12);
 
-  --headGray:#d6d6d6;      /* ✅ entêtes gris clair */
+  --head:#d8d8d8;     /* ✅ entête gris clair */
+  --headTxt:#111;
+
+  --yellowTitle:#fff200;
   --monthA:#bcd5ee;
   --monthB:#ffe39c;
 
+  --ok:#25c46a;
+  --bad:#ff3b30;
+
   --shadow: 0 14px 34px rgba(0,0,0,.40);
   --radius: 18px;
-
-  --okGreen: rgba(50, 190, 90, .65);
-  --badRed: rgba(210, 60, 60, .65);
 
   --appH: 100dvh;
 }
@@ -58,11 +61,11 @@ body{
 
 .wrap{
   height: var(--appH);
-  width:min(1100px, 100%);
+  width:min(980px, 100%);
   margin:0 auto;
   padding:
     calc(env(safe-area-inset-top) + 10px)
-    10px
+    12px
     calc(env(safe-area-inset-bottom) + 12px);
   display:grid;
   grid-template-rows: auto auto 1fr;
@@ -105,7 +108,7 @@ body{
 }
 .btn:active{transform: translateY(1px)}
 
-.tabs{display:flex; gap:10px;}
+.tabs{ display:flex; gap:10px; }
 .tab{
   flex:1;
   padding: 10px 12px;
@@ -121,7 +124,7 @@ body{
 }
 .tab.active{
   background: linear-gradient(180deg, rgba(212,106,0,.62), rgba(185,88,0,.45));
-  color: #fff;
+  color:#fff;
   border-color: rgba(255,255,255,.16);
 }
 .tab:active{transform: translateY(1px)}
@@ -140,15 +143,14 @@ body{
 }
 
 .banner{
-  background: rgba(255,255,255,.10);
-  color:#fff;
+  background: var(--yellowTitle);
+  color:#000;
   font-weight: 950;
   text-align:center;
   padding: 10px 10px;
-  border-bottom: 1px solid rgba(255,255,255,.12);
+  border-bottom: 2px solid rgba(0,0,0,.25);
   letter-spacing:.8px;
   font-size: clamp(16px, 2.6vw, 22px);
-  text-transform: uppercase;
 }
 
 .table{
@@ -160,30 +162,30 @@ body{
 
 .thead{
   display:grid;
-  grid-template-columns: 1.05fr 1fr 1fr .9fr 1.1fr; /* ✅ + justificatif */
-  background: var(--headGray);
-  color:#111;
+  grid-template-columns: 1.05fr 1fr 1fr .85fr;
+  background: var(--head);           /* ✅ gris clair */
+  color: var(--headTxt);
   font-weight:950;
   text-transform:uppercase;
   letter-spacing:.6px;
   border-bottom: 2px solid rgba(0,0,0,.25);
 }
 .th{
-  padding: 10px 8px;
+  padding: 10px 10px;
   text-align:center;
-  border-right: 2px solid rgba(0,0,0,.25);
+  border-right: 2px solid rgba(0,0,0,.18);
   font-size: clamp(12px, 1.9vw, 14px);
 }
 .th:last-child{border-right:none;}
 
 .tbody{
   display:grid;
-  grid-template-rows: repeat(12, 1fr); /* ✅ 12 mois prennent toute la hauteur */
+  grid-template-rows: repeat(12, 1fr);
   min-height:0;
 }
 .tr{
   display:grid;
-  grid-template-columns: 1.05fr 1fr 1fr .9fr 1.1fr;
+  grid-template-columns: 1.05fr 1fr 1fr .85fr;
   border-bottom: 2px solid rgba(255,255,255,.12);
 }
 .tr:last-child{border-bottom:none;}
@@ -192,12 +194,12 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  padding: 4px 6px;
+  padding: 6px 8px;
   text-align:center;
   border-right: 2px solid rgba(255,255,255,.12);
   min-width:0;
   font-weight: 850;
-  font-size: clamp(11px, 1.7vw, 13.5px);
+  font-size: clamp(11px, 1.75vw, 14px);
   color: rgba(255,255,255,.92);
 }
 .td:last-child{border-right:none;}
@@ -211,86 +213,124 @@ body{
 .month.a{ background: var(--monthA); }
 .month.b{ background: var(--monthB); }
 
-.ref, .agent, .fait, .justif{
+.ref, .agent, .fait{
   background: rgba(0,0,0,.10);
 }
 
-.agentBox{
+/* ✅ bouton agent */
+.agentBtn{
   width:100%;
-  max-width: 260px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-}
-.agentName{
-  flex:1;
-  text-align:left;
+  max-width: 240px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.20);
+  color: rgba(255,255,255,.95);
+  font-weight: 900;
+  cursor:pointer;
+  -webkit-tap-highlight-color: transparent;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
-  font-weight:950;
 }
-.agentBtn{
-  flex:0 0 auto;
-  padding: 7px 10px;
-  border-radius: 12px;
-  border:1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.22);
-  color: rgba(255,255,255,.95);
-  font-weight: 950;
-  cursor:pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.agentBtn:active{transform: translateY(1px)}
 .agentBtn.locked{ opacity:.55; cursor:not-allowed; }
 .agentBtn.mine{ background: rgba(212,106,0,.45); border-color: rgba(255,255,255,.22); }
 
+/* ✅ bouton fait */
 .faitBtn{
   width:100%;
-  max-width: 160px;
-  padding: 7px 10px;
+  max-width: 190px;
+  padding: 8px 10px;
   border-radius: 12px;
   border:1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.22);
+  background: rgba(0,0,0,.20);
   color: rgba(255,255,255,.95);
   font-weight: 950;
   cursor:pointer;
   -webkit-tap-highlight-color: transparent;
-}
-.faitBtn:active{transform: translateY(1px)}
-.faitBtn.locked{ opacity:.55; cursor:not-allowed; }
-
-.faitCell.ok{ background: var(--okGreen); }
-.faitCell.bad{ background: var(--badRed); }
-
-.justifText{
-  width:100%;
-  padding: 0 6px;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
-  opacity:.95;
-  text-align:left;
 }
+.faitBtn.disabled{ opacity:.45; cursor:not-allowed; }
+.faitBtn.ok{ background: rgba(37,196,106,.22); border-color: rgba(37,196,106,.55); }
+.faitBtn.bad{ background: rgba(255,59,48,.20); border-color: rgba(255,59,48,.55); }
 
-/* inventaire placeholder */
-.inv{
-  flex:1;
-  display:flex;
+/* ✅ modal */
+.modal{
+  position:fixed; inset:0;
+  display:none;
   align-items:center;
   justify-content:center;
-  padding: 14px;
-  text-align:center;
-  color: rgba(255,255,255,.86);
-  font-weight:900;
-  font-size: clamp(14px, 2.2vw, 18px);
+  padding: 18px;
+  z-index: 99999;
 }
+.modal.show{ display:flex; }
+.modal .backdrop{
+  position:absolute; inset:0;
+  background: rgba(0,0,0,.62);
+  backdrop-filter: blur(6px);
+}
+.modal .box{
+  position:relative;
+  width:min(520px, 100%);
+  border-radius: 18px;
+  background: rgba(10,10,10,.92);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 22px 60px rgba(0,0,0,.65);
+  padding: 14px;
+}
+.modal h3{
+  margin: 6px 6px 10px;
+  font-size: 16px;
+  letter-spacing:.3px;
+}
+.modal .row{
+  display:flex;
+  gap:10px;
+  margin: 10px 6px 6px;
+}
+.modal .row .btn2{
+  flex:1;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.06);
+  color:#fff;
+  font-weight: 950;
+  cursor:pointer;
+}
+.modal .row .btn2.primary{
+  background: linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.55));
+}
+.modal .row .btn2.ok{
+  background: rgba(37,196,106,.24);
+  border-color: rgba(37,196,106,.55);
+}
+.modal .row .btn2.bad{
+  background: rgba(255,59,48,.22);
+  border-color: rgba(255,59,48,.55);
+}
+.modal .field{
+  margin: 10px 6px 0;
+}
+.modal input[type="date"],
+.modal textarea{
+  width:100%;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.35);
+  color:#fff;
+  padding: 10px 10px;
+  font-weight: 800;
+}
+.modal textarea{ min-height: 92px; resize:none; }
 
 @media (max-width:360px){
-  .th{padding:8px 5px}
-  .td{padding:4px 5px}
-  .agentBtn,.faitBtn{padding:6px 8px}
+  .th{padding:8px 6px}
+  .td{padding:5px 6px}
+  .agentBtn{padding:7px 8px}
+  .faitBtn{padding:7px 8px}
 }
 </style>
 </head>
@@ -299,6 +339,7 @@ body{
 <div class="bg"></div>
 
 <div class="wrap">
+
   <div class="topbar">
     <h1 class="title">Désinfection VSAV 2026</h1>
     <button class="btn" id="btnBack">Retour</button>
@@ -310,7 +351,7 @@ body{
   </div>
 
   <section class="card" id="panelInscription" role="tabpanel" aria-labelledby="tabInscription">
-    <div class="banner">Désinfection VSAV 2026</div>
+    <div class="banner">DÉSINFECTION VSAV 2026</div>
 
     <div class="table">
       <div class="thead">
@@ -318,29 +359,43 @@ body{
         <div class="th">RÉFÉRENT</div>
         <div class="th">AGENT</div>
         <div class="th">FAIT</div>
-        <div class="th">JUSTIFICATIF</div>
       </div>
 
       <div class="tbody" id="tbody">
         <!-- 12 lignes fixes -->
+        <div class="tr" data-month="JANVIER"><div class="td month a">JANVIER</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn">S’inscrire</button></div><div class="td fait"><button class="faitBtn disabled" disabled>—</button></div></div>
+        <div class="tr" data-month="FÉVRIER"><div class="td month b">FÉVRIER</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn">S’inscrire</button></div><div class="td fait"><button class="faitBtn disabled" disabled>—</button></div></div>
+        <div class="tr" data-month="MARS"><div class="td month a">MARS</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn">S’inscrire</button></div><div class="td fait"><button class="faitBtn disabled" disabled>—</button></div></div>
+        <div class="tr" data-month="AVRIL"><div class="td month b">AVRIL</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn">S’inscrire</button></div><div class="td fait"><button class="faitBtn disabled" disabled>—</button></div></div>
+        <div class="tr" data-month="MAI"><div class="td month a">MAI</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn">S’inscrire</button></div><div class="td fait"><button class="faitBtn disabled" disabled>—</button></div></div>
+        <div class="tr" data-month="JUIN"><div class="td month b">JUIN</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn">S’inscrire</button></div><div class="td fait"><button class="faitBtn disabled" disabled>—</button></div></div>
+        <div class="tr" data-month="JUILLET"><div class="td month a">JUILLET</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn">S’inscrire</button></div><div class="td fait"><button class="faitBtn disabled" disabled>—</button></div></div>
+        <div class="tr" data-month="AOÛT"><div class="td month b">AOÛT</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn">S’inscrire</button></div><div class="td fait"><button class="faitBtn disabled" disabled>—</button></div></div>
+        <div class="tr" data-month="SEPTEMBRE"><div class="td month a">SEPTEMBRE</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn">S’inscrire</button></div><div class="td fait"><button class="faitBtn disabled" disabled>—</button></div></div>
+        <div class="tr" data-month="OCTOBRE"><div class="td month b">OCTOBRE</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn">S’inscrire</button></div><div class="td fait"><button class="faitBtn disabled" disabled>—</button></div></div>
+        <div class="tr" data-month="NOVEMBRE"><div class="td month a">NOVEMBRE</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn">S’inscrire</button></div><div class="td fait"><button class="faitBtn disabled" disabled>—</button></div></div>
+        <div class="tr" data-month="DÉCEMBRE"><div class="td month b">DÉCEMBRE</div><div class="td ref">—</div><div class="td agent"><button class="agentBtn">S’inscrire</button></div><div class="td fait"><button class="faitBtn disabled" disabled>—</button></div></div>
       </div>
     </div>
   </section>
 
   <section class="card" id="panelInventaire" role="tabpanel" aria-labelledby="tabInventaire" style="display:none;">
-    <div class="banner">Inventaire VSAV</div>
-    <div class="inv">(Structure inventaire à ajouter plus tard)</div>
+    <div class="banner">INVENTAIRE VSAV</div>
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:14px;text-align:center;font-weight:900;color:rgba(255,255,255,.86)">
+      (Placeholder inventaire)
+    </div>
   </section>
+
+</div>
+
+<!-- ✅ MODAL -->
+<div class="modal" id="modal">
+  <div class="backdrop" id="modalClose"></div>
+  <div class="box" id="modalBox"></div>
 </div>
 
 <script>
-/* =========================
-   CONFIG
-   ========================= */
-const API = "TON_URL_EXEC_ICI";                 // ✅ METS TON /exec ICI
-const LS_KEY = "cs_portail_email_v1";           // ✅ email stocké par le portail
-
-/* ✅ Fix Android / Samsung */
+/* ✅ vraie hauteur Android */
 function setAppHeight(){
   document.documentElement.style.setProperty("--appH", window.innerHeight + "px");
 }
@@ -348,12 +403,12 @@ window.addEventListener("resize", setAppHeight);
 window.addEventListener("orientationchange", setAppHeight);
 setAppHeight();
 
-/* ✅ Retour vers portail (évite retour login) */
+/* ✅ Retour */
 document.getElementById("btnBack").addEventListener("click", ()=>{
   location.href = "index.html?portal=1";
 });
 
-/* Tabs */
+/* ✅ Tabs */
 const tabIns = document.getElementById("tabInscription");
 const tabInv = document.getElementById("tabInventaire");
 const panIns = document.getElementById("panelInscription");
@@ -370,9 +425,23 @@ function setTab(which){
 tabIns.addEventListener("click", ()=>setTab("ins"));
 tabInv.addEventListener("click", ()=>setTab("inv"));
 
-/* =========================
+/* =======================
+   CONFIG API + IDENTITÉ
+   ======================= */
+const API = "TON_URL_EXEC"; // ✅ remplace par ton /exec Apps Script
+const LS_EMAIL = "cs_portail_email_v1";
+const LS_NAME  = "cs_portail_name_v1"; // (optionnel si tu le stockes dans index.html)
+
+function myEmail(){
+  return (localStorage.getItem(LS_EMAIL) || "").trim().toLowerCase();
+}
+function myName(){
+  return (localStorage.getItem(LS_NAME) || "").trim();
+}
+
+/* =======================
    JSONP
-   ========================= */
+   ======================= */
 function jsonp(url, cbName, timeoutMs=15000){
   return new Promise((resolve, reject)=>{
     const s = document.createElement("script");
@@ -388,298 +457,284 @@ function jsonp(url, cbName, timeoutMs=15000){
   });
 }
 
-function myEmail(){
-  return (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
+async function apiCall(view, params={}){
+  const cb = "cb_" + Math.random().toString(36).slice(2);
+  const qs = new URLSearchParams({ view, callback: cb, nocache:"1" });
+  Object.entries(params).forEach(([k,v])=> qs.set(k, String(v)));
+  const url = `${API}?${qs.toString()}`;
+  return await jsonp(url, cb, 20000);
 }
 
-/* =========================
-   API CALLS attendus
-   =========================
-   - auth_check : ?view=auth_check&email=...
-   - vsav_get   : retourne rows[12] avec:
-        mois, referent_name, referent_email, agent_name, agent_email,
-        fait_status ("OK"/"NO"/""), fait_date ("jj/mm/aaaa" ou ""), justificatif ("")
-   - vsav_set_agent   : month + email
-   - vsav_unset_agent : month + email
-   - vsav_set_fait    : month + email + date
-   - vsav_set_nonfait : month + email + justificatif
-*/
-async function apiAuthCheck(email){
-  const cb = "cb_auth_" + Math.random().toString(36).slice(2);
-  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&callback=${cb}&nocache=1`;
-  return await jsonp(url, cb, 15000);
+/* =======================
+   HELPERS DATA "Nom|email"
+   ======================= */
+function parseSigned(s){
+  s = (s||"").toString().trim();
+  if(!s) return { name:"", email:"" };
+  if(!s.includes("|")) return { name:s, email:"" };
+  const [name, email] = s.split("|").map(x=>x.trim());
+  return { name, email:(email||"").toLowerCase() };
 }
-async function apiVsavGet(){
-  const cb = "cb_get_" + Math.random().toString(36).slice(2);
-  const url = `${API}?view=vsav_get&callback=${cb}&nocache=1`;
-  return await jsonp(url, cb, 15000);
-}
-async function apiAction(view, params){
-  const cb = "cb_act_" + Math.random().toString(36).slice(2);
-  const qs = Object.entries(params||{}).map(([k,v])=>`${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join("&");
-  const url = `${API}?view=${encodeURIComponent(view)}&${qs}&callback=${cb}&nocache=1`;
-  return await jsonp(url, cb, 15000);
+function displayNameOrEmail(s){
+  const a = parseSigned(s);
+  if(a.name) return a.name;
+  return a.email || s || "—";
 }
 
-/* =========================
-   UI BUILD
-   ========================= */
-const MONTHS = ["JANVIER","FÉVRIER","MARS","AVRIL","MAI","JUIN","JUILLET","AOÛT","SEPTEMBRE","OCTOBRE","NOVEMBRE","DÉCEMBRE"];
+/* =======================
+   MODAL (choix / date / justificatif)
+   ======================= */
+const $modal = document.getElementById("modal");
+const $modalBox = document.getElementById("modalBox");
+document.getElementById("modalClose").addEventListener("click", closeModal);
 
-function buildRows(){
+function openModal(html){
+  $modalBox.innerHTML = html;
+  $modal.classList.add("show");
+}
+function closeModal(){
+  $modal.classList.remove("show");
+  $modalBox.innerHTML = "";
+}
+function askConfirm(msg){
+  return new Promise((resolve)=>{
+    openModal(`
+      <h3>${msg}</h3>
+      <div class="row">
+        <button class="btn2 primary" id="mOk">Confirmer</button>
+        <button class="btn2" id="mCancel">Annuler</button>
+      </div>
+    `);
+    document.getElementById("mOk").onclick = ()=>{ closeModal(); resolve(true); };
+    document.getElementById("mCancel").onclick = ()=>{ closeModal(); resolve(false); };
+  });
+}
+
+/* =======================
+   REMPLISSAGE TABLE
+   Attendu côté API vsav_get:
+   rows = [
+     { mois:"JANVIER", referent:"Nom|mail", agent:"Nom|mail", status:"done|not_done|", date:"2026-01-15", justificatif:"..." },
+     ...
+   ]
+   ======================= */
+function fill(rows){
   const tbody = document.getElementById("tbody");
-  tbody.innerHTML = "";
-  for(let i=0;i<12;i++){
-    const m = MONTHS[i];
-    const ab = (i%2===0) ? "a" : "b";
+  const me = myEmail();
 
-    const row = document.createElement("div");
-    row.className = "tr";
-    row.innerHTML = `
-      <div class="td month ${ab}">${m}</div>
-      <div class="td ref" data-cell="ref">—</div>
-
-      <div class="td agent" data-cell="agent">
-        <div class="agentBox">
-          <div class="agentName" data-cell="agentName">—</div>
-          <button class="agentBtn" data-month="${m}">S’inscrire</button>
-        </div>
-      </div>
-
-      <div class="td fait faitCell" data-cell="fait">
-        <button class="faitBtn" data-month="${m}">—</button>
-      </div>
-
-      <div class="td justif" data-cell="justif">
-        <div class="justifText" title="" data-cell="justifText">—</div>
-      </div>
-    `;
-    tbody.appendChild(row);
-  }
-}
-
-/* Helpers */
-function isSameEmail(a,b){
-  return String(a||"").trim().toLowerCase() === String(b||"").trim().toLowerCase();
-}
-function fmtDateFR(iso){
-  // iso yyyy-mm-dd -> dd/mm/yyyy
-  if(!iso) return "";
-  const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if(!m) return iso;
-  return `${m[3]}/${m[2]}/${m[1]}`;
-}
-function isoFromFR(fr){
-  const m = String(fr||"").match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
-  if(!m) return "";
-  return `${m[3]}-${m[2]}-${m[1]}`;
-}
-
-/* Fill from API rows */
-function render(rows, me){
-  const tbody = document.getElementById("tbody");
   for(let i=0;i<12;i++){
     const tr = tbody.children[i];
-    const r = rows && rows[i] ? rows[i] : {};
+    if(!tr) continue;
 
-    const mois = (r.mois ?? r[0] ?? MONTHS[i]).toString().trim().toUpperCase();
-    const refName = (r.referent_name ?? r.referent ?? r[1] ?? "").toString().trim();
-    const refEmail= (r.referent_email ?? r.ref_email ?? r[2] ?? "").toString().trim().toLowerCase();
+    const row = rows[i] || {};
+    const mois = (row.mois || tr.dataset.month || "").toString().trim().toUpperCase();
+    tr.dataset.month = mois;
 
-    const agentName = (r.agent_name ?? r.agent ?? r[3] ?? "").toString().trim();
-    const agentEmail= (r.agent_email ?? r.agent_mail ?? r[4] ?? "").toString().trim().toLowerCase();
+    const refRaw = (row.referent ?? row[1] ?? "").toString().trim();
+    const agRaw  = (row.agent ?? row[2] ?? "").toString().trim();
+    const status = (row.status ?? row[4] ?? "").toString().trim();     // "done" / "not_done" / ""
+    const dateISO= (row.date ?? row[3] ?? "").toString().trim();       // "YYYY-MM-DD" conseillé
+    const justif = (row.justificatif ?? row[5] ?? "").toString().trim();
 
-    const faitStatus = (r.fait_status ?? r.status ?? r[5] ?? "").toString().trim().toUpperCase(); // OK / NO / ""
-    const faitDate   = (r.fait_date ?? r.date ?? r[6] ?? "").toString().trim();                  // "dd/mm/yyyy"
-    const justificatif = (r.justificatif ?? r[7] ?? "").toString().trim();
+    const ref = parseSigned(refRaw);
+    const ag  = parseSigned(agRaw);
 
-    // ref
-    tr.querySelector('[data-cell="ref"]').textContent = refName || "—";
+    // REF
+    tr.children[1].textContent = displayNameOrEmail(refRaw);
+    tr.dataset.refEmail = (ref.email || "").toLowerCase();
 
-    // agent cell
-    const nameEl = tr.querySelector('[data-cell="agentName"]');
-    nameEl.textContent = agentName || "—";
+    // AGENT button
+    const btnA = tr.querySelector(".agentBtn");
+    if(btnA){
+      btnA.classList.remove("locked","mine");
+      btnA.disabled = false;
 
-    const btn = tr.querySelector(".agentBtn");
-    btn.dataset.month = mois;
-
-    // état bouton agent
-    if(!agentEmail){
-      btn.textContent = "S’inscrire";
-      btn.classList.remove("locked","mine");
-      btn.disabled = false;
-    }else if(isSameEmail(agentEmail, me)){
-      btn.textContent = "Annuler";
-      btn.classList.remove("locked");
-      btn.classList.add("mine");
-      btn.disabled = false;
-    }else{
-      btn.textContent = "Pris";
-      btn.classList.add("locked");
-      btn.classList.remove("mine");
-      btn.disabled = true;
-    }
-
-    // FAIT
-    const faitBtn = tr.querySelector(".faitBtn");
-    faitBtn.dataset.month = mois;
-
-    const faitCell = tr.querySelector(".faitCell");
-    faitCell.classList.remove("ok","bad");
-
-    // bouton FAIT visible (mais cliquable seulement si je suis référent email)
-    const isRef = !!refEmail && isSameEmail(refEmail, me);
-
-    if(faitStatus === "OK"){
-      faitBtn.textContent = faitDate ? faitDate : "Fait";
-      faitCell.classList.add("ok");
-    }else if(faitStatus === "NO"){
-      faitBtn.textContent = "Non fait";
-      faitCell.classList.add("bad");
-    }else{
-      faitBtn.textContent = "—";
-    }
-
-    // lock si pas référent
-    faitBtn.disabled = !isRef;
-    faitBtn.classList.toggle("locked", !isRef);
-
-    // justificatif
-    const jEl = tr.querySelector('[data-cell="justifText"]');
-    jEl.textContent = justificatif ? justificatif : "—";
-    jEl.title = justificatif || "";
-  }
-}
-
-/* =========================
-   ACTIONS
-   ========================= */
-async function refresh(){
-  const me = myEmail();
-  const res = await apiVsavGet();
-  if(res && res.ok){
-    render(res.rows || [], me);
-  }
-}
-
-function attachHandlers(){
-  document.querySelectorAll(".agentBtn").forEach(btn=>{
-    btn.addEventListener("click", async ()=>{
-      const me = myEmail();
-      if(!me){ alert("Email non détecté (reviens au portail)."); return; }
-
-      const month = btn.dataset.month;
-      const doUnset = (btn.textContent === "Annuler");
-
-      try{
-        const view = doUnset ? "vsav_unset_agent" : "vsav_set_agent";
-        const r = await apiAction(view, { month, email: me });
-        if(!r || !r.ok){ alert((r && r.error) ? r.error : "Erreur"); return; }
-        await refresh();
-      }catch(e){
-        alert("Erreur réseau");
-      }
-    });
-  });
-
-  document.querySelectorAll(".faitBtn").forEach(btn=>{
-    btn.addEventListener("click", async ()=>{
-      const me = myEmail();
-      if(!me){ alert("Email non détecté (reviens au portail)."); return; }
-
-      const month = btn.dataset.month;
-
-      // choix Fait / Non fait
-      const choice = prompt('Tape "F" pour Fait, "N" pour Non fait', "F");
-      if(!choice) return;
-
-      const c = choice.trim().toUpperCase();
-
-      if(c === "F"){
-        // calendrier
-        const iso = prompt("Date (format AAAA-MM-JJ) :", "");
-        if(!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)){
-          alert("Date invalide. Exemple: 2026-04-12");
-          return;
-        }
-        const fr = fmtDateFR(iso);
-
-        const ok = confirm(`Confirmer validation FAIT au ${fr} ?`);
-        if(!ok) return;
-
-        try{
-          const r = await apiAction("vsav_set_fait", { month, email: me, date: fr });
-          if(!r || !r.ok){ alert((r && r.error) ? r.error : "Erreur"); return; }
-          await refresh();
-        }catch(e){
-          alert("Erreur réseau");
-        }
-
-      }else if(c === "N"){
-        const justif = prompt("Justificatif (obligatoire) :", "");
-        if(!justif || !justif.trim()){
-          alert("Justificatif obligatoire.");
-          return;
-        }
-        const ok = confirm("Confirmer NON FAIT ?");
-        if(!ok) return;
-
-        try{
-          const r = await apiAction("vsav_set_nonfait", { month, email: me, justificatif: justif.trim() });
-          if(!r || !r.ok){ alert((r && r.error) ? r.error : "Erreur"); return; }
-          await refresh();
-        }catch(e){
-          alert("Erreur réseau");
-        }
-
+      if(!agRaw){
+        btnA.textContent = "S’inscrire";
       }else{
-        alert("Choix invalide.");
+        const label = displayNameOrEmail(agRaw);
+        if(ag.email && me && ag.email === me){
+          btnA.textContent = label + " (Annuler)";
+          btnA.classList.add("mine");
+        }else{
+          btnA.textContent = label;
+          btnA.classList.add("locked");
+          btnA.disabled = true;
+        }
       }
-    });
+    }
+
+    // FAIT button (seul référent)
+    const btnF = tr.querySelector(".faitBtn");
+    if(btnF){
+      btnF.classList.remove("ok","bad","disabled");
+      btnF.disabled = false;
+
+      const isRef = (ref.email && me && ref.email === me);
+
+      if(!isRef){
+        btnF.classList.add("disabled");
+        btnF.disabled = true;
+        btnF.textContent = (status==="done" && dateISO) ? fmtFR(dateISO) : (status==="not_done" ? "NON FAIT" : "—");
+      }else{
+        if(status==="done" && dateISO){
+          btnF.classList.add("ok");
+          btnF.textContent = fmtFR(dateISO);
+        }else if(status==="not_done"){
+          btnF.classList.add("bad");
+          btnF.textContent = "NON FAIT";
+        }else{
+          btnF.textContent = "—";
+        }
+      }
+
+      tr.dataset.status = status || "";
+      tr.dataset.date = dateISO || "";
+      tr.dataset.justif = justif || "";
+    }
+  }
+}
+
+function fmtFR(iso){
+  // "YYYY-MM-DD" => "DD/MM/YYYY"
+  const m = String(iso||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(!m) return iso || "—";
+  return `${m[3]}/${m[2]}/${m[1]}`;
+}
+
+/* =======================
+   ACTIONS
+   views attendues côté Apps Script:
+   - vsav_get
+   - vsav_set_agent (month,email,name)
+   - vsav_unset_agent (month,email)
+   - vsav_set_done (month,email,date)         // email = référent
+   - vsav_set_not_done (month,email,justif)   // email = référent
+   ======================= */
+async function refresh(){
+  const res = await apiCall("vsav_get");
+  if(res && res.ok) fill(res.rows || []);
+}
+
+async function onAgentClick(tr){
+  const month = tr.dataset.month;
+  const me = myEmail();
+  if(!me){ alert("Email non détecté (connexion)."); return; }
+
+  const btnA = tr.querySelector(".agentBtn");
+  const isMine = btnA && btnA.classList.contains("mine");
+  const action = isMine ? "vsav_unset_agent" : "vsav_set_agent";
+
+  const nm = myName(); // optionnel
+  const ok = await askConfirm(isMine ? `Annuler ton inscription (${month}) ?` : `S’inscrire sur ${month} ?`);
+  if(!ok) return;
+
+  const r = await apiCall(action, isMine ? { month, email: me } : { month, email: me, name: nm });
+  if(!r?.ok){ alert(r?.error || "Erreur"); return; }
+  await refresh();
+}
+
+async function onFaitClick(tr){
+  const month = tr.dataset.month;
+  const me = myEmail();
+  const refEmail = (tr.dataset.refEmail || "").toLowerCase();
+  if(!me || !refEmail || me !== refEmail){
+    return; // sécurité
+  }
+
+  openModal(`
+    <h3>${month} — Validation</h3>
+    <div class="row">
+      <button class="btn2 ok" id="mFait">Fait</button>
+      <button class="btn2 bad" id="mNon">Non fait</button>
+    </div>
+    <div class="row">
+      <button class="btn2" id="mCancel">Annuler</button>
+    </div>
+  `);
+
+  document.getElementById("mCancel").onclick = closeModal;
+
+  document.getElementById("mFait").onclick = async ()=>{
+    // calendrier
+    openModal(`
+      <h3>${month} — Choisir la date</h3>
+      <div class="field">
+        <input type="date" id="mDate">
+      </div>
+      <div class="row">
+        <button class="btn2 primary" id="mVal">Valider</button>
+        <button class="btn2" id="mBack">Retour</button>
+      </div>
+    `);
+    document.getElementById("mBack").onclick = ()=>onFaitClick(tr);
+
+    document.getElementById("mVal").onclick = async ()=>{
+      const d = (document.getElementById("mDate").value || "").trim();
+      if(!d){ alert("Choisis une date."); return; }
+
+      const ok = await askConfirm(`Confirmer : Fait le ${fmtFR(d)} ?`);
+      if(!ok) return;
+
+      const r = await apiCall("vsav_set_done", { month, email: me, date: d });
+      if(!r?.ok){ alert(r?.error || "Erreur"); return; }
+      closeModal();
+      await refresh();
+    };
+  };
+
+  document.getElementById("mNon").onclick = async ()=>{
+    // justificatif obligatoire
+    openModal(`
+      <h3>${month} — Non fait (justificatif obligatoire)</h3>
+      <div class="field">
+        <textarea id="mJustif" placeholder="Justificatif obligatoire…"></textarea>
+      </div>
+      <div class="row">
+        <button class="btn2 primary" id="mVal">Valider</button>
+        <button class="btn2" id="mBack">Retour</button>
+      </div>
+    `);
+    document.getElementById("mBack").onclick = ()=>onFaitClick(tr);
+
+    document.getElementById("mVal").onclick = async ()=>{
+      const j = (document.getElementById("mJustif").value || "").trim();
+      if(!j){ alert("Justificatif obligatoire."); return; }
+
+      const ok = await askConfirm(`Confirmer : NON FAIT ?`);
+      if(!ok) return;
+
+      const r = await apiCall("vsav_set_not_done", { month, email: me, justif: j });
+      if(!r?.ok){ alert(r?.error || "Erreur"); return; }
+      closeModal();
+      await refresh();
+    };
+  };
+}
+
+/* bind clicks */
+function bind(){
+  document.querySelectorAll("#tbody .tr").forEach(tr=>{
+    const btnA = tr.querySelector(".agentBtn");
+    const btnF = tr.querySelector(".faitBtn");
+    if(btnA){
+      btnA.addEventListener("click", ()=> onAgentClick(tr));
+    }
+    if(btnF){
+      btnF.addEventListener("click", ()=> onFaitClick(tr));
+    }
   });
 }
 
-/* =========================
-   BOOT (sécurisé)
-   ========================= */
+/* boot */
 (async function(){
-  buildRows();
-
-  // ⚠️ Sécurité: si pas d’email stocké -> retour portail
-  const me = myEmail();
-  if(!me){
-    // pas de blabla : on évite les écrans “bizarres”
-    location.href = "index.html";
-    return;
-  }
-
-  // Vérif accès côté Acces (bloque si non autorisé)
   try{
-    const a = await apiAuthCheck(me);
-    if(!a || a.ok !== true){
-      localStorage.removeItem(LS_KEY);
-      location.href = "index.html";
-      return;
-    }
+    bind();
+    await refresh();
   }catch(e){
-    // si API HS : on bloque (pas d’accès fantôme)
-    location.href = "index.html";
-    return;
+    // silence
   }
-
-  // load table
-  try{
-    const res = await apiVsavGet();
-    if(res && res.ok){
-      render(res.rows || [], me);
-    }
-  }catch(e){
-    // on laisse les —
-  }
-
-  attachHandlers();
 })();
 </script>
-
 </body>
 </html>
