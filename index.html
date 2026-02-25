@@ -384,35 +384,54 @@ async function handleCredentialResponse(response){
 
 $logoutPortal.addEventListener("click", doLogout);
 
-/* ====== Retour navigateur ====== */
-window.addEventListener("popstate", async () => {
-  // Toujours: portail interdit tant que pas re-validé
-  showLogin();
+/* ====== RETOUR NAVIGATEUR (SÉCURISÉ) ======
+   Règle simple:
+   - si pas validé => portail INTERDIT
+   - si validé => portail OK
+*/
+window.__ALLOW_PORTAL__ = false;
+
+function forceLogin(msg){
+  window.__ALLOW_PORTAL__ = false;
+  $portal.style.display = "none";
+  $loginBox.style.display = "block";
+  clearPortalUrl_();
+  showMsg(msg || "");
+}
+
+function forcePortal(){
+  if (window.__ALLOW_PORTAL__ !== true) return;
+  $loginBox.style.display = "none";
+  $portal.style.display = "flex";
+  markPortalUrl_();
   showMsg("");
+}
 
+async function revalidateSaved_(){
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
-  if (!saved) {
-    showMsg("Déconnecté.");
-    return;
+  if(!saved){
+    forceLogin("Déconnecté.");
+    return false;
   }
-
-  showMsg("Vérification…");
-  try {
+  showMsg("Vérification de l’accès…");
+  try{
     const res = await authCheck(saved);
-    if (res && res.ok === true) {
-      showMsg("");
-      showPortal();
-    } else {
-      localStorage.removeItem(LS_KEY);
-      showLogin();
-      showMsg("Accès refusé.");
+    if(res && res.ok === true){
+      window.__ALLOW_PORTAL__ = true;
+      forcePortal();
+      return true;
     }
-  } catch (e) {
-    localStorage.removeItem(LS_KEY);
-    showLogin();
-    showMsg("Erreur réseau / serveur.");
-  }
+  }catch(e){}
+  localStorage.removeItem(LS_KEY);
+  forceLogin("Accès refusé.");
+  return false;
+}
+
+window.addEventListener("popstate", () => {
+  // on revalide toujours au retour
+  revalidateSaved_();
 });
+
 
 </script>
 
