@@ -231,7 +231,9 @@ function clearPortalUrl_(){
 
 function showPortal(){
   $loginBox.style.display = "none";
+  if (window.__ALLOW_PORTAL__ === true) {
   $portal.style.display = "flex";
+}
   markPortalUrl_();
 }
 function showLogin(){
@@ -332,6 +334,7 @@ async function handleCredentialResponse(response){
     if(res && res.ok === true){
       localStorage.setItem(LS_KEY, email);
       showMsg("");
+      window.__ALLOW_PORTAL__ = true;
       showPortal(); // ✅ portail UNIQUEMENT ici si ok:true
     }else{
       localStorage.removeItem(LS_KEY);
@@ -346,6 +349,7 @@ async function handleCredentialResponse(response){
 }
 
 /* ====== Boot ====== */
+  window.__ALLOW_PORTAL__ = false;
 (async function(){
   const g = document.getElementById("g_id_onload");
   g.setAttribute("data-client_id", GOOGLE_CLIENT_ID);
