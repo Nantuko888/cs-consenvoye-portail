@@ -382,30 +382,34 @@ $logoutPortal.addEventListener("click", doLogout);
 
 /* ====== Retour navigateur ====== */
 window.addEventListener("popstate", async () => {
-  // ✅ même règle: jamais portail si pas autorisé
+  // Toujours: portail interdit tant que pas re-validé
   showLogin();
   showMsg("");
 
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
-  if(!saved) return;
+  if (!saved) {
+    showMsg("Déconnecté.");
+    return;
+  }
 
   showMsg("Vérification…");
-  try{
+  try {
     const res = await authCheck(saved);
-    if(res && res.ok === true){
+    if (res && res.ok === true) {
       showMsg("");
       showPortal();
-    }else{
+    } else {
       localStorage.removeItem(LS_KEY);
       showLogin();
       showMsg("Accès refusé.");
     }
-  }catch(e){
+  } catch (e) {
     localStorage.removeItem(LS_KEY);
     showLogin();
     showMsg("Erreur réseau / serveur.");
   }
 });
+
 </script>
 
 </body>
