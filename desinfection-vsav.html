@@ -332,6 +332,26 @@ body{
   .agentBtn{padding:7px 8px}
   .faitBtn{padding:7px 8px}
 }
+  /* ✅ FIX S24 / écrans pas assez hauts : on compacte pour que DÉCEMBRE reste visible */
+@media (max-height: 820px){
+  .wrap{
+    padding-top: calc(env(safe-area-inset-top) + 6px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 6px);
+    gap: 8px;
+  }
+
+  .topbar{ padding: 8px 10px; min-height: 42px; }
+  .tabs{ gap: 8px; }
+  .tab{ padding: 8px 10px; }
+
+  .banner{ padding: 6px 8px; font-size: 16px; }
+
+  .th{ padding: 7px 6px; font-size: 12px; }
+  .td{ padding: 4px 6px; font-size: 12px; }
+
+  .agentBtn{ padding: 7px 8px; }
+  .faitBtn{ padding: 7px 8px; }
+}
 </style>
 </head>
 
