@@ -459,6 +459,35 @@ const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnj
 const LS_EMAIL = "cs_portail_email_v1";
 const LS_NAME = "cs_portail_name_v1";
 
+  function requireIdentity(){
+  let email = myEmail();
+  if(email) return true;
+
+  // 1) tentative via URL (si tu arrives depuis index avec ?email=...&name=...)
+  const u = new URL(location.href);
+  const pEmail = (u.searchParams.get("email") || "").trim().toLowerCase();
+  const pName = (u.searchParams.get("name") || "").trim();
+
+  if(pEmail){
+    localStorage.setItem(LS_EMAIL, pEmail);
+    if(pName) localStorage.setItem(LS_NAME, pName);
+    return true;
+  }
+
+  // 2) sinon on demande UNE fois
+  email = prompt("Email de connexion (obligatoire) :","") || "";
+  email = email.trim().toLowerCase();
+  if(!email) return false;
+
+  const name = (prompt("Prénom (optionnel) :","") || "").trim();
+
+  localStorage.setItem(LS_EMAIL, email);
+  if(name) localStorage.setItem(LS_NAME, name);
+
+  return true;
+}
+
+
 function myEmail(){
   return (localStorage.getItem(LS_EMAIL) || "").trim().toLowerCase();
 }
@@ -746,10 +775,15 @@ function bind(){
 /* boot */
 (async function(){
   try{
+    if(!requireIdentity()){
+      alert("Connexion obligatoire.");
+      location.href = "index.html?portal=1";
+      return;
+    }
     bind();
     await refresh();
   }catch(e){
-    console.log(e);
+    // silence
   }
 })();
 </script>
