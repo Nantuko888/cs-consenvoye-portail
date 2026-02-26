@@ -357,6 +357,8 @@ body{
   border-color: #1e7a3a !important;
   color:#fff;
 }
+  /* Mobile: évite que les dernières lignes soient masquées */
+body { padding-bottom: 90px; }
 </style>
 </head>
 
@@ -555,8 +557,10 @@ function fill(rows){
     const mois = (row.mois || tr.dataset.month || "").toString().trim().toUpperCase();
     tr.dataset.month = mois;
 
-    const refRaw = (row.referent ?? row[1] ?? "").toString().trim();
-    const agRaw = (row.agent ?? row[2] ?? "").toString().trim();
+    const refRaw = (row.referent ?? "").toString().trim(); // prénom affiché
+const refEmail = (row.referent_email ?? "").toString().trim(); // email référent
+const agRaw = (row.agent ?? "").toString().trim(); // prénom affiché
+const agEmail = (row.agent_email ?? "").toString().trim(); // email agent
     const status = (row.status ?? row[4] ?? "").toString().trim(); // "done" / "not_done" / ""
     const dateISO= (row.date ?? row[3] ?? "").toString().trim(); // "YYYY-MM-DD" conseillé
     const justif = (row.justificatif ?? row[5] ?? "").toString().trim();
@@ -565,8 +569,8 @@ function fill(rows){
     const ag = parseSigned(agRaw);
 
     // REF
-    tr.children[1].textContent = displayNameOrEmail(refRaw);
-    tr.dataset.refEmail = (ref.email || "").toLowerCase();
+   tr.children[1].textContent = refRaw ? refRaw : "—";
+   tr.dataset.refEmail = (refEmail || "").toLowerCase();
 
     // AGENT button
     const btnA = tr.querySelector(".agentBtn");
@@ -630,7 +634,7 @@ if (btnF) {
   const month = tr.dataset.month;
 
   // référent = ref.email (si referent = "Prenom|email" côté Sheet)
-  const isRef = (ref.email && me && ref.email.toLowerCase() === me.toLowerCase());
+  const isRef = (tr.dataset.refEmail && me && tr.dataset.refEmail === me.toLowerCase());
 
   // Affichage par défaut (lecture seule si pas référent)
   const renderLabel = () => {
