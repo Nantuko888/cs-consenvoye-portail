@@ -863,35 +863,48 @@ function bind(){
     // silence
   }
 })();
-    function pickDate_(defaultISO){
-  return new Promise(resolve => {
+    function pickDate(initialISO = "") {
+  return new Promise((resolve) => {
     const input = document.createElement("input");
     input.type = "date";
-    if (defaultISO && /^\d{4}-\d{2}-\d{2}$/.test(defaultISO)) input.value = defaultISO;
 
+    if (initialISO) input.value = initialISO;
+
+    // caché mais cliquable
     input.style.position = "fixed";
     input.style.left = "-9999px";
+    input.style.opacity = "0";
+
     document.body.appendChild(input);
 
-    input.addEventListener("change", () => {
-      const v = input.value || "";
-      document.body.removeChild(input);
-      resolve(v);
-    });
+    const cleanup = () => {
+      if (input && input.parentNode) input.parentNode.removeChild(input);
+    };
 
-    // ouvre le sélecteur
-    input.click();
+    // choix OK
+    input.addEventListener(
+      "change",
+      () => {
+        const v = input.value || "";
+        cleanup();
+        resolve(v);
+      },
+      { once: true }
+    );
 
-    // si l’utilisateur ferme sans choisir
+    // si l'utilisateur ferme sans choisir (fallback)
     setTimeout(() => {
       if (document.body.contains(input)) {
-        document.body.removeChild(input);
+        cleanup();
         resolve("");
       }
     }, 15000);
+
+    // ouvre le sélecteur
+    input.click();
   });
 }
-    }
+}
 
 </script>
 </body>
