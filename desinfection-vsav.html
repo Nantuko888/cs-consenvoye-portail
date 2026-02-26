@@ -581,25 +581,23 @@ function fill(rows){
 
   }else{
 
-    const label = agRaw; // maintenant c’est juste le prénom
+    const ag = parseSigned(agRaw); // -> { name, email } si "Prenom|email"
+const label = (ag.name || agRaw || "").trim(); // affichage = prénom
 
-    if(label && me && label.toLowerCase() === localStorage.getItem("user_prenom")?.toLowerCase()){
+if(ag.email && me && ag.email.toLowerCase() === me.toLowerCase()){
+  btnA.textContent = label + " (Annuler)";
+  btnA.classList.add("mine");
 
-      btnA.textContent = label + " (Annuler)";
-      btnA.classList.add("mine");
+  btnA.onclick = () => {
+    callApi("vsav_unset_agent", { month, email: me }, () => loadVsav());
+  };
+}else{
+  btnA.textContent = label;
+  btnA.classList.add("locked");
+  btnA.disabled = true;
+  btnA.onclick = null;
+}
 
-      btnA.onclick = () => {
-        callApi("vsav_unset_agent", { month, email: me }, () => loadVsav());
-      };
-
-    }else{
-
-      btnA.textContent = label;
-      btnA.classList.add("locked");
-      btnA.disabled = true;
-      btnA.onclick = null;
-
-    }
   }
 }
 
