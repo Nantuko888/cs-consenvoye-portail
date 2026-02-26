@@ -550,6 +550,21 @@ function askConfirm(msg){
   });
 }
 
+function parseSigned(s){
+  s = (s || "").toString().trim();
+  if(!s) return { name:"", email:"" };
+
+  if(!s.includes("|")){
+    return { name:s, email:"" };
+  }
+
+  const parts = s.split("|");
+  return {
+    name: (parts[0] || "").trim(),
+    email: (parts[1] || "").trim().toLowerCase()
+  };
+}
+
 function fmtFR(iso){
   const m = String(iso||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if(!m) return iso || "—";
