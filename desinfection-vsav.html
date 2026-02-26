@@ -352,6 +352,11 @@ body{
   .agentBtn{ padding: 7px 8px; }
   .faitBtn{ padding: 7px 8px; }
 }
+  .agentBtn.loading{
+  background: #1e7a3a !important;
+  border-color: #1e7a3a !important;
+  color:#fff;
+}
 </style>
 </head>
 
@@ -551,13 +556,13 @@ function fill(rows){
     tr.dataset.month = mois;
 
     const refRaw = (row.referent ?? row[1] ?? "").toString().trim();
-    const agRaw  = (row.agent ?? row[2] ?? "").toString().trim();
-    const status = (row.status ?? row[4] ?? "").toString().trim();     // "done" / "not_done" / ""
-    const dateISO= (row.date ?? row[3] ?? "").toString().trim();       // "YYYY-MM-DD" conseillé
+    const agRaw = (row.agent ?? row[2] ?? "").toString().trim();
+    const status = (row.status ?? row[4] ?? "").toString().trim(); // "done" / "not_done" / ""
+    const dateISO= (row.date ?? row[3] ?? "").toString().trim(); // "YYYY-MM-DD" conseillé
     const justif = (row.justificatif ?? row[5] ?? "").toString().trim();
 
     const ref = parseSigned(refRaw);
-    const ag  = parseSigned(agRaw);
+    const ag = parseSigned(agRaw);
 
     // REF
     tr.children[1].textContent = displayNameOrEmail(refRaw);
@@ -567,71 +572,152 @@ function fill(rows){
     const btnA = tr.querySelector(".agentBtn");
     if(btnA){
 
-  btnA.classList.remove("locked","mine");
-  btnA.disabled = false;
+      btnA.classList.remove("locked","mine","loading");
+      btnA.disabled = false;
+
+      const month = tr.dataset.month;
+
+      if(!agRaw){
+        btnA.textContent = "S’inscrire";
+
+        btnA.onclick = () => {
+          btnA.classList.add("loading");
+          btnA.disabled = true;
+
+          callApi("vsav_set_agent", { month, email: me }, () => {
+            btnA.classList.remove("loading"); // ✅ on enlève quand l’API a répondu
+            btnA.disabled = false;
+            loadVsav();
+          });
+        };
+
+      }else{
+
+        const ag = parseSigned(agRaw); // -> { name, email } si "Prenom|email"
+        const label = (ag.name || agRaw || "").trim(); // affichage = prénom
+
+        if(ag.email && me && ag.email.toLowerCase() === me.toLowerCase()){
+          btnA.textContent = label + " (Annuler)";
+          btnA.classList.add("mine");
+
+          btnA.onclick = () => {
+            btnA.classList.add("loading");
+            btnA.disabled = true;
+
+            callApi("vsav_unset_agent", { month, email: me }, () => {
+              btnA.classList.remove("loading"); // ✅ idem pour annuler
+              btnA.disabled = false;
+              loadVsav();
+            });
+          };
+
+        }else{
+          btnA.textContent = label;
+          btnA.classList.add("locked");
+          btnA.disabled = true;
+          btnA.onclick = null;
+        }
+
+      }
+    }
+
+  // FAIT button (seul référent)
+const btnF = tr.querySelector(".faitBtn");
+if (btnF) {
+  btnF.classList.remove("ok", "bad", "disabled", "loading");
+  btnF.disabled = false;
 
   const month = tr.dataset.month;
 
-  if(!agRaw){
-    btnA.textContent = "S’inscrire";
+  // référent = ref.email (si referent = "Prenom|email" côté Sheet)
+  const isRef = (ref.email && me && ref.email.toLowerCase() === me.toLowerCase());
 
-    btnA.onclick = () => {
-      callApi("vsav_set_agent", { month, email: me }, () => loadVsav());
-    };
-
-  }else{
-
-    const ag = parseSigned(agRaw); // -> { name, email } si "Prenom|email"
-const label = (ag.name || agRaw || "").trim(); // affichage = prénom
-
-if(ag.email && me && ag.email.toLowerCase() === me.toLowerCase()){
-  btnA.textContent = label + " (Annuler)";
-  btnA.classList.add("mine");
-
-  btnA.onclick = () => {
-    callApi("vsav_unset_agent", { month, email: me }, () => loadVsav());
+  // Affichage par défaut (lecture seule si pas référent)
+  const renderLabel = () => {
+    if (status === "done" && dateISO) return fmtFR(dateISO);
+    if (status === "not_done") return "NON FAIT";
+    return "—";
   };
-}else{
-  btnA.textContent = label;
-  btnA.classList.add("locked");
-  btnA.disabled = true;
-  btnA.onclick = null;
-}
 
-  }
-}
-
-
-    // FAIT button (seul référent)
-    const btnF = tr.querySelector(".faitBtn");
-    if(btnF){
-      btnF.classList.remove("ok","bad","disabled");
-      btnF.disabled = false;
-
-      const isRef = (ref.email && me && ref.email === me);
-
-      if(!isRef){
-        btnF.classList.add("disabled");
-        btnF.disabled = true;
-        btnF.textContent = (status==="done" && dateISO) ? fmtFR(dateISO) : (status==="not_done" ? "NON FAIT" : "—");
-      }else{
-        if(status==="done" && dateISO){
-          btnF.classList.add("ok");
-          btnF.textContent = fmtFR(dateISO);
-        }else if(status==="not_done"){
-          btnF.classList.add("bad");
-          btnF.textContent = "NON FAIT";
-        }else{
-          btnF.textContent = "—";
-        }
-      }
-
-      tr.dataset.status = status || "";
-      tr.dataset.date = dateISO || "";
-      tr.dataset.justif = justif || "";
+  if (!isRef) {
+    btnF.classList.add("disabled");
+    btnF.disabled = true;
+    btnF.textContent = renderLabel();
+  } else {
+    // référent : affichage couleur
+    if (status === "done" && dateISO) {
+      btnF.classList.add("ok");
+      btnF.textContent = fmtFR(dateISO);
+    } else if (status === "not_done") {
+      btnF.classList.add("bad");
+      btnF.textContent = "NON FAIT";
+    } else {
+      btnF.textContent = "—";
     }
+
+    // ✅ CLIC référent : Fait / Non fait + calendrier/justif + confirmation + API
+    btnF.onclick = async () => {
+      // 1) choisir Fait / Non fait
+      const isDone = confirm("FAIT ?\n\nOK = Fait\nAnnuler = Non fait");
+      if (isDone) {
+        // 2) calendrier (input date)
+        const picked = await pickDate_(dateISO || "");
+        if (!picked) return;
+
+        // 3) confirmation
+        const ok = confirm(`Confirmer : FAIT le ${fmtFR(picked)} ?`);
+        if (!ok) return;
+
+        // 4) appel API
+        btnF.classList.add("loading");
+        btnF.disabled = true;
+
+        callApi(
+          "vsav_set_fait",
+          { month, email: me, date: picked },
+          () => {
+            btnF.classList.remove("loading");
+            btnF.disabled = false;
+            loadVsav();
+          }
+        );
+
+      } else {
+        // NON FAIT => justificatif obligatoire
+        let j = prompt("NON FAIT.\n\nJustificatif OBLIGATOIRE :", (justif || ""));
+        if (j == null) return; // annuler
+        j = String(j).trim();
+        if (!j) {
+          alert("Justificatif obligatoire.");
+          return;
+        }
+
+        // confirmation
+        const ok = confirm("Confirmer : NON FAIT ?");
+        if (!ok) return;
+
+        btnF.classList.add("loading");
+        btnF.disabled = true;
+
+        callApi(
+          "vsav_set_nonfait",
+          { month, email: me, justificatif: j },
+          () => {
+            btnF.classList.remove("loading");
+            btnF.disabled = false;
+            loadVsav();
+          }
+        );
+      }
+    };
   }
+
+  // datasets (tu les gardes)
+  tr.dataset.status = status || "";
+  tr.dataset.date = dateISO || "";
+  tr.dataset.justif = justif || "";
 }
+
 
 function fmtFR(iso){
   // "YYYY-MM-DD" => "DD/MM/YYYY"
@@ -773,6 +859,35 @@ function bind(){
     // silence
   }
 })();
+    function pickDate_(defaultISO){
+  return new Promise(resolve => {
+    const input = document.createElement("input");
+    input.type = "date";
+    if (defaultISO && /^\d{4}-\d{2}-\d{2}$/.test(defaultISO)) input.value = defaultISO;
+
+    input.style.position = "fixed";
+    input.style.left = "-9999px";
+    document.body.appendChild(input);
+
+    input.addEventListener("change", () => {
+      const v = input.value || "";
+      document.body.removeChild(input);
+      resolve(v);
+    });
+
+    // ouvre le sélecteur
+    input.click();
+
+    // si l’utilisateur ferme sans choisir
+    setTimeout(() => {
+      if (document.body.contains(input)) {
+        document.body.removeChild(input);
+        resolve("");
+      }
+    }, 15000);
+  });
+}
+
 </script>
 </body>
 </html>
