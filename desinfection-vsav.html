@@ -455,9 +455,9 @@ tabInv.addEventListener("click", ()=>setTab("inv"));
 /* =======================
    CONFIG API + IDENTITÉ
    ======================= */
-const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec"; // ✅ remplace par ton /exec Apps Script
+const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 const LS_EMAIL = "cs_portail_email_v1";
-const LS_NAME  = "cs_portail_name_v1"; // (optionnel si tu le stockes dans index.html)
+const LS_NAME = "cs_portail_name_v1";
 
 function myEmail(){
   return (localStorage.getItem(LS_EMAIL) || "").trim().toLowerCase();
@@ -493,23 +493,7 @@ async function apiCall(view, params={}){
 }
 
 /* =======================
-   HELPERS DATA "Nom|email"
-   ======================= */
-function parseSigned(s){
-  s = (s||"").toString().trim();
-  if(!s) return { name:"", email:"" };
-  if(!s.includes("|")) return { name:s, email:"" };
-  const [name, email] = s.split("|").map(x=>x.trim());
-  return { name, email:(email||"").toLowerCase() };
-}
-function displayNameOrEmail(s){
-  const a = parseSigned(s);
-  if(a.name) return a.name;
-  return a.email || s || "—";
-}
-
-/* =======================
-   MODAL (choix / date / justificatif)
+   MODAL
    ======================= */
 const $modal = document.getElementById("modal");
 const $modalBox = document.getElementById("modalBox");
@@ -537,13 +521,22 @@ function askConfirm(msg){
   });
 }
 
+function fmtFR(iso){
+  const m = String(iso||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(!m) return iso || "—";
+  return `${m[3]}/${m[2]}/${m[1]}`;
+}
+
 /* =======================
    REMPLISSAGE TABLE
-   Attendu côté API vsav_get:
-   rows = [
-     { mois:"JANVIER", referent:"Nom|mail", agent:"Nom|mail", status:"done|not_done|", date:"2026-01-15", justificatif:"..." },
-     ...
-   ]
+   attend côté API:
+   row.referent (prénom)
+   row.referent_email (email)
+   row.agent (prénom)
+   row.agent_email (email)
+   row.status ("done"/"not_done"/"")
+   row.date ("YYYY-MM-DD")
+   row.justificatif (texte)
    ======================= */
 function fill(rows){
   const tbody = document.getElementById("tbody");
@@ -557,187 +550,75 @@ function fill(rows){
     const mois = (row.mois || tr.dataset.month || "").toString().trim().toUpperCase();
     tr.dataset.month = mois;
 
-    const refRaw = (row.referent ?? "").toString().trim(); // prénom affiché
-const refEmail = (row.referent_email ?? "").toString().trim(); // email référent
-const agRaw = (row.agent ?? "").toString().trim(); // prénom affiché
-const agEmail = (row.agent_email ?? "").toString().trim(); // email agent
-    const status = (row.status ?? row[4] ?? "").toString().trim(); // "done" / "not_done" / ""
-    const dateISO= (row.date ?? row[3] ?? "").toString().trim(); // "YYYY-MM-DD" conseillé
-    const justif = (row.justificatif ?? row[5] ?? "").toString().trim();
+    const refRaw = (row.referent ?? "").toString().trim();
+    const refEmail = (row.referent_email ?? "").toString().trim().toLowerCase();
 
-    const ref = parseSigned(refRaw);
-    const ag = parseSigned(agRaw);
+    const agRaw = (row.agent ?? "").toString().trim();
+    const agEmail = (row.agent_email ?? "").toString().trim().toLowerCase();
+
+    const status = (row.status ?? "").toString().trim();
+    const dateISO = (row.date ?? "").toString().trim();
+    const justif = (row.justificatif ?? "").toString().trim();
 
     // REF
-   tr.children[1].textContent = refRaw ? refRaw : "—";
-   tr.dataset.refEmail = (refEmail || "").toLowerCase();
+    tr.children[1].textContent = refRaw ? refRaw : "—";
+    tr.dataset.refEmail = refEmail || "";
 
-    // AGENT button
+    // AGENT
     const btnA = tr.querySelector(".agentBtn");
     if(btnA){
-
       btnA.classList.remove("locked","mine","loading");
       btnA.disabled = false;
 
-      const month = tr.dataset.month;
-
       if(!agRaw){
         btnA.textContent = "S’inscrire";
-
-        btnA.onclick = () => {
-          btnA.classList.add("loading");
-          btnA.disabled = true;
-
-          callApi("vsav_set_agent", { month, email: me }, () => {
-            btnA.classList.remove("loading"); // ✅ on enlève quand l’API a répondu
-            btnA.disabled = false;
-            loadVsav();
-          });
-        };
-
       }else{
-
-        const ag = parseSigned(agRaw); // -> { name, email } si "Prenom|email"
-        const label = (ag.name || agRaw || "").trim(); // affichage = prénom
-
-        if(ag.email && me && ag.email.toLowerCase() === me.toLowerCase()){
-          btnA.textContent = label + " (Annuler)";
+        const isMine = (agEmail && me && agEmail === me);
+        if(isMine){
+          btnA.textContent = agRaw + " (Annuler)";
           btnA.classList.add("mine");
-
-          btnA.onclick = () => {
-            btnA.classList.add("loading");
-            btnA.disabled = true;
-
-            callApi("vsav_unset_agent", { month, email: me }, () => {
-              btnA.classList.remove("loading"); // ✅ idem pour annuler
-              btnA.disabled = false;
-              loadVsav();
-            });
-          };
-
         }else{
-          btnA.textContent = label;
+          btnA.textContent = agRaw;
           btnA.classList.add("locked");
           btnA.disabled = true;
-          btnA.onclick = null;
         }
-
       }
     }
 
-  // FAIT button (seul référent)
-const btnF = tr.querySelector(".faitBtn");
-if (btnF) {
-  btnF.classList.remove("ok", "bad", "disabled", "loading");
-  btnF.disabled = false;
+    // FAIT
+    const btnF = tr.querySelector(".faitBtn");
+    if(btnF){
+      btnF.classList.remove("ok","bad","disabled","loading");
+      btnF.disabled = false;
 
-  const month = tr.dataset.month;
+      const isRef = (refEmail && me && refEmail === me);
 
-  // référent = ref.email (si referent = "Prenom|email" côté Sheet)
-  const isRef = (tr.dataset.refEmail && me && tr.dataset.refEmail === me.toLowerCase());
-
-  // Affichage par défaut (lecture seule si pas référent)
-  const renderLabel = () => {
-    if (status === "done" && dateISO) return fmtFR(dateISO);
-    if (status === "not_done") return "NON FAIT";
-    return "—";
-  };
-
-  if (!isRef) {
-    btnF.classList.add("disabled");
-    btnF.disabled = true;
-    btnF.textContent = renderLabel();
-  } else {
-    // référent : affichage couleur
-    if (status === "done" && dateISO) {
-      btnF.classList.add("ok");
-      btnF.textContent = fmtFR(dateISO);
-    } else if (status === "not_done") {
-      btnF.classList.add("bad");
-      btnF.textContent = "NON FAIT";
-    } else {
-      btnF.textContent = "—";
-    }
-
-    // ✅ CLIC référent : Fait / Non fait + calendrier/justif + confirmation + API
-    btnF.onclick = async () => {
-      // 1) choisir Fait / Non fait
-      const isDone = confirm("FAIT ?\n\nOK = Fait\nAnnuler = Non fait");
-      if (isDone) {
-        // 2) calendrier (input date)
-        const picked = await pickDate_(dateISO || "");
-        if (!picked) return;
-
-        // 3) confirmation
-        const ok = confirm(`Confirmer : FAIT le ${fmtFR(picked)} ?`);
-        if (!ok) return;
-
-        // 4) appel API
-        btnF.classList.add("loading");
+      if(!isRef){
+        btnF.classList.add("disabled");
         btnF.disabled = true;
-
-        callApi(
-          "vsav_set_fait",
-          { month, email: me, date: picked },
-          () => {
-            btnF.classList.remove("loading");
-            btnF.disabled = false;
-            loadVsav();
-          }
-        );
-
-      } else {
-        // NON FAIT => justificatif obligatoire
-        let j = prompt("NON FAIT.\n\nJustificatif OBLIGATOIRE :", (justif || ""));
-        if (j == null) return; // annuler
-        j = String(j).trim();
-        if (!j) {
-          alert("Justificatif obligatoire.");
-          return;
+        btnF.textContent = (status==="done" && dateISO) ? fmtFR(dateISO)
+                       : (status==="not_done" ? "NON FAIT" : "—");
+      }else{
+        if(status==="done" && dateISO){
+          btnF.classList.add("ok");
+          btnF.textContent = fmtFR(dateISO);
+        }else if(status==="not_done"){
+          btnF.classList.add("bad");
+          btnF.textContent = "NON FAIT";
+        }else{
+          btnF.textContent = "—";
         }
-
-        // confirmation
-        const ok = confirm("Confirmer : NON FAIT ?");
-        if (!ok) return;
-
-        btnF.classList.add("loading");
-        btnF.disabled = true;
-
-        callApi(
-          "vsav_set_nonfait",
-          { month, email: me, justificatif: j },
-          () => {
-            btnF.classList.remove("loading");
-            btnF.disabled = false;
-            loadVsav();
-          }
-        );
       }
-    };
+
+      tr.dataset.status = status || "";
+      tr.dataset.date = dateISO || "";
+      tr.dataset.justif = justif || "";
+    }
   }
-
-  // datasets (tu les gardes)
-  tr.dataset.status = status || "";
-  tr.dataset.date = dateISO || "";
-  tr.dataset.justif = justif || "";
-}
-
-
-function fmtFR(iso){
-  // "YYYY-MM-DD" => "DD/MM/YYYY"
-  const m = String(iso||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if(!m) return iso || "—";
-  return `${m[3]}/${m[2]}/${m[1]}`;
 }
 
 /* =======================
    ACTIONS
-   views attendues côté Apps Script:
-   - vsav_get
-   - vsav_set_agent (month,email,name)
-   - vsav_unset_agent (month,email)
-   - vsav_set_done (month,email,date)         // email = référent
-   - vsav_set_not_done (month,email,justif)   // email = référent
    ======================= */
 async function refresh(){
   const res = await apiCall("vsav_get");
@@ -750,14 +631,24 @@ async function onAgentClick(tr){
   if(!me){ alert("Email non détecté (connexion)."); return; }
 
   const btnA = tr.querySelector(".agentBtn");
-  const isMine = btnA && btnA.classList.contains("mine");
+  if(!btnA) return;
+
+  const isMine = btnA.classList.contains("mine");
   const action = isMine ? "vsav_unset_agent" : "vsav_set_agent";
 
-  const nm = myName(); // optionnel
   const ok = await askConfirm(isMine ? `Annuler ton inscription (${month}) ?` : `S’inscrire sur ${month} ?`);
   if(!ok) return;
 
+  // ✅ loading vert pendant le chargement
+  btnA.classList.add("loading");
+  btnA.disabled = true;
+
+  const nm = myName(); // optionnel
   const r = await apiCall(action, isMine ? { month, email: me } : { month, email: me, name: nm });
+
+  btnA.classList.remove("loading");
+  btnA.disabled = false;
+
   if(!r?.ok){ alert(r?.error || "Erreur"); return; }
   await refresh();
 }
@@ -784,7 +675,6 @@ async function onFaitClick(tr){
   document.getElementById("mCancel").onclick = closeModal;
 
   document.getElementById("mFait").onclick = async ()=>{
-    // calendrier
     openModal(`
       <h3>${month} — Choisir la date</h3>
       <div class="field">
@@ -812,7 +702,6 @@ async function onFaitClick(tr){
   };
 
   document.getElementById("mNon").onclick = async ()=>{
-    // justificatif obligatoire
     openModal(`
       <h3>${month} — Non fait (justificatif obligatoire)</h3>
       <div class="field">
@@ -846,10 +735,10 @@ function bind(){
     const btnA = tr.querySelector(".agentBtn");
     const btnF = tr.querySelector(".faitBtn");
     if(btnA){
-      btnA.addEventListener("click", ()=> onAgentClick(tr));
+      btnA.onclick = ()=> onAgentClick(tr);
     }
     if(btnF){
-      btnF.addEventListener("click", ()=> onFaitClick(tr));
+      btnF.onclick = ()=> onFaitClick(tr);
     }
   });
 }
@@ -860,52 +749,10 @@ function bind(){
     bind();
     await refresh();
   }catch(e){
-    // silence
+    console.log(e);
   }
 })();
-    function pickDate(initialISO = "") {
-  return new Promise((resolve) => {
-    const input = document.createElement("input");
-    input.type = "date";
-
-    if (initialISO) input.value = initialISO;
-
-    // caché mais cliquable
-    input.style.position = "fixed";
-    input.style.left = "-9999px";
-    input.style.opacity = "0";
-
-    document.body.appendChild(input);
-
-    const cleanup = () => {
-      if (input && input.parentNode) input.parentNode.removeChild(input);
-    };
-
-    // choix OK
-    input.addEventListener(
-      "change",
-      () => {
-        const v = input.value || "";
-        cleanup();
-        resolve(v);
-      },
-      { once: true }
-    );
-
-    // si l'utilisateur ferme sans choisir (fallback)
-    setTimeout(() => {
-      if (document.body.contains(input)) {
-        cleanup();
-        resolve("");
-      }
-    }, 15000);
-
-    // ouvre le sélecteur
-    input.click();
-  });
-}
-}
-
 </script>
+
 </body>
 </html>
