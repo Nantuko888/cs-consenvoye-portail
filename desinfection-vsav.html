@@ -566,23 +566,43 @@ function fill(rows){
     // AGENT button
     const btnA = tr.querySelector(".agentBtn");
     if(btnA){
-      btnA.classList.remove("locked","mine");
-      btnA.disabled = false;
 
-      if(!agRaw){
-        btnA.textContent = "S’inscrire";
-      }else{
-        const label = displayNameOrEmail(agRaw);
-        if(ag.email && me && ag.email === me){
-          btnA.textContent = label + " (Annuler)";
-          btnA.classList.add("mine");
-        }else{
-          btnA.textContent = label;
-          btnA.classList.add("locked");
-          btnA.disabled = true;
-        }
-      }
+  btnA.classList.remove("locked","mine");
+  btnA.disabled = false;
+
+  const month = tr.dataset.month;
+
+  if(!agRaw){
+    btnA.textContent = "S’inscrire";
+
+    btnA.onclick = () => {
+      callApi("vsav_set_agent", { month, email: me }, () => loadVsav());
+    };
+
+  }else{
+
+    const label = agRaw; // maintenant c’est juste le prénom
+
+    if(label && me && label.toLowerCase() === localStorage.getItem("user_prenom")?.toLowerCase()){
+
+      btnA.textContent = label + " (Annuler)";
+      btnA.classList.add("mine");
+
+      btnA.onclick = () => {
+        callApi("vsav_unset_agent", { month, email: me }, () => loadVsav());
+      };
+
+    }else{
+
+      btnA.textContent = label;
+      btnA.classList.add("locked");
+      btnA.disabled = true;
+      btnA.onclick = null;
+
     }
+  }
+}
+
 
     // FAIT button (seul référent)
     const btnF = tr.querySelector(".faitBtn");
