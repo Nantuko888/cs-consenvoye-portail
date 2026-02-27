@@ -657,7 +657,7 @@ function fill(rows){
 
         // ✅ c’est moi (on compare agent_email)
         if(agEmail && me && agEmail === me){
-          btnA.textContent = label + " (Annuler)";
+          btnA.textContent = label;
           btnA.classList.add("mine");
 
           btnA.onclick = async () => {
