@@ -584,7 +584,7 @@ function fmtFR(iso){
    ======================= */
 function fill(rows){
   const tbody = document.getElementById("tbody");
-  const me = myEmail();
+  const me = (myEmail() || "").toLowerCase();
 
   for(let i=0;i<12;i++){
     const tr = tbody.children[i];
@@ -594,97 +594,91 @@ function fill(rows){
     const mois = (row.mois || tr.dataset.month || "").toString().trim().toUpperCase();
     tr.dataset.month = mois;
 
-    const refRaw = (row.referent ?? "").toString().trim();
-    const refEmail = (row.referent_email ?? "").toString().trim().toLowerCase();
+    // ✅ référent = prénom (affiché) + email (pour droits)
+    const refName = (row.referent || "").toString().trim();
+    const refEmail = (row.referent_email || "").toString().trim().toLowerCase();
 
-    const agRaw = (row.agent ?? "").toString().trim();
-    const agEmail = (row.agent_email ?? "").toString().trim().toLowerCase();
+    // ✅ agent = prénom (affiché) + email (pour annulation)
+    const agName = (row.agent || "").toString().trim();
+    const agEmail = (row.agent_email || "").toString().trim().toLowerCase();
 
-    const status = (row.status ?? "").toString().trim();
-    const dateISO = (row.date ?? "").toString().trim();
-    const justif = (row.justificatif ?? "").toString().trim();
+    const status = (row.status || "").toString().trim();
+    const dateISO= (row.date || "").toString().trim();
+    const justif = (row.justificatif || "").toString().trim();
 
-    // REF
-    tr.children[1].textContent = refRaw ? refRaw : "—";
+    // REF affichage + droits
+    tr.children[1].textContent = refName ? refName : "—";
     tr.dataset.refEmail = refEmail || "";
 
+    // ======================
     // AGENT button
-const btnA = tr.querySelector(".agentBtn");
-if (btnA) {
-
-  btnA.classList.remove("locked", "mine", "loading");
-  btnA.disabled = false;
-
-  const month = tr.dataset.month;
-  const meEmail = (me || "").toLowerCase();
-
-  // agRaw doit être idéalement "Prenom|email" (ex: "Pierre|pierre@gmail.com")
-  const agObj = parseSigned(agRaw);
-  const label = (agObj.name || agRaw || "").trim();
-  const agentEmail = (agObj.email || "").toLowerCase();
-
-  // 1) personne inscrit -> bouton S'inscrire
-  if (!agRaw) {
-    btnA.textContent = "S’inscrire";
-
-    btnA.onclick = async () => {
-      if (!meEmail) { alert("Email non détecté (connexion)."); return; }
-
-      const ok = await askConfirm(`S’inscrire sur ${month} ?`);
-      if(!ok) return;
-
-      btnA.classList.add("loading");
-      btnA.disabled = true;
-
-      const r = await apiCall("vsav_set_agent", {
-        month,
-        email: meEmail,
-        name: (myName() || "").trim()
-      });
-
-      btnA.classList.remove("loading");
+    // ======================
+    const btnA = tr.querySelector(".agentBtn");
+    if(btnA){
+      btnA.classList.remove("locked","mine","loading");
       btnA.disabled = false;
 
-      if(!r?.ok){ alert(r?.error || "Erreur"); return; }
-      await refresh();
-    };
+      const month = tr.dataset.month;
 
-  } else {
+      // personne inscrit
+      if(!agName && !agEmail){
+        btnA.textContent = "S’inscrire";
+        btnA.onclick = async () => {
+          if(!me){ alert("Email non détecté (connexion)."); return; }
 
-    // 2) quelqu'un est inscrit
-    if (agentEmail && meEmail && agentEmail === meEmail) {
-      // c'est moi -> je peux annuler
-      btnA.textContent = label + " (Annuler)";
-      btnA.classList.add("mine");
+          const ok = await askConfirm(`S’inscrire sur ${month} ?`);
+          if(!ok) return;
 
-      btnA.onclick = async () => {
-        const ok = await askConfirm(`Annuler ton inscription (${month}) ?`);
-        if(!ok) return;
+          btnA.classList.add("loading");
+          btnA.disabled = true;
 
-        btnA.classList.add("loading");
-        btnA.disabled = true;
+          const r = await apiCall("vsav_set_agent", { month, email: me });
 
-        const r = await apiCall("vsav_unset_agent", { month, email: meEmail });
+          btnA.classList.remove("loading");
+          btnA.disabled = false;
 
-        btnA.classList.remove("loading");
-        btnA.disabled = false;
+          if(!r?.ok){ alert(r?.error || "Erreur"); return; }
+          await refresh();
+        };
 
-        if(!r?.ok){ alert(r?.error || "Erreur"); return; }
-        await refresh();
-      };
+      }else{
+        // quelqu'un est inscrit
+        const label = (agName || "—").trim();
 
-    } else {
-      // c'est un autre -> bloqué
-      btnA.textContent = label;
-      btnA.classList.add("locked");
-      btnA.disabled = true;
-      btnA.onclick = null;
+        // ✅ c’est moi (on compare agent_email)
+        if(agEmail && me && agEmail === me){
+          btnA.textContent = label + " (Annuler)";
+          btnA.classList.add("mine");
+
+          btnA.onclick = async () => {
+            const ok = await askConfirm(`Annuler ton inscription (${month}) ?`);
+            if(!ok) return;
+
+            btnA.classList.add("loading");
+            btnA.disabled = true;
+
+            const r = await apiCall("vsav_unset_agent", { month, email: me });
+
+            btnA.classList.remove("loading");
+            btnA.disabled = false;
+
+            if(!r?.ok){ alert(r?.error || "Erreur"); return; }
+            await refresh();
+          };
+
+        }else{
+          // autre personne -> bloqué
+          btnA.textContent = label;
+          btnA.classList.add("locked");
+          btnA.disabled = true;
+          btnA.onclick = null;
+        }
+      }
     }
-  }
-}
 
-
-    // FAIT
+    // ======================
+    // FAIT (lecture seule ici)
+    // ======================
     const btnF = tr.querySelector(".faitBtn");
     if(btnF){
       btnF.classList.remove("ok","bad","disabled","loading");
@@ -715,6 +709,7 @@ if (btnA) {
     }
   }
 }
+
 
 /* =======================
    ACTIONS
