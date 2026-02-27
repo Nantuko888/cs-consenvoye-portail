@@ -688,36 +688,53 @@ async function refresh(){
 }
 
 async function onAgentClick(tr){
+
   const month = tr.dataset.month;
   const meEmail = (myEmail() || "").trim().toLowerCase();
   const meName = (myName() || "").trim();
 
-  if(!meEmail){ alert("Email non détecté (connexion)."); return; }
+  if(!meEmail || !meName){
+    alert("Identité non détectée. Reconnexion nécessaire.");
+    return;
+  }
 
   const btnA = tr.querySelector(".agentBtn");
   if(!btnA) return;
 
   const isMine = btnA.classList.contains("mine");
-  const action = isMine ? "vsav_unset_agent" : "vsav_set_agent";
 
-  const ok = await askConfirm(isMine ? `Annuler ton inscription (${month}) ?` : `S’inscrire sur ${month} ?`);
+  const ok = await askConfirm(
+    isMine
+      ? `Annuler ton inscription (${month}) ?`
+      : `S’inscrire sur ${month} ?`
+  );
+
   if(!ok) return;
 
-  // ✅ Optimiste : on affiche tout de suite, sans attendre Sheets
+  // =========================
+  // 🔥 AFFICHAGE IMMÉDIAT
+  // =========================
+
   if(!isMine){
-    btnA.textContent = meName || "Moi";
+    // inscription
+    btnA.textContent = meName;
     btnA.classList.add("mine");
-    btnA.classList.remove("locked");
   }else{
+    // annulation
     btnA.textContent = "S’inscrire";
     btnA.classList.remove("mine");
   }
 
-  // ✅ loading vert pendant l’appel (même pour annuler)
   btnA.classList.add("loading");
   btnA.disabled = true;
 
+  // =========================
+  // 📡 Appel Sheets en arrière-plan
+  // =========================
+
   try{
+    const action = isMine ? "vsav_unset_agent" : "vsav_set_agent";
+
     const r = await apiCall(
       action,
       isMine
@@ -725,19 +742,18 @@ async function onAgentClick(tr){
         : { month, email: meEmail, name: meName }
     );
 
-    if(!r?.ok){
-      // rollback si erreur
-      alert(r?.error || "Erreur");
-      await refresh();
-      return;
-    }
-
-    // on réactive vite (pas besoin d'attendre refresh)
     btnA.classList.remove("loading");
     btnA.disabled = false;
 
-    // refresh “en arrière-plan” pour récupérer l’état exact (referents, etc.)
-    setTimeout(()=>{ refresh(); }, 400);
+    if(!r?.ok){
+      // rollback si erreur
+      await refresh();
+      alert(r?.error || "Erreur");
+      return;
+    }
+
+    // refresh discret après 400ms
+    setTimeout(()=> refresh(), 400);
 
   }catch(err){
     btnA.classList.remove("loading");
