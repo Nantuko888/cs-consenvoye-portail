@@ -358,8 +358,15 @@ body{
   color:#fff;
 }
   
+  
   /* Mobile: évite que les dernières lignes soient masquées */
 body { padding-bottom: 90px; }
+  /* Largeur fixe des colonnes */
+#tbody .tr{
+  display: grid;
+  grid-template-columns: 80px 1fr 120px 70px;
+  align-items: center;
+}
 </style>
 </head>
 
