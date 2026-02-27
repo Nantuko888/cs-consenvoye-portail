@@ -358,9 +358,11 @@ body{
   color:#fff;
 }
   .agentBtn{
-  padding: 7px 8px;
-  width: 100%;
-  white-space: nowrap;
+  min-width: 120px; /* largeur minimum suffisante */
+  padding: 8px 14px;
+  white-space: nowrap; /* empêche le retour à la ligne */
+  overflow: visible; /* empêche les "..." */
+  text-overflow: unset; /* supprime l'ellipsis */
 }
 
   /* Mobile: évite que les dernières lignes soient masquées */
@@ -688,51 +690,62 @@ async function refresh(){
 }
 
 async function onAgentClick(tr){
-
   const month = tr.dataset.month;
-  const meEmail = (myEmail() || "").toLowerCase();
+  const meEmail = (myEmail() || "").trim().toLowerCase();
   const meName = (myName() || "").trim();
 
-  if(!meEmail){
-    alert("Email non détecté.");
-    return;
-  }
+  if(!meEmail){ alert("Email non détecté (connexion)."); return; }
 
   const btnA = tr.querySelector(".agentBtn");
   if(!btnA) return;
 
-  const currentEmail = (tr.dataset.agentEmail || "").toLowerCase();
-  const isMine = currentEmail && currentEmail === meEmail;
+  const isMine = btnA.classList.contains("mine");
+  const action = isMine ? "vsav_unset_agent" : "vsav_set_agent";
 
-  const ok = await askConfirm(
-    isMine
-      ? `Annuler ton inscription (${month}) ?`
-      : `S’inscrire sur ${month} ?`
-  );
-
+  const ok = await askConfirm(isMine ? `Annuler ton inscription (${month}) ?` : `S’inscrire sur ${month} ?`);
   if(!ok) return;
 
+  // ✅ Optimiste : on affiche tout de suite, sans attendre Sheets
+  if(!isMine){
+    btnA.textContent = meName || "Moi";
+    btnA.classList.add("mine");
+    btnA.classList.remove("locked");
+  }else{
+    btnA.textContent = "S’inscrire";
+    btnA.classList.remove("mine");
+  }
+
+  // ✅ loading vert pendant l’appel (même pour annuler)
   btnA.classList.add("loading");
   btnA.disabled = true;
 
-  const action = isMine ? "vsav_unset_agent" : "vsav_set_agent";
+  try{
+    const r = await apiCall(
+      action,
+      isMine
+        ? { month, email: meEmail }
+        : { month, email: meEmail, name: meName }
+    );
 
-  const r = await apiCall(
-    action,
-    isMine
-      ? { month, email: meEmail }
-      : { month, email: meEmail, name: meName }
-  );
+    if(!r?.ok){
+      // rollback si erreur
+      alert(r?.error || "Erreur");
+      await refresh();
+      return;
+    }
 
-  btnA.classList.remove("loading");
-  btnA.disabled = false;
+    // on réactive vite (pas besoin d'attendre refresh)
+    btnA.classList.remove("loading");
+    btnA.disabled = false;
 
-  if(!r?.ok){
-    alert(r?.error || "Erreur");
-    return;
+    // refresh “en arrière-plan” pour récupérer l’état exact (referents, etc.)
+    setTimeout(()=>{ refresh(); }, 400);
+
+  }catch(err){
+    btnA.classList.remove("loading");
+    btnA.disabled = false;
+    await refresh();
   }
-
-  await refresh();
 }
 
 
