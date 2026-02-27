@@ -624,22 +624,32 @@ function fill(rows){
       if(!agName && !agEmail){
         btnA.textContent = "S’inscrire";
         btnA.onclick = async () => {
-          if(!me){ alert("Email non détecté (connexion)."); return; }
 
-          const ok = await askConfirm(`S’inscrire sur ${month} ?`);
-          if(!ok) return;
+  if(!me){ alert("Email non détecté."); return; }
 
-          btnA.classList.add("loading");
-          btnA.disabled = true;
+  const ok = await askConfirm(`S’inscrire sur ${month} ?`);
+  if(!ok) return;
 
-          const r = await apiCall("vsav_set_agent", { month, email: me });
+  // 🔥 Mise à jour immédiate
+  btnA.textContent = myName();
+  btnA.classList.add("mine");
+  btnA.classList.remove("locked");
 
-          btnA.classList.remove("loading");
-          btnA.disabled = false;
+  // petit effet loading léger
+  btnA.classList.add("loading");
 
-          if(!r?.ok){ alert(r?.error || "Erreur"); return; }
-          await refresh();
-        };
+  const r = await apiCall("vsav_set_agent", { month, email: me });
+
+  btnA.classList.remove("loading");
+
+  if(!r?.ok){
+    // ❌ rollback si erreur
+    btnA.textContent = "S’inscrire";
+    btnA.classList.remove("mine");
+    alert(r?.error || "Erreur");
+  }
+};
+
 
       }else{
         // quelqu'un est inscrit
@@ -651,20 +661,28 @@ function fill(rows){
           btnA.classList.add("mine");
 
           btnA.onclick = async () => {
-            const ok = await askConfirm(`Annuler ton inscription (${month}) ?`);
-            if(!ok) return;
 
-            btnA.classList.add("loading");
-            btnA.disabled = true;
+  const ok = await askConfirm(`Annuler ton inscription (${month}) ?`);
+  if(!ok) return;
 
-            const r = await apiCall("vsav_unset_agent", { month, email: me });
+  // 🔥 mise à jour immédiate
+  btnA.textContent = "S’inscrire";
+  btnA.classList.remove("mine");
 
-            btnA.classList.remove("loading");
-            btnA.disabled = false;
+  btnA.classList.add("loading");
 
-            if(!r?.ok){ alert(r?.error || "Erreur"); return; }
-            await refresh();
-          };
+  const r = await apiCall("vsav_unset_agent", { month, email: me });
+
+  btnA.classList.remove("loading");
+
+  if(!r?.ok){
+    // ❌ rollback
+    btnA.textContent = myName();
+    btnA.classList.add("mine");
+    alert(r?.error || "Erreur");
+  }
+};
+
 
         }else{
           // autre personne -> bloqué
