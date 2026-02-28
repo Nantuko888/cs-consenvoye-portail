@@ -654,7 +654,7 @@ function fill(rows){
     const justif = (row.justificatif || "").toString().trim();
 
     // statut déduit
-    const st = dateVal ? "done" : (justif ? "not_done" : "");
+    const st = (row.status || "").toString().trim();
     const isValidated = (st === "done" || st === "not_done");
 
     tr.dataset.status = st;
