@@ -941,6 +941,38 @@ function bind(){
     // silence
   }
 })();
+  /* =========================
+   PULL TO REFRESH (mobile)
+   ========================= */
+(function(){
+  let startY = 0;
+  let pulling = false;
+  const threshold = 70;
+
+  window.addEventListener("touchstart", (e)=>{
+    if(window.scrollY === 0){
+      startY = e.touches[0].clientY;
+      pulling = true;
+    }
+  }, { passive:true });
+
+  window.addEventListener("touchmove", (e)=>{
+    if(!pulling) return;
+
+    const currentY = e.touches[0].clientY;
+    const diff = currentY - startY;
+
+    if(diff > threshold){
+      pulling = false;
+      refresh(); // 🔥 on recharge les données
+    }
+  }, { passive:true });
+
+  window.addEventListener("touchend", ()=>{
+    pulling = false;
+  });
+})();
+
 </script>
 
 </body>
