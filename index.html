@@ -391,6 +391,100 @@ window.addEventListener("popstate", () => {
   if (saved) showPortal();
   else showLogin();
 });
+  /* ==========================
+   PULL TO REFRESH (Android)
+   - sans scrollbar
+   - marche même si overflow:hidden
+   ========================== */
+(function enablePullToRefresh(){
+  let startY = 0;
+  let pulling = false;
+  let fired = false;
+
+  // petit indicateur (discret)
+  const bar = document.createElement("div");
+  bar.style.position = "fixed";
+  bar.style.left = "50%";
+  bar.style.top = "10px";
+  bar.style.transform = "translateX(-50%)";
+  bar.style.padding = "6px 10px";
+  bar.style.borderRadius = "999px";
+  bar.style.background = "rgba(0,0,0,.55)";
+  bar.style.border = "1px solid rgba(255,255,255,.15)";
+  bar.style.color = "#fff";
+  bar.style.fontWeight = "900";
+  bar.style.fontSize = "12px";
+  bar.style.zIndex = "999999";
+  bar.style.display = "none";
+  bar.textContent = "Tire pour rafraîchir…";
+  document.body.appendChild(bar);
+
+  function atTop(){
+    // sur index c’est toujours 0, mais on garde la sécurité
+    const se = document.scrollingElement || document.documentElement;
+    return (se.scrollTop || 0) <= 0;
+  }
+
+  function canStart(e){
+    // ignore si modal ouverte / input etc.
+    const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : "";
+    if(tag === "input" || tag === "textarea" || tag === "select") return false;
+
+    // si un overlay / modal est visible chez toi, bloque (optionnel)
+    // if(document.querySelector(".modal.show")) return false;
+
+    return atTop();
+  }
+
+  function doRefresh(){
+    // Sur index : reload
+    location.reload();
+  }
+
+  window.addEventListener("touchstart", (e)=>{
+    if(!e.touches || e.touches.length !== 1) return;
+    if(!canStart(e)) return;
+
+    startY = e.touches[0].clientY;
+    pulling = true;
+    fired = false;
+  }, {passive:true});
+
+  window.addEventListener("touchmove", (e)=>{
+    if(!pulling || fired) return;
+    if(!e.touches || e.touches.length !== 1) return;
+
+    const y = e.touches[0].clientY;
+    const dy = y - startY;
+
+    if(dy > 10){
+      bar.style.display = "block";
+      if(dy > 80){
+        bar.textContent = "Relâche pour rafraîchir ✅";
+      }else{
+        bar.textContent = "Tire pour rafraîchir…";
+      }
+    }
+  }, {passive:true});
+
+  window.addEventListener("touchend", (e)=>{
+    if(!pulling || fired) { pulling = false; return; }
+
+    bar.style.display = "none";
+
+    // si on a tiré suffisamment
+    const endY = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientY : startY;
+    const dy = endY - startY;
+
+    pulling = false;
+
+    if(dy > 80){
+      fired = true;
+      doRefresh();
+    }
+  }, {passive:true});
+})();
+
 </script>
 
 </body>
