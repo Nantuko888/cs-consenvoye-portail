@@ -405,29 +405,30 @@ async function handleCredentialResponse(response){
   showMsg("");
 
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
-  if(saved){
-    await checkAndShow_(saved);
-  }else{
-    showLogin();
-  }
-})();
 
-/* ✅ Android / retour depuis une icône : re-check quand la page revient du cache */
-window.addEventListener("pageshow", async () => {
-  const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
-  if(saved){
-    await checkAndShow_(saved);
-  }
-});
-
-/* ✅ garde ton popstate : si l’utilisateur "retour" */
-window.addEventListener("popstate", async () => {
-  const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
-  if(saved){
-    await checkAndShow_(saved);
-  }else{
+if(saved){
+  // ✅ IMPORTANT: on NE montre PAS le portail tant que authCheck n’a pas validé
+  showLogin();
+  showMsg("Vérification…");
+  try{
+    const res = await authCheck(saved);
+    if(res && res.ok === true){
+      showMsg("");
+      showPortal();
+    }else{
+      localStorage.removeItem(LS_KEY);
+      showLogin();
+      showMsg("Accès refusé.");
+    }
+  }catch(e){
+    localStorage.removeItem(LS_KEY);
     showLogin();
+    showMsg("Erreur réseau / serveur.");
   }
+}else{
+  showLogin();
+}
+
 });
 </script>
 
