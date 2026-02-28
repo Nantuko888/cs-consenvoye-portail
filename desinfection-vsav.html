@@ -236,25 +236,37 @@ body{
 .agentBtn.locked{ opacity:.55; cursor:not-allowed; }
 .agentBtn.mine{ background: rgba(212,106,0,.45); border-color: rgba(255,255,255,.22); }
 
-/* ✅ bouton fait */
+/* ✅ bouton fait (plein format, opaque) */
 .faitBtn{
   width:100%;
-  max-width: 190px;
-  padding: 8px 10px;
-  border-radius: 12px;
+  height:44px;
+  padding:0;
+  border-radius:24px;
   border:1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.20);
-  color: rgba(255,255,255,.95);
-  font-weight: 950;
+  background:rgba(0,0,0,.20);
   cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   -webkit-tap-highlight-color: transparent;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 }
-.faitBtn.disabled{ opacity:.45; cursor:not-allowed; }
-.faitBtn.ok{ background: rgba(37,196,106,.22); border-color: rgba(37,196,106,.55); }
-.faitBtn.bad{ background: rgba(255,59,48,.20); border-color: rgba(255,59,48,.55); }
+
+.faitBtn.disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+/* Vert plein */
+.faitBtn.ok{
+  background:#25c46a;
+  border-color:#25c46a;
+}
+
+/* Rouge plein */
+.faitBtn.bad{
+  background:#ff3b30;
+  border-color:#ff3b30;
+}
 
 /* ✅ modal */
 .modal{
