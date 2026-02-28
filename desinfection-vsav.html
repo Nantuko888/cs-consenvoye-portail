@@ -578,6 +578,11 @@ function fmtFR(iso){
   if(!m) return iso || "—";
   return `${m[3]}/${m[2]}/${m[1]}`;
 }
+  function fmtDM(iso){
+  const m = String(iso||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(!m) return iso || "—";
+  return `${m[3]}/${m[2]}`; // jour/mois
+}
 
 /* =======================
    REMPLISSAGE TABLE
@@ -653,26 +658,24 @@ const btnF = tr.querySelector(".faitBtn");
 if(btnF){
   btnF.classList.remove("ok","bad","disabled","loading");
   btnF.disabled = false;
+  btnF.onclick = null;
 
-  const isRef = (refEmail && meEmail && refEmail === meEmail);
+  // Colonnes chez toi
+  const dateVal = (row.date_validation || "").toString().trim(); // "YYYY-MM-DD"
+  const justifTxt = (row.justificatif || "").toString().trim();
 
-  // ✅ on récupère les vraies colonnes (avec fallback)
-  const dateVal = (row.date_validation || row.fait_date || row.date || "").toString().trim();
-  const justifTxt = (row.justificatif || row.justif || "").toString().trim();
+  // Statut déduit
+  const st = dateVal ? (justifTxt ? "not_done" : "done") : ""; // si date + justif => rouge, si date seule => vert
 
-  // ✅ on déduit le statut depuis TES colonnes
-  const st = dateVal ? "done" : (justifTxt ? "not_done" : "");
-
-  // affichage couleur
+  // Affichage
   if(st === "done"){
     btnF.classList.add("ok");
-    btnF.textContent = fmtFR(dateVal);
-    btnF.onclick = null;
+    btnF.textContent = fmtDM(dateVal); // jour/mois
+    btnF.disabled = true; // plus modifiable
   }else if(st === "not_done"){
     btnF.classList.add("bad");
-    btnF.textContent = "NON FAIT";
-
-    // ✅ clic = voir justificatif
+    btnF.textContent = fmtDM(dateVal); // jour/mois (donc date nécessaire)
+    // ✅ seul cas cliquable : voir justificatif
     btnF.onclick = ()=>{
       openModal(`
         <h3>${mois} — Justificatif</h3>
@@ -687,21 +690,22 @@ if(btnF){
     };
   }else{
     btnF.textContent = "—";
-    btnF.onclick = null;
+    btnF.disabled = true; // rien à faire tant que pas validé
   }
 
-  // droits : si pas référent, lecture seule (mais on garde le clic justificatif si rouge)
-  if(!isRef){
-    btnF.classList.add("disabled");
-    btnF.disabled = true;
-    if(st !== "not_done") btnF.onclick = null;
-  }
-
+  // Mémos ligne
   tr.dataset.status = st;
   tr.dataset.date = dateVal || "";
   tr.dataset.justif = justifTxt || "";
+
+  // ✅ VERROUILLAGE COMPLET DE LA LIGNE si validé (vert ou rouge)
+  const btnA = tr.querySelector(".agentBtn");
+  if(btnA && st){
+    btnA.classList.add("locked");
+    btnA.disabled = true; // agent ne peut plus recliquer
+  }
 }
-}
+
 
   }
 
