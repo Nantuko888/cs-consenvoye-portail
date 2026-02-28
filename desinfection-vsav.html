@@ -600,114 +600,148 @@ function fill(rows){
   const meEmail = (myEmail() || "").trim().toLowerCase();
   const meName = (myName() || "").trim();
 
+  // helpers
+  const nameFromEmail = (em)=>{
+    em = (em||"").toString().trim().toLowerCase();
+    if(!em || !em.includes("@")) return "";
+    let n = em.split("@")[0].replace(/[._-]+/g," ").trim();
+    if(!n) return "";
+    return n.charAt(0).toUpperCase() + n.slice(1);
+  };
+  const fmtDM = (iso)=>{
+    iso = (iso||"").toString().trim();
+    const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if(!m) return iso || "—";
+    return `${m[3]}/${m[2]}`; // JJ/MM
+  };
+
   for(let i=0;i<12;i++){
     const tr = tbody.children[i];
     if(!tr) continue;
 
     const row = rows[i] || {};
+
+    // MOIS
     const mois = (row.mois || tr.dataset.month || "").toString().trim().toUpperCase();
     tr.dataset.month = mois;
 
-    // ✅ référent : prénom + email (droits)
-    const refName = (row.referent || "").toString().trim();
-    const refEmail = (row.referent_email || "").toString().trim().toLowerCase();
+    // ===== RÉFÉRENT =====
+    // Dans ta Sheet, "referent" = email. (referent_email peut exister plus tard)
+    const refEmail = ((row.referent_email || row.referent || "") + "").trim().toLowerCase();
+    const refName = ((row.referent_name || row.referent_prenom || "") + "").trim()
+                  || nameFromEmail(refEmail)
+                  || ((row.referent || "") + "").trim(); // fallback affichage
 
-    // ✅ agent : prénom + email (annulation)
-    const agName = (row.agent || "").toString().trim();
-    const agEmail = (row.agent_email || "").toString().trim().toLowerCase();
-
-    const status = (row.status || "").toString().trim();
-    const dateISO= (row.date || "").toString().trim();
-    const justif = (row.justificatif || "").toString().trim();
-
-    // REF (affichage) + droits
     tr.children[1].textContent = refName ? refName : "—";
     tr.dataset.refEmail = refEmail || "";
 
-    // ======================
-    // AGENT button (affichage + état)
-    // ======================
+    // ===== AGENT =====
+    const agEmail = ((row.agent_email || "") + "").trim().toLowerCase();
+    const agName = ((row.agent || "") + "").trim() || nameFromEmail(agEmail);
+
+    // ===== VALIDATION (TES colonnes) =====
+    const dateVal = ((row.date_validation || row.fait_date || row.date || "") + "").trim(); // YYYY-MM-DD attendu
+    const justif = ((row.justificatif || row.justif || "") + "").trim();
+
+    // Statut déduit
+    const st = dateVal ? "done" : (justif ? "not_done" : "");
+    const isLocked = (st === "done" || st === "not_done");
+    const isRef = (!!refEmail && !!meEmail && refEmail === meEmail);
+
+    tr.dataset.status = st;
+    tr.dataset.date = dateVal || "";
+    tr.dataset.justif = justif || "";
+
+    // ===== BOUTON AGENT =====
     const btnA = tr.querySelector(".agentBtn");
     if(btnA){
       btnA.classList.remove("locked","mine","loading");
       btnA.disabled = false;
 
-      // 1) Personne inscrit
-      if(!agName && !agEmail){
-        btnA.textContent = "S’inscrire";
-        // ⚠️ le clic est géré par bind() -> onAgentClick(tr)
-      }else{
-        // 2) Quelqu’un est inscrit
+      // 1) Si validé (vert/rouge) => verrouillage TOTAL de l’agent
+      if(isLocked){
+        // Affiche le prénom si dispo, sinon —
         btnA.textContent = agName || "—";
-
-        // ✅ c’est moi : on compare sur agent_email (PAS parseSigned)
-        if(agEmail && meEmail && agEmail === meEmail){
-          btnA.classList.add("mine");
-          // pas de "(Annuler)" comme tu veux
+        btnA.classList.add("locked");
+        btnA.disabled = true;
+      }
+      // 2) Pas validé => comportement normal inscription / annulation (mais sans changer tes handlers)
+      else{
+        if(!agName && !agEmail){
+          btnA.textContent = "S’inscrire";
+          // le clic reste géré par bind() -> onAgentClick(tr)
         }else{
-          btnA.classList.add("locked");
-          btnA.disabled = true;
+          btnA.textContent = agName || "—";
+          if(agEmail && meEmail && agEmail === meEmail){
+            btnA.classList.add("mine"); // moi
+            // le clic reste géré par bind() -> onAgentClick(tr) (annulation)
+          }else{
+            btnA.classList.add("locked");
+            btnA.disabled = true;
+          }
         }
       }
     }
 
-    // ======================  
-// FAIT ✅ (vert/rouge + justificatif)
-// ======================  
-const btnF = tr.querySelector(".faitBtn");
-if(btnF){
-  btnF.classList.remove("ok","bad","disabled","loading");
-  btnF.disabled = false;
-  btnF.onclick = null;
+    // ===== BOUTON FAIT =====
+    const btnF = tr.querySelector(".faitBtn");
+    if(btnF){
+      btnF.classList.remove("ok","bad","disabled","loading");
+      btnF.disabled = false;
+      btnF.onclick = null;
 
-  // Colonnes chez toi
-  const dateVal = (row.date_validation || "").toString().trim(); // "YYYY-MM-DD"
-  const justifTxt = (row.justificatif || "").toString().trim();
+      // A) VALIDÉ = VERT
+      if(st === "done"){
+        btnF.classList.add("ok");
+        btnF.textContent = fmtDM(dateVal);
+        // verrouillé : pas de modification
+        btnF.disabled = true; // on bloque le clic de validation
+        btnF.onclick = null; // aucun handler
+      }
 
-  // Statut déduit
-  const st = dateVal ? (justifTxt ? "not_done" : "done") : ""; // si date + justif => rouge, si date seule => vert
+      // B) VALIDÉ = ROUGE
+      else if(st === "not_done"){
+        btnF.classList.add("bad");
+        btnF.textContent = dateVal ? fmtDM(dateVal) : "NON FAIT";
 
-  // Affichage
-  if(st === "done"){
-    btnF.classList.add("ok");
-    btnF.textContent = fmtDM(dateVal); // jour/mois
-    btnF.disabled = true; // plus modifiable
-  }else if(st === "not_done"){
-    btnF.classList.add("bad");
-    btnF.textContent = fmtDM(dateVal); // jour/mois (donc date nécessaire)
-    // ✅ seul cas cliquable : voir justificatif
-    btnF.onclick = ()=>{
-      openModal(`
-        <h3>${mois} — Justificatif</h3>
-        <div class="field" style="text-align:left;white-space:pre-wrap;line-height:1.35;">
-          ${justifTxt || "—"}
-        </div>
-        <div class="row">
-          <button class="btn2 primary" id="mOk">OK</button>
-        </div>
-      `);
-      document.getElementById("mOk").onclick = closeModal;
-    };
-  }else{
-    btnF.textContent = "—";
-    btnF.disabled = true; // rien à faire tant que pas validé
-  }
+        // verrouillé MAIS consultable
+        btnF.disabled = false; // IMPORTANT : sinon le clic ne part pas
+        btnF.onclick = ()=>{
+          openModal(`
+            <h3>${mois} — Justificatif</h3>
+            <div class="field" style="text-align:left;white-space:pre-wrap;line-height:1.35;">
+              ${justif ? justif.replace(/</g,"&lt;").replace(/>/g,"&gt;") : "—"}
+            </div>
+            <div class="row">
+              <button class="btn2 primary" id="mOk">OK</button>
+            </div>
+          `);
+          document.getElementById("mOk").onclick = closeModal;
+        };
+      }
 
-  // Mémos ligne
-  tr.dataset.status = st;
-  tr.dataset.date = dateVal || "";
-  tr.dataset.justif = justifTxt || "";
+      // C) PAS ENCORE VALIDÉ
+      else{
+        btnF.textContent = "—";
 
-  // ✅ VERROUILLAGE COMPLET DE LA LIGNE si validé (vert ou rouge)
-  const btnA = tr.querySelector(".agentBtn");
-  if(btnA && st){
-    btnA.classList.add("locked");
-    btnA.disabled = true; // agent ne peut plus recliquer
+        // seul le référent peut cliquer pour valider
+        if(isRef){
+          btnF.disabled = false;
+          btnF.onclick = ()=> onFaitClick(tr);
+        }else{
+          btnF.classList.add("disabled");
+          btnF.disabled = true;
+          btnF.onclick = null;
+        }
+      }
+
+      // petit marquage visuel si non référent (sauf rouge consultable)
+      if(!isRef && st !== "not_done"){
+        btnF.classList.add("disabled");
+      }
+    }
   }
 }
-
-
-  }
 
 /* =======================
    ACTIONS
