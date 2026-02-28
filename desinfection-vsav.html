@@ -642,7 +642,7 @@ function fill(rows){
     // Référent (affichage)
     const refName = (row.referent || "").toString().trim(); // prénom attendu
     const refEmail = (row.referent_email || row.referentEmail || "").toString().trim().toLowerCase();
-    tr.children[1].textContent = refName || "—";
+    tr.children[1].textContent = refName || ((refEmail.split("@")[0]||"").split(/[._-]/)[0]||"—");
     tr.dataset.refEmail = refEmail || "";
 
     // Agent
