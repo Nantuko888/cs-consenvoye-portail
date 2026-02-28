@@ -790,7 +790,7 @@ async function onFaitClick(tr){
       const ok = await askConfirm(`Confirmer : Fait le ${fmtFR(d)} ?`);
       if(!ok) return;
 
-      const r = await apiCall("vsav_set_done", { month, email: me, date: d });
+      const r = await apiCall("vsav_set_fait", { month, email: me, date: d });
       if(!r?.ok){ alert(r?.error || "Erreur"); return; }
       closeModal();
       await refresh();
@@ -817,7 +817,7 @@ async function onFaitClick(tr){
       const ok = await askConfirm(`Confirmer : NON FAIT ?`);
       if(!ok) return;
 
-      const r = await apiCall("vsav_set_not_done", { month, email: me, justif: j });
+      const r = await apiCall("vsav_set_nonfait", { month, email: me, justif: j });
       if(!r?.ok){ alert(r?.error || "Erreur"); return; }
       closeModal();
       await refresh();
