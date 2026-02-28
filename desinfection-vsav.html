@@ -635,7 +635,8 @@ function fill(rows){
     const tr = tbody.children[i];
     if(!tr) continue;
 
-    const row = rows[i] || {};
+    const monthKey = (tr.dataset.month || "").toLowerCase();
+const row = rows.find(r => (r.mois || "").toLowerCase() === monthKey) || {};
     const mois = (row.mois || tr.dataset.month || "").toString().trim().toUpperCase();
     tr.dataset.month = mois;
 
