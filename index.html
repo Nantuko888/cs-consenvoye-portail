@@ -360,14 +360,17 @@ async function handleCredentialResponse(response){
 
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
 
-  if(saved){
-  showPortal(); // ✅ IMPORTANT : revient au portail direct
+  // ✅ IMPORTANT : on reste sur LOGIN tant que pas vérifié
+  showLogin();
+
+  if(!saved) return;
+
   showMsg("Vérification…");
   try{
     const res = await authCheck(saved);
     if(res && res.ok === true){
       showMsg("");
-      showPortal(); // ✅ garde portail (au cas où)
+      showPortal();
     }else{
       localStorage.removeItem(LS_KEY);
       showLogin();
@@ -378,19 +381,8 @@ async function handleCredentialResponse(response){
     showLogin();
     showMsg("Erreur réseau / serveur.");
   }
-} else {
-  showLogin();
-}
-
 })();
 
-$logoutPortal.addEventListener("click", doLogout);
-
-window.addEventListener("popstate", () => {
-  const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
-  if (saved) showPortal();
-  else showLogin();
-});
   /* ==========================
    PULL TO REFRESH (Android)
    - sans scrollbar
