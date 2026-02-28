@@ -646,38 +646,60 @@ function fill(rows){
       }
     }
 
-    // ======================
-    // FAIT (lecture seule ici, comme chez toi)
-    // ======================
-    const btnF = tr.querySelector(".faitBtn");
-    if(btnF){
-      btnF.classList.remove("ok","bad","disabled","loading");
-      btnF.disabled = false;
+    // ======================  
+// FAIT ✅ (vert/rouge + justificatif)
+// ======================  
+const btnF = tr.querySelector(".faitBtn");
+if(btnF){
+  btnF.classList.remove("ok","bad","disabled","loading");
+  btnF.disabled = false;
 
-      const isRef = (refEmail && meEmail && refEmail === meEmail);
+  const isRef = (refEmail && meEmail && refEmail === meEmail);
 
-      if(!isRef){
-        btnF.classList.add("disabled");
-        btnF.disabled = true;
-        btnF.textContent = (status==="done" && dateISO) ? fmtFR(dateISO)
-                       : (status==="not_done" ? "NON FAIT" : "—");
-      }else{
-        if(status==="done" && dateISO){
-          btnF.classList.add("ok");
-          btnF.textContent = fmtFR(dateISO);
-        }else if(status==="not_done"){
-          btnF.classList.add("bad");
-          btnF.textContent = "NON FAIT";
-        }else{
-          btnF.textContent = "—";
-        }
-      }
+  // ✅ on récupère les vraies colonnes (avec fallback)
+  const dateVal = (row.date_validation || row.fait_date || row.date || "").toString().trim();
+  const justifTxt = (row.justificatif || row.justif || "").toString().trim();
 
-      tr.dataset.status = status || "";
-      tr.dataset.date = dateISO || "";
-      tr.dataset.justif = justif || "";
-    }
+  // ✅ on déduit le statut depuis TES colonnes
+  const st = dateVal ? "done" : (justifTxt ? "not_done" : "");
+
+  // affichage couleur
+  if(st === "done"){
+    btnF.classList.add("ok");
+    btnF.textContent = fmtFR(dateVal);
+    btnF.onclick = null;
+  }else if(st === "not_done"){
+    btnF.classList.add("bad");
+    btnF.textContent = "NON FAIT";
+
+    // ✅ clic = voir justificatif
+    btnF.onclick = ()=>{
+      openModal(`
+        <h3>${mois} — Justificatif</h3>
+        <div class="field" style="text-align:left;white-space:pre-wrap;line-height:1.35;">
+          ${justifTxt || "—"}
+        </div>
+        <div class="row">
+          <button class="btn2 primary" id="mOk">OK</button>
+        </div>
+      `);
+      document.getElementById("mOk").onclick = closeModal;
+    };
+  }else{
+    btnF.textContent = "—";
+    btnF.onclick = null;
   }
+
+  // droits : si pas référent, lecture seule (mais on garde le clic justificatif si rouge)
+  if(!isRef){
+    btnF.classList.add("disabled");
+    btnF.disabled = true;
+    if(st !== "not_done") btnF.onclick = null;
+  }
+
+  tr.dataset.status = st;
+  tr.dataset.date = dateVal || "";
+  tr.dataset.justif = justifTxt || "";
 }
 
 
