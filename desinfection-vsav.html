@@ -595,86 +595,83 @@ function fmtFR(iso){
    row.date ("YYYY-MM-DD")
    row.justificatif (texte)
    ======================= */
+function fmtDMAny(v){
+  if(v == null) return "";
+  if (v instanceof Date && !isNaN(v)) {
+    const dd = String(v.getDate()).padStart(2,"0");
+    const mm = String(v.getMonth()+1).padStart(2,"0");
+    return `${dd}/${mm}`;
+  }
+  const s = String(v).trim();
+  if(!s) return "";
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(m) return `${m[3]}/${m[2]}`;
+  const d = new Date(s);
+  if(!isNaN(d)){
+    const dd = String(d.getDate()).padStart(2,"0");
+    const mm = String(d.getMonth()+1).padStart(2,"0");
+    return `${dd}/${mm}`;
+  }
+  return s; // fallback
+}
+
 function fill(rows){
   const tbody = document.getElementById("tbody");
   const meEmail = (myEmail() || "").trim().toLowerCase();
-  const meName = (myName() || "").trim();
-
-  // helpers
-  const nameFromEmail = (em)=>{
-    em = (em||"").toString().trim().toLowerCase();
-    if(!em || !em.includes("@")) return "";
-    let n = em.split("@")[0].replace(/[._-]+/g," ").trim();
-    if(!n) return "";
-    return n.charAt(0).toUpperCase() + n.slice(1);
-  };
-  const fmtDM = (iso)=>{
-    iso = (iso||"").toString().trim();
-    const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-    if(!m) return iso || "—";
-    return `${m[3]}/${m[2]}`; // JJ/MM
-  };
 
   for(let i=0;i<12;i++){
     const tr = tbody.children[i];
     if(!tr) continue;
 
     const row = rows[i] || {};
-
-    // MOIS
     const mois = (row.mois || tr.dataset.month || "").toString().trim().toUpperCase();
     tr.dataset.month = mois;
 
-    // ===== RÉFÉRENT =====
-    // Dans ta Sheet, "referent" = email. (referent_email peut exister plus tard)
-    const refEmail = ((row.referent_email || row.referent || "") + "").trim().toLowerCase();
-    const refName = ((row.referent_name || row.referent_prenom || "") + "").trim()
-                  || nameFromEmail(refEmail)
-                  || ((row.referent || "") + "").trim(); // fallback affichage
-
-    tr.children[1].textContent = refName ? refName : "—";
+    // Référent (affichage)
+    const refName = (row.referent || "").toString().trim(); // prénom attendu
+    const refEmail = (row.referent_email || row.referentEmail || "").toString().trim().toLowerCase();
+    tr.children[1].textContent = refName || "—";
     tr.dataset.refEmail = refEmail || "";
 
-    // ===== AGENT =====
-    const agEmail = ((row.agent_email || "") + "").trim().toLowerCase();
-    const agName = ((row.agent || "") + "").trim() || nameFromEmail(agEmail);
+    // Agent
+    const agName = (row.agent || "").toString().trim();
+    const agEmail = (row.agent_email || row.agentEmail || "").toString().trim().toLowerCase();
 
-    // ===== VALIDATION (TES colonnes) =====
-    const dateVal = ((row.date_validation || row.fait_date || row.date || "") + "").trim(); // YYYY-MM-DD attendu
-    const justif = ((row.justificatif || row.justif || "") + "").trim();
+    // Validation (TES colonnes Sheets)
+    const dateVal = (row.date_validation || row.fait_date || row.date || "").toString().trim();
+    const justif = (row.justificatif || "").toString().trim();
 
-    // Statut déduit
+    // statut déduit
     const st = dateVal ? "done" : (justif ? "not_done" : "");
-    const isLocked = (st === "done" || st === "not_done");
-    const isRef = (!!refEmail && !!meEmail && refEmail === meEmail);
+    const isValidated = (st === "done" || st === "not_done");
 
     tr.dataset.status = st;
     tr.dataset.date = dateVal || "";
     tr.dataset.justif = justif || "";
 
-    // ===== BOUTON AGENT =====
+    // ======================
+    // Bouton AGENT
+    // ======================
     const btnA = tr.querySelector(".agentBtn");
     if(btnA){
       btnA.classList.remove("locked","mine","loading");
       btnA.disabled = false;
 
-      // 1) Si validé (vert/rouge) => verrouillage TOTAL de l’agent
-      if(isLocked){
-        // Affiche le prénom si dispo, sinon —
+      // Si validé => ligne verrouillée (agent ne touche plus)
+      if(isValidated){
         btnA.textContent = agName || "—";
         btnA.classList.add("locked");
         btnA.disabled = true;
-      }
-      // 2) Pas validé => comportement normal inscription / annulation (mais sans changer tes handlers)
-      else{
+        btnA.onclick = null;
+      }else{
+        // non validé => comportement normal
         if(!agName && !agEmail){
           btnA.textContent = "S’inscrire";
-          // le clic reste géré par bind() -> onAgentClick(tr)
+          // clic géré par bind() -> onAgentClick(tr)
         }else{
           btnA.textContent = agName || "—";
           if(agEmail && meEmail && agEmail === meEmail){
-            btnA.classList.add("mine"); // moi
-            // le clic reste géré par bind() -> onAgentClick(tr) (annulation)
+            btnA.classList.add("mine"); // juste style
           }else{
             btnA.classList.add("locked");
             btnA.disabled = true;
@@ -683,64 +680,77 @@ function fill(rows){
       }
     }
 
-    // ===== BOUTON FAIT =====
+    // ======================
+    // Case FAIT = couleur uniquement + clic "note"
+    // ======================
     const btnF = tr.querySelector(".faitBtn");
     if(btnF){
       btnF.classList.remove("ok","bad","disabled","loading");
       btnF.disabled = false;
-      btnF.onclick = null;
 
-      // A) VALIDÉ = VERT
+      const isRef = (refEmail && meEmail && refEmail === meEmail);
+
+      // Affichage = rien (uniquement la couleur)
+      btnF.textContent = "";
+
+      // Couleurs
       if(st === "done"){
         btnF.classList.add("ok");
-        btnF.textContent = fmtDM(dateVal);
-        // verrouillé : pas de modification
-        btnF.disabled = true; // on bloque le clic de validation
-        btnF.onclick = null; // aucun handler
-      }
-
-      // B) VALIDÉ = ROUGE
-      else if(st === "not_done"){
+      }else if(st === "not_done"){
         btnF.classList.add("bad");
-        btnF.textContent = dateVal ? fmtDM(dateVal) : "NON FAIT";
+      }
 
-        // verrouillé MAIS consultable
-        btnF.disabled = false; // IMPORTANT : sinon le clic ne part pas
+      // CLIC = note (si déjà validé)
+      if(isValidated){
         btnF.onclick = ()=>{
-          openModal(`
-            <h3>${mois} — Justificatif</h3>
-            <div class="field" style="text-align:left;white-space:pre-wrap;line-height:1.35;">
-              ${justif ? justif.replace(/</g,"&lt;").replace(/>/g,"&gt;") : "—"}
-            </div>
-            <div class="row">
-              <button class="btn2 primary" id="mOk">OK</button>
-            </div>
-          `);
-          document.getElementById("mOk").onclick = closeModal;
+          const d = fmtDMAny(dateVal) || "—";
+          if(st === "done"){
+            openModal(`
+              <h3>${mois} — Fait</h3>
+              <div class="field" style="text-align:left;">
+                Date : <b>${d}</b>
+              </div>
+              <div class="row">
+                <button class="btn2 primary" id="mOk">OK</button>
+              </div>
+            `);
+            document.getElementById("mOk").onclick = closeModal;
+          }else{
+            openModal(`
+              <h3>${mois} — Non fait</h3>
+              <div class="field" style="text-align:left;">
+                Date : <b>${d}</b>
+              </div>
+              <div class="field" style="text-align:left;white-space:pre-wrap;line-height:1.35;">
+                Justificatif :<br><b>${(justif || "—")}</b>
+              </div>
+              <div class="row">
+                <button class="btn2 primary" id="mOk">OK</button>
+              </div>
+            `);
+            document.getElementById("mOk").onclick = closeModal;
+          }
         };
+
+        // verrouillé pour tout le monde (on ne revalide pas)
+        btnF.disabled = false; // on laisse cliquable pour lire la note
+        btnF.classList.add("disabled"); // si tu veux style "verrouillé" visuel
+        return;
       }
 
-      // C) PAS ENCORE VALIDÉ
-      else{
-        btnF.textContent = "—";
-
-        // seul le référent peut cliquer pour valider
-        if(isRef){
-          btnF.disabled = false;
-          btnF.onclick = ()=> onFaitClick(tr);
-        }else{
-          btnF.classList.add("disabled");
-          btnF.disabled = true;
-          btnF.onclick = null;
-        }
-      }
-
-      // petit marquage visuel si non référent (sauf rouge consultable)
-      if(!isRef && st !== "not_done"){
+      // Pas validé :
+      // - référent peut cliquer pour valider (onFaitClick)
+      // - non référent : rien
+      if(isRef){
+        btnF.onclick = ()=> onFaitClick(tr);
+      }else{
+        btnF.onclick = null;
+        btnF.disabled = true;
         btnF.classList.add("disabled");
       }
     }
   }
+}
 
 /* =======================
    ACTIONS
@@ -814,8 +824,12 @@ async function onFaitClick(tr){
   const month = tr.dataset.month;
   const me = myEmail();
   const refEmail = (tr.dataset.refEmail || "").toLowerCase();
-  if(!me || !refEmail || me !== refEmail){
-    return; // sécurité
+  if(!me || !refEmail || me !== refEmail) return;
+
+  // Si déjà validé : on ne revalide pas
+  const st = tr.dataset.status || "";
+  if(st === "done" || st === "not_done"){
+    return;
   }
 
   openModal(`
@@ -833,7 +847,7 @@ async function onFaitClick(tr){
 
   document.getElementById("mFait").onclick = async ()=>{
     openModal(`
-      <h3>${month} — Choisir la date</h3>
+      <h3>${month} — Date</h3>
       <div class="field">
         <input type="date" id="mDate">
       </div>
@@ -848,11 +862,9 @@ async function onFaitClick(tr){
       const d = (document.getElementById("mDate").value || "").trim();
       if(!d){ alert("Choisis une date."); return; }
 
-      const ok = await askConfirm(`Confirmer : Fait le ${fmtFR(d)} ?`);
-      if(!ok) return;
-
       const r = await apiCall("vsav_set_fait", { month, email: me, date: d });
       if(!r?.ok){ alert(r?.error || "Erreur"); return; }
+
       closeModal();
       await refresh();
     };
@@ -860,7 +872,10 @@ async function onFaitClick(tr){
 
   document.getElementById("mNon").onclick = async ()=>{
     openModal(`
-      <h3>${month} — Non fait (justificatif obligatoire)</h3>
+      <h3>${month} — Non fait</h3>
+      <div class="field">
+        <input type="date" id="mDate">
+      </div>
       <div class="field">
         <textarea id="mJustif" placeholder="Justificatif obligatoire…"></textarea>
       </div>
@@ -872,14 +887,14 @@ async function onFaitClick(tr){
     document.getElementById("mBack").onclick = ()=>onFaitClick(tr);
 
     document.getElementById("mVal").onclick = async ()=>{
+      const d = (document.getElementById("mDate").value || "").trim();
       const j = (document.getElementById("mJustif").value || "").trim();
+      if(!d){ alert("Choisis une date."); return; }
       if(!j){ alert("Justificatif obligatoire."); return; }
 
-      const ok = await askConfirm(`Confirmer : NON FAIT ?`);
-      if(!ok) return;
-
-      const r = await apiCall("vsav_set_nonfait", { month, email: me, justif: j });
+      const r = await apiCall("vsav_set_nonfait", { month, email: me, date: d, justificatif: j });
       if(!r?.ok){ alert(r?.error || "Erreur"); return; }
+
       closeModal();
       await refresh();
     };
