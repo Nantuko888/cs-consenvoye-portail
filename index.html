@@ -206,7 +206,8 @@ body {
 </main>
 
 <script>
-/* ====== CONFIG (SEULS 2 TRUCS À METTRE) ====== */
+<script>
+/* ====== CONFIG ====== */
 const GOOGLE_CLIENT_ID = "690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com";
 const API = "https://script.google.com/macros/s/AKfycbyOtpcY1OIyDxbbsyaMJHnkeSjzjD54MG1lM7nqAGQzuc_0kmCRNCAFe_2WZUc1xQrL/exec";
 const LS_KEY = "cs_portail_email_v1";
@@ -220,7 +221,7 @@ const $logoutPortal = document.getElementById("logoutBtnPortal");
 /* ====== UI ====== */
 function showMsg(t){ $msg.textContent = t || ""; }
 
-/* ✅ MODIF: on marque l’état "portail" dans l’URL pour que RETOUR depuis une page revienne au portail (pas au login) */
+/* ✅ État URL portail (utile pour "retour") */
 function markPortalUrl_(){
   if (!location.search.includes("portal=1")) {
     history.replaceState({page:"portal"}, "", location.pathname + "?portal=1");
@@ -229,25 +230,21 @@ function markPortalUrl_(){
   }
 }
 function clearPortalUrl_(){
-  if (location.search.includes("portal=1")) {
-    history.replaceState({page:"login"}, "", location.pathname);
-  } else {
-    history.replaceState({page:"login"}, "", location.pathname);
-  }
+  history.replaceState({page:"login"}, "", location.pathname);
 }
 
 function showPortal(){
   $loginBox.style.display = "none";
   $portal.style.display = "flex";
-  markPortalUrl_(); // ✅ important
+  markPortalUrl_();
 }
 function showLogin(){
   $portal.style.display = "none";
   $loginBox.style.display = "block";
-  clearPortalUrl_(); // ✅ important
+  clearPortalUrl_();
 }
 
-/* ====== JWT email (ROBUSTE) ====== */
+/* ====== JWT email ====== */
 function b64urlToUtf8(b64url){
   let s = String(b64url || "").replace(/-/g, "+").replace(/_/g, "/");
   while (s.length % 4) s += "=";
@@ -306,178 +303,134 @@ function jsonp(url, cbName, timeoutMs = 30000){
 async function authCheck(email){
   const cb = "cb_auth_" + Math.random().toString(36).slice(2);
   const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
-  try {
-    return await jsonp(url, cb, 30000);
-  } catch(e1){
-    return await jsonp(url, cb, 30000);
-  }
+  // 1 tentative suffit souvent, mais on garde ton retry
+  try { return await jsonp(url, cb, 30000); }
+  catch(e1){ return await jsonp(url, cb, 30000); }
 }
 
-/* ✅ MODIF: une seule fonction de déconnexion */
+/* ====== Overlay Vérification (évite flash login/portail) ====== */
+let $checking = null;
+function ensureChecking(){
+  if($checking) return;
+  $checking = document.createElement("div");
+  $checking.style.position = "fixed";
+  $checking.style.inset = "0";
+  $checking.style.display = "none";
+  $checking.style.alignItems = "center";
+  $checking.style.justifyContent = "center";
+  $checking.style.background = "rgba(0,0,0,.55)";
+  $checking.style.backdropFilter = "blur(8px)";
+  $checking.style.zIndex = "999999";
+  $checking.innerHTML = `
+    <div style="padding:16px 18px;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.60);color:#fff;font-weight:900;">
+      Vérification de l’accès…
+    </div>
+  `;
+  document.body.appendChild($checking);
+}
+function showChecking(){
+  ensureChecking();
+  $loginBox.style.display = "none";
+  $portal.style.display = "none";
+  $checking.style.display = "flex";
+}
+function hideChecking(){
+  ensureChecking();
+  $checking.style.display = "none";
+}
+
+/* ====== Déconnexion ====== */
 function doLogout(){
   localStorage.removeItem(LS_KEY);
   showLogin();
   showMsg("Déconnecté.");
 }
+$logoutPortal.addEventListener("click", doLogout);
 
-/* ====== Google callback ====== */
-async function handleCredentialResponse(response){
+/* ====== logique centrale ====== */
+async function checkAndShow_(email){
+  showChecking();
+  showMsg("");
+
   try{
-    showMsg("Vérification de l’accès…");
-
-    const email = parseJwtEmail(response.credential);
-    if(!email){
-      localStorage.removeItem(LS_KEY);
-      showLogin();
-      showMsg("Erreur : email introuvable.");
-      return;
-    }
-
     const res = await authCheck(email);
 
     if(res && res.ok === true){
+      // autorisé
       localStorage.setItem(LS_KEY, email);
-      showMsg("");
+      hideChecking();
       showPortal();
-    }else{
-      localStorage.removeItem(LS_KEY);
-      showLogin();
-      showMsg("Accès refusé.");
+      showMsg("");
+      return true;
     }
-  }catch(err){
+
+    // refusé => on nettoie
     localStorage.removeItem(LS_KEY);
+    hideChecking();
+    showLogin();
+    showMsg("Accès refusé.");
+    return false;
+
+  }catch(err){
+    // sécurité : en cas d'erreur réseau, on refuse
+    localStorage.removeItem(LS_KEY);
+    hideChecking();
     showLogin();
     showMsg("Erreur réseau / serveur.");
+    return false;
   }
+}
+
+/* ====== Google callback ====== */
+async function handleCredentialResponse(response){
+  showMsg("Vérification de l’accès…");
+
+  const email = parseJwtEmail(response.credential);
+  if(!email){
+    localStorage.removeItem(LS_KEY);
+    showLogin();
+    showMsg("Erreur : email introuvable.");
+    return;
+  }
+
+  await checkAndShow_(email);
 }
 
 /* ====== Boot ====== */
 (async function(){
+  // inject client id
   const g = document.getElementById("g_id_onload");
   g.setAttribute("data-client_id", GOOGLE_CLIENT_ID);
 
   showMsg("");
 
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
-
-  // ✅ IMPORTANT : on reste sur LOGIN tant que pas vérifié
-  showLogin();
-
-  if(!saved) return;
-
-  showMsg("Vérification…");
-  try{
-    const res = await authCheck(saved);
-    if(res && res.ok === true){
-      showMsg("");
-      showPortal();
-    }else{
-      localStorage.removeItem(LS_KEY);
-      showLogin();
-      showMsg("Accès refusé.");
-    }
-  }catch(e){
-    localStorage.removeItem(LS_KEY);
+  if(saved){
+    await checkAndShow_(saved);
+  }else{
     showLogin();
-    showMsg("Erreur réseau / serveur.");
   }
 })();
 
-  /* ==========================
-   PULL TO REFRESH (Android)
-   - sans scrollbar
-   - marche même si overflow:hidden
-   ========================== */
-(function enablePullToRefresh(){
-  let startY = 0;
-  let pulling = false;
-  let fired = false;
-
-  // petit indicateur (discret)
-  const bar = document.createElement("div");
-  bar.style.position = "fixed";
-  bar.style.left = "50%";
-  bar.style.top = "10px";
-  bar.style.transform = "translateX(-50%)";
-  bar.style.padding = "6px 10px";
-  bar.style.borderRadius = "999px";
-  bar.style.background = "rgba(0,0,0,.55)";
-  bar.style.border = "1px solid rgba(255,255,255,.15)";
-  bar.style.color = "#fff";
-  bar.style.fontWeight = "900";
-  bar.style.fontSize = "12px";
-  bar.style.zIndex = "999999";
-  bar.style.display = "none";
-  bar.textContent = "Tire pour rafraîchir…";
-  document.body.appendChild(bar);
-
-  function atTop(){
-    // sur index c’est toujours 0, mais on garde la sécurité
-    const se = document.scrollingElement || document.documentElement;
-    return (se.scrollTop || 0) <= 0;
+/* ✅ Android / retour depuis une icône : re-check quand la page revient du cache */
+window.addEventListener("pageshow", async () => {
+  const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
+  if(saved){
+    await checkAndShow_(saved);
   }
+});
 
-  function canStart(e){
-    // ignore si modal ouverte / input etc.
-    const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : "";
-    if(tag === "input" || tag === "textarea" || tag === "select") return false;
-
-    // si un overlay / modal est visible chez toi, bloque (optionnel)
-    // if(document.querySelector(".modal.show")) return false;
-
-    return atTop();
+/* ✅ garde ton popstate : si l’utilisateur "retour" */
+window.addEventListener("popstate", async () => {
+  const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
+  if(saved){
+    await checkAndShow_(saved);
+  }else{
+    showLogin();
   }
-
-  function doRefresh(){
-    // Sur index : reload
-    location.reload();
-  }
-
-  window.addEventListener("touchstart", (e)=>{
-    if(!e.touches || e.touches.length !== 1) return;
-    if(!canStart(e)) return;
-
-    startY = e.touches[0].clientY;
-    pulling = true;
-    fired = false;
-  }, {passive:true});
-
-  window.addEventListener("touchmove", (e)=>{
-    if(!pulling || fired) return;
-    if(!e.touches || e.touches.length !== 1) return;
-
-    const y = e.touches[0].clientY;
-    const dy = y - startY;
-
-    if(dy > 10){
-      bar.style.display = "block";
-      if(dy > 80){
-        bar.textContent = "Relâche pour rafraîchir ✅";
-      }else{
-        bar.textContent = "Tire pour rafraîchir…";
-      }
-    }
-  }, {passive:true});
-
-  window.addEventListener("touchend", (e)=>{
-    if(!pulling || fired) { pulling = false; return; }
-
-    bar.style.display = "none";
-
-    // si on a tiré suffisamment
-    const endY = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientY : startY;
-    const dy = endY - startY;
-
-    pulling = false;
-
-    if(dy > 80){
-      fired = true;
-      doRefresh();
-    }
-  }, {passive:true});
-})();
-
+});
 </script>
+
 
 </body>
 </html>
