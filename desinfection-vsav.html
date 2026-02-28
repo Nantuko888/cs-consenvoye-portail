@@ -696,71 +696,72 @@ function fill(rows){
     // Case FAIT = couleur uniquement + clic "note"
     // ======================
     const btnF = tr.querySelector(".faitBtn");
-    if(btnF){
-      btnF.classList.remove("ok","bad","disabled","loading");
-      btnF.disabled = false;
+if(btnF){
+  btnF.classList.remove("ok","bad","disabled","loading");
+  btnF.disabled = false;
 
-      const isRef = (refEmail && meEmail && refEmail === meEmail);
+  const isRef = (refEmail && meEmail && refEmail === meEmail);
 
-      // Affichage = rien (uniquement la couleur)
-      btnF.textContent = "";
+  // Affichage = rien (uniquement la couleur)
+  btnF.textContent = "";
 
-      // Couleurs
+  // Couleurs
+  if(st === "done"){
+    btnF.classList.add("ok");
+  }else if(st === "not_done"){
+    btnF.classList.add("bad");
+  }
+
+  // ✅ SI DÉJÀ VALIDÉ : clic = note (et on sort, on n'écrase plus onclick)
+  if(isValidated){
+    btnF.onclick = ()=>{
+      const d = fmtDMAny(dateVal) || "—";
+
       if(st === "done"){
-        btnF.classList.add("ok");
-      }else if(st === "not_done"){
-        btnF.classList.add("bad");
-      }
-
-      // CLIC = note (si déjà validé)
-      if(isValidated){
-        btnF.onclick = ()=>{
-          const d = fmtDMAny(dateVal) || "—";
-          if(st === "done"){
-            openModal(`
-              <h3>${mois} — Fait</h3>
-              <div class="field" style="text-align:left;">
-                Date : <b>${d}</b>
-              </div>
-              <div class="row">
-                <button class="btn2 primary" id="mOk">OK</button>
-              </div>
-            `);
-            document.getElementById("mOk").onclick = closeModal;
-          }else{
-            openModal(`
-              <h3>${mois} — Non fait</h3>
-              <div class="field" style="text-align:left;">
-                Date : <b>${d}</b>
-              </div>
-              <div class="field" style="text-align:left;white-space:pre-wrap;line-height:1.35;">
-                Justificatif :<br><b>${(justif || "—")}</b>
-              </div>
-              <div class="row">
-                <button class="btn2 primary" id="mOk">OK</button>
-              </div>
-            `);
-            document.getElementById("mOk").onclick = closeModal;
-          }
-        };
-
-        // verrouillé pour tout le monde (on ne revalide pas)
-        btnF.disabled = false; // on laisse cliquable pour lire la note
-        btnF.classList.add("disabled"); // si tu veux style "verrouillé" visuel
-        
-      }
-
-      // Pas validé :
-      // - référent peut cliquer pour valider (onFaitClick)
-      // - non référent : rien
-      if(isRef){
-        btnF.onclick = ()=> onFaitClick(tr);
+        openModal(`
+          <h3>${mois} — Fait</h3>
+          <div class="field" style="text-align:left;">
+            Date : <b>${d}</b>
+          </div>
+          <div class="row">
+            <button class="btn2 primary" id="mOk">OK</button>
+          </div>
+        `);
       }else{
-        btnF.onclick = null;
-        btnF.disabled = true;
-        btnF.classList.add("disabled");
+        openModal(`
+          <h3>${mois} — Non fait</h3>
+          <div class="field" style="text-align:left;">
+            Date : <b>${d}</b>
+          </div>
+          <div class="field" style="text-align:left;white-space:pre-wrap;line-height:1.35;">
+            Justificatif :<br><b>${(justif || "—")}</b>
+          </div>
+          <div class="row">
+            <button class="btn2 primary" id="mOk">OK</button>
+          </div>
+        `);
       }
-    }
+      document.getElementById("mOk").onclick = closeModal;
+    };
+
+    // visuel “lecture seule” MAIS cliquable
+    btnF.disabled = false;
+    btnF.classList.add("disabled");
+    return; // ✅ IMPORTANT : empêche d’écraser onclick juste après
+  }
+
+  // ✅ PAS VALIDÉ :
+  // - référent peut cliquer pour valider
+  // - non référent : rien
+  if(isRef){
+    btnF.onclick = ()=> onFaitClick(tr);
+  }else{
+    btnF.onclick = null;
+    btnF.disabled = true;
+    btnF.classList.add("disabled");
+  }
+}
+
   }
 }
 
