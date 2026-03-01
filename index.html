@@ -398,7 +398,7 @@ async function handleCredentialResponse(response){
 
 /* ====== Boot ====== */
 (async function(){
-
+  // inject client id
   const g = document.getElementById("g_id_onload");
   g.setAttribute("data-client_id", GOOGLE_CLIENT_ID);
 
@@ -406,27 +406,29 @@ async function handleCredentialResponse(response){
 
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
 
-  if(saved){
-    showChecking(); // overlay neutre
-
-    try{
-      const res = await authCheck(saved);
-      if(res && res.ok === true){
-        showPortal();
-      }else{
-        localStorage.removeItem(LS_KEY);
-        showLogin();
-      }
-    }catch(e){
+if(saved){
+  showChecking(); // ✅ au lieu de showLogin()
+  try{
+    const res = await authCheck(saved);
+    if(res && res.ok === true){
+      showMsg("");
+      showPortal();
+    }else{
       localStorage.removeItem(LS_KEY);
       showLogin();
+      showMsg("Accès refusé.");
     }
-
-  }else{
+  }catch(e){
+    localStorage.removeItem(LS_KEY);
     showLogin();
+    showMsg("Erreur réseau / serveur.");
   }
+}else{
+  showLogin();
+}
 
-})();
+});
+
 
 </script>
 
