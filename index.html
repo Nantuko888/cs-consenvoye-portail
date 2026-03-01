@@ -407,9 +407,7 @@ async function handleCredentialResponse(response){
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
 
 if(saved){
-  // ✅ IMPORTANT: on NE montre PAS le portail tant que authCheck n’a pas validé
-  showLogin();
-  showMsg("Vérification…");
+  showChecking(); // ✅ au lieu de showLogin()
   try{
     const res = await authCheck(saved);
     if(res && res.ok === true){
