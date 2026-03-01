@@ -450,8 +450,9 @@ setAppHeight();
 
 /* ✅ Retour */
 document.getElementById("btnBack").addEventListener("click", ()=>{
-  location.href = "index.html?portal=1";
+  location.replace("index.html?portal=1");
 });
+
 
 /* ✅ Tabs */
 const tabIns = document.getElementById("tabInscription");
