@@ -163,7 +163,7 @@ body{
 .thead{
   display:grid;
   grid-template-columns: 1.05fr 1fr 1fr .85fr;
-  background: var(--head);           /* ✅ gris clair */
+  background: var(--head);
   color: var(--headTxt);
   font-weight:950;
   text-transform:uppercase;
@@ -235,6 +235,12 @@ body{
 }
 .agentBtn.locked{ opacity:.55; cursor:not-allowed; }
 .agentBtn.mine{ background: rgba(212,106,0,.45); border-color: rgba(255,255,255,.22); }
+
+.agentBtn.loading{
+  background: #1e7a3a !important;
+  border-color: #1e7a3a !important;
+  color:#fff;
+}
 
 /* ✅ bouton fait (plein format, opaque) */
 .faitBtn{
@@ -344,36 +350,28 @@ body{
   .agentBtn{padding:7px 8px}
   .faitBtn{padding:7px 8px}
 }
-  /* ✅ FIX S24 / écrans pas assez hauts : on compacte pour que DÉCEMBRE reste visible */
+
+/* ✅ FIX S24 / écrans pas assez hauts : on compacte pour que DÉCEMBRE reste visible */
 @media (max-height: 820px){
   .wrap{
     padding-top: calc(env(safe-area-inset-top) + 6px);
     padding-bottom: calc(env(safe-area-inset-bottom) + 6px);
     gap: 8px;
   }
-
   .topbar{ padding: 8px 10px; min-height: 42px; }
   .tabs{ gap: 8px; }
   .tab{ padding: 8px 10px; }
-
   .banner{ padding: 6px 8px; font-size: 16px; }
-
   .th{ padding: 7px 6px; font-size: 12px; }
   .td{ padding: 4px 6px; font-size: 12px; }
-
   .agentBtn{ padding: 7px 8px; }
   .faitBtn{ padding: 7px 8px; }
 }
-  .agentBtn.loading{
-  background: #1e7a3a !important;
-  border-color: #1e7a3a !important;
-  color:#fff;
-}
-  
-  
-  /* Mobile: évite que les dernières lignes soient masquées */
+
+/* Mobile: évite que les dernières lignes soient masquées */
 body { padding-bottom: 90px; }
-  /* Largeur fixe des colonnes */
+
+/* Largeur fixe des colonnes */
 #tbody .tr{
   display: grid;
   grid-template-columns: 80px 1fr 120px 70px;
@@ -479,7 +477,7 @@ const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnj
 const LS_EMAIL = "cs_portail_email_v1";
 const LS_NAME = "cs_portail_name_v1";
 
-  function requireIdentity(){
+function requireIdentity(){
   let email = myEmail();
   if(email) return true;
 
@@ -506,7 +504,6 @@ const LS_NAME = "cs_portail_name_v1";
 
   return true;
 }
-
 
 function myEmail(){
   return (localStorage.getItem(LS_EMAIL) || "").trim().toLowerCase();
@@ -570,43 +567,6 @@ function askConfirm(msg){
   });
 }
 
-function parseSigned(s){
-  s = (s || "").toString().trim();
-  if(!s) return { name:"", email:"" };
-
-  if(!s.includes("|")){
-    return { name:s, email:"" };
-  }
-
-  const parts = s.split("|");
-  return {
-    name: (parts[0] || "").trim(),
-    email: (parts[1] || "").trim().toLowerCase()
-  };
-}
-
-function fmtFR(iso){
-  const m = String(iso||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if(!m) return iso || "—";
-  return `${m[3]}/${m[2]}/${m[1]}`;
-}
-  function fmtDM(iso){
-  const m = String(iso||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if(!m) return iso || "—";
-  return `${m[3]}/${m[2]}`; // jour/mois
-}
-
-/* =======================
-   REMPLISSAGE TABLE
-   attend côté API:
-   row.referent (prénom)
-   row.referent_email (email)
-   row.agent (prénom)
-   row.agent_email (email)
-   row.status ("done"/"not_done"/"")
-   row.date ("YYYY-MM-DD")
-   row.justificatif (texte)
-   ======================= */
 function fmtDMAny(v){
   if(v == null) return "";
   if (v instanceof Date && !isNaN(v)) {
@@ -624,9 +584,12 @@ function fmtDMAny(v){
     const mm = String(d.getMonth()+1).padStart(2,"0");
     return `${dd}/${mm}`;
   }
-  return s; // fallback
+  return s;
 }
 
+/* =======================
+   REMPLISSAGE TABLE
+   ======================= */
 function fill(rows){
   const tbody = document.getElementById("tbody");
   const meEmail = (myEmail() || "").trim().toLowerCase();
@@ -636,12 +599,12 @@ function fill(rows){
     if(!tr) continue;
 
     const monthKey = (tr.dataset.month || "").toLowerCase();
-const row = rows.find(r => (r.mois || "").toLowerCase() === monthKey) || {};
+    const row = rows.find(r => (r.mois || "").toLowerCase() === monthKey) || {};
     const mois = (row.mois || tr.dataset.month || "").toString().trim().toUpperCase();
     tr.dataset.month = mois;
 
     // Référent (affichage)
-    const refName = (row.referent || "").toString().trim(); // prénom attendu
+    const refName = (row.referent || "").toString().trim();
     const refEmail = (row.referent_email || row.referentEmail || "").toString().trim().toLowerCase();
     tr.children[1].textContent = refName || ((refEmail.split("@")[0]||"").split(/[._-]/)[0]||"—");
     tr.dataset.refEmail = refEmail || "";
@@ -650,11 +613,11 @@ const row = rows.find(r => (r.mois || "").toLowerCase() === monthKey) || {};
     const agName = (row.agent || "").toString().trim();
     const agEmail = (row.agent_email || row.agentEmail || "").toString().trim().toLowerCase();
 
-    // Validation (TES colonnes Sheets)
+    // Validation
     const dateVal = (row.date_validation || row.fait_date || row.date || "").toString().trim();
     const justif = (row.justificatif || "").toString().trim();
 
-    // statut déduit
+    // statut
     const st = (row.status || "").toString().trim();
     const isValidated = (st === "done" || st === "not_done");
 
@@ -670,21 +633,19 @@ const row = rows.find(r => (r.mois || "").toLowerCase() === monthKey) || {};
       btnA.classList.remove("locked","mine","loading");
       btnA.disabled = false;
 
-      // Si validé => ligne verrouillée (agent ne touche plus)
       if(isValidated){
         btnA.textContent = agName || "—";
         btnA.classList.add("locked");
         btnA.disabled = true;
         btnA.onclick = null;
       }else{
-        // non validé => comportement normal
         if(!agName && !agEmail){
           btnA.textContent = "S’inscrire";
-          // clic géré par bind() -> onAgentClick(tr)
+          // onclick géré par bind()
         }else{
           btnA.textContent = agName || "—";
           if(agEmail && meEmail && agEmail === meEmail){
-            btnA.classList.add("mine"); // juste style
+            btnA.classList.add("mine");
           }else{
             btnA.classList.add("locked");
             btnA.disabled = true;
@@ -694,75 +655,68 @@ const row = rows.find(r => (r.mois || "").toLowerCase() === monthKey) || {};
     }
 
     // ======================
-    // Case FAIT = couleur uniquement + clic "note"
+    // Case FAIT (couleur + clic)
     // ======================
     const btnF = tr.querySelector(".faitBtn");
-if(btnF){
-  btnF.classList.remove("ok","bad","disabled","loading");
-  btnF.disabled = false;
+    if(btnF){
+      btnF.classList.remove("ok","bad","disabled","loading");
+      btnF.disabled = false;
 
-  const isRef = (refEmail && meEmail && refEmail === meEmail);
+      const isRef = (refEmail && meEmail && refEmail === meEmail);
 
-  // Affichage = rien (uniquement la couleur)
-  btnF.textContent = "";
+      btnF.textContent = "";
 
-  // Couleurs
-  if(st === "done"){
-    btnF.classList.add("ok");
-  }else if(st === "not_done"){
-    btnF.classList.add("bad");
-  }
+      if(st === "done"){
+        btnF.classList.add("ok");
+      }else if(st === "not_done"){
+        btnF.classList.add("bad");
+      }
 
-  // ✅ SI DÉJÀ VALIDÉ : clic = note (lecture seule)
-if (isValidated) {
-  btnF.onclick = () => {
-    const d = fmtDMAny(dateVal) || "—";
+      // ✅ SI DÉJÀ VALIDÉ : clic = note (lecture seule) + on sort (on n'écrase pas après)
+      if(isValidated){
+        btnF.onclick = () => {
+          const d = fmtDMAny(dateVal) || "—";
+          if(st === "done"){
+            openModal(`
+              <h3>${mois} — Fait</h3>
+              <div class="field" style="text-align:left;">
+                Date : <b>${d}</b>
+              </div>
+              <div class="row">
+                <button class="btn2 primary" id="mOk">OK</button>
+              </div>
+            `);
+            document.getElementById("mOk").onclick = closeModal;
+          }else{
+            openModal(`
+              <h3>${mois} — Non fait</h3>
+              <div class="field" style="text-align:left;">
+                Date : <b>${d}</b>
+              </div>
+              <div class="field" style="text-align:left;white-space:pre-wrap;line-height:1.35;">
+                Justificatif :<br><b>${(justif || "—")}</b>
+              </div>
+              <div class="row">
+                <button class="btn2 primary" id="mOk">OK</button>
+              </div>
+            `);
+            document.getElementById("mOk").onclick = closeModal;
+          }
+        };
 
-    if (st === "done") {
-      openModal(`
-        <h3>${mois} — Fait</h3>
-        <div class="field" style="text-align:left;">
-          Date : <b>${d}</b>
-        </div>
-        <div class="row">
-          <button class="btn2 primary" id="mOk">OK</button>
-        </div>
-      `);
-      document.getElementById("mOk").onclick = closeModal;
-    } else {
-      openModal(`
-        <h3>${mois} — Non fait</h3>
-        <div class="field" style="text-align:left;">
-          Date : <b>${d}</b>
-        </div>
-        <div class="field" style="text-align:left;white-space:pre-wrap;line-height:1.35;">
-          Justificatif :<br><b>${(justif || "—")}</b>
-        </div>
-        <div class="row">
-          <button class="btn2 primary" id="mOk">OK</button>
-        </div>
-      `);
-      document.getElementById("mOk").onclick = closeModal;
+        btnF.disabled = false;            // cliquable (lecture seule)
+        btnF.classList.add("disabled");   // visuel "lecture seule"
+        continue;                         // ✅ IMPORTANT : évite d'écraser onclick juste après
+      }
+
+      if(isRef){
+        btnF.onclick = () => onFaitClick(tr);
+      }else{
+        btnF.onclick = null;
+        btnF.disabled = true;
+        btnF.classList.add("disabled");
+      }
     }
-  };
-
-  // visuel "lecture seule" MAIS cliquable
-  btnF.disabled = false;
-  btnF.classList.add("disabled");
-}
-else if (isRef) {
-  // ✅ PAS VALIDÉ + référent : peut valider
-  btnF.onclick = () => onFaitClick(tr);
-}
-else {
-  // ✅ PAS VALIDÉ + non référent : rien
-  btnF.onclick = null;
-  btnF.disabled = true;
-  btnF.classList.add("disabled");
-}
-
-}
-
   }
 }
 
@@ -790,7 +744,7 @@ async function onAgentClick(tr){
   const ok = await askConfirm(isMine ? `Annuler ton inscription (${month}) ?` : `S’inscrire sur ${month} ?`);
   if(!ok) return;
 
-  // ✅ Optimiste : on affiche tout de suite, sans attendre Sheets
+  // ✅ Optimiste
   if(!isMine){
     btnA.textContent = meName || "Moi";
     btnA.classList.add("mine");
@@ -800,7 +754,7 @@ async function onAgentClick(tr){
     btnA.classList.remove("mine");
   }
 
-  // ✅ loading vert pendant l’appel (même pour annuler)
+  // ✅ loading vert pendant l’appel
   btnA.classList.add("loading");
   btnA.disabled = true;
 
@@ -813,17 +767,14 @@ async function onAgentClick(tr){
     );
 
     if(!r?.ok){
-      // rollback si erreur
       alert(r?.error || "Erreur");
       await refresh();
       return;
     }
 
-    // on réactive vite (pas besoin d'attendre refresh)
     btnA.classList.remove("loading");
     btnA.disabled = false;
 
-    // refresh “en arrière-plan” pour récupérer l’état exact (referents, etc.)
     setTimeout(()=>{ refresh(); }, 400);
 
   }catch(err){
@@ -833,14 +784,12 @@ async function onAgentClick(tr){
   }
 }
 
-
 async function onFaitClick(tr){
   const month = tr.dataset.month;
   const me = myEmail();
   const refEmail = (tr.dataset.refEmail || "").toLowerCase();
   if(!me || !refEmail || me !== refEmail) return;
 
-  // Si déjà validé : on ne revalide pas
   const st = tr.dataset.status || "";
   if(st === "done" || st === "not_done"){
     return;
@@ -917,17 +866,39 @@ async function onFaitClick(tr){
 
 /* bind clicks */
 function bind(){
+  // ✅ IMPORTANT : on ne touche PAS au .faitBtn ici
+  // car fill() gère ses onclick selon (validé / référent / non référent).
   document.querySelectorAll("#tbody .tr").forEach(tr=>{
     const btnA = tr.querySelector(".agentBtn");
-    const btnF = tr.querySelector(".faitBtn");
     if(btnA){
       btnA.onclick = ()=> onAgentClick(tr);
     }
-    if(btnF){
-      btnF.onclick = ()=> onFaitClick(tr);
-    }
   });
 }
+
+/* =======================
+   ✅ COMPAT (anti “vsavSetAgent_ is not defined”)
+   Si une vieille partie de ton code appelle encore vsavSetAgent_(),
+   ça ne plantera plus.
+   ======================= */
+window.vsavSetAgent_ = async function(month, email){
+  const em = (email || myEmail() || "").trim().toLowerCase();
+  if(!em) { alert("Session perdue."); return {ok:false}; }
+  return await apiCall("vsav_set_agent", { month, email: em, name: myName() || "" });
+};
+window.vsavUnsetAgent_ = async function(month, email){
+  const em = (email || myEmail() || "").trim().toLowerCase();
+  if(!em) { alert("Session perdue."); return {ok:false}; }
+  return await apiCall("vsav_unset_agent", { month, email: em });
+};
+window.vsavSetFait_ = async function(month, email, date){
+  const em = (email || myEmail() || "").trim().toLowerCase();
+  return await apiCall("vsav_set_fait", { month, email: em, date: (date||"") });
+};
+window.vsavSetNonfait_ = async function(month, email, date, justificatif){
+  const em = (email || myEmail() || "").trim().toLowerCase();
+  return await apiCall("vsav_set_nonfait", { month, email: em, date: (date||""), justificatif: (justificatif||"") });
+};
 
 /* boot */
 (async function(){
@@ -943,7 +914,6 @@ function bind(){
     // silence
   }
 })();
- 
 </script>
 
 </body>
