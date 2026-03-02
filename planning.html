@@ -878,7 +878,7 @@ function setEditMode(on){
   $btnPrev.addEventListener("click", ()=>{ if(currentMonth>0){ currentMonth--; renderMonth(); }});
   $btnNext.addEventListener("click", ()=>{ if(currentMonth<11){ currentMonth++; renderMonth(); }});
   if($btnLock) $btnLock.addEventListener("click", ()=> setEditMode(!EDIT_MODE));
-});
+
   /********** BOOT **********/
   (function(){
     rebuildMaps();
