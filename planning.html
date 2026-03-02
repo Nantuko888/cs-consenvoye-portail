@@ -411,7 +411,9 @@
     <div class="topbar">
   <h1 class="title">PLANNING 2026</h1>
   <div style="display:flex;gap:10px;align-items:center;">
-    <button class="btn" id="btnLock" type="button" aria-pressed="false" title="Mode édition">🔒</button>
+  <span id="editLabel" style="font-weight:950;letter-spacing:.3px;display:none;margin-right:8px;">MODE ÉDITION</span>
+<button class="btn" id="btnLock" title="Mode édition" aria-pressed="false">🔒</button>
+
     <button class="btn" id="btnBack">Retour</button>
   </div>
 </div>
@@ -469,15 +471,14 @@ const $btnLock = document.getElementById("btnLock");
 function setEditMode(on){
   EDIT_MODE = !!on;
 
-  if(EDIT_MODE){
-    $btnLock.textContent = "🔓";
-    $btnLock.setAttribute("aria-pressed","true");
-  }else{
-    $btnLock.textContent = "🔒";
-    $btnLock.setAttribute("aria-pressed","false");
+  const lab = document.getElementById("editLabel"); // 👈 le texte MODE ÉDITION
+  if(lab) lab.style.display = EDIT_MODE ? "inline-block" : "none";
+
+  if($btnLock){
+    $btnLock.textContent = EDIT_MODE ? "🔓" : "🔒";
+    $btnLock.setAttribute("aria-pressed", EDIT_MODE ? "true" : "false");
   }
 }
-
   // ✅ Légende par défaut (affichée même si l’API plante)
   const DEFAULT_CATEGORIES = [
     { category:"FMA centre", color:"#ff2d2d", order:1 },
@@ -876,8 +877,7 @@ function setEditMode(on){
   $("btnBack").addEventListener("click", ()=>location.href=BACK_URL);
   $btnPrev.addEventListener("click", ()=>{ if(currentMonth>0){ currentMonth--; renderMonth(); }});
   $btnNext.addEventListener("click", ()=>{ if(currentMonth<11){ currentMonth++; renderMonth(); }});
-  $btnLock.addEventListener("click", ()=>{
-  setEditMode(!EDIT_MODE);
+  if($btnLock) $btnLock.addEventListener("click", ()=> setEditMode(!EDIT_MODE));
 });
   /********** BOOT **********/
   (function(){
