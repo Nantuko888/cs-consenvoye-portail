@@ -722,6 +722,36 @@ function refreshLockIcon(){
   }
 
   /********** NOTES (modal demi-page) **********/
+  function openAddEvent(dateStr){
+  const title = prompt("Titre de l’événement pour le " + dateStr);
+  if(!title) return;
+
+  const details = prompt("Détails (optionnel)");
+  
+  // On appelle Apps Script
+  const cb = "cb_add_" + Math.random().toString(36).slice(2);
+  const url = `${API}?view=planning_add`
+    + `&email=pierre.venante@gmail.com` // ⚠️ pour l’instant en dur (on sécurisera après)
+    + `&date=${encodeURIComponent(dateStr)}`
+    + `&title=${encodeURIComponent(title)}`
+    + `&details=${encodeURIComponent(details||"")}`
+    + `&nocache=1`
+    + `&callback=${cb}`;
+
+  jsonp(url, cb)
+    .then(res=>{
+      if(res?.ok){
+        alert("Ajouté ✔");
+        loadApi(); // refresh planning
+      }else{
+        alert("Erreur : " + (res?.error||"inconnue"));
+      }
+    })
+    .catch(()=>{
+      alert("Erreur réseau");
+    });
+}
+
   function openNote(dateStr){
     const arr = eventsByDate.get(dateStr) || [];
     const withDetails = arr.filter(ev => String(ev.details||"").trim());
@@ -781,7 +811,7 @@ function refreshLockIcon(){
   // 🔓 MODE ÉDITION : clic sur n'importe quel jour
   if(EDIT_MODE){
     // pour l’instant on test juste (étape 1)
-    alert("Mode édition : " + dateStr);
+    openAddEvent(dateStr);
     return;
   }
 
