@@ -401,14 +401,10 @@ async function handleCredentialResponse(response){
   const g = document.getElementById("g_id_onload");
   g.setAttribute("data-client_id", GOOGLE_CLIENT_ID);
 
-  const url = new URL(location.href);
-  const wantPortal = url.searchParams.get("portal") === "1";
-
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
 
-  // ✅ Si on revient d’une page (portal=1) et qu’on a une session en local,
-  // on affiche DIRECT le portail (anti "flash login") puis on vérifie derrière.
-  if (wantPortal && saved){
+  // ✅ Si on a une session => on affiche le PORTAIL tout de suite (retour OK depuis n’importe quelle page)
+  if(saved){
     showPortal();
     showMsg("Vérification…");
 
@@ -416,44 +412,24 @@ async function handleCredentialResponse(response){
       const res = await authCheck(saved);
       if(res && res.ok === true){
         showMsg("");
-        showPortal();
+        showPortal(); // garde portail
       }else{
         localStorage.removeItem(LS_KEY);
         showLogin();
         showMsg("Accès refusé.");
       }
     }catch(e){
-      // En cas d’erreur réseau, on garde le portail affiché (pas de retour login)
-      // et on met juste un message. (Tu peux choisir l’inverse si tu préfères.)
+      // réseau: on laisse le portail visible, mais on affiche un message
       showMsg("Connexion à vérifier (réseau).");
       showPortal();
     }
-
     return;
   }
 
-  // ✅ Cas normal (ou premier accès)
-  if(saved){
-    showMsg("Vérification…");
-    try{
-      const res = await authCheck(saved);
-      if(res && res.ok === true){
-        showMsg("");
-        showPortal();
-      }else{
-        localStorage.removeItem(LS_KEY);
-        showLogin();
-        showMsg("Accès refusé.");
-      }
-    }catch(e){
-      localStorage.removeItem(LS_KEY);
-      showLogin();
-      showMsg("Erreur réseau / serveur.");
-    }
-  }else{
-    showLogin();
-  }
+  // ✅ Pas de session => login
+  showLogin();
 })();
+
 
 
 </script>
