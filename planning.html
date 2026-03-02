@@ -897,7 +897,11 @@ async function loadMyRole_(){
   $("btnBack").addEventListener("click", ()=>location.href=BACK_URL);
   $btnPrev.addEventListener("click", ()=>{ if(currentMonth>0){ currentMonth--; renderMonth(); }});
   $btnNext.addEventListener("click", ()=>{ if(currentMonth<11){ currentMonth++; renderMonth(); }});
-  if($btnLock) $btnLock.addEventListener("click", ()=> setEditMode(!EDIT_MODE));
+  if($btnLock)
+  $btnLock.addEventListener("click", ()=>{
+    if(!IS_ADMIN) return; // ⛔ bloque les agents
+    setEditMode(!EDIT_MODE);
+  });
 
   /********** BOOT **********/
   (function(){
