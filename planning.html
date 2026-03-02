@@ -593,6 +593,26 @@ function setEditMode(on){
     document.head.appendChild(script);
   });
 }
+ // ====== ROLE (admin/agent) depuis Sheets (onglet Acces) ======
+const LS_EMAIL = "cs_portail_email_v1"; // doit être le même que sur index.html
+let IS_ADMIN = false;
+
+async function loadMyRole_(){
+  const email = (localStorage.getItem(LS_EMAIL) || "").trim().toLowerCase();
+  if(!email){
+    IS_ADMIN = false;
+    return { ok:false, error:"email manquant (localStorage)" };
+  }
+
+  const cb = "cb_auth_" + Math.random().toString(36).slice(2);
+  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
+
+  const res = await jsonp(url, cb);
+
+  // admin uniquement si ok=true ET role=admin
+  IS_ADMIN = !!(res && res.ok === true && String(res.role||"").toLowerCase() === "admin");
+  return { ok:true, email, isAdmin: IS_ADMIN, res };
+}
 
 
   /********** DATA **********/
