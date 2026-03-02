@@ -189,28 +189,22 @@
   border-color: #ffffff;
 }
 
-    /* jour avec NOTE (détails) => jaune fluo + cliquable */
+    /* jour avec NOTE (détails) => jaune fluo */
     .day.has-note{
-      box-shadow: inset 0 0 0 4px rgba(255,242,0,.95);
-      border-color: rgba(255,242,0,.80);
-      cursor:pointer;
-    }
-    .day.has-note span{
-      color:#fff200;
-      font-weight:950;
-      text-shadow: 0 0 6px rgba(255,242,0,.8);
-    }
-    /* petit repère discret en haut à droite */
-    .day.has-note::after{
-      content:"";
-      position:absolute;
-      top:6px; right:6px;
-      width:10px; height:10px;
-      border-radius: 3px;
-      background: rgba(255,242,0,.95);
-      box-shadow: 0 0 10px rgba(255,242,0,.55);
-      z-index:2;
-    }
+  cursor:pointer; /* on garde le clic */
+}
+
+/* ✅ juste un petit point discret en haut à droite */
+.day.has-note::after{
+  content:"";
+  position:absolute;
+  top:8px; right:8px;
+  width:8px; height:8px;
+  border-radius:999px;
+  background: rgba(255,242,0,.95);
+  box-shadow: 0 0 8px rgba(255,242,0,.45);
+  z-index:2;
+}
 
     /* ✅ légende TOUJOURS visible */
     .legend{
@@ -417,7 +411,7 @@
     <div class="topbar">
   <h1 class="title">PLANNING 2026</h1>
   <div style="display:flex;gap:10px;align-items:center;">
-    <button class="btn" id="btnLock" title="Mode édition">🔒</button>
+    <button class="btn" id="btnLock" type="button" aria-pressed="false" title="Mode édition">🔒</button>
     <button class="btn" id="btnBack">Retour</button>
   </div>
 </div>
@@ -470,10 +464,18 @@
   // ✅ Mode édition (plus tard : on le montrera seulement aux admins)
 let EDIT_MODE = false;
 
-function refreshLockIcon(){
-  const b = document.getElementById("btnLock");
-  if(!b) return;
-  b.textContent = EDIT_MODE ? "🔓" : "🔒";
+const $btnLock = document.getElementById("btnLock");
+
+function setEditMode(on){
+  EDIT_MODE = !!on;
+
+  if(EDIT_MODE){
+    $btnLock.textContent = "🔓";
+    $btnLock.setAttribute("aria-pressed","true");
+  }else{
+    $btnLock.textContent = "🔒";
+    $btnLock.setAttribute("aria-pressed","false");
+  }
 }
 
   // ✅ Légende par défaut (affichée même si l’API plante)
@@ -874,9 +876,10 @@ function refreshLockIcon(){
   $("btnBack").addEventListener("click", ()=>location.href=BACK_URL);
   $btnPrev.addEventListener("click", ()=>{ if(currentMonth>0){ currentMonth--; renderMonth(); }});
   $btnNext.addEventListener("click", ()=>{ if(currentMonth<11){ currentMonth++; renderMonth(); }});
-  $("btnLock").addEventListener("click", ()=>{
-  EDIT_MODE = !EDIT_MODE;
-  refreshLockIcon();
+  const $btnLock = $("btnLock");
+
+$btnLock.addEventListener("click", ()=>{
+  setEditMode(!EDIT_MODE);
 });
   /********** BOOT **********/
   (function(){
@@ -886,8 +889,7 @@ function refreshLockIcon(){
     const now = new Date();
     currentMonth = (now.getFullYear()===YEAR) ? now.getMonth() : 0;
     renderMonth();
-    refreshLockIcon();
-
+    setEditMode(false);
     loadApi();
   })();
 </script>
