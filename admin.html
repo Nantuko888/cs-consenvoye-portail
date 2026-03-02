@@ -1,101 +1,227 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Admin — CS Consenvoye</title>
-
   <style>
+    :root{
+      --txt:#f4f4f4;
+      --muted:rgba(255,255,255,.70);
+      --shadow: 0 14px 34px rgba(0,0,0,.40);
+      --radius: 22px;
+      --stroke: rgba(255,255,255,.10);
+      --orange:#d46a00;
+      --orange2:#b95800;
+      --yellow:#fff200;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
-      font-family:system-ui,Segoe UI,Roboto,Arial;
-      background:#000;
-      color:#fff;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--txt);
+      background:#0b0b0b;
+    }
+    .bg{
+      position:fixed; inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.55)),
+        url("background.png") center top/cover no-repeat;
+      z-index:-2;
+    }
+    .wrap{
+      min-height:100vh;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: calc(env(safe-area-inset-top) + 12px) 12px calc(env(safe-area-inset-bottom) + 12px);
       display:flex;
-      align-items:center;
-      justify-content:center;
-      height:100vh;
-      text-align:center;
+      flex-direction:column;
+      gap:12px;
     }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding: 10px 12px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      min-height: 46px;
+    }
+    .title{
+      font-weight:950; letter-spacing:.8px; text-transform: uppercase;
+      font-size: 18px; margin:0; white-space:nowrap;
+    }
+    .btn{
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      color:var(--txt);
+      padding: 9px 12px;
+      border-radius: 14px;
+      font-weight:900;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active{transform: translateY(1px)}
+
     .card{
-      padding:30px;
-      border-radius:18px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.30));
+      border:1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overflow:hidden;
+      padding: 14px;
+      min-height: 0;
     }
-    h1{margin:0 0 10px 0;}
+
+    /* état */
+    .status{
+      font-weight:950;
+      color:rgba(255,255,255,.90);
+    }
+    .status small{
+      display:block;
+      font-weight:850;
+      color:var(--muted);
+      margin-top:6px;
+    }
+
+    /* écran refus */
+    .refus{
+      display:none;
+      text-align:center;
+      padding:14px;
+    }
+    .refus img{
+      max-width:min(640px, 100%);
+      width:100%;
+      border-radius:18px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.45);
+    }
+
+    /* contenu admin (placeholder) */
+    .admin{
+      display:none;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      font-weight:900;
+      color: var(--yellow);
+    }
   </style>
 </head>
+
 <body>
+  <div class="bg"></div>
 
-<div id="app" class="card">
-  Vérification des droits...
-</div>
+  <div class="wrap">
+    <div class="topbar">
+      <h1 class="title">ADMIN</h1>
+      <button class="btn" id="btnBack">Retour</button>
+    </div>
 
-<script>
-/* ===== CONFIG ===== */
-const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
-const LS_EMAIL = "cs_portail_email_v1";
+    <section class="card">
+      <div class="status" id="status">
+        Vérification accès…
+        <small id="statusSub">Connexion à l’API</small>
+      </div>
 
-/* ===== JSONP ===== */
-function jsonp(url, cbName){
-  return new Promise((resolve,reject)=>{
-    const script=document.createElement("script");
-    const cleanup=()=>{
-      script.remove();
-      delete window[cbName];
-    };
-    window[cbName]=(data)=>{
-      cleanup();
-      resolve(data);
-    };
-    script.onerror=()=>{
-      cleanup();
-      reject(new Error("Erreur JSONP"));
-    };
-    script.src=url;
-    document.head.appendChild(script);
-  });
-}
+      <div class="admin" id="admin">
+        <div class="badge">✅ Accès admin OK</div>
+        <div style="margin-top:10px;font-weight:900;opacity:.9">
+          (Contenu admin à venir)
+        </div>
+      </div>
 
-/* ===== CHECK ADMIN ===== */
-async function checkAdmin(){
-  const email=(localStorage.getItem(LS_EMAIL)||"").trim().toLowerCase();
-  if(!email) return false;
+      <div class="refus" id="refus">
+        <img src="acces-refuse.png" alt="Accès refusé">
+      </div>
+    </section>
+  </div>
 
-  const cb="cb_"+Math.random().toString(36).slice(2);
-  const url=`${API}?view=auth_check&email=${encodeURIComponent(email)}&callback=${cb}&nocache=1`;
+  <script>
+    /********** CONFIG **********/
+    const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec"; // <- ton URL Apps Script /exec
+    const BACK_URL = "index.html";
 
-  try{
-    const res=await jsonp(url,cb);
-    return !!(res && res.ok && String(res.role||"").toLowerCase()==="admin");
-  }catch(e){
-    return false;
-  }
-}
+    const $ = (id)=>document.getElementById(id);
+    const $status = $("status");
+    const $statusSub = $("statusSub");
+    const $admin = $("admin");
+    const $refus = $("refus");
 
-/* ===== BOOT ===== */
-(async function(){
+    function jsonp(url, cbName){
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        const cleanup = () => {
+          script.remove();
+          try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+        };
+        const timer = setTimeout(() => { cleanup(); reject(new Error("Timeout JSONP")); }, 12000);
 
-  const isAdmin = await checkAdmin();
-  const app = document.getElementById("app");
+        window[cbName] = (data) => { clearTimeout(timer); cleanup(); resolve(data); };
 
-  if(!isAdmin){
-    app.innerHTML = `
-      <h1 style="color:#ff2d2d;">ACCÈS REFUSÉ</h1>
-      <p>Vous n'avez pas les droits administrateur.</p>
-    `;
-    return;
-  }
+        const sep = url.includes("?") ? "&" : "?";
+        script.src = url + sep + "callback=" + cbName + "&t=" + Date.now();
+        script.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error("Erreur JSONP")); };
+        document.head.appendChild(script);
+      });
+    }
 
-  app.innerHTML = `
-    <h1>ADMIN</h1>
-    <p>Zone administrateur sécurisée.</p>
-  `;
+    function showRefus(msg){
+      $status.textContent = "Accès refusé";
+      $statusSub.textContent = msg || "";
+      $admin.style.display = "none";
+      $refus.style.display = "block";
+    }
 
-})();
-</script>
+    function showAdmin(email){
+      $status.style.display = "none";
+      $admin.style.display = "block";
+      $refus.style.display = "none";
+    }
 
+    async function checkAdmin(){
+      if(!API || API.includes("COLLE_ICI")){
+        showRefus("API manquante : colle ton URL /exec dans admin.html");
+        return;
+      }
+      $status.textContent = "Vérification accès…";
+      $statusSub.textContent = "Lecture du rôle (onglet Acces)";
+
+      try{
+        // ✅ on appelle ton endpoint qui renvoie email+role
+        // Si ton API utilise déjà ?view=whoami (comme on avait fait), c’est parfait.
+        const cb = "cb_admin_" + Math.random().toString(36).slice(2);
+        const data = await jsonp(`${API}?view=whoami`, cb);
+
+        if(data?.ok !== true) throw new Error(data?.error || "API ok=false");
+        const role = String(data.role || "").toLowerCase().trim();
+
+        if(role === "admin"){
+          showAdmin(data.email || "");
+        }else{
+          showRefus("admin requis");
+        }
+      }catch(e){
+        showRefus("API HS / lente / mauvais lien");
+      }
+    }
+
+    $("btnBack").addEventListener("click", ()=>location.href=BACK_URL);
+
+    // BOOT
+    checkAdmin();
+  </script>
 </body>
 </html>
-
