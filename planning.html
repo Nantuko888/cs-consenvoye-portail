@@ -908,6 +908,7 @@ async function loadMyRole_(){
     currentMonth = (now.getFullYear()===YEAR) ? now.getMonth() : 0;
     renderMonth();
     setEditMode(false);
+    loadMyRole_().then(x=>console.log("ROLE:", x)).catch(e=>console.log("ROLE ERR:", e));
     loadApi();
   })();
 </script>
