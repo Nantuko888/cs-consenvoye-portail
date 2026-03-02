@@ -1,1 +1,101 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin — CS Consenvoye</title>
+
+  <style>
+    body{
+      margin:0;
+      font-family:system-ui,Segoe UI,Roboto,Arial;
+      background:#000;
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100vh;
+      text-align:center;
+    }
+    .card{
+      padding:30px;
+      border-radius:18px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    h1{margin:0 0 10px 0;}
+  </style>
+</head>
+<body>
+
+<div id="app" class="card">
+  Vérification des droits...
+</div>
+
+<script>
+/* ===== CONFIG ===== */
+const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+const LS_EMAIL = "cs_portail_email_v1";
+
+/* ===== JSONP ===== */
+function jsonp(url, cbName){
+  return new Promise((resolve,reject)=>{
+    const script=document.createElement("script");
+    const cleanup=()=>{
+      script.remove();
+      delete window[cbName];
+    };
+    window[cbName]=(data)=>{
+      cleanup();
+      resolve(data);
+    };
+    script.onerror=()=>{
+      cleanup();
+      reject(new Error("Erreur JSONP"));
+    };
+    script.src=url;
+    document.head.appendChild(script);
+  });
+}
+
+/* ===== CHECK ADMIN ===== */
+async function checkAdmin(){
+  const email=(localStorage.getItem(LS_EMAIL)||"").trim().toLowerCase();
+  if(!email) return false;
+
+  const cb="cb_"+Math.random().toString(36).slice(2);
+  const url=`${API}?view=auth_check&email=${encodeURIComponent(email)}&callback=${cb}&nocache=1`;
+
+  try{
+    const res=await jsonp(url,cb);
+    return !!(res && res.ok && String(res.role||"").toLowerCase()==="admin");
+  }catch(e){
+    return false;
+  }
+}
+
+/* ===== BOOT ===== */
+(async function(){
+
+  const isAdmin = await checkAdmin();
+  const app = document.getElementById("app");
+
+  if(!isAdmin){
+    app.innerHTML = `
+      <h1 style="color:#ff2d2d;">ACCÈS REFUSÉ</h1>
+      <p>Vous n'avez pas les droits administrateur.</p>
+    `;
+    return;
+  }
+
+  app.innerHTML = `
+    <h1>ADMIN</h1>
+    <p>Zone administrateur sécurisée.</p>
+  `;
+
+})();
+</script>
+
+</body>
+</html>
 
