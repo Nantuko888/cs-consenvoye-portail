@@ -158,6 +158,20 @@ body{
 </div>
 
 <script>
+/* =====================================================
+   🔐 PROTECTION ADMIN (OBLIGATOIRE)
+   ===================================================== */
+(function(){
+  const role = (localStorage.getItem("cs_role_v1") || "")
+                .trim()
+                .toLowerCase();
+
+  if(role !== "admin"){
+    // replace = pas d’historique → bouton retour Android bloqué
+    location.replace("index.html?portal=1");
+    return;
+  }
+})();
 const dashboard = document.getElementById("dashboard");
 const grid = document.getElementById("grid");
 const content = document.getElementById("sectionContent");
