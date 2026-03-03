@@ -557,6 +557,9 @@
   const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
   const BACK_URL = "index.html";
   const YEAR = 2026;
+  const CACHE_KEY = `cs_planning_cache_v1_${YEAR}`;
+  const CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 7; // 7 jours
+
 
   const LS_EMAIL = "cs_portail_email_v1"; // même clé que index.html
   let IS_ADMIN = false;
@@ -821,7 +824,7 @@
     const withDetails = arr.filter(ev => String(ev.details||"").trim());
     if(!withDetails.length) return;
 
-    $noteTitle.textContent = `Note — ${toFRDate(dateStr)}`;
+    $noteTitle.textContent = `Note — ${dateStr.split("-").reverse().join("/")}`;
     $noteBody.innerHTML = "";
 
     for(const ev of withDetails){
@@ -1095,43 +1098,89 @@
     }
   });
 
+  function saveCache_(payload){
+  try{
+    localStorage.setItem(CACHE_KEY, JSON.stringify({
+      savedAt: Date.now(),
+      payload
+    }));
+  }catch(e){}
+}
+
+function loadCache_(){
+  try{
+    const raw = localStorage.getItem(CACHE_KEY);
+    if(!raw) return null;
+    const obj = JSON.parse(raw);
+    if(!obj || !obj.payload) return null;
+    if(obj.savedAt && (Date.now() - obj.savedAt) > CACHE_MAX_AGE_MS) return null;
+    return obj.payload;
+  }catch(e){
+    return null;
+  }
+}
+
+function applyPlanningData_(py, pc){
+  events = Array.isArray(py?.events) ? py.events : [];
+  categoriesRaw = Array.isArray(pc?.categories) && pc.categories.length ? pc.categories : DEFAULT_CATEGORIES.slice();
+
+  rebuildMaps();
+  renderLegend();
+  renderMonth();
+}
+
+
   /********** LOAD API **********/
   async function loadApi(){
-    if(!API || API.includes("COLLE_ICI")){
-      showStatus("API manquante", "Mets ton URL exec dans const API.");
+  if(!API || API.includes("COLLE_ICI")){
+    showStatus("API manquante", "Mets ton URL exec dans const API.");
+    return;
+  }
+
+  // ✅ 1) Affiche le cache instantanément si dispo
+  const cached = loadCache_();
+  if(cached?.py && cached?.pc){
+    applyPlanningData_(cached.py, cached.pc);
+    showStatus("Synchronisation…", "Mise à jour en cours.");
+  }else{
+    showStatus("Chargement…", "Récupération des événements et catégories.");
+  }
+
+  const cb1 = "cb_py_" + Math.random().toString(36).slice(2);
+  const cb2 = "cb_pc_" + Math.random().toString(36).slice(2);
+
+  try{
+    const [py, pc] = await Promise.all([
+      jsonp(`${API}?view=planning_year&year=${YEAR}&nocache=1&callback=${cb1}`, cb1),
+      jsonp(`${API}?view=planning_categories&nocache=1&callback=${cb2}`, cb2)
+    ]);
+
+    if(py?.ok===false) throw new Error(py?.error || "planning_year invalide");
+    if(pc?.ok===false) throw new Error(pc?.error || "planning_categories invalide");
+
+    applyPlanningData_(py, pc);
+
+    // ✅ 2) Sauvegarde cache
+    saveCache_({ py, pc });
+
+    hideStatus();
+  }catch(e){
+    // ✅ si on avait un cache, on le laisse affiché + message discret
+    if(cached?.py && cached?.pc){
+      showStatus("Hors ligne / lent", "Les données affichées sont en cache.");
+      setTimeout(hideStatus, 2500);
       return;
     }
-    showStatus("Chargement…", "Récupération des événements et catégories.");
 
-    const cb1 = "cb_py_" + Math.random().toString(36).slice(2);
-    const cb2 = "cb_pc_" + Math.random().toString(36).slice(2);
-
-    try{
-      const [py, pc] = await Promise.all([
-        jsonp(`${API}?view=planning_year&year=${YEAR}&nocache=1&callback=${cb1}`, cb1, 20000),
-        jsonp(`${API}?view=planning_categories&nocache=1&callback=${cb2}`, cb2, 20000)
-      ]);
-
-      if(py?.ok===false) throw new Error(py?.error || "planning_year invalide");
-      if(pc?.ok===false) throw new Error(pc?.error || "planning_categories invalide");
-
-      events = Array.isArray(py.events) ? py.events : [];
-      categoriesRaw = Array.isArray(pc.categories) && pc.categories.length ? pc.categories : DEFAULT_CATEGORIES.slice();
-
-      rebuildMaps();
-      renderLegend();
-      renderMonth();
-
-      hideStatus();
-    }catch(e){
-      categoriesRaw = DEFAULT_CATEGORIES.slice();
-      events = [];
-      rebuildMaps();
-      renderLegend();
-      renderMonth();
-      showStatus("API HS / lente", "La légende reste, mais pas d’événements.");
-    }
+    // sinon fallback (comme avant)
+    categoriesRaw = DEFAULT_CATEGORIES.slice();
+    events = [];
+    rebuildMaps();
+    renderLegend();
+    renderMonth();
+    showStatus("API HS / lente", "La légende reste, mais pas d’événements.");
   }
+}
 
   /********** UI **********/
   $("btnBack").addEventListener("click", ()=>location.href=BACK_URL);
