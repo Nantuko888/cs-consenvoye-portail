@@ -14,6 +14,8 @@
       --orange:#d46a00;
       --orange2:#b95800;
       --yellow:#fff200;
+      --card: linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.30));
+      --btnbg: rgba(0,0,0,.18);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -32,7 +34,7 @@
     }
     .wrap{
       min-height:100vh;
-      max-width: 980px;
+      max-width: 1100px;
       margin: 0 auto;
       padding: calc(env(safe-area-inset-top) + 12px) 12px calc(env(safe-area-inset-bottom) + 12px);
       display:flex;
@@ -56,7 +58,7 @@
     }
     .btn{
       border:1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.18);
+      background: var(--btnbg);
       color:var(--txt);
       padding: 9px 12px;
       border-radius: 14px;
@@ -65,10 +67,12 @@
       -webkit-tap-highlight-color: transparent;
     }
     .btn:active{transform: translateY(1px)}
-
+    .btn.small{padding:7px 10px; border-radius:12px; font-weight:900; font-size:13px}
+    .btn.primary{border-color: rgba(255,242,0,.25)}
+    .btn.danger{border-color: rgba(255,77,77,.35)}
     .card{
       border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.30));
+      background: var(--card);
       border:1px solid var(--stroke);
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
@@ -103,10 +107,9 @@
       box-shadow: 0 12px 30px rgba(0,0,0,.45);
     }
 
-    /* contenu admin (placeholder) */
-    .admin{
-      display:none;
-    }
+    /* contenu admin */
+    .admin{ display:none; }
+
     .badge{
       display:inline-flex;
       align-items:center;
@@ -118,6 +121,107 @@
       font-weight:900;
       color: var(--yellow);
     }
+
+    /* layout admin */
+    .adminGrid{
+      display:grid;
+      grid-template-columns: 260px 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+    @media (max-width: 920px){
+      .adminGrid{ grid-template-columns: 1fr; }
+    }
+
+    .menu{
+      padding:10px;
+    }
+    .tabs{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .tab{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      text-align:left;
+      padding:10px 12px;
+      border-radius:16px;
+      border:1px solid transparent;
+      background: rgba(0,0,0,.20);
+      color:var(--txt);
+      font-weight:950;
+      cursor:pointer;
+    }
+    .tab:hover{
+      border-color: rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+    }
+    .tab.active{
+      border-color: rgba(255,242,0,.22);
+      background: linear-gradient(90deg, rgba(255,242,0,.10), rgba(212,106,0,.08));
+    }
+    .tag{
+      font-size:12px;
+      padding:2px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      color: var(--muted);
+      background: rgba(0,0,0,.18);
+      font-weight:850;
+      white-space:nowrap;
+    }
+
+    .panelHead{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:10px;
+      padding-bottom:10px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      margin-bottom:12px;
+    }
+    .panelHead h2{
+      margin:0;
+      font-size:16px;
+      font-weight:950;
+      letter-spacing:.2px;
+    }
+    .panelHead p{
+      margin:6px 0 0 0;
+      color: var(--muted);
+      font-size:13px;
+      font-weight:850;
+    }
+    .actions{ display:flex; gap:8px; flex-wrap:wrap; }
+
+    .section{ display:none; }
+    .section.active{ display:block; }
+
+    .hint{
+      margin-top:6px;
+      color: var(--muted);
+      font-weight:850;
+      font-size:13px;
+    }
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width: 720px){ .kpis{ grid-template-columns:1fr; } }
+    .kpi{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:18px;
+      background: rgba(0,0,0,.18);
+      padding:12px;
+      font-weight:950;
+    }
+    .kpi small{display:block; margin-top:6px; color:var(--muted); font-weight:850}
   </style>
 </head>
 
@@ -133,13 +237,165 @@
     <section class="card">
       <div class="status" id="status">
         Vérification accès…
-        <small id="statusSub">Connexion à l’API</small>
+        <small id="statusSub">Lecture du rôle local</small>
       </div>
 
       <div class="admin" id="admin">
         <div class="badge">✅ Accès admin OK</div>
-        <div style="margin-top:10px;font-weight:900;opacity:.9">
-          (Contenu admin à venir)
+
+        <div class="adminGrid">
+          <!-- MENU -->
+          <div class="card menu">
+            <div class="tabs" id="tabs">
+              <button class="tab active" data-tab="dash"><span>Tableau de bord</span><span class="tag">Vue</span></button>
+              <button class="tab" data-tab="planning"><span>Planning</span><span class="tag">Events</span></button>
+              <button class="tab" data-tab="years"><span>Années</span><span class="tag">Base</span></button>
+              <button class="tab" data-tab="categories"><span>Catégories</span><span class="tag">Couleurs</span></button>
+              <button class="tab" data-tab="documents"><span>Documents</span><span class="tag">Liens</span></button>
+              <button class="tab" data-tab="vsav"><span>Désinfection VSAV</span><span class="tag">Suivi</span></button>
+              <button class="tab" data-tab="orga"><span>Orga / Équipes</span><span class="tag">Struct</span></button>
+              <button class="tab" data-tab="acces"><span>Accès</span><span class="tag">Rôles</span></button>
+              <button class="tab" data-tab="debug"><span>Debug</span><span class="tag">API</span></button>
+            </div>
+
+            <div class="hint" style="margin-top:10px;">
+              (Ici, navigation admin. On branchera les données ensuite.)
+            </div>
+          </div>
+
+          <!-- PANELS -->
+          <div class="card" id="panel">
+
+            <!-- DASH -->
+            <div class="section active" id="sec-dash">
+              <div class="panelHead">
+                <div>
+                  <h2>Tableau de bord</h2>
+                  <p>Vue rapide (pour vérifier que tout va bien)</p>
+                </div>
+                <div class="actions">
+                  <button class="btn small" data-goto="planning">Planning</button>
+                  <button class="btn small" data-goto="vsav">VSAV</button>
+                </div>
+              </div>
+
+              <div class="kpis">
+                <div class="kpi"><span id="kpiYear">—</span><small>Années actives</small></div>
+                <div class="kpi"><span id="kpiEvents">—</span><small>Events (année)</small></div>
+                <div class="kpi"><span id="kpiVsav">—</span><small>VSAV (mois)</small></div>
+              </div>
+
+              <div class="hint">On remplira ces chiffres quand on branchera l’API.</div>
+            </div>
+
+            <!-- PLANNING -->
+            <div class="section" id="sec-planning">
+              <div class="panelHead">
+                <div>
+                  <h2>Planning</h2>
+                  <p>Ajouter / supprimer des events (avec event_id)</p>
+                </div>
+                <div class="actions">
+                  <button class="btn small primary">+ Ajouter</button>
+                  <button class="btn small">Actualiser</button>
+                </div>
+              </div>
+              <div class="hint">On mettra ici ton interface planning admin.</div>
+            </div>
+
+            <!-- YEARS -->
+            <div class="section" id="sec-years">
+              <div class="panelHead">
+                <div>
+                  <h2>Années</h2>
+                  <p>Créer année / archiver</p>
+                </div>
+                <div class="actions">
+                  <button class="btn small primary">+ Créer</button>
+                </div>
+              </div>
+              <div class="hint">On branchera sur planning_years_list + planning_year_create.</div>
+            </div>
+
+            <!-- CATEGORIES -->
+            <div class="section" id="sec-categories">
+              <div class="panelHead">
+                <div>
+                  <h2>Catégories</h2>
+                  <p>Couleurs + ordre</p>
+                </div>
+                <div class="actions">
+                  <button class="btn small primary">+ Ajouter</button>
+                </div>
+              </div>
+              <div class="hint">On branchera sur planning_categories.</div>
+            </div>
+
+            <!-- DOCUMENTS -->
+            <div class="section" id="sec-documents">
+              <div class="panelHead">
+                <div>
+                  <h2>Documents</h2>
+                  <p>Gérer les liens (catégories / ordre / actif)</p>
+                </div>
+                <div class="actions">
+                  <button class="btn small primary">+ Ajouter</button>
+                </div>
+              </div>
+              <div class="hint">On branchera sur documents.</div>
+            </div>
+
+            <!-- VSAV -->
+            <div class="section" id="sec-vsav">
+              <div class="panelHead">
+                <div>
+                  <h2>Désinfection VSAV</h2>
+                  <p>Vue admin (table + statuts)</p>
+                </div>
+                <div class="actions">
+                  <button class="btn small">Actualiser</button>
+                </div>
+              </div>
+              <div class="hint">On branchera sur vsav_get.</div>
+            </div>
+
+            <!-- ORGA -->
+            <div class="section" id="sec-orga">
+              <div class="panelHead">
+                <div>
+                  <h2>Orga / Équipes</h2>
+                  <p>Structurer l’organigramme et les équipes</p>
+                </div>
+              </div>
+              <div class="hint">On mettra ici les écrans “Équipes” + “Organigramme”.</div>
+            </div>
+
+            <!-- ACCES -->
+            <div class="section" id="sec-acces">
+              <div class="panelHead">
+                <div>
+                  <h2>Accès</h2>
+                  <p>Emails + rôles</p>
+                </div>
+                <div class="actions">
+                  <button class="btn small primary">+ Ajouter</button>
+                </div>
+              </div>
+              <div class="hint">Plus tard : sécurisation côté serveur.</div>
+            </div>
+
+            <!-- DEBUG -->
+            <div class="section" id="sec-debug">
+              <div class="panelHead">
+                <div>
+                  <h2>Debug</h2>
+                  <p>Tester les endpoints</p>
+                </div>
+              </div>
+              <div class="hint">On mettra un mini testeur JSONP.</div>
+            </div>
+
+          </div>
         </div>
       </div>
 
@@ -151,56 +407,54 @@
 
   <script>
     /********** CONFIG **********/
-    const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec"; // <- ton URL Apps Script /exec
     const BACK_URL = "index.html";
-
     const $ = (id)=>document.getElementById(id);
     const $status = $("status");
     const $statusSub = $("statusSub");
     const $admin = $("admin");
     const $refus = $("refus");
 
-    function jsonp(url, cbName){
-      return new Promise((resolve, reject) => {
-        const script = document.createElement("script");
-        const cleanup = () => {
-          script.remove();
-          try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
-        };
-        const timer = setTimeout(() => { cleanup(); reject(new Error("Timeout JSONP")); }, 12000);
-
-        window[cbName] = (data) => { clearTimeout(timer); cleanup(); resolve(data); };
-
-        const sep = url.includes("?") ? "&" : "?";
-        script.src = url + sep + "callback=" + cbName + "&t=" + Date.now();
-        script.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error("Erreur JSONP")); };
-        document.head.appendChild(script);
-      });
-    }
+    $("btnBack").onclick = () => { window.location.href = BACK_URL; };
 
     function showRefus(msg){
+      $status.style.display = "block";
       $status.textContent = "Accès refusé";
       $statusSub.textContent = msg || "";
       $admin.style.display = "none";
       $refus.style.display = "block";
     }
 
-    function showAdmin(email){
+    function showAdmin(){
       $status.style.display = "none";
       $admin.style.display = "block";
       $refus.style.display = "none";
     }
 
-    // BOOT
-    (function(){
-  const role = (localStorage.getItem("cs_role_v1") || "").toLowerCase().trim();
+    // Tabs UI
+    const tabs = Array.from(document.querySelectorAll("#tabs .tab"));
+    function showTab(tabKey){
+      tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === tabKey));
+      document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+      const sec = document.getElementById("sec-" + tabKey);
+      if(sec) sec.classList.add("active");
+    }
+    tabs.forEach(t => t.addEventListener("click", ()=>showTab(t.dataset.tab)));
 
-  if(role === "admin"){
-    showAdmin();
-  } else {
-    showRefus("admin requis");
-  }
-})();
+    // shortcuts dashboard
+    document.querySelectorAll("[data-goto]").forEach(b=>{
+      b.addEventListener("click", ()=>showTab(b.getAttribute("data-goto")));
+    });
+
+    // BOOT (IMPORTANT : pas d'appel API ici, uniquement localStorage)
+    (function(){
+      const role = (localStorage.getItem("cs_role_v1") || "").toLowerCase().trim();
+      if(role === "admin"){
+        showAdmin();
+        showTab("dash");
+      } else {
+        showRefus("admin requis");
+      }
+    })();
   </script>
 </body>
 </html>
