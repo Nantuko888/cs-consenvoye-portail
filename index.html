@@ -454,18 +454,19 @@ function showDenied(){
     const btn = document.createElement("button");
     btn.textContent = "← Retour";
     btn.style.cssText = `
-      position:absolute;
-      top: calc(env(safe-area-inset-top) + 12px);
-      left: 12px;
-      padding: 10px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.25);
-      background: rgba(0,0,0,.60);
-      color:#fff;
-      font-weight:900;
-      font-size:14px;
-      -webkit-tap-highlight-color: transparent;
-    `;
+  position:absolute;
+  bottom: calc(env(safe-area-inset-bottom) + 24px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 14px 22px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(0,0,0,.75);
+  color:#fff;
+  font-weight:900;
+  font-size:16px;
+  -webkit-tap-highlight-color: transparent;
+`;
     btn.addEventListener("click", ()=> overlay.remove());
 
     const img = document.createElement("img");
