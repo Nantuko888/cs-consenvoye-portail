@@ -263,6 +263,7 @@ function parseJwtEmail(credential){
   return String(payload.email || "").trim().toLowerCase();
 }
 
+<script>
 /* ====== JSONP ====== */
 function jsonp(url, cbName, timeoutMs = 30000){
   return new Promise((resolve, reject) => {
@@ -287,6 +288,7 @@ function jsonp(url, cbName, timeoutMs = 30000){
       resolve(data);
     };
 
+    // IMPORTANT : le callback doit déjà être dans l'URL (authCheck le met)
     const sep = url.includes("?") ? "&" : "?";
     script.src = url + sep + "_t=" + Date.now();
 
@@ -303,15 +305,16 @@ function jsonp(url, cbName, timeoutMs = 30000){
 async function authCheck(email){
   const cb = "cb_auth_" + Math.random().toString(36).slice(2);
   const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
-  // 1 tentative suffit souvent, mais on garde ton retry
   try { return await jsonp(url, cb, 30000); }
   catch(e1){ return await jsonp(url, cb, 30000); }
 }
 
 /* ====== Overlay Vérification (évite flash login/portail) ====== */
 let $checking = null;
+
 function ensureChecking(){
   if($checking) return;
+
   $checking = document.createElement("div");
   $checking.style.position = "fixed";
   $checking.style.inset = "0";
@@ -328,6 +331,7 @@ function ensureChecking(){
   `;
   document.body.appendChild($checking);
 }
+
 function showChecking(){
   ensureChecking();
   $loginBox.style.display = "none";
@@ -347,7 +351,7 @@ function doLogout(){
 }
 $logoutPortal.addEventListener("click", doLogout);
 
-/* ====== logique centrale ====== */
+/* ====== logique centrale login ====== */
 async function checkAndShow_(email){
   showChecking();
   showMsg("");
@@ -356,7 +360,6 @@ async function checkAndShow_(email){
     const res = await authCheck(email);
 
     if(res && res.ok === true){
-      // autorisé
       localStorage.setItem(LS_KEY, email);
       hideChecking();
       showPortal();
@@ -364,7 +367,6 @@ async function checkAndShow_(email){
       return true;
     }
 
-    // refusé => on nettoie
     localStorage.removeItem(LS_KEY);
     hideChecking();
     showLogin();
@@ -372,7 +374,6 @@ async function checkAndShow_(email){
     return false;
 
   }catch(err){
-    // sécurité : en cas d'erreur réseau, on refuse
     localStorage.removeItem(LS_KEY);
     hideChecking();
     showLogin();
@@ -398,12 +399,8 @@ async function handleCredentialResponse(response){
 
 /* ====== Boot ====== */
 (async function(){
-  const g = document.getElementById("g_id_onload");
-  g.setAttribute("data-client_id", GOOGLE_CLIENT_ID);
-
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
 
-  // ✅ Si on a une session => on affiche le PORTAIL tout de suite (retour OK depuis n’importe quelle page)
   if(saved){
     showPortal();
     showMsg("Vérification…");
@@ -412,185 +409,81 @@ async function handleCredentialResponse(response){
       const res = await authCheck(saved);
       if(res && res.ok === true){
         showMsg("");
-        showPortal(); // garde portail
+        showPortal();
       }else{
         localStorage.removeItem(LS_KEY);
         showLogin();
         showMsg("Accès refusé.");
       }
     }catch(e){
-      // réseau: on laisse le portail visible, mais on affiche un message
       showMsg("Connexion à vérifier (réseau).");
       showPortal();
     }
     return;
   }
 
-  // ✅ Pas de session => login
   showLogin();
 })();
 
+/* =========================================================
+   ====== ADMIN (clic + refus plein écran + retour) ======
+   ========================================================= */
 
-
-</script>
-<script>
-
-/*** OUTILS ***/
-function getEmailLocal(){
-  return localStorage.getItem("email")
-      || localStorage.getItem("cs_email")
-      || localStorage.getItem("user_email")
-      || "";
-}
-
-function jsonp(url, cbName){
-  return new Promise((resolve, reject)=>{
-    const s = document.createElement("script");
-    const timer = setTimeout(()=>{ cleanup(); reject(new Error("timeout")); }, 12000);
-    function cleanup(){
-      s.remove();
-      try{ delete window[cbName]; }catch(e){ window[cbName]=undefined; }
-      clearTimeout(timer);
-    }
-    window[cbName] = (data)=>{ cleanup(); resolve(data); };
-    const sep = url.includes("?") ? "&" : "?";
-    s.src = url + sep + "callback=" + cbName + "&t=" + Date.now();
-    s.onerror = ()=>{ cleanup(); reject(new Error("jsonp error")); };
-    document.head.appendChild(s);
-  });
-}
-</script>
-  
-<script>
-/*** CONFIG (on garde) ***/
 const ADMIN_URL = "admin.html";
 const DENIED_IMG = "acces_refuse.png";
 
-/*** OUTILS (on garde, mais propre) ***/
 function getEmailLocal(){
-  return (
-    localStorage.getItem("cs_portail_email_v1") || // ton LS_KEY du login Google
-    localStorage.getItem("email") ||
-    localStorage.getItem("cs_email") ||
-    localStorage.getItem("user_email") ||
-    ""
-  ).trim().toLowerCase();
+  return (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
 }
 
-function jsonp(url, cbName, timeoutMs = 12000){
-  return new Promise((resolve, reject)=>{
-    const s = document.createElement("script");
-    let done = false;
-
-    const cleanup = ()=>{
-      if(done) return;
-      done = true;
-      s.remove();
-      try{ delete window[cbName]; }catch(e){ window[cbName]=undefined; }
-      clearTimeout(timer);
-    };
-
-    const timer = setTimeout(()=>{
-      cleanup();
-      reject(new Error("timeout"));
-    }, timeoutMs);
-
-    window[cbName] = (data)=>{
-      cleanup();
-      resolve(data);
-    };
-
-    const sep = url.includes("?") ? "&" : "?";
-    s.src = url + sep + "callback=" + cbName + "&t=" + Date.now();
-    s.onerror = ()=>{
-      cleanup();
-      reject(new Error("jsonp error"));
-    };
-
-    document.head.appendChild(s);
-  });
-}
-
-/*** REFUS (plein écran, pas de about:blank) ***/
 function showDenied(){
-  if(document.getElementById("denyOverlay")) {
-    document.getElementById("denyOverlay").style.display = "block";
-    return;
+  let ov = document.getElementById("denyOverlay");
+  if(!ov){
+    ov = document.createElement("div");
+    ov.id = "denyOverlay";
+    ov.style.cssText = "position:fixed;inset:0;z-index:999999;background:#000;display:none;";
+
+    const btn = document.createElement("button");
+    btn.id = "denyBack";
+    btn.textContent = "← Retour";
+    btn.style.cssText = `
+      position:absolute;top:calc(env(safe-area-inset-top) + 12px);left:12px;z-index:2;
+      padding:10px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.25);
+      background:rgba(0,0,0,.55);color:#fff;font-weight:900;font-size:14px;
+      -webkit-tap-highlight-color:transparent;
+    `;
+    btn.onclick = ()=>{ ov.style.display = "none"; };
+
+    const img = document.createElement("img");
+    img.src = DENIED_IMG;
+    img.alt = "Accès refusé";
+    img.style.cssText = "width:100%;height:100%;object-fit:cover;display:block;";
+
+    ov.appendChild(btn);
+    ov.appendChild(img);
+    document.body.appendChild(ov);
   }
-
-  const overlay = document.createElement("div");
-  overlay.id = "denyOverlay";
-  overlay.style.position = "fixed";
-  overlay.style.inset = "0";
-  overlay.style.background = "#000";
-  overlay.style.zIndex = "99999";
-
-  const btn = document.createElement("button");
-  btn.innerText = "← Retour";
-  btn.style.position = "absolute";
-  btn.style.top = "20px";
-  btn.style.left = "20px";
-  btn.style.padding = "10px 14px";
-  btn.style.borderRadius = "14px";
-  btn.style.border = "1px solid rgba(255,255,255,.25)";
-  btn.style.background = "rgba(0,0,0,.6)";
-  btn.style.color = "#fff";
-  btn.style.fontWeight = "900";
-  btn.onclick = () => overlay.remove();
-
-  const img = document.createElement("img");
-  img.src = "acces_refuse.png";
-  img.style.width = "100%";
-  img.style.height = "100%";
-  img.style.objectFit = "cover";
-
-  overlay.appendChild(btn);
-  overlay.appendChild(img);
-  document.body.appendChild(overlay);
+  ov.style.display = "block";
 }
 
-function hideDenied(){
-  const overlay = document.getElementById("denyOverlay");
-  if(overlay) overlay.style.display = "none";
-}
-
-/*** BOUTON RETOUR OVERLAY ***/
-document.addEventListener("click", (e)=>{
-  if(e.target.closest("#denyBack")){
-    e.preventDefault();
-    hideDenied();
-  }
-});
-
-/*** CLIC ADMIN : vérif AU CLIC, pas avant ***/
 document.addEventListener("click", async (e)=>{
   const btn = e.target.closest("#btnAdmin");
   if(!btn) return;
-
   e.preventDefault();
 
   const email = getEmailLocal();
-  if(!email){
-    showDenied();
-    return;
-  }
+  if(!email){ showDenied(); return; }
 
   try{
-    // ✅ on appelle ta vue EXISTANTE côté Apps Script : auth_check
-    const cb = "cb_admin_" + Math.random().toString(36).slice(2);
-    const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
-const data = await jsonp(url, cb, 20000);
+    const res = await authCheck(email);
+    const role = String(res && res.role ? res.role : "").trim().toLowerCase();
 
-
-    const role = String(data && data.role ? data.role : "").trim().toLowerCase();
-
-    if(data && data.ok === true && role === "admin"){
+    if(res && res.ok === true && role === "admin"){
       location.href = ADMIN_URL;
     }else{
       showDenied();
     }
   }catch(err){
-    // sécurité : si l’API plante => refus
     showDenied();
   }
 });
