@@ -191,37 +191,16 @@
       $refus.style.display = "none";
     }
 
-    async function checkAdmin(){
-      if(!API || API.includes("COLLE_ICI")){
-        showRefus("API manquante : colle ton URL /exec dans admin.html");
-        return;
-      }
-      $status.textContent = "Vérification accès…";
-      $statusSub.textContent = "Lecture du rôle (onglet Acces)";
-
-      try{
-        // ✅ on appelle ton endpoint qui renvoie email+role
-        // Si ton API utilise déjà ?view=whoami (comme on avait fait), c’est parfait.
-        const cb = "cb_admin_" + Math.random().toString(36).slice(2);
-        const data = await jsonp(`${API}?view=whoami`, cb);
-
-        if(data?.ok !== true) throw new Error(data?.error || "API ok=false");
-        const role = String(data.role || "").toLowerCase().trim();
-
-        if(role === "admin"){
-          showAdmin(data.email || "");
-        }else{
-          showRefus("admin requis");
-        }
-      }catch(e){
-        showRefus("API HS / lente / mauvais lien");
-      }
-    }
-
-    $("btnBack").addEventListener("click", ()=>location.href=BACK_URL);
-
     // BOOT
-    checkAdmin();
+    (function(){
+  const role = (localStorage.getItem("cs_role_v1") || "").toLowerCase().trim();
+
+  if(role === "admin"){
+    showAdmin();
+  } else {
+    showRefus("admin requis");
+  }
+})();
   </script>
 </body>
 </html>
