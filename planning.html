@@ -170,7 +170,6 @@
     }
     .day.is-empty{ opacity:.12; pointer-events:none; }
 
-    /* couleur évènement (fond) */
     .day.has-color::before{
       content:"";
       position:absolute; inset:0;
@@ -181,32 +180,23 @@
     }
     .day span{ position:relative; z-index:1; }
 
-    /* jour du mois en cours  */
     .day.is-today{
-  box-shadow:
-    inset 0 0 0 4px #ffffff,
-    0 0 8px rgba(0,0,0,.6);
-  border-color: #ffffff;
-}
+      box-shadow: inset 0 0 0 4px #ffffff, 0 0 8px rgba(0,0,0,.6);
+      border-color: #ffffff;
+    }
 
-    /* jour avec NOTE (détails) => jaune fluo */
-    .day.has-note{
-  cursor:pointer; /* on garde le clic */
-}
+    .day.has-note{ cursor:pointer; }
+    .day.has-note::after{
+      content:"";
+      position:absolute;
+      top:8px; right:8px;
+      width:8px; height:8px;
+      border-radius:999px;
+      background: rgba(255,242,0,.95);
+      box-shadow: 0 0 8px rgba(255,242,0,.45);
+      z-index:2;
+    }
 
-/* ✅ juste un petit point discret en haut à droite */
-.day.has-note::after{
-  content:"";
-  position:absolute;
-  top:8px; right:8px;
-  width:8px; height:8px;
-  border-radius:999px;
-  background: rgba(255,242,0,.95);
-  box-shadow: 0 0 8px rgba(255,242,0,.45);
-  z-index:2;
-}
-
-    /* ✅ légende TOUJOURS visible */
     .legend{
       border-radius: var(--radius);
       background: linear-gradient(180deg, rgba(0,0,0,.40), rgba(0,0,0,.28));
@@ -248,7 +238,6 @@
       text-overflow: ellipsis;
     }
 
-    /* mini message d'état */
     .status{
       position:fixed;
       left:12px; right:12px;
@@ -276,7 +265,7 @@
     }
     .status .small{font-weight:800; opacity:.85; font-size:13px}
 
-    /* ======= NOTE MODAL (demi-page) ======= */
+    /* ======= NOTE MODAL ======= */
     .noteOverlay{
       position:fixed; inset:0;
       background: rgba(0,0,0,.55);
@@ -392,6 +381,98 @@
       white-space:pre-wrap;
     }
 
+    /* ======= EDIT MODAL (admin) ======= */
+    .editOverlay{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index:140;
+      display:none;
+    }
+    .editOverlay.show{display:block;}
+    .editSheet{
+      position:absolute;
+      left:12px; right:12px;
+      bottom: calc(env(safe-area-inset-bottom) + 12px);
+      max-width: 980px;
+      margin: 0 auto;
+      height: min(62vh, 620px);
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(0,0,0,.78), rgba(0,0,0,.62));
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+    .editHead{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding: 12px 12px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+    }
+    .editTitle{
+      font-weight:950;
+      font-size: 16px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .editActions{
+      display:flex; gap:8px; align-items:center;
+    }
+    .iconBtn{
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      color:var(--txt);
+      padding: 8px 10px;
+      border-radius: 14px;
+      font-weight:950;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+      min-width: 42px;
+    }
+    .iconBtn:active{transform: translateY(1px)}
+    .iconBtn.danger{ border-color: rgba(255,80,80,.35); }
+
+    .editBody{
+      padding: 12px;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .row{
+      border-radius: 18px;
+      background: rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.10);
+      padding: 10px 12px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .rowTop{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .rowName{
+      font-weight: 950;
+      font-size: 16px;
+      overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    }
+    .rowSub{
+      font-weight: 850;
+      font-size: 13px;
+      color: rgba(255,255,255,.78);
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .rowBtns{
+      display:flex; gap:8px; flex-wrap:wrap;
+    }
+
     @media (max-width: 360px){
       .monthname{font-size:20px}
       .day{font-size:20px; border-radius:16px}
@@ -400,6 +481,7 @@
       .legTxt{font-size:16px}
       .sq{width:18px;height:18px}
       .noteSheet{height: min(56vh, 520px);}
+      .editSheet{height: min(68vh, 680px);}
     }
   </style>
 </head>
@@ -409,15 +491,13 @@
 
   <div class="wrap">
     <div class="topbar">
-  <h1 class="title">PLANNING 2026</h1>
-  <div style="display:flex;gap:10px;align-items:center;">
-  <span id="editLabel" style="display:none;margin-right:6px;font-weight:700;font-size:12px;color:#fff200;">MODE ÉDITION</span>
-  <button class="btn" id="btnLock" title="Mode édition" aria-pressed="false">🔒</button>
-
-    <button class="btn" id="btnBack">Retour</button>
-  </div>
-</div>
-
+      <h1 class="title" id="titleYear">PLANNING 2026</h1>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <span id="editLabel" style="display:none;margin-right:6px;font-weight:700;font-size:12px;color:#fff200;">MODE ÉDITION</span>
+        <button class="btn" id="btnLock" title="Mode édition" aria-pressed="false" style="display:none;">🔒</button>
+        <button class="btn" id="btnBack">Retour</button>
+      </div>
+    </div>
 
     <div class="monthbar">
       <button class="navbtn" id="btnPrev" aria-label="Mois précédent">‹</button>
@@ -447,7 +527,7 @@
     </div>
   </div>
 
-  <!-- ✅ MODAL NOTE (demi-page) -->
+  <!-- NOTE MODAL -->
   <div class="noteOverlay" id="noteOverlay" aria-hidden="true">
     <div class="noteSheet" role="dialog" aria-modal="true" aria-label="Note du jour">
       <div class="noteHead">
@@ -458,28 +538,31 @@
     </div>
   </div>
 
+  <!-- EDIT MODAL (admin) -->
+  <div class="editOverlay" id="editOverlay" aria-hidden="true">
+    <div class="editSheet" role="dialog" aria-modal="true" aria-label="Gestion des événements">
+      <div class="editHead">
+        <div class="editTitle" id="editTitle">—</div>
+        <div class="editActions">
+          <button class="iconBtn" id="btnAddEvent" title="Ajouter">＋</button>
+          <button class="iconBtn" id="btnCloseEdit" title="Fermer">✕</button>
+        </div>
+      </div>
+      <div class="editBody" id="editBody"></div>
+    </div>
+  </div>
+
 <script>
   /********** CONFIG **********/
   const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
   const BACK_URL = "index.html";
   const YEAR = 2026;
-  // ✅ Mode édition (plus tard : on le montrera seulement aux admins)
-let EDIT_MODE = false;
 
-const $btnLock = document.getElementById("btnLock");
+  const LS_EMAIL = "cs_portail_email_v1"; // même clé que index.html
+  let IS_ADMIN = false;
+  let EDIT_MODE = false;
 
-function setEditMode(on){
-  EDIT_MODE = !!on;
-
-  const lab = document.getElementById("editLabel"); // 👈 le texte MODE ÉDITION
-  if(lab) lab.style.display = EDIT_MODE ? "inline-block" : "none";
-
-  if($btnLock){
-    $btnLock.textContent = EDIT_MODE ? "🔓" : "🔒";
-    $btnLock.setAttribute("aria-pressed", EDIT_MODE ? "true" : "false");
-  }
-}
-  // ✅ Légende par défaut (affichée même si l’API plante)
+  /********** DEFAULT CATEGORIES **********/
   const DEFAULT_CATEGORIES = [
     { category:"FMA centre", color:"#ff2d2d", order:1 },
     { category:"FMA équipe 1", color:"#24d36a", order:2 },
@@ -490,13 +573,8 @@ function setEditMode(on){
     { category:"Sainte Barbe", color:"#ff5a5a", order:7 },
   ];
 
-  // ✅ Overrides (change ICI les couleurs interface légende + jours)
-  // -> clef = nom de catégorie en minuscules (peu importe accents/espaces)
   const OVERRIDE_COLORS = {
     "fma centre": "#ff2d2d",
-    // exemples :
-    // "navette": "#00ff7a",
-    // "jsp": "#00b7ff",
   };
 
   /********** DOM **********/
@@ -509,14 +587,22 @@ function setEditMode(on){
   const $status = $("status");
   const $statusTxt = $("statusTxt");
   const $statusSub = $("statusSub");
+  const $btnLock = $("btnLock");
+  const $editLabel = $("editLabel");
 
   const $noteOverlay = $("noteOverlay");
   const $noteTitle = $("noteTitle");
   const $noteBody = $("noteBody");
   const $noteClose = $("noteClose");
 
+  const $editOverlay = $("editOverlay");
+  const $editTitle = $("editTitle");
+  const $editBody = $("editBody");
+  const $btnAddEvent = $("btnAddEvent");
+  const $btnCloseEdit = $("btnCloseEdit");
+
   const monthsFR = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-  const dowsFR = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"]; // JS getDay()
+  const dowsFR = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
 
   function norm(s){
     return String(s||"").trim().toLowerCase()
@@ -537,14 +623,13 @@ function setEditMode(on){
   }
   function firstMondayGrid(year, monthIndex){
     const d = new Date(year, monthIndex, 1);
-    const js = d.getDay(); // 0=dim 1=lun ...
+    const js = d.getDay();
     const offset = (js === 0) ? 6 : (js - 1);
     d.setDate(d.getDate() - offset);
     d.setHours(12,0,0,0);
     return d;
   }
   function toFRDate(ymdStr){
-    // ymd -> "Ven 20/02/2026"
     const [y,m,d] = String(ymdStr||"").split("-");
     if(!y||!m||!d) return ymdStr;
     const dt = new Date(Number(y), Number(m)-1, Number(d), 12,0,0,0);
@@ -559,61 +644,39 @@ function setEditMode(on){
     if(e) return e;
     return "";
   }
-
-  function jsonp(url, cbName){
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-
-    const cleanup = () => {
-      script.remove();
-      try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
-    };
-
-    const timer = setTimeout(() => {
-      cleanup();
-      reject(new Error("Timeout JSONP"));
-    }, 12000);
-
-    window[cbName] = (data) => {
-      clearTimeout(timer);
-      cleanup();
-      resolve(data);
-    };
-
-    // ✅ anti-cache (URL unique à chaque appel)
-    const sep = url.includes("?") ? "&" : "?";
-    script.src = url + sep + "t=" + Date.now();
-
-    script.onerror = () => {
-      clearTimeout(timer);
-      cleanup();
-      reject(new Error("Erreur JSONP"));
-    };
-
-    document.head.appendChild(script);
-  });
-}
- // ====== ROLE (admin/agent) depuis Sheets (onglet Acces) ======
-const LS_EMAIL = "cs_portail_email_v1"; // doit être le même que sur index.html
-let IS_ADMIN = false;
-
-async function loadMyRole_(){
-  const email = (localStorage.getItem(LS_EMAIL) || "").trim().toLowerCase();
-  if(!email){
-    IS_ADMIN = false;
-    return { ok:false, error:"email manquant (localStorage)" };
+  function getEmailLocal(){
+    return (localStorage.getItem(LS_EMAIL) || "").trim().toLowerCase();
   }
 
-  const cb = "cb_auth_" + Math.random().toString(36).slice(2);
-  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
+  /********** JSONP **********/
+  function jsonp(url, cbName, timeoutMs=15000){
+    return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      const cleanup = () => {
+        script.remove();
+        try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+      };
+      const timer = setTimeout(() => { cleanup(); reject(new Error("Timeout JSONP")); }, timeoutMs);
+      window[cbName] = (data) => { clearTimeout(timer); cleanup(); resolve(data); };
+      const sep = url.includes("?") ? "&" : "?";
+      script.src = url + sep + "t=" + Date.now();
+      script.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error("Erreur JSONP")); };
+      document.head.appendChild(script);
+    });
+  }
 
-  const res = await jsonp(url, cb);
-
-  // admin uniquement si ok=true ET role=admin
-  IS_ADMIN = !!(res && res.ok === true && String(res.role||"").toLowerCase() === "admin");
-  return { ok:true, email, isAdmin: IS_ADMIN, res };
-}
-
+  async function loadMyRole_(){
+    const email = getEmailLocal();
+    if(!email){
+      IS_ADMIN = false;
+      return { ok:false, error:"email manquant (localStorage)" };
+    }
+    const cb = "cb_auth_" + Math.random().toString(36).slice(2);
+    const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
+    const res = await jsonp(url, cb, 20000);
+    IS_ADMIN = !!(res && res.ok === true && String(res.role||"").toLowerCase() === "admin");
+    return { ok:true, email, isAdmin: IS_ADMIN, res };
+  }
 
   /********** DATA **********/
   let events = [];
@@ -623,9 +686,9 @@ async function loadMyRole_(){
   let catLabel = new Map();
   let catOrder = new Map();
   let firstCatByDate = new Map();
-  let hasNoteByDate = new Map(); // ✅ seulement si details non vide
+  let hasNoteByDate = new Map();
   let currentMonth = 0;
-  
+
   function showStatus(txt, sub){
     $statusTxt.textContent = txt || "";
     $statusSub.textContent = sub || "";
@@ -644,12 +707,9 @@ async function loadMyRole_(){
       if(!date) continue;
       if(!eventsByDate.has(date)) eventsByDate.set(date, []);
       eventsByDate.get(date).push(ev);
-
-      // NOTE = details remplis
       if(String(ev.details||"").trim()) hasNoteByDate.set(date, true);
     }
 
-    // catégories dédoublonnées
     catColor = new Map();
     catLabel = new Map();
     catOrder = new Map();
@@ -674,7 +734,6 @@ async function loadMyRole_(){
       catOrder.set(k, c.order);
     }
 
-    // couleur du jour = 1ère catégorie (selon order)
     firstCatByDate = new Map();
     for(const [date, arr] of eventsByDate.entries()){
       let best = null;
@@ -744,41 +803,23 @@ async function loadMyRole_(){
     }
   }
 
-  /********** NOTES (modal demi-page) **********/
-  function openAddEvent(dateStr){
-  const title = prompt("Titre de l’événement pour le " + dateStr);
-  if(!title) return;
+  /********** MODE EDIT **********/
+  function setEditMode(on){
+    EDIT_MODE = !!on;
+    $editLabel.style.display = EDIT_MODE ? "inline-block" : "none";
+    if($btnLock){
+      $btnLock.textContent = EDIT_MODE ? "🔓" : "🔒";
+      $btnLock.setAttribute("aria-pressed", EDIT_MODE ? "true" : "false");
+    }
+    // si on coupe l'édition, on ferme la feuille edit si ouverte
+    if(!EDIT_MODE) closeEdit();
+  }
 
-  const details = prompt("Détails (optionnel)");
-  
-  // On appelle Apps Script
-  const cb = "cb_add_" + Math.random().toString(36).slice(2);
-  const url = `${API}?view=planning_add`
-    + `&email=pierre.venante@gmail.com` // ⚠️ pour l’instant en dur (on sécurisera après)
-    + `&date=${encodeURIComponent(dateStr)}`
-    + `&title=${encodeURIComponent(title)}`
-    + `&details=${encodeURIComponent(details||"")}`
-    + `&nocache=1`
-    + `&callback=${cb}`;
-
-  jsonp(url, cb)
-    .then(res=>{
-      if(res?.ok){
-        alert("Ajouté ✔");
-        loadApi(); // refresh planning
-      }else{
-        alert("Erreur : " + (res?.error||"inconnue"));
-      }
-    })
-    .catch(()=>{
-      alert("Erreur réseau");
-    });
-}
-
+  /********** NOTE MODAL **********/
   function openNote(dateStr){
     const arr = eventsByDate.get(dateStr) || [];
     const withDetails = arr.filter(ev => String(ev.details||"").trim());
-    if(!withDetails.length) return; // ✅ on ouvre uniquement si NOTE
+    if(!withDetails.length) return;
 
     $noteTitle.textContent = `Note — ${toFRDate(dateStr)}`;
     $noteBody.innerHTML = "";
@@ -790,7 +831,6 @@ async function loadMyRole_(){
       const catLabelTxt = (ev.category || "").trim();
       const loc = String(ev.location||"").trim();
       const details = String(ev.details||"").trim();
-
       const dotCol = getColorForCategory(catK);
 
       const card = document.createElement("div");
@@ -817,43 +857,245 @@ async function loadMyRole_(){
     $noteOverlay.classList.add("show");
     $noteOverlay.setAttribute("aria-hidden","false");
   }
-
   function closeNote(){
     $noteOverlay.classList.remove("show");
     $noteOverlay.setAttribute("aria-hidden","true");
   }
 
+  /********** EDIT SHEET **********/
+  let _editDate = "";
+
+  function openEdit(dateStr){
+    _editDate = dateStr;
+    $editTitle.textContent = `Événements — ${toFRDate(dateStr)}`;
+    renderEditList(dateStr);
+    $editOverlay.classList.add("show");
+    $editOverlay.setAttribute("aria-hidden","false");
+  }
+  function closeEdit(){
+    $editOverlay.classList.remove("show");
+    $editOverlay.setAttribute("aria-hidden","true");
+    _editDate = "";
+    $editBody.innerHTML = "";
+  }
+
+  function renderEditList(dateStr){
+    const arr = (eventsByDate.get(dateStr) || []).slice();
+    // tri : start puis title
+    arr.sort((a,b)=> String(a.start||"").localeCompare(String(b.start||"")) || String(a.title||"").localeCompare(String(b.title||"")));
+
+    $editBody.innerHTML = "";
+
+    if(!arr.length){
+      const empty = document.createElement("div");
+      empty.className = "row";
+      empty.innerHTML = `<div style="font-weight:900;opacity:.9">Aucun événement ce jour.</div>`;
+      $editBody.appendChild(empty);
+      return;
+    }
+
+    for(const ev of arr){
+      const name = String(ev.title||"").trim() || "—";
+      const time = formatTimeRange(ev.start, ev.end);
+      const cat = String(ev.category||"").trim();
+      const loc = String(ev.location||"").trim();
+      const details = String(ev.details||"").trim();
+
+      const row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML = `
+        <div class="rowTop">
+          <div class="rowName">${escapeHtml(name)}</div>
+          <div class="evTime">${escapeHtml(time)}</div>
+        </div>
+        <div class="rowSub">
+          ${cat ? `<span>🎨 ${escapeHtml(cat)}</span>` : ""}
+          ${loc ? `<span>📍 ${escapeHtml(loc)}</span>` : ""}
+          ${details ? `<span>📝 note</span>` : ""}
+        </div>
+        <div class="rowBtns">
+          <button class="iconBtn" data-act="view">👁</button>
+          <button class="iconBtn" data-act="edit">🖍</button>
+          <button class="iconBtn danger" data-act="del">🗑</button>
+        </div>
+      `;
+
+      row.querySelectorAll("button").forEach(b=>{
+        b.addEventListener("click", async ()=>{
+          const act = b.dataset.act;
+          if(act === "view"){
+            alert(
+              `📅 ${toFRDate(dateStr)}\n` +
+              `🕒 ${time || "—"}\n` +
+              `📌 ${name}\n` +
+              (cat ? `🎨 ${cat}\n` : "") +
+              (loc ? `📍 ${loc}\n` : "") +
+              (details ? `\n📝 ${details}` : "")
+            );
+            return;
+          }
+
+          if(act === "del"){
+            const ok = confirm(`Supprimer l’événement :\n\n${name}\n${time || ""}\n\nConfirmer ?`);
+            if(!ok) return;
+            await apiDeleteEvent_(dateStr, ev);
+            await loadApi(); // refresh
+            // re-render list after refresh
+            renderEditList(dateStr);
+            return;
+          }
+
+          if(act === "edit"){
+            // "modifier" = delete + add (car pas d’endpoint update)
+            const newTitle = prompt("Titre", name);
+            if(newTitle == null) return;
+
+            const newStart = prompt("Heure début (HH:MM) (optionnel)", String(ev.start||""));
+            if(newStart == null) return;
+
+            const newEnd = prompt("Heure fin (HH:MM) (optionnel)", String(ev.end||""));
+            if(newEnd == null) return;
+
+            const newCat = prompt("Catégorie (optionnel)", String(ev.category||""));
+            if(newCat == null) return;
+
+            const newLoc = prompt("Lieu (optionnel)", String(ev.location||""));
+            if(newLoc == null) return;
+
+            const newDetails = prompt("Détails / note (optionnel)", String(ev.details||""));
+            if(newDetails == null) return;
+
+            const ok = confirm("Appliquer la modification ?\n(Technique : suppression + recréation)");
+            if(!ok) return;
+
+            await apiDeleteEvent_(dateStr, ev);
+            await apiAddEvent_(dateStr, {
+              title:newTitle,
+              start:newStart,
+              end:newEnd,
+              category:newCat,
+              location:newLoc,
+              details:newDetails
+            });
+
+            await loadApi();
+            renderEditList(dateStr);
+            return;
+          }
+        });
+      });
+
+      $editBody.appendChild(row);
+    }
+  }
+
+  $btnAddEvent.addEventListener("click", async ()=>{
+    if(!_editDate) return;
+    await openAddEventPrompt_(_editDate);
+    await loadApi();
+    renderEditList(_editDate);
+  });
+
+  $btnCloseEdit.addEventListener("click", closeEdit);
+  $editOverlay.addEventListener("click", (e)=>{ if(e.target === $editOverlay) closeEdit(); });
+
+  /********** API actions **********/
+  async function apiAddEvent_(dateStr, payload){
+    const email = getEmailLocal();
+    if(!email) { alert("Email introuvable (localStorage). Reconnecte-toi sur le portail."); return; }
+
+    const cb = "cb_add_" + Math.random().toString(36).slice(2);
+    const url =
+      `${API}?view=planning_add` +
+      `&email=${encodeURIComponent(email)}` +
+      `&date=${encodeURIComponent(dateStr)}` +
+      `&start=${encodeURIComponent(payload.start||"")}` +
+      `&end=${encodeURIComponent(payload.end||"")}` +
+      `&title=${encodeURIComponent(payload.title||"")}` +
+      `&category=${encodeURIComponent(payload.category||"")}` +
+      `&location=${encodeURIComponent(payload.location||"")}` +
+      `&details=${encodeURIComponent(payload.details||"")}` +
+      `&nocache=1&callback=${cb}`;
+
+    const res = await jsonp(url, cb, 20000);
+    if(!res || res.ok !== true){
+      throw new Error(res?.error || "Erreur ajout");
+    }
+    return res;
+  }
+
+  async function apiDeleteEvent_(dateStr, ev){
+    const email = getEmailLocal();
+    if(!email) { alert("Email introuvable (localStorage). Reconnecte-toi sur le portail."); return; }
+
+    const cb = "cb_del_" + Math.random().toString(36).slice(2);
+
+    // IMPORTANT : ton Apps Script delete actuel supprime par date+title(+start).
+    // On envoie donc au minimum date+title, et start si présent.
+    const url =
+      `${API}?view=planning_delete` +
+      `&email=${encodeURIComponent(email)}` +
+      `&date=${encodeURIComponent(dateStr)}` +
+      `&title=${encodeURIComponent(String(ev.title||"").trim())}` +
+      `&start=${encodeURIComponent(String(ev.start||"").trim())}` +
+      `&nocache=1&callback=${cb}`;
+
+    const res = await jsonp(url, cb, 20000);
+    if(!res || res.ok !== true){
+      throw new Error(res?.error || "Erreur suppression");
+    }
+    return res;
+  }
+
+  async function openAddEventPrompt_(dateStr){
+    const title = prompt("Titre de l’événement", "");
+    if(!title) return;
+
+    const start = prompt("Heure début (HH:MM) (optionnel)", "") || "";
+    const end = prompt("Heure fin (HH:MM) (optionnel)", "") || "";
+    const category = prompt("Catégorie (optionnel)", "") || "";
+    const location = prompt("Lieu (optionnel)", "") || "";
+    const details = prompt("Détails / note (optionnel)", "") || "";
+
+    try{
+      await apiAddEvent_(dateStr, { title, start, end, category, location, details });
+      alert("Ajouté ✔");
+    }catch(err){
+      alert("Erreur : " + String(err && err.message ? err.message : err));
+    }
+  }
+
+  /********** CLICK calendar **********/
   $grid.addEventListener("click", (e)=>{
-  const day = e.target.closest(".day");
-  if(!day) return;
-  if(day.classList.contains("is-empty")) return;
+    const day = e.target.closest(".day");
+    if(!day) return;
+    if(day.classList.contains("is-empty")) return;
 
-  const dateStr = day.dataset.date;
-  if(!dateStr) return;
+    const dateStr = day.dataset.date;
+    if(!dateStr) return;
 
-  // 🔓 MODE ÉDITION : clic sur n'importe quel jour
-  if(EDIT_MODE){
-    // pour l’instant on test juste (étape 1)
-    openAddEvent(dateStr);
-    return;
-  }
+    // MODE ÉDITION admin : ouvre gestion événements du jour
+    if(EDIT_MODE && IS_ADMIN){
+      openEdit(dateStr);
+      return;
+    }
 
-  // 🔒 MODE LECTURE : on garde ton comportement actuel (notes uniquement)
-  if(day.classList.contains("has-note")){
-    openNote(dateStr);
-  }
-});
-
+    // MODE lecture : notes uniquement
+    if(day.classList.contains("has-note")){
+      openNote(dateStr);
+    }
+  });
 
   $noteClose.addEventListener("click", closeNote);
-  $noteOverlay.addEventListener("click", (e)=>{
-    if(e.target === $noteOverlay) closeNote();
-  });
+  $noteOverlay.addEventListener("click", (e)=>{ if(e.target === $noteOverlay) closeNote(); });
   document.addEventListener("keydown", (e)=>{
-    if(e.key === "Escape") closeNote();
+    if(e.key === "Escape"){
+      closeNote();
+      closeEdit();
+    }
   });
 
-  /********** LOAD **********/
+  /********** LOAD API **********/
   async function loadApi(){
     if(!API || API.includes("COLLE_ICI")){
       showStatus("API manquante", "Mets ton URL exec dans const API.");
@@ -863,13 +1105,11 @@ async function loadMyRole_(){
 
     const cb1 = "cb_py_" + Math.random().toString(36).slice(2);
     const cb2 = "cb_pc_" + Math.random().toString(36).slice(2);
-    const bust = "&t=" + Date.now();
 
     try{
       const [py, pc] = await Promise.all([
-      jsonp(`${API}?view=planning_year&year=${YEAR}&nocache=1&callback=${cb1}`, cb1),
-      jsonp(`${API}?view=planning_categories&nocache=1&callback=${cb2}`, cb2)
-
+        jsonp(`${API}?view=planning_year&year=${YEAR}&nocache=1&callback=${cb1}`, cb1, 20000),
+        jsonp(`${API}?view=planning_categories&nocache=1&callback=${cb2}`, cb2, 20000)
       ]);
 
       if(py?.ok===false) throw new Error(py?.error || "planning_year invalide");
@@ -897,23 +1137,37 @@ async function loadMyRole_(){
   $("btnBack").addEventListener("click", ()=>location.href=BACK_URL);
   $btnPrev.addEventListener("click", ()=>{ if(currentMonth>0){ currentMonth--; renderMonth(); }});
   $btnNext.addEventListener("click", ()=>{ if(currentMonth<11){ currentMonth++; renderMonth(); }});
-  if($btnLock)
+
   $btnLock.addEventListener("click", ()=>{
-    if(!IS_ADMIN) return; // ⛔ bloque les agents
+    if(!IS_ADMIN) return;
     setEditMode(!EDIT_MODE);
   });
 
   /********** BOOT **********/
-  (function(){
+  (async function(){
+    $("titleYear").textContent = `PLANNING ${YEAR}`;
     rebuildMaps();
     renderLegend();
 
     const now = new Date();
     currentMonth = (now.getFullYear()===YEAR) ? now.getMonth() : 0;
     renderMonth();
-    setEditMode(false);
-    loadMyRole_().then(x=>console.log("ROLE:", x)).catch(e=>console.log("ROLE ERR:", e));
-    loadApi();
+
+    // rôle -> affiche le cadenas uniquement si admin
+    try{
+      await loadMyRole_();
+    }catch(e){
+      IS_ADMIN = false;
+    }
+
+    if(IS_ADMIN){
+      $btnLock.style.display = "inline-block";
+    }else{
+      $btnLock.style.display = "none";
+      setEditMode(false);
+    }
+
+    await loadApi();
   })();
 </script>
 </body>
