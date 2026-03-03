@@ -359,12 +359,17 @@ async function checkAndShow_(email){
     const res = await authCheck(email);
 
     if(res && res.ok === true){
-      localStorage.setItem(LS_KEY, email);
-      hideChecking();
-      showPortal();
-      showMsg("");
-      return true;
-    }
+  localStorage.setItem(LS_KEY, email);
+
+  // ✅ on mémorise le rôle renvoyé par Sheets (Acces)
+  localStorage.setItem("cs_role_v1", String(res.role||"").trim().toLowerCase());
+
+  hideChecking();
+  showPortal();
+  showMsg("");
+  return true;
+}
+
 
     localStorage.removeItem(LS_KEY);
     hideChecking();
@@ -374,6 +379,7 @@ async function checkAndShow_(email){
 
   }catch(err){
     localStorage.removeItem(LS_KEY);
+    localStorage.removeItem("cs_role_v1");
     hideChecking();
     showLogin();
     showMsg("Erreur réseau / serveur.");
@@ -406,14 +412,17 @@ async function handleCredentialResponse(response){
 
     try{
       const res = await authCheck(saved);
-      if(res && res.ok === true){
-        showMsg("");
-        showPortal();
-      }else{
-        localStorage.removeItem(LS_KEY);
-        showLogin();
-        showMsg("Accès refusé.");
-      }
+if(res && res.ok === true){
+  localStorage.setItem("cs_role_v1", String(res.role||"").trim().toLowerCase());
+  showMsg("");
+  showPortal();
+}else{
+  localStorage.removeItem(LS_KEY);
+  localStorage.removeItem("cs_role_v1");
+  showLogin();
+  showMsg("Accès refusé.");
+}
+
     }catch(e){
       showMsg("Connexion à vérifier (réseau).");
       showPortal();
@@ -465,27 +474,63 @@ function showDenied(){
   ov.style.display = "block";
 }
 
-document.addEventListener("click", async (e)=>{
+<script>
+const ADMIN_URL = "admin.html";
+const DENIED_IMG = "acces_refuse.png";
+
+function showDenied(){
+  let overlay = document.getElementById("denyOverlay");
+  if(!overlay){
+    overlay = document.createElement("div");
+    overlay.id = "denyOverlay";
+    overlay.style.cssText = "position:fixed;inset:0;z-index:999999;background:#000;";
+
+    const btn = document.createElement("button");
+    btn.textContent = "← Retour";
+    btn.style.cssText = `
+      position:absolute;
+      top: calc(env(safe-area-inset-top) + 12px);
+      left: 12px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.25);
+      background: rgba(0,0,0,.60);
+      color:#fff;
+      font-weight:900;
+      font-size:14px;
+      -webkit-tap-highlight-color: transparent;
+    `;
+    btn.addEventListener("click", ()=> overlay.remove());
+
+    const img = document.createElement("img");
+    img.src = DENIED_IMG;
+    img.alt = "Accès refusé";
+    img.style.cssText = "width:100%;height:100%;object-fit:cover;display:block;";
+
+    overlay.appendChild(btn);
+    overlay.appendChild(img);
+    document.body.appendChild(overlay);
+  }
+}
+
+function isAdminLocal(){
+  return (localStorage.getItem("cs_role_v1") || "").trim().toLowerCase() === "admin";
+}
+
+document.addEventListener("click", (e)=>{
   const btn = e.target.closest("#btnAdmin");
   if(!btn) return;
   e.preventDefault();
 
-  const email = getEmailLocal();
-  if(!email){ showDenied(); return; }
-
-  try{
-    const res = await authCheck(email);
-    const role = String(res && res.role ? res.role : "").trim().toLowerCase();
-
-    if(res && res.ok === true && role === "admin"){
-      location.href = ADMIN_URL;
-    }else{
-      showDenied();
-    }
-  }catch(err){
+  // ✅ instantané : PAS d'appel API ici
+  if(isAdminLocal()){
+    location.href = ADMIN_URL;
+  }else{
     showDenied();
   }
 });
+</script>
+
 </script>
 
 </body>
