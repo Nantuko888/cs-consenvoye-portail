@@ -289,6 +289,23 @@
       color:#ffd19a;
       display:none;
     }
+    .syncPill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.28);
+  border: 1px solid rgba(255,255,255,.14);
+  color: rgba(255,255,255,.92);
+  font-weight: 950;
+  font-size: 12px;
+  letter-spacing: .2px;
+  box-shadow: 0 10px 26px rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
   </style>
 </head>
 
@@ -297,8 +314,10 @@
     <header>
       <div class="title">Organigramme</div>
       <div class="topBtns">
-        <button class="chipBtn" onclick="goBack()">Retour</button>
-              </div>
+  <span class="syncPill" id="syncPill" style="display:none;">Synchronisation…</span>
+  <button class="btn" id="btnBack">Retour</button>
+</div>
+
     </header>
 
     <div class="card">
@@ -539,43 +558,66 @@
     await loadFromSheets();
   };
 
-  async function loadFromSheets(){
-    hideErr();
+  function setSync(on, text){
+  const el = document.getElementById("syncPill");
+  if(!el) return;
+  if(on){
+    el.textContent = text || "Synchronisation…";
+    el.style.display = "inline-flex";
+  }else{
+    el.style.display = "none";
+  }
+}
 
-    // 1) ✅ tente cache
-    const cached = loadCache();
-    if(cached && cached.direction && Array.isArray(cached.poles)){
-      DATA = cached;
-      render();
+async function loadFromSheets(){
+  hideErr();
+
+  // 1) ✅ affiche immédiatement le cache si dispo
+  let hadCache = false;
+  const cached = loadCache();
+  if(cached && cached.direction && Array.isArray(cached.poles)){
+    DATA = cached;
+    render();
+    hadCache = true;
+    setSync(true, "Synchronisation…");
+  }else{
+    setSync(true, "Chargement…");
+  }
+
+  // 2) ✅ rafraîchit ensuite via API (même si cache présent)
+  try{
+    const cb = "cb_org_" + Math.random().toString(36).slice(2);
+    const url = `${API}?view=org&callback=${cb}&nocache=1&_=${Date.now()}`;
+    const apiData = await jsonp(url, cb);
+
+    if(!apiData || apiData.ok === false){
+      throw new Error(apiData?.error || "Réponse org invalide");
+    }
+
+    const fresh = normalizeOrgPayload(apiData);
+
+    // met à jour + cache
+    DATA = fresh;
+    saveCache(DATA);
+    render();
+
+    setSync(false);
+
+  }catch(err){
+    console.error(err);
+
+    // si on avait déjà le cache → on garde l’affichage et on masque juste le pill
+    if(hadCache){
+      setSync(false);
       return;
     }
 
-    // 2) sinon ✅ API + cache
-    try{
-      const cb = "cb_org_" + Math.random().toString(36).slice(2);
-      const url = `${API}?view=org&callback=${cb}&_=${Date.now()}`;
-      const apiData = await jsonp(url, cb);
-
-      if(!apiData || apiData.ok === false){
-        throw new Error(apiData?.error || "Réponse org invalide");
-      }
-
-      DATA = normalizeOrgPayload(apiData);
-      saveCache(DATA);
-      render();
-
-    }catch(err){
-      console.error(err);
-      showErr("Erreur de chargement depuis Sheets (API).");
-    }
+    // sinon → vraie erreur
+    setSync(false);
+    showErr("Erreur de chargement depuis Sheets (API).");
   }
+}
 
-  // ✅ Charge au démarrage (mais utilisera le cache si déjà fait)
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", loadFromSheets, { once:true });
-  } else {
-    loadFromSheets();
-  }
 </script>
 
 </body>
