@@ -260,8 +260,7 @@ function showMsg(t){ $msg.textContent = t || ""; }
 
 function showSync(text){
   if(!$syncPill) return;
-  $syncPill.textContent = text || "Synchronisation…";
-  $syncPill.style.display = "block";
+    $syncPill.style.display = "block";
 }
 function hideSync(){
   if(!$syncPill) return;
@@ -461,7 +460,7 @@ async function handleCredentialResponse(response){
   if(saved){
     // ✅ on affiche le portail tout de suite (pas d’écran noir)
     showPortal();
-    showSync("Synchronisation…");
+    showSync();
 
     try{
       const res = await authCheck(saved);
