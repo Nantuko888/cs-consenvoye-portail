@@ -138,6 +138,25 @@ body.mode-portal{
   display: block;
 }
 .logoutTopBtn:active{ transform: scale(0.96); }
+  /* ✅ mini indicateur (ne décale rien) */
+#syncPill{
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom) + 14px);
+  z-index: 10000;
+  display: none;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.62);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 14px 34px rgba(0,0,0,.40);
+  color: #fff;
+  font-weight: 900;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
 </style>
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -190,6 +209,10 @@ body.mode-portal{
   </section>
 </main>
 
+  <!-- ✅ petit indicateur non bloquant (synchro) -->
+<div id="syncPill" aria-live="polite">Synchronisation…</div>
+
+
 <script>
 /* ====== CONFIG ====== */
 const GOOGLE_CLIENT_ID = "690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com";
@@ -201,9 +224,21 @@ const $loginBox = document.getElementById("loginBox");
 const $portal = document.getElementById("portal");
 const $msg = document.getElementById("loginMsg");
 const $logoutPortal = document.getElementById("logoutBtnPortal");
+const $syncPill = document.getElementById("syncPill");
 
 /* ====== UI ====== */
 function showMsg(t){ $msg.textContent = t || ""; }
+
+function showSync(text){
+  if(!$syncPill) return;
+  $syncPill.textContent = text || "Synchronisation…";
+  $syncPill.style.display = "block";
+}
+function hideSync(){
+  if(!$syncPill) return;
+  $syncPill.style.display = "none";
+}
+
 
 /* ✅ État URL portail (utile pour "retour") */
 function markPortalUrl_(){
@@ -395,31 +430,38 @@ async function handleCredentialResponse(response){
   const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
 
   if(saved){
+    // ✅ on affiche le portail tout de suite (pas d’écran noir)
     showPortal();
-    showMsg("Vérification…");
+    showSync("Synchronisation…");
 
     try{
       const res = await authCheck(saved);
+
       if(res && res.ok === true){
         localStorage.setItem("cs_role_v1", String(res.role||"").trim().toLowerCase());
-        showMsg("");
-        showPortal();
-      }else{
-        localStorage.removeItem(LS_KEY);
-        localStorage.removeItem("cs_role_v1");
-        showLogin();
-        showMsg("Accès refusé.");
+        hideSync();
+        return;
       }
+
+      // refus
+      hideSync();
+      localStorage.removeItem(LS_KEY);
+      localStorage.removeItem("cs_role_v1");
+      showLogin();
+      showMsg("Accès refusé.");
+      return;
+
     }catch(e){
-      // réseau KO : on laisse portail mais sans changer rôle
-      showMsg("Connexion à vérifier (réseau).");
-      showPortal();
+      // ✅ hors-ligne / serveur lent : on laisse le portail visible
+      showSync("Hors ligne — affichage en cache");
+      setTimeout(()=> hideSync(), 1800);
+      return;
     }
-    return;
   }
 
   showLogin();
 })();
+
 
 /* =========================================================
    ====== ADMIN (clic + refus plein écran + retour) ======
