@@ -1,460 +1,180 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Admin — CS Consenvoye</title>
-  <style>
-    :root{
-      --txt:#f4f4f4;
-      --muted:rgba(255,255,255,.70);
-      --shadow: 0 14px 34px rgba(0,0,0,.40);
-      --radius: 22px;
-      --stroke: rgba(255,255,255,.10);
-      --orange:#d46a00;
-      --orange2:#b95800;
-      --yellow:#fff200;
-      --card: linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.30));
-      --btnbg: rgba(0,0,0,.18);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--txt);
-      background:#0b0b0b;
-    }
-    .bg{
-      position:fixed; inset:0;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.55)),
-        url("background.png") center top/cover no-repeat;
-      z-index:-2;
-    }
-    .wrap{
-      min-height:100vh;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: calc(env(safe-area-inset-top) + 12px) 12px calc(env(safe-area-inset-bottom) + 12px);
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-    }
-    .topbar{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding: 10px 12px;
-      border-radius: 18px;
-      background: linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      min-height: 46px;
-    }
-    .title{
-      font-weight:950; letter-spacing:.8px; text-transform: uppercase;
-      font-size: 18px; margin:0; white-space:nowrap;
-    }
-    .btn{
-      border:1px solid rgba(255,255,255,.18);
-      background: var(--btnbg);
-      color:var(--txt);
-      padding: 9px 12px;
-      border-radius: 14px;
-      font-weight:900;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btn:active{transform: translateY(1px)}
-    .btn.small{padding:7px 10px; border-radius:12px; font-weight:900; font-size:13px}
-    .btn.primary{border-color: rgba(255,242,0,.25)}
-    .btn.danger{border-color: rgba(255,77,77,.35)}
-    .card{
-      border-radius: var(--radius);
-      background: var(--card);
-      border:1px solid var(--stroke);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      overflow:hidden;
-      padding: 14px;
-      min-height: 0;
-    }
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>Admin — CS Consenvoye</title>
 
-    /* état */
-    .status{
-      font-weight:950;
-      color:rgba(255,255,255,.90);
-    }
-    .status small{
-      display:block;
-      font-weight:850;
-      color:var(--muted);
-      margin-top:6px;
-    }
+<style>
+:root{
+  --txt:#f4f4f4;
+  --muted:rgba(255,255,255,.70);
+  --orange:#d46a00;
+  --orange2:#b95800;
+  --shadow:0 14px 34px rgba(0,0,0,.40);
+  --radius:22px;
+}
 
-    /* écran refus */
-    .refus{
-      display:none;
-      text-align:center;
-      padding:14px;
-    }
-    .refus img{
-      max-width:min(640px, 100%);
-      width:100%;
-      border-radius:18px;
-      box-shadow: 0 12px 30px rgba(0,0,0,.45);
-    }
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--txt);
+  background:#0b0b0b;
+}
+.bg{
+  position:fixed; inset:0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.55)),
+    url("background.png") center/cover no-repeat;
+  z-index:-1;
+}
 
-    /* contenu admin */
-    .admin{ display:none; }
+.wrap{
+  max-width:1000px;
+  margin:auto;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
 
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:6px 10px;
-      border-radius:999px;
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      font-weight:900;
-      color: var(--yellow);
-    }
+/* HEADER */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 16px;
+  border-radius:18px;
+  background:linear-gradient(180deg,var(--orange),var(--orange2));
+  font-weight:900;
+  box-shadow:var(--shadow);
+}
+.topbar span{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.dot{
+  width:10px;
+  height:10px;
+  background:#00ff5a;
+  border-radius:50%;
+}
+.btn{
+  background:rgba(0,0,0,.2);
+  border:none;
+  color:#fff;
+  padding:8px 12px;
+  border-radius:12px;
+  font-weight:900;
+  cursor:pointer;
+}
 
-    /* layout admin */
-    .adminGrid{
-      display:grid;
-      grid-template-columns: 260px 1fr;
-      gap:12px;
-      margin-top:12px;
-    }
-    @media (max-width: 920px){
-      .adminGrid{ grid-template-columns: 1fr; }
-    }
+/* DASHBOARD BLOCK */
+.dashboard{
+  background:#1e7fff;
+  border-radius:var(--radius);
+  padding:30px;
+  font-size:22px;
+  font-weight:900;
+  text-align:center;
+  box-shadow:var(--shadow);
+  cursor:pointer;
+  transition:.25s;
+}
+.dashboard.compact{
+  padding:12px;
+  font-size:16px;
+}
 
-    .menu{
-      padding:10px;
-    }
-    .tabs{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-    .tab{
-      width:100%;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      text-align:left;
-      padding:10px 12px;
-      border-radius:16px;
-      border:1px solid transparent;
-      background: rgba(0,0,0,.20);
-      color:var(--txt);
-      font-weight:950;
-      cursor:pointer;
-    }
-    .tab:hover{
-      border-color: rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-    }
-    .tab.active{
-      border-color: rgba(255,242,0,.22);
-      background: linear-gradient(90deg, rgba(255,242,0,.10), rgba(212,106,0,.08));
-    }
-    .tag{
-      font-size:12px;
-      padding:2px 8px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      color: var(--muted);
-      background: rgba(0,0,0,.18);
-      font-weight:850;
-      white-space:nowrap;
-    }
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
 
-    .panelHead{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap:10px;
-      padding-bottom:10px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-      margin-bottom:12px;
-    }
-    .panelHead h2{
-      margin:0;
-      font-size:16px;
-      font-weight:950;
-      letter-spacing:.2px;
-    }
-    .panelHead p{
-      margin:6px 0 0 0;
-      color: var(--muted);
-      font-size:13px;
-      font-weight:850;
-    }
-    .actions{ display:flex; gap:8px; flex-wrap:wrap; }
+.card{
+  border-radius:var(--radius);
+  padding:28px;
+  font-weight:900;
+  text-align:center;
+  box-shadow:var(--shadow);
+  cursor:pointer;
+  transition:.2s;
+}
+.card:hover{transform:translateY(-2px)}
 
-    .section{ display:none; }
-    .section.active{ display:block; }
+.planning{background:#ff7a00}
+.years{background:#9c27b0}
+.categories{background:#ff9800}
+.documents{background:#009688}
+.vsav{background:#f44336}
+.orga{background:#795548}
+.acces{background:#607d8b}
 
-    .hint{
-      margin-top:6px;
-      color: var(--muted);
-      font-weight:850;
-      font-size:13px;
-    }
-    .kpis{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:10px;
-      margin-top:10px;
-    }
-    @media (max-width: 720px){ .kpis{ grid-template-columns:1fr; } }
-    .kpi{
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:18px;
-      background: rgba(0,0,0,.18);
-      padding:12px;
-      font-weight:950;
-    }
-    .kpi small{display:block; margin-top:6px; color:var(--muted); font-weight:850}
-  </style>
+/* CONTENT AREA */
+.content{
+  display:none;
+  background:rgba(0,0,0,.4);
+  padding:20px;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  min-height:200px;
+}
+.content.active{
+  display:block;
+}
+</style>
 </head>
 
 <body>
-  <div class="bg"></div>
+<div class="bg"></div>
 
-  <div class="wrap">
-    <div class="topbar">
-      <h1 class="title">ADMIN</h1>
-      <button class="btn" id="btnBack">Retour</button>
-    </div>
+<div class="wrap">
 
-    <section class="card">
-      <div class="status" id="status">
-        Vérification accès…
-        <small id="statusSub">Lecture du rôle local</small>
-      </div>
-
-      <div class="admin" id="admin">
-        <div class="badge">✅ Accès admin OK</div>
-
-        <div class="adminGrid">
-          <!-- MENU -->
-          <div class="card menu">
-            <div class="tabs" id="tabs">
-              <button class="tab active" data-tab="dash"><span>Tableau de bord</span><span class="tag">Vue</span></button>
-              <button class="tab" data-tab="planning"><span>Planning</span><span class="tag">Events</span></button>
-              <button class="tab" data-tab="years"><span>Années</span><span class="tag">Base</span></button>
-              <button class="tab" data-tab="categories"><span>Catégories</span><span class="tag">Couleurs</span></button>
-              <button class="tab" data-tab="documents"><span>Documents</span><span class="tag">Liens</span></button>
-              <button class="tab" data-tab="vsav"><span>Désinfection VSAV</span><span class="tag">Suivi</span></button>
-              <button class="tab" data-tab="orga"><span>Orga / Équipes</span><span class="tag">Struct</span></button>
-              <button class="tab" data-tab="acces"><span>Accès</span><span class="tag">Rôles</span></button>
-              <button class="tab" data-tab="debug"><span>Debug</span><span class="tag">API</span></button>
-            </div>
-
-            <div class="hint" style="margin-top:10px;">
-              (Ici, navigation admin. On branchera les données ensuite.)
-            </div>
-          </div>
-
-          <!-- PANELS -->
-          <div class="card" id="panel">
-
-            <!-- DASH -->
-            <div class="section active" id="sec-dash">
-              <div class="panelHead">
-                <div>
-                  <h2>Tableau de bord</h2>
-                  <p>Vue rapide (pour vérifier que tout va bien)</p>
-                </div>
-                <div class="actions">
-                  <button class="btn small" data-goto="planning">Planning</button>
-                  <button class="btn small" data-goto="vsav">VSAV</button>
-                </div>
-              </div>
-
-              <div class="kpis">
-                <div class="kpi"><span id="kpiYear">—</span><small>Années actives</small></div>
-                <div class="kpi"><span id="kpiEvents">—</span><small>Events (année)</small></div>
-                <div class="kpi"><span id="kpiVsav">—</span><small>VSAV (mois)</small></div>
-              </div>
-
-              <div class="hint">On remplira ces chiffres quand on branchera l’API.</div>
-            </div>
-
-            <!-- PLANNING -->
-            <div class="section" id="sec-planning">
-              <div class="panelHead">
-                <div>
-                  <h2>Planning</h2>
-                  <p>Ajouter / supprimer des events (avec event_id)</p>
-                </div>
-                <div class="actions">
-                  <button class="btn small primary">+ Ajouter</button>
-                  <button class="btn small">Actualiser</button>
-                </div>
-              </div>
-              <div class="hint">On mettra ici ton interface planning admin.</div>
-            </div>
-
-            <!-- YEARS -->
-            <div class="section" id="sec-years">
-              <div class="panelHead">
-                <div>
-                  <h2>Années</h2>
-                  <p>Créer année / archiver</p>
-                </div>
-                <div class="actions">
-                  <button class="btn small primary">+ Créer</button>
-                </div>
-              </div>
-              <div class="hint">On branchera sur planning_years_list + planning_year_create.</div>
-            </div>
-
-            <!-- CATEGORIES -->
-            <div class="section" id="sec-categories">
-              <div class="panelHead">
-                <div>
-                  <h2>Catégories</h2>
-                  <p>Couleurs + ordre</p>
-                </div>
-                <div class="actions">
-                  <button class="btn small primary">+ Ajouter</button>
-                </div>
-              </div>
-              <div class="hint">On branchera sur planning_categories.</div>
-            </div>
-
-            <!-- DOCUMENTS -->
-            <div class="section" id="sec-documents">
-              <div class="panelHead">
-                <div>
-                  <h2>Documents</h2>
-                  <p>Gérer les liens (catégories / ordre / actif)</p>
-                </div>
-                <div class="actions">
-                  <button class="btn small primary">+ Ajouter</button>
-                </div>
-              </div>
-              <div class="hint">On branchera sur documents.</div>
-            </div>
-
-            <!-- VSAV -->
-            <div class="section" id="sec-vsav">
-              <div class="panelHead">
-                <div>
-                  <h2>Désinfection VSAV</h2>
-                  <p>Vue admin (table + statuts)</p>
-                </div>
-                <div class="actions">
-                  <button class="btn small">Actualiser</button>
-                </div>
-              </div>
-              <div class="hint">On branchera sur vsav_get.</div>
-            </div>
-
-            <!-- ORGA -->
-            <div class="section" id="sec-orga">
-              <div class="panelHead">
-                <div>
-                  <h2>Orga / Équipes</h2>
-                  <p>Structurer l’organigramme et les équipes</p>
-                </div>
-              </div>
-              <div class="hint">On mettra ici les écrans “Équipes” + “Organigramme”.</div>
-            </div>
-
-            <!-- ACCES -->
-            <div class="section" id="sec-acces">
-              <div class="panelHead">
-                <div>
-                  <h2>Accès</h2>
-                  <p>Emails + rôles</p>
-                </div>
-                <div class="actions">
-                  <button class="btn small primary">+ Ajouter</button>
-                </div>
-              </div>
-              <div class="hint">Plus tard : sécurisation côté serveur.</div>
-            </div>
-
-            <!-- DEBUG -->
-            <div class="section" id="sec-debug">
-              <div class="panelHead">
-                <div>
-                  <h2>Debug</h2>
-                  <p>Tester les endpoints</p>
-                </div>
-              </div>
-              <div class="hint">On mettra un mini testeur JSONP.</div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <div class="refus" id="refus">
-        <img src="acces_refuse.png" alt="Accès refusé">
-      </div>
-    </section>
+  <div class="topbar">
+    <span>ADMIN · <div class="dot"></div> OK</span>
+    <button class="btn" onclick="location.href='index.html'">Retour</button>
   </div>
 
-  <script>
-    /********** CONFIG **********/
-    const BACK_URL = "index.html";
-    const $ = (id)=>document.getElementById(id);
-    const $status = $("status");
-    const $statusSub = $("statusSub");
-    const $admin = $("admin");
-    const $refus = $("refus");
+  <div id="dashboard" class="dashboard">
+    📊 TABLEAU DE BORD
+  </div>
 
-    $("btnBack").onclick = () => { window.location.href = BACK_URL; };
+  <div id="grid" class="grid">
+    <div class="card planning" onclick="openSection('planning')">📅 Planning</div>
+    <div class="card years" onclick="openSection('years')">🗓 Années</div>
+    <div class="card categories" onclick="openSection('categories')">🎨 Catégories</div>
+    <div class="card documents" onclick="openSection('documents')">📂 Documents</div>
+    <div class="card vsav" onclick="openSection('vsav')">🚑 VSAV</div>
+    <div class="card orga" onclick="openSection('orga')">👥 Orga / Équipes</div>
+    <div class="card acces" onclick="openSection('acces')">🔐 Accès</div>
+  </div>
 
-    function showRefus(msg){
-      $status.style.display = "block";
-      $status.textContent = "Accès refusé";
-      $statusSub.textContent = msg || "";
-      $admin.style.display = "none";
-      $refus.style.display = "block";
-    }
+  <div id="sectionContent" class="content"></div>
 
-    function showAdmin(){
-      $status.style.display = "none";
-      $admin.style.display = "block";
-      $refus.style.display = "none";
-    }
+</div>
 
-    // Tabs UI
-    const tabs = Array.from(document.querySelectorAll("#tabs .tab"));
-    function showTab(tabKey){
-      tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === tabKey));
-      document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
-      const sec = document.getElementById("sec-" + tabKey);
-      if(sec) sec.classList.add("active");
-    }
-    tabs.forEach(t => t.addEventListener("click", ()=>showTab(t.dataset.tab)));
+<script>
+const dashboard = document.getElementById("dashboard");
+const grid = document.getElementById("grid");
+const content = document.getElementById("sectionContent");
 
-    // shortcuts dashboard
-    document.querySelectorAll("[data-goto]").forEach(b=>{
-      b.addEventListener("click", ()=>showTab(b.getAttribute("data-goto")));
-    });
+function openSection(section){
+  dashboard.classList.add("compact");
+  grid.style.display="none";
+  content.classList.add("active");
+  content.innerHTML = "<h2>"+section.toUpperCase()+"</h2><p>Contenu à développer...</p>";
+}
 
-    // BOOT (IMPORTANT : pas d'appel API ici, uniquement localStorage)
-    (function(){
-      const role = (localStorage.getItem("cs_role_v1") || "").toLowerCase().trim();
-      if(role === "admin"){
-        showAdmin();
-        showTab("dash");
-      } else {
-        showRefus("admin requis");
-      }
-    })();
-  </script>
+dashboard.onclick = ()=>{
+  dashboard.classList.remove("compact");
+  grid.style.display="grid";
+  content.classList.remove("active");
+};
+</script>
+
 </body>
 </html>
