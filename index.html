@@ -578,8 +578,9 @@ document.addEventListener("click", async (e)=>{
   try{
     // ✅ on appelle ta vue EXISTANTE côté Apps Script : auth_check
     const cb = "cb_admin_" + Math.random().toString(36).slice(2);
-    const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1`;
-    const data = await jsonp(url, cb, 20000);
+    const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
+const data = await jsonp(url, cb, 20000);
+
 
     const role = String(data && data.role ? data.role : "").trim().toLowerCase();
 
