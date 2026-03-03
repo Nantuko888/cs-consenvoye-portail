@@ -12,7 +12,7 @@
 <meta name="theme-color" content="#d46a00">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">F
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <style>
 :root{
@@ -30,7 +30,21 @@ html, body{
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   -webkit-text-size-adjust:100%;
 }
-body{ background:#000 url("background.png") center top / cover no-repeat fixed; }
+body{
+  background:#000 url("background.png") center top / cover no-repeat fixed;
+}
+
+/* ✅ modes (évite body centré qui casse le portail) */
+body.mode-login{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+body.mode-portal{
+  display:block;
+}
+
 .wrap{
   height:100dvh;
   width:100%;
@@ -73,24 +87,14 @@ body{ background:#000 url("background.png") center top / cover no-repeat fixed; 
   :root{ --btn: clamp(110px, 16vw, 180px); --titleMaxH: 26vh; --maxw:900px; }
 }
 
-/* ===== LOGIN FULL CENTER ===== */
-
-body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: url("background.png") center/cover no-repeat fixed;
-  font-family: 'Segoe UI', sans-serif;
-}
-
+/* ===== LOGIN ===== */
 #loginBox {
   width: 90%;
   max-width: 380px;
   padding: 40px 30px;
   border-radius: 18px;
   backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   background: rgba(0, 0, 0, 0.65);
   text-align: center;
   box-shadow: 0 10px 40px rgba(0,0,0,0.6);
@@ -115,21 +119,7 @@ body {
   color: #ff6b6b;
 }
 
-/* (laissé tel quel, même si pas utilisé côté login) */
-#logoutBtn {
-  margin-top: 15px;
-  padding: 8px 20px;
-  border-radius: 8px;
-  border: none;
-  background: rgba(255,255,255,0.1);
-  color: white;
-  cursor: pointer;
-}
-#logoutBtn:hover {
-  background: rgba(255,255,255,0.2);
-}
-
-/* ✅ AJOUT: bouton déconnexion top-right (portail) */
+/* ✅ bouton déconnexion top-right (portail) */
 .logoutTopBtn{
   position: fixed;
   top: calc(env(safe-area-inset-top) + 10px);
@@ -153,13 +143,12 @@ body {
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
-<body>
+<body class="mode-login">
 
 <!-- LOGIN -->
 <div id="loginBox">
   <h2 id="loginTitle">Accès Portail</h2>
 
-  <!-- Google button -->
   <div id="g_id_onload"
        data-client_id="690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com"
        data-callback="handleCredentialResponse"
@@ -179,8 +168,6 @@ body {
 
 <!-- PORTAIL -->
 <main class="wrap" id="portal" style="display:none;">
-
-  <!-- ✅ MODIF: bouton déconnexion en haut à droite -->
   <button id="logoutBtnPortal" class="logoutTopBtn" aria-label="Déconnexion">
     <img src="deconnexion.png" alt="Déconnexion">
   </button>
@@ -201,10 +188,7 @@ body {
     <a class="btn" href="construction.html"><img src="tickets carburant.png" alt="Tickets carburant"></a>
     <a class="btn" href="desinfection-vsav.html"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>
   </section>
-
-  <!-- ✅ MODIF: SUPPRIMÉ le bouton du bas -->
 </main>
-
 
 <script>
 /* ====== CONFIG ====== */
@@ -234,11 +218,15 @@ function clearPortalUrl_(){
 }
 
 function showPortal(){
+  document.body.classList.remove("mode-login");
+  document.body.classList.add("mode-portal");
   $loginBox.style.display = "none";
   $portal.style.display = "flex";
   markPortalUrl_();
 }
 function showLogin(){
+  document.body.classList.remove("mode-portal");
+  document.body.classList.add("mode-login");
   $portal.style.display = "none";
   $loginBox.style.display = "block";
   clearPortalUrl_();
@@ -287,7 +275,6 @@ function jsonp(url, cbName, timeoutMs = 30000){
       resolve(data);
     };
 
-    // IMPORTANT : le callback doit déjà être dans l'URL (authCheck le met)
     const sep = url.includes("?") ? "&" : "?";
     script.src = url + sep + "_t=" + Date.now();
 
@@ -308,7 +295,7 @@ async function authCheck(email){
   catch(e1){ return await jsonp(url, cb, 30000); }
 }
 
-/* ====== Overlay Vérification (évite flash login/portail) ====== */
+/* ====== Overlay Vérification ====== */
 let $checking = null;
 
 function ensureChecking(){
@@ -322,6 +309,7 @@ function ensureChecking(){
   $checking.style.justifyContent = "center";
   $checking.style.background = "rgba(0,0,0,.55)";
   $checking.style.backdropFilter = "blur(8px)";
+  $checking.style.webkitBackdropFilter = "blur(8px)";
   $checking.style.zIndex = "999999";
   $checking.innerHTML = `
     <div style="padding:16px 18px;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.60);color:#fff;font-weight:900;">
@@ -345,6 +333,7 @@ function hideChecking(){
 /* ====== Déconnexion ====== */
 function doLogout(){
   localStorage.removeItem(LS_KEY);
+  localStorage.removeItem("cs_role_v1");
   showLogin();
   showMsg("Déconnecté.");
 }
@@ -359,19 +348,17 @@ async function checkAndShow_(email){
     const res = await authCheck(email);
 
     if(res && res.ok === true){
-  localStorage.setItem(LS_KEY, email);
+      localStorage.setItem(LS_KEY, email);
+      localStorage.setItem("cs_role_v1", String(res.role||"").trim().toLowerCase());
 
-  // ✅ on mémorise le rôle renvoyé par Sheets (Acces)
-  localStorage.setItem("cs_role_v1", String(res.role||"").trim().toLowerCase());
-
-  hideChecking();
-  showPortal();
-  showMsg("");
-  return true;
-}
-
+      hideChecking();
+      showPortal();
+      showMsg("");
+      return true;
+    }
 
     localStorage.removeItem(LS_KEY);
+    localStorage.removeItem("cs_role_v1");
     hideChecking();
     showLogin();
     showMsg("Accès refusé.");
@@ -394,6 +381,7 @@ async function handleCredentialResponse(response){
   const email = parseJwtEmail(response.credential);
   if(!email){
     localStorage.removeItem(LS_KEY);
+    localStorage.removeItem("cs_role_v1");
     showLogin();
     showMsg("Erreur : email introuvable.");
     return;
@@ -412,18 +400,18 @@ async function handleCredentialResponse(response){
 
     try{
       const res = await authCheck(saved);
-if(res && res.ok === true){
-  localStorage.setItem("cs_role_v1", String(res.role||"").trim().toLowerCase());
-  showMsg("");
-  showPortal();
-}else{
-  localStorage.removeItem(LS_KEY);
-  localStorage.removeItem("cs_role_v1");
-  showLogin();
-  showMsg("Accès refusé.");
-}
-
+      if(res && res.ok === true){
+        localStorage.setItem("cs_role_v1", String(res.role||"").trim().toLowerCase());
+        showMsg("");
+        showPortal();
+      }else{
+        localStorage.removeItem(LS_KEY);
+        localStorage.removeItem("cs_role_v1");
+        showLogin();
+        showMsg("Accès refusé.");
+      }
     }catch(e){
+      // réseau KO : on laisse portail mais sans changer rôle
       showMsg("Connexion à vérifier (réseau).");
       showPortal();
     }
@@ -434,22 +422,23 @@ if(res && res.ok === true){
 })();
 
 /* =========================================================
-   ====== ADMIN (clic + refus plein écran + retour) ======
+   ====== ADMIN (clic + refus plein écran + ANTI BACK) ======
    ========================================================= */
 
 const ADMIN_URL = "admin.html";
 const DENIED_IMG = "acces_refuse.png";
 
-function getEmailLocal(){
-  return (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
+function isAdminLocal(){
+  return (localStorage.getItem("cs_role_v1") || "").trim().toLowerCase() === "admin";
 }
 
-function showDenied(){
-  // si déjà affiché, ne recrée pas
-  let overlay = document.getElementById("denyOverlay");
-  if (overlay) return;
+let _denyActive = false;
+let _denyPopHandler = null;
 
-  overlay = document.createElement("div");
+function showDenied(){
+  if (document.getElementById("denyOverlay")) return;
+
+  const overlay = document.createElement("div");
   overlay.id = "denyOverlay";
   overlay.style.cssText = `
     position:fixed; inset:0; z-index:999999;
@@ -461,7 +450,6 @@ function showDenied(){
     padding: 12px;
   `;
 
-  // image
   const img = document.createElement("img");
   img.src = DENIED_IMG;
   img.alt = "Accès refusé";
@@ -474,8 +462,8 @@ function showDenied(){
     display:block;
   `;
 
-  // bouton retour en bas
   const btn = document.createElement("button");
+  btn.id = "denyBackBtn";
   btn.textContent = "← Retour";
   btn.style.cssText = `
     position:fixed;
@@ -492,32 +480,57 @@ function showDenied(){
     -webkit-tap-highlight-color: transparent;
   `;
 
-  // ✅ piège le bouton "retour" Android (history)
-  // -> on ajoute une entrée d'historique
-  history.pushState({ deny: 1 }, "", location.href);
+  // ✅ on s'assure que l'état actuel est bien "portal"
+  // (évite un retour Android vers une page bizarre dans l'historique)
+  history.replaceState({page:"portal"}, "", location.href);
 
-  // fermeture propre
-  const close = () => {
+  _denyActive = true;
+
+  // ✅ on ajoute 1 entrée "deny"
+  history.pushState({deny:1}, "", location.href);
+
+  // ✅ piège du bouton retour Android : si overlay actif -> on re-push et on reste bloqué
+  _denyPopHandler = () => {
+    if (!_denyActive) return;
+    // On reste sur l'overlay
+    history.pushState({deny:1}, "", location.href);
+  };
+  window.addEventListener("popstate", _denyPopHandler);
+
+  const closeDenied = () => {
+    if(!_denyActive) return;
+    _denyActive = false;
+
+    window.removeEventListener("popstate", _denyPopHandler);
+    _denyPopHandler = null;
+
     const ov = document.getElementById("denyOverlay");
+    const b = document.getElementById("denyBackBtn");
     if (ov) ov.remove();
-    window.removeEventListener("popstate", onPop);
+    if (b) b.remove();
+
+    // revient à l'état juste avant "deny"
+    history.back();
   };
 
-  // si l'utilisateur appuie sur "retour" Android => on ferme l'overlay
-  const onPop = (ev) => {
-    // on ferme juste l'overlay, sans naviguer vers une page "admin" cachée
-    close();
-  };
-  window.addEventListener("popstate", onPop);
-
-  // bouton => revient en arrière (déclenche popstate => close)
-  btn.addEventListener("click", () => history.back());
+  btn.addEventListener("click", closeDenied);
 
   overlay.appendChild(img);
   document.body.appendChild(overlay);
-  document.body.appendChild(btn); // bouton au-dessus, en bas
+  document.body.appendChild(btn);
 }
 
+document.addEventListener("click", (e)=>{
+  const btn = e.target.closest("#btnAdmin");
+  if(!btn) return;
+  e.preventDefault();
+
+  if(isAdminLocal()){
+    location.href = ADMIN_URL;
+  }else{
+    showDenied();
+  }
+});
 </script>
 
 </body>
