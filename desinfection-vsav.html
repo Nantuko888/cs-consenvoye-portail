@@ -500,6 +500,7 @@ tabInv.addEventListener("click", ()=>setTab("inv"));
    CONFIG API + IDENTITÉ
    ======================= */
 const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+const LS_VSAV_CACHE = "cs_vsav_cache_v1";
 const LS_EMAIL = "cs_portail_email_v1";
 const LS_NAME = "cs_portail_name_v1";
 
@@ -750,9 +751,25 @@ function fill(rows){
    ACTIONS
    ======================= */
 async function refresh(){
-  const res = await apiCall("vsav_get");
-  if(res && res.ok) fill(res.rows || []);
+
+  try{
+    const res = await apiCall("vsav_get");
+
+    if(res && res.ok){
+
+      const rows = res.rows || [];
+
+      // ✅ Sauvegarde cache
+      localStorage.setItem(LS_VSAV_CACHE, JSON.stringify(rows));
+
+      fill(rows);
+    }
+
+  }catch(e){
+    // silence (on garde affichage existant)
+  }
 }
+
 
 async function onAgentClick(tr){
   const month = tr.dataset.month;
@@ -934,12 +951,23 @@ window.vsavSetNonfait_ = async function(month, email, date, justificatif){
       location.href = "index.html?portal=1";
       return;
     }
+
     bind();
-    await refresh();
+
+    const cache = localStorage.getItem(LS_VSAV_CACHE);
+    if(cache){
+      try{
+        fill(JSON.parse(cache));
+      }catch(e){}
+    }
+
+    refresh();
+
   }catch(e){
     // silence
   }
 })();
+
 </script>
 
 </body>
