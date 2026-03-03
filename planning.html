@@ -625,7 +625,7 @@ async function loadMyRole_(){
   let firstCatByDate = new Map();
   let hasNoteByDate = new Map(); // ✅ seulement si details non vide
   let currentMonth = 0;
-
+  
   function showStatus(txt, sub){
     $statusTxt.textContent = txt || "";
     $statusSub.textContent = sub || "";
@@ -646,7 +646,7 @@ async function loadMyRole_(){
       eventsByDate.get(date).push(ev);
 
       // NOTE = details remplis
-      if(String(ev.details||"").trim()) hasNoteByDate.set(date, true);
+      if(String(ev.title||"").trim() || String(ev.details||"").trim()) hasNoteByDate.set(date, true);
     }
 
     // catégories dédoublonnées
