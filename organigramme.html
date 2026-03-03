@@ -305,6 +305,33 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
+  /* ✅ pastille synchro flottante */
+.syncToast{
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: calc(env(safe-area-inset-bottom) + 12px);
+  z-index: 9999;
+  display: none;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.syncToast .pill{
+  display:inline-flex;
+  gap:10px;
+  align-items:center;
+  padding:10px 12px;
+  border-radius: 16px;
+  background: rgba(0,0,0,.62);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow: 0 14px 34px rgba(0,0,0,.40);
+  color: rgba(255,255,255,.90);
+  font-weight:900;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.syncToast .small{font-weight:800; opacity:.85; font-size:13px}
+
 
   </style>
 </head>
@@ -566,6 +593,17 @@
     el.style.display = "none";
   }
 }
+function showSync(msg="Synchronisation…", sub=""){
+  const t = document.getElementById("syncToast");
+  document.getElementById("syncTxt").textContent = msg;
+  document.getElementById("syncSub").textContent = sub || "Mise à jour des données";
+  t.style.display = "block";
+}
+function hideSync(){
+  const t = document.getElementById("syncToast");
+  if(t) t.style.display = "none";
+}
+
 
 async function loadFromSheets(){
   hideErr();
@@ -624,6 +662,15 @@ document.getElementById("btnBack").addEventListener("click", () => {
 loadFromSheets();
 
 </script>
+<div class="syncToast" id="syncToast">
+  <div class="pill">
+    <span>🔄</span>
+    <div>
+      <div id="syncTxt">Synchronisation…</div>
+      <div class="small" id="syncSub">Mise à jour des données</div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
