@@ -445,56 +445,79 @@ function getEmailLocal(){
 }
 
 function showDenied(){
+  // si déjà affiché, ne recrée pas
   let overlay = document.getElementById("denyOverlay");
-  if(!overlay){
-    overlay = document.createElement("div");
-    overlay.id = "denyOverlay";
-    overlay.style.cssText = "position:fixed;inset:0;z-index:999999;background:#000;";
+  if (overlay) return;
 
-    const btn = document.createElement("button");
-    btn.textContent = "← Retour";
-    btn.style.cssText = `
-  position:absolute;
-  bottom: calc(env(safe-area-inset-bottom) + 24px);
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 14px 22px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.25);
-  background: rgba(0,0,0,.75);
-  color:#fff;
-  font-weight:900;
-  font-size:16px;
-  -webkit-tap-highlight-color: transparent;
-`;
-    btn.addEventListener("click", ()=> overlay.remove());
+  overlay = document.createElement("div");
+  overlay.id = "denyOverlay";
+  overlay.style.cssText = `
+    position:fixed; inset:0; z-index:999999;
+    background:#000;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding: 12px;
+  `;
 
-    const img = document.createElement("img");
-    img.src = DENIED_IMG;
-    img.alt = "Accès refusé";
-    img.style.cssText = "max-width:100%;max-height:80vh;width:auto;height:auto;object-fit:contain;display:block;margin:auto;";
+  // image
+  const img = document.createElement("img");
+  img.src = DENIED_IMG;
+  img.alt = "Accès refusé";
+  img.style.cssText = `
+    max-width:100%;
+    max-height: calc(100dvh - 90px);
+    width:auto;
+    height:auto;
+    object-fit:contain;
+    display:block;
+  `;
 
-    overlay.appendChild(btn);
-    overlay.appendChild(img);
-    document.body.appendChild(overlay);
-  }
+  // bouton retour en bas
+  const btn = document.createElement("button");
+  btn.textContent = "← Retour";
+  btn.style.cssText = `
+    position:fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(env(safe-area-inset-bottom) + 14px);
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.25);
+    background: rgba(0,0,0,.65);
+    color:#fff;
+    font-weight:950;
+    font-size:16px;
+    -webkit-tap-highlight-color: transparent;
+  `;
+
+  // ✅ piège le bouton "retour" Android (history)
+  // -> on ajoute une entrée d'historique
+  history.pushState({ deny: 1 }, "", location.href);
+
+  // fermeture propre
+  const close = () => {
+    const ov = document.getElementById("denyOverlay");
+    if (ov) ov.remove();
+    window.removeEventListener("popstate", onPop);
+  };
+
+  // si l'utilisateur appuie sur "retour" Android => on ferme l'overlay
+  const onPop = (ev) => {
+    // on ferme juste l'overlay, sans naviguer vers une page "admin" cachée
+    close();
+  };
+  window.addEventListener("popstate", onPop);
+
+  // bouton => revient en arrière (déclenche popstate => close)
+  btn.addEventListener("click", () => history.back());
+
+  overlay.appendChild(img);
+  document.body.appendChild(overlay);
+  document.body.appendChild(btn); // bouton au-dessus, en bas
 }
 
-function isAdminLocal(){
-  return (localStorage.getItem("cs_role_v1") || "").trim().toLowerCase() === "admin";
-}
-
-document.addEventListener("click", (e)=>{
-  const btn = e.target.closest("#btnAdmin");
-  if(!btn) return;
-  e.preventDefault();
-
-  // ✅ instantané : PAS d'appel API ici
-  if(isAdminLocal()){
-    location.href = ADMIN_URL;
-  }else{
-    showDenied();
-  }
 });
 
 </script>
