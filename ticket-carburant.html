@@ -3,730 +3,920 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Ticket carburant — CS Consenvoye</title>
+  <title>Ticket Carburant — CS Consenvoye</title>
+
   <style>
     :root{
-      --bg:#0b0f14; --card:#111826; --muted:#8aa0b6; --text:#e9f0f7;
-      --line:rgba(255,255,255,.10);
-      --good:#2ecc71; --warn:#f1c40f; --bad:#e74c3c; --info:#3498db;
+      --txt:#f4f4f4;
+      --muted:rgba(255,255,255,.72);
+      --shadow: 0 14px 34px rgba(0,0,0,.40);
+      --radius: 22px;
+      --stroke: rgba(255,255,255,.10);
+
+      /* ✅ ORANGE comme tes pages */
+      --orange:#d46a00;
+      --orange2:#b95800;
+
+      --bg:#0b0b0b;
+
+      /* véhicules */
+      --vsav:#2f79ff;
+      --ccr:#ff3b30;
+      --vtul:#25c46a;
+      --vtp:#f6a000;
+
+      --yellow:#fff200;
     }
+
     *{box-sizing:border-box}
-    body{margin:0;background:linear-gradient(180deg,#0b0f14,#0b0f14 40%,#0a121a);color:var(--text);font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto}
-    a{color:inherit}
-    .wrap{max-width:980px;margin:0 auto;padding:14px 14px 90px}
-    .topbar{
-      position:sticky;top:0;z-index:20;
-      background:rgba(11,15,20,.82);backdrop-filter:blur(10px);
-      border-bottom:1px solid var(--line);
-      padding:10px 14px;
-    }
-    .topbar .row{max-width:980px;margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between}
-    .brand{display:flex;gap:10px;align-items:center}
-    .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:rgba(255,255,255,.04);padding:6px 10px;border-radius:999px}
-    .pill{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:6px 10px;font-weight:600}
-    .pill.admin{background:rgba(241,196,15,.14);border:1px solid rgba(241,196,15,.35);color:#ffd86b}
-    .ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      padding:10px 12px;border-radius:12px;border:1px solid var(--line);
-      background:rgba(255,255,255,.05);color:var(--text);
-      cursor:pointer;user-select:none;
-    }
-    .btn:disabled{opacity:.45;cursor:not-allowed}
-    .btn.primary{background:rgba(52,152,219,.18);border-color:rgba(52,152,219,.35)}
-    .btn.good{background:rgba(46,204,113,.18);border-color:rgba(46,204,113,.35)}
-    .btn.bad{background:rgba(231,76,60,.18);border-color:rgba(231,76,60,.35)}
-    .btn.small{padding:8px 10px;border-radius:10px;font-size:13px}
-    .grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
-    @media(min-width:860px){.grid{grid-template-columns:1.05fr .95fr}}
-    .card{background:rgba(17,24,38,.72);border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-    .title{font-size:16px;font-weight:800;margin:0 0 8px}
-    .muted{color:var(--muted)}
-    .row{display:flex;gap:10px;align-items:center}
-    .row.wrap{flex-wrap:wrap}
-    .field{display:flex;flex-direction:column;gap:6px}
-    select,input{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--text);border-radius:12px;padding:10px 12px;outline:none}
-    .split{display:flex;gap:10px;flex-wrap:wrap}
-    .split > *{flex:1 1 220px}
-    .preview{
-      width:100%;border-radius:16px;border:1px solid var(--line);
-      background:rgba(0,0,0,.35);overflow:hidden;min-height:220px;
-      display:flex;align-items:center;justify-content:center;
-    }
-    .preview img{width:100%;height:auto;display:block}
-    .preview .ph{padding:18px;text-align:center;color:var(--muted)}
-    .tabs{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-    .tab{padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.04);cursor:pointer;font-weight:700}
-    .tab.active{background:rgba(52,152,219,.18);border-color:rgba(52,152,219,.35)}
-    .hide{display:none!important}
-
-    /* Vehicle chips */
-    .veh-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;border:1px solid var(--line);font-weight:800}
-    .dot{width:10px;height:10px;border-radius:999px;display:inline-block}
-    .veh-VSAV{background:rgba(52,152,219,.16);border-color:rgba(52,152,219,.35)}
-    .veh-CCR{background:rgba(231,76,60,.16);border-color:rgba(231,76,60,.35)}
-    .veh-VTUL{background:rgba(46,204,113,.14);border-color:rgba(46,204,113,.35)}
-    .veh-VTP{background:rgba(243,156,18,.14);border-color:rgba(243,156,18,.35)}
-    .dot.VSAV{background:var(--info)}
-    .dot.CCR{background:var(--bad)}
-    .dot.VTUL{background:var(--good)}
-    .dot.VTP{background:#f39c12}
-
-    /* History */
-    .month{
-      border:1px solid var(--line);
-      border-radius:16px;
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--txt);
+      background:var(--bg);
       overflow:hidden;
-      background:rgba(255,255,255,.03);
+    }
+
+    .bg{
+      position:fixed; inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.55)),
+        url("background.png") center top/cover no-repeat;
+      z-index:-2;
+      transform: translateZ(0);
+    }
+    .bg::after{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.72) 62%);
+      z-index:-1;
+    }
+
+    .wrap{
+      height:100vh;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
+      display:grid;
+      grid-template-rows: auto auto 1fr;
+      gap:10px;
+      min-height:0;
+    }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding: 10px 12px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(212,106,0,.78), rgba(185,88,0,.58));
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      min-height: 46px;
+    }
+    .title{
+      margin:0;
+      font-weight:950;
+      letter-spacing:.6px;
+      text-transform: uppercase;
+      font-size: 18px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .topRight{display:flex; gap:10px; align-items:center;}
+    .btn{
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      color:var(--txt);
+      padding: 9px 12px;
+      border-radius: 14px;
+      font-weight:900;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+      white-space:nowrap;
+    }
+    .btn:active{transform: translateY(1px)}
+    .adminTag{
+      display:none;
+      font-weight:950;
+      font-size:12px;
+      letter-spacing:.4px;
+      color: var(--yellow);
+      text-transform: uppercase;
+      margin-right:2px;
+    }
+
+    .tabs{
+      display:flex; gap:10px;
+    }
+    .tab{
+      flex:1;
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.28);
+      box-shadow: var(--shadow);
+      font-weight:950;
+      letter-spacing:.3px;
+      cursor:pointer;
+      color: rgba(255,255,255,.86);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tab.active{
+      background: linear-gradient(180deg, rgba(212,106,0,.62), rgba(185,88,0,.45));
+      color:#fff;
+      border-color: rgba(255,255,255,.16);
+    }
+    .tab:active{transform: translateY(1px)}
+
+    .card{
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(0,0,0,.52), rgba(0,0,0,.32));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overflow:hidden;
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .panel{
+      flex:1;
+      min-height:0;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      padding:12px;
+      display:none;
+    }
+    .panel.show{display:block;}
+
+    .row{
+      border-radius: 18px;
+      background: rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.10);
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+    .rowTitle{
+      font-weight:950;
+      margin:0 0 8px 0;
+      letter-spacing:.2px;
+    }
+
+    .select{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.28);
+      color:#fff;
+      font-weight:900;
+      outline:none;
+    }
+
+    .vehChips{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
       margin-top:10px;
     }
-    .month-h{
-      display:flex;align-items:center;justify-content:space-between;
-      padding:12px 12px;
+    .chip{
+      padding: 9px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      font-weight:950;
       cursor:pointer;
-      background:rgba(46,204,113,.08);
+      -webkit-tap-highlight-color: transparent;
+      user-select:none;
     }
-    .month-h .left{display:flex;align-items:center;gap:10px;font-weight:900}
-    .month-h .count{opacity:.8;font-weight:800}
-    .month-h .chev{opacity:.8}
-    .month-b{padding:10px 10px;border-top:1px solid var(--line)}
+    .chip.active{outline:2px solid rgba(255,255,255,.30)}
+
+    .chip.vsav{background: rgba(47,121,255,.20); border-color: rgba(47,121,255,.45);}
+    .chip.ccr{ background: rgba(255,59,48,.18); border-color: rgba(255,59,48,.45);}
+    .chip.vtul{background: rgba(37,196,106,.18); border-color: rgba(37,196,106,.45);}
+    .chip.vtp{ background: rgba(246,160,0,.18); border-color: rgba(246,160,0,.45);}
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .primary{
+      background: linear-gradient(180deg, rgba(212,106,0,.80), rgba(185,88,0,.62));
+      border-color: rgba(255,255,255,.18);
+    }
+    .ghost{
+      background: rgba(255,255,255,.06);
+    }
+    .danger{
+      background: rgba(255,59,48,.18);
+      border-color: rgba(255,59,48,.45);
+    }
+    .btnWide{flex:1; min-width: 130px; text-align:center;}
+
+    .previewWrap{
+      display:none;
+      margin-top: 12px;
+      gap:10px;
+    }
+    .previewWrap.show{display:flex; flex-direction:column;}
+    .previewImg{
+      width:100%;
+      max-height: 44vh;
+      object-fit:contain;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.25);
+      box-shadow: 0 12px 30px rgba(0,0,0,.45);
+    }
+
+    /* ===== Historique ===== */
+    .monthBlock{
+      border-radius: 18px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+      margin-bottom: 10px;
+    }
+    .monthHead{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding: 12px 12px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      background: rgba(255,255,255,.06);
+    }
+    .monthHeadTint{
+      background: linear-gradient(180deg, rgba(37,196,106,.18), rgba(0,0,0,.06));
+    }
+    .monthLeft{
+      display:flex; align-items:center; gap:10px;
+      min-width:0;
+    }
+    .monthName{
+      font-weight:950;
+      letter-spacing:.4px;
+      text-transform: uppercase;
+      white-space:nowrap;
+    }
+    .countPill{
+      font-weight:950;
+      font-size:12px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.9);
+    }
+    .chev{
+      font-weight:950;
+      opacity:.9;
+    }
+    .monthBody{
+      display:none;
+      padding: 10px 10px 12px;
+    }
+    .monthBody.show{display:block;}
+
     .item{
-      display:flex;align-items:center;justify-content:space-between;
-      gap:10px;padding:10px;border-radius:14px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(0,0,0,.20);
-      margin-top:8px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      padding: 10px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-top: 8px;
     }
-    .item .meta{display:flex;flex-direction:column;gap:4px;min-width:0}
-    .item .meta .main{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .item .meta .sub{color:var(--muted);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .item .actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-    .ico{
-      width:36px;height:36px;border-radius:12px;border:1px solid var(--line);
-      background:rgba(255,255,255,.05);
-      display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+    .vehBadge{
+      flex:0 0 auto;
+      min-width: 64px;
+      text-align:center;
+      font-weight:950;
+      padding: 8px 10px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.14);
     }
-    .ico:hover{background:rgba(255,255,255,.08)}
-    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;opacity:.9}
-    .toast{
-      position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
-      padding:10px 14px;border-radius:999px;
-      background:rgba(0,0,0,.70);border:1px solid rgba(255,255,255,.14);
-      color:#fff;opacity:0;pointer-events:none;transition:opacity .2s ease, transform .2s ease;
-      max-width:92vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-      z-index:50;
+    .vehBadge.vsav{background: rgba(47,121,255,.25); border-color: rgba(47,121,255,.50);}
+    .vehBadge.ccr{ background: rgba(255,59,48,.22); border-color: rgba(255,59,48,.50);}
+    .vehBadge.vtul{background: rgba(37,196,106,.22); border-color: rgba(37,196,106,.50);}
+    .vehBadge.vtp{ background: rgba(246,160,0,.22); border-color: rgba(246,160,0,.50);}
+
+    .meta{
+      min-width:0;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
     }
-    .toast.show{opacity:1;transform:translateX(-50%) translateY(-2px)}
+    .metaTop{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .dateTxt{
+      font-weight:950;
+      opacity:.95;
+    }
+    .agentTxt{
+      font-weight:900;
+      color: var(--muted);
+    }
+    .icons{
+      flex:0 0 auto;
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .iconBtn{
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color:#fff;
+      font-weight:950;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .iconBtn:active{transform: translateY(1px)}
+    .iconBtn.adminOnly{display:none;}
+
+    /* status pill */
+    .status{
+      position:fixed;
+      left:12px; right:12px;
+      bottom: calc(env(safe-area-inset-bottom) + 12px);
+      z-index:80;
+      display:none;
+      max-width: 980px;
+      margin: 0 auto;
+      pointer-events:none;
+    }
+    .status .pill{
+      pointer-events:auto;
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:10px 12px;
+      border-radius: 16px;
+      background: rgba(0,0,0,.62);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+      color: rgba(255,255,255,.92);
+      font-weight:900;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .small{font-weight:800; opacity:.85; font-size:13px}
+
+    /* input file hidden */
+    #photoInput{ display:none; }
+
+    @media (max-width:360px){
+      .title{font-size:16px}
+      .item{padding:9px}
+      .vehBadge{min-width:60px}
+    }
   </style>
 </head>
 
 <body>
-  <div class="topbar">
-    <div class="row">
-      <div class="brand">
-        <div class="badge">
-          <span style="font-size:18px">⛽</span>
-          <div>
-            <div style="font-weight:900">Ticket carburant</div>
-            <div class="muted" style="font-size:12px">CS Consenvoye</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row" style="gap:8px">
-        <button id="btnAdmin" class="btn ghost small" title="Mode admin">🔒</button>
-        <span id="adminPill" class="pill admin hide">Mode admin</span>
-      </div>
-    </div>
-  </div>
+  <div class="bg"></div>
 
   <div class="wrap">
-    <div class="tabs">
-      <div id="tabCapture" class="tab active">📷 Prise de photo</div>
-      <div id="tabHistory" class="tab">🗂️ Historique</div>
+    <div class="topbar">
+      <h1 class="title">TICKET CARBURANT</h1>
+      <div class="topRight">
+        <span class="adminTag" id="adminTag">MODE ADMIN</span>
+        <button class="btn" id="btnLock" title="Admin" aria-pressed="false" style="display:none;">🔒</button>
+        <button class="btn" id="btnBack">Retour</button>
+      </div>
     </div>
 
-    <div class="grid">
-      <!-- CAPTURE -->
-      <div id="viewCapture" class="card">
-        <h3 class="title">1) Choisir le véhicule</h3>
+    <div class="tabs" role="tablist" aria-label="Ticket carburant onglets">
+      <button class="tab active" id="tabPhoto" role="tab" aria-selected="true">Photo</button>
+      <button class="tab" id="tabHist" role="tab" aria-selected="false">Historique</button>
+    </div>
 
-        <div class="split">
-          <div class="field">
-            <label class="muted">Véhicule</label>
-            <select id="vehSelect">
-              <option value="">— Sélectionner —</option>
-              <option value="VSAV">VSAV</option>
-              <option value="CCR">CCR</option>
-              <option value="VTUL">VTUL</option>
-              <option value="VTP">VTP</option>
-            </select>
+    <section class="card">
+      <!-- PANEL PHOTO -->
+      <div class="panel show" id="panelPhoto" role="tabpanel" aria-labelledby="tabPhoto">
+        <div class="row">
+          <div class="rowTitle">Véhicule</div>
+
+          <select class="select" id="vehicleSelect">
+            <option value="">— Choisir un véhicule —</option>
+            <option value="VSAV">VSAV</option>
+            <option value="CCR">CCR</option>
+            <option value="VTUL">VTUL</option>
+            <option value="VTP">VTP</option>
+          </select>
+
+          <div class="vehChips" aria-label="Raccourcis véhicules">
+            <div class="chip vsav" data-v="VSAV">VSAV</div>
+            <div class="chip ccr"  data-v="CCR">CCR</div>
+            <div class="chip vtul" data-v="VTUL">VTUL</div>
+            <div class="chip vtp"  data-v="VTP">VTP</div>
           </div>
 
-          <div class="field">
-            <label class="muted">Agent</label>
-            <input id="whoInput" type="text" placeholder="prénom (auto)" disabled />
+          <div class="actions">
+            <button class="btn primary btnWide" id="btnTake">📷 Prendre une photo</button>
           </div>
-        </div>
 
-        <div style="height:10px"></div>
-
-        <h3 class="title">2) Photo + aperçu</h3>
-        <div class="preview" id="previewBox">
-          <div class="ph">
-            <div style="font-size:22px;margin-bottom:6px">📸</div>
-            <div>Prends une photo de l’écran de la pompe</div>
-            <div class="muted" style="margin-top:6px">Choisis d’abord un véhicule</div>
+          <input id="photoInput" type="file" accept="image/*" capture="environment" />
+          <div class="previewWrap" id="previewWrap">
+            <img class="previewImg" id="previewImg" alt="Aperçu photo" />
+            <div class="actions">
+              <button class="btn ghost btnWide" id="btnRetake">Reprendre</button>
+              <button class="btn primary btnWide" id="btnSend">Envoyer</button>
+            </div>
           </div>
-        </div>
-
-        <div style="height:12px"></div>
-
-        <div class="row wrap">
-          <button id="btnTake" class="btn primary" type="button">📷 Prendre une photo</button>
-          <button id="btnRetake" class="btn" type="button" disabled>🔄 Reprendre</button>
-          <button id="btnSend" class="btn good" type="button" disabled>✅ Envoyer</button>
-          <button id="btnClear" class="btn bad" type="button" disabled>🗑️ Effacer</button>
-        </div>
-
-        <div class="muted" style="margin-top:10px">
-          Astuce : après “Envoyer”, tu peux enchaîner directement une nouvelle photo.
-        </div>
-
-        <!-- input camera hidden -->
-        <input id="fileInput" type="file" accept="image/*" capture="environment" class="hide" />
-      </div>
-
-      <!-- HISTORY -->
-      <div id="viewHistory" class="card hide">
-        <h3 class="title">Historique</h3>
-        <div class="muted">
-          Par mois (replié). Ordre : du plus ancien en haut → au plus récent en bas.
-        </div>
-
-        <div style="height:10px"></div>
-        <div id="historyRoot"></div>
-
-        <div style="height:12px"></div>
-        <div class="muted kbd">
-          Stockage local temporaire (démo) : on branche l’upload Drive via Apps Script ensuite.
         </div>
       </div>
 
-      <!-- SIDE CARD: INFO -->
-      <div class="card">
-        <h3 class="title">Résumé</h3>
-        <div class="muted">
-          1) Choisis le véhicule<br/>
-          2) Photo → aperçu<br/>
-          3) “Envoyer” → message “Envoyé” + historique
-        </div>
+      <!-- PANEL HIST -->
+      <div class="panel" id="panelHist" role="tabpanel" aria-labelledby="tabHist">
+        <div id="histWrap"></div>
+      </div>
+    </section>
+  </div>
 
-        <div style="height:14px"></div>
-
-        <div class="title" style="font-size:14px">Couleurs véhicules</div>
-        <div class="row wrap" style="margin-top:8px">
-          <span class="veh-chip veh-VSAV"><span class="dot VSAV"></span>VSAV</span>
-          <span class="veh-chip veh-CCR"><span class="dot CCR"></span>CCR</span>
-          <span class="veh-chip veh-VTUL"><span class="dot VTUL"></span>VTUL</span>
-          <span class="veh-chip veh-VTP"><span class="dot VTP"></span>VTP</span>
-        </div>
-
-        <div style="height:14px"></div>
-        <div class="muted">
-          Mode admin : accès téléchargement / ouvrir.  
-          Mode agent : uniquement visualiser.
-        </div>
+  <div class="status" id="status">
+    <div class="pill">
+      <span id="statusIcon">⏳</span>
+      <div>
+        <div id="statusTxt">Chargement…</div>
+        <div class="small" id="statusSub">—</div>
       </div>
     </div>
   </div>
 
-  <div id="toast" class="toast">OK</div>
-
 <script>
-/* =========================
-   CONFIG (à brancher après)
-   ========================= */
-// Mets ton endpoint Apps Script (doGet JSONP) quand tu l’auras.
-// L’upload serveur devra :
-// - créer / retrouver le dossier "2026" (ou année courante) dans Ticket carburant
-// - enregistrer la photo, puis écrire une ligne d’historique (veh, who, date, fileId/url)
-const API = ""; // ex: "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec"
-const DRIVE_ROOT_FOLDER_ID = "12rnE_u5XhUzsif27mWPF-fL3H9AGxn_M"; // ton dossier Ticket Carburant
-const LS_KEY = "cs_ticket_carburant_history_v1";
-const LS_EMAIL = "cs_portail_email_v1"; // même logique que tes autres pages
-const LS_ADMIN = "cs_portail_is_admin_v1";
+/* =======================
+   CONFIG
+   ======================= */
+const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+const BACK_URL = "index.html?portal=1";
+const LS_EMAIL = "cs_portail_email_v1";
+const LS_NAME  = "cs_portail_name_v1";
 
-/* =========================
-   Helpers
-   ========================= */
-const $ = (id)=>document.getElementById(id);
-
-function toast(msg){
-  const t = $("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  clearTimeout(toast._tm);
-  toast._tm = setTimeout(()=>t.classList.remove("show"), 1800);
-}
-
-function pad2(n){ return String(n).padStart(2,"0"); }
-
-function nowIsoLocal(){
-  const d = new Date();
-  return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
-}
-
-function monthKeyFromISO(isoLike){ // "YYYY-MM-DD ..." or Date
-  const s = String(isoLike||"");
-  const y = s.slice(0,4);
-  const m = s.slice(5,7);
-  return (y && m) ? `${y}-${m}` : "????-??";
-}
-
-function monthLabel(k){
-  const [y,m]=k.split("-");
-  const names = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
-  const mi = Number(m)-1;
-  return `${names[mi]||m} ${y}`;
-}
-
-function vehicleClass(veh){
-  return veh ? `veh-${veh}` : "";
-}
-function vehicleDot(veh){
-  return veh ? `dot ${veh}` : "dot";
-}
-
-function inferFirstName(email){
-  if(!email) return "";
-  const local = String(email).split("@")[0] || "";
-  const part = local.split(".")[0] || local.split("_")[0] || local;
-  if(!part) return "";
-  return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
-}
-
-function getEmail(){
-  return (localStorage.getItem(LS_EMAIL) || "").trim().toLowerCase();
-}
-
-function isAdmin(){
-  // on reprend ta logique habituelle : tu stockes un flag en localStorage ou tu le détermines via ton système
-  // Ici on lit un flag simple (tu peux l’adapter à ton check existant).
-  return localStorage.getItem(LS_ADMIN) === "1" || localStorage.getItem(LS_ADMIN) === "true";
-}
-
-/* =========================
-   State
-   ========================= */
-let STATE = {
-  admin: false,
-  veh: "",
-  whoEmail: "",
-  whoName: "",
-  photoBlob: null,
-  photoDataUrl: "",
-  photoName: "",
+/* couleurs véhicule */
+const VEH_COL = {
+  "VSAV": "vsav",
+  "CCR":  "ccr",
+  "VTUL": "vtul",
+  "VTP":  "vtp",
 };
 
-function loadHistory(){
+/* =======================
+   DOM helpers
+   ======================= */
+const $ = (id)=>document.getElementById(id);
+const statusEl = $("status");
+const statusTxt = $("statusTxt");
+const statusSub = $("statusSub");
+const statusIcon = $("statusIcon");
+
+function showStatus(txt, sub, icon="⏳"){
+  statusIcon.textContent = icon;
+  statusTxt.textContent = txt || "";
+  statusSub.textContent = sub || "";
+  statusEl.style.display = "block";
+}
+function hideStatus(){ statusEl.style.display = "none"; }
+
+function myEmail(){ return (localStorage.getItem(LS_EMAIL)||"").trim().toLowerCase(); }
+function myName(){ return (localStorage.getItem(LS_NAME)||"").trim(); }
+function firstNameFromEmail(email){
+  const s = String(email||"").trim().toLowerCase();
+  if(!s.includes("@")) return "";
+  let p = s.split("@")[0] || "";
+  p = p.split(/[._-]/)[0] || p;
+  if(!p) return "";
+  return p.charAt(0).toUpperCase() + p.slice(1);
+}
+function myFirstName(){
+  const n = myName();
+  if(n) return n.split(/\s+/)[0].trim();
+  return firstNameFromEmail(myEmail());
+}
+
+function escapeHtml(s){
+  return (s==null ? "" : String(s))
+    .replaceAll("&","&amp;").replaceAll("<","&lt;")
+    .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+
+/* =======================
+   JSONP
+   ======================= */
+function jsonp(url, cbName, timeoutMs=20000){
+  return new Promise((resolve, reject)=>{
+    const s = document.createElement("script");
+    const cleanup = ()=>{
+      s.remove();
+      try{ delete window[cbName]; }catch(e){ window[cbName]=undefined; }
+    };
+    const t = setTimeout(()=>{ cleanup(); reject(new Error("Timeout JSONP")); }, timeoutMs);
+
+    window[cbName] = (data)=>{ clearTimeout(t); cleanup(); resolve(data); };
+
+    s.src = url + (url.includes("?") ? "&" : "?") + "t=" + Date.now();
+    s.onerror = ()=>{ clearTimeout(t); cleanup(); reject(new Error("Erreur JSONP")); };
+    document.head.appendChild(s);
+  });
+}
+async function apiCall(view, params={}){
+  const cb = "cb_" + Math.random().toString(36).slice(2);
+  const qs = new URLSearchParams({ view, callback: cb, nocache:"1" });
+  Object.entries(params).forEach(([k,v])=> qs.set(k, String(v)));
+  return await jsonp(`${API}?${qs.toString()}`, cb, 25000);
+}
+
+/* =======================
+   Rôle admin
+   ======================= */
+let IS_ADMIN = false;
+let ADMIN_MODE = false;
+
+async function loadMyRole_(){
+  const email = myEmail();
+  if(!email){ IS_ADMIN=false; return; }
   try{
-    const raw = localStorage.getItem(LS_KEY);
-    const arr = raw ? JSON.parse(raw) : [];
-    return Array.isArray(arr) ? arr : [];
-  }catch(e){ return []; }
-}
-function saveHistory(arr){
-  localStorage.setItem(LS_KEY, JSON.stringify(arr||[]));
+    const r = await apiCall("auth_check", { email });
+    IS_ADMIN = !!(r && r.ok===true && String(r.role||"").toLowerCase()==="admin");
+  }catch(e){
+    IS_ADMIN = false;
+  }
 }
 
-/* =========================
+function setAdminMode(on){
+  ADMIN_MODE = !!on;
+  $("adminTag").style.display = ADMIN_MODE ? "inline-block" : "none";
+  const lockBtn = $("btnLock");
+  lockBtn.textContent = ADMIN_MODE ? "🔓" : "🔒";
+  lockBtn.setAttribute("aria-pressed", ADMIN_MODE ? "true":"false");
+
+  // boutons admin only dans l'historique
+  document.querySelectorAll(".iconBtn.adminOnly").forEach(b=>{
+    b.style.display = ADMIN_MODE ? "flex" : "none";
+  });
+}
+
+/* =======================
    Tabs
-   ========================= */
+   ======================= */
+const tabPhoto = $("tabPhoto");
+const tabHist  = $("tabHist");
+const panelPhoto = $("panelPhoto");
+const panelHist  = $("panelHist");
+
 function setTab(which){
-  const cap = $("viewCapture");
-  const hist = $("viewHistory");
-  $("tabCapture").classList.toggle("active", which==="capture");
-  $("tabHistory").classList.toggle("active", which==="history");
-  cap.classList.toggle("hide", which!=="capture");
-  hist.classList.toggle("hide", which!=="history");
-  if(which==="history") renderHistory();
+  const isPhoto = (which==="photo");
+  tabPhoto.classList.toggle("active", isPhoto);
+  tabHist.classList.toggle("active", !isPhoto);
+  tabPhoto.setAttribute("aria-selected", isPhoto ? "true":"false");
+  tabHist.setAttribute("aria-selected", isPhoto ? "false":"true");
+  panelPhoto.classList.toggle("show", isPhoto);
+  panelHist.classList.toggle("show", !isPhoto);
+}
+tabPhoto.addEventListener("click", ()=>setTab("photo"));
+tabHist.addEventListener("click", ()=>{ setTab("hist"); refreshHistory(); });
+
+/* =======================
+   Véhicule select + chips
+   ======================= */
+const vehicleSelect = $("vehicleSelect");
+function setVehicle(v){
+  vehicleSelect.value = v || "";
+  document.querySelectorAll(".chip").forEach(ch=>{
+    ch.classList.toggle("active", ch.dataset.v === vehicleSelect.value);
+  });
+}
+document.querySelectorAll(".chip").forEach(ch=>{
+  ch.addEventListener("click", ()=>setVehicle(ch.dataset.v));
+});
+vehicleSelect.addEventListener("change", ()=>setVehicle(vehicleSelect.value));
+
+/* =======================
+   Photo capture / preview
+   ======================= */
+const photoInput = $("photoInput");
+const previewWrap = $("previewWrap");
+const previewImg = $("previewImg");
+let _imageDataUrl = ""; // base64 dataURL
+
+function resetPreview(){
+  _imageDataUrl = "";
+  previewImg.src = "";
+  previewWrap.classList.remove("show");
 }
 
-/* =========================
-   Preview / buttons
-   ========================= */
-function setPreviewEmpty(){
-  $("previewBox").innerHTML = `
-    <div class="ph">
-      <div style="font-size:22px;margin-bottom:6px">📸</div>
-      <div>Prends une photo de l’écran de la pompe</div>
-      <div class="muted" style="margin-top:6px">Choisis d’abord un véhicule</div>
-    </div>`;
-}
-
-function setPreviewImage(dataUrl){
-  $("previewBox").innerHTML = `<img alt="Aperçu" src="${dataUrl}">`;
-}
-
-function refreshButtons(){
-  const hasVeh = !!STATE.veh;
-  const hasPhoto = !!STATE.photoBlob;
-
-  $("btnTake").disabled = !hasVeh;
-  $("btnRetake").disabled = !hasVeh || !hasPhoto;
-  $("btnSend").disabled = !hasVeh || !hasPhoto;
-  $("btnClear").disabled = !hasVeh || !hasPhoto;
-
-  if(!hasVeh && !hasPhoto){
-    setPreviewEmpty();
+$("btnTake").addEventListener("click", ()=>{
+  if(!vehicleSelect.value){
+    alert("Choisis d’abord un véhicule.");
+    return;
   }
-}
+  photoInput.click();
+});
 
-/* =========================
-   History rendering (months accordion)
-   ========================= */
-function groupByMonth(items){
-  const map = new Map();
-  for(const it of items){
-    const k = monthKeyFromISO(it.takenAt || it.date || "");
-    if(!map.has(k)) map.set(k, []);
-    map.get(k).push(it);
+photoInput.addEventListener("change", async ()=>{
+  const file = photoInput.files && photoInput.files[0];
+  if(!file) return;
+
+  // lecture file -> dataURL
+  showStatus("Préparation…", "Création de l’aperçu", "🖼");
+  try{
+    const dataUrl = await new Promise((resolve, reject)=>{
+      const r = new FileReader();
+      r.onload = ()=>resolve(String(r.result||""));
+      r.onerror = ()=>reject(new Error("Lecture impossible"));
+      r.readAsDataURL(file);
+    });
+
+    _imageDataUrl = dataUrl;
+    previewImg.src = dataUrl;
+    previewWrap.classList.add("show");
+    hideStatus();
+  }catch(e){
+    hideStatus();
+    alert("Impossible de lire la photo.");
   }
-  // order keys asc
-  const keys = Array.from(map.keys()).sort();
-  return keys.map(k => ({ key:k, label: monthLabel(k), items: map.get(k) }));
-}
+});
 
-function renderHistory(){
-  const root = $("historyRoot");
-  const arr = loadHistory();
+$("btnRetake").addEventListener("click", ()=>{
+  // “Reprendre” = on reset et on ré-ouvre caméra
+  resetPreview();
+  photoInput.value = "";
+  setTimeout(()=>photoInput.click(), 50);
+});
 
-  if(arr.length === 0){
-    root.innerHTML = `<div class="muted">Aucun envoi pour le moment.</div>`;
+$("btnSend").addEventListener("click", async ()=>{
+  if(!vehicleSelect.value){
+    alert("Choisis un véhicule.");
+    return;
+  }
+  if(!_imageDataUrl){
+    alert("Aucune photo.");
+    return;
+  }
+  const email = myEmail();
+  if(!email){
+    alert("Email non détecté (connexion). Reviens au portail.");
     return;
   }
 
-  const groups = groupByMonth(arr);
-  root.innerHTML = "";
+  const vehicle = vehicleSelect.value;
+  const name = myFirstName() || "—";
 
-  groups.forEach((g, idx)=>{
-    const wrap = document.createElement("div");
-    wrap.className = "month";
-    const opened = false; // replié par défaut
-    wrap.innerHTML = `
-      <div class="month-h" data-open="${opened ? "1":"0"}">
-        <div class="left">
-          <span class="chev">▸</span>
-          <span>${g.label}</span>
-          <span class="count">(${g.items.length})</span>
-        </div>
-        <div class="muted" style="font-weight:800">replié</div>
-      </div>
-      <div class="month-b ${opened ? "" : "hide"}"></div>
-    `;
-
-    const head = wrap.querySelector(".month-h");
-    const body = wrap.querySelector(".month-b");
-    const chev = wrap.querySelector(".chev");
-
-    function fillBody(){
-      body.innerHTML = "";
-      g.items.forEach((it)=>{
-        const item = document.createElement("div");
-        item.className = "item";
-        const veh = it.veh || "";
-        const takenAt = it.takenAt || "";
-        const title = it.title || "Photo carburant";
-        const who = it.whoName || it.whoEmail || "";
-        const fileUrl = it.fileUrl || "";
-        const dataUrl = it.dataUrl || "";
-        const canDownload = STATE.admin && (fileUrl || dataUrl);
-
-        item.innerHTML = `
-          <div class="meta">
-            <div class="main">
-              <span class="veh-chip ${vehicleClass(veh)}"><span class="${vehicleDot(veh)}"></span>${veh}</span>
-              <span style="font-weight:900">${title}</span>
-            </div>
-            <div class="sub">${takenAt} — ${who}</div>
-          </div>
-          <div class="actions">
-            <div class="ico" title="Voir la photo">🖼️</div>
-            <button class="btn small ${canDownload ? "" : "hide"}" title="Télécharger (admin)">⬇️</button>
-            <button class="btn small ${canDownload ? "" : "hide"}" title="Ouvrir (admin)">🔗</button>
-          </div>
-        `;
-
-        // view photo (modal simple)
-        const btnView = item.querySelector(".ico");
-        btnView.onclick = ()=>{
-          const src = fileUrl || dataUrl;
-          if(!src){ toast("Aucune image"); return; }
-          openModal(src, `${veh} — ${takenAt}`);
-        };
-
-        const btnDl = item.querySelector(".btn[title^='Télécharger']");
-        const btnOpen = item.querySelector(".btn[title^='Ouvrir']");
-        if(btnDl){
-          btnDl.onclick = ()=>{
-            const src = fileUrl || dataUrl;
-            if(!src){ toast("Aucune image"); return; }
-            downloadUrl(src, it.photoName || "ticket-carburant.jpg");
-          };
-        }
-        if(btnOpen){
-          btnOpen.onclick = ()=>{
-            const src = fileUrl || dataUrl;
-            if(!src){ toast("Aucune image"); return; }
-            window.open(src, "_blank", "noopener,noreferrer");
-          };
-        }
-
-        body.appendChild(item);
-      });
-    }
-
-    fillBody();
-
-    head.onclick = ()=>{
-      const isOpen = head.getAttribute("data-open")==="1";
-      head.setAttribute("data-open", isOpen ? "0":"1");
-      body.classList.toggle("hide", isOpen);
-      chev.textContent = isOpen ? "▸" : "▾";
-      head.querySelector("div.muted").textContent = isOpen ? "replié" : "déplié";
-    };
-
-    root.appendChild(wrap);
-  });
-}
-
-/* =========================
-   Modal (view photo)
-   ========================= */
-let modalEl = null;
-
-function openModal(src, label){
-  if(!modalEl){
-    modalEl = document.createElement("div");
-    modalEl.style.position="fixed";
-    modalEl.style.inset="0";
-    modalEl.style.background="rgba(0,0,0,.72)";
-    modalEl.style.backdropFilter="blur(6px)";
-    modalEl.style.zIndex="80";
-    modalEl.style.display="flex";
-    modalEl.style.alignItems="center";
-    modalEl.style.justifyContent="center";
-    modalEl.style.padding="18px";
-    modalEl.innerHTML = `
-      <div style="width:min(920px,96vw);background:rgba(17,24,38,.96);border:1px solid rgba(255,255,255,.14);border-radius:18px;overflow:hidden">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.12)">
-          <div style="font-weight:900" id="mLabel">Photo</div>
-          <button class="btn small" id="mClose">✖</button>
-        </div>
-        <div style="padding:12px">
-          <img id="mImg" alt="Photo" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.25)" />
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modalEl);
-    modalEl.querySelector("#mClose").onclick = closeModal;
-    modalEl.onclick = (e)=>{ if(e.target===modalEl) closeModal(); };
-  }
-  modalEl.querySelector("#mLabel").textContent = label || "Photo";
-  modalEl.querySelector("#mImg").src = src;
-  modalEl.classList.remove("hide");
-}
-function closeModal(){
-  if(modalEl) modalEl.classList.add("hide");
-}
-function downloadUrl(url, filename){
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename || "photo.jpg";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-}
-
-/* =========================
-   Upload (placeholder API JSONP)
-   ========================= */
-function jsonp(url){
-  return new Promise((resolve,reject)=>{
-    const cb = "cb_" + Math.random().toString(36).slice(2);
-    const s = document.createElement("script");
-    const sep = url.includes("?") ? "&" : "?";
-    s.src = url + sep + "callback=" + cb;
-    window[cb] = (data)=>{
-      resolve(data);
-      cleanup();
-    };
-    s.onerror = ()=>{ reject(new Error("Erreur JSONP")); cleanup(); };
-    function cleanup(){
-      try{ delete window[cb]; }catch(e){}
-      s.remove();
-    }
-    document.body.appendChild(s);
-  });
-}
-
-// On gardera ça pour brancher Apps Script.
-// Pour l’instant, on loge en local (démo) + on garde dataURL dans l’historique.
-async function uploadToServerStub({veh, whoName, whoEmail, photoBlob, dataUrl}){
-  // Quand tu seras prêt, on remplacera par un call JSONP vers Apps Script:
-  // view=ticket_upload&email=...&veh=...&year=...&filename=...&data=...
-  // return { ok:true, fileUrl:"https://drive.google.com/uc?id=..." }
-  return { ok:true, fileUrl:"", note:"stub" };
-}
-
-/* =========================
-   Events
-   ========================= */
-function init(){
-  // Email + prénom
-  const email = getEmail();
-  STATE.whoEmail = email || "";
-  STATE.whoName = inferFirstName(email) || "Agent";
-  $("whoInput").value = STATE.whoName;
-
-  // Admin
-  STATE.admin = isAdmin();
-  $("adminPill").classList.toggle("hide", !STATE.admin);
-
-  // Tabs
-  $("tabCapture").onclick = ()=>setTab("capture");
-  $("tabHistory").onclick = ()=>setTab("history");
-
-  // Admin toggle (local only)
-  $("btnAdmin").onclick = ()=>{
-    STATE.admin = !STATE.admin;
-    $("adminPill").classList.toggle("hide", !STATE.admin);
-    // optionnel: mémoriser
-    localStorage.setItem(LS_ADMIN, STATE.admin ? "1" : "0");
-    toast(STATE.admin ? "Mode admin activé" : "Mode admin désactivé");
-    renderHistory();
-  };
-
-  // Vehicle select
-  $("vehSelect").onchange = ()=>{
-    STATE.veh = $("vehSelect").value;
-    refreshButtons();
-  };
-
-  // File input / take photo
-  $("btnTake").onclick = ()=>{
-    if(!STATE.veh){ toast("Choisis un véhicule"); return; }
-    $("fileInput").value = "";
-    $("fileInput").click();
-  };
-
-  $("fileInput").onchange = async ()=>{
-    const f = $("fileInput").files && $("fileInput").files[0];
-    if(!f) return;
-    STATE.photoBlob = f;
-    STATE.photoName = f.name || `ticket_${Date.now()}.jpg`;
-
-    // ✅ Une seule lecture, propre, sans doublon
-    const dataUrl = await new Promise((resolve,reject)=>{
-      const reader = new FileReader();
-      reader.onload = ()=>resolve(String(reader.result||""));
-      reader.onerror = ()=>reject(new Error("Lecture photo impossible"));
-      reader.readAsDataURL(f);
+  showStatus("Envoi…", "Upload sur Drive", "⬆️");
+  try{
+    const r = await apiCall("fuel_upload", {
+      email,
+      name,
+      vehicle,
+      image: _imageDataUrl
     });
 
-    STATE.photoDataUrl = dataUrl;
-    setPreviewImage(dataUrl);
-    refreshButtons();
-    $("btnRetake").disabled = false;
-    $("btnSend").disabled = false;
-    $("btnClear").disabled = false;
-  };
+    if(!r || r.ok !== true){
+      throw new Error(r?.error || "Erreur upload");
+    }
 
-  // Retake = relance appareil photo
-  $("btnRetake").onclick = ()=>{
-    if(!STATE.veh){ toast("Choisis un véhicule"); return; }
-    $("fileInput").value = "";
-    $("fileInput").click();
-  };
+    showStatus("Envoyé ✔", "Photo enregistrée", "✅");
+    setTimeout(hideStatus, 1200);
 
-  // Clear
-  $("btnClear").onclick = ()=>{
-    resetPhoto();
-    toast("Photo effacée");
-  };
+    // reset UI
+    resetPreview();
+    photoInput.value = "";
 
-  // Send
-  $("btnSend").onclick = async ()=>{
-    if(!STATE.veh){ toast("Choisis un véhicule"); return; }
-    if(!STATE.photoBlob || !STATE.photoDataUrl){ toast("Prends une photo"); return; }
+    // refresh historique
+    await refreshHistory();
 
-    $("btnSend").disabled = true;
-    $("btnTake").disabled = true;
-    $("btnRetake").disabled = true;
-    $("btnClear").disabled = true;
+    alert("Envoyé ✔");
+  }catch(e){
+    showStatus("Erreur", String(e.message||e), "⚠️");
+    setTimeout(hideStatus, 2500);
+    alert("Erreur : " + String(e.message||e));
+  }
+});
 
-    try{
-      const takenAt = nowIsoLocal();
-      const item = {
-        veh: STATE.veh,
-        whoName: STATE.whoName,
-        whoEmail: STATE.whoEmail,
-        takenAt,
-        title: "Photo carburant",
-        photoName: STATE.photoName,
-        // Démo: dataUrl stocké localement (attention, ça peut grossir)
-        dataUrl: STATE.photoDataUrl,
-        fileUrl: "" // rempli quand on branchera Drive
-      };
+/* =======================
+   Historique
+   ======================= */
+const histWrap = $("histWrap");
+let _histLoadedOnce = false;
 
-      // serveur (stub pour l’instant)
-      const up = await uploadToServerStub({
-        veh: STATE.veh,
-        whoName: STATE.whoName,
-        whoEmail: STATE.whoEmail,
-        photoBlob: STATE.photoBlob,
-        dataUrl: STATE.photoDataUrl
+function fmtShortDate(iso){
+  // iso: "2026-03-05T..."
+  const d = new Date(String(iso||""));
+  if(isNaN(d)) return String(iso||"");
+  const dd = String(d.getDate()).padStart(2,"0");
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  const hh = String(d.getHours()).padStart(2,"0");
+  const mi = String(d.getMinutes()).padStart(2,"0");
+  return `${dd}/${mm} ${hh}:${mi}`;
+}
+
+function monthKey(iso){
+  const d = new Date(String(iso||""));
+  if(isNaN(d)) return "—";
+  const y = d.getFullYear();
+  const m = d.getMonth(); // 0-11
+  const monthsFR = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  return `${monthsFR[m]} ${y}`;
+}
+
+function buildHistoryUI(rows){
+  histWrap.innerHTML = "";
+
+  if(!rows || !rows.length){
+    const empty = document.createElement("div");
+    empty.className = "row";
+    empty.innerHTML = `<div style="font-weight:900;opacity:.9">Aucune photo pour le moment.</div>`;
+    histWrap.appendChild(empty);
+    return;
+  }
+
+  // group by month (ordre ancien -> récent comme tu veux : haut ancien bas récent)
+  const groups = new Map();
+  for(const r of rows){
+    const k = monthKey(r.createdAt);
+    if(!groups.has(k)) groups.set(k, []);
+    groups.get(k).push(r);
+  }
+
+  for(const [k, arr] of groups.entries()){
+    const block = document.createElement("div");
+    block.className = "monthBlock";
+
+    const head = document.createElement("div");
+    head.className = "monthHead monthHeadTint";
+    head.innerHTML = `
+      <div class="monthLeft">
+        <div class="monthName">${escapeHtml(k)}</div>
+        <div class="countPill">${arr.length}</div>
+      </div>
+      <div class="chev">▾</div>
+    `;
+
+    const body = document.createElement("div");
+    body.className = "monthBody"; // ✅ replié par défaut
+
+    head.addEventListener("click", ()=>{
+      const open = body.classList.toggle("show");
+      head.querySelector(".chev").textContent = open ? "▴" : "▾";
+    });
+
+    // items
+    for(const r of arr){
+      const v = String(r.vehicle||"").trim().toUpperCase();
+      const vehClass = VEH_COL[v] || "";
+      const date = fmtShortDate(r.createdAt);
+      const agent = String(r.name||"").trim() || firstNameFromEmail(r.email);
+
+      const item = document.createElement("div");
+      item.className = "item";
+      item.innerHTML = `
+        <div class="vehBadge ${vehClass}">${escapeHtml(v||"—")}</div>
+        <div class="meta">
+          <div class="metaTop">
+            <div class="dateTxt">${escapeHtml(date)}</div>
+            <div class="agentTxt">— ${escapeHtml(agent||"—")}</div>
+          </div>
+        </div>
+        <div class="icons">
+          <button class="iconBtn" title="Voir">📷</button>
+          <button class="iconBtn adminOnly" title="Télécharger">⬇️</button>
+          <button class="iconBtn adminOnly" title="Partager">🔗</button>
+        </div>
+      `;
+
+      const btnView = item.querySelectorAll(".iconBtn")[0];
+      const btnDl   = item.querySelectorAll(".iconBtn")[1];
+      const btnShare= item.querySelectorAll(".iconBtn")[2];
+
+      btnView.addEventListener("click", ()=>{
+        // simple preview : ouvre un nouvel onglet sur l'URL "view"
+        if(r.viewUrl) window.open(r.viewUrl, "_blank", "noopener");
+        else alert("Aucun lien photo.");
       });
 
-      if(up && up.ok && up.fileUrl){
-        item.fileUrl = up.fileUrl;
-        // optionnel: si on a fileUrl, on peut enlever dataUrl pour alléger
-        // item.dataUrl = "";
-      }
+      // admin only
+      btnDl.classList.add("adminOnly");
+      btnShare.classList.add("adminOnly");
 
-      const arr = loadHistory();
-      arr.push(item); // ordre prise photo : ancien -> récent
-      saveHistory(arr);
+      btnDl.addEventListener("click", ()=>{
+        if(!ADMIN_MODE) return;
+        if(r.downloadUrl) window.open(r.downloadUrl, "_blank", "noopener");
+        else alert("Aucun lien téléchargement.");
+      });
 
-      toast("Envoyé");
-      resetPhoto();
+      btnShare.addEventListener("click", async ()=>{
+        if(!ADMIN_MODE) return;
+        const link = r.viewUrl || r.downloadUrl || "";
+        if(!link){ alert("Aucun lien."); return; }
 
-      // affiche l’historique sans forcer le changement d’onglet
-      renderHistory();
+        try{
+          if(navigator.share){
+            await navigator.share({ title:"Ticket Carburant", text:`${v} • ${date} • ${agent}`, url: link });
+          }else{
+            await navigator.clipboard.writeText(link);
+            alert("Lien copié ✔");
+          }
+        }catch(e){
+          // fallback clipboard
+          try{
+            await navigator.clipboard.writeText(link);
+            alert("Lien copié ✔");
+          }catch(_){
+            prompt("Copie le lien :", link);
+          }
+        }
+      });
 
-    }catch(err){
-      alert("Erreur envoi : " + (err && err.message ? err.message : err));
-    }finally{
-      $("btnTake").disabled = !STATE.veh;
-      $("btnSend").disabled = true;
-      $("btnRetake").disabled = true;
-      $("btnClear").disabled = true;
+      body.appendChild(item);
     }
-  };
 
-  refreshButtons();
+    block.appendChild(head);
+    block.appendChild(body);
+    histWrap.appendChild(block);
+  }
+
+  // appliquer admin mode visibility
+  document.querySelectorAll(".iconBtn.adminOnly").forEach(b=>{
+    b.style.display = ADMIN_MODE ? "flex" : "none";
+  });
 }
 
-function resetPhoto(){
-  STATE.photoBlob = null;
-  STATE.photoDataUrl = "";
-  STATE.photoName = "";
-  setPreviewEmpty();
-  refreshButtons();
+async function refreshHistory(){
+  const email = myEmail();
+  if(!email){
+    buildHistoryUI([]);
+    return;
+  }
+
+  if(!_histLoadedOnce){
+    showStatus("Chargement…", "Récupération de l’historique", "⏳");
+  }
+
+  try{
+    const r = await apiCall("fuel_list", { email }); // email utile surtout si un jour tu filtres
+    if(!r || r.ok !== true) throw new Error(r?.error || "Erreur list");
+
+    // rows déjà dans l'ordre ancien -> récent (on le garantit côté Apps Script)
+    buildHistoryUI(Array.isArray(r.rows) ? r.rows : []);
+    hideStatus();
+    _histLoadedOnce = true;
+  }catch(e){
+    hideStatus();
+    // garde un message discret, mais pas un gros “synchro”
+    showStatus("Erreur", "Historique indisponible", "⚠️");
+    setTimeout(hideStatus, 2000);
+  }
 }
 
-init();
+/* =======================
+   UI: back + lock
+   ======================= */
+$("btnBack").addEventListener("click", ()=>location.href = BACK_URL);
+
+$("btnLock").addEventListener("click", ()=>{
+  if(!IS_ADMIN) return;
+  setAdminMode(!ADMIN_MODE);
+});
+
+/* =======================
+   Boot
+   ======================= */
+(async function(){
+  // rôle
+  await loadMyRole_();
+
+  // bouton lock seulement si admin
+  if(IS_ADMIN){
+    $("btnLock").style.display = "inline-block";
+  }else{
+    $("btnLock").style.display = "none";
+    setAdminMode(false);
+  }
+
+  // init chips selection
+  setVehicle("");
+
+  // charge historique 1 fois (mais onglet Photo par défaut)
+  // -> on évite de ralentir la première vue
+})();
 </script>
 </body>
 </html>
