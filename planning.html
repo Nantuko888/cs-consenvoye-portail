@@ -483,6 +483,76 @@
       .noteSheet{height: min(56vh, 520px);}
       .editSheet{height: min(68vh, 680px);}
     }
+
+    /* ======= CATEGORY PICKER ======= */
+.catOverlay{
+  position:fixed; inset:0;
+  background: rgba(0,0,0,.62);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index:160;
+  display:none;
+}
+.catOverlay.show{display:block;}
+.catSheet{
+  position:absolute;
+  left:12px; right:12px;
+  bottom: calc(env(safe-area-inset-bottom) + 12px);
+  max-width: 980px;
+  margin: 0 auto;
+  height: min(56vh, 520px);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(0,0,0,.78), rgba(0,0,0,.62));
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow: var(--shadow);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.catHead{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding: 12px 12px;
+  border-bottom:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.22);
+}
+.catTitle{
+  font-weight:950;
+  font-size: 16px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.catBody{
+  padding: 12px;
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+}
+.catBtn{
+  display:flex; align-items:center; gap:10px;
+  padding: 12px 12px;
+  border-radius: 18px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.22);
+  color: rgba(255,255,255,.92);
+  font-weight: 950;
+  cursor:pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.catBtn:active{transform: translateY(1px)}
+.catDot{
+  width:18px; height:18px;
+  border-radius: 6px;
+  border:1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.25);
+  flex:0 0 auto;
+}
+.catBtn.none .catDot{
+  background: transparent;
+}
+
   </style>
 </head>
 
@@ -552,6 +622,18 @@
     </div>
   </div>
 
+  <!-- CATEGORY PICKER (admin) -->
+<div class="catOverlay" id="catOverlay" aria-hidden="true">
+  <div class="catSheet" role="dialog" aria-modal="true" aria-label="Choix catégorie">
+    <div class="catHead">
+      <div class="catTitle">Choisir une catégorie</div>
+      <button class="iconBtn" id="catClose" title="Fermer">✕</button>
+    </div>
+    <div class="catBody" id="catBody"></div>
+  </div>
+</div>
+
+
 <script>
   /********** CONFIG **********/
   const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
@@ -606,6 +688,11 @@
 
   const monthsFR = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
   const dowsFR = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
+
+  const $catOverlay = $("catOverlay");
+const $catBody = $("catBody");
+const $catClose = $("catClose");
+
 
   function norm(s){
     return String(s||"").trim().toLowerCase()
@@ -1050,23 +1137,87 @@
     return res;
   }
 
-  async function openAddEventPrompt_(dateStr){
-    const title = prompt("Titre de l’événement", "");
-    if(!title) return;
+  function openCatPicker_(){
+  return new Promise((resolve)=>{
+    // construit la liste (Aucune + catégories)
+    $catBody.innerHTML = "";
 
-    const start = prompt("Heure début (HH:MM) (optionnel)", "") || "";
-    const end = prompt("Heure fin (HH:MM) (optionnel)", "") || "";
-    const category = prompt("Catégorie (optionnel)", "") || "";
-    const location = prompt("Lieu (optionnel)", "") || "";
-    const details = prompt("Détails / note (optionnel)", "") || "";
+    // Bouton "Aucune"
+    const b0 = document.createElement("button");
+    b0.className = "catBtn none";
+    b0.type = "button";
+    b0.innerHTML = `<span class="catDot"></span><span>Aucune (pas de couleur)</span>`;
+    b0.onclick = ()=>{ closeCatPicker_(); resolve(""); };
+    $catBody.appendChild(b0);
 
-    try{
-      await apiAddEvent_(dateStr, { title, start, end, category, location, details });
-      alert("Ajouté ✔");
-    }catch(err){
-      alert("Erreur : " + String(err && err.message ? err.message : err));
+    // Tri par ordre puis libellé
+    const items = [...catLabel.entries()].map(([k,label])=>({
+      k, label,
+      order: catOrder.has(k) ? catOrder.get(k) : 9999,
+      color: getColorForCategory(k)
+    }));
+    items.sort((a,b)=> (a.order-b.order) || a.label.localeCompare(b.label));
+
+    for(const it of items){
+      const btn = document.createElement("button");
+      btn.className = "catBtn";
+      btn.type = "button";
+      btn.innerHTML = `
+        <span class="catDot" style="background:${escapeHtml(it.color)}"></span>
+        <span>${escapeHtml(it.label)}</span>
+      `;
+      btn.onclick = ()=>{ closeCatPicker_(); resolve(it.label); };
+      $catBody.appendChild(btn);
     }
+
+    // ouvre
+    $catOverlay.classList.add("show");
+    $catOverlay.setAttribute("aria-hidden","false");
+
+    // cancel si on clique le fond
+    const onBg = (e)=>{ if(e.target === $catOverlay){ cleanup(); closeCatPicker_(); resolve(null); } };
+    const onEsc = (e)=>{ if(e.key==="Escape"){ cleanup(); closeCatPicker_(); resolve(null); } };
+    const cleanup = ()=>{
+      $catOverlay.removeEventListener("click", onBg);
+      document.removeEventListener("keydown", onEsc);
+    };
+
+    $catOverlay.addEventListener("click", onBg);
+    document.addEventListener("keydown", onEsc);
+
+    // bouton X
+    $catClose.onclick = ()=>{ cleanup(); closeCatPicker_(); resolve(null); };
+  });
+}
+
+function closeCatPicker_(){
+  $catOverlay.classList.remove("show");
+  $catOverlay.setAttribute("aria-hidden","true");
+  $catBody.innerHTML = "";
+}
+
+ async function openAddEventPrompt_(dateStr){
+  // ✅ choix catégorie via légende (clic)
+  const picked = await openCatPicker_();
+  if(picked === null) return; // annulé
+  const category = picked || ""; // "" = aucune
+
+  const title = prompt("Titre de l’événement", "");
+  if(!title) return;
+
+  const start = prompt("Heure début (HH:MM) (optionnel)", "") || "";
+  const end = prompt("Heure fin (HH:MM) (optionnel)", "") || "";
+  const location = prompt("Lieu (optionnel)", "") || "";
+  const details = prompt("Détails / note (optionnel)", "") || "";
+
+  try{
+    await apiAddEvent_(dateStr, { title, start, end, category, location, details });
+    alert("Ajouté ✔");
+  }catch(err){
+    alert("Erreur : " + String(err && err.message ? err.message : err));
   }
+}
+
 
   /********** CLICK calendar **********/
   $grid.addEventListener("click", (e)=>{
