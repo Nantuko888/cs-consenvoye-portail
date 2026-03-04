@@ -1,825 +1,1010 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<title>Ticket carburant — CS Consenvoye</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Ticket carburant — CS Consenvoye</title>
 
-<style>
-:root{
-  --txt:#f4f4f4;
-  --muted:rgba(255,255,255,.72);
-  --shadow: 0 14px 34px rgba(0,0,0,.40);
-  --radius: 18px;
-  --stroke: rgba(255,255,255,.12);
-  --orange:#d46a00;
-  --orange2:#b95800;
-  --card: rgba(0,0,0,.46);
-  --ok:#25c46a;
-  --bad:#ff3b30;
-}
+  <style>
+    :root{
+      --txt:#f4f4f4;
+      --muted:rgba(255,255,255,.72);
+      --shadow: 0 14px 34px rgba(0,0,0,.40);
+      --radius: 20px;
+      --stroke: rgba(255,255,255,.12);
 
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color:var(--txt);
-  background:#0b0b0b;
-  overflow:hidden;
-}
+      --orange:#d46a00;
+      --orange2:#b95800;
+      --yellow:#fff200;
 
-.bg{
-  position:fixed; inset:0;
-  background:
-    linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.55)),
-    url("background.png") center top/cover no-repeat;
-  z-index:-2;
-  transform: translateZ(0);
-}
-.bg::after{
-  content:"";
-  position:absolute; inset:0;
-  background: radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.72) 62%);
-  z-index:-1;
-}
+      --cardA: rgba(0,0,0,.54);
+      --cardB: rgba(0,0,0,.34);
 
-.wrap{
-  height:100dvh;
-  width:min(980px, 100%);
-  margin:0 auto;
-  padding: calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
-  display:grid;
-  grid-template-rows:auto auto 1fr;
-  gap:10px;
-  overflow:hidden;
-  min-height:0;
-}
+      --vsav:#2f79ff;
+      --ccr:#ff3b30;
+      --vtul:#25c46a;
+      --vtp:#f6a000;
 
-.topbar{
-  display:flex; align-items:center; justify-content:space-between; gap:10px;
-  padding: 10px 12px;
-  border-radius: var(--radius);
-  background: linear-gradient(180deg, rgba(212,106,0,.78), rgba(185,88,0,.58));
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  min-height: 46px;
-}
-.title{
-  margin:0;
-  font-weight:950;
-  letter-spacing:.6px;
-  text-transform: uppercase;
-  font-size: clamp(15px, 2.2vw, 18px);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.topActions{display:flex; gap:10px; align-items:center;}
-.btn{
-  border:1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.18);
-  color:var(--txt);
-  padding: 9px 12px;
-  border-radius: 14px;
-  font-weight:900;
-  cursor:pointer;
-  -webkit-tap-highlight-color: transparent;
-  white-space:nowrap;
-}
-.btn:active{transform: translateY(1px)}
-.btn[disabled]{opacity:.45; cursor:not-allowed}
+      --monthBg: rgba(37,196,106,.22); /* vert translucide */
+      --monthBd: rgba(37,196,106,.40);
+    }
 
-.tabs{ display:flex; gap:10px; }
-.tab{
-  flex:1;
-  padding: 10px 12px;
-  border-radius: var(--radius);
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(0,0,0,.28);
-  box-shadow: var(--shadow);
-  font-weight:950;
-  letter-spacing:.3px;
-  cursor:pointer;
-  color: rgba(255,255,255,.86);
-  -webkit-tap-highlight-color: transparent;
-}
-.tab.active{
-  background: linear-gradient(180deg, rgba(212,106,0,.62), rgba(185,88,0,.45));
-  color:#fff;
-  border-color: rgba(255,255,255,.16);
-}
-.tab:active{transform: translateY(1px)}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--txt);
+      background:#0b0b0b;
+      overflow:hidden;
+      overscroll-behavior:none;
+    }
 
-.card{
-  border-radius: 22px;
-  background: linear-gradient(180deg, rgba(0,0,0,.54), rgba(0,0,0,.34));
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  overflow:hidden;
-  min-height:0;
-  display:flex;
-  flex-direction:column;
-}
+    .bg{
+      position:fixed; inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.55)),
+        url("background.png") center top/cover no-repeat;
+      z-index:-2;
+      transform: translateZ(0);
+    }
+    .bg::after{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.72) 62%);
+      z-index:-1;
+    }
 
-.banner{
-  display:flex; align-items:center; justify-content:space-between; gap:10px;
-  padding: 10px 12px;
-  background: rgba(0,0,0,.20);
-  border-bottom:1px solid rgba(255,255,255,.10);
-}
-.bannerLeft{display:flex; flex-direction:column; gap:2px; min-width:0;}
-.bannerTitle{
-  font-weight:950;
-  letter-spacing:.6px;
-  text-transform: uppercase;
-  font-size: 15px;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
-.bannerSub{font-weight:800; color:var(--muted); font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+    .wrap{
+      height:100dvh;
+      max-width:980px;
+      margin:0 auto;
+      padding: calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
+      display:grid;
+      grid-template-rows: auto auto 1fr;
+      gap:10px;
+      min-height:0;
+    }
 
-.camBtn{
-  display:inline-flex; align-items:center; justify-content:center;
-  gap:10px;
-  padding: 10px 12px;
-  border-radius: 16px;
-  border:1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.18);
-  color:#fff;
-  font-weight:950;
-  cursor:pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.camBtn:active{transform: translateY(1px)}
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding: 10px 12px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(212,106,0,.78), rgba(185,88,0,.58));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      min-height: 46px;
+    }
+    .title{
+      margin:0;
+      font-weight:950;
+      letter-spacing:.6px;
+      text-transform: uppercase;
+      font-size: 18px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .topRight{display:flex; align-items:center; gap:10px;}
+    .btn{
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      color:var(--txt);
+      padding: 9px 12px;
+      border-radius: 14px;
+      font-weight:900;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+      white-space:nowrap;
+    }
+    .btn:active{transform: translateY(1px)}
+    .btn[disabled]{opacity:.45; cursor:not-allowed}
 
-.body{
-  padding: 12px;
-  overflow:auto;
-  -webkit-overflow-scrolling: touch;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  min-height:0;
-}
+    .adminLabel{
+      display:none;
+      font-weight:950;
+      font-size:12px;
+      color: var(--yellow);
+      letter-spacing:.3px;
+      text-transform: uppercase;
+    }
 
-.field{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  padding: 12px;
-  border-radius: 18px;
-  background: rgba(0,0,0,.22);
-  border:1px solid rgba(255,255,255,.10);
-}
-.label{font-weight:950; font-size:13px; letter-spacing:.3px; color:rgba(255,255,255,.88); text-transform:uppercase;}
-.select, .input{
-  width:100%;
-  border-radius: 14px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.30);
-  color:#fff;
-  padding: 11px 12px;
-  font-weight:900;
-  outline:none;
-}
+    .tabs{
+      display:flex; gap:10px;
+    }
+    .tab{
+      flex:1;
+      padding: 10px 12px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.28);
+      box-shadow: var(--shadow);
+      font-weight:950;
+      letter-spacing:.3px;
+      cursor:pointer;
+      color: rgba(255,255,255,.86);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tab.active{
+      background: linear-gradient(180deg, rgba(212,106,0,.62), rgba(185,88,0,.45));
+      color:#fff;
+      border-color: rgba(255,255,255,.16);
+    }
+    .tab:active{transform: translateY(1px)}
 
-.previewWrap{
-  border-radius: 18px;
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(0,0,0,.18);
-}
-.previewImg{
-  width:100%;
-  display:block;
-  max-height: 52vh;
-  object-fit:contain;
-  background:#000;
-}
+    .card{
+      border-radius: 22px;
+      background: linear-gradient(180deg, var(--cardA), var(--cardB));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overflow:hidden;
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+    }
 
-.rowBtns{
-  display:flex; gap:10px; flex-wrap:wrap;
-}
-.primary{
-  background: linear-gradient(180deg, rgba(212,106,0,.78), rgba(185,88,0,.58));
-  border-color: rgba(255,255,255,.18);
-}
-.ok{
-  background: rgba(37,196,106,.22);
-  border-color: rgba(37,196,106,.55);
-}
-.danger{
-  background: rgba(255,59,48,.18);
-  border-color: rgba(255,59,48,.45);
-}
+    .banner{
+      background: var(--yellow);
+      color:#000;
+      font-weight: 950;
+      text-align:center;
+      padding: 10px 10px;
+      border-bottom: 2px solid rgba(0,0,0,.22);
+      letter-spacing:.8px;
+      font-size: 18px;
+    }
 
-.pill{
-  display:inline-flex; align-items:center; gap:8px;
-  padding: 8px 10px;
-  border-radius: 999px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.35);
-  font-weight:900;
-}
+    .content{
+      padding: 12px;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      min-height:0;
+    }
 
-/* Historique */
-.monthBlock{
-  border-radius: 18px;
-  background: rgba(0,0,0,.22);
-  border:1px solid rgba(255,255,255,.10);
-  overflow:hidden;
-}
-.monthHead{
-  display:flex; align-items:center; justify-content:space-between; gap:10px;
-  padding: 12px;
-  cursor:pointer;
-  user-select:none;
-  -webkit-tap-highlight-color: transparent;
-  background: rgba(0,0,0,.14);
-}
-.monthHead:active{transform: translateY(1px)}
-.monthTitle{font-weight:950; letter-spacing:.4px;}
-.monthMeta{display:flex; gap:10px; align-items:center; font-weight:900; color:rgba(255,255,255,.86);}
-.chev{opacity:.9; font-weight:950;}
-.monthBody{
-  display:none;
-  padding: 10px 12px 12px;
-  gap:10px;
-}
-.monthBlock.open .monthBody{display:flex; flex-direction:column;}
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      padding: 10px 12px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+    }
+    .label{
+      font-weight:950;
+      color: rgba(255,255,255,.92);
+      letter-spacing:.2px;
+    }
 
-.item{
-  border-radius: 16px;
-  border:1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.18);
-  padding: 10px 12px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-.itemLeft{display:flex; flex-direction:column; gap:4px; min-width:0;}
-.itemTop{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
-.badge{
-  padding: 5px 8px;
-  border-radius: 999px;
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.06);
-  font-weight:900;
-  font-size:12px;
-}
-.itemSub{
-  color:var(--muted);
-  font-weight:850;
-  font-size:12px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.iconBtn{
-  border:1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.18);
-  color:var(--txt);
-  padding: 9px 10px;
-  border-radius: 14px;
-  font-weight:950;
-  cursor:pointer;
-  -webkit-tap-highlight-color: transparent;
-  min-width: 44px;
-}
-.iconBtn:active{transform: translateY(1px)}
+    select, input[type="file"]{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.28);
+      color: var(--txt);
+      font-weight: 900;
+      outline:none;
+    }
 
-.status{
-  position:fixed;
-  left:12px; right:12px;
-  bottom: calc(env(safe-area-inset-bottom) + 12px);
-  z-index:80;
-  display:none;
-  max-width: 980px;
-  margin: 0 auto;
-  pointer-events:none;
-}
-.status .pillBox{
-  pointer-events:auto;
-  display:inline-flex;
-  gap:10px;
-  align-items:center;
-  padding:10px 12px;
-  border-radius: 16px;
-  background: rgba(0,0,0,.62);
-  border:1px solid rgba(255,255,255,.14);
-  box-shadow: var(--shadow);
-  color: rgba(255,255,255,.90);
-  font-weight:900;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-.small{font-weight:800; opacity:.85; font-size:13px}
-</style>
+    .vehBadge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 950;
+      letter-spacing:.3px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      white-space:nowrap;
+    }
+    .vehBadge.vsav{ background: color-mix(in srgb, var(--vsav) 35%, transparent); border-color: color-mix(in srgb, var(--vsav) 55%, transparent); }
+    .vehBadge.ccr{  background: color-mix(in srgb, var(--ccr) 32%, transparent);  border-color: color-mix(in srgb, var(--ccr) 55%, transparent); }
+    .vehBadge.vtul{ background: color-mix(in srgb, var(--vtul) 28%, transparent); border-color: color-mix(in srgb, var(--vtul) 52%, transparent); }
+    .vehBadge.vtp{  background: color-mix(in srgb, var(--vtp) 32%, transparent);  border-color: color-mix(in srgb, var(--vtp) 55%, transparent); }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .primary{
+      background: linear-gradient(180deg, rgba(212,106,0,.78), rgba(185,88,0,.55));
+      border-color: rgba(255,255,255,.16);
+    }
+    .good{
+      background: rgba(37,196,106,.22);
+      border-color: rgba(37,196,106,.45);
+    }
+    .danger{
+      background: rgba(255,59,48,.18);
+      border-color: rgba(255,59,48,.45);
+    }
+
+    .previewWrap{
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+    .preview{
+      width:100%;
+      display:block;
+      max-height: 46vh;
+      object-fit: contain;
+      background:#000;
+    }
+    .previewMeta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 12px;
+      border-top:1px solid rgba(255,255,255,.08);
+      color: rgba(255,255,255,.86);
+      font-weight: 900;
+      font-size: 13px;
+      flex-wrap:wrap;
+    }
+
+    /* ===== Historique ===== */
+    .monthGroup{
+      border-radius: 18px;
+      border: 1px solid var(--monthBd);
+      background: var(--monthBg);
+      overflow:hidden;
+    }
+    .monthHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 10px 12px;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .monthHead:active{transform: translateY(1px)}
+    .monthTitle{
+      font-weight: 950;
+      letter-spacing:.3px;
+      text-transform: uppercase;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color: rgba(255,255,255,.92);
+    }
+    .countPill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width: 34px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.18);
+      font-weight: 950;
+    }
+    .chev{
+      font-weight: 950;
+      opacity:.9;
+      width: 34px;
+      height: 34px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      flex: 0 0 auto;
+    }
+
+    .monthBody{
+      display:none;
+      padding: 10px 10px 12px;
+      border-top: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      gap:10px;
+    }
+    .monthGroup.open .monthBody{display:flex; flex-direction:column;}
+    .monthGroup.open .chev{transform: rotate(180deg);}
+
+    .histRow{
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      padding: 10px 10px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .leftMeta{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      min-width: 0;
+    }
+    .smallTxt{font-weight: 900; color: rgba(255,255,255,.86);}
+    .miniDate{
+      font-weight: 950;
+      color: rgba(255,255,255,.92);
+      padding: 6px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+    }
+    .who{
+      font-weight: 900;
+      color: rgba(255,255,255,.86);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 220px;
+    }
+
+    .rowBtns{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-left:auto;
+    }
+    .iconBtn{
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.18);
+      color:var(--txt);
+      padding: 8px 10px;
+      border-radius: 14px;
+      font-weight:950;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+      min-width: 42px;
+    }
+    .iconBtn:active{transform: translateY(1px)}
+    .iconBtn[disabled]{opacity:.45; cursor:not-allowed}
+    .iconBtn.good{ border-color: rgba(37,196,106,.45); background: rgba(37,196,106,.18); }
+    .iconBtn.danger{ border-color: rgba(255,59,48,.45); background: rgba(255,59,48,.14); }
+
+    /* toast */
+    .toast{
+      position:fixed;
+      left:12px; right:12px;
+      bottom: calc(env(safe-area-inset-bottom) + 12px);
+      z-index:200;
+      display:none;
+      max-width: 980px;
+      margin: 0 auto;
+      pointer-events:none;
+    }
+    .toast .pill{
+      pointer-events:auto;
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:10px 12px;
+      border-radius: 16px;
+      background: rgba(0,0,0,.70);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+      color: rgba(255,255,255,.92);
+      font-weight:950;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    /* modal */
+    .modal{
+      position:fixed; inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 99999;
+    }
+    .modal.show{ display:flex; }
+    .modal .backdrop{
+      position:absolute; inset:0;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(6px);
+    }
+    .modal .box{
+      position:relative;
+      width:min(720px, 100%);
+      border-radius: 18px;
+      background: rgba(10,10,10,.92);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 22px 60px rgba(0,0,0,.65);
+      padding: 14px;
+    }
+    .modal h3{margin: 6px 6px 10px; font-size: 16px; letter-spacing:.3px;}
+    .modalImg{
+      width:100%;
+      display:block;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:#000;
+      max-height: 72vh;
+      object-fit: contain;
+    }
+    .modal .row{
+      display:flex;
+      gap:10px;
+      margin: 12px 6px 6px;
+      flex-wrap:wrap;
+    }
+    .modal .btn2{
+      flex:1;
+      min-width: 140px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color:#fff;
+      font-weight: 950;
+      cursor:pointer;
+    }
+    .modal .btn2.primary{
+      background: linear-gradient(180deg, rgba(212,106,0,.78), rgba(185,88,0,.55));
+    }
+    .modal .btn2.good{
+      background: rgba(37,196,106,.20);
+      border-color: rgba(37,196,106,.45);
+    }
+    .modal .btn2.danger{
+      background: rgba(255,59,48,.16);
+      border-color: rgba(255,59,48,.45);
+    }
+
+    @media (max-width:360px){
+      .title{font-size:16px}
+      .banner{font-size:16px}
+      .who{max-width: 150px;}
+    }
+  </style>
 </head>
 
 <body>
-<div class="bg"></div>
+  <div class="bg"></div>
 
-<div class="wrap">
-  <div class="topbar">
-    <h1 class="title">Ticket carburant</h1>
-    <div class="topActions">
-      <span id="adminPill" class="pill" style="display:none;">🔒 Admin</span>
-      <button class="btn" id="btnBack">Retour</button>
+  <div class="wrap">
+    <div class="topbar">
+      <h1 class="title">TICKET CARBURANT</h1>
+      <div class="topRight">
+        <span class="adminLabel" id="adminLabel">MODE ADMIN</span>
+        <button class="btn" id="btnLock" title="Mode admin" aria-pressed="false">🔒</button>
+        <button class="btn" id="btnBack">Retour</button>
+      </div>
     </div>
+
+    <div class="tabs" role="tablist" aria-label="Ticket carburant onglets">
+      <button class="tab active" id="tabPhoto" role="tab" aria-selected="true">Photo</button>
+      <button class="tab" id="tabHist" role="tab" aria-selected="false">Historique</button>
+    </div>
+
+    <!-- PHOTO -->
+    <section class="card" id="panelPhoto" role="tabpanel" aria-labelledby="tabPhoto">
+      <div class="banner">PRISE DE PHOTO — TICKET CARBURANT</div>
+      <div class="content">
+
+        <div class="field">
+          <div class="label">Véhicule</div>
+          <select id="vehSelect">
+            <option value="">— Choisir —</option>
+            <option value="VSAV">VSAV</option>
+            <option value="CCR">CCR</option>
+            <option value="VTUL">VTUL</option>
+            <option value="VTP">VTP</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <div class="label">Photo de l’écran de la pompe</div>
+
+          <!-- input caméra -->
+          <input id="fileInput" type="file" accept="image/*" capture="environment" style="display:none" />
+
+          <div class="actions">
+            <button class="btn primary" id="btnTake">📸 Prendre une photo</button>
+            <button class="btn" id="btnClear" disabled>↩ Reprendre</button>
+            <button class="btn good" id="btnSend" disabled>📤 Envoyer</button>
+          </div>
+
+          <div class="previewWrap" id="previewWrap" style="display:none">
+            <img id="previewImg" class="preview" alt="Aperçu photo" />
+            <div class="previewMeta">
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                <span id="previewVehBadge" class="vehBadge">—</span>
+                <span class="miniDate" id="previewDate">—</span>
+              </div>
+              <div class="smallTxt" id="previewWho">—</div>
+            </div>
+          </div>
+
+          <div style="font-weight:900;color:rgba(255,255,255,.78);font-size:13px;line-height:1.25;">
+            Astuce : si tu appuies sur <b>Envoyer</b>, la photo est validée et part dans l’historique.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- HISTORIQUE -->
+    <section class="card" id="panelHist" role="tabpanel" aria-labelledby="tabHist" style="display:none;">
+      <div class="banner">HISTORIQUE</div>
+      <div class="content" id="histContent">
+        <!-- mois générés ici -->
+      </div>
+    </section>
   </div>
 
-  <div class="tabs" role="tablist" aria-label="Ticket carburant onglets">
-    <button class="tab active" id="tabShot" role="tab" aria-selected="true">📷 Prise de photo</button>
-    <button class="tab" id="tabHistory" role="tab" aria-selected="false">🗂 Historique</button>
+  <!-- toast -->
+  <div class="toast" id="toast">
+    <div class="pill" id="toastPill">✔ Envoyé</div>
   </div>
 
-  <!-- PANEL PHOTO -->
-  <section class="card" id="panelShot" role="tabpanel" aria-labelledby="tabShot">
-    <div class="banner">
-      <div class="bannerLeft">
-        <div class="bannerTitle">Prendre un ticket</div>
-        <div class="bannerSub">Choisis le véhicule puis prends la photo.</div>
-      </div>
-      <button class="camBtn" id="btnCamera" title="Ouvrir l’appareil photo">📷 Ouvrir</button>
-    </div>
-
-    <div class="body">
-      <div class="field">
-        <div class="label">Véhicule</div>
-        <select class="select" id="vehSelect">
-          <option value="">— Choisir —</option>
-          <option>VSAV</option>
-          <option>FPT</option>
-          <option>VTU</option>
-          <option>VL</option>
-          <option>CCF</option>
-        </select>
-        <div style="color:var(--muted);font-weight:850;font-size:12px;">
-          (On remplacera la liste par ta liste officielle quand tu veux.)
-        </div>
-      </div>
-
-      <div id="previewBlock" class="field" style="display:none;">
-        <div class="label">Aperçu</div>
-        <div class="previewWrap">
-          <img id="previewImg" class="previewImg" alt="Aperçu ticket"/>
-        </div>
-        <div class="rowBtns">
-          <button class="btn danger" id="btnRetake">Reprendre</button>
-          <button class="btn primary" id="btnSend">Envoyer</button>
-        </div>
-        <div id="sendHint" style="color:var(--muted);font-weight:850;font-size:12px;">
-          La date est automatique (au moment de l’envoi).
-        </div>
-      </div>
-
-      <div class="field" id="shotHelp">
-        <div class="label">Info</div>
-        <div style="font-weight:850;line-height:1.35;color:rgba(255,255,255,.90);">
-          1) Choisir le véhicule<br>
-          2) 📷 Prendre la photo (ticket pompe)<br>
-          3) Vérifier l’aperçu<br>
-          4) Envoyer
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PANEL HISTORIQUE -->
-  <section class="card" id="panelHistory" role="tabpanel" aria-labelledby="tabHistory" style="display:none;">
-    <div class="banner">
-      <div class="bannerLeft">
-        <div class="bannerTitle">Historique</div>
-        <div class="bannerSub">Classé par mois, repliable. Ordre ancien → récent.</div>
-      </div>
-      <button class="btn" id="btnRefresh">Rafraîchir</button>
-    </div>
-
-    <div class="body" id="historyBody">
-      <!-- Injecté -->
-    </div>
-  </section>
-</div>
-
-<div class="status" id="status">
-  <div class="pillBox">
-    <span id="stIcon">⏳</span>
-    <div>
-      <div id="stTxt">Synchronisation…</div>
-      <div class="small" id="stSub">Veuillez patienter.</div>
-    </div>
+  <!-- modal -->
+  <div class="modal" id="modal">
+    <div class="backdrop" id="modalClose"></div>
+    <div class="box" id="modalBox"></div>
   </div>
-</div>
-
-<!-- Input camera (icône + ouverture appareil photo) -->
-<input id="fileInput" type="file" accept="image/*" capture="environment" style="display:none;"/>
 
 <script>
-/* =============================
-   CONFIG (on branchera Apps Script après)
-   ============================= */
+/* =========================
+   CONFIG
+   =========================
+   - MODE DEMO (localStorage) : ça te donne l’aperçu complet de la page sans rien casser.
+   - Quand tu me donnes ton Drive/Apps Script, on branchera l’upload + la liste.
+*/
 const BACK_URL = "index.html?portal=1";
 const LS_EMAIL = "cs_portail_email_v1";
 const LS_NAME  = "cs_portail_name_v1";
 
-/* ⚠️ API (optionnel pour l’instant)
-   Quand tu me donnes la view Apps Script, on remplace ici.
-*/
-const API = ""; // ex: "https://script.google.com/macros/s/XXXX/exec"
+// 🔧 Pour l’instant : DEMO = true (historique stocké localement)
+let DEMO_MODE = true;
 
-/* Local cache pour prévisualiser tout de suite */
-const LS_TICKETS = "cs_fuel_tickets_v1";
+// Si tu veux brancher Apps Script plus tard :
+// const API = "https://script.google.com/macros/s/XXXX/exec";
+const API = ""; // (vide => demo)
 
-/* Admin: pour l’instant on fait une whitelist simple.
-   Tu me diras si tu préfères auth_check via Sheets comme les autres pages.
-*/
-const ADMIN_EMAILS = [
-  "pierre.venante@gmail.com"
-];
-
-/* =============================
-   Helpers
-   ============================= */
+/* =========================
+   UI helpers
+   ========================= */
 const $ = (id)=>document.getElementById(id);
 
-function myEmail(){ return (localStorage.getItem(LS_EMAIL)||"").trim().toLowerCase(); }
-function myName(){ return (localStorage.getItem(LS_NAME)||"").trim(); }
+const tabPhoto = $("tabPhoto");
+const tabHist  = $("tabHist");
+const panelPhoto = $("panelPhoto");
+const panelHist  = $("panelHist");
 
-function isAdminLocal(){
-  const em = myEmail();
-  return !!(em && ADMIN_EMAILS.includes(em));
+function setTab(which){
+  const isPhoto = (which === "photo");
+  tabPhoto.classList.toggle("active", isPhoto);
+  tabHist.classList.toggle("active", !isPhoto);
+  tabPhoto.setAttribute("aria-selected", isPhoto ? "true" : "false");
+  tabHist.setAttribute("aria-selected", isPhoto ? "false" : "true");
+  panelPhoto.style.display = isPhoto ? "flex" : "none";
+  panelHist.style.display  = isPhoto ? "none" : "flex";
 }
 
-function showStatus(txt, sub, icon="⏳"){
-  $("stTxt").textContent = txt || "";
-  $("stSub").textContent = sub || "";
-  $("stIcon").textContent = icon;
-  $("status").style.display = "block";
-}
-function hideStatus(){ $("status").style.display = "none"; }
+tabPhoto.addEventListener("click", ()=>setTab("photo"));
+tabHist.addEventListener("click", ()=>{ setTab("hist"); renderHistory(); });
 
-function pad2(n){ return String(n).padStart(2,"0"); }
-function isoNow(){
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = pad2(d.getMonth()+1);
-  const dd = pad2(d.getDate());
-  const hh = pad2(d.getHours());
-  const mm = pad2(d.getMinutes());
-  const ss = pad2(d.getSeconds());
-  return `${y}-${m}-${dd} ${hh}:${mm}:${ss}`;
+$("btnBack").addEventListener("click", ()=>location.replace(BACK_URL));
+
+/* =========================
+   Admin mode (cadenas)
+   ========================= */
+let IS_ADMIN = false;
+
+function setAdminUI(on){
+  IS_ADMIN = !!on;
+  $("adminLabel").style.display = IS_ADMIN ? "inline-block" : "none";
+  $("btnLock").textContent = IS_ADMIN ? "🔓" : "🔒";
+  $("btnLock").setAttribute("aria-pressed", IS_ADMIN ? "true" : "false");
 }
-function monthKeyFromIso(iso){
-  // "YYYY-MM-..." -> "YYYY-MM"
-  const m = String(iso||"").slice(0,7);
-  return /^\d{4}-\d{2}$/.test(m) ? m : "0000-00";
+
+$("btnLock").addEventListener("click", ()=>{
+  // Ici : on toggle juste l’affichage (comme demandé).
+  // Plus tard on reliera à auth_check (planning).
+  setAdminUI(!IS_ADMIN);
+  renderHistory(); // refresh boutons admin
+});
+
+/* =========================
+   Vehicules / couleurs
+   ========================= */
+const VEH_COL_CLASS = {
+  "VSAV":"vsav",
+  "CCR":"ccr",
+  "VTUL":"vtul",
+  "VTP":"vtp"
+};
+
+function vehBadgeHtml(veh){
+  const v = String(veh||"").toUpperCase().trim();
+  const cls = VEH_COL_CLASS[v] || "";
+  if(!v) return `<span class="vehBadge">—</span>`;
+  return `<span class="vehBadge ${cls}">${escapeHtml(v)}</span>`;
 }
-function monthLabel(ym){
-  const [y,m] = ym.split("-");
-  const months = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-  const mi = Number(m)-1;
-  const lab = (mi>=0 && mi<12) ? months[mi] : "—";
-  return `${lab} ${y}`;
-}
+
 function escapeHtml(s){
   return (s==null ? "" : String(s))
     .replaceAll("&","&amp;").replaceAll("<","&lt;")
-    .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    .replaceAll(">","&gt;").replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
-function loadLocalTickets(){
+function myEmail(){ return (localStorage.getItem(LS_EMAIL) || "").trim().toLowerCase(); }
+function myName(){ return (localStorage.getItem(LS_NAME) || "").trim(); }
+
+function firstNameFromEmail(email){
+  const e = String(email||"").trim().toLowerCase();
+  if(!e.includes("@")) return "";
+  const local = e.split("@")[0] || "";
+  const p = local.split(/[._-]/)[0] || local;
+  return p ? (p.charAt(0).toUpperCase() + p.slice(1)) : "";
+}
+
+function fmtDateShort(d){
+  const dt = (d instanceof Date) ? d : new Date(d);
+  if(isNaN(dt)) return "—";
+  const dd = String(dt.getDate()).padStart(2,"0");
+  const mm = String(dt.getMonth()+1).padStart(2,"0");
+  return `${dd}/${mm}`;
+}
+function monthKeyFR(d){
+  const dt = (d instanceof Date) ? d : new Date(d);
+  if(isNaN(dt)) return "—";
+  const months = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  return `${months[dt.getMonth()]} ${dt.getFullYear()}`;
+}
+
+/* =========================
+   Toast
+   ========================= */
+let _toastT = null;
+function toast(msg, icon="✔"){
+  const t = $("toast");
+  $("toastPill").textContent = `${icon} ${msg}`;
+  t.style.display = "block";
+  clearTimeout(_toastT);
+  _toastT = setTimeout(()=>{ t.style.display="none"; }, 2200);
+}
+
+/* =========================
+   Modal
+   ========================= */
+const $modal = $("modal");
+const $modalBox = $("modalBox");
+$("modalClose").addEventListener("click", closeModal);
+
+function openModal(html){
+  $modalBox.innerHTML = html;
+  $modal.classList.add("show");
+}
+function closeModal(){
+  $modal.classList.remove("show");
+  $modalBox.innerHTML = "";
+}
+
+/* =========================
+   Données (DEMO localStorage)
+   ========================= */
+const DEMO_KEY = "cs_fuel_demo_history_v1";
+
+function loadDemoHistory(){
   try{
-    const raw = localStorage.getItem(LS_TICKETS);
+    const raw = localStorage.getItem(DEMO_KEY);
     const arr = raw ? JSON.parse(raw) : [];
     return Array.isArray(arr) ? arr : [];
   }catch(e){ return []; }
 }
-function saveLocalTickets(arr){
-  try{ localStorage.setItem(LS_TICKETS, JSON.stringify(arr||[])); }catch(e){}
+function saveDemoHistory(arr){
+  try{ localStorage.setItem(DEMO_KEY, JSON.stringify(arr||[])); }catch(e){}
 }
 
-/* =============================
-   Tabs
-   ============================= */
-const tabShot = $("tabShot");
-const tabHistory = $("tabHistory");
-const panShot = $("panelShot");
-const panHistory = $("panelHistory");
-
-function setTab(which){
-  const shot = (which==="shot");
-  tabShot.classList.toggle("active", shot);
-  tabHistory.classList.toggle("active", !shot);
-  tabShot.setAttribute("aria-selected", shot ? "true" : "false");
-  tabHistory.setAttribute("aria-selected", shot ? "false" : "true");
-  panShot.style.display = shot ? "flex" : "none";
-  panHistory.style.display = shot ? "none" : "flex";
-  if(!shot) renderHistory(); // refresh view
-}
-
-tabShot.addEventListener("click", ()=>setTab("shot"));
-tabHistory.addEventListener("click", ()=>setTab("history"));
-
-/* =============================
-   Camera + Preview
-   ============================= */
-const fileInput = $("fileInput");
-const btnCamera = $("btnCamera");
-const btnRetake = $("btnRetake");
-const btnSend = $("btnSend");
+/* =========================
+   Photo flow
+   ========================= */
 const vehSelect = $("vehSelect");
-const previewBlock = $("previewBlock");
-const previewImg = $("previewImg");
+const fileInput = $("fileInput");
+const btnTake   = $("btnTake");
+const btnClear  = $("btnClear");
+const btnSend   = $("btnSend");
 
-let pendingFile = null;
-let pendingDataUrl = "";
+const previewWrap = $("previewWrap");
+const previewImg  = $("previewImg");
+const previewVehBadge = $("previewVehBadge");
+const previewDate = $("previewDate");
+const previewWho  = $("previewWho");
 
-btnCamera.addEventListener("click", ()=>{
-  const veh = (vehSelect.value||"").trim();
+let _photoBlob = null;
+let _photoUrl  = "";
+let _photoTakenAt = null;
+
+function resetPhoto(){
+  _photoBlob = null;
+  _photoTakenAt = null;
+  if(_photoUrl){ try{ URL.revokeObjectURL(_photoUrl); }catch(e){} }
+  _photoUrl = "";
+  previewWrap.style.display = "none";
+  previewImg.removeAttribute("src");
+  btnClear.disabled = true;
+  btnSend.disabled = true;
+  try{ fileInput.value = ""; }catch(e){}
+}
+
+btnTake.addEventListener("click", ()=>{
+  const veh = (vehSelect.value || "").trim();
   if(!veh){
-    alert("Choisis d’abord le véhicule.");
+    alert("Choisis d’abord un véhicule.");
     return;
   }
-  fileInput.value = "";
   fileInput.click();
 });
 
-btnRetake.addEventListener("click", ()=>{
-  pendingFile = null;
-  pendingDataUrl = "";
-  previewBlock.style.display = "none";
-});
-
-fileInput.addEventListener("change", async ()=>{
+fileInput.addEventListener("change", ()=>{
   const f = fileInput.files && fileInput.files[0];
   if(!f) return;
 
-  pendingFile = f;
+  _photoBlob = f;
+  _photoTakenAt = new Date();
 
-  // Aperçu rapide
-  const url = URL.createObjectURL(f);
-  previewImg.src = url;
-  previewBlock.style.display = "flex";
+  if(_photoUrl){ try{ URL.revokeObjectURL(_photoUrl); }catch(e){} }
+  _photoUrl = URL.createObjectURL(f);
+
+  previewImg.src = _photoUrl;
+  previewWrap.style.display = "block";
+
+  const veh = (vehSelect.value || "").trim();
+  previewVehBadge.className = "vehBadge " + (VEH_COL_CLASS[veh] || "");
+  previewVehBadge.textContent = veh || "—";
+
+  previewDate.textContent = fmtDateShort(_photoTakenAt);
+
+  const who = myName() || firstNameFromEmail(myEmail()) || "Agent";
+  previewWho.textContent = who;
+
+  btnClear.disabled = false;
+  btnSend.disabled = false;
 });
 
-/* =============================
-   “API” (stub local pour l’instant)
-   ============================= */
-async function uploadTicket_(ticket){
-  // Si tu as déjà l’API, on branchera ici.
-  // Pour l’instant: stockage local pour tester l’UX.
-  const all = loadLocalTickets();
-  all.push(ticket);
-  saveLocalTickets(all);
-  return { ok:true };
-}
+btnClear.addEventListener("click", ()=>{
+  // ✅ “Reprendre” = on efface l’aperçu + re-ouvre la caméra si un véhicule est choisi
+  const veh = (vehSelect.value || "").trim();
+  resetPhoto();
+  if(veh) fileInput.click();
+});
 
-async function listTickets_(){
-  // Même logique: local pour l’instant
-  return { ok:true, rows: loadLocalTickets() };
-}
-
-/* =============================
-   Send
-   ============================= */
 btnSend.addEventListener("click", async ()=>{
-  try{
-    const veh = (vehSelect.value||"").trim();
-    if(!veh){ alert("Véhicule manquant."); return; }
-    if(!pendingFile){ alert("Aucune photo."); return; }
+  const veh = (vehSelect.value || "").trim();
+  if(!veh){ alert("Véhicule manquant."); return; }
+  if(!_photoBlob){ alert("Aucune photo."); return; }
 
-    const email = myEmail();
-    const name = myName();
-    if(!email){
-      alert("Email de connexion introuvable. Reconnecte-toi via la page d’accueil.");
+  btnSend.disabled = true;
+  btnTake.disabled = true;
+  btnClear.disabled = true;
+
+  try{
+    const whoEmail = myEmail();
+    const whoName = myName() || firstNameFromEmail(whoEmail) || "Agent";
+    const takenAt = _photoTakenAt || new Date();
+
+    if(!API){
+      // ✅ DEMO: on stocke localement + on affiche
+      const arr = loadDemoHistory();
+      arr.push({
+        id: "demo_" + Date.now(),
+        veh,
+        who: whoName,
+        email: whoEmail,
+        takenAt: takenAt.toISOString(),
+        // On garde un mini “aperçu” local: objectURL ne survit pas au reload,
+        // donc on convertit en dataURL (ok pour démo).
+        dataUrl: await blobToDataUrl(_photoBlob)
+      });
+      saveDemoHistory(arr);
+      toast("Envoyé");
+      resetPhoto();
+      btnTake.disabled = false;
+      renderHistory();
       return;
     }
 
-    showStatus("Envoi…", "Enregistrement du ticket.", "⏳");
-    btnSend.disabled = true;
+    // ✅ plus tard: upload Apps Script (branchage)
+    // await uploadToApi_(veh, whoName, whoEmail, takenAt, _photoBlob);
+    toast("Envoyé");
+    resetPhoto();
+    btnTake.disabled = false;
+    renderHistory();
 
-    // Convertit en base64 pour le mode local (aperçu UX)
-    const dataUrl = await new Promise((resolve, reject)=>{
-      const r = new FileReader();
-      r.onload = ()=>resolve(String(r.result||""));
-      r.onerror = ()=>reject(new Error("Lecture photo impossible"));
-      r.readAsDataURL(pendingFile);
-    });
-
-    const ticket = {
-      id: "t_" + Math.random().toString(36).slice(2) + "_" + Date.now(),
-      createdAt: isoNow(),
-      vehicle: veh,
-      agentEmail: email,
-      agentName: name || (email.split("@")[0] || "—"),
-      // en local: on stocke l’image (plus tard: on stockera l’URL Drive)
-      imageDataUrl: dataUrl,
-      imageUrl: "" // futur: URL Drive
-    };
-
-    const res = await uploadTicket_(ticket);
-    if(!res?.ok) throw new Error(res?.error || "Erreur envoi");
-
-    hideStatus();
-    alert("Envoyé ✔");
-
-    // Reset
-    pendingFile = null;
-    previewBlock.style.display = "none";
-    vehSelect.value = "";
-
-  }catch(err){
-    hideStatus();
-    alert("Erreur : " + String(err?.message || err));
-  }finally{
+  }catch(e){
+    alert("Erreur envoi : " + (e && e.message ? e.message : e));
     btnSend.disabled = false;
+    btnClear.disabled = false;
+    btnTake.disabled = false;
   }
 });
 
-/* =============================
-   Historique
-   ============================= */
-const historyBody = $("historyBody");
-$("btnRefresh").addEventListener("click", renderHistory);
-
-function groupByMonth(rows){
-  // rows: ancien -> récent déjà
-  const map = new Map();
-  for(const r of rows){
-    const mk = monthKeyFromIso(r.createdAt);
-    if(!map.has(mk)) map.set(mk, []);
-    map.get(mk).push(r);
-  }
-  // tri mois du + ancien au + récent
-  const keys = [...map.keys()].sort((a,b)=>a.localeCompare(b));
-  return keys.map(k => ({ month:k, items: map.get(k) }));
+async function blobToDataUrl(blob){
+  return await new Promise((resolve,reject)=>{
+    const r = new FileReader();
+    r.onload = ()=>resolve(String(r.result||""));
+    r.onerror = ()=>reject(new Error("Lecture image impossible"));
+    r.readAsDataURL(blob);
+  });
 }
 
+/* =========================
+   Historique (mois repliés)
+   ========================= */
 function renderHistory(){
-  (async ()=>{
-    try{
-      showStatus("Synchronisation…", "Chargement de l’historique.", "⏳");
-      const res = await listTickets_();
-      const rows = (res?.ok && Array.isArray(res.rows)) ? res.rows : [];
+  const host = $("histContent");
+  host.innerHTML = "";
 
-      // Tri ancien -> récent
-      rows.sort((a,b)=> String(a.createdAt||"").localeCompare(String(b.createdAt||"")));
+  // Source: DEMO local ou futur API
+  let items = [];
+  if(!API){
+    items = loadDemoHistory();
+  }else{
+    // plus tard: items = await fetch list
+    items = [];
+  }
 
-      // Filtre: si un jour on veut “agents voient tout” -> on garde tout.
-      // (Tu as dit: page pour tous les agents, donc historique complet)
-      const groups = groupByMonth(rows);
+  if(!items.length){
+    const empty = document.createElement("div");
+    empty.className = "field";
+    empty.innerHTML = `<div class="label">Aucun historique pour le moment.</div>
+                       <div style="font-weight:900;color:rgba(255,255,255,.78);font-size:13px;">
+                         Les mois apparaîtront automatiquement dès qu’il y aura des photos.
+                       </div>`;
+    host.appendChild(empty);
+    return;
+  }
 
-      historyBody.innerHTML = "";
+  // ordre : du plus ancien au plus récent (top -> bottom)
+  items.sort((a,b)=> String(a.takenAt||"").localeCompare(String(b.takenAt||"")));
 
-      if(!groups.length){
-        historyBody.innerHTML = `
-          <div class="field">
-            <div class="label">Aucun ticket</div>
-            <div style="font-weight:850;color:var(--muted);">Pas encore de photo envoyée.</div>
-          </div>
-        `;
-        hideStatus();
-        return;
-      }
+  // group by month
+  const groups = new Map();
+  for(const it of items){
+    const dt = new Date(it.takenAt);
+    const mk = monthKeyFR(dt);
+    if(!groups.has(mk)) groups.set(mk, []);
+    groups.get(mk).push(it);
+  }
 
-      for(const g of groups){
-        const block = document.createElement("div");
-        block.className = "monthBlock open"; // ouvert par défaut (tu peux mettre fermé par défaut si tu veux)
-        const title = monthLabel(g.month);
-        const count = g.items.length;
+  for(const [mk, arr] of groups.entries()){
+    const g = document.createElement("div");
+    g.className = "monthGroup"; // replié par défaut
 
-        block.innerHTML = `
-          <div class="monthHead">
-            <div class="monthTitle">${escapeHtml(title)}</div>
-            <div class="monthMeta">
-              <span class="badge">${count}</span>
-              <span class="chev">▾</span>
-            </div>
-          </div>
-          <div class="monthBody"></div>
-        `;
+    const head = document.createElement("div");
+    head.className = "monthHead";
+    head.innerHTML = `
+      <div class="monthTitle">
+        <span>${escapeHtml(mk)}</span>
+        <span class="countPill">${arr.length}</span>
+      </div>
+      <div class="chev">▾</div>
+    `;
 
-        const head = block.querySelector(".monthHead");
-        const chev = block.querySelector(".chev");
-        const body = block.querySelector(".monthBody");
+    const body = document.createElement("div");
+    body.className = "monthBody";
 
-        head.addEventListener("click", ()=>{
-          const open = block.classList.toggle("open");
-          chev.textContent = open ? "▾" : "▸";
-        });
+    for(const it of arr){
+      const dt = new Date(it.takenAt);
+      const dshort = fmtDateShort(dt);
+      const veh = String(it.veh||"").toUpperCase().trim();
+      const who = String(it.who||"").trim() || "Agent";
 
-        for(const it of g.items){
-          const el = document.createElement("div");
-          el.className = "item";
-
-          const when = String(it.createdAt||"—");
-          const veh = String(it.vehicle||"—");
-          const who = String(it.agentName||"—");
-          const whoEmail = String(it.agentEmail||"");
-
-          el.innerHTML = `
-            <div class="itemLeft">
-              <div class="itemTop">
-                <span class="badge">${escapeHtml(veh)}</span>
-                <span class="badge">🗓 ${escapeHtml(when)}</span>
-              </div>
-              <div class="itemSub">${escapeHtml(who)}${whoEmail ? " · " + escapeHtml(whoEmail) : ""}</div>
-            </div>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <button class="iconBtn" data-act="view" title="Voir la photo">📷</button>
-              <button class="iconBtn" data-act="dl" title="Télécharger" style="display:none;">⬇</button>
-              <button class="iconBtn" data-act="share" title="Partager" style="display:none;">📤</button>
-            </div>
-          `;
-
-          const btnView = el.querySelector('[data-act="view"]');
-          const btnDl = el.querySelector('[data-act="dl"]');
-          const btnShare = el.querySelector('[data-act="share"]');
-
-          const admin = isAdminLocal();
-          if(admin){
-            btnDl.style.display = "inline-block";
-            btnShare.style.display = "inline-block";
-          }
-
-          const openPreview = async ()=>{
-            // local: imageDataUrl, futur: imageUrl Drive
-            const src = it.imageUrl || it.imageDataUrl || "";
-            if(!src){
-              alert("Photo indisponible.");
-              return;
-            }
-            // Preview simple
-            const w = window.open("", "_blank");
-            if(!w){ alert("Popup bloquée. Autorise les popups."); return; }
-            w.document.write(`<title>Ticket</title><img src="${src}" style="max-width:100%;height:auto;display:block;margin:auto;background:#000">`);
-            w.document.close();
-          };
-
-          btnView.addEventListener("click", openPreview);
-
-          btnDl.addEventListener("click", async ()=>{
-            const src = it.imageUrl || it.imageDataUrl || "";
-            if(!src){ alert("Photo indisponible."); return; }
-            // download local via <a>
-            const a = document.createElement("a");
-            a.href = src;
-            a.download = `${String(it.createdAt||"").slice(0,10)}_${veh}_${who}.jpg`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-          });
-
-          btnShare.addEventListener("click", async ()=>{
-            const src = it.imageUrl || it.imageDataUrl || "";
-            if(!src){ alert("Photo indisponible."); return; }
-
-            // Partage natif si dispo (surtout mobile)
-            if(navigator.share){
-              try{
-                await navigator.share({ title:"Ticket carburant", text:`${veh} — ${when} — ${who}`, url: src });
-              }catch(e){
-                // silence
-              }
-            }else{
-              alert("Partage natif non disponible sur cet appareil.");
-            }
-          });
-
-          body.appendChild(el);
-        }
-
-        historyBody.appendChild(block);
-      }
-
-      hideStatus();
-    }catch(e){
-      hideStatus();
-      historyBody.innerHTML = `
-        <div class="field">
-          <div class="label">Erreur</div>
-          <div style="font-weight:850;color:var(--muted);">Impossible de charger l’historique.</div>
+      const row = document.createElement("div");
+      row.className = "histRow";
+      row.innerHTML = `
+        <div class="leftMeta">
+          ${vehBadgeHtml(veh)}
+          <span class="miniDate">${escapeHtml(dshort)}</span>
+          <span class="who">${escapeHtml(who)}</span>
+        </div>
+        <div class="rowBtns">
+          <button class="iconBtn" data-act="view">👁</button>
+          <button class="iconBtn good" data-act="dl" style="display:none">⬇</button>
+          <button class="iconBtn" data-act="share" style="display:none">📤</button>
         </div>
       `;
+
+      // Boutons admin uniquement
+      const btnDl = row.querySelector('[data-act="dl"]');
+      const btnSh = row.querySelector('[data-act="share"]');
+      if(IS_ADMIN){
+        btnDl.style.display = "inline-block";
+        btnSh.style.display = "inline-block";
+      }
+
+      row.querySelector('[data-act="view"]').addEventListener("click", ()=>{
+        const src = it.dataUrl || "";
+        openModal(`
+          <h3>${escapeHtml(veh)} — ${escapeHtml(dshort)} — ${escapeHtml(who)}</h3>
+          <img class="modalImg" src="${escapeHtml(src)}" alt="Photo ticket carburant">
+          <div class="row">
+            <button class="btn2 primary" id="mClose">Fermer</button>
+          </div>
+        `);
+        $("mClose").onclick = closeModal;
+      });
+
+      if(btnDl){
+        btnDl.addEventListener("click", ()=>{
+          if(!IS_ADMIN) return;
+          const src = it.dataUrl || "";
+          if(!src) return;
+          const a = document.createElement("a");
+          a.href = src;
+          a.download = `ticket_${veh}_${dt.toISOString().slice(0,10)}_${who}.jpg`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        });
+      }
+
+      if(btnSh){
+        btnSh.addEventListener("click", async ()=>{
+          if(!IS_ADMIN) return;
+          const src = it.dataUrl || "";
+          if(!src) return;
+
+          // Web Share si possible
+          try{
+            if(navigator.share){
+              await navigator.share({
+                title: "Ticket carburant",
+                text: `${veh} — ${dshort} — ${who}`
+              });
+              toast("Partagé", "📤");
+              return;
+            }
+          }catch(e){}
+
+          // fallback : copie une info (pas de lien en démo)
+          try{
+            await navigator.clipboard.writeText(`${veh} — ${dshort} — ${who}`);
+            toast("Copié", "📋");
+          }catch(e){
+            alert("Partage non disponible sur cet appareil.");
+          }
+        });
+      }
+
+      body.appendChild(row);
     }
-  })();
+
+    head.addEventListener("click", ()=>{
+      g.classList.toggle("open");
+    });
+
+    g.appendChild(head);
+    g.appendChild(body);
+    host.appendChild(g);
+  }
 }
 
-/* =============================
+/* =========================
    Boot
-   ============================= */
-$("btnBack").addEventListener("click", ()=>location.replace(BACK_URL));
+   ========================= */
+(function(){
+  // Si tu veux forcer admin par mail plus tard, on branchera auth_check.
+  // Là : admin = toggle cadenas (comme demandé).
+  setAdminUI(false);
 
-(function boot(){
-  // admin pill
-  $("adminPill").style.display = isAdminLocal() ? "inline-flex" : "none";
-  // charge l’historique une fois (utile si tu vas direct)
+  // auto-refresh historique quand on ouvre l’onglet
   renderHistory();
 })();
 </script>
