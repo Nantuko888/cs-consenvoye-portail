@@ -833,14 +833,17 @@ btnSend.addEventListener("click", async ()=>{
   reader.readAsDataURL(_photoBlob);
 
 });
+reader.onload = () => {
+  // ... ton code qui fabrique arr / who / veh etc ...
 
-      saveDemoHistory(arr);
-      toast("Envoyé");
-      resetPhoto();
-      btnTake.disabled = false;
-      renderHistory();
-          }
+  saveDemoHistory(arr);
+  toast("Envoyé");
+  resetPhoto();
+  btnTake.disabled = false;
+  renderHistory();
+};
 
+reader.readAsDataURL(photoBlob);
     // ✅ plus tard: upload Apps Script (branchage)
     // await uploadToApi_(veh, whoName, whoEmail, takenAt, _photoBlob);
     toast("Envoyé");
