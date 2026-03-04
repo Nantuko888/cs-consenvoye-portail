@@ -1,0 +1,827 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>Ticket carburant — CS Consenvoye</title>
+
+<style>
+:root{
+  --txt:#f4f4f4;
+  --muted:rgba(255,255,255,.72);
+  --shadow: 0 14px 34px rgba(0,0,0,.40);
+  --radius: 18px;
+  --stroke: rgba(255,255,255,.12);
+  --orange:#d46a00;
+  --orange2:#b95800;
+  --card: rgba(0,0,0,.46);
+  --ok:#25c46a;
+  --bad:#ff3b30;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--txt);
+  background:#0b0b0b;
+  overflow:hidden;
+}
+
+.bg{
+  position:fixed; inset:0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.55)),
+    url("background.png") center top/cover no-repeat;
+  z-index:-2;
+  transform: translateZ(0);
+}
+.bg::after{
+  content:"";
+  position:absolute; inset:0;
+  background: radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.72) 62%);
+  z-index:-1;
+}
+
+.wrap{
+  height:100dvh;
+  width:min(980px, 100%);
+  margin:0 auto;
+  padding: calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
+  display:grid;
+  grid-template-rows:auto auto 1fr;
+  gap:10px;
+  overflow:hidden;
+  min-height:0;
+}
+
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(212,106,0,.78), rgba(185,88,0,.58));
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  min-height: 46px;
+}
+.title{
+  margin:0;
+  font-weight:950;
+  letter-spacing:.6px;
+  text-transform: uppercase;
+  font-size: clamp(15px, 2.2vw, 18px);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.topActions{display:flex; gap:10px; align-items:center;}
+.btn{
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.18);
+  color:var(--txt);
+  padding: 9px 12px;
+  border-radius: 14px;
+  font-weight:900;
+  cursor:pointer;
+  -webkit-tap-highlight-color: transparent;
+  white-space:nowrap;
+}
+.btn:active{transform: translateY(1px)}
+.btn[disabled]{opacity:.45; cursor:not-allowed}
+
+.tabs{ display:flex; gap:10px; }
+.tab{
+  flex:1;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.28);
+  box-shadow: var(--shadow);
+  font-weight:950;
+  letter-spacing:.3px;
+  cursor:pointer;
+  color: rgba(255,255,255,.86);
+  -webkit-tap-highlight-color: transparent;
+}
+.tab.active{
+  background: linear-gradient(180deg, rgba(212,106,0,.62), rgba(185,88,0,.45));
+  color:#fff;
+  border-color: rgba(255,255,255,.16);
+}
+.tab:active{transform: translateY(1px)}
+
+.card{
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(0,0,0,.54), rgba(0,0,0,.34));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  overflow:hidden;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+}
+
+.banner{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding: 10px 12px;
+  background: rgba(0,0,0,.20);
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+.bannerLeft{display:flex; flex-direction:column; gap:2px; min-width:0;}
+.bannerTitle{
+  font-weight:950;
+  letter-spacing:.6px;
+  text-transform: uppercase;
+  font-size: 15px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.bannerSub{font-weight:800; color:var(--muted); font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+
+.camBtn{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:10px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.18);
+  color:#fff;
+  font-weight:950;
+  cursor:pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.camBtn:active{transform: translateY(1px)}
+
+.body{
+  padding: 12px;
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  min-height:0;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(0,0,0,.22);
+  border:1px solid rgba(255,255,255,.10);
+}
+.label{font-weight:950; font-size:13px; letter-spacing:.3px; color:rgba(255,255,255,.88); text-transform:uppercase;}
+.select, .input{
+  width:100%;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.30);
+  color:#fff;
+  padding: 11px 12px;
+  font-weight:900;
+  outline:none;
+}
+
+.previewWrap{
+  border-radius: 18px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.18);
+}
+.previewImg{
+  width:100%;
+  display:block;
+  max-height: 52vh;
+  object-fit:contain;
+  background:#000;
+}
+
+.rowBtns{
+  display:flex; gap:10px; flex-wrap:wrap;
+}
+.primary{
+  background: linear-gradient(180deg, rgba(212,106,0,.78), rgba(185,88,0,.58));
+  border-color: rgba(255,255,255,.18);
+}
+.ok{
+  background: rgba(37,196,106,.22);
+  border-color: rgba(37,196,106,.55);
+}
+.danger{
+  background: rgba(255,59,48,.18);
+  border-color: rgba(255,59,48,.45);
+}
+
+.pill{
+  display:inline-flex; align-items:center; gap:8px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.35);
+  font-weight:900;
+}
+
+/* Historique */
+.monthBlock{
+  border-radius: 18px;
+  background: rgba(0,0,0,.22);
+  border:1px solid rgba(255,255,255,.10);
+  overflow:hidden;
+}
+.monthHead{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding: 12px;
+  cursor:pointer;
+  user-select:none;
+  -webkit-tap-highlight-color: transparent;
+  background: rgba(0,0,0,.14);
+}
+.monthHead:active{transform: translateY(1px)}
+.monthTitle{font-weight:950; letter-spacing:.4px;}
+.monthMeta{display:flex; gap:10px; align-items:center; font-weight:900; color:rgba(255,255,255,.86);}
+.chev{opacity:.9; font-weight:950;}
+.monthBody{
+  display:none;
+  padding: 10px 12px 12px;
+  gap:10px;
+}
+.monthBlock.open .monthBody{display:flex; flex-direction:column;}
+
+.item{
+  border-radius: 16px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  padding: 10px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.itemLeft{display:flex; flex-direction:column; gap:4px; min-width:0;}
+.itemTop{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+.badge{
+  padding: 5px 8px;
+  border-radius: 999px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  font-weight:900;
+  font-size:12px;
+}
+.itemSub{
+  color:var(--muted);
+  font-weight:850;
+  font-size:12px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.iconBtn{
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.18);
+  color:var(--txt);
+  padding: 9px 10px;
+  border-radius: 14px;
+  font-weight:950;
+  cursor:pointer;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 44px;
+}
+.iconBtn:active{transform: translateY(1px)}
+
+.status{
+  position:fixed;
+  left:12px; right:12px;
+  bottom: calc(env(safe-area-inset-bottom) + 12px);
+  z-index:80;
+  display:none;
+  max-width: 980px;
+  margin: 0 auto;
+  pointer-events:none;
+}
+.status .pillBox{
+  pointer-events:auto;
+  display:inline-flex;
+  gap:10px;
+  align-items:center;
+  padding:10px 12px;
+  border-radius: 16px;
+  background: rgba(0,0,0,.62);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow: var(--shadow);
+  color: rgba(255,255,255,.90);
+  font-weight:900;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.small{font-weight:800; opacity:.85; font-size:13px}
+</style>
+</head>
+
+<body>
+<div class="bg"></div>
+
+<div class="wrap">
+  <div class="topbar">
+    <h1 class="title">Ticket carburant</h1>
+    <div class="topActions">
+      <span id="adminPill" class="pill" style="display:none;">🔒 Admin</span>
+      <button class="btn" id="btnBack">Retour</button>
+    </div>
+  </div>
+
+  <div class="tabs" role="tablist" aria-label="Ticket carburant onglets">
+    <button class="tab active" id="tabShot" role="tab" aria-selected="true">📷 Prise de photo</button>
+    <button class="tab" id="tabHistory" role="tab" aria-selected="false">🗂 Historique</button>
+  </div>
+
+  <!-- PANEL PHOTO -->
+  <section class="card" id="panelShot" role="tabpanel" aria-labelledby="tabShot">
+    <div class="banner">
+      <div class="bannerLeft">
+        <div class="bannerTitle">Prendre un ticket</div>
+        <div class="bannerSub">Choisis le véhicule puis prends la photo.</div>
+      </div>
+      <button class="camBtn" id="btnCamera" title="Ouvrir l’appareil photo">📷 Ouvrir</button>
+    </div>
+
+    <div class="body">
+      <div class="field">
+        <div class="label">Véhicule</div>
+        <select class="select" id="vehSelect">
+          <option value="">— Choisir —</option>
+          <option>VSAV</option>
+          <option>FPT</option>
+          <option>VTU</option>
+          <option>VL</option>
+          <option>CCF</option>
+        </select>
+        <div style="color:var(--muted);font-weight:850;font-size:12px;">
+          (On remplacera la liste par ta liste officielle quand tu veux.)
+        </div>
+      </div>
+
+      <div id="previewBlock" class="field" style="display:none;">
+        <div class="label">Aperçu</div>
+        <div class="previewWrap">
+          <img id="previewImg" class="previewImg" alt="Aperçu ticket"/>
+        </div>
+        <div class="rowBtns">
+          <button class="btn danger" id="btnRetake">Reprendre</button>
+          <button class="btn primary" id="btnSend">Envoyer</button>
+        </div>
+        <div id="sendHint" style="color:var(--muted);font-weight:850;font-size:12px;">
+          La date est automatique (au moment de l’envoi).
+        </div>
+      </div>
+
+      <div class="field" id="shotHelp">
+        <div class="label">Info</div>
+        <div style="font-weight:850;line-height:1.35;color:rgba(255,255,255,.90);">
+          1) Choisir le véhicule<br>
+          2) 📷 Prendre la photo (ticket pompe)<br>
+          3) Vérifier l’aperçu<br>
+          4) Envoyer
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PANEL HISTORIQUE -->
+  <section class="card" id="panelHistory" role="tabpanel" aria-labelledby="tabHistory" style="display:none;">
+    <div class="banner">
+      <div class="bannerLeft">
+        <div class="bannerTitle">Historique</div>
+        <div class="bannerSub">Classé par mois, repliable. Ordre ancien → récent.</div>
+      </div>
+      <button class="btn" id="btnRefresh">Rafraîchir</button>
+    </div>
+
+    <div class="body" id="historyBody">
+      <!-- Injecté -->
+    </div>
+  </section>
+</div>
+
+<div class="status" id="status">
+  <div class="pillBox">
+    <span id="stIcon">⏳</span>
+    <div>
+      <div id="stTxt">Synchronisation…</div>
+      <div class="small" id="stSub">Veuillez patienter.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Input camera (icône + ouverture appareil photo) -->
+<input id="fileInput" type="file" accept="image/*" capture="environment" style="display:none;"/>
+
+<script>
+/* =============================
+   CONFIG (on branchera Apps Script après)
+   ============================= */
+const BACK_URL = "index.html?portal=1";
+const LS_EMAIL = "cs_portail_email_v1";
+const LS_NAME  = "cs_portail_name_v1";
+
+/* ⚠️ API (optionnel pour l’instant)
+   Quand tu me donnes la view Apps Script, on remplace ici.
+*/
+const API = ""; // ex: "https://script.google.com/macros/s/XXXX/exec"
+
+/* Local cache pour prévisualiser tout de suite */
+const LS_TICKETS = "cs_fuel_tickets_v1";
+
+/* Admin: pour l’instant on fait une whitelist simple.
+   Tu me diras si tu préfères auth_check via Sheets comme les autres pages.
+*/
+const ADMIN_EMAILS = [
+  "pierre.venante@gmail.com"
+];
+
+/* =============================
+   Helpers
+   ============================= */
+const $ = (id)=>document.getElementById(id);
+
+function myEmail(){ return (localStorage.getItem(LS_EMAIL)||"").trim().toLowerCase(); }
+function myName(){ return (localStorage.getItem(LS_NAME)||"").trim(); }
+
+function isAdminLocal(){
+  const em = myEmail();
+  return !!(em && ADMIN_EMAILS.includes(em));
+}
+
+function showStatus(txt, sub, icon="⏳"){
+  $("stTxt").textContent = txt || "";
+  $("stSub").textContent = sub || "";
+  $("stIcon").textContent = icon;
+  $("status").style.display = "block";
+}
+function hideStatus(){ $("status").style.display = "none"; }
+
+function pad2(n){ return String(n).padStart(2,"0"); }
+function isoNow(){
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = pad2(d.getMonth()+1);
+  const dd = pad2(d.getDate());
+  const hh = pad2(d.getHours());
+  const mm = pad2(d.getMinutes());
+  const ss = pad2(d.getSeconds());
+  return `${y}-${m}-${dd} ${hh}:${mm}:${ss}`;
+}
+function monthKeyFromIso(iso){
+  // "YYYY-MM-..." -> "YYYY-MM"
+  const m = String(iso||"").slice(0,7);
+  return /^\d{4}-\d{2}$/.test(m) ? m : "0000-00";
+}
+function monthLabel(ym){
+  const [y,m] = ym.split("-");
+  const months = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  const mi = Number(m)-1;
+  const lab = (mi>=0 && mi<12) ? months[mi] : "—";
+  return `${lab} ${y}`;
+}
+function escapeHtml(s){
+  return (s==null ? "" : String(s))
+    .replaceAll("&","&amp;").replaceAll("<","&lt;")
+    .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+
+function loadLocalTickets(){
+  try{
+    const raw = localStorage.getItem(LS_TICKETS);
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  }catch(e){ return []; }
+}
+function saveLocalTickets(arr){
+  try{ localStorage.setItem(LS_TICKETS, JSON.stringify(arr||[])); }catch(e){}
+}
+
+/* =============================
+   Tabs
+   ============================= */
+const tabShot = $("tabShot");
+const tabHistory = $("tabHistory");
+const panShot = $("panelShot");
+const panHistory = $("panelHistory");
+
+function setTab(which){
+  const shot = (which==="shot");
+  tabShot.classList.toggle("active", shot);
+  tabHistory.classList.toggle("active", !shot);
+  tabShot.setAttribute("aria-selected", shot ? "true" : "false");
+  tabHistory.setAttribute("aria-selected", shot ? "false" : "true");
+  panShot.style.display = shot ? "flex" : "none";
+  panHistory.style.display = shot ? "none" : "flex";
+  if(!shot) renderHistory(); // refresh view
+}
+
+tabShot.addEventListener("click", ()=>setTab("shot"));
+tabHistory.addEventListener("click", ()=>setTab("history"));
+
+/* =============================
+   Camera + Preview
+   ============================= */
+const fileInput = $("fileInput");
+const btnCamera = $("btnCamera");
+const btnRetake = $("btnRetake");
+const btnSend = $("btnSend");
+const vehSelect = $("vehSelect");
+const previewBlock = $("previewBlock");
+const previewImg = $("previewImg");
+
+let pendingFile = null;
+let pendingDataUrl = "";
+
+btnCamera.addEventListener("click", ()=>{
+  const veh = (vehSelect.value||"").trim();
+  if(!veh){
+    alert("Choisis d’abord le véhicule.");
+    return;
+  }
+  fileInput.value = "";
+  fileInput.click();
+});
+
+btnRetake.addEventListener("click", ()=>{
+  pendingFile = null;
+  pendingDataUrl = "";
+  previewBlock.style.display = "none";
+});
+
+fileInput.addEventListener("change", async ()=>{
+  const f = fileInput.files && fileInput.files[0];
+  if(!f) return;
+
+  pendingFile = f;
+
+  // Aperçu rapide
+  const url = URL.createObjectURL(f);
+  previewImg.src = url;
+  previewBlock.style.display = "flex";
+});
+
+/* =============================
+   “API” (stub local pour l’instant)
+   ============================= */
+async function uploadTicket_(ticket){
+  // Si tu as déjà l’API, on branchera ici.
+  // Pour l’instant: stockage local pour tester l’UX.
+  const all = loadLocalTickets();
+  all.push(ticket);
+  saveLocalTickets(all);
+  return { ok:true };
+}
+
+async function listTickets_(){
+  // Même logique: local pour l’instant
+  return { ok:true, rows: loadLocalTickets() };
+}
+
+/* =============================
+   Send
+   ============================= */
+btnSend.addEventListener("click", async ()=>{
+  try{
+    const veh = (vehSelect.value||"").trim();
+    if(!veh){ alert("Véhicule manquant."); return; }
+    if(!pendingFile){ alert("Aucune photo."); return; }
+
+    const email = myEmail();
+    const name = myName();
+    if(!email){
+      alert("Email de connexion introuvable. Reconnecte-toi via la page d’accueil.");
+      return;
+    }
+
+    showStatus("Envoi…", "Enregistrement du ticket.", "⏳");
+    btnSend.disabled = true;
+
+    // Convertit en base64 pour le mode local (aperçu UX)
+    const dataUrl = await new Promise((resolve, reject)=>{
+      const r = new FileReader();
+      r.onload = ()=>resolve(String(r.result||""));
+      r.onerror = ()=>reject(new Error("Lecture photo impossible"));
+      r.readAsDataURL(pendingFile);
+    });
+
+    const ticket = {
+      id: "t_" + Math.random().toString(36).slice(2) + "_" + Date.now(),
+      createdAt: isoNow(),
+      vehicle: veh,
+      agentEmail: email,
+      agentName: name || (email.split("@")[0] || "—"),
+      // en local: on stocke l’image (plus tard: on stockera l’URL Drive)
+      imageDataUrl: dataUrl,
+      imageUrl: "" // futur: URL Drive
+    };
+
+    const res = await uploadTicket_(ticket);
+    if(!res?.ok) throw new Error(res?.error || "Erreur envoi");
+
+    hideStatus();
+    alert("Envoyé ✔");
+
+    // Reset
+    pendingFile = null;
+    previewBlock.style.display = "none";
+    vehSelect.value = "";
+
+  }catch(err){
+    hideStatus();
+    alert("Erreur : " + String(err?.message || err));
+  }finally{
+    btnSend.disabled = false;
+  }
+});
+
+/* =============================
+   Historique
+   ============================= */
+const historyBody = $("historyBody");
+$("btnRefresh").addEventListener("click", renderHistory);
+
+function groupByMonth(rows){
+  // rows: ancien -> récent déjà
+  const map = new Map();
+  for(const r of rows){
+    const mk = monthKeyFromIso(r.createdAt);
+    if(!map.has(mk)) map.set(mk, []);
+    map.get(mk).push(r);
+  }
+  // tri mois du + ancien au + récent
+  const keys = [...map.keys()].sort((a,b)=>a.localeCompare(b));
+  return keys.map(k => ({ month:k, items: map.get(k) }));
+}
+
+function renderHistory(){
+  (async ()=>{
+    try{
+      showStatus("Synchronisation…", "Chargement de l’historique.", "⏳");
+      const res = await listTickets_();
+      const rows = (res?.ok && Array.isArray(res.rows)) ? res.rows : [];
+
+      // Tri ancien -> récent
+      rows.sort((a,b)=> String(a.createdAt||"").localeCompare(String(b.createdAt||"")));
+
+      // Filtre: si un jour on veut “agents voient tout” -> on garde tout.
+      // (Tu as dit: page pour tous les agents, donc historique complet)
+      const groups = groupByMonth(rows);
+
+      historyBody.innerHTML = "";
+
+      if(!groups.length){
+        historyBody.innerHTML = `
+          <div class="field">
+            <div class="label">Aucun ticket</div>
+            <div style="font-weight:850;color:var(--muted);">Pas encore de photo envoyée.</div>
+          </div>
+        `;
+        hideStatus();
+        return;
+      }
+
+      for(const g of groups){
+        const block = document.createElement("div");
+        block.className = "monthBlock open"; // ouvert par défaut (tu peux mettre fermé par défaut si tu veux)
+        const title = monthLabel(g.month);
+        const count = g.items.length;
+
+        block.innerHTML = `
+          <div class="monthHead">
+            <div class="monthTitle">${escapeHtml(title)}</div>
+            <div class="monthMeta">
+              <span class="badge">${count}</span>
+              <span class="chev">▾</span>
+            </div>
+          </div>
+          <div class="monthBody"></div>
+        `;
+
+        const head = block.querySelector(".monthHead");
+        const chev = block.querySelector(".chev");
+        const body = block.querySelector(".monthBody");
+
+        head.addEventListener("click", ()=>{
+          const open = block.classList.toggle("open");
+          chev.textContent = open ? "▾" : "▸";
+        });
+
+        for(const it of g.items){
+          const el = document.createElement("div");
+          el.className = "item";
+
+          const when = String(it.createdAt||"—");
+          const veh = String(it.vehicle||"—");
+          const who = String(it.agentName||"—");
+          const whoEmail = String(it.agentEmail||"");
+
+          el.innerHTML = `
+            <div class="itemLeft">
+              <div class="itemTop">
+                <span class="badge">${escapeHtml(veh)}</span>
+                <span class="badge">🗓 ${escapeHtml(when)}</span>
+              </div>
+              <div class="itemSub">${escapeHtml(who)}${whoEmail ? " · " + escapeHtml(whoEmail) : ""}</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <button class="iconBtn" data-act="view" title="Voir la photo">📷</button>
+              <button class="iconBtn" data-act="dl" title="Télécharger" style="display:none;">⬇</button>
+              <button class="iconBtn" data-act="share" title="Partager" style="display:none;">📤</button>
+            </div>
+          `;
+
+          const btnView = el.querySelector('[data-act="view"]');
+          const btnDl = el.querySelector('[data-act="dl"]');
+          const btnShare = el.querySelector('[data-act="share"]');
+
+          const admin = isAdminLocal();
+          if(admin){
+            btnDl.style.display = "inline-block";
+            btnShare.style.display = "inline-block";
+          }
+
+          const openPreview = async ()=>{
+            // local: imageDataUrl, futur: imageUrl Drive
+            const src = it.imageUrl || it.imageDataUrl || "";
+            if(!src){
+              alert("Photo indisponible.");
+              return;
+            }
+            // Preview simple
+            const w = window.open("", "_blank");
+            if(!w){ alert("Popup bloquée. Autorise les popups."); return; }
+            w.document.write(`<title>Ticket</title><img src="${src}" style="max-width:100%;height:auto;display:block;margin:auto;background:#000">`);
+            w.document.close();
+          };
+
+          btnView.addEventListener("click", openPreview);
+
+          btnDl.addEventListener("click", async ()=>{
+            const src = it.imageUrl || it.imageDataUrl || "";
+            if(!src){ alert("Photo indisponible."); return; }
+            // download local via <a>
+            const a = document.createElement("a");
+            a.href = src;
+            a.download = `${String(it.createdAt||"").slice(0,10)}_${veh}_${who}.jpg`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+          });
+
+          btnShare.addEventListener("click", async ()=>{
+            const src = it.imageUrl || it.imageDataUrl || "";
+            if(!src){ alert("Photo indisponible."); return; }
+
+            // Partage natif si dispo (surtout mobile)
+            if(navigator.share){
+              try{
+                await navigator.share({ title:"Ticket carburant", text:`${veh} — ${when} — ${who}`, url: src });
+              }catch(e){
+                // silence
+              }
+            }else{
+              alert("Partage natif non disponible sur cet appareil.");
+            }
+          });
+
+          body.appendChild(el);
+        }
+
+        historyBody.appendChild(block);
+      }
+
+      hideStatus();
+    }catch(e){
+      hideStatus();
+      historyBody.innerHTML = `
+        <div class="field">
+          <div class="label">Erreur</div>
+          <div style="font-weight:850;color:var(--muted);">Impossible de charger l’historique.</div>
+        </div>
+      `;
+    }
+  })();
+}
+
+/* =============================
+   Boot
+   ============================= */
+$("btnBack").addEventListener("click", ()=>location.replace(BACK_URL));
+
+(function boot(){
+  // admin pill
+  $("adminPill").style.display = isAdminLocal() ? "inline-flex" : "none";
+  // charge l’historique une fois (utile si tu vas direct)
+  renderHistory();
+})();
+</script>
+</body>
+</html>
