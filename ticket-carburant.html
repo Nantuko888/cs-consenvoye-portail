@@ -572,7 +572,7 @@ const LS_NAME  = "cs_portail_name_v1";
 let DEMO_MODE = true;
 
 // Si tu veux brancher Apps Script plus tard :
-// const API = "https://script.google.com/macros/s/XXXX/exec";
+// const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 const API = ""; // (vide => demo)
 
 /* =========================
@@ -778,40 +778,62 @@ fileInput.addEventListener("change", ()=>{
   btnSend.disabled = false;
 });
 
-btnClear.addEventListener("click", ()=>{
-  // ✅ “Reprendre” = on efface l’aperçu + re-ouvre la caméra si un véhicule est choisi
-  const veh = (vehSelect.value || "").trim();
-  resetPhoto();
-  if(veh) fileInput.click();
+btnSend.addEventListener("click", async ()=>{
+
+  const veh = vehSelect.value;
+  if(!veh){
+    alert("Choisis un véhicule");
+    return;
+  }
+
+  if(!_photoBlob){
+    alert("Aucune photo");
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = async function(){
+
+    const base64 = reader.result.split(",")[1];
+
+    const agent =
+      localStorage.getItem("cs_portail_name_v1") ||
+      "Agent";
+
+    const params = new URLSearchParams({
+      view:"ticket_carburant_upload",
+      vehicle:veh,
+      agent:agent,
+      image:base64
+    });
+
+    try{
+
+      const res = await fetch(API + "?" + params.toString());
+      const data = await res.json();
+
+      if(!data.ok){
+        throw new Error(data.error || "Erreur upload");
+      }
+
+      toast("Photo envoyée ✔");
+
+      resetPhoto();
+      renderHistory();
+
+    }catch(err){
+
+      alert("Erreur envoi : " + err.message);
+
+    }
+
+  };
+
+  reader.readAsDataURL(_photoBlob);
+
 });
 
-btnSend.addEventListener("click", async ()=>{
-  const veh = (vehSelect.value || "").trim();
-  if(!veh){ alert("Véhicule manquant."); return; }
-  if(!_photoBlob){ alert("Aucune photo."); return; }
-
-  btnSend.disabled = true;
-  btnTake.disabled = true;
-  btnClear.disabled = true;
-
-  try{
-    const whoEmail = myEmail();
-    const whoName = myName() || firstNameFromEmail(whoEmail) || "Agent";
-    const takenAt = _photoTakenAt || new Date();
-
-    if(!API){
-      // ✅ DEMO: on stocke localement + on affiche
-      const arr = loadDemoHistory();
-      arr.push({
-        id: "demo_" + Date.now(),
-        veh,
-        who: whoName,
-        email: whoEmail,
-        takenAt: takenAt.toISOString(),
-        // On garde un mini “aperçu” local: objectURL ne survit pas au reload,
-        // donc on convertit en dataURL (ok pour démo).
-        dataUrl: await blobToDataUrl(_photoBlob)
-      });
       saveDemoHistory(arr);
       toast("Envoyé");
       resetPhoto();
