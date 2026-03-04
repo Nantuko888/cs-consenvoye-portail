@@ -2,323 +2,300 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Ticket Carburant — CS Consenvoye</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ticket carburant — CS Consenvoye</title>
 
   <style>
     :root{
-      --bg:#000;
-      --txt:#fff;
+      --bg:#0f0f12;
+      --panel:#16161b;
+      --card:#1d1e25;
+      --text:#f2f2f4;
+      --muted:#a8a9b3;
 
-      --orange:#d46a00;
-      --orange2:#b95800;
+      /* Couleur bandeau (comme tes autres pages) */
+      --orange:#d97a1f;
+      --orange2:#b86416;
 
-      --stroke: rgba(255,255,255,.12);
-      --shadow: 0 14px 34px rgba(0,0,0,.40);
+      --shadow: 0 10px 28px rgba(0,0,0,.45);
       --radius: 18px;
 
-      --card: rgba(0,0,0,.50);
+      /* Véhicules (translucide) */
+      --vsav: rgba( 24,120,255,.32);
+      --ccr : rgba(255, 60, 60,.32);
+      --vtul: rgba( 0,190,110,.32);
+      --vtp : rgba(255,160, 0,.32);
 
-      --yellow:#fff200;
-      --muted: rgba(255,255,255,.78);
-
-      --ok:#25c46a;
-      --bad:#ff3b30;
-
-      --vsav:#2f79ff; /* bleu */
-      --ccr:#ff3b30; /* rouge */
-      --vtul:#25c46a; /* vert */
-      --vtp:#f6a000; /* orange */
-
-      --appH: 100dvh;
+      --vsavSolid: rgb( 24,120,255);
+      --ccrSolid : rgb(255, 60, 60);
+      --vtulSolid: rgb( 0,190,110);
+      --vtpSolid : rgb(255,160, 0);
     }
 
     *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-
     body{
       margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background: var(--bg);
-      color: var(--txt);
-      overflow:hidden;
-      overscroll-behavior:none;
-      height: var(--appH);
-    }
-
-    .bg{
-      position:fixed; inset:0;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.55)),
-        url("background.png") center top/cover no-repeat;
-      z-index:-2;
-    }
-    .bg::after{
-      content:"";
-      position:absolute; inset:0;
-      background: radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.72) 62%);
-      z-index:-1;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 50% -10%, rgba(255,140,0,.18), transparent 60%),
+                  radial-gradient(900px 600px at 20% 10%, rgba(30,144,255,.12), transparent 55%),
+                  var(--bg);
+      color:var(--text);
     }
 
     .wrap{
-      height: var(--appH);
-      width:min(980px, 100%);
-      margin:0 auto;
-      padding:
-        calc(env(safe-area-inset-top) + 10px)
-        12px
-        calc(env(safe-area-inset-bottom) + 12px);
-      display:grid;
-      grid-template-rows: auto auto 1fr;
-      gap: 10px;
-      overflow:hidden;
-      min-height:0;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 14px 12px 28px;
     }
 
-    /* ===== Topbar ===== */
+    /* Bandeau haut */
     .topbar{
+      background: linear-gradient(180deg, var(--orange), var(--orange2));
+      border-radius: 18px;
+      padding: 10px 10px;
+      box-shadow: var(--shadow);
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .titleBlock{
+      flex:1;
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .title{
+      font-weight: 900;
+      letter-spacing:.6px;
+      text-transform: uppercase;
+      font-size: 15px;
+      line-height: 1.05;
+      white-space: normal; /* autorise 2 lignes */
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .subtitle{
+      font-size: 12px;
+      opacity:.92;
+      color: rgba(255,255,255,.92);
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap: wrap;
+    }
+    .pill{
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.18);
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size:12px;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+    .btnIcon{
+      border:none;
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.18);
+      color: white;
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      white-space:nowrap;
+    }
+    .btnIcon:active{ transform: translateY(1px); }
+
+    .adminBadge{
+      display:none;
+      background: rgba(255,235,59,.18);
+      border: 1px solid rgba(255,235,59,.55);
+      color: #ffe96a;
+      padding: 6px 10px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 12px;
+      white-space:nowrap;
+    }
+    .adminOn .adminBadge{ display:inline-flex; }
+
+    /* Tabs */
+    .tabs{
+      display:flex;
+      gap:10px;
+      margin-top: 12px;
+    }
+    .tab{
+      flex:1;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-weight: 800;
+      letter-spacing:.3px;
+      cursor:pointer;
+      text-align:center;
+      color: rgba(255,255,255,.9);
+    }
+    .tab.active{
+      background: rgba(0,0,0,.22);
+      border-color: rgba(255,255,255,.22);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.18);
+    }
+
+    /* Cards */
+    .card{
+      margin-top: 12px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardHead{
+      padding: 12px 14px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:10px;
-      padding: 10px 12px;
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.55));
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      min-height: 46px;
+      background: rgba(0,0,0,.18);
+      border-bottom: 1px solid rgba(255,255,255,.08);
     }
-    .title{
+    .cardHead h2{
       margin:0;
-      font-weight:950;
+      font-size: 14px;
+      letter-spacing:.5px;
+      text-transform:uppercase;
+    }
+    .cardBody{
+      padding: 14px;
+    }
+
+    /* Sélection véhicule (cellule) */
+    .vehCell{
+      width:100%;
+      border-radius: 16px;
+      padding: 14px 12px;
+      text-align:center;
+      font-weight: 900;
       letter-spacing:.6px;
       text-transform: uppercase;
-      font-size: clamp(15px, 2.2vw, 18px);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .topRight{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width: 220px;
-      justify-content:flex-end;
-    }
-
-    .adminPill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.18);
-      color: var(--yellow);
-      font-weight: 950;
-      font-size: 12px;
-      letter-spacing:.2px;
-      visibility: hidden; /* IMPORTANT : évite le décalage */
-    }
-    .adminPill.show{ visibility: visible; }
-
-    .btn{
-      border:1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.18);
-      color:var(--txt);
-      padding: 9px 12px;
-      border-radius: 14px;
-      font-weight:900;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-      white-space:nowrap;
-    }
-    .btn:active{ transform: translateY(1px); }
-
-    /* ===== Tabs ===== */
-    .tabs{ display:flex; gap:10px; }
-    .tab{
-      flex:1;
-      padding: 10px 12px;
-      border-radius: var(--radius);
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.28);
-      box-shadow: var(--shadow);
-      font-weight:950;
-      letter-spacing:.3px;
-      cursor:pointer;
-      color: rgba(255,255,255,.86);
-      -webkit-tap-highlight-color: transparent;
-    }
-    .tab.active{
-      background: linear-gradient(180deg, rgba(212,106,0,.62), rgba(185,88,0,.45));
-      color:#fff;
-      border-color: rgba(255,255,255,.16);
-    }
-
-    /* ===== Card ===== */
-    .card{
-      border-radius: 22px;
-      background: linear-gradient(180deg, rgba(0,0,0,.52), rgba(0,0,0,.32));
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      overflow:hidden;
-      min-height:0;
-      display:flex;
-      flex-direction:column;
-    }
-
-    .banner{
-      color:#000;
-      font-weight: 950;
-      text-align:center;
-      padding: 10px 10px;
-      border-bottom: 2px solid rgba(0,0,0,.25);
-      letter-spacing:.8px;
-      font-size: clamp(16px, 2.6vw, 20px);
-      background: var(--yellow);
-    }
-
-    .content{
-      padding: 12px;
-      overflow:auto;
-      -webkit-overflow-scrolling: touch;
-      display:flex;
-      flex-direction:column;
-      gap: 12px;
-    }
-
-    /* ===== Vehicle “cell” ===== */
-    .vehicleCell{
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.22);
-      box-shadow: 0 10px 24px rgba(0,0,0,.25);
-      padding: 12px;
-      min-height: 52px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight: 950;
-      letter-spacing:.5px;
-      text-transform: uppercase;
+      background: rgba(255,255,255,.06);
+      border: 1px dashed rgba(255,255,255,.22);
+      color: rgba(255,255,255,.88);
+      margin-bottom: 12px;
       user-select:none;
     }
-    .vehicleCell.placeholder{
-      color: rgba(255,255,255,.82);
+    .vehCell .hint{
+      display:block;
+      margin-top:6px;
+      font-weight: 600;
+      letter-spacing: 0;
+      text-transform:none;
+      color: rgba(255,255,255,.7);
+      font-size: 12px;
     }
 
-    /* ===== Vehicle buttons ===== */
+    /* Boutons véhicules (plus petits + discrets) */
     .vehGrid{
       display:grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
+      margin-bottom: 12px;
     }
     .vehBtn{
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow: 0 10px 24px rgba(0,0,0,.22);
-      padding: 12px 10px;
-      font-weight: 950;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      min-height: 54px;
-      color:#fff;
+      border:none;
+      border-radius: 14px;
+      padding: 10px 10px;
+      font-weight: 900;
+      letter-spacing:.7px;
       text-transform: uppercase;
-      letter-spacing:.6px;
+      cursor:pointer;
+      color: rgba(255,255,255,.92);
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.07);
+      box-shadow: 0 6px 18px rgba(0,0,0,.25);
     }
     .vehBtn:active{ transform: translateY(1px); }
-    .vehBtn.sel{
-      outline: 3px solid rgba(255,255,255,.95);
-      outline-offset: 2px;
+    .vehBtn.selected{
+      outline: 2px solid rgba(255,255,255,.32);
+      box-shadow: 0 10px 22px rgba(0,0,0,.35);
     }
 
-    /* ===== Photo area ===== */
-    .photoActions{
-      display:flex;
+    .vehBtn.vsav{ background: var(--vsav); }
+    .vehBtn.ccr { background: var(--ccr); }
+    .vehBtn.vtul{ background: var(--vtul); }
+    .vehBtn.vtp { background: var(--vtp); }
+
+    /* Actions */
+    .actions{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
       gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
+      margin-top: 6px;
     }
-
-    .primaryBtn{
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.16);
-      background: linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.55));
-      color:#fff;
-      font-weight: 950;
-      padding: 12px 14px;
+    .btn{
+      border:none;
+      border-radius: 14px;
+      padding: 12px 12px;
+      font-weight: 900;
       cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-      flex: 1 1 170px;
-      min-height: 48px;
+      background: rgba(255,255,255,.09);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.92);
     }
-    .primaryBtn:active{ transform: translateY(1px); }
-    .primaryBtn:disabled{
-      opacity:.55;
+    .btn.primary{
+      background: rgba(217,122,31,.28);
+      border-color: rgba(217,122,31,.55);
+    }
+    .btn.danger{
+      background: rgba(255,70,70,.18);
+      border-color: rgba(255,70,70,.35);
+    }
+    .btn:disabled{
+      opacity:.45;
       cursor:not-allowed;
     }
 
-    .ghostBtn{
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(0,0,0,.22);
-      color:#fff;
-      font-weight: 950;
-      padding: 12px 14px;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-      flex: 1 1 140px;
-      min-height: 48px;
-    }
-    .ghostBtn:active{ transform: translateY(1px); }
-    .ghostBtn:disabled{ opacity:.55; cursor:not-allowed; }
-
-    .previewWrap{
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
-      padding: 10px;
+    /* Preview photo */
+    .preview{
+      margin-top:12px;
       display:none;
+      gap:10px;
       flex-direction:column;
+    }
+    .preview img{
+      width:100%;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.25);
+    }
+    .preview .row{
+      display:flex;
       gap:10px;
     }
-    .previewWrap.show{ display:flex; }
-
-    .previewImg{
-      width:100%;
-      max-height: 44vh;
-      object-fit: contain;
+    .mini{
+      flex:1;
+      padding: 10px 10px;
       border-radius: 14px;
-      background: rgba(0,0,0,.25);
-      box-shadow: 0 10px 26px rgba(0,0,0,.25);
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.08);
+      font-weight: 900;
+      cursor:pointer;
+      color: rgba(255,255,255,.92);
     }
 
-    .hint{
-      font-weight: 850;
-      color: var(--muted);
-      font-size: 13px;
-      line-height:1.25;
-    }
-
-    /* ===== History (accordion by month) ===== */
-    .monthBlock{
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
+    /* Historique (placeholder UI) */
+    .month{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
       overflow:hidden;
+      margin-bottom: 10px;
+      background: rgba(60, 200, 120, .10); /* un peu vert translucide */
     }
-
-    .monthHeader{
+    .monthHead{
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -326,740 +303,513 @@
       padding: 12px 12px;
       cursor:pointer;
       user-select:none;
-      background: rgba(37,196,106,.18); /* vert translucide (à ta demande) */
-      border-bottom: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.12);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      font-weight: 900;
     }
-    .monthLeft{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width:0;
-    }
-    .chev{
-      width: 28px;
-      height: 28px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,.14);
+    .monthHead .count{
+      opacity:.9;
+      font-weight: 800;
+      font-size: 12px;
       background: rgba(0,0,0,.18);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight: 950;
-    }
-    .monthName{
-      font-weight: 950;
-      letter-spacing:.4px;
-      text-transform: uppercase;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .count{
-      font-weight: 950;
-      color: rgba(255,255,255,.95);
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(0,0,0,.18);
-      padding: 6px 10px;
+      border: 1px solid rgba(255,255,255,.10);
+      padding: 4px 8px;
       border-radius: 999px;
-      white-space:nowrap;
     }
-
     .monthBody{
       display:none;
-      padding: 10px;
-      gap:10px;
-    }
-    .monthBody.open{
-      display:flex;
-      flex-direction:column;
+      padding: 10px 12px 12px;
     }
 
-    .histItem{
-      border-radius: 16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
-      padding: 10px 10px;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-    .histTop{
+    .hItem{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:10px;
+      padding: 10px 10px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+      margin-top: 8px;
     }
-    .histMain{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width:0;
-    }
-    .vehChip{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-width: 70px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-weight: 950;
-      letter-spacing:.4px;
-      text-transform: uppercase;
-      color:#fff;
-      border:1px solid rgba(255,255,255,.18);
-      flex:0 0 auto;
-    }
-    .meta{
+    .hLeft{
       min-width:0;
       display:flex;
       flex-direction:column;
       gap:2px;
     }
-    .metaLine1{
-      font-weight: 950;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .metaLine2{
-      font-weight: 850;
-      color: var(--muted);
+    .hMeta{
       font-size: 12px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      color: rgba(255,255,255,.78);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-
-    .histBtns{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-    .iconBtn{
-      border:1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.18);
-      color: var(--txt);
-      padding: 8px 10px;
-      border-radius: 14px;
-      font-weight: 950;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-      min-width: 42px;
-    }
-    .iconBtn:active{ transform: translateY(1px); }
-    .iconBtn:disabled{ opacity:.55; cursor:not-allowed; }
-
-    /* ===== Toast ===== */
-    .toast{
-      position:fixed;
-      left:12px; right:12px;
-      bottom: calc(env(safe-area-inset-bottom) + 12px);
-      max-width: 980px;
-      margin: 0 auto;
-      z-index: 9999;
-      display:none;
-      pointer-events:none;
-    }
-    .toast.show{ display:block; }
-    .toast .pill{
-      pointer-events:auto;
+    .hVeh{
       display:inline-flex;
       align-items:center;
-      gap:10px;
-      padding:10px 12px;
-      border-radius: 16px;
-      background: rgba(0,0,0,.62);
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow: var(--shadow);
-      color: rgba(255,255,255,.92);
-      font-weight:900;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      gap:8px;
+      font-weight: 900;
+      text-transform: uppercase;
     }
-
-    /* ===== Modal preview ===== */
-    .modal{
-      position:fixed; inset:0;
-      display:none;
+    .dot{
+      width:10px; height:10px;
+      border-radius: 99px;
+      border: 1px solid rgba(255,255,255,.25);
+      flex: 0 0 auto;
+    }
+    .photoIcon{
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.08);
+      cursor:pointer;
+      display:flex;
       align-items:center;
       justify-content:center;
-      padding: 18px;
-      z-index: 99999;
-    }
-    .modal.show{ display:flex; }
-    .backdrop{
-      position:absolute; inset:0;
-      background: rgba(0,0,0,.62);
-      backdrop-filter: blur(6px);
-    }
-    .box{
-      position:relative;
-      width:min(560px, 100%);
-      border-radius: 18px;
-      background: rgba(10,10,10,.92);
-      border: 1px solid rgba(255,255,255,.14);
-      box-shadow: 0 22px 60px rgba(0,0,0,.65);
-      padding: 12px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .boxHead{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-    }
-    .boxTitle{
-      font-weight: 950;
-      font-size: 15px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      font-size: 18px;
     }
 
-    @media (max-width:360px){
-      .vehGrid{ grid-template-columns: 1fr; }
-      .topRight{ min-width: 200px; }
-      .adminPill{ font-size: 11px; }
+    /* Toast */
+    .toast{
+      position: fixed;
+      left:50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.78);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 10px 12px;
+      border-radius: 14px;
+      color: white;
+      display:none;
+      max-width: 92vw;
+      text-align:center;
+      box-shadow: var(--shadow);
+      z-index: 1000;
     }
   </style>
 </head>
 
 <body>
-  <div class="bg"></div>
+  <div class="wrap" id="root">
 
-  <div class="wrap">
-    <div class="topbar">
-      <h1 class="title">Ticket Carburant</h1>
-
-      <div class="topRight">
-        <span class="adminPill" id="adminPill">MODE ADMIN</span>
-        <button class="btn" id="btnLock" title="Mode admin" aria-pressed="false">🔒</button>
-        <button class="btn" id="btnBack">Retour</button>
+    <!-- Bandeau -->
+    <div class="topbar" id="topbar">
+      <div class="titleBlock">
+        <div class="title">TICKET CARBURANT</div>
+        <div class="subtitle">
+          <span class="pill" id="whoPill">👤 <span id="whoName">Agent</span></span>
+          <span class="adminBadge" id="adminBadge">MODE ADMIN</span>
+        </div>
       </div>
+
+      <button class="btnIcon" id="btnAdmin" title="Basculer mode admin">🔒</button>
+      <button class="btnIcon" id="btnBack" title="Retour">↩ Retour</button>
     </div>
 
-    <div class="tabs" role="tablist" aria-label="Ticket Carburant onglets">
-      <button class="tab active" id="tabPhoto" role="tab" aria-selected="true">Photo</button>
-      <button class="tab" id="tabHist" role="tab" aria-selected="false">Historique</button>
+    <!-- Onglets -->
+    <div class="tabs">
+      <button class="tab active" id="tabTicket">Ticket</button>
+      <button class="tab" id="tabHist">Historique</button>
     </div>
 
-    <!-- PANEL PHOTO -->
-    <section class="card" id="panelPhoto" role="tabpanel" aria-labelledby="tabPhoto">
-      <div class="banner">TICKET CARBURANT</div>
-      <div class="content">
+    <!-- Vue Ticket -->
+    <div class="card" id="viewTicket">
+      <div class="cardHead">
+        <h2>Prise de photo</h2>
+        <span style="font-size:12px;color:rgba(255,255,255,.75)">Pompe carburant</span>
+      </div>
 
-        <div class="vehicleCell placeholder" id="vehicleCell">Sélectionner le véhicule</div>
-
-        <div class="vehGrid" id="vehGrid">
-          <button class="vehBtn" data-veh="VSAV" style="background:var(--vsav)">VSAV</button>
-          <button class="vehBtn" data-veh="CCR" style="background:var(--ccr)">CCR</button>
-          <button class="vehBtn" data-veh="VTUL" style="background:var(--vtul)">VTUL</button>
-          <button class="vehBtn" data-veh="VTP" style="background:var(--vtp)">VTP</button>
+      <div class="cardBody">
+        <!-- Cellule véhicule -->
+        <div class="vehCell" id="vehCell">
+          Sélectionner le véhicule
+          <span class="hint">Choisis un véhicule ci-dessous</span>
         </div>
 
-        <div class="photoActions">
-          <button class="primaryBtn" id="btnTakePhoto">📷 Prendre une photo</button>
-          <button class="ghostBtn" id="btnClear" title="Annuler la sélection">Réinitialiser</button>
+        <!-- Boutons véhicules -->
+        <div class="vehGrid">
+          <button class="vehBtn vsav" data-veh="VSAV">VSAV</button>
+          <button class="vehBtn ccr" data-veh="CCR">CCR</button>
+          <button class="vehBtn vtul" data-veh="VTUL">VTUL</button>
+          <button class="vehBtn vtp" data-veh="VTP">VTP</button>
         </div>
 
-        <div class="previewWrap" id="previewWrap">
-          <div class="hint" id="previewHint">Aperçu avant envoi</div>
-          <img class="previewImg" id="previewImg" alt="Aperçu photo" />
-          <div class="photoActions">
-            <button class="ghostBtn" id="btnRetake">Reprendre</button>
-            <button class="primaryBtn" id="btnSend">Envoyer</button>
+        <div class="actions">
+          <button class="btn primary" id="btnTake">📷 Prendre une photo</button>
+          <button class="btn danger" id="btnReset">Réinitialiser</button>
+        </div>
+
+        <!-- Preview -->
+        <div class="preview" id="preview">
+          <img id="imgPreview" alt="Aperçu photo" />
+          <div class="row">
+            <button class="mini" id="btnRetake">Reprendre</button>
+            <button class="mini" id="btnSend">Envoyer</button>
           </div>
         </div>
 
-        <div class="hint">
-          Pour l’instant : <b>envoi simulé</b> (on branchera Drive + Apps Script après).
-        </div>
-
-        <!-- input caméra (caché) -->
-        <input id="fileInput" type="file" accept="image/*" capture="environment" style="display:none" />
+        <input id="fileCam" type="file" accept="image/*" capture="environment" hidden>
       </div>
-    </section>
-
-    <!-- PANEL HISTORY -->
-    <section class="card" id="panelHist" role="tabpanel" aria-labelledby="tabHist" style="display:none;">
-      <div class="banner">HISTORIQUE</div>
-      <div class="content">
-        <div class="hint">
-          Affichage par mois (replié). Clique un bandeau pour dérouler.
-        </div>
-        <div id="histRoot"></div>
-      </div>
-    </section>
-  </div>
-
-  <!-- Toast -->
-  <div class="toast" id="toast">
-    <div class="pill" id="toastTxt">—</div>
-  </div>
-
-  <!-- Modal photo -->
-  <div class="modal" id="modal">
-    <div class="backdrop" id="modalClose"></div>
-    <div class="box">
-      <div class="boxHead">
-        <div class="boxTitle" id="modalTitle">Photo</div>
-        <button class="btn" id="modalBtnClose">OK</button>
-      </div>
-      <img class="previewImg" id="modalImg" alt="Photo" />
-      <div class="photoActions" id="modalActions" style="display:none;">
-        <button class="ghostBtn" id="btnDownload">Télécharger</button>
-        <button class="primaryBtn" id="btnShare">Partager</button>
-      </div>
-      <div class="hint" id="modalHint"></div>
     </div>
+
+    <!-- Vue Historique -->
+    <div class="card" id="viewHist" style="display:none">
+      <div class="cardHead">
+        <h2>Historique</h2>
+        <span style="font-size:12px;color:rgba(255,255,255,.75)">Par mois</span>
+      </div>
+
+      <div class="cardBody" id="histContainer">
+        <!-- Injecté en JS (démo) -->
+      </div>
+    </div>
+
   </div>
 
-  <script>
-    /* ===== app height Android ===== */
-    function setAppHeight(){
-      document.documentElement.style.setProperty("--appH", window.innerHeight + "px");
+  <div class="toast" id="toast"></div>
+
+<script>
+  // ====== CONFIG SIMPLE (interface only) ======
+  // Récupère l’email depuis ton portail (si présent)
+  // Tu utilises souvent LS_EMAIL = "cs_portail_email_v1"
+  const LS_EMAIL_KEYS = ["cs_portail_email_v1","cs_portail_email","email"];
+  const LS_ADMIN = "cs_ticket_admin_v1"; // juste pour UI
+  const LS_HISTORY = "cs_ticket_history_demo_v1"; // démo locale
+
+  const VEH = {
+    VSAV: { cell:"var(--vsav)", dot:"var(--vsavSolid)" },
+    CCR : { cell:"var(--ccr)", dot:"var(--ccrSolid)" },
+    VTUL: { cell:"var(--vtul)", dot:"var(--vtulSolid)" },
+    VTP : { cell:"var(--vtp)", dot:"var(--vtpSolid)" },
+  };
+
+  // ====== UI refs ======
+  const root = document.getElementById("root");
+  const topbar = document.getElementById("topbar");
+
+  const whoName = document.getElementById("whoName");
+  const btnAdmin = document.getElementById("btnAdmin");
+  const adminBadge = document.getElementById("adminBadge");
+  const btnBack = document.getElementById("btnBack");
+
+  const tabTicket = document.getElementById("tabTicket");
+  const tabHist = document.getElementById("tabHist");
+  const viewTicket = document.getElementById("viewTicket");
+  const viewHist = document.getElementById("viewHist");
+
+  const vehCell = document.getElementById("vehCell");
+  const vehBtns = [...document.querySelectorAll(".vehBtn")];
+  const btnTake = document.getElementById("btnTake");
+  const btnReset = document.getElementById("btnReset");
+
+  const fileCam = document.getElementById("fileCam");
+  const preview = document.getElementById("preview");
+  const imgPreview = document.getElementById("imgPreview");
+  const btnRetake = document.getElementById("btnRetake");
+  const btnSend = document.getElementById("btnSend");
+
+  const histContainer = document.getElementById("histContainer");
+  const toastEl = document.getElementById("toast");
+
+  // ====== State ======
+  let selectedVeh = "";
+  let photoDataUrl = "";
+
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.style.display = "block";
+    clearTimeout(toastEl._t);
+    toastEl._t = setTimeout(()=> toastEl.style.display="none", 1700);
+  }
+
+  function getStoredEmail(){
+    for(const k of LS_EMAIL_KEYS){
+      const v = (localStorage.getItem(k) || "").trim();
+      if(v) return v;
     }
-    window.addEventListener("resize", setAppHeight);
-    window.addEventListener("orientationchange", setAppHeight);
-    setAppHeight();
+    return "";
+  }
 
-    /* ===== constants / storage ===== */
-    const LS_EMAIL = "cs_portail_email_v1";
-    const LS_NAME = "cs_portail_name_v1";
-    const LS_ADMIN = "cs_ticket_admin_v1";
-    const LS_DATA = "cs_ticket_history_v1";
+  // Prénom simple : "pierre.venante@..." => "Pierre"
+  function guessFirstNameFromEmail(email){
+    if(!email) return "Agent";
+    const left = email.split("@")[0] || "";
+    const first = left.split(/[._-]/)[0] || left;
+    if(!first) return "Agent";
+    return first.charAt(0).toUpperCase() + first.slice(1).toLowerCase();
+  }
 
-    const VEH_COLORS = {
-      VSAV: getComputedStyle(document.documentElement).getPropertyValue("--vsav").trim(),
-      CCR: getComputedStyle(document.documentElement).getPropertyValue("--ccr").trim(),
-      VTUL: getComputedStyle(document.documentElement).getPropertyValue("--vtul").trim(),
-      VTP: getComputedStyle(document.documentElement).getPropertyValue("--vtp").trim()
-    };
+  function setAdminUI(on){
+    if(on){
+      root.classList.add("adminOn");
+      btnAdmin.textContent = "🔓";
+      adminBadge.style.display = "inline-flex";
+    }else{
+      root.classList.remove("adminOn");
+      btnAdmin.textContent = "🔒";
+      adminBadge.style.display = "none";
+    }
+    localStorage.setItem(LS_ADMIN, on ? "1":"0");
+  }
 
-    /* ===== helpers ===== */
-    const $ = (id)=>document.getElementById(id);
+  function currentIsAdmin(){
+    return (localStorage.getItem(LS_ADMIN) || "0") === "1";
+  }
 
-    function toast(msg){
-      const t = $("toast");
-      $("toastTxt").textContent = msg;
-      t.classList.add("show");
-      clearTimeout(toast._t);
-      toast._t = setTimeout(()=>t.classList.remove("show"), 2000);
+  function setVeh(veh){
+    selectedVeh = veh;
+
+    // bouton selected
+    vehBtns.forEach(b => b.classList.toggle("selected", b.dataset.veh === veh));
+
+    // cellule
+    if(!veh){
+      vehCell.style.background = "rgba(255,255,255,.06)";
+      vehCell.style.borderStyle = "dashed";
+      vehCell.innerHTML = `Sélectionner le véhicule<span class="hint">Choisis un véhicule ci-dessous</span>`;
+      return;
     }
 
-    function myEmail(){ return (localStorage.getItem(LS_EMAIL)||"").trim().toLowerCase(); }
-    function myName(){
-      const n = (localStorage.getItem(LS_NAME)||"").trim();
-      if(n) return n;
-      const e = myEmail();
-      if(!e) return "—";
-      const base = e.split("@")[0] || "";
-      const first = base.split(/[._-]/)[0] || base;
-      return first ? (first.charAt(0).toUpperCase() + first.slice(1)) : "—";
-    }
+    vehCell.style.borderStyle = "solid";
+    vehCell.style.background = `linear-gradient(180deg, ${getCssVar(VEH[veh].cell)}, rgba(0,0,0,.10))`;
+    vehCell.innerHTML = `${veh}<span class="hint">OK — tu peux prendre la photo</span>`;
+  }
 
-    function fmtDateShort(d){
-      // dd/mm/yy hh:mm (court)
-      const dd = String(d.getDate()).padStart(2,"0");
-      const mm = String(d.getMonth()+1).padStart(2,"0");
-      const yy = String(d.getFullYear()).slice(-2);
-      const hh = String(d.getHours()).padStart(2,"0");
-      const mi = String(d.getMinutes()).padStart(2,"0");
-      return `${dd}/${mm}/${yy} ${hh}:${mi}`;
-    }
+  function getCssVar(v){
+    // v est "var(--xxx)" => récupère la valeur calculée
+    if(!v.startsWith("var(")) return v;
+    const name = v.slice(4,-1).trim();
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
 
-    function monthKey(d){
-      const y = d.getFullYear();
-      const m = String(d.getMonth()+1).padStart(2,"0");
-      return `${y}-${m}`; // ex: 2026-03
-    }
-    function monthLabel(key){
-      const [y,m] = key.split("-");
-      const names = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-      return `${names[Number(m)-1]} ${y}`;
-    }
+  function resetAll(){
+    selectedVeh = "";
+    photoDataUrl = "";
+    setVeh("");
+    preview.style.display = "none";
+    imgPreview.src = "";
+    btnTake.disabled = false;
+    toast("Réinitialisé");
+  }
 
-    function loadHistory(){
-      try{
-        const raw = localStorage.getItem(LS_DATA);
-        const arr = raw ? JSON.parse(raw) : [];
-        return Array.isArray(arr) ? arr : [];
-      }catch(e){
-        return [];
-      }
-    }
-    function saveHistory(arr){
-      try{ localStorage.setItem(LS_DATA, JSON.stringify(arr)); }catch(e){}
-    }
+  // ====== Tabs ======
+  function showTicket(){
+    tabTicket.classList.add("active");
+    tabHist.classList.remove("active");
+    viewTicket.style.display = "";
+    viewHist.style.display = "none";
+  }
+  function showHist(){
+    tabHist.classList.add("active");
+    tabTicket.classList.remove("active");
+    viewHist.style.display = "";
+    viewTicket.style.display = "none";
+    renderHistory();
+  }
 
-    /* ===== tabs ===== */
-    const tabPhoto = $("tabPhoto");
-    const tabHist = $("tabHist");
-    const panelPhoto = $("panelPhoto");
-    const panelHist = $("panelHist");
+  tabTicket.addEventListener("click", showTicket);
+  tabHist.addEventListener("click", showHist);
 
-    function setTab(which){
-      const photo = (which === "photo");
-      tabPhoto.classList.toggle("active", photo);
-      tabHist.classList.toggle("active", !photo);
-      tabPhoto.setAttribute("aria-selected", photo ? "true" : "false");
-      tabHist.setAttribute("aria-selected", photo ? "false" : "true");
-      panelPhoto.style.display = photo ? "flex" : "none";
-      panelHist.style.display = photo ? "none" : "flex";
-      if(!photo) renderHistory();
-    }
-    tabPhoto.addEventListener("click", ()=>setTab("photo"));
-    tabHist.addEventListener("click", ()=>setTab("hist"));
-
-    /* ===== back ===== */
-    $("btnBack").addEventListener("click", ()=>{
-      location.href = "index.html?portal=1";
+  // ====== Véhicules ======
+  vehBtns.forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      setVeh(btn.dataset.veh);
     });
+  });
 
-    /* ===== admin toggle ===== */
-    let IS_ADMIN = (localStorage.getItem(LS_ADMIN) === "1");
-
-    function applyAdminUI(){
-      $("adminPill").classList.toggle("show", IS_ADMIN);
-      $("btnLock").textContent = IS_ADMIN ? "🔓" : "🔒";
-      $("btnLock").setAttribute("aria-pressed", IS_ADMIN ? "true" : "false");
+  // ====== Photo ======
+  btnTake.addEventListener("click", ()=>{
+    if(!selectedVeh){
+      toast("Choisis un véhicule d’abord");
+      return;
     }
-    $("btnLock").addEventListener("click", ()=>{
-      IS_ADMIN = !IS_ADMIN;
-      localStorage.setItem(LS_ADMIN, IS_ADMIN ? "1" : "0");
-      applyAdminUI();
-      // si la modal est ouverte, on ajuste les actions visibles
-      updateModalActions();
-    });
-    applyAdminUI();
+    fileCam.value = "";
+    fileCam.click();
+  });
 
-    /* ===== vehicle selection ===== */
-    let selectedVeh = "";
-    let selectedDataUrl = ""; // preview image (base64)
+  fileCam.addEventListener("change", ()=>{
+    const f = fileCam.files && fileCam.files[0];
+    if(!f) return;
 
-    const vehicleCell = $("vehicleCell");
-    const vehBtns = Array.from(document.querySelectorAll(".vehBtn"));
-
-    function setVehicle(v){
-      selectedVeh = v;
-
-      vehBtns.forEach(b=>{
-        b.classList.toggle("sel", b.dataset.veh === v);
-      });
-
-      if(!v){
-        vehicleCell.classList.add("placeholder");
-        vehicleCell.style.background = "rgba(0,0,0,.22)";
-        vehicleCell.textContent = "Sélectionner le véhicule";
-        return;
-      }
-
-      vehicleCell.classList.remove("placeholder");
-      vehicleCell.style.background = VEH_COLORS[v] || "rgba(255,255,255,.22)";
-      vehicleCell.textContent = v;
-    }
-
-    vehBtns.forEach(b=>{
-      b.addEventListener("click", ()=> setVehicle(b.dataset.veh));
-    });
-
-    $("btnClear").addEventListener("click", ()=>{
-      setVehicle("");
-      clearPreview();
-      toast("Réinitialisé");
-    });
-
-    /* ===== photo capture ===== */
-    const fileInput = $("fileInput");
-    const btnTakePhoto = $("btnTakePhoto");
-    const previewWrap = $("previewWrap");
-    const previewImg = $("previewImg");
-
-    function clearPreview(){
-      selectedDataUrl = "";
-      previewImg.src = "";
-      previewWrap.classList.remove("show");
-    }
-
-    function requireVehicle(){
-      if(!selectedVeh){
-        toast("Choisis d’abord un véhicule");
-        return false;
-      }
-      return true;
-    }
-
-    btnTakePhoto.addEventListener("click", ()=>{
-      if(!requireVehicle()) return;
-      fileInput.value = "";
-      fileInput.click();
-    });
-
-    fileInput.addEventListener("change", async ()=>{
-      const f = fileInput.files && fileInput.files[0];
-      if(!f) return;
-
-      // Preview local
-      const url = await readAsDataURL(f);
-      selectedDataUrl = url;
-      previewImg.src = url;
-      previewWrap.classList.add("show");
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      photoDataUrl = String(reader.result || "");
+      imgPreview.src = photoDataUrl;
+      preview.style.display = "flex";
       toast("Aperçu prêt");
+    };
+    reader.readAsDataURL(f);
+  });
+
+  btnRetake.addEventListener("click", ()=>{
+    // reprendre = rouvrir caméra
+    fileCam.value = "";
+    fileCam.click();
+  });
+
+  btnSend.addEventListener("click", ()=>{
+    if(!photoDataUrl){
+      toast("Pas de photo");
+      return;
+    }
+    // Pour l’instant on simule : on stocke en local pour UI.
+    saveDemoHistory();
+    toast("Envoyé");
+    resetAll();
+  });
+
+  btnReset.addEventListener("click", resetAll);
+
+  // ====== Historique (démo locale) ======
+  function loadDemoHistory(){
+    try{
+      const raw = localStorage.getItem(LS_HISTORY);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){
+      return [];
+    }
+  }
+  function saveDemoHistory(){
+    const arr = loadDemoHistory();
+    arr.push({
+      ts: Date.now(),
+      veh: selectedVeh,
+      who: whoName.textContent || "Agent",
+      thumb: photoDataUrl
     });
+    localStorage.setItem(LS_HISTORY, JSON.stringify(arr));
+  }
 
-    $("btnRetake").addEventListener("click", ()=>{
-      if(!requireVehicle()) return;
-      fileInput.value = "";
-      fileInput.click(); // Reprendre = relancer la caméra
-    });
+  function fmtDate(ts){
+    const d = new Date(ts);
+    // Format court FR : jj/mm/aaaa hh:mm
+    const pad = (n)=> String(n).padStart(2,"0");
+    return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
 
-    $("btnSend").addEventListener("click", ()=>{
-      if(!selectedVeh){ toast("Sélectionne un véhicule"); return; }
-      if(!selectedDataUrl){ toast("Aucune photo"); return; }
+  function monthKey(ts){
+    const d = new Date(ts);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+  }
+  function monthLabel(key){
+    const [y,m] = key.split("-");
+    const mo = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"][Number(m)-1] || m;
+    return `${mo} ${y}`;
+  }
 
-      // Simulation : on stocke dans localStorage pour l’historique
-      const now = new Date();
-      const item = {
-        id: "loc_" + Math.random().toString(36).slice(2) + "_" + Date.now(),
-        createdAt: now.toISOString(),
-        veh: selectedVeh,
-        vehColor: VEH_COLORS[selectedVeh] || "",
-        agentName: myName(),
-        dataUrl: selectedDataUrl
-      };
-
-      const list = loadHistory();
-      list.push(item); // ordre ancien -> récent
-      saveHistory(list);
-
-      clearPreview();
-      toast("Envoyé ✔ (simulation)");
-    });
-
-    function readAsDataURL(file){
-      return new Promise((resolve, reject)=>{
-        const r = new FileReader();
-        r.onload = ()=> resolve(String(r.result||""));
-        r.onerror = ()=> reject(new Error("Lecture impossible"));
-        r.readAsDataURL(file);
-      });
+  function renderHistory(){
+    const arr = loadDemoHistory();
+    if(arr.length === 0){
+      histContainer.innerHTML = `<div style="color:rgba(255,255,255,.75);font-size:13px">
+        Aucun ticket pour le moment.
+      </div>`;
+      return;
     }
 
-    /* ===== history render ===== */
-    function groupByMonth(items){
-      const map = new Map();
-      for(const it of items){
-        const d = new Date(it.createdAt);
-        const key = monthKey(d);
-        if(!map.has(key)) map.set(key, []);
-        map.get(key).push(it);
-      }
-      // tri mois croissant
-      const keys = Array.from(map.keys()).sort();
-      return keys.map(k => ({ key:k, items: map.get(k) }));
-    }
+    // Groupes par mois
+    const groups = {};
+    arr.forEach(it=>{
+      const k = monthKey(it.ts);
+      (groups[k] ||= []).push(it);
+    });
 
-    function renderHistory(){
-      const root = $("histRoot");
-      const items = loadHistory();
+    // ordre ancien -> récent (comme tu veux)
+    const keys = Object.keys(groups).sort();
 
-      root.innerHTML = "";
-      if(!items.length){
-        const empty = document.createElement("div");
-        empty.className = "monthBlock";
-        empty.innerHTML = `
-          <div class="monthHeader" style="cursor:default;">
-            <div class="monthLeft">
-              <div class="chev">•</div>
-              <div class="monthName">Aucun envoi pour le moment</div>
-            </div>
-            <div class="count">0</div>
-          </div>
-        `;
-        root.appendChild(empty);
-        return;
-      }
+    histContainer.innerHTML = "";
+    keys.forEach(k=>{
+      const items = groups[k];
+      const box = document.createElement("div");
+      box.className = "month";
 
-      const groups = groupByMonth(items);
+      const head = document.createElement("div");
+      head.className = "monthHead";
+      head.innerHTML = `<div>${monthLabel(k)}</div><div class="count">${items.length}</div>`;
 
-      for(const g of groups){
-        const block = document.createElement("div");
-        block.className = "monthBlock";
+      const body = document.createElement("div");
+      body.className = "monthBody";
 
-        const header = document.createElement("div");
-        header.className = "monthHeader";
-        header.innerHTML = `
-          <div class="monthLeft">
-            <div class="chev">▾</div>
-            <div class="monthName">${escapeHtml(monthLabel(g.key))}</div>
-          </div>
-          <div class="count">${g.items.length}</div>
-        `;
+      items.forEach(it=>{
+        const row = document.createElement("div");
+        row.className = "hItem";
 
-        const body = document.createElement("div");
-        body.className = "monthBody"; // replié par défaut
+        const left = document.createElement("div");
+        left.className = "hLeft";
 
-        // contenu items
-        for(const it of g.items){
-          const d = new Date(it.createdAt);
-          const row = document.createElement("div");
-          row.className = "histItem";
+        const vehLine = document.createElement("div");
+        vehLine.className = "hVeh";
 
-          const veh = String(it.veh||"").trim();
-          const col = String(it.vehColor||"").trim() || "rgba(255,255,255,.25)";
-          const agent = String(it.agentName||"—").trim() || "—";
+        const dot = document.createElement("span");
+        dot.className = "dot";
+        dot.style.background = getCssVar(VEH[it.veh]?.dot || "rgba(255,255,255,.35)");
 
-          row.innerHTML = `
-            <div class="histTop">
-              <div class="histMain">
-                <div class="vehChip" style="background:${escapeHtml(col)}">${escapeHtml(veh || "—")}</div>
-                <div class="meta">
-                  <div class="metaLine1">${escapeHtml(agent)}</div>
-                  <div class="metaLine2">${escapeHtml(fmtDateShort(d))}</div>
-                </div>
-              </div>
+        const vehTxt = document.createElement("span");
+        vehTxt.textContent = it.veh;
 
-              <div class="histBtns">
-                <button class="iconBtn" data-act="view" title="Voir">📷</button>
-                <button class="iconBtn" data-act="download" title="Télécharger" style="display:none;">⬇️</button>
-                <button class="iconBtn" data-act="share" title="Partager" style="display:none;">📤</button>
-              </div>
-            </div>
-          `;
+        vehLine.appendChild(dot);
+        vehLine.appendChild(vehTxt);
 
-          // actions
-          const btnView = row.querySelector('[data-act="view"]');
-          const btnDl = row.querySelector('[data-act="download"]');
-          const btnSh = row.querySelector('[data-act="share"]');
+        const meta = document.createElement("div");
+        meta.className = "hMeta";
+        meta.textContent = `${fmtDate(it.ts)} — ${it.who}`;
 
-          // admin only
-          btnDl.style.display = IS_ADMIN ? "inline-flex" : "none";
-          btnSh.style.display = IS_ADMIN ? "inline-flex" : "none";
+        left.appendChild(vehLine);
+        left.appendChild(meta);
 
-          btnView.addEventListener("click", ()=> openPhotoModal(it));
-
-          btnDl.addEventListener("click", ()=>{
-            if(!IS_ADMIN) return;
-            downloadDataUrl(it.dataUrl, `ticket_${veh}_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}.jpg`);
-          });
-
-          btnSh.addEventListener("click", async ()=>{
-            if(!IS_ADMIN) return;
-            await shareDataUrl(it.dataUrl, `Ticket Carburant — ${veh}`, `${agent} — ${fmtDateShort(d)}`);
-          });
-
-          body.appendChild(row);
-        }
-
-        let open = false;
-        header.addEventListener("click", ()=>{
-          open = !open;
-          body.classList.toggle("open", open);
-          header.querySelector(".chev").textContent = open ? "▴" : "▾";
+        const pic = document.createElement("div");
+        pic.className = "photoIcon";
+        pic.title = "Voir la photo";
+        pic.textContent = "🖼️";
+        pic.addEventListener("click", ()=>{
+          // simple preview via nouvelle fenêtre
+          const w = window.open();
+          if(w){
+            w.document.write(`<img src="${it.thumb}" style="max-width:100%;height:auto"/>`);
+          }
         });
 
-        block.appendChild(header);
-        block.appendChild(body);
-        root.appendChild(block);
-      }
-    }
+        row.appendChild(left);
+        row.appendChild(pic);
 
-    function escapeHtml(s){
-      return (s==null ? "" : String(s))
-        .replaceAll("&","&amp;").replaceAll("<","&lt;")
-        .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
-    }
+        body.appendChild(row);
+      });
 
-    function downloadDataUrl(dataUrl, filename){
-      try{
-        const a = document.createElement("a");
-        a.href = dataUrl;
-        a.download = filename || "ticket.jpg";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        toast("Téléchargement…");
-      }catch(e){
-        toast("Téléchargement impossible");
-      }
-    }
+      let open = false;
+      head.addEventListener("click", ()=>{
+        open = !open;
+        body.style.display = open ? "block" : "none";
+      });
 
-    async function shareDataUrl(dataUrl, title, text){
-      // Web Share API (mobile)
-      try{
-        if(!navigator.share){
-          toast("Partage non dispo ici");
-          return;
-        }
-        const file = dataUrlToFile(dataUrl, "ticket.jpg");
-        const data = { title, text };
-        if(file && navigator.canShare && navigator.canShare({ files:[file] })){
-          data.files = [file];
-        }
-        await navigator.share(data);
-      }catch(e){
-        toast("Partage annulé / impossible");
-      }
-    }
+      box.appendChild(head);
+      box.appendChild(body);
+      histContainer.appendChild(box);
+    });
+  }
 
-    function dataUrlToFile(dataUrl, filename){
-      try{
-        const arr = dataUrl.split(",");
-        const mime = arr[0].match(/:(.*?);/)[1];
-        const bstr = atob(arr[1]);
-        let n = bstr.length;
-        const u8 = new Uint8Array(n);
-        while(n--) u8[n] = bstr.charCodeAt(n);
-        return new File([u8], filename, { type: mime });
-      }catch(e){
-        return null;
-      }
-    }
+  // ====== Admin + Retour ======
+  btnAdmin.addEventListener("click", ()=>{
+    setAdminUI(!currentIsAdmin());
+  });
 
-    /* ===== modal photo ===== */
-    const modal = $("modal");
-    const modalImg = $("modalImg");
-    const modalTitle = $("modalTitle");
-    const modalHint = $("modalHint");
-    const modalActions = $("modalActions");
+  btnBack.addEventListener("click", ()=>{
+    // retour simple vers index.html si présent
+    window.location.href = "index.html";
+  });
 
-    $("modalClose").addEventListener("click", closeModal);
-    $("modalBtnClose").addEventListener("click", closeModal);
+  // ====== Init ======
+  (function init(){
+    const email = getStoredEmail();
+    whoName.textContent = guessFirstNameFromEmail(email);
 
-    function updateModalActions(){
-      modalActions.style.display = IS_ADMIN ? "flex" : "none";
-    }
+    // admin UI persistant
+    setAdminUI(currentIsAdmin());
 
-    function openPhotoModal(item){
-      const d = new Date(item.createdAt);
-      modalTitle.textContent = `Photo — ${item.veh || "—"}`;
-      modalImg.src = item.dataUrl || "";
-      modalHint.textContent = `${item.agentName || "—"} — ${fmtDateShort(d)}`;
-      updateModalActions();
-
-      // bind buttons (admin only)
-      $("btnDownload").onclick = ()=>{
-        if(!IS_ADMIN) return;
-        downloadDataUrl(item.dataUrl, `ticket_${item.veh || "veh"}_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}.jpg`);
-      };
-      $("btnShare").onclick = async ()=>{
-        if(!IS_ADMIN) return;
-        await shareDataUrl(item.dataUrl, `Ticket Carburant — ${item.veh || ""}`, `${item.agentName || ""} — ${fmtDateShort(d)}`);
-      };
-
-      modal.classList.add("show");
-    }
-    function closeModal(){
-      modal.classList.remove("show");
-      modalImg.src = "";
-    }
-
-    /* ===== boot ===== */
-    // set default
-    setVehicle("");
-
-    // si pas de name/email, on laisse (comme tes autres pages : c’est index qui remplit)
-    // mais on évite l’email affiché : on dérive un prénom si besoin
-  </script>
+    // état initial
+    setVeh("");
+    showTicket();
+  })();
+</script>
 </body>
 </html>
