@@ -1050,77 +1050,53 @@
     return res;
   }
 
-  function pickCategoryFromLegend_(){
-  // catLabel = Map(normCategory -> "Libellé d'origine") déjà construit par rebuildMaps()
-  const list = Array.from(catLabel.entries()).map(([k,label]) => ({ key:k, label }));
-  if(!list.length){
-    return { ok:true, category:"" }; // pas de catégories => on laisse vide
+  async function openAddEventPrompt_(dateStr){
+    const title = prompt("Titre de l’événement", "");
+    if(!title) return;
+
+    const start = prompt("Heure début (HH:MM) (optionnel)", "") || "";
+    const end = prompt("Heure fin (HH:MM) (optionnel)", "") || "";
+    const category = prompt("Catégorie (optionnel)", "") || "";
+    const location = prompt("Lieu (optionnel)", "") || "";
+    const details = prompt("Détails / note (optionnel)", "") || "";
+
+    try{
+      await apiAddEvent_(dateStr, { title, start, end, category, location, details });
+      alert("Ajouté ✔");
+    }catch(err){
+      alert("Erreur : " + String(err && err.message ? err.message : err));
+    }
   }
 
-  // Menu prompt simple (rapide et robuste)
-  let msg = "Choisir une catégorie :\n";
-  msg += "0 - Aucune (information)\n";
-  for(let i=0;i<list.length;i++){
-    msg += `${i+1} - ${list[i].label}\n`;
-  }
+  /********** CLICK calendar **********/
+  $grid.addEventListener("click", (e)=>{
+    const day = e.target.closest(".day");
+    if(!day) return;
+    if(day.classList.contains("is-empty")) return;
 
-  const raw = prompt(msg, "0");
-  if(raw === null) return { ok:false, cancelled:true };
+    const dateStr = day.dataset.date;
+    if(!dateStr) return;
 
-  const n = Number(String(raw).trim());
-  if(!Number.isFinite(n) || n < 0 || n > list.length){
-    alert("Choix invalide.");
-    return { ok:false, error:"choix_invalide" };
-  }
+    // MODE ÉDITION admin : ouvre gestion événements du jour
+    if(EDIT_MODE && IS_ADMIN){
+      openEdit(dateStr);
+      return;
+    }
 
-  if(n === 0) return { ok:true, category:"" }; // Aucune catégorie
-  return { ok:true, category: list[n-1].label }; // on renvoie le libellé exact
-}
+    // MODE lecture : notes uniquement
+    if(day.classList.contains("has-note")){
+      openNote(dateStr);
+    }
+  });
 
-function openAddEvent(dateStr){
-  // 1) Catégorie (optionnelle)
-  const catPick = pickCategoryFromLegend_();
-  if(!catPick.ok){
-    if(catPick.cancelled) return;
-    return;
-  }
-  const category = catPick.category || ""; // vide = pas de couleur
-
-  // 2) Titre / détails
-  const title = prompt("Titre de l’événement pour le " + dateStr);
-  if(!title) return;
-
-  const details = prompt("Détails (optionnel)") || "";
-
-  // 3) Email admin depuis localStorage (comme le reste du portail)
-  const email = (localStorage.getItem("cs_portail_email_v1") || "").trim().toLowerCase();
-  if(!email){
-    alert("Email non détecté (connexion). Retourne à l’accueil et reconnecte-toi.");
-    return;
-  }
-
-  // 4) Appel Apps Script
-  const cb = "cb_add_" + Math.random().toString(36).slice(2);
-  const url = `${API}?view=planning_add`
-    + `&email=${encodeURIComponent(email)}`
-    + `&date=${encodeURIComponent(dateStr)}`
-    + `&title=${encodeURIComponent(title)}`
-    + `&details=${encodeURIComponent(details)}`
-    + `&category=${encodeURIComponent(category)}`
-    + `&nocache=1`
-    + `&callback=${cb}`;
-
-  jsonp(url, cb)
-    .then(res=>{
-      if(res?.ok){
-        loadApi(); // refresh planning
-      }else{
-        alert("Erreur : " + (res?.error||"inconnue"));
-      }
-    })
-    .catch(()=> alert("Erreur réseau"));
-}
-
+  $noteClose.addEventListener("click", closeNote);
+  $noteOverlay.addEventListener("click", (e)=>{ if(e.target === $noteOverlay) closeNote(); });
+  document.addEventListener("keydown", (e)=>{
+    if(e.key === "Escape"){
+      closeNote();
+      closeEdit();
+    }
+  });
 
   function saveCache_(payload){
   try{
