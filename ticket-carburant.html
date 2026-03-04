@@ -7,35 +7,43 @@
 
   <style>
     :root{
-      --txt:#f4f4f4;
-      --muted:rgba(255,255,255,.72);
-      --shadow: 0 14px 34px rgba(0,0,0,.40);
-      --radius: 22px;
-      --stroke: rgba(255,255,255,.10);
+      --bg:#000;
+      --txt:#fff;
 
-      /* ✅ ORANGE comme tes pages */
       --orange:#d46a00;
       --orange2:#b95800;
 
-      --bg:#0b0b0b;
+      --stroke: rgba(255,255,255,.12);
+      --shadow: 0 14px 34px rgba(0,0,0,.40);
+      --radius: 18px;
 
-      /* véhicules */
-      --vsav:#2f79ff;
-      --ccr:#ff3b30;
-      --vtul:#25c46a;
-      --vtp:#f6a000;
+      --card: rgba(0,0,0,.50);
 
       --yellow:#fff200;
+      --muted: rgba(255,255,255,.78);
+
+      --ok:#25c46a;
+      --bad:#ff3b30;
+
+      --vsav:#2f79ff; /* bleu */
+      --ccr:#ff3b30; /* rouge */
+      --vtul:#25c46a; /* vert */
+      --vtp:#f6a000; /* orange */
+
+      --appH: 100dvh;
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+
     body{
       margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--txt);
-      background:var(--bg);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background: var(--bg);
+      color: var(--txt);
       overflow:hidden;
+      overscroll-behavior:none;
+      height: var(--appH);
     }
 
     .bg{
@@ -44,7 +52,6 @@
         linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.55)),
         url("background.png") center top/cover no-repeat;
       z-index:-2;
-      transform: translateZ(0);
     }
     .bg::after{
       content:"";
@@ -54,21 +61,29 @@
     }
 
     .wrap{
-      height:100vh;
-      max-width: 980px;
-      margin: 0 auto;
-      padding: calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
+      height: var(--appH);
+      width:min(980px, 100%);
+      margin:0 auto;
+      padding:
+        calc(env(safe-area-inset-top) + 10px)
+        12px
+        calc(env(safe-area-inset-bottom) + 12px);
       display:grid;
       grid-template-rows: auto auto 1fr;
-      gap:10px;
+      gap: 10px;
+      overflow:hidden;
       min-height:0;
     }
 
+    /* ===== Topbar ===== */
     .topbar{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
       padding: 10px 12px;
-      border-radius: 18px;
-      background: linear-gradient(180deg, rgba(212,106,0,.78), rgba(185,88,0,.58));
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.55));
       border: 1px solid rgba(255,255,255,.12);
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
@@ -80,12 +95,36 @@
       font-weight:950;
       letter-spacing:.6px;
       text-transform: uppercase;
-      font-size: 18px;
+      font-size: clamp(15px, 2.2vw, 18px);
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
     }
-    .topRight{display:flex; gap:10px; align-items:center;}
+
+    .topRight{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width: 220px;
+      justify-content:flex-end;
+    }
+
+    .adminPill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      color: var(--yellow);
+      font-weight: 950;
+      font-size: 12px;
+      letter-spacing:.2px;
+      visibility: hidden; /* IMPORTANT : évite le décalage */
+    }
+    .adminPill.show{ visibility: visible; }
+
     .btn{
       border:1px solid rgba(255,255,255,.18);
       background: rgba(0,0,0,.18);
@@ -97,20 +136,10 @@
       -webkit-tap-highlight-color: transparent;
       white-space:nowrap;
     }
-    .btn:active{transform: translateY(1px)}
-    .adminTag{
-      display:none;
-      font-weight:950;
-      font-size:12px;
-      letter-spacing:.4px;
-      color: var(--yellow);
-      text-transform: uppercase;
-      margin-right:2px;
-    }
+    .btn:active{ transform: translateY(1px); }
 
-    .tabs{
-      display:flex; gap:10px;
-    }
+    /* ===== Tabs ===== */
+    .tabs{ display:flex; gap:10px; }
     .tab{
       flex:1;
       padding: 10px 12px;
@@ -129,8 +158,8 @@
       color:#fff;
       border-color: rgba(255,255,255,.16);
     }
-    .tab:active{transform: translateY(1px)}
 
+    /* ===== Card ===== */
     .card{
       border-radius: 22px;
       background: linear-gradient(180deg, rgba(0,0,0,.52), rgba(0,0,0,.32));
@@ -144,230 +173,300 @@
       flex-direction:column;
     }
 
-    .panel{
-      flex:1;
-      min-height:0;
+    .banner{
+      color:#000;
+      font-weight: 950;
+      text-align:center;
+      padding: 10px 10px;
+      border-bottom: 2px solid rgba(0,0,0,.25);
+      letter-spacing:.8px;
+      font-size: clamp(16px, 2.6vw, 20px);
+      background: var(--yellow);
+    }
+
+    .content{
+      padding: 12px;
       overflow:auto;
       -webkit-overflow-scrolling: touch;
-      padding:12px;
-      display:none;
-    }
-    .panel.show{display:block;}
-
-    .row{
-      border-radius: 18px;
-      background: rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.10);
-      padding: 12px;
-      margin-bottom: 10px;
-    }
-    .rowTitle{
-      font-weight:950;
-      margin:0 0 8px 0;
-      letter-spacing:.2px;
-    }
-
-    .select{
-      width:100%;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.28);
-      color:#fff;
-      font-weight:900;
-      outline:none;
-    }
-
-    .vehChips{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-    .chip{
-      padding: 9px 12px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      font-weight:950;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-      user-select:none;
-    }
-    .chip.active{outline:2px solid rgba(255,255,255,.30)}
-
-    .chip.vsav{background: rgba(47,121,255,.20); border-color: rgba(47,121,255,.45);}
-    .chip.ccr{ background: rgba(255,59,48,.18); border-color: rgba(255,59,48,.45);}
-    .chip.vtul{background: rgba(37,196,106,.18); border-color: rgba(37,196,106,.45);}
-    .chip.vtp{ background: rgba(246,160,0,.18); border-color: rgba(246,160,0,.45);}
-
-    .actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-    .primary{
-      background: linear-gradient(180deg, rgba(212,106,0,.80), rgba(185,88,0,.62));
-      border-color: rgba(255,255,255,.18);
-    }
-    .ghost{
-      background: rgba(255,255,255,.06);
-    }
-    .danger{
-      background: rgba(255,59,48,.18);
-      border-color: rgba(255,59,48,.45);
-    }
-    .btnWide{flex:1; min-width: 130px; text-align:center;}
-
-    .previewWrap{
-      display:none;
-      margin-top: 12px;
-      gap:10px;
-    }
-    .previewWrap.show{display:flex; flex-direction:column;}
-    .previewImg{
-      width:100%;
-      max-height: 44vh;
-      object-fit:contain;
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.25);
-      box-shadow: 0 12px 30px rgba(0,0,0,.45);
-    }
-
-    /* ===== Historique ===== */
-    .monthBlock{
-      border-radius: 18px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.22);
-      margin-bottom: 10px;
-    }
-    .monthHead{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding: 12px 12px;
-      cursor:pointer;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-      background: rgba(255,255,255,.06);
-    }
-    .monthHeadTint{
-      background: linear-gradient(180deg, rgba(37,196,106,.18), rgba(0,0,0,.06));
-    }
-    .monthLeft{
-      display:flex; align-items:center; gap:10px;
-      min-width:0;
-    }
-    .monthName{
-      font-weight:950;
-      letter-spacing:.4px;
-      text-transform: uppercase;
-      white-space:nowrap;
-    }
-    .countPill{
-      font-weight:950;
-      font-size:12px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.18);
-      color: rgba(255,255,255,.9);
-    }
-    .chev{
-      font-weight:950;
-      opacity:.9;
-    }
-    .monthBody{
-      display:none;
-      padding: 10px 10px 12px;
-    }
-    .monthBody.show{display:block;}
-
-    .item{
-      border-radius: 16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
-      padding: 10px;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      margin-top: 8px;
-    }
-    .vehBadge{
-      flex:0 0 auto;
-      min-width: 64px;
-      text-align:center;
-      font-weight:950;
-      padding: 8px 10px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.14);
-    }
-    .vehBadge.vsav{background: rgba(47,121,255,.25); border-color: rgba(47,121,255,.50);}
-    .vehBadge.ccr{ background: rgba(255,59,48,.22); border-color: rgba(255,59,48,.50);}
-    .vehBadge.vtul{background: rgba(37,196,106,.22); border-color: rgba(37,196,106,.50);}
-    .vehBadge.vtp{ background: rgba(246,160,0,.22); border-color: rgba(246,160,0,.50);}
-
-    .meta{
-      min-width:0;
-      flex:1;
       display:flex;
       flex-direction:column;
-      gap:4px;
+      gap: 12px;
     }
-    .metaTop{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-    .dateTxt{
-      font-weight:950;
-      opacity:.95;
-    }
-    .agentTxt{
-      font-weight:900;
-      color: var(--muted);
-    }
-    .icons{
-      flex:0 0 auto;
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
-    .iconBtn{
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
+
+    /* ===== Vehicle “cell” ===== */
+    .vehicleCell{
+      border-radius: 18px;
       border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.18);
-      color:#fff;
-      font-weight:950;
+      background: rgba(0,0,0,.22);
+      box-shadow: 0 10px 24px rgba(0,0,0,.25);
+      padding: 12px;
+      min-height: 52px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 950;
+      letter-spacing:.5px;
+      text-transform: uppercase;
+      user-select:none;
+    }
+    .vehicleCell.placeholder{
+      color: rgba(255,255,255,.82);
+    }
+
+    /* ===== Vehicle buttons ===== */
+    .vehGrid{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .vehBtn{
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: 0 10px 24px rgba(0,0,0,.22);
+      padding: 12px 10px;
+      font-weight: 950;
       cursor:pointer;
       -webkit-tap-highlight-color: transparent;
       display:flex;
       align-items:center;
       justify-content:center;
+      gap:10px;
+      min-height: 54px;
+      color:#fff;
+      text-transform: uppercase;
+      letter-spacing:.6px;
     }
-    .iconBtn:active{transform: translateY(1px)}
-    .iconBtn.adminOnly{display:none;}
+    .vehBtn:active{ transform: translateY(1px); }
+    .vehBtn.sel{
+      outline: 3px solid rgba(255,255,255,.95);
+      outline-offset: 2px;
+    }
 
-    /* status pill */
-    .status{
+    /* ===== Photo area ===== */
+    .photoActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .primaryBtn{
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.16);
+      background: linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.55));
+      color:#fff;
+      font-weight: 950;
+      padding: 12px 14px;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+      flex: 1 1 170px;
+      min-height: 48px;
+    }
+    .primaryBtn:active{ transform: translateY(1px); }
+    .primaryBtn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
+    .ghostBtn{
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.22);
+      color:#fff;
+      font-weight: 950;
+      padding: 12px 14px;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+      flex: 1 1 140px;
+      min-height: 48px;
+    }
+    .ghostBtn:active{ transform: translateY(1px); }
+    .ghostBtn:disabled{ opacity:.55; cursor:not-allowed; }
+
+    .previewWrap{
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      padding: 10px;
+      display:none;
+      flex-direction:column;
+      gap:10px;
+    }
+    .previewWrap.show{ display:flex; }
+
+    .previewImg{
+      width:100%;
+      max-height: 44vh;
+      object-fit: contain;
+      border-radius: 14px;
+      background: rgba(0,0,0,.25);
+      box-shadow: 0 10px 26px rgba(0,0,0,.25);
+    }
+
+    .hint{
+      font-weight: 850;
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.25;
+    }
+
+    /* ===== History (accordion by month) ===== */
+    .monthBlock{
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+
+    .monthHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 12px 12px;
+      cursor:pointer;
+      user-select:none;
+      background: rgba(37,196,106,.18); /* vert translucide (à ta demande) */
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .monthLeft{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+    .chev{
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 950;
+    }
+    .monthName{
+      font-weight: 950;
+      letter-spacing:.4px;
+      text-transform: uppercase;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .count{
+      font-weight: 950;
+      color: rgba(255,255,255,.95);
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.18);
+      padding: 6px 10px;
+      border-radius: 999px;
+      white-space:nowrap;
+    }
+
+    .monthBody{
+      display:none;
+      padding: 10px;
+      gap:10px;
+    }
+    .monthBody.open{
+      display:flex;
+      flex-direction:column;
+    }
+
+    .histItem{
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      padding: 10px 10px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .histTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .histMain{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+    .vehChip{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width: 70px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 950;
+      letter-spacing:.4px;
+      text-transform: uppercase;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.18);
+      flex:0 0 auto;
+    }
+    .meta{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .metaLine1{
+      font-weight: 950;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .metaLine2{
+      font-weight: 850;
+      color: var(--muted);
+      font-size: 12px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .histBtns{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .iconBtn{
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      color: var(--txt);
+      padding: 8px 10px;
+      border-radius: 14px;
+      font-weight: 950;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+      min-width: 42px;
+    }
+    .iconBtn:active{ transform: translateY(1px); }
+    .iconBtn:disabled{ opacity:.55; cursor:not-allowed; }
+
+    /* ===== Toast ===== */
+    .toast{
       position:fixed;
       left:12px; right:12px;
       bottom: calc(env(safe-area-inset-bottom) + 12px);
-      z-index:80;
-      display:none;
       max-width: 980px;
       margin: 0 auto;
+      z-index: 9999;
+      display:none;
       pointer-events:none;
     }
-    .status .pill{
+    .toast.show{ display:block; }
+    .toast .pill{
       pointer-events:auto;
       display:inline-flex;
-      gap:10px;
       align-items:center;
+      gap:10px;
       padding:10px 12px;
       border-radius: 16px;
       background: rgba(0,0,0,.62);
@@ -378,15 +477,49 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
-    .small{font-weight:800; opacity:.85; font-size:13px}
 
-    /* input file hidden */
-    #photoInput{ display:none; }
+    /* ===== Modal preview ===== */
+    .modal{
+      position:fixed; inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 99999;
+    }
+    .modal.show{ display:flex; }
+    .backdrop{
+      position:absolute; inset:0;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(6px);
+    }
+    .box{
+      position:relative;
+      width:min(560px, 100%);
+      border-radius: 18px;
+      background: rgba(10,10,10,.92);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 22px 60px rgba(0,0,0,.65);
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .boxHead{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .boxTitle{
+      font-weight: 950;
+      font-size: 15px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
 
     @media (max-width:360px){
-      .title{font-size:16px}
-      .item{padding:9px}
-      .vehBadge{min-width:60px}
+      .vehGrid{ grid-template-columns: 1fr; }
+      .topRight{ min-width: 200px; }
+      .adminPill{ font-size: 11px; }
     }
   </style>
 </head>
@@ -396,527 +529,537 @@
 
   <div class="wrap">
     <div class="topbar">
-      <h1 class="title">TICKET CARBURANT</h1>
+      <h1 class="title">Ticket Carburant</h1>
+
       <div class="topRight">
-        <span class="adminTag" id="adminTag">MODE ADMIN</span>
-        <button class="btn" id="btnLock" title="Admin" aria-pressed="false" style="display:none;">🔒</button>
+        <span class="adminPill" id="adminPill">MODE ADMIN</span>
+        <button class="btn" id="btnLock" title="Mode admin" aria-pressed="false">🔒</button>
         <button class="btn" id="btnBack">Retour</button>
       </div>
     </div>
 
-    <div class="tabs" role="tablist" aria-label="Ticket carburant onglets">
+    <div class="tabs" role="tablist" aria-label="Ticket Carburant onglets">
       <button class="tab active" id="tabPhoto" role="tab" aria-selected="true">Photo</button>
       <button class="tab" id="tabHist" role="tab" aria-selected="false">Historique</button>
     </div>
 
-    <section class="card">
-      <!-- PANEL PHOTO -->
-      <div class="panel show" id="panelPhoto" role="tabpanel" aria-labelledby="tabPhoto">
-        <div class="row">
-          <div class="rowTitle">Véhicule</div>
+    <!-- PANEL PHOTO -->
+    <section class="card" id="panelPhoto" role="tabpanel" aria-labelledby="tabPhoto">
+      <div class="banner">TICKET CARBURANT</div>
+      <div class="content">
 
-          <select class="select" id="vehicleSelect">
-            <option value="">— Choisir un véhicule —</option>
-            <option value="VSAV">VSAV</option>
-            <option value="CCR">CCR</option>
-            <option value="VTUL">VTUL</option>
-            <option value="VTP">VTP</option>
-          </select>
+        <div class="vehicleCell placeholder" id="vehicleCell">Sélectionner le véhicule</div>
 
-          <div class="vehChips" aria-label="Raccourcis véhicules">
-            <div class="chip vsav" data-v="VSAV">VSAV</div>
-            <div class="chip ccr"  data-v="CCR">CCR</div>
-            <div class="chip vtul" data-v="VTUL">VTUL</div>
-            <div class="chip vtp"  data-v="VTP">VTP</div>
-          </div>
+        <div class="vehGrid" id="vehGrid">
+          <button class="vehBtn" data-veh="VSAV" style="background:var(--vsav)">VSAV</button>
+          <button class="vehBtn" data-veh="CCR" style="background:var(--ccr)">CCR</button>
+          <button class="vehBtn" data-veh="VTUL" style="background:var(--vtul)">VTUL</button>
+          <button class="vehBtn" data-veh="VTP" style="background:var(--vtp)">VTP</button>
+        </div>
 
-          <div class="actions">
-            <button class="btn primary btnWide" id="btnTake">📷 Prendre une photo</button>
-          </div>
+        <div class="photoActions">
+          <button class="primaryBtn" id="btnTakePhoto">📷 Prendre une photo</button>
+          <button class="ghostBtn" id="btnClear" title="Annuler la sélection">Réinitialiser</button>
+        </div>
 
-          <input id="photoInput" type="file" accept="image/*" capture="environment" />
-          <div class="previewWrap" id="previewWrap">
-            <img class="previewImg" id="previewImg" alt="Aperçu photo" />
-            <div class="actions">
-              <button class="btn ghost btnWide" id="btnRetake">Reprendre</button>
-              <button class="btn primary btnWide" id="btnSend">Envoyer</button>
-            </div>
+        <div class="previewWrap" id="previewWrap">
+          <div class="hint" id="previewHint">Aperçu avant envoi</div>
+          <img class="previewImg" id="previewImg" alt="Aperçu photo" />
+          <div class="photoActions">
+            <button class="ghostBtn" id="btnRetake">Reprendre</button>
+            <button class="primaryBtn" id="btnSend">Envoyer</button>
           </div>
         </div>
-      </div>
 
-      <!-- PANEL HIST -->
-      <div class="panel" id="panelHist" role="tabpanel" aria-labelledby="tabHist">
-        <div id="histWrap"></div>
+        <div class="hint">
+          Pour l’instant : <b>envoi simulé</b> (on branchera Drive + Apps Script après).
+        </div>
+
+        <!-- input caméra (caché) -->
+        <input id="fileInput" type="file" accept="image/*" capture="environment" style="display:none" />
+      </div>
+    </section>
+
+    <!-- PANEL HISTORY -->
+    <section class="card" id="panelHist" role="tabpanel" aria-labelledby="tabHist" style="display:none;">
+      <div class="banner">HISTORIQUE</div>
+      <div class="content">
+        <div class="hint">
+          Affichage par mois (replié). Clique un bandeau pour dérouler.
+        </div>
+        <div id="histRoot"></div>
       </div>
     </section>
   </div>
 
-  <div class="status" id="status">
-    <div class="pill">
-      <span id="statusIcon">⏳</span>
-      <div>
-        <div id="statusTxt">Chargement…</div>
-        <div class="small" id="statusSub">—</div>
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <div class="pill" id="toastTxt">—</div>
+  </div>
+
+  <!-- Modal photo -->
+  <div class="modal" id="modal">
+    <div class="backdrop" id="modalClose"></div>
+    <div class="box">
+      <div class="boxHead">
+        <div class="boxTitle" id="modalTitle">Photo</div>
+        <button class="btn" id="modalBtnClose">OK</button>
       </div>
+      <img class="previewImg" id="modalImg" alt="Photo" />
+      <div class="photoActions" id="modalActions" style="display:none;">
+        <button class="ghostBtn" id="btnDownload">Télécharger</button>
+        <button class="primaryBtn" id="btnShare">Partager</button>
+      </div>
+      <div class="hint" id="modalHint"></div>
     </div>
   </div>
 
-<script>
-/* =======================
-   CONFIG
-   ======================= */
-const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
-const BACK_URL = "index.html?portal=1";
-const LS_EMAIL = "cs_portail_email_v1";
-const LS_NAME  = "cs_portail_name_v1";
+  <script>
+    /* ===== app height Android ===== */
+    function setAppHeight(){
+      document.documentElement.style.setProperty("--appH", window.innerHeight + "px");
+    }
+    window.addEventListener("resize", setAppHeight);
+    window.addEventListener("orientationchange", setAppHeight);
+    setAppHeight();
 
-/* couleurs véhicule */
-const VEH_COL = {
-  "VSAV": "vsav",
-  "CCR":  "ccr",
-  "VTUL": "vtul",
-  "VTP":  "vtp",
-};
+    /* ===== constants / storage ===== */
+    const LS_EMAIL = "cs_portail_email_v1";
+    const LS_NAME = "cs_portail_name_v1";
+    const LS_ADMIN = "cs_ticket_admin_v1";
+    const LS_DATA = "cs_ticket_history_v1";
 
-/* =======================
-   DOM helpers
-   ======================= */
-const $ = (id)=>document.getElementById(id);
-const statusEl = $("status");
-const statusTxt = $("statusTxt");
-const statusSub = $("statusSub");
-const statusIcon = $("statusIcon");
-
-function showStatus(txt, sub, icon="⏳"){
-  statusIcon.textContent = icon;
-  statusTxt.textContent = txt || "";
-  statusSub.textContent = sub || "";
-  statusEl.style.display = "block";
-}
-function hideStatus(){ statusEl.style.display = "none"; }
-
-function myEmail(){ return (localStorage.getItem(LS_EMAIL)||"").trim().toLowerCase(); }
-function myName(){ return (localStorage.getItem(LS_NAME)||"").trim(); }
-function firstNameFromEmail(email){
-  const s = String(email||"").trim().toLowerCase();
-  if(!s.includes("@")) return "";
-  let p = s.split("@")[0] || "";
-  p = p.split(/[._-]/)[0] || p;
-  if(!p) return "";
-  return p.charAt(0).toUpperCase() + p.slice(1);
-}
-function myFirstName(){
-  const n = myName();
-  if(n) return n.split(/\s+/)[0].trim();
-  return firstNameFromEmail(myEmail());
-}
-
-function escapeHtml(s){
-  return (s==null ? "" : String(s))
-    .replaceAll("&","&amp;").replaceAll("<","&lt;")
-    .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
-}
-
-/* =======================
-   JSONP
-   ======================= */
-function jsonp(url, cbName, timeoutMs=20000){
-  return new Promise((resolve, reject)=>{
-    const s = document.createElement("script");
-    const cleanup = ()=>{
-      s.remove();
-      try{ delete window[cbName]; }catch(e){ window[cbName]=undefined; }
+    const VEH_COLORS = {
+      VSAV: getComputedStyle(document.documentElement).getPropertyValue("--vsav").trim(),
+      CCR: getComputedStyle(document.documentElement).getPropertyValue("--ccr").trim(),
+      VTUL: getComputedStyle(document.documentElement).getPropertyValue("--vtul").trim(),
+      VTP: getComputedStyle(document.documentElement).getPropertyValue("--vtp").trim()
     };
-    const t = setTimeout(()=>{ cleanup(); reject(new Error("Timeout JSONP")); }, timeoutMs);
 
-    window[cbName] = (data)=>{ clearTimeout(t); cleanup(); resolve(data); };
+    /* ===== helpers ===== */
+    const $ = (id)=>document.getElementById(id);
 
-    s.src = url + (url.includes("?") ? "&" : "?") + "t=" + Date.now();
-    s.onerror = ()=>{ clearTimeout(t); cleanup(); reject(new Error("Erreur JSONP")); };
-    document.head.appendChild(s);
-  });
-}
-async function apiCall(view, params={}){
-  const cb = "cb_" + Math.random().toString(36).slice(2);
-  const qs = new URLSearchParams({ view, callback: cb, nocache:"1" });
-  Object.entries(params).forEach(([k,v])=> qs.set(k, String(v)));
-  return await jsonp(`${API}?${qs.toString()}`, cb, 25000);
-}
-
-/* =======================
-   Rôle admin
-   ======================= */
-let IS_ADMIN = false;
-let ADMIN_MODE = false;
-
-async function loadMyRole_(){
-  const email = myEmail();
-  if(!email){ IS_ADMIN=false; return; }
-  try{
-    const r = await apiCall("auth_check", { email });
-    IS_ADMIN = !!(r && r.ok===true && String(r.role||"").toLowerCase()==="admin");
-  }catch(e){
-    IS_ADMIN = false;
-  }
-}
-
-function setAdminMode(on){
-  ADMIN_MODE = !!on;
-  $("adminTag").style.display = ADMIN_MODE ? "inline-block" : "none";
-  const lockBtn = $("btnLock");
-  lockBtn.textContent = ADMIN_MODE ? "🔓" : "🔒";
-  lockBtn.setAttribute("aria-pressed", ADMIN_MODE ? "true":"false");
-
-  // boutons admin only dans l'historique
-  document.querySelectorAll(".iconBtn.adminOnly").forEach(b=>{
-    b.style.display = ADMIN_MODE ? "flex" : "none";
-  });
-}
-
-/* =======================
-   Tabs
-   ======================= */
-const tabPhoto = $("tabPhoto");
-const tabHist  = $("tabHist");
-const panelPhoto = $("panelPhoto");
-const panelHist  = $("panelHist");
-
-function setTab(which){
-  const isPhoto = (which==="photo");
-  tabPhoto.classList.toggle("active", isPhoto);
-  tabHist.classList.toggle("active", !isPhoto);
-  tabPhoto.setAttribute("aria-selected", isPhoto ? "true":"false");
-  tabHist.setAttribute("aria-selected", isPhoto ? "false":"true");
-  panelPhoto.classList.toggle("show", isPhoto);
-  panelHist.classList.toggle("show", !isPhoto);
-}
-tabPhoto.addEventListener("click", ()=>setTab("photo"));
-tabHist.addEventListener("click", ()=>{ setTab("hist"); refreshHistory(); });
-
-/* =======================
-   Véhicule select + chips
-   ======================= */
-const vehicleSelect = $("vehicleSelect");
-function setVehicle(v){
-  vehicleSelect.value = v || "";
-  document.querySelectorAll(".chip").forEach(ch=>{
-    ch.classList.toggle("active", ch.dataset.v === vehicleSelect.value);
-  });
-}
-document.querySelectorAll(".chip").forEach(ch=>{
-  ch.addEventListener("click", ()=>setVehicle(ch.dataset.v));
-});
-vehicleSelect.addEventListener("change", ()=>setVehicle(vehicleSelect.value));
-
-/* =======================
-   Photo capture / preview
-   ======================= */
-const photoInput = $("photoInput");
-const previewWrap = $("previewWrap");
-const previewImg = $("previewImg");
-let _imageDataUrl = ""; // base64 dataURL
-
-function resetPreview(){
-  _imageDataUrl = "";
-  previewImg.src = "";
-  previewWrap.classList.remove("show");
-}
-
-$("btnTake").addEventListener("click", ()=>{
-  if(!vehicleSelect.value){
-    alert("Choisis d’abord un véhicule.");
-    return;
-  }
-  photoInput.click();
-});
-
-photoInput.addEventListener("change", async ()=>{
-  const file = photoInput.files && photoInput.files[0];
-  if(!file) return;
-
-  // lecture file -> dataURL
-  showStatus("Préparation…", "Création de l’aperçu", "🖼");
-  try{
-    const dataUrl = await new Promise((resolve, reject)=>{
-      const r = new FileReader();
-      r.onload = ()=>resolve(String(r.result||""));
-      r.onerror = ()=>reject(new Error("Lecture impossible"));
-      r.readAsDataURL(file);
-    });
-
-    _imageDataUrl = dataUrl;
-    previewImg.src = dataUrl;
-    previewWrap.classList.add("show");
-    hideStatus();
-  }catch(e){
-    hideStatus();
-    alert("Impossible de lire la photo.");
-  }
-});
-
-$("btnRetake").addEventListener("click", ()=>{
-  // “Reprendre” = on reset et on ré-ouvre caméra
-  resetPreview();
-  photoInput.value = "";
-  setTimeout(()=>photoInput.click(), 50);
-});
-
-$("btnSend").addEventListener("click", async ()=>{
-  if(!vehicleSelect.value){
-    alert("Choisis un véhicule.");
-    return;
-  }
-  if(!_imageDataUrl){
-    alert("Aucune photo.");
-    return;
-  }
-  const email = myEmail();
-  if(!email){
-    alert("Email non détecté (connexion). Reviens au portail.");
-    return;
-  }
-
-  const vehicle = vehicleSelect.value;
-  const name = myFirstName() || "—";
-
-  showStatus("Envoi…", "Upload sur Drive", "⬆️");
-  try{
-    const r = await apiCall("fuel_upload", {
-      email,
-      name,
-      vehicle,
-      image: _imageDataUrl
-    });
-
-    if(!r || r.ok !== true){
-      throw new Error(r?.error || "Erreur upload");
+    function toast(msg){
+      const t = $("toast");
+      $("toastTxt").textContent = msg;
+      t.classList.add("show");
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=>t.classList.remove("show"), 2000);
     }
 
-    showStatus("Envoyé ✔", "Photo enregistrée", "✅");
-    setTimeout(hideStatus, 1200);
+    function myEmail(){ return (localStorage.getItem(LS_EMAIL)||"").trim().toLowerCase(); }
+    function myName(){
+      const n = (localStorage.getItem(LS_NAME)||"").trim();
+      if(n) return n;
+      const e = myEmail();
+      if(!e) return "—";
+      const base = e.split("@")[0] || "";
+      const first = base.split(/[._-]/)[0] || base;
+      return first ? (first.charAt(0).toUpperCase() + first.slice(1)) : "—";
+    }
 
-    // reset UI
-    resetPreview();
-    photoInput.value = "";
+    function fmtDateShort(d){
+      // dd/mm/yy hh:mm (court)
+      const dd = String(d.getDate()).padStart(2,"0");
+      const mm = String(d.getMonth()+1).padStart(2,"0");
+      const yy = String(d.getFullYear()).slice(-2);
+      const hh = String(d.getHours()).padStart(2,"0");
+      const mi = String(d.getMinutes()).padStart(2,"0");
+      return `${dd}/${mm}/${yy} ${hh}:${mi}`;
+    }
 
-    // refresh historique
-    await refreshHistory();
+    function monthKey(d){
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,"0");
+      return `${y}-${m}`; // ex: 2026-03
+    }
+    function monthLabel(key){
+      const [y,m] = key.split("-");
+      const names = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+      return `${names[Number(m)-1]} ${y}`;
+    }
 
-    alert("Envoyé ✔");
-  }catch(e){
-    showStatus("Erreur", String(e.message||e), "⚠️");
-    setTimeout(hideStatus, 2500);
-    alert("Erreur : " + String(e.message||e));
-  }
-});
+    function loadHistory(){
+      try{
+        const raw = localStorage.getItem(LS_DATA);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
+      }catch(e){
+        return [];
+      }
+    }
+    function saveHistory(arr){
+      try{ localStorage.setItem(LS_DATA, JSON.stringify(arr)); }catch(e){}
+    }
 
-/* =======================
-   Historique
-   ======================= */
-const histWrap = $("histWrap");
-let _histLoadedOnce = false;
+    /* ===== tabs ===== */
+    const tabPhoto = $("tabPhoto");
+    const tabHist = $("tabHist");
+    const panelPhoto = $("panelPhoto");
+    const panelHist = $("panelHist");
 
-function fmtShortDate(iso){
-  // iso: "2026-03-05T..."
-  const d = new Date(String(iso||""));
-  if(isNaN(d)) return String(iso||"");
-  const dd = String(d.getDate()).padStart(2,"0");
-  const mm = String(d.getMonth()+1).padStart(2,"0");
-  const hh = String(d.getHours()).padStart(2,"0");
-  const mi = String(d.getMinutes()).padStart(2,"0");
-  return `${dd}/${mm} ${hh}:${mi}`;
-}
+    function setTab(which){
+      const photo = (which === "photo");
+      tabPhoto.classList.toggle("active", photo);
+      tabHist.classList.toggle("active", !photo);
+      tabPhoto.setAttribute("aria-selected", photo ? "true" : "false");
+      tabHist.setAttribute("aria-selected", photo ? "false" : "true");
+      panelPhoto.style.display = photo ? "flex" : "none";
+      panelHist.style.display = photo ? "none" : "flex";
+      if(!photo) renderHistory();
+    }
+    tabPhoto.addEventListener("click", ()=>setTab("photo"));
+    tabHist.addEventListener("click", ()=>setTab("hist"));
 
-function monthKey(iso){
-  const d = new Date(String(iso||""));
-  if(isNaN(d)) return "—";
-  const y = d.getFullYear();
-  const m = d.getMonth(); // 0-11
-  const monthsFR = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-  return `${monthsFR[m]} ${y}`;
-}
-
-function buildHistoryUI(rows){
-  histWrap.innerHTML = "";
-
-  if(!rows || !rows.length){
-    const empty = document.createElement("div");
-    empty.className = "row";
-    empty.innerHTML = `<div style="font-weight:900;opacity:.9">Aucune photo pour le moment.</div>`;
-    histWrap.appendChild(empty);
-    return;
-  }
-
-  // group by month (ordre ancien -> récent comme tu veux : haut ancien bas récent)
-  const groups = new Map();
-  for(const r of rows){
-    const k = monthKey(r.createdAt);
-    if(!groups.has(k)) groups.set(k, []);
-    groups.get(k).push(r);
-  }
-
-  for(const [k, arr] of groups.entries()){
-    const block = document.createElement("div");
-    block.className = "monthBlock";
-
-    const head = document.createElement("div");
-    head.className = "monthHead monthHeadTint";
-    head.innerHTML = `
-      <div class="monthLeft">
-        <div class="monthName">${escapeHtml(k)}</div>
-        <div class="countPill">${arr.length}</div>
-      </div>
-      <div class="chev">▾</div>
-    `;
-
-    const body = document.createElement("div");
-    body.className = "monthBody"; // ✅ replié par défaut
-
-    head.addEventListener("click", ()=>{
-      const open = body.classList.toggle("show");
-      head.querySelector(".chev").textContent = open ? "▴" : "▾";
+    /* ===== back ===== */
+    $("btnBack").addEventListener("click", ()=>{
+      location.href = "index.html?portal=1";
     });
 
-    // items
-    for(const r of arr){
-      const v = String(r.vehicle||"").trim().toUpperCase();
-      const vehClass = VEH_COL[v] || "";
-      const date = fmtShortDate(r.createdAt);
-      const agent = String(r.name||"").trim() || firstNameFromEmail(r.email);
+    /* ===== admin toggle ===== */
+    let IS_ADMIN = (localStorage.getItem(LS_ADMIN) === "1");
 
-      const item = document.createElement("div");
-      item.className = "item";
-      item.innerHTML = `
-        <div class="vehBadge ${vehClass}">${escapeHtml(v||"—")}</div>
-        <div class="meta">
-          <div class="metaTop">
-            <div class="dateTxt">${escapeHtml(date)}</div>
-            <div class="agentTxt">— ${escapeHtml(agent||"—")}</div>
+    function applyAdminUI(){
+      $("adminPill").classList.toggle("show", IS_ADMIN);
+      $("btnLock").textContent = IS_ADMIN ? "🔓" : "🔒";
+      $("btnLock").setAttribute("aria-pressed", IS_ADMIN ? "true" : "false");
+    }
+    $("btnLock").addEventListener("click", ()=>{
+      IS_ADMIN = !IS_ADMIN;
+      localStorage.setItem(LS_ADMIN, IS_ADMIN ? "1" : "0");
+      applyAdminUI();
+      // si la modal est ouverte, on ajuste les actions visibles
+      updateModalActions();
+    });
+    applyAdminUI();
+
+    /* ===== vehicle selection ===== */
+    let selectedVeh = "";
+    let selectedDataUrl = ""; // preview image (base64)
+
+    const vehicleCell = $("vehicleCell");
+    const vehBtns = Array.from(document.querySelectorAll(".vehBtn"));
+
+    function setVehicle(v){
+      selectedVeh = v;
+
+      vehBtns.forEach(b=>{
+        b.classList.toggle("sel", b.dataset.veh === v);
+      });
+
+      if(!v){
+        vehicleCell.classList.add("placeholder");
+        vehicleCell.style.background = "rgba(0,0,0,.22)";
+        vehicleCell.textContent = "Sélectionner le véhicule";
+        return;
+      }
+
+      vehicleCell.classList.remove("placeholder");
+      vehicleCell.style.background = VEH_COLORS[v] || "rgba(255,255,255,.22)";
+      vehicleCell.textContent = v;
+    }
+
+    vehBtns.forEach(b=>{
+      b.addEventListener("click", ()=> setVehicle(b.dataset.veh));
+    });
+
+    $("btnClear").addEventListener("click", ()=>{
+      setVehicle("");
+      clearPreview();
+      toast("Réinitialisé");
+    });
+
+    /* ===== photo capture ===== */
+    const fileInput = $("fileInput");
+    const btnTakePhoto = $("btnTakePhoto");
+    const previewWrap = $("previewWrap");
+    const previewImg = $("previewImg");
+
+    function clearPreview(){
+      selectedDataUrl = "";
+      previewImg.src = "";
+      previewWrap.classList.remove("show");
+    }
+
+    function requireVehicle(){
+      if(!selectedVeh){
+        toast("Choisis d’abord un véhicule");
+        return false;
+      }
+      return true;
+    }
+
+    btnTakePhoto.addEventListener("click", ()=>{
+      if(!requireVehicle()) return;
+      fileInput.value = "";
+      fileInput.click();
+    });
+
+    fileInput.addEventListener("change", async ()=>{
+      const f = fileInput.files && fileInput.files[0];
+      if(!f) return;
+
+      // Preview local
+      const url = await readAsDataURL(f);
+      selectedDataUrl = url;
+      previewImg.src = url;
+      previewWrap.classList.add("show");
+      toast("Aperçu prêt");
+    });
+
+    $("btnRetake").addEventListener("click", ()=>{
+      if(!requireVehicle()) return;
+      fileInput.value = "";
+      fileInput.click(); // Reprendre = relancer la caméra
+    });
+
+    $("btnSend").addEventListener("click", ()=>{
+      if(!selectedVeh){ toast("Sélectionne un véhicule"); return; }
+      if(!selectedDataUrl){ toast("Aucune photo"); return; }
+
+      // Simulation : on stocke dans localStorage pour l’historique
+      const now = new Date();
+      const item = {
+        id: "loc_" + Math.random().toString(36).slice(2) + "_" + Date.now(),
+        createdAt: now.toISOString(),
+        veh: selectedVeh,
+        vehColor: VEH_COLORS[selectedVeh] || "",
+        agentName: myName(),
+        dataUrl: selectedDataUrl
+      };
+
+      const list = loadHistory();
+      list.push(item); // ordre ancien -> récent
+      saveHistory(list);
+
+      clearPreview();
+      toast("Envoyé ✔ (simulation)");
+    });
+
+    function readAsDataURL(file){
+      return new Promise((resolve, reject)=>{
+        const r = new FileReader();
+        r.onload = ()=> resolve(String(r.result||""));
+        r.onerror = ()=> reject(new Error("Lecture impossible"));
+        r.readAsDataURL(file);
+      });
+    }
+
+    /* ===== history render ===== */
+    function groupByMonth(items){
+      const map = new Map();
+      for(const it of items){
+        const d = new Date(it.createdAt);
+        const key = monthKey(d);
+        if(!map.has(key)) map.set(key, []);
+        map.get(key).push(it);
+      }
+      // tri mois croissant
+      const keys = Array.from(map.keys()).sort();
+      return keys.map(k => ({ key:k, items: map.get(k) }));
+    }
+
+    function renderHistory(){
+      const root = $("histRoot");
+      const items = loadHistory();
+
+      root.innerHTML = "";
+      if(!items.length){
+        const empty = document.createElement("div");
+        empty.className = "monthBlock";
+        empty.innerHTML = `
+          <div class="monthHeader" style="cursor:default;">
+            <div class="monthLeft">
+              <div class="chev">•</div>
+              <div class="monthName">Aucun envoi pour le moment</div>
+            </div>
+            <div class="count">0</div>
           </div>
-        </div>
-        <div class="icons">
-          <button class="iconBtn" title="Voir">📷</button>
-          <button class="iconBtn adminOnly" title="Télécharger">⬇️</button>
-          <button class="iconBtn adminOnly" title="Partager">🔗</button>
-        </div>
-      `;
+        `;
+        root.appendChild(empty);
+        return;
+      }
 
-      const btnView = item.querySelectorAll(".iconBtn")[0];
-      const btnDl   = item.querySelectorAll(".iconBtn")[1];
-      const btnShare= item.querySelectorAll(".iconBtn")[2];
+      const groups = groupByMonth(items);
 
-      btnView.addEventListener("click", ()=>{
-        // simple preview : ouvre un nouvel onglet sur l'URL "view"
-        if(r.viewUrl) window.open(r.viewUrl, "_blank", "noopener");
-        else alert("Aucun lien photo.");
-      });
+      for(const g of groups){
+        const block = document.createElement("div");
+        block.className = "monthBlock";
 
-      // admin only
-      btnDl.classList.add("adminOnly");
-      btnShare.classList.add("adminOnly");
+        const header = document.createElement("div");
+        header.className = "monthHeader";
+        header.innerHTML = `
+          <div class="monthLeft">
+            <div class="chev">▾</div>
+            <div class="monthName">${escapeHtml(monthLabel(g.key))}</div>
+          </div>
+          <div class="count">${g.items.length}</div>
+        `;
 
-      btnDl.addEventListener("click", ()=>{
-        if(!ADMIN_MODE) return;
-        if(r.downloadUrl) window.open(r.downloadUrl, "_blank", "noopener");
-        else alert("Aucun lien téléchargement.");
-      });
+        const body = document.createElement("div");
+        body.className = "monthBody"; // replié par défaut
 
-      btnShare.addEventListener("click", async ()=>{
-        if(!ADMIN_MODE) return;
-        const link = r.viewUrl || r.downloadUrl || "";
-        if(!link){ alert("Aucun lien."); return; }
+        // contenu items
+        for(const it of g.items){
+          const d = new Date(it.createdAt);
+          const row = document.createElement("div");
+          row.className = "histItem";
 
-        try{
-          if(navigator.share){
-            await navigator.share({ title:"Ticket Carburant", text:`${v} • ${date} • ${agent}`, url: link });
-          }else{
-            await navigator.clipboard.writeText(link);
-            alert("Lien copié ✔");
-          }
-        }catch(e){
-          // fallback clipboard
-          try{
-            await navigator.clipboard.writeText(link);
-            alert("Lien copié ✔");
-          }catch(_){
-            prompt("Copie le lien :", link);
-          }
+          const veh = String(it.veh||"").trim();
+          const col = String(it.vehColor||"").trim() || "rgba(255,255,255,.25)";
+          const agent = String(it.agentName||"—").trim() || "—";
+
+          row.innerHTML = `
+            <div class="histTop">
+              <div class="histMain">
+                <div class="vehChip" style="background:${escapeHtml(col)}">${escapeHtml(veh || "—")}</div>
+                <div class="meta">
+                  <div class="metaLine1">${escapeHtml(agent)}</div>
+                  <div class="metaLine2">${escapeHtml(fmtDateShort(d))}</div>
+                </div>
+              </div>
+
+              <div class="histBtns">
+                <button class="iconBtn" data-act="view" title="Voir">📷</button>
+                <button class="iconBtn" data-act="download" title="Télécharger" style="display:none;">⬇️</button>
+                <button class="iconBtn" data-act="share" title="Partager" style="display:none;">📤</button>
+              </div>
+            </div>
+          `;
+
+          // actions
+          const btnView = row.querySelector('[data-act="view"]');
+          const btnDl = row.querySelector('[data-act="download"]');
+          const btnSh = row.querySelector('[data-act="share"]');
+
+          // admin only
+          btnDl.style.display = IS_ADMIN ? "inline-flex" : "none";
+          btnSh.style.display = IS_ADMIN ? "inline-flex" : "none";
+
+          btnView.addEventListener("click", ()=> openPhotoModal(it));
+
+          btnDl.addEventListener("click", ()=>{
+            if(!IS_ADMIN) return;
+            downloadDataUrl(it.dataUrl, `ticket_${veh}_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}.jpg`);
+          });
+
+          btnSh.addEventListener("click", async ()=>{
+            if(!IS_ADMIN) return;
+            await shareDataUrl(it.dataUrl, `Ticket Carburant — ${veh}`, `${agent} — ${fmtDateShort(d)}`);
+          });
+
+          body.appendChild(row);
         }
-      });
 
-      body.appendChild(item);
+        let open = false;
+        header.addEventListener("click", ()=>{
+          open = !open;
+          body.classList.toggle("open", open);
+          header.querySelector(".chev").textContent = open ? "▴" : "▾";
+        });
+
+        block.appendChild(header);
+        block.appendChild(body);
+        root.appendChild(block);
+      }
     }
 
-    block.appendChild(head);
-    block.appendChild(body);
-    histWrap.appendChild(block);
-  }
+    function escapeHtml(s){
+      return (s==null ? "" : String(s))
+        .replaceAll("&","&amp;").replaceAll("<","&lt;")
+        .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    }
 
-  // appliquer admin mode visibility
-  document.querySelectorAll(".iconBtn.adminOnly").forEach(b=>{
-    b.style.display = ADMIN_MODE ? "flex" : "none";
-  });
-}
+    function downloadDataUrl(dataUrl, filename){
+      try{
+        const a = document.createElement("a");
+        a.href = dataUrl;
+        a.download = filename || "ticket.jpg";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        toast("Téléchargement…");
+      }catch(e){
+        toast("Téléchargement impossible");
+      }
+    }
 
-async function refreshHistory(){
-  const email = myEmail();
-  if(!email){
-    buildHistoryUI([]);
-    return;
-  }
+    async function shareDataUrl(dataUrl, title, text){
+      // Web Share API (mobile)
+      try{
+        if(!navigator.share){
+          toast("Partage non dispo ici");
+          return;
+        }
+        const file = dataUrlToFile(dataUrl, "ticket.jpg");
+        const data = { title, text };
+        if(file && navigator.canShare && navigator.canShare({ files:[file] })){
+          data.files = [file];
+        }
+        await navigator.share(data);
+      }catch(e){
+        toast("Partage annulé / impossible");
+      }
+    }
 
-  if(!_histLoadedOnce){
-    showStatus("Chargement…", "Récupération de l’historique", "⏳");
-  }
+    function dataUrlToFile(dataUrl, filename){
+      try{
+        const arr = dataUrl.split(",");
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8 = new Uint8Array(n);
+        while(n--) u8[n] = bstr.charCodeAt(n);
+        return new File([u8], filename, { type: mime });
+      }catch(e){
+        return null;
+      }
+    }
 
-  try{
-    const r = await apiCall("fuel_list", { email }); // email utile surtout si un jour tu filtres
-    if(!r || r.ok !== true) throw new Error(r?.error || "Erreur list");
+    /* ===== modal photo ===== */
+    const modal = $("modal");
+    const modalImg = $("modalImg");
+    const modalTitle = $("modalTitle");
+    const modalHint = $("modalHint");
+    const modalActions = $("modalActions");
 
-    // rows déjà dans l'ordre ancien -> récent (on le garantit côté Apps Script)
-    buildHistoryUI(Array.isArray(r.rows) ? r.rows : []);
-    hideStatus();
-    _histLoadedOnce = true;
-  }catch(e){
-    hideStatus();
-    // garde un message discret, mais pas un gros “synchro”
-    showStatus("Erreur", "Historique indisponible", "⚠️");
-    setTimeout(hideStatus, 2000);
-  }
-}
+    $("modalClose").addEventListener("click", closeModal);
+    $("modalBtnClose").addEventListener("click", closeModal);
 
-/* =======================
-   UI: back + lock
-   ======================= */
-$("btnBack").addEventListener("click", ()=>location.href = BACK_URL);
+    function updateModalActions(){
+      modalActions.style.display = IS_ADMIN ? "flex" : "none";
+    }
 
-$("btnLock").addEventListener("click", ()=>{
-  if(!IS_ADMIN) return;
-  setAdminMode(!ADMIN_MODE);
-});
+    function openPhotoModal(item){
+      const d = new Date(item.createdAt);
+      modalTitle.textContent = `Photo — ${item.veh || "—"}`;
+      modalImg.src = item.dataUrl || "";
+      modalHint.textContent = `${item.agentName || "—"} — ${fmtDateShort(d)}`;
+      updateModalActions();
 
-/* =======================
-   Boot
-   ======================= */
-(async function(){
-  // rôle
-  await loadMyRole_();
+      // bind buttons (admin only)
+      $("btnDownload").onclick = ()=>{
+        if(!IS_ADMIN) return;
+        downloadDataUrl(item.dataUrl, `ticket_${item.veh || "veh"}_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}.jpg`);
+      };
+      $("btnShare").onclick = async ()=>{
+        if(!IS_ADMIN) return;
+        await shareDataUrl(item.dataUrl, `Ticket Carburant — ${item.veh || ""}`, `${item.agentName || ""} — ${fmtDateShort(d)}`);
+      };
 
-  // bouton lock seulement si admin
-  if(IS_ADMIN){
-    $("btnLock").style.display = "inline-block";
-  }else{
-    $("btnLock").style.display = "none";
-    setAdminMode(false);
-  }
+      modal.classList.add("show");
+    }
+    function closeModal(){
+      modal.classList.remove("show");
+      modalImg.src = "";
+    }
 
-  // init chips selection
-  setVehicle("");
+    /* ===== boot ===== */
+    // set default
+    setVehicle("");
 
-  // charge historique 1 fois (mais onglet Photo par défaut)
-  // -> on évite de ralentir la première vue
-})();
-</script>
+    // si pas de name/email, on laisse (comme tes autres pages : c’est index qui remplit)
+    // mais on évite l’email affiché : on dérive un prénom si besoin
+  </script>
 </body>
 </html>
