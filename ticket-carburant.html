@@ -472,8 +472,7 @@
 
 <script>
   // ====== CONFIG SIMPLE (interface only) ======
-  // Récupère l’email depuis ton portail (si présent)
-  // Tu utilises souvent LS_EMAIL = "cs_portail_email_v1"
+  const API_URL = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
   const LS_EMAIL_KEYS = ["cs_portail_email_v1","cs_portail_email","email"];
   const LS_ADMIN = "cs_ticket_admin_v1"; // juste pour UI
   const LS_HISTORY = "cs_ticket_history_demo_v1"; // démo locale
@@ -811,13 +810,51 @@
     showTicket();
   })();
   
-  btnSend.addEventListener("click", function () {
+  btnSend.addEventListener("click", async function () {
 
-  console.log("clic envoyer");
+  if(!selectedVeh){
+    toast("Sélectionner un véhicule");
+    return;
+  }
 
-  toast("Envoyé");
+  if(!photoDataUrl){
+    toast("Prendre une photo");
+    return;
+  }
+
+  try{
+
+    const email = getStoredEmail();
+    const agent = guessFirstNameFromEmail(email);
+
+    const base64 = photoDataUrl.split(",")[1];
+
+    const response = await fetch(API_URL + "?view=ticket_carburant_upload",{
+      method:"POST",
+      body: JSON.stringify({
+        vehicle: selectedVeh,
+        agent: agent,
+        image: base64
+      })
+    });
+
+    const data = await response.json();
+
+    if(data.ok){
+      toast("Ticket envoyé");
+      resetPhoto();
+    }else{
+      toast("Erreur envoi");
+      console.error(data);
+    }
+
+  }catch(err){
+    console.error(err);
+    toast("Erreur connexion");
+  }
 
 });
+
 </script>
 </body>
 </html>
