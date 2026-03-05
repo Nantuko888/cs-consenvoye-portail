@@ -825,30 +825,26 @@ async function loadTickets(){
 
   // extraction véhicule + prénom depuis le nom du fichier
   const clean = name.replace(/\.[^.]+$/, "");
-  const parts = clean.split("_");
+const parts = clean.split("_");
 
-  let veh = "";
-  let agent = "";
-
-  if(parts.length >= 3){
-    veh = parts[1].toUpperCase();
-    agent = parts[2];
+// format attendu : 15-56-03_VTUL_Pierre.jpg
+let veh = parts[1] || "";
+let agent = parts[2] || "";
   }
 
   const icon = VEH_ICON[veh] || ""; // si inconnu => rien
 
 row.innerHTML = `
-  <a href="${url}" target="_blank" style="color:#fff;text-decoration:none;display:flex;gap:10px;align-items:center">
-    <div style="font-size:20px;line-height:1">${icon}</div>
-    <div style="line-height:1.2">
-      <div style="font-size:14px;font-weight:700">
-        ${veh} — ${agent}
-      </div>
-      <div style="font-size:13px;opacity:.85">
-        ${dateTxt} — ${hourTxt}
-      </div>
-    </div>
-  </a>
+<a href="${url}" target="_blank" style="color:#fff;text-decoration:none;display:flex;gap:10px;align-items:center">
+
+<div style="font-size:20px">${VEH_ICON[veh] || ""}</div>
+
+<div style="line-height:1.2">
+<div style="font-size:14px;font-weight:700">${veh} — ${agent}</div>
+<div style="font-size:13px;opacity:.85">${dateTxt} — ${hourTxt}</div>
+</div>
+
+</a>
 `;
   content.appendChild(row);
 
