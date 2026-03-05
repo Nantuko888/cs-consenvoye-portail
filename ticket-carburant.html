@@ -605,10 +605,7 @@
     viewHist.style.display = "";
     viewTicket.style.display = "none";
 
-    // Pas d’historique démo : placeholder
-    histContainer.innerHTML = `<div style="color:rgba(255,255,255,.75);font-size:13px">
-      Historique : sera branché plus tard sur Drive / Apps Script.
-    </div>`;
+    loadTickets();
   }
 
   tabTicket.addEventListener("click", showTicket);
@@ -657,12 +654,20 @@
 
   // ====== Envoi (1 SEUL listener) ======
   btnSend.addEventListener("click", async () => {
-    const btn = document.getElementById("btnSend");
-btn.disabled = true;
-btn.style.background = "#28a745";
-btn.innerHTML = "⏳ Envoi du ticket...";
+  const btn = btnSend;
+
+  // vérifs AVANT de bloquer le bouton
   if(!selectedVeh){ toast("Sélectionner un véhicule"); return; }
   if(!photoDataUrl){ toast("Prendre une photo"); return; }
+  if(isSending) return;
+
+  isSending = true;
+  const prevText = btn.innerHTML;
+  const prevBg = btn.style.background;
+
+  btn.disabled = true;
+  btn.style.background = "#28a745";
+  btn.innerHTML = "⏳ Envoi du ticket...";
 
   try{
     const email = getStoredEmail();
@@ -684,7 +689,14 @@ btn.innerHTML = "⏳ Envoi du ticket...";
     if(data && data.ok){
       toast("Ticket envoyé ✅");
       console.log("FILE URL:", data.url);
-      resetAll(); // garde resetAll, PAS resetPhoto
+      resetAll();
+
+      // option : refresh historique si onglet ouvert
+      if(viewHist.style.display !== "none"){
+        histLoaded = false;
+        await loadTickets();
+      }
+
     }else{
       toast("ERREUR API ❌ (voir console)");
       console.log("UPLOAD DATA:", data);
@@ -693,10 +705,12 @@ btn.innerHTML = "⏳ Envoi du ticket...";
   }catch(err){
     console.error(err);
     toast("Erreur réseau / CORS (voir console)");
-  }
+  }finally{
     btn.disabled = false;
-    btn.style.background = "";
-    btn.innerHTML = "Envoyer";
+    btn.style.background = prevBg;
+    btn.innerHTML = prevText;
+    isSending = false;
+  }
 });
 
 
@@ -709,29 +723,110 @@ btn.innerHTML = "⏳ Envoi du ticket...";
     window.location.href = "index.html";
   });
 
-  async function loadTickets(){
+  let histLoaded = false;
 
-const res = await fetch(API_URL + "?view=ticket_carburant_list");
-const data = await res.json();
+async function loadTickets(){
+  // évite de recharger 50 fois si tu reviens sur l'onglet
+  if(histLoaded) return;
+  histLoaded = true;
 
-const container = document.getElementById("ticketsList");
-container.innerHTML = "";
+  histContainer.innerHTML = `<div style="color:rgba(255,255,255,.75);font-size:13px">
+    Chargement de l'historique...
+  </div>`;
 
-data.files.forEach(f=>{
+  try{
+    const res = await fetch(API_URL + "?view=ticket_carburant_list");
+    const data = await res.json();
 
-const div = document.createElement("div");
+    const files = (data && data.files) ? data.files : [];
 
-div.innerHTML =
-`<a href="${f.url}" target="_blank">
-${new Date(f.date).toLocaleDateString()} - ${f.name}
-</a>`;
+    if(!files.length){
+      histContainer.innerHTML = `<div style="color:rgba(255,255,255,.75);font-size:13px">
+        Aucun ticket pour l’instant.
+      </div>`;
+      return;
+    }
 
-container.appendChild(div);
+    // groupe par mois "YYYY-MM"
+    const byMonth = {};
+    files.forEach(f=>{
+      const d = new Date(f.date || f.created || f.time || Date.now());
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,"0");
+      const key = `${y}-${m}`;
+      (byMonth[key] ||= []).push({ ...f, _d:d });
+    });
 
-});
+    // trie mois desc
+    const monthKeys = Object.keys(byMonth).sort((a,b)=> b.localeCompare(a));
 
+    // construit DOM
+    histContainer.innerHTML = "";
+
+    monthKeys.forEach(key=>{
+      const [y,m] = key.split("-");
+      const monthLabel = new Date(Number(y), Number(m)-1, 1)
+        .toLocaleString("fr-FR",{month:"long",year:"numeric"});
+      const list = byMonth[key];
+
+      // tri fichiers desc
+      list.sort((a,b)=> (b._d - a._d));
+
+      // bandeau mois
+      const header = document.createElement("div");
+      header.className = "monthHeader";
+      header.textContent = monthLabel;
+      header.style.width = "100%";
+      header.style.padding = "10px 12px";
+      header.style.marginTop = "10px";
+      header.style.borderRadius = "10px";
+      header.style.cursor = "pointer";
+      header.style.userSelect = "none";
+      header.style.background = "rgba(30,120,255,0.25)"; // bleu transparent
+      header.style.border = "1px solid rgba(255,255,255,.12)";
+      header.style.fontWeight = "700";
+
+      // contenu replié
+      const content = document.createElement("div");
+      content.style.display = "none";
+      content.style.padding = "10px 6px 6px 6px";
+
+      list.forEach(f=>{
+        const row = document.createElement("div");
+        row.style.padding = "8px 10px";
+        row.style.margin = "6px 0";
+        row.style.borderRadius = "10px";
+        row.style.background = "rgba(255,255,255,.06)";
+        row.style.border = "1px solid rgba(255,255,255,.08)";
+
+        const dateTxt = f._d.toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"numeric"});
+        const name = f.name || f.filename || "Ticket";
+        const url = f.url || f.link || "#";
+
+        row.innerHTML = `
+          <a href="${url}" target="_blank" style="color:#fff;text-decoration:none;display:block">
+            <div style="font-size:13px;opacity:.85">${dateTxt}</div>
+            <div style="font-size:14px;font-weight:600">${name}</div>
+          </a>
+        `;
+        content.appendChild(row);
+      });
+
+      header.addEventListener("click", ()=>{
+        content.style.display = (content.style.display === "none") ? "block" : "none";
+      });
+
+      histContainer.appendChild(header);
+      histContainer.appendChild(content);
+    });
+
+  }catch(err){
+    console.error(err);
+    histContainer.innerHTML = `<div style="color:rgba(255,120,120,.95);font-size:13px">
+      Erreur chargement historique (voir console).
+    </div>`;
+  }
 }
-
 
   // ====== Init ======
   (function init(){
@@ -740,8 +835,7 @@ container.appendChild(div);
     setAdminUI(currentIsAdmin());
     setVeh("");
     showTicket();
-    loadTickets();
-  })();
+     })();
 
 </script>
 </body>
