@@ -653,58 +653,42 @@
   });
 
   // ====== Envoi (1 SEUL listener) ======
-  btnSend.addEventListener("click", async ()=>{
-    if(isSending) return;
+  btnSend.addEventListener("click", async () => {
+  if(!selectedVeh){ toast("Sélectionner un véhicule"); return; }
+  if(!photoDataUrl){ toast("Prendre une photo"); return; }
 
-    if(!selectedVeh){
-      toast("Sélectionner un véhicule");
-      return;
+  try{
+    const email = getStoredEmail();
+    const agent = guessFirstNameFromEmail(email);
+    const base64 = photoDataUrl.split(",")[1] || "";
+
+    const res = await fetch(API_URL + "?view=ticket_carburant_upload", {
+      method: "POST",
+      body: JSON.stringify({ vehicle: selectedVeh, agent, image: base64 })
+    });
+
+    const text = await res.text();
+    console.log("UPLOAD STATUS:", res.status);
+    console.log("UPLOAD TEXT:", text);
+
+    let data = null;
+    try { data = JSON.parse(text); } catch(e){}
+
+    if(data && data.ok){
+      toast("Ticket envoyé ✅");
+      console.log("FILE URL:", data.url);
+      resetAll(); // garde resetAll, PAS resetPhoto
+    }else{
+      toast("ERREUR API ❌ (voir console)");
+      console.log("UPLOAD DATA:", data);
     }
-    if(!photoDataUrl){
-      toast("Prendre une photo");
-      return;
-    }
 
-    try{
-      isSending = true;
-      btnSend.disabled = true;
-      btnRetake.disabled = true;
-      btnReset.disabled = true;
-      btnTake.disabled = true;
+  }catch(err){
+    console.error(err);
+    toast("Erreur réseau / CORS (voir console)");
+  }
+});
 
-      toast("Envoi...");
-
-      const email = getStoredEmail();
-      const agent = guessFirstNameFromEmail(email);
-      const base64 = photoDataUrl.includes(",") ? photoDataUrl.split(",")[1] : "";
-
-      const body = new URLSearchParams({
-        vehicle: selectedVeh,
-        agent: agent,
-        image: base64
-      });
-
-      // IMPORTANT: no-cors => pas de blocage navigateur
-      await fetch(API_URL + "?view=ticket_carburant_upload", {
-        method: "POST",
-        mode: "no-cors",
-        body
-      });
-
-      toast("Ticket envoyé");
-      resetAll();
-
-    }catch(err){
-      console.error(err);
-      toast("Erreur connexion");
-    }finally{
-      isSending = false;
-      btnSend.disabled = false;
-      btnRetake.disabled = false;
-      btnReset.disabled = false;
-      btnTake.disabled = false;
-    }
-  });
 
   // ====== Admin + Retour ======
   btnAdmin.addEventListener("click", ()=>{
