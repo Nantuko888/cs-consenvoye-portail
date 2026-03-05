@@ -751,8 +751,10 @@ async function loadTickets(){
   </div>`;
 
   try{
-    const res = await fetch(API_URL + "?view=ticket_carburant_list");
-    const data = await res.json();
+    const res = await fetch(API_URL + "?view=ticket_carburant_list&callback=");
+const txt = await res.text();
+const data = JSON.parse(txt);
+
 
     const files = (data && data.files) ? data.files : [];
 
