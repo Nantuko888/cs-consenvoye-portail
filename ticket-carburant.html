@@ -835,17 +835,21 @@ async function loadTickets(){
     agent = parts[2];
   }
 
-  row.innerHTML = `
-    <a href="${url}" target="_blank" style="color:#fff;text-decoration:none;display:block">
+  const icon = VEH_ICON[veh] || ""; // si inconnu => rien
+
+row.innerHTML = `
+  <a href="${url}" target="_blank" style="color:#fff;text-decoration:none;display:flex;gap:10px;align-items:center">
+    <div style="font-size:20px;line-height:1">${icon}</div>
+    <div style="line-height:1.2">
       <div style="font-size:14px;font-weight:700">
         ${veh} — ${agent}
       </div>
       <div style="font-size:13px;opacity:.85">
         ${dateTxt} — ${hourTxt}
       </div>
-    </a>
-  `;
-
+    </div>
+  </a>
+`;
   content.appendChild(row);
 
 });
