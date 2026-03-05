@@ -471,22 +471,20 @@
   <div class="toast" id="toast"></div>
 
 <script>
-  // ====== CONFIG SIMPLE (interface only) ======
+  // ====== CONFIG ======
   const API_URL = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
   const LS_EMAIL_KEYS = ["cs_portail_email_v1","cs_portail_email","email"];
   const LS_ADMIN = "cs_ticket_admin_v1"; // juste pour UI
-  const LS_HISTORY = "cs_ticket_history_demo_v1"; // démo locale
 
   const VEH = {
     VSAV: { cell:"var(--vsav)", dot:"var(--vsavSolid)" },
     CCR : { cell:"var(--ccr)", dot:"var(--ccrSolid)" },
-    VTUL: { cell:"var(--vtul)", dot:"var(--vtulSolid)" },
+    VTUL:{ cell:"var(--vtul)", dot:"var(--vtulSolid)" },
     VTP : { cell:"var(--vtp)", dot:"var(--vtpSolid)" },
   };
 
   // ====== UI refs ======
   const root = document.getElementById("root");
-  const topbar = document.getElementById("topbar");
 
   const whoName = document.getElementById("whoName");
   const btnAdmin = document.getElementById("btnAdmin");
@@ -508,20 +506,14 @@
   const imgPreview = document.getElementById("imgPreview");
   const btnRetake = document.getElementById("btnRetake");
   const btnSend = document.getElementById("btnSend");
-  console.log("btnSend trouvé =", btnSend);
-
-btnSend.addEventListener("click", () => {
-  alert("CLICK ENVOYER OK");
-  console.log("CLICK ENVOYER OK");
-});
-
 
   const histContainer = document.getElementById("histContainer");
   const toastEl = document.getElementById("toast");
 
   // ====== State ======
   let selectedVeh = "";
-  let photoDataUrl = "";
+  let photoDataUrl = ""; // DataURL pour aperçu + base64
+  let isSending = false;
 
   function toast(msg){
     toastEl.textContent = msg;
@@ -538,7 +530,7 @@ btnSend.addEventListener("click", () => {
     return "";
   }
 
-  // Prénom simple : "pierre.venante@..." => "Pierre"
+  // "pierre.venante@..." => "Pierre"
   function guessFirstNameFromEmail(email){
     if(!email) return "Agent";
     const left = email.split("@")[0] || "";
@@ -564,13 +556,17 @@ btnSend.addEventListener("click", () => {
     return (localStorage.getItem(LS_ADMIN) || "0") === "1";
   }
 
+  function getCssVar(v){
+    if(!v.startsWith("var(")) return v;
+    const name = v.slice(4,-1).trim();
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
   function setVeh(veh){
     selectedVeh = veh;
 
-    // bouton selected
     vehBtns.forEach(b => b.classList.toggle("selected", b.dataset.veh === veh));
 
-    // cellule
     if(!veh){
       vehCell.style.background = "rgba(255,255,255,.06)";
       vehCell.style.borderStyle = "dashed";
@@ -583,13 +579,6 @@ btnSend.addEventListener("click", () => {
     vehCell.innerHTML = `${veh}<span class="hint">OK — tu peux prendre la photo</span>`;
   }
 
-  function getCssVar(v){
-    // v est "var(--xxx)" => récupère la valeur calculée
-    if(!v.startsWith("var(")) return v;
-    const name = v.slice(4,-1).trim();
-    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-  }
-
   function resetAll(){
     selectedVeh = "";
     photoDataUrl = "";
@@ -597,7 +586,6 @@ btnSend.addEventListener("click", () => {
     preview.style.display = "none";
     imgPreview.src = "";
     btnTake.disabled = false;
-    toast("Réinitialisé");
   }
 
   // ====== Tabs ======
@@ -607,12 +595,17 @@ btnSend.addEventListener("click", () => {
     viewTicket.style.display = "";
     viewHist.style.display = "none";
   }
+
   function showHist(){
     tabHist.classList.add("active");
     tabTicket.classList.remove("active");
     viewHist.style.display = "";
     viewTicket.style.display = "none";
-    renderHistory();
+
+    // Pas d’historique démo : placeholder
+    histContainer.innerHTML = `<div style="color:rgba(255,255,255,.75);font-size:13px">
+      Historique : sera branché plus tard sur Drive / Apps Script.
+    </div>`;
   }
 
   tabTicket.addEventListener("click", showTicket);
@@ -650,138 +643,68 @@ btnSend.addEventListener("click", () => {
   });
 
   btnRetake.addEventListener("click", ()=>{
-    // reprendre = rouvrir caméra
     fileCam.value = "";
     fileCam.click();
   });
 
-  btnReset.addEventListener("click", resetAll);
+  btnReset.addEventListener("click", ()=>{
+    resetAll();
+    toast("Réinitialisé");
+  });
 
-  // ====== Historique (démo locale) ======
-  function loadDemoHistory(){
-    try{
-      const raw = localStorage.getItem(LS_HISTORY);
-      return raw ? JSON.parse(raw) : [];
-    }catch(e){
-      return [];
+  // ====== Envoi (1 SEUL listener) ======
+  btnSend.addEventListener("click", async ()=>{
+    if(isSending) return;
+
+    if(!selectedVeh){
+      toast("Sélectionner un véhicule");
+      return;
     }
-  }
-  function saveDemoHistory(){
-    const arr = loadDemoHistory();
-    arr.push({
-      ts: Date.now(),
-      veh: selectedVeh,
-      who: whoName.textContent || "Agent",
-      thumb: photoDataUrl
-    });
-    localStorage.setItem(LS_HISTORY, JSON.stringify(arr));
-  }
-
-  function fmtDate(ts){
-    const d = new Date(ts);
-    // Format court FR : jj/mm/aaaa hh:mm
-    const pad = (n)=> String(n).padStart(2,"0");
-    return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  }
-
-  function monthKey(ts){
-    const d = new Date(ts);
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
-  }
-  function monthLabel(key){
-    const [y,m] = key.split("-");
-    const mo = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"][Number(m)-1] || m;
-    return `${mo} ${y}`;
-  }
-
-  function renderHistory(){
-    const arr = loadDemoHistory();
-    if(arr.length === 0){
-      histContainer.innerHTML = `<div style="color:rgba(255,255,255,.75);font-size:13px">
-        Aucun ticket pour le moment.
-      </div>`;
+    if(!photoDataUrl){
+      toast("Prendre une photo");
       return;
     }
 
-    // Groupes par mois
-    const groups = {};
-    arr.forEach(it=>{
-      const k = monthKey(it.ts);
-      (groups[k] ||= []).push(it);
-    });
+    try{
+      isSending = true;
+      btnSend.disabled = true;
+      btnRetake.disabled = true;
+      btnReset.disabled = true;
+      btnTake.disabled = true;
 
-    // ordre ancien -> récent (comme tu veux)
-    const keys = Object.keys(groups).sort();
+      toast("Envoi...");
 
-    histContainer.innerHTML = "";
-    keys.forEach(k=>{
-      const items = groups[k];
-      const box = document.createElement("div");
-      box.className = "month";
+      const email = getStoredEmail();
+      const agent = guessFirstNameFromEmail(email);
+      const base64 = photoDataUrl.includes(",") ? photoDataUrl.split(",")[1] : "";
 
-      const head = document.createElement("div");
-      head.className = "monthHead";
-      head.innerHTML = `<div>${monthLabel(k)}</div><div class="count">${items.length}</div>`;
-
-      const body = document.createElement("div");
-      body.className = "monthBody";
-
-      items.forEach(it=>{
-        const row = document.createElement("div");
-        row.className = "hItem";
-
-        const left = document.createElement("div");
-        left.className = "hLeft";
-
-        const vehLine = document.createElement("div");
-        vehLine.className = "hVeh";
-
-        const dot = document.createElement("span");
-        dot.className = "dot";
-        dot.style.background = getCssVar(VEH[it.veh]?.dot || "rgba(255,255,255,.35)");
-
-        const vehTxt = document.createElement("span");
-        vehTxt.textContent = it.veh;
-
-        vehLine.appendChild(dot);
-        vehLine.appendChild(vehTxt);
-
-        const meta = document.createElement("div");
-        meta.className = "hMeta";
-        meta.textContent = `${fmtDate(it.ts)} — ${it.who}`;
-
-        left.appendChild(vehLine);
-        left.appendChild(meta);
-
-        const pic = document.createElement("div");
-        pic.className = "photoIcon";
-        pic.title = "Voir la photo";
-        pic.textContent = "🖼️";
-        pic.addEventListener("click", ()=>{
-          // simple preview via nouvelle fenêtre
-          const w = window.open();
-          if(w){
-            w.document.write(`<img src="${it.thumb}" style="max-width:100%;height:auto"/>`);
-          }
-        });
-
-        row.appendChild(left);
-        row.appendChild(pic);
-
-        body.appendChild(row);
+      const body = new URLSearchParams({
+        vehicle: selectedVeh,
+        agent: agent,
+        image: base64
       });
 
-      let open = false;
-      head.addEventListener("click", ()=>{
-        open = !open;
-        body.style.display = open ? "block" : "none";
+      // IMPORTANT: no-cors => pas de blocage navigateur
+      await fetch(API_URL + "?view=ticket_carburant_upload", {
+        method: "POST",
+        mode: "no-cors",
+        body
       });
 
-      box.appendChild(head);
-      box.appendChild(body);
-      histContainer.appendChild(box);
-    });
-  }
+      toast("Ticket envoyé");
+      resetAll();
+
+    }catch(err){
+      console.error(err);
+      toast("Erreur connexion");
+    }finally{
+      isSending = false;
+      btnSend.disabled = false;
+      btnRetake.disabled = false;
+      btnReset.disabled = false;
+      btnTake.disabled = false;
+    }
+  });
 
   // ====== Admin + Retour ======
   btnAdmin.addEventListener("click", ()=>{
@@ -789,7 +712,6 @@ btnSend.addEventListener("click", () => {
   });
 
   btnBack.addEventListener("click", ()=>{
-    // retour simple vers index.html si présent
     window.location.href = "index.html";
   });
 
@@ -797,59 +719,10 @@ btnSend.addEventListener("click", () => {
   (function init(){
     const email = getStoredEmail();
     whoName.textContent = guessFirstNameFromEmail(email);
-
-    // admin UI persistant
     setAdminUI(currentIsAdmin());
-
-    // état initial
     setVeh("");
     showTicket();
   })();
-  
-  btnSend.addEventListener("click", async function () {
-
-  if(!selectedVeh){
-    toast("Sélectionner un véhicule");
-    return;
-  }
-
-  if(!photoDataUrl){
-    toast("Prendre une photo");
-    return;
-  }
-
-  try{
-
-    const email = getStoredEmail();
-    const agent = guessFirstNameFromEmail(email);
-
-    const base64 = photoDataUrl.split(",")[1];
-
-    const response = await fetch(API_URL + "?view=ticket_carburant_upload",{
-      method:"POST",
-      body: JSON.stringify({
-        vehicle: selectedVeh,
-        agent: agent,
-        image: base64
-      })
-    });
-
-    const data = await response.json();
-
-    if(data.ok){
-      toast("Ticket envoyé");
-      resetPhoto();
-    }else{
-      toast("Erreur envoi");
-      console.error(data);
-    }
-
-  }catch(err){
-    console.error(err);
-    toast("Erreur connexion");
-  }
-
-});
 
 </script>
 </body>
