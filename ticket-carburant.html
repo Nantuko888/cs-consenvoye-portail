@@ -477,11 +477,12 @@
   const LS_ADMIN = "cs_ticket_admin_v1"; // juste pour UI
 
   const VEH = {
-    VSAV: { cell:"var(--vsav)", dot:"var(--vsavSolid)" },
-    CCR : { cell:"var(--ccr)", dot:"var(--ccrSolid)" },
-    VTUL:{ cell:"var(--vtul)", dot:"var(--vtulSolid)" },
-    VTP : { cell:"var(--vtp)", dot:"var(--vtpSolid)" },
-  };
+    const VEH_ICON = {
+  VSAV: "🚑",
+  CCR: "🚒",
+  VTUL: "🚗",
+  VTP: "🚗" // pareil que VTUL
+};
 
   // ====== UI refs ======
   const root = document.getElementById("root");
@@ -797,15 +798,20 @@ async function loadTickets(){
         row.style.border = "1px solid rgba(255,255,255,.08)";
 
         const dateTxt = f._d.toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"numeric"});
-        const name = f.name || f.filename || "Ticket";
-        const url = f.url || f.link || "#";
+const url = f.url || f.link || "#";
 
-        row.innerHTML = `
-          <a href="${url}" target="_blank" style="color:#fff;text-decoration:none;display:block">
-            <div style="font-size:13px;opacity:.85">${dateTxt}</div>
-            <div style="font-size:14px;font-weight:600">${name}</div>
-          </a>
-        `;
+// on tente plusieurs champs possibles (selon ce que renvoie ton Apps Script)
+const veh = (f.vehicle || f.veh || f.VEH || "").toString().toUpperCase();
+const agent = (f.agent || f.who || f.prenom || "").toString();
+const icon = VEH_ICON[veh] || "📄";
+
+row.innerHTML = `
+  <a href="${url}" target="_blank" style="color:#fff;text-decoration:none;display:block">
+    <div style="font-size:14px;font-weight:700">
+      ${icon} ${veh || "—"} — ${agent || "—"} — ${dateTxt}
+    </div>
+  </a>
+`;
         content.appendChild(row);
       });
 
