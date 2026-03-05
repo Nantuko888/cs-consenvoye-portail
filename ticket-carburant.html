@@ -728,6 +728,18 @@
   });
 
   let histLoaded = false;
+  
+  function parseTicketInfo(filename=""){
+  // attend: ticket_2026-03-05_VSAV_Pierre.jpg
+  const base = (filename || "").replace(/\.[^.]+$/, ""); // enlève .jpg
+  const parts = base.split("_");
+
+  // parts: ["ticket","2026-03-05","VSAV","Pierre"]
+  const veh = parts[2] || "";
+  const agent = parts.slice(3).join("_") || ""; // si prénom composé
+  return { veh, agent };
+}
+
 
 async function loadTickets(){
   // évite de recharger 50 fois si tu reviens sur l'onglet
@@ -796,30 +808,38 @@ async function loadTickets(){
       content.style.padding = "10px 6px 6px 6px";
 
       list.forEach(f=>{
-        const row = document.createElement("div");
-        row.style.padding = "8px 10px";
-        row.style.margin = "6px 0";
-        row.style.borderRadius = "10px";
-        row.style.background = "rgba(255,255,255,.06)";
-        row.style.border = "1px solid rgba(255,255,255,.08)";
+  const row = document.createElement("div");
+  row.style.padding = "8px 10px";
+  row.style.margin = "6px 0";
+  row.style.borderRadius = "10px";
+  row.style.background = "rgba(255,255,255,.06)";
+  row.style.border = "1px solid rgba(255,255,255,.08)";
 
-        const dateTxt = f._d.toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"numeric"});
-const url = f.url || f.link || "#";
+  const d = f._d || new Date();
+  const dateTxt = d.toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"numeric"});
 
-// on tente plusieurs champs possibles (selon ce que renvoie ton Apps Script)
-const veh = (f.vehicle || f.veh || f.VEH || "").toString().toUpperCase();
-const agent = (f.agent || f.who || f.prenom || "").toString();
-const icon = VEH_ICON[veh] || "📄";
+  const name = f.name || f.filename || "";
+  const url = f.url || f.link || "#";
 
-row.innerHTML = `
-  <a href="${url}" target="_blank" style="color:#fff;text-decoration:none;display:block">
-    <div style="font-size:14px;font-weight:700">
-      ${icon} ${veh || "—"} — ${agent || "—"} — ${dateTxt}
-    </div>
-  </a>
-`;
-        content.appendChild(row);
-      });
+  const info = parseTicketInfo(name);
+  const icon = (typeof VEH_ICON !== "undefined" && info.veh && VEH_ICON[info.veh]) ? VEH_ICON[info.veh] : "📄";
+
+  // fallback si on n’arrive pas à lire le nom
+  const vehLabel = info.veh || "—";
+  const agentLabel = info.agent || "—";
+
+  row.innerHTML = `
+    <a href="${url}" target="_blank" style="color:#fff;text-decoration:none;display:flex;gap:10px;align-items:center">
+      <div style="font-size:18px;opacity:.9">${icon}</div>
+      <div style="line-height:1.2">
+        <div style="font-size:14px;font-weight:700">${vehLabel} — ${agentLabel}</div>
+        <div style="font-size:13px;opacity:.85">${dateTxt}</div>
+      </div>
+    </a>
+  `;
+
+  content.appendChild(row);
+});
 
       header.addEventListener("click", ()=>{
         content.style.display = (content.style.display === "none") ? "block" : "none";
