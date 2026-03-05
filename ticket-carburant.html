@@ -820,23 +820,24 @@ async function loadTickets(){
 
   const name = f.name || f.filename || "";
   const url = f.url || f.link || "#";
+  const timeTxt = (name.split("_")[0] || "").replace(/-/g, ":");
 
   const info = parseTicketInfo(name);
-  const icon = (typeof VEH_ICON !== "undefined" && info.veh && VEH_ICON[info.veh]) ? VEH_ICON[info.veh] : "📄";
+  const icon = (info.veh && VEH_ICON[info.veh]) ? VEH_ICON[info.veh] : "📄";
 
   // fallback si on n’arrive pas à lire le nom
   const vehLabel = info.veh || "—";
   const agentLabel = info.agent || "—";
 
   row.innerHTML = `
-    <a href="${url}" target="_blank" style="color:#fff;text-decoration:none;display:flex;gap:10px;align-items:center">
-      <div style="font-size:18px;opacity:.9">${icon}</div>
-      <div style="line-height:1.2">
-        <div style="font-size:14px;font-weight:700">${vehLabel} — ${agentLabel}</div>
-        <div style="font-size:13px;opacity:.85">${dateTxt}</div>
-      </div>
-    </a>
-  `;
+  <a href="${url}" target="_blank" style="color:#fff;text-decoration:none;display:block">
+    <div style="font-size:15px;font-weight:700;display:flex;gap:10px;align-items:center">
+      <span style="font-size:18px">${icon}</span>
+      <span>${veh}${agent ? " — " + agent : ""}</span>
+    </div>
+    <div style="font-size:13px;opacity:.85">${dateTxt} ${timeTxt ? "— " + timeTxt : ""}</div>
+  </a>
+`;
 
   content.appendChild(row);
 });
