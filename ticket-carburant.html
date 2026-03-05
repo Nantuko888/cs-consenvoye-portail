@@ -508,6 +508,13 @@
   const imgPreview = document.getElementById("imgPreview");
   const btnRetake = document.getElementById("btnRetake");
   const btnSend = document.getElementById("btnSend");
+  console.log("btnSend trouvé =", btnSend);
+
+btnSend.addEventListener("click", () => {
+  alert("CLICK ENVOYER OK");
+  console.log("CLICK ENVOYER OK");
+});
+
 
   const histContainer = document.getElementById("histContainer");
   const toastEl = document.getElementById("toast");
