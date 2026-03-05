@@ -654,6 +654,10 @@
 
   // ====== Envoi (1 SEUL listener) ======
   btnSend.addEventListener("click", async () => {
+    const btn = document.getElementById("btnSend");
+btn.disabled = true;
+btn.style.background = "#28a745";
+btn.innerHTML = "⏳ Envoi du ticket...";
   if(!selectedVeh){ toast("Sélectionner un véhicule"); return; }
   if(!photoDataUrl){ toast("Prendre une photo"); return; }
 
@@ -687,6 +691,9 @@
     console.error(err);
     toast("Erreur réseau / CORS (voir console)");
   }
+    btn.disabled = false;
+    btn.style.background = "";
+    btn.innerHTML = "Envoyer";
 });
 
 
