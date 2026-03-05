@@ -829,15 +829,19 @@ async function loadTickets(){
   const vehLabel = info.veh || "—";
   const agentLabel = info.agent || "—";
 
-  row.innerHTML = `
-  <a href="${url}" target="_blank" style="color:#fff;text-decoration:none;display:block">
-    <div style="font-size:15px;font-weight:700;display:flex;gap:10px;align-items:center">
-      <span style="font-size:18px">${icon}</span>
-      <span>${veh}${agent ? " — " + agent : ""}</span>
-    </div>
-    <div style="font-size:13px;opacity:.85">${dateTxt} ${timeTxt ? "— " + timeTxt : ""}</div>
-  </a>
+ row.innerHTML = `
+<a href="${url}" target="_blank" style="color:#fff;text-decoration:none;display:flex;gap:10px;align-items:center">
+
+<div style="font-size:18px;opacity:.9">${icon}</div>
+
+<div style="line-height:1.2">
+<div style="font-size:14px;font-weight:700">${vehLabel}${agentLabel ? " — " + agentLabel : ""}</div>
+<div style="font-size:13px;opacity:.85;margin-top:2px">${dateTxt} ${timeTxt ? "— " + timeTxt : ""}</div>
+</div>
+
+</a>
 `;
+
 
   content.appendChild(row);
 });
