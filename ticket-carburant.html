@@ -648,17 +648,6 @@
     fileCam.click();
   });
 
-  btnSend.addEventListener("click", ()=>{
-    if(!photoDataUrl){
-      toast("Pas de photo");
-      return;
-    }
-    // Pour l’instant on simule : on stocke en local pour UI.
-    saveDemoHistory();
-    toast("Envoyé");
-    resetAll();
-  });
-
   btnReset.addEventListener("click", resetAll);
 
   // ====== Historique (démo locale) ======
