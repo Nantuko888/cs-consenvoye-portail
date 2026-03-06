@@ -900,7 +900,7 @@ const res = await fetch(API_URL + "?view=ticket_carburant_upload", {
             <div class="hMeta">${dateTxt}${hourTxt ? " — " + hourTxt : ""}</div>
           </div>
           <div style="display:flex;gap:8px;align-items:center">
-            <button class="photoIcon" type="button" onclick="openTicketPreview('${url}')" title="Voir la photo">📄</button>
+            <button class="photoIcon" type="button" onclick="openTicketPreview('${id}')" title="Voir la photo">📄</button>
 
 
             ${currentIsAdmin() ? `<a class="photoIcon" href="${url}" target="_blank" rel="noopener" title="Ouvrir dans Drive">🔗</a>` : ``}
@@ -925,31 +925,23 @@ const res = await fetch(API_URL + "?view=ticket_carburant_upload", {
   }
 }
 
-function openTicketPreview(url){
+function openTicketPreview(id){
   const viewer = document.getElementById("photoViewer");
-  const img = document.getElementById("photoViewerImg");
+  const frame = document.getElementById("photoViewerFrame");
 
-  img.src = "";
+  frame.src = "";
   viewer.style.display = "flex";
-
-  img.src = url;
+  frame.src = "https://drive.google.com/file/d/" + encodeURIComponent(id) + "/preview";
 }
-
 
 
 
 function closeTicketPreview(){
   const viewer = document.getElementById("photoViewer");
-  const img = document.getElementById("photoViewerImg");
+  const frame = document.getElementById("photoViewerFrame");
   viewer.style.display = "none";
-  img.src = "";
+  frame.src = "";
 }
-
-document.addEventListener("click", (e)=>{
-  const viewer = document.getElementById("photoViewer");
-  if(e.target === viewer){
-    closeTicketPreview();
-  }
 });
 
 // ====== Init ======
@@ -972,12 +964,17 @@ document.addEventListener("click", (e)=>{
   z-index:9999;
   padding:12px;
 ">
-  <img id="photoViewerImg" style="
-    max-width:100%;
-    max-height:100%;
-    border-radius:12px;
-    box-shadow:0 10px 30px rgba(0,0,0,.5);
-  ">
+  <iframe
+    id="photoViewerFrame"
+    style="
+      width:100%;
+      height:100%;
+      border:none;
+      border-radius:12px;
+      background:#000;
+    "
+    allow="autoplay"
+  ></iframe>
 </div>
 
 </body>
