@@ -926,34 +926,27 @@ const res = await fetch(API_URL + "?view=ticket_carburant_upload", {
 }
 
 async function openTicketPreview(id){
-
   const viewer = document.getElementById("photoViewer");
   const img = document.getElementById("photoViewerImg");
 
   try{
-
     viewer.style.display = "flex";
     img.src = "";
 
-    const url = API_URL + "?view=ticket_carburant_preview&id=" + encodeURIComponent(id);
+    const res = await fetch(API_URL + "?view=ticket_carburant_preview&id=" + encodeURIComponent(id));
+    const base64 = await res.text();
 
-    img.onload = () => {
-      // image chargée
-    };
+    if(!base64 || base64 === "ID manquant" || base64.startsWith("preview error:")){
+      throw new Error(base64 || "Preview vide");
+    }
 
-    img.onerror = () => {
-      toast("Erreur chargement image");
-      closeTicketPreview();
-    };
-
-    img.src = url;
+    img.src = "data:image/jpeg;base64," + base64;
 
   }catch(err){
     console.error(err);
-    toast("Erreur ouverture photo");
+    toast("Erreur chargement image");
     closeTicketPreview();
   }
-
 }
 
 function closeTicketPreview(){
