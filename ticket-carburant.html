@@ -930,10 +930,14 @@ function openTicketPreview(url){
     const viewer = document.getElementById("photoViewer");
     const img = document.getElementById("photoViewerImg");
 
+    // conversion de l'URL Drive vers une URL d'image affichable
+    const idMatch = String(url).match(/[-\w]{25,}/);
+    const id = idMatch ? idMatch[0] : "";
+
     img.src = "";
     viewer.style.display = "flex";
 
-    img.src = url;
+    img.src = "https://drive.google.com/uc?export=view&id=" + id;
 
   }catch(err){
     console.error(err);
@@ -941,6 +945,7 @@ function openTicketPreview(url){
     closeTicketPreview();
   }
 }
+
 
 
 
