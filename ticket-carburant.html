@@ -287,13 +287,13 @@
       color: rgba(255,255,255,.92);
     }
 
-    /* Historique (placeholder UI) */
+    /* Historique */
     .month{
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,.10);
       overflow:hidden;
       margin-bottom: 10px;
-      background: rgba(60, 200, 120, .10); /* un peu vert translucide */
+      background: rgba(60, 200, 120, .10);
     }
     .monthHead{
       display:flex;
@@ -450,7 +450,7 @@
           </div>
         </div>
 
-      <input id="fileCam" type="file" accept="image/*" capture="environment" hidden>
+        <input id="fileCam" type="file" accept="image/*" capture="environment" hidden>
       </div>
     </div>
 
@@ -461,11 +461,8 @@
         <span style="font-size:12px;color:rgba(255,255,255,.75)">Par mois</span>
       </div>
 
-      <div class="cardBody" id="histContainer">
-        <!-- Injecté en JS (démo) -->
-      </div>
+      <div class="cardBody" id="histContainer"></div>
     </div>
-
   </div>
 
   <div class="toast" id="toast"></div>
@@ -477,18 +474,18 @@
   const LS_ADMIN = "cs_ticket_admin_v1"; // juste pour UI
 
   const VEH = {
-  VSAV: { cell:"var(--vsav)", dot:"var(--vsavSolid)" },
-  CCR : { cell:"var(--ccr)", dot:"var(--ccrSolid)" },
-  VTUL:{ cell:"var(--vtul)", dot:"var(--vtulSolid)" },
-  VTP : { cell:"var(--vtp)", dot:"var(--vtpSolid)" },
-};
+    VSAV: { cell:"var(--vsav)", dot:"var(--vsavSolid)" },
+    CCR : { cell:"var(--ccr)",  dot:"var(--ccrSolid)"  },
+    VTUL:{ cell:"var(--vtul)", dot:"var(--vtulSolid)" },
+    VTP : { cell:"var(--vtp)",  dot:"var(--vtpSolid)"  },
+  };
 
   const VEH_ICON = {
-  VSAV: "🚑",
-  CCR: "🚒",
-  VTUL: "🚗",
-  VTP: "🚗" // pareil que VTUL
-};
+    VSAV: "🚑",
+    CCR: "🚒",
+    VTUL: "🚗",
+    VTP: "🚗"
+  };
 
   // ====== UI refs ======
   const root = document.getElementById("root");
@@ -519,8 +516,9 @@
 
   // ====== State ======
   let selectedVeh = "";
-  let photoDataUrl = ""; // DataURL pour aperçu + base64
+  let photoDataUrl = "";
   let isSending = false;
+  let histLoaded = false;
 
   function toast(msg){
     toastEl.textContent = msg;
@@ -537,7 +535,6 @@
     return "";
   }
 
-  // "pierre.venante@..." => "Pierre"
   function guessFirstNameFromEmail(email){
     if(!email) return "Agent";
     const left = email.split("@")[0] || "";
@@ -608,7 +605,6 @@
     tabTicket.classList.remove("active");
     viewHist.style.display = "";
     viewTicket.style.display = "none";
-
     loadTickets();
   }
 
@@ -656,67 +652,60 @@
     toast("Réinitialisé");
   });
 
-  // ====== Envoi (1 SEUL listener) ======
+  // ====== Envoi ======
   btnSend.addEventListener("click", async () => {
-  const btn = btnSend;
+    const btn = btnSend;
 
-  // vérifs AVANT de bloquer le bouton
-  if(!selectedVeh){ toast("Sélectionner un véhicule"); return; }
-  if(!photoDataUrl){ toast("Prendre une photo"); return; }
-  if(isSending) return;
+    if(!selectedVeh){ toast("Sélectionner un véhicule"); return; }
+    if(!photoDataUrl){ toast("Prendre une photo"); return; }
+    if(isSending) return;
 
-  isSending = true;
-  const prevText = btn.innerHTML;
-  const prevBg = btn.style.background;
+    isSending = true;
+    const prevText = btn.innerHTML;
+    const prevBg = btn.style.background;
 
-  btn.disabled = true;
-  btn.style.background = "#28a745";
-  btn.innerHTML = "⏳ Envoi du ticket...";
+    btn.disabled = true;
+    btn.style.background = "#28a745";
+    btn.innerHTML = "⏳ Envoi du ticket...";
 
-  try{
-    const email = getStoredEmail();
-    const agent = guessFirstNameFromEmail(email);
-    const base64 = photoDataUrl.split(",")[1] || "";
+    try{
+      const email = getStoredEmail();
+      const agent = guessFirstNameFromEmail(email);
+      const base64 = photoDataUrl.split(",")[1] || "";
 
-    const res = await fetch(API_URL + "?view=ticket_carburant_upload", {
-      method: "POST",
-      body: JSON.stringify({ vehicle: selectedVeh, agent, image: base64 })
-    });
+      const res = await fetch(API_URL + "?view=ticket_carburant_upload", {
+        method: "POST",
+        body: JSON.stringify({ vehicle: selectedVeh, agent, image: base64 })
+      });
 
-    const text = await res.text();
-    console.log("UPLOAD STATUS:", res.status);
-    console.log("UPLOAD TEXT:", text);
+      const text = await res.text();
+      let data = null;
+      try { data = JSON.parse(text); } catch(e){}
 
-    let data = null;
-    try { data = JSON.parse(text); } catch(e){}
+      if(data && data.ok){
+        toast("Ticket envoyé ✅");
+        resetAll();
 
-    if(data && data.ok){
-      toast("Ticket envoyé ✅");
-      console.log("FILE URL:", data.url);
-      resetAll();
-
-      // option : refresh historique si onglet ouvert
-      if(viewHist.style.display !== "none"){
-        histLoaded = false;
-        await loadTickets();
+        // refresh historique si onglet ouvert
+        if(viewHist.style.display !== "none"){
+          histLoaded = false;
+          await loadTickets();
+        }
+      }else{
+        toast("ERREUR API ❌ (voir console)");
+        console.log("UPLOAD TEXT:", text);
       }
 
-    }else{
-      toast("ERREUR API ❌ (voir console)");
-      console.log("UPLOAD DATA:", data);
+    }catch(err){
+      console.error(err);
+      toast("Erreur réseau / CORS (voir console)");
+    }finally{
+      btn.disabled = false;
+      btn.style.background = prevBg;
+      btn.innerHTML = prevText;
+      isSending = false;
     }
-
-  }catch(err){
-    console.error(err);
-    toast("Erreur réseau / CORS (voir console)");
-  }finally{
-    btn.disabled = false;
-    btn.style.background = prevBg;
-    btn.innerHTML = prevText;
-    isSending = false;
-  }
-});
-
+  });
 
   // ====== Admin + Retour ======
   btnAdmin.addEventListener("click", ()=>{
@@ -727,143 +716,168 @@
     window.location.href = "index.html";
   });
 
-  let histLoaded = false;
-  
-  function parseTicketInfo(filename=""){
-  // attend: ticket_2026-03-05_VSAV_Pierre.jpg
-  const base = (filename || "").replace(/\.[^.]+$/, ""); // enlève .jpg
-  const parts = base.split("_");
+  // ====== Helpers Historique ======
 
-  // parts: ["ticket","2026-03-05","VSAV","Pierre"]
-  const veh = parts[2] || "";
-  const agent = parts.slice(3).join("_") || ""; // si prénom composé
-  return { veh, agent };
-}
+  function parseMaybeJsonp(text){
+    const t = (text || "").trim();
+    // JSON direct
+    if(t.startsWith("{") || t.startsWith("[")) return JSON.parse(t);
+    // JSONP: callback(....);
+    const m = t.match(/^[a-zA-Z_$][\w$]*\(\s*([\s\S]*)\s*\)\s*;?\s*$/);
+    if(m && m[1]) return JSON.parse(m[1]);
+    // Dernier recours: on essaie d'extraire {...}
+    const i = t.indexOf("{");
+    const j = t.lastIndexOf("}");
+    if(i !== -1 && j !== -1 && j > i) return JSON.parse(t.slice(i, j+1));
+    throw new Error("Réponse API non JSON/JSONP");
+  }
 
+  function pad2(n){ return String(n).padStart(2,"0"); }
 
-async function loadTickets(){
-  // évite de recharger 50 fois si tu reviens sur l'onglet
-  if(histLoaded) return;
-  histLoaded = true;
+  function safeDateFromParts(ymd){
+    // ymd = "2026-03-06"
+    if(!ymd || !/^\d{4}-\d{2}-\d{2}$/.test(ymd)) return null;
+    const [y,m,d] = ymd.split("-").map(Number);
+    return new Date(y, m-1, d);
+  }
 
-  histContainer.innerHTML = `<div style="color:rgba(255,255,255,.75);font-size:13px">
-    Chargement de l'historique...
-  </div>`;
+  function monthKeyFromItem(f){
+    // priorité: dateFromName (YYYY-MM-DD), sinon created, sinon fallback
+    const d1 = safeDateFromParts(f.dateFromName || "");
+    if(d1) return `${d1.getFullYear()}-${pad2(d1.getMonth()+1)}`;
 
-  try{
-    const res = await fetch(API_URL + "?view=ticket_carburant_list");
-    const data = await res.json();
-    const files = (data && data.files) ? data.files : [];
+    const d2 = f.created ? new Date(f.created) : null;
+    if(d2 && !isNaN(d2)) return `${d2.getFullYear()}-${pad2(d2.getMonth()+1)}`;
 
-    if(!files.length){
-      histContainer.innerHTML = `<div style="color:rgba(255,255,255,.75);font-size:13px">
-        Aucun ticket pour l’instant.
-      </div>`;
-      return;
+    // fallback extrême
+    const d3 = new Date();
+    return `${d3.getFullYear()}-${pad2(d3.getMonth()+1)}`;
+  }
+
+  function displayDateTime(f){
+    // Date affichée: dateFromName si possible
+    let d = safeDateFromParts(f.dateFromName || "");
+    if(!d) {
+      const c = f.created ? new Date(f.created) : null;
+      if(c && !isNaN(c)) d = c;
+    }
+    if(!d) d = new Date();
+
+    const dateTxt = d.toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"numeric"});
+
+    // Heure affichée: f.time ("HH:mm") sinon heure de created
+    let hourTxt = "";
+    if(f.time && /^\d{2}:\d{2}$/.test(String(f.time))) {
+      hourTxt = String(f.time);
+    } else {
+      hourTxt = d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
     }
 
-    // groupe par mois "YYYY-MM"
-    const byMonth = {};
-    files.forEach(f=>{
-      const d = new Date(f.date || f.created || f.time || Date.now());
-      const y = d.getFullYear();
-      const m = String(d.getMonth()+1).padStart(2,"0");
-      const key = `${y}-${m}`;
-      (byMonth[key] ||= []).push({ ...f, _d:d });
-    });
+    return { dateTxt, hourTxt, d };
+  }
 
-    // trie mois desc
-    const monthKeys = Object.keys(byMonth).sort((a,b)=> b.localeCompare(a));
+  async function loadTickets(){
+    if(histLoaded) return;
+    histLoaded = true;
 
-    // construit DOM
-    histContainer.innerHTML = "";
+    histContainer.innerHTML = `<div style="color:rgba(255,255,255,.75);font-size:13px">Chargement de l'historique...</div>`;
 
-    monthKeys.forEach(key=>{
-      const [y,m] = key.split("-");
-      const monthLabel = new Date(Number(y), Number(m)-1, 1)
-        .toLocaleString("fr-FR",{month:"long",year:"numeric"});
-      const list = byMonth[key];
+    try{
+      const res = await fetch(API_URL + "?view=ticket_carburant_list", { cache: "no-store" });
+      const txt = await res.text();
+      const data = parseMaybeJsonp(txt);
 
-      // tri fichiers desc
-      list.sort((a,b)=> (b._d - a._d));
+      const files = (data && data.files) ? data.files : [];
+      if(!files.length){
+        histContainer.innerHTML = `<div style="color:rgba(255,255,255,.75);font-size:13px">Aucun ticket pour l’instant.</div>`;
+        return;
+      }
 
-      // bandeau mois
-      const header = document.createElement("div");
-      header.className = "monthHeader";
-      header.textContent = monthLabel;
-      header.style.width = "100%";
-      header.style.padding = "10px 12px";
-      header.style.marginTop = "10px";
-      header.style.borderRadius = "10px";
-      header.style.cursor = "pointer";
-      header.style.userSelect = "none";
-      header.style.background = "rgba(30,120,255,0.25)"; // bleu transparent
-      header.style.border = "1px solid rgba(255,255,255,.12)";
-      header.style.fontWeight = "700";
-
-      // contenu replié
-      const content = document.createElement("div");
-      content.style.display = "none";
-      content.style.padding = "10px 6px 6px 6px";
-
-      list.forEach(f=>{
-
-  const row = document.createElement("div");
-  row.style.padding = "8px 10px";
-  row.style.margin = "6px 0";
-  row.style.borderRadius = "10px";
-  row.style.background = "rgba(255,255,255,.06)";
-  row.style.border = "1px solid rgba(255,255,255,.08)";
-
-  const d = f._d || new Date();
-  const dateTxt = d.toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"numeric"});
-  const hourTxt = d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
-
-  const name = f.name || f.filename || "";
-  const url = f.url || f.link || "#";
-
-  // extraction véhicule + prénom depuis le nom du fichier
-  const clean = name.replace(/\.[^.]+$/, "");
-const parts = clean.split("_");
-
-// format attendu : 15-56-03_VTUL_Pierre.jpg
-let veh = parts[1] || "";
-let agent = parts[2] || "";
-  
-  const icon = VEH_ICON[veh] || ""; // si inconnu => rien
-
-row.innerHTML = `
-<a href="${url}" target="_blank" style="color:#fff;text-decoration:none;display:flex;gap:10px;align-items:center">
-
-<div style="font-size:20px">${VEH_ICON[veh] || ""}</div>
-
-<div style="line-height:1.2">
-<div style="font-size:14px;font-weight:700">${veh} — ${agent}</div>
-<div style="font-size:13px;opacity:.85">${dateTxt} — ${hourTxt}</div>
-</div>
-
-</a>
-`;
-  content.appendChild(row);
-
-});
-
-
-      header.addEventListener("click", ()=>{
-        content.style.display = (content.style.display === "none") ? "block" : "none";
+      // Groupe par mois
+      const byMonth = {};
+      files.forEach(f=>{
+        const key = monthKeyFromItem(f);
+        (byMonth[key] ||= []).push(f);
       });
 
-      histContainer.appendChild(header);
-      histContainer.appendChild(content);
-    });
+      // trie mois desc
+      const monthKeys = Object.keys(byMonth).sort((a,b)=> b.localeCompare(a));
 
-  }catch(err){
-    console.error(err);
-    histContainer.innerHTML = `<div style="color:rgba(255,120,120,.95);font-size:13px">
-      Erreur chargement historique (voir console).
-    </div>`;
+      histContainer.innerHTML = "";
+
+      monthKeys.forEach(key=>{
+        const [y,m] = key.split("-");
+        const monthLabel = new Date(Number(y), Number(m)-1, 1)
+          .toLocaleString("fr-FR",{month:"long",year:"numeric"});
+
+        const list = byMonth[key];
+
+        // tri desc: dateFromName + time sinon created
+        list.sort((a,b)=>{
+          const ad = safeDateFromParts(a.dateFromName || "") || (a.created ? new Date(a.created) : new Date(0));
+          const bd = safeDateFromParts(b.dateFromName || "") || (b.created ? new Date(b.created) : new Date(0));
+          // si même jour, trie sur time
+          if(ad.getTime() === bd.getTime()){
+            const at = String(a.time || "00:00");
+            const bt = String(b.time || "00:00");
+            return bt.localeCompare(at);
+          }
+          return bd - ad;
+        });
+
+        const month = document.createElement("div");
+        month.className = "month";
+
+        const head = document.createElement("div");
+        head.className = "monthHead";
+        head.innerHTML = `<div>${monthLabel}</div><div class="count">${list.length}</div>`;
+
+        const body = document.createElement("div");
+        body.className = "monthBody";
+
+        list.forEach(f=>{
+          const veh = String(f.veh || "").trim().toUpperCase();
+          const agent = String(f.agent || "").trim();
+          const url = f.url || "#";
+
+          const { dateTxt, hourTxt } = displayDateTime(f);
+          const icon = VEH_ICON[veh] || "";
+          const dotColor = (VEH[veh] && VEH[veh].dot) ? getCssVar(VEH[veh].dot) : "rgba(255,255,255,.35)";
+
+          const item = document.createElement("div");
+          item.className = "hItem";
+
+          item.innerHTML = `
+            <div class="hLeft">
+              <div class="hVeh">
+                <span class="dot" style="background:${dotColor}"></span>
+                <span>${icon ? icon + " " : ""}${veh || "—"} — ${agent || "—"}</span>
+              </div>
+              <div class="hMeta">${dateTxt} — ${hourTxt}</div>
+            </div>
+            <a class="photoIcon" href="${url}" target="_blank" rel="noopener" title="Ouvrir la photo">📄</a>
+          `;
+
+          body.appendChild(item);
+        });
+
+        head.addEventListener("click", ()=>{
+          body.style.display = (body.style.display === "none" || !body.style.display) ? "block" : "none";
+        });
+
+        // Par défaut : ouvert
+        body.style.display = "block";
+
+        month.appendChild(head);
+        month.appendChild(body);
+        histContainer.appendChild(month);
+      });
+
+    }catch(err){
+      console.error(err);
+      histContainer.innerHTML = `<div style="color:rgba(255,120,120,.95);font-size:13px">Erreur chargement historique (voir console).</div>`;
+    }
   }
-}
 
   // ====== Init ======
   (function init(){
@@ -872,8 +886,7 @@ row.innerHTML = `
     setAdminUI(currentIsAdmin());
     setVeh("");
     showTicket();
-     })();
-
+  })();
 </script>
 </body>
 </html>
