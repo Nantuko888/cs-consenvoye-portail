@@ -894,13 +894,29 @@
   }
 }
 
-function openTicketPreview(id){
-  const viewer = document.getElementById("photoViewer");
-  const img = document.getElementById("photoViewerImg");
+async function openTicketPreview(id){
+  try{
+    const viewer = document.getElementById("photoViewer");
+    const img = document.getElementById("photoViewerImg");
 
-  img.src = "https://drive.google.com/thumbnail?id=" + encodeURIComponent(id) + "&sz=w1600";
-  viewer.style.display = "flex";
+    img.src = "";
+    viewer.style.display = "flex";
+
+    const res = await fetch(API_URL + "?view=ticket_carburant_preview&id=" + encodeURIComponent(id));
+    const base64 = await res.text();
+
+    if(!base64 || base64 === "ID manquant" || base64 === "Erreur accès fichier"){
+      throw new Error(base64 || "Preview vide");
+    }
+
+    img.src = "data:image/jpeg;base64," + base64;
+  }catch(err){
+    console.error(err);
+    toast("Erreur ouverture photo");
+    closeTicketPreview();
+  }
 }
+
 
 function closeTicketPreview(){
   const viewer = document.getElementById("photoViewer");
