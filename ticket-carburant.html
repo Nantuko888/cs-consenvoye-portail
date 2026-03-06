@@ -739,8 +739,14 @@ const res = await fetch(API_URL + "?view=ticket_carburant_upload", {
 
   // ====== Admin + Retour ======
   btnAdmin.addEventListener("click", ()=>{
-    setAdminUI(!currentIsAdmin());
-  });
+  setAdminUI(!currentIsAdmin());
+
+  if(viewHist.style.display !== "none"){
+    histLoaded = false;
+    loadTickets();
+  }
+});
+
 
   btnBack.addEventListener("click", ()=>{
     window.location.href = "index.html";
