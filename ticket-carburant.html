@@ -926,21 +926,23 @@ const res = await fetch(API_URL + "?view=ticket_carburant_upload", {
 }
 
 function openTicketPreview(id){
+
   const viewer = document.getElementById("photoViewer");
-  const frame = document.getElementById("photoViewerFrame");
+  const img = document.getElementById("photoViewerImg");
 
-  frame.src = "";
   viewer.style.display = "flex";
-  frame.src = "https://drive.google.com/uc?export=view&id=" + encodeURIComponent(id);
-}
 
+  img.src = "https://drive.google.com/uc?export=view&id=" + id;
+
+}
 
 
 function closeTicketPreview(){
   const viewer = document.getElementById("photoViewer");
-  const frame = document.getElementById("photoViewerFrame");
+  const img = document.getElementById("photoViewerImg");
+
   viewer.style.display = "none";
-  frame.src = "";
+  img.src = "";
 }
   const viewer = document.getElementById("photoViewer");
 
@@ -997,17 +999,7 @@ cursor:pointer;
 ✕
 </button>
   
-  <iframe
-  id="photoViewerFrame"
-  style="
-    width:92%;
-    height:88%;
-    border:none;
-    border-radius:12px;
-    background:#000;
-  "
-  allow="autoplay"
-></iframe>
+  <img id="photoViewerImg" style="max-width:95%;max-height:95%;border-radius:12px;">
 </div>
 
 </body>
