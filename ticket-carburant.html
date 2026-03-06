@@ -926,24 +926,13 @@ const res = await fetch(API_URL + "?view=ticket_carburant_upload", {
 }
 
 function openTicketPreview(url){
-  try{
-    const viewer = document.getElementById("photoViewer");
-    const img = document.getElementById("photoViewerImg");
+  const viewer = document.getElementById("photoViewer");
+  const img = document.getElementById("photoViewerImg");
 
-    // conversion de l'URL Drive vers une URL d'image affichable
-    const idMatch = String(url).match(/[-\w]{25,}/);
-    const id = idMatch ? idMatch[0] : "";
+  img.src = "";
+  viewer.style.display = "flex";
 
-    img.src = "";
-    viewer.style.display = "flex";
-
-    img.src = "https://drive.google.com/uc?export=view&id=" + id;
-
-  }catch(err){
-    console.error(err);
-    toast("Erreur ouverture photo");
-    closeTicketPreview();
-  }
+  img.src = url;
 }
 
 
