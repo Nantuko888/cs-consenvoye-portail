@@ -900,7 +900,7 @@ const res = await fetch(API_URL + "?view=ticket_carburant_upload", {
             <div class="hMeta">${dateTxt}${hourTxt ? " — " + hourTxt : ""}</div>
           </div>
           <div style="display:flex;gap:8px;align-items:center">
-            <button class="photoIcon" type="button" onclick="openTicketPreview('${id}')" title="Voir la photo">📄</button>
+            <button class="photoIcon" type="button" onclick="openTicketPreview('${f.previewId || f.id}')" title="Voir la photo">📄</button>
 
             ${currentIsAdmin() ? `<a class="photoIcon" href="${url}" target="_blank" rel="noopener" title="Ouvrir dans Drive">🔗</a>` : ``}
           </div>
