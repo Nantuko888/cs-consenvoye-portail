@@ -855,7 +855,7 @@
               </div>
               <div class="hMeta">${dateTxt} — ${hourTxt}</div>
             </div>
-            <a class="photoIcon" href="${url}" target="_blank" rel="noopener" title="Ouvrir la photo">📄</a>
+            <button class="photoIcon" type="button" onclick="openTicketPreview('${f.id}')" title="Voir la photo">📄</button>
           `;
 
           body.appendChild(item);
@@ -879,6 +879,42 @@
     }
   }
 
+  async function openTicketPreview(id){
+  try{
+    const res = await fetch(API_URL + "?view=ticket_carburant_preview&id=" + encodeURIComponent(id));
+    const data = await res.json();
+
+    if(!data || !data.ok){
+      toast("Impossible d’ouvrir la photo");
+      console.error(data);
+      return;
+    }
+
+    const viewer = document.getElementById("photoViewer");
+    const img = document.getElementById("photoViewerImg");
+
+    img.src = `data:${data.mimeType};base64,${data.base64}`;
+    viewer.style.display = "flex";
+  }catch(err){
+    console.error(err);
+    toast("Erreur ouverture photo");
+  }
+}
+
+function closeTicketPreview(){
+  const viewer = document.getElementById("photoViewer");
+  const img = document.getElementById("photoViewerImg");
+  viewer.style.display = "none";
+  img.src = "";
+}
+
+  document.addEventListener("click", (e)=>{
+  const viewer = document.getElementById("photoViewer");
+  if(e.target === viewer){
+    closeTicketPreview();
+  }
+});
+
   // ====== Init ======
   (function init(){
     const email = getStoredEmail();
@@ -888,5 +924,24 @@
     showTicket();
   })();
 </script>
+  
+  <div id="photoViewer" style="
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.95);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  padding:12px;
+">
+  <img id="photoViewerImg" style="
+    max-width:100%;
+    max-height:100%;
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,.5);
+  ">
+</div>
+
 </body>
 </html>
