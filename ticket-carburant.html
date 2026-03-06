@@ -870,7 +870,8 @@
             <div class="hMeta">${dateTxt}${hourTxt ? " — " + hourTxt : ""}</div>
           </div>
           <div style="display:flex;gap:8px;align-items:center">
-            <button class="photoIcon" type="button" onclick="openTicketPreview('${url}')" title="Voir la photo">📄</button>
+            <button class="photoIcon" type="button" onclick="openTicketPreview('${id}')" title="Voir la photo">📄</button>
+
             ${currentIsAdmin() ? `<a class="photoIcon" href="${url}" target="_blank" rel="noopener" title="Ouvrir dans Drive">🔗</a>` : ``}
           </div>
         `;
@@ -893,14 +894,13 @@
   }
 }
 
-function openTicketPreview(url){
+function openTicketPreview(id){
   const viewer = document.getElementById("photoViewer");
   const img = document.getElementById("photoViewerImg");
 
-  img.src = url;
+  img.src = "https://drive.google.com/thumbnail?id=" + encodeURIComponent(id) + "&sz=w1600";
   viewer.style.display = "flex";
 }
-
 
 function closeTicketPreview(){
   const viewer = document.getElementById("photoViewer");
