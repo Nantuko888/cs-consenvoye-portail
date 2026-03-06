@@ -900,7 +900,8 @@ const res = await fetch(API_URL + "?view=ticket_carburant_upload", {
             <div class="hMeta">${dateTxt}${hourTxt ? " — " + hourTxt : ""}</div>
           </div>
           <div style="display:flex;gap:8px;align-items:center">
-            <button class="photoIcon" type="button" onclick="openTicketPreview('${f.previewId || f.id}')" title="Voir la photo">📄</button>
+            <button class="photoIcon" type="button" onclick="openTicketPreview('${url}')" title="Voir la photo">📄</button>
+
 
             ${currentIsAdmin() ? `<a class="photoIcon" href="${url}" target="_blank" rel="noopener" title="Ouvrir dans Drive">🔗</a>` : ``}
           </div>
@@ -924,27 +925,20 @@ const res = await fetch(API_URL + "?view=ticket_carburant_upload", {
   }
 }
 
-async function openTicketPreview(id){
+function openTicketPreview(url){
   try{
-
     const viewer = document.getElementById("photoViewer");
     const img = document.getElementById("photoViewerImg");
 
-    // reset image
     img.src = "";
-
-    // affiche la fenêtre
     viewer.style.display = "flex";
 
-    // charge directement l'image depuis Apps Script
-    img.src = API_URL + "?view=ticket_carburant_preview&id=" + encodeURIComponent(id);
+    img.src = url;
 
   }catch(err){
-
     console.error(err);
     toast("Erreur ouverture photo");
     closeTicketPreview();
-
   }
 }
 
