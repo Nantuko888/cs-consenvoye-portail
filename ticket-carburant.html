@@ -876,12 +876,12 @@
       });
 
     }catch(err){
-      console.error(err);
-      histContainer.innerHTML = "<div style="color:rgba(255,120,120,.95);font-size:13px">Erreur chargement historique (voir console).</div>";
-    }
-  }
+  console.error(err);
+  histContainer.innerHTML = "<div style=\"color:rgba(255,120,120,.95);font-size:13px\">Erreur chargement historique (voir console).</div>";
+}
+}
 
-  function openTicketPreview(id){
+function openTicketPreview(id){
   const viewer = document.getElementById("photoViewer");
   const img = document.getElementById("photoViewerImg");
 
@@ -896,24 +896,24 @@ function closeTicketPreview(){
   img.src = "";
 }
 
-  document.addEventListener("click", (e)=>{
+document.addEventListener("click", (e)=>{
   const viewer = document.getElementById("photoViewer");
   if(e.target === viewer){
     closeTicketPreview();
   }
 });
 
-  // ====== Init ======
-  (function init(){
-    const email = getStoredEmail();
-    whoName.textContent = guessFirstNameFromEmail(email);
-    setAdminUI(currentIsAdmin());
-    setVeh("");
-    showTicket();
-  })();
+// ====== Init ======
+(function init(){
+  const email = getStoredEmail();
+  whoName.textContent = guessFirstNameFromEmail(email);
+  setAdminUI(currentIsAdmin());
+  setVeh("");
+  showTicket();
+})();
 </script>
-  
-  <div id="photoViewer" style="
+
+<div id="photoViewer" style="
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.95);
@@ -930,6 +930,7 @@ function closeTicketPreview(){
     box-shadow:0 10px 30px rgba(0,0,0,.5);
   ">
 </div>
+
 
 </body>
 </html>
