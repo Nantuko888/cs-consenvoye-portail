@@ -848,15 +848,17 @@
           item.className = "hItem";
 
           item.innerHTML = `
-            <div class="hLeft">
-              <div class="hVeh">
-                <span class="dot" style="background:${dotColor}"></span>
-                <span>${icon ? icon + " " : ""}${veh || "—"} — ${agent || "—"}</span>
-              </div>
-              <div class="hMeta">${dateTxt} — ${hourTxt}</div>
-            </div>
-            <button class="photoIcon" type="button" onclick="openTicketPreview('${f.id}')" title="Voir la photo">📄</button>
-          `;
+  <div class="hLeft">
+    <div class="hVeh">
+      <span class="dot" style="background:${dotColor}"></span>
+      <span>${icon ? icon + " " : ""}${veh || "—"} — ${agent || "—"}</span>
+    </div>
+    <div class="hMeta">${dateTxt} — ${hourTxt}</div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="photoIcon" type="button" onclick="openTicketPreview('${f.id}')" title="Voir la photo">📄</button>
+    ${currentIsAdmin() ? `<a class="photoIcon" href="${url}" target="_blank" rel="noopener" title="Ouvrir dans Drive">🔗</a>` : ``}
+  </div>
 
           body.appendChild(item);
         });
@@ -879,26 +881,12 @@
     }
   }
 
-  async function openTicketPreview(id){
-  try{
-    const res = await fetch(API_URL + "?view=ticket_carburant_preview&id=" + encodeURIComponent(id));
-    const data = await res.json();
+  function openTicketPreview(id){
+  const viewer = document.getElementById("photoViewer");
+  const img = document.getElementById("photoViewerImg");
 
-    if(!data || !data.ok){
-      toast("Impossible d’ouvrir la photo");
-      console.error(data);
-      return;
-    }
-
-    const viewer = document.getElementById("photoViewer");
-    const img = document.getElementById("photoViewerImg");
-
-    img.src = `data:${data.mimeType};base64,${data.base64}`;
-    viewer.style.display = "flex";
-  }catch(err){
-    console.error(err);
-    toast("Erreur ouverture photo");
-  }
+  img.src = API_URL + "?view=ticket_carburant_preview&id=" + encodeURIComponent(id);
+  viewer.style.display = "flex";
 }
 
 function closeTicketPreview(){
