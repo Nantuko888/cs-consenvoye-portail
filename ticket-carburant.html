@@ -942,15 +942,24 @@ function closeTicketPreview(){
   viewer.style.display = "none";
   frame.src = "";
 }
-  document.getElementById("photoViewer").addEventListener("click", function(e){
-  if(e.target === this){
-    closeTicketPreview();
-  }
-});
+  const viewer = document.getElementById("photoViewer");
 
-document.getElementById("photoViewerClose").addEventListener("click", function(){
-  closeTicketPreview();
-});
+if(viewer){
+  viewer.addEventListener("click", function(e){
+    if(e.target === viewer){
+      closeTicketPreview();
+    }
+  });
+}
+
+const closeBtn = document.getElementById("photoViewerClose");
+
+if(closeBtn){
+  closeBtn.addEventListener("click", function(){
+    closeTicketPreview();
+  });
+}
+
 
 // ====== Init ======
 (function init(){
