@@ -777,108 +777,120 @@
   }
 
   async function loadTickets(){
-    if(histLoaded) return;
-    histLoaded = true;
+  if(histLoaded) return;
+  histLoaded = true;
 
-    histContainer.innerHTML = `<div style="color:rgba(255,255,255,.75);font-size:13px">Chargement de l'historique...</div>`;
+  histContainer.innerHTML = `<div style="color:rgba(255,255,255,.75);font-size:13px">Chargement de l'historique...</div>`;
 
-    try{
-      const res = await fetch(API_URL + "?view=ticket_carburant_list", { cache: "no-store" });
-      const txt = await res.text();
-      const data = parseMaybeJsonp(txt);
+  try{
+    const res = await fetch(API_URL + "?view=ticket_carburant_list", { cache: "no-store" });
+    const data = await res.json();
 
-      const files = (data && data.files) ? data.files : [];
-      if(!files.length){
-        histContainer.innerHTML = `<div style="color:rgba(255,255,255,.75);font-size:13px">Aucun ticket pour l’instant.</div>`;
-        return;
+    const files = (data && data.files) ? data.files : [];
+    if(!files.length){
+      histContainer.innerHTML = `<div style="color:rgba(255,255,255,.75);font-size:13px">Aucun ticket pour l’instant.</div>`;
+      return;
+    }
+
+    const byMonth = {};
+
+    files.forEach(f=>{
+      let d = null;
+
+      if(f.dateFromName && /^\d{4}-\d{2}-\d{2}$/.test(f.dateFromName)){
+        const [y,m,day] = f.dateFromName.split("-").map(Number);
+        d = new Date(y, m - 1, day);
+      } else if(f.created){
+        d = new Date(f.created);
+      } else {
+        d = new Date();
       }
 
-      // Groupe par mois
-      const byMonth = {};
-      files.forEach(f=>{
-        const key = monthKeyFromItem(f);
-        (byMonth[key] ||= []).push(f);
+      const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+      (byMonth[key] ||= []).push({ ...f, _d:d });
+    });
+
+    const monthKeys = Object.keys(byMonth).sort((a,b)=> b.localeCompare(a));
+    histContainer.innerHTML = "";
+
+    monthKeys.forEach(key=>{
+      const [y,m] = key.split("-");
+      const monthLabel = new Date(Number(y), Number(m)-1, 1)
+        .toLocaleString("fr-FR",{month:"long",year:"numeric"});
+
+      const list = byMonth[key];
+
+      list.sort((a,b)=>{
+        const ad = (a.dateFromName || "") + " " + (a.time || "");
+        const bd = (b.dateFromName || "") + " " + (b.time || "");
+        return bd.localeCompare(ad);
       });
 
-      // trie mois desc
-      const monthKeys = Object.keys(byMonth).sort((a,b)=> b.localeCompare(a));
+      const month = document.createElement("div");
+      month.className = "month";
 
-      histContainer.innerHTML = "";
+      const head = document.createElement("div");
+      head.className = "monthHead";
+      head.innerHTML = `<div>${monthLabel}</div><div class="count">${list.length}</div>`;
 
-      monthKeys.forEach(key=>{
-        const [y,m] = key.split("-");
-        const monthLabel = new Date(Number(y), Number(m)-1, 1)
-          .toLocaleString("fr-FR",{month:"long",year:"numeric"});
+      const body = document.createElement("div");
+      body.className = "monthBody";
+      body.style.display = "none";
 
-        const list = byMonth[key];
+      list.forEach(f=>{
+        const veh = String(f.veh || "").trim().toUpperCase();
+        const agent = String(f.agent || "").trim();
+        const url = f.url || "#";
+        const id = f.id || "";
 
-        // tri desc: dateFromName + time sinon created
-        list.sort((a,b)=>{
-          const ad = safeDateFromParts(a.dateFromName || "") || (a.created ? new Date(a.created) : new Date(0));
-          const bd = safeDateFromParts(b.dateFromName || "") || (b.created ? new Date(b.created) : new Date(0));
-          // si même jour, trie sur time
-          if(ad.getTime() === bd.getTime()){
-            const at = String(a.time || "00:00");
-            const bt = String(b.time || "00:00");
-            return bt.localeCompare(at);
-          }
-          return bd - ad;
-        });
+        let dateTxt = "";
+        if(f.dateFromName && /^\d{4}-\d{2}-\d{2}$/.test(f.dateFromName)){
+          const [yy,mm,dd] = f.dateFromName.split("-");
+          dateTxt = `${dd}/${mm}/${yy}`;
+        } else if(f.created){
+          const d = new Date(f.created);
+          dateTxt = d.toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"numeric"});
+        } else {
+          dateTxt = "";
+        }
 
-        const month = document.createElement("div");
-        month.className = "month";
+        const hourTxt = String(f.time || "").trim();
+        const icon = VEH_ICON[veh] || "";
+        const dotColor = (VEH[veh] && VEH[veh].dot) ? getCssVar(VEH[veh].dot) : "rgba(255,255,255,.35)";
 
-        const head = document.createElement("div");
-        head.className = "monthHead";
-        head.innerHTML = `<div>${monthLabel}</div><div class="count">${list.length}</div>`;
+        const item = document.createElement("div");
+        item.className = "hItem";
 
-        const body = document.createElement("div");
-        body.className = "monthBody";
+        item.innerHTML = `
+          <div class="hLeft">
+            <div class="hVeh">
+              <span class="dot" style="background:${dotColor}"></span>
+              <span>${icon ? icon + " " : ""}${veh || "—"} — ${agent || "—"}</span>
+            </div>
+            <div class="hMeta">${dateTxt}${hourTxt ? " — " + hourTxt : ""}</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="photoIcon" type="button" onclick="openTicketPreview('${id}')" title="Voir la photo">📄</button>
+            ${currentIsAdmin() ? `<a class="photoIcon" href="${url}" target="_blank" rel="noopener" title="Ouvrir dans Drive">🔗</a>` : ``}
+          </div>
+        `;
 
-        list.forEach(f=>{
-          const veh = String(f.veh || "").trim().toUpperCase();
-          const agent = String(f.agent || "").trim();
-          const url = f.url || "#";
-
-          const { dateTxt, hourTxt } = displayDateTime(f);
-          const icon = VEH_ICON[veh] || "";
-          const dotColor = (VEH[veh] && VEH[veh].dot) ? getCssVar(VEH[veh].dot) : "rgba(255,255,255,.35)";
-
-          const item = document.createElement("div");
-          item.className = "hItem";
-
-          item.innerHTML = `
-  <div class="hLeft">
-    <div class="hVeh">
-      <span class="dot" style="background:${dotColor}"></span>
-      <span>${icon ? icon + " " : ""}${veh || "—"} — ${agent || "—"}</span>
-    </div>
-    <div class="hMeta">${dateTxt} — ${hourTxt}</div>
-  </div>
-  <div style="display:flex;gap:8px;align-items:center">
-    <button class="photoIcon" type="button" onclick="openTicketPreview('${f.id}')" title="Voir la photo">📄</button>
-    ${currentIsAdmin() ? `<a class="photoIcon" href="${url}" target="_blank" rel="noopener" title="Ouvrir dans Drive">🔗</a>` : ``}
-  </div>
-
-          body.appendChild(item);
-        });
-
-        head.addEventListener("click", ()=>{
-          body.style.display = (body.style.display === "none" || !body.style.display) ? "block" : "none";
-        });
-
-        // Par défaut : ouvert
-        body.style.display = "none";
-
-        month.appendChild(head);
-        month.appendChild(body);
-        histContainer.appendChild(month);
+        body.appendChild(item);
       });
 
-    }catch(err){
-  console.error(err);
-  histContainer.innerHTML = "<div style=\"color:rgba(255,120,120,.95);font-size:13px\">Erreur chargement historique (voir console).</div>";
-}
+      head.addEventListener("click", ()=>{
+        body.style.display = (body.style.display === "none" || !body.style.display) ? "block" : "none";
+      });
+
+      month.appendChild(head);
+      month.appendChild(body);
+      histContainer.appendChild(month);
+    });
+
+  }catch(err){
+    console.error(err);
+    histContainer.innerHTML = "<div style=\"color:rgba(255,120,120,.95);font-size:13px\">Erreur chargement historique (voir console).</div>";
+  }
 }
 
 function openTicketPreview(id){
@@ -930,7 +942,6 @@ document.addEventListener("click", (e)=>{
     box-shadow:0 10px 30px rgba(0,0,0,.5);
   ">
 </div>
-
 
 </body>
 </html>
