@@ -931,7 +931,7 @@ function openTicketPreview(id){
 
   frame.src = "";
   viewer.style.display = "flex";
-  frame.src = "https://drive.google.com/file/d/" + encodeURIComponent(id) + "/preview";
+  frame.src = "https://drive.google.com/uc?export=view&id=" + encodeURIComponent(id);
 }
 
 
@@ -981,19 +981,21 @@ if(closeBtn){
   z-index:9999;
   padding:12px;
 ">
-  <button id="photoViewerClose" style="
-  position:absolute;
-  top:14px;
-  right:14px;
-  z-index:10000;
-  border:none;
-  border-radius:12px;
-  padding:10px 12px;
-  background:rgba(0,0,0,.65);
-  color:#fff;
-  font-size:20px;
-  cursor:pointer;
-">✕</button>
+  <button onclick="closeTicketPreview()" style="
+position:absolute;
+top:14px;
+right:14px;
+z-index:10000;
+border:none;
+border-radius:12px;
+padding:10px 12px;
+background:rgba(0,0,0,.65);
+color:#fff;
+font-size:20px;
+cursor:pointer;
+">
+✕
+</button>
   
   <iframe
   id="photoViewerFrame"
