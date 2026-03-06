@@ -652,6 +652,31 @@
     toast("Réinitialisé");
   });
 
+  async function makePreviewBase64(dataUrl, maxWidth = 1000, quality = 0.55){
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const ratio = img.width > maxWidth ? (maxWidth / img.width) : 1;
+      const w = Math.round(img.width * ratio);
+      const h = Math.round(img.height * ratio);
+
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, w, h);
+
+      const previewDataUrl = canvas.toDataURL("image/jpeg", quality);
+      const previewBase64 = previewDataUrl.split(",")[1] || "";
+      resolve(previewBase64);
+    };
+    img.onerror = reject;
+    img.src = dataUrl;
+  });
+}
+
+
   // ====== Envoi ======
   btnSend.addEventListener("click", async () => {
     const btn = btnSend;
@@ -670,14 +695,19 @@
 
     try{
       const email = getStoredEmail();
-      const agent = guessFirstNameFromEmail(email);
-      const base64 = photoDataUrl.split(",")[1] || "";
+const agent = guessFirstNameFromEmail(email);
+const base64 = photoDataUrl.split(",")[1] || "";
+const previewBase64 = await makePreviewBase64(photoDataUrl);
 
-      const res = await fetch(API_URL + "?view=ticket_carburant_upload", {
-        method: "POST",
-        body: JSON.stringify({ vehicle: selectedVeh, agent, image: base64 })
-      });
-
+const res = await fetch(API_URL + "?view=ticket_carburant_upload", {
+  method: "POST",
+  body: JSON.stringify({
+    vehicle: selectedVeh,
+    agent,
+    image: base64,
+    preview: previewBase64
+  })
+});
       const text = await res.text();
       let data = null;
       try { data = JSON.parse(text); } catch(e){}
