@@ -925,17 +925,36 @@ const res = await fetch(API_URL + "?view=ticket_carburant_upload", {
   }
 }
 
-function openTicketPreview(id){
+async function openTicketPreview(id){
 
   const viewer = document.getElementById("photoViewer");
   const img = document.getElementById("photoViewerImg");
 
-  viewer.style.display = "flex";
+  try{
 
-  img.src = "https://drive.google.com/thumbnail?id=" + id + "&sz=w1000";
+    viewer.style.display = "flex";
+    img.src = "";
+
+    const url = API_URL + "?view=ticket_carburant_preview&id=" + encodeURIComponent(id);
+
+    img.onload = () => {
+      // image chargée
+    };
+
+    img.onerror = () => {
+      toast("Erreur chargement image");
+      closeTicketPreview();
+    };
+
+    img.src = url;
+
+  }catch(err){
+    console.error(err);
+    toast("Erreur ouverture photo");
+    closeTicketPreview();
+  }
 
 }
-
 
 function closeTicketPreview(){
   const viewer = document.getElementById("photoViewer");
@@ -944,23 +963,11 @@ function closeTicketPreview(){
   viewer.style.display = "none";
   img.src = "";
 }
-  const viewer = document.getElementById("photoViewer");
-
-if(viewer){
-  viewer.addEventListener("click", function(e){
-    if(e.target === viewer){
-      closeTicketPreview();
-    }
-  });
-}
-
-const closeBtn = document.getElementById("photoViewerClose");
-
-if(closeBtn){
-  closeBtn.addEventListener("click", function(){
+  document.getElementById("photoViewer").addEventListener("click", function(e){
+  if(e.target.id === "photoViewer"){
     closeTicketPreview();
-  });
-}
+  }
+});
 
 
 // ====== Init ======
