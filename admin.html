@@ -10,11 +10,7 @@
 
 <link rel="stylesheet" href="cs-theme.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
-
 <style>
-
-/* ===== STRUCTURE ===== */
 
 .adminWrap{
 max-width:980px;
@@ -22,7 +18,7 @@ margin:auto;
 padding:14px;
 }
 
-/* ===== TABLEAU DE BORD ===== */
+/* tableau de bord */
 
 .dashboard{
 
@@ -33,7 +29,7 @@ border-radius:18px;
 
 background:linear-gradient(
 180deg,
-rgba(255,120,0,.35),
+rgba(255,120,0,.45),
 rgba(0,0,0,.35)
 );
 
@@ -41,32 +37,21 @@ border:1px solid rgba(255,255,255,.12);
 
 font-weight:900;
 
-display:flex;
-align-items:center;
-gap:10px;
-
 }
 
-/* ===== BANDEAUX ===== */
+/* catégories */
 
 .menuBlock{
 
 border-radius:20px;
 overflow:hidden;
-
 margin-bottom:14px;
-
-background:linear-gradient(
-180deg,
-rgba(0,0,0,.55),
-rgba(0,0,0,.35)
-);
 
 border:1px solid rgba(255,255,255,.12);
 
 }
 
-/* ===== HEADER MENU ===== */
+/* bandeau principal */
 
 .menuHeader{
 
@@ -76,27 +61,18 @@ justify-content:space-between;
 
 padding:16px;
 
-cursor:pointer;
-
 font-weight:900;
 
+cursor:pointer;
+
 }
 
-.menuLeft{
-display:flex;
-align-items:center;
-gap:12px;
-}
-
-/* ===== SOUS MENU ===== */
+/* sous menu */
 
 .subMenu{
 
 display:none;
-
 padding:10px;
-
-background:rgba(0,0,0,.25);
 
 }
 
@@ -104,17 +80,13 @@ background:rgba(0,0,0,.25);
 display:block;
 }
 
-/* ===== BOUTONS ===== */
+/* boutons */
 
 .subBtn{
 
-display:flex;
-align-items:center;
-gap:12px;
-
 padding:12px;
 
-border-radius:14px;
+border-radius:12px;
 
 margin-bottom:8px;
 
@@ -122,28 +94,34 @@ font-weight:850;
 
 cursor:pointer;
 
-border:1px solid rgba(255,255,255,.10);
-
 }
 
-/* ===== COULEURS ===== */
+/* couleurs catégories */
 
-.gestion{
-background:rgba(60,120,255,.18);
+.gestionHeader{
+background:#2f6fd4;
 }
 
-.param{
-background:rgba(255,140,40,.18);
+.paramHeader{
+background:#d46a00;
 }
 
-.tests{
-background:rgba(70,200,120,.18);
+.testsHeader{
+background:#2f9e5b;
 }
 
-/* ===== ICONES ===== */
+/* sous catégories */
 
-.material-symbols-rounded{
-font-size:22px;
+.gestionSub{
+background:rgba(47,111,212,.25);
+}
+
+.paramSub{
+background:rgba(212,106,0,.25);
+}
+
+.testsSub{
+background:rgba(47,158,91,.25);
 }
 
 </style>
@@ -159,13 +137,7 @@ font-size:22px;
 <div class="topbar">
 
 <div class="title">
-
-<span class="material-symbols-rounded">
-admin_panel_settings
-</span>
-
-Administration
-
+⚙️ Administration
 </div>
 
 <button class="btn" onclick="window.location.href='index.html'">
@@ -176,186 +148,82 @@ Retour
 
 <div class="adminWrap">
 
-<!-- TABLEAU DE BORD -->
-
 <div class="dashboard">
-
-<span class="material-symbols-rounded">
-dashboard
-</span>
-
-Tableau de bord administration
-
+📊 Tableau de bord administration
 </div>
 
-<!-- GESTION -->
+<!-- Gestion -->
 
 <div class="menuBlock">
 
-<div class="menuHeader" onclick="toggleMenu(this)">
-
-<div class="menuLeft">
-
-<span class="material-symbols-rounded">
-manage_accounts
-</span>
-
-Gestion
-
-</div>
-
-<span class="material-symbols-rounded">
-expand_more
-</span>
-
+<div class="menuHeader gestionHeader" onclick="toggleMenu(this)">
+🔧 Gestion ▾
 </div>
 
 <div class="subMenu">
 
-<div class="subBtn gestion">
-
-<span class="material-symbols-rounded">
-account_tree
-</span>
-
-Organigramme
-
+<div class="subBtn gestionSub">
+🧭 Organigramme
 </div>
 
-<div class="subBtn gestion">
-
-<span class="material-symbols-rounded">
-groups
-</span>
-
-Équipes
-
+<div class="subBtn gestionSub">
+👥 Équipes
 </div>
 
-<div class="subBtn gestion">
-
-<span class="material-symbols-rounded">
-ambulance
-</span>
-
-Désinfection VSAV
-
+<div class="subBtn gestionSub">
+🚑 Désinfection VSAV
 </div>
 
 </div>
 
 </div>
 
-<!-- PARAMETRES -->
+<!-- Paramètres -->
 
 <div class="menuBlock">
 
-<div class="menuHeader" onclick="toggleMenu(this)">
-
-<div class="menuLeft">
-
-<span class="material-symbols-rounded">
-settings
-</span>
-
-Paramètres
-
-</div>
-
-<span class="material-symbols-rounded">
-expand_more
-</span>
-
+<div class="menuHeader paramHeader" onclick="toggleMenu(this)">
+⚙️ Paramètres ▾
 </div>
 
 <div class="subMenu">
 
-<div class="subBtn param">
-
-<span class="material-symbols-rounded">
-key
-</span>
-
-Accès
-
+<div class="subBtn paramSub">
+🔑 Accès
 </div>
 
-<div class="subBtn param">
-
-<span class="material-symbols-rounded">
-tune
-</span>
-
-Configuration
-
+<div class="subBtn paramSub">
+🛠 Configuration
 </div>
 
 </div>
 
 </div>
 
-<!-- TESTS -->
+<!-- Tests -->
 
 <div class="menuBlock">
 
-<div class="menuHeader" onclick="toggleMenu(this)">
-
-<div class="menuLeft">
-
-<span class="material-symbols-rounded">
-construction
-</span>
-
-Tests
-
-</div>
-
-<span class="material-symbols-rounded">
-expand_more
-</span>
-
+<div class="menuHeader testsHeader" onclick="toggleMenu(this)">
+🧰 Tests ▾
 </div>
 
 <div class="subMenu">
 
-<div class="subBtn tests">
-
-<span class="material-symbols-rounded">
-info
-</span>
-
-Informations
-
+<div class="subBtn testsSub">
+ℹ️ Informations
 </div>
 
-<div class="subBtn tests">
-
-<span class="material-symbols-rounded">
-schedule
-</span>
-
-Gardes postées
-
+<div class="subBtn testsSub">
+👨‍🚒 Gardes postées
 </div>
 
-<div class="subBtn tests">
-
-<span class="material-symbols-rounded">
-photo_library
-</span>
-
-Galerie
-
+<div class="subBtn testsSub">
+🖼 Galerie
 </div>
 
-<div class="subBtn tests">
-
-<span class="material-symbols-rounded">
-menu_book
-</span>
-
-Book
-
+<div class="subBtn testsSub">
+📘 Book
 </div>
 
 </div>
@@ -371,6 +239,7 @@ Book
 function toggleMenu(el){
 
 const block = el.parentElement
+
 block.classList.toggle("open")
 
 }
