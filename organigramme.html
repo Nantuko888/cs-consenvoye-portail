@@ -219,7 +219,8 @@
     .poleBtn:active{ transform: translateY(1px); }
 
     .modal{
-      position:fixed; inset:0;
+      position:fixed;
+      inset:0;
       display:none;
       background: rgba(0,0,0,.60);
       backdrop-filter: blur(10px);
@@ -237,11 +238,16 @@
       border:1px solid rgba(255,255,255,.14);
       box-shadow: 0 25px 70px rgba(0,0,0,.55);
       background: rgba(18,18,18,.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
     .modalHead{
       padding: 14px 14px;
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
       border-bottom: 1px solid rgba(255,255,255,.10);
       color:#fff;
     }
@@ -272,6 +278,7 @@
       overflow:hidden;
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.20);
+      box-shadow: 0 12px 28px rgba(0,0,0,.18);
     }
 
     .subBar{
@@ -282,7 +289,10 @@
       color:#fff;
     }
 
-    .subBody{ padding: 10px 12px 12px; }
+    .subBody{
+      padding: 10px 12px 12px;
+      background: rgba(0,0,0,.18);
+    }
 
     ul{ margin:0; padding-left: 18px; }
 
@@ -528,24 +538,61 @@
       };
     }
 
+    function getPolePalette(label){
+      const s = String(label || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+      if (s.includes("technique") || s.includes("logistique")) {
+        return { main: "#d38a1a", sub: "#f0a52a" };
+      }
+
+      if (s.includes("operationnel") || s.includes("operation")) {
+        return { main: "#d9b019", sub: "#f1c93a" };
+      }
+
+      if (s.includes("formation") || s.includes("sport")) {
+        return { main: "#7f68d8", sub: "#9a84f0" };
+      }
+
+      if (s.includes("jsp")) {
+        return { main: "#1faa7c", sub: "#39c794" };
+      }
+
+      if (s.includes("recrutement")) {
+        return { main: "#a64fd5", sub: "#c46cf0" };
+      }
+
+      if (s.includes("amicale")) {
+        return { main: "#4f8fd5", sub: "#71aef0" };
+      }
+
+      if (s.includes("soutien")) {
+        return { main: "#3a9fc0", sub: "#63bedc" };
+      }
+
+      return { main: "#777777", sub: "#9b9b9b" };
+    }
+
     function render(){
       $chefName.textContent = DATA.direction.chef || "—";
       $adj1Name.textContent = DATA.direction.adj1 || "—";
       $adj2Name.textContent = DATA.direction.adj2 || "—";
 
       $grid.innerHTML = "";
+
       DATA.poles.forEach(p => {
+        const palette = getPolePalette(p.label);
+
         const btn = document.createElement("button");
         btn.className = "poleBtn";
-        btn.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .34)}, ${hexToRgba(p.color, .16)})`;
+        btn.style.background = `linear-gradient(180deg, ${hexToRgba(palette.main, .34)}, ${hexToRgba(palette.main, .16)})`;
         btn.textContent = p.label;
-        btn.onclick = () => openPole(p);
+        btn.onclick = () => openPole(p, palette);
         $grid.appendChild(btn);
       });
     }
 
-    function openPole(p){
-      $modalHead.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .95)}, ${hexToRgba(p.color, .75)})`;
+    function openPole(p, palette){
+      $modalHead.style.background = `linear-gradient(180deg, ${hexToRgba(palette.main, .42)}, ${hexToRgba(palette.main, .18)})`;
       $modalTitle.textContent = p.label;
       $modalBody.innerHTML = "";
 
@@ -555,7 +602,7 @@
 
         const bar = document.createElement("div");
         bar.className = "subBar";
-        bar.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .92)}, ${hexToRgba(p.color, .72)})`;
+        bar.style.background = `linear-gradient(180deg, ${hexToRgba(palette.sub, .36)}, ${hexToRgba(palette.sub, .16)})`;
         bar.textContent = sp.label;
 
         const body = document.createElement("div");
