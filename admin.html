@@ -9,69 +9,204 @@
 
 <link rel="stylesheet" href="cs-theme.css">
 
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
 
-/* ===== PAGE ADMIN ===== */
+/* ===== TITRES ===== */
 
 .sectionTitle{
-  margin:14px 0 8px;
-  font-weight:950;
-  letter-spacing:.6px;
-  text-transform:uppercase;
-  opacity:.9;
+margin:14px 0 10px;
+font-weight:950;
+letter-spacing:.8px;
+text-transform:uppercase;
+text-align:center;
 }
+
+/* ===== DASHBOARD ===== */
+
+.dashboardCard{
+
+border-radius:22px;
+
+background: linear-gradient(
+180deg,
+rgba(47,123,211,.35),
+rgba(47,123,211,.18)
+);
+
+border:1px solid rgba(140,190,255,.28);
+
+box-shadow:var(--shadow);
+
+padding:16px;
+
+margin-bottom:16px;
+
+}
+
+/* ===== GRID ===== */
 
 .grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
 }
 
+/* ===== CARTES ===== */
+
 .cardBtn{
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(0,0,0,.25);
-  padding:16px;
-  border-radius:18px;
-  font-weight:900;
-  text-align:center;
-  cursor:pointer;
-  box-shadow:var(--shadow);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  -webkit-tap-highlight-color: transparent;
+
+position:relative;
+
+padding:22px 14px;
+
+border-radius:20px;
+
+cursor:pointer;
+
+text-align:center;
+
+border:1px solid rgba(255,255,255,.12);
+
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+
+box-shadow:var(--shadow);
+
+transition:.2s;
+
+}
+
+.cardBtn:hover{
+transform:translateY(-2px);
 }
 
 .cardBtn:active{
-  transform:translateY(1px);
+transform:translateY(2px);
 }
 
+/* ===== ICÔNES ===== */
+
+.cardIcon{
+
+font-size:28px;
+margin-bottom:6px;
+
+}
+
+/* ===== TITRE ===== */
+
+.cardTitle{
+font-weight:950;
+font-size:16px;
+}
+
+/* ===== BADGE ===== */
+
+.badge{
+
+position:absolute;
+top:8px;
+right:10px;
+
+font-size:11px;
+
+padding:4px 8px;
+
+border-radius:999px;
+
+background:rgba(0,0,0,.4);
+
+border:1px solid rgba(255,255,255,.25);
+
+}
+
+/* ===== COULEURS ===== */
+
+.gestion{
+background:linear-gradient(
+180deg,
+rgba(47,123,211,.65),
+rgba(47,123,211,.40)
+);
+}
+
+.param{
+background:linear-gradient(
+180deg,
+rgba(255,177,90,.65),
+rgba(255,177,90,.40)
+);
+}
+
+.test{
+background:linear-gradient(
+180deg,
+rgba(47,168,107,.65),
+rgba(47,168,107,.40)
+);
+}
+
+/* ===== SOUS MENUS ===== */
+
 .subGrid{
-  margin-top:10px;
-  display:grid;
-  grid-template-columns:1fr;
-  gap:8px;
+margin-top:14px;
+display:grid;
+grid-template-columns:1fr;
+gap:12px;
 }
 
 .subBtn{
-  border:1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.25);
-  padding:12px;
-  border-radius:14px;
-  font-weight:850;
-  text-align:center;
-  cursor:pointer;
+
+display:flex;
+align-items:center;
+gap:12px;
+
+padding:16px;
+
+border-radius:16px;
+
+font-weight:900;
+
+cursor:pointer;
+
+border:1px solid rgba(255,255,255,.12);
+
+background:rgba(0,0,0,.30);
+
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+
+box-shadow:var(--shadow);
+
+}
+
+.subIcon{
+font-size:20px;
+width:24px;
+text-align:center;
 }
 
 .subBtn:active{
-  transform:translateY(1px);
+transform:translateY(2px);
 }
 
+/* ===== SECTIONS ===== */
+
 .section{
-  display:none;
+display:none;
 }
 
 .section.active{
-  display:block;
+display:block;
+}
+
+/* ===== RETOUR ===== */
+
+.backBtn{
+margin-bottom:10px;
 }
 
 </style>
@@ -84,108 +219,191 @@
 
 <div class="wrap">
 
-  <!-- Bandeau -->
-  <div class="topbar">
-    <div class="title">Admin</div>
-    <button class="btn" onclick="window.location.href='index.html'">Retour</button>
-  </div>
+<!-- BANDEAU -->
 
-  <!-- Tableau de bord -->
-  <div class="sectionTitle">Tableau de bord</div>
+<div class="topbar">
+<div class="title">
+<i class="fa-solid fa-fire"></i> Admin
+</div>
+<button class="btn" onclick="window.location.href='index.html'">
+Retour
+</button>
+</div>
 
-  <div class="grid">
+<!-- DASHBOARD -->
 
-    <div class="cardBtn" onclick="openSection('gestion')">
-      Gestion
-    </div>
+<div id="dashboard">
 
-    <div class="cardBtn" onclick="openSection('parametres')">
-      Paramètres
-    </div>
+<div class="dashboardCard">
 
-    <div class="cardBtn" onclick="openSection('test')">
-      Test
-    </div>
+<div class="sectionTitle">
+Tableau de bord
+</div>
 
-  </div>
+<div class="grid">
 
-  <!-- ================= -->
-  <!-- GESTION -->
-  <!-- ================= -->
+<div class="cardBtn gestion" onclick="openSection('gestion')">
 
-  <div id="gestion" class="section">
+<div class="badge">3</div>
 
-    <div class="sectionTitle">Gestion</div>
+<div class="cardIcon">
+<i class="fa-solid fa-screwdriver-wrench"></i>
+</div>
 
-    <div class="subGrid">
+<div class="cardTitle">
+Gestion
+</div>
 
-      <div class="subBtn">
-        Organigramme
-      </div>
+</div>
 
-      <div class="subBtn">
-        Équipes
-      </div>
+<div class="cardBtn param" onclick="openSection('parametres')">
 
-      <div class="subBtn">
-        Désinfection VSAV
-      </div>
+<div class="cardIcon">
+<i class="fa-solid fa-gears"></i>
+</div>
 
-    </div>
+<div class="cardTitle">
+Paramètres
+</div>
 
-  </div>
+</div>
 
-  <!-- ================= -->
-  <!-- PARAMETRES -->
-  <!-- ================= -->
+<div class="cardBtn test" onclick="openSection('test')">
 
-  <div id="parametres" class="section">
+<div class="badge">LAB</div>
 
-    <div class="sectionTitle">Paramètres</div>
+<div class="cardIcon">
+<i class="fa-solid fa-flask"></i>
+</div>
 
-    <div class="subGrid">
+<div class="cardTitle">
+Test
+</div>
 
-      <div class="subBtn">
-        Accès
-      </div>
+</div>
 
-      <div class="subBtn">
-        Configuration
-      </div>
+</div>
 
-    </div>
+</div>
 
-  </div>
+</div>
 
-  <!-- ================= -->
-  <!-- TEST -->
-  <!-- ================= -->
+<!-- GESTION -->
 
-  <div id="test" class="section">
+<div id="gestion" class="section">
 
-    <div class="sectionTitle">Test</div>
+<button class="btn backBtn" onclick="goDashboard()">
+← Tableau de bord
+</button>
 
-    <div class="subGrid">
+<div class="sectionTitle">
+Gestion
+</div>
 
-      <div class="subBtn">
-        Informations
-      </div>
+<div class="subGrid">
 
-      <div class="subBtn">
-        Garde posté
-      </div>
+<div class="subBtn">
+<div class="subIcon">
+<i class="fa-solid fa-sitemap"></i>
+</div>
+Organigramme
+</div>
 
-      <div class="subBtn">
-        Galerie
-      </div>
+<div class="subBtn">
+<div class="subIcon">
+<i class="fa-solid fa-people-group"></i>
+</div>
+Équipes
+</div>
 
-      <div class="subBtn">
-        Book
-      </div>
+<div class="subBtn">
+<div class="subIcon">
+<i class="fa-solid fa-truck-medical"></i>
+</div>
+Désinfection VSAV
+</div>
 
-    </div>
+</div>
 
-  </div>
+</div>
+
+<!-- PARAMETRES -->
+
+<div id="parametres" class="section">
+
+<button class="btn backBtn" onclick="goDashboard()">
+← Tableau de bord
+</button>
+
+<div class="sectionTitle">
+Paramètres
+</div>
+
+<div class="subGrid">
+
+<div class="subBtn">
+<div class="subIcon">
+<i class="fa-solid fa-user-lock"></i>
+</div>
+Accès
+</div>
+
+<div class="subBtn">
+<div class="subIcon">
+<i class="fa-solid fa-sliders"></i>
+</div>
+Configuration
+</div>
+
+</div>
+
+</div>
+
+<!-- TEST -->
+
+<div id="test" class="section">
+
+<button class="btn backBtn" onclick="goDashboard()">
+← Tableau de bord
+</button>
+
+<div class="sectionTitle">
+Laboratoire
+</div>
+
+<div class="subGrid">
+
+<div class="subBtn">
+<div class="subIcon">
+<i class="fa-solid fa-phone"></i>
+</div>
+Informations
+</div>
+
+<div class="subBtn">
+<div class="subIcon">
+<i class="fa-solid fa-calendar-days"></i>
+</div>
+Garde posté
+</div>
+
+<div class="subBtn">
+<div class="subIcon">
+<i class="fa-solid fa-images"></i>
+</div>
+Galerie
+</div>
+
+<div class="subBtn">
+<div class="subIcon">
+<i class="fa-solid fa-book-open"></i>
+</div>
+Book
+</div>
+
+</div>
+
+</div>
 
 </div>
 
@@ -193,11 +411,23 @@
 
 function openSection(name){
 
-  document.querySelectorAll(".section").forEach(sec=>{
-    sec.classList.remove("active")
-  })
+document.getElementById("dashboard").style.display="none"
 
-  document.getElementById(name).classList.add("active")
+document.querySelectorAll(".section").forEach(sec=>{
+sec.classList.remove("active")
+})
+
+document.getElementById(name).classList.add("active")
+
+}
+
+function goDashboard(){
+
+document.getElementById("dashboard").style.display="block"
+
+document.querySelectorAll(".section").forEach(sec=>{
+sec.classList.remove("active")
+})
 
 }
 
