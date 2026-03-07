@@ -9,7 +9,7 @@
 
 <link rel="stylesheet" href="cs-theme.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
 
 <style>
 
@@ -17,38 +17,44 @@
 font-size:22px;
 }
 
-.sectionTitle{
-margin:10px 0;
-font-weight:950;
-text-transform:uppercase;
-text-align:center;
-letter-spacing:.8px;
+/* ===== DASHBOARD ===== */
+
+.commandCenter{
+
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+gap:10px;
+margin-bottom:14px;
+
 }
 
-/* ===== TABLEAU DE BORD ===== */
+.statusCard{
 
-.dashboardInfo{
-
-border-radius:20px;
+border-radius:16px;
+padding:12px;
 
 background:linear-gradient(
 180deg,
-rgba(47,123,211,.45),
-rgba(47,123,211,.20)
+rgba(0,0,0,.45),
+rgba(0,0,0,.25)
 );
 
-border:1px solid rgba(140,190,255,.35);
+border:1px solid rgba(255,255,255,.10);
 
 box-shadow:var(--shadow);
 
-padding:14px;
-
-margin-bottom:14px;
-
 text-align:center;
 
-font-weight:900;
+}
 
+.statusValue{
+font-size:20px;
+font-weight:950;
+}
+
+.statusLabel{
+font-size:12px;
+opacity:.7;
 }
 
 /* ===== BANDEAUX ===== */
@@ -62,6 +68,8 @@ box-shadow:var(--shadow);
 overflow:hidden;
 
 margin-bottom:12px;
+
+transition:.3s;
 
 }
 
@@ -82,10 +90,25 @@ font-weight:900;
 }
 
 .menuLeft{
-
 display:flex;
 align-items:center;
 gap:12px;
+}
+
+/* ===== BADGE ===== */
+
+.badge{
+
+background:#ff4b4b;
+color:white;
+
+font-size:11px;
+
+padding:2px 6px;
+
+border-radius:8px;
+
+margin-left:6px;
 
 }
 
@@ -93,16 +116,18 @@ gap:12px;
 
 .subMenu{
 
-display:none;
+max-height:0;
 
-padding:10px;
+overflow:hidden;
+
+transition:max-height .4s ease;
 
 background:rgba(0,0,0,.25);
 
 }
 
 .menuBlock.open .subMenu{
-display:block;
+max-height:400px;
 }
 
 /* ===== BOUTONS ===== */
@@ -121,7 +146,7 @@ font-weight:850;
 
 cursor:pointer;
 
-margin-bottom:8px;
+margin:8px;
 
 background:rgba(255,255,255,.05);
 
@@ -129,8 +154,8 @@ border:1px solid rgba(255,255,255,.10);
 
 }
 
-.subBtn:active{
-transform:translateY(1px);
+.subBtn:hover{
+background:rgba(255,255,255,.08);
 }
 
 /* ===== COULEURS ===== */
@@ -159,31 +184,14 @@ rgba(47,168,107,.35)
 );
 }
 
-/* icônes couleurs */
+/* ===== ICÔNES ===== */
 
-.iconBlue{
-color:#4da3ff;
-}
-
-.iconOrange{
-color:#ffb15a;
-}
-
-.iconGreen{
-color:#50d890;
-}
-
-.iconRed{
-color:#ff6b6b;
-}
-
-.iconPurple{
-color:#c47cff;
-}
-
-.iconYellow{
-color:#ffd166;
-}
+.blue{color:#4da3ff}
+.orange{color:#ffb15a}
+.green{color:#50d890}
+.red{color:#ff6b6b}
+.purple{color:#c47cff}
+.yellow{color:#ffd166}
 
 </style>
 
@@ -200,8 +208,13 @@ color:#ffd166;
 <div class="topbar">
 
 <div class="title">
-<span class="material-symbols-rounded">local_fire_department</span>
+
+<span class="material-symbols-rounded red">
+local_fire_department
+</span>
+
 Admin
+
 </div>
 
 <button class="btn" onclick="window.location.href='index.html'">
@@ -210,16 +223,49 @@ Retour
 
 </div>
 
-<!-- TABLEAU DE BORD -->
+<!-- TABLEAU DE COMMANDEMENT -->
 
-<div class="dashboardInfo">
+<div class="commandCenter">
 
-<span class="material-symbols-rounded iconBlue">dashboard</span>
-Tableau de bord administration
+<div class="statusCard">
+
+<div class="statusValue green">
+3
+</div>
+
+<div class="statusLabel">
+VSAV opérationnels
+</div>
 
 </div>
 
-<!-- ===== GESTION ===== -->
+<div class="statusCard">
+
+<div class="statusValue blue">
+12
+</div>
+
+<div class="statusLabel">
+Agents actifs
+</div>
+
+</div>
+
+<div class="statusCard">
+
+<div class="statusValue orange">
+2
+</div>
+
+<div class="statusLabel">
+Missions en attente
+</div>
+
+</div>
+
+</div>
+
+<!-- GESTION -->
 
 <div class="menuBlock gestion">
 
@@ -227,11 +273,15 @@ Tableau de bord administration
 
 <div class="menuLeft">
 
-<span class="material-symbols-rounded iconBlue">
+<span class="material-symbols-rounded blue">
 build
 </span>
 
 Gestion
+
+<span class="badge">
+3
+</span>
 
 </div>
 
@@ -245,7 +295,7 @@ expand_more
 
 <div class="subBtn">
 
-<span class="material-symbols-rounded iconPurple">
+<span class="material-symbols-rounded purple">
 account_tree
 </span>
 
@@ -255,7 +305,7 @@ Organigramme
 
 <div class="subBtn">
 
-<span class="material-symbols-rounded iconBlue">
+<span class="material-symbols-rounded blue">
 groups
 </span>
 
@@ -265,7 +315,7 @@ groups
 
 <div class="subBtn">
 
-<span class="material-symbols-rounded iconRed">
+<span class="material-symbols-rounded red">
 emergency
 </span>
 
@@ -277,7 +327,7 @@ Désinfection VSAV
 
 </div>
 
-<!-- ===== PARAMETRES ===== -->
+<!-- PARAMETRES -->
 
 <div class="menuBlock param">
 
@@ -285,7 +335,7 @@ Désinfection VSAV
 
 <div class="menuLeft">
 
-<span class="material-symbols-rounded iconOrange">
+<span class="material-symbols-rounded orange">
 settings
 </span>
 
@@ -303,7 +353,7 @@ expand_more
 
 <div class="subBtn">
 
-<span class="material-symbols-rounded iconRed">
+<span class="material-symbols-rounded red">
 lock
 </span>
 
@@ -313,7 +363,7 @@ Accès
 
 <div class="subBtn">
 
-<span class="material-symbols-rounded iconYellow">
+<span class="material-symbols-rounded yellow">
 tune
 </span>
 
@@ -325,7 +375,7 @@ Configuration
 
 </div>
 
-<!-- ===== TEST ===== -->
+<!-- TEST -->
 
 <div class="menuBlock test">
 
@@ -333,11 +383,11 @@ Configuration
 
 <div class="menuLeft">
 
-<span class="material-symbols-rounded iconGreen">
+<span class="material-symbols-rounded green">
 science
 </span>
 
-Test
+Laboratoire
 
 </div>
 
@@ -351,7 +401,7 @@ expand_more
 
 <div class="subBtn">
 
-<span class="material-symbols-rounded iconBlue">
+<span class="material-symbols-rounded blue">
 info
 </span>
 
@@ -361,7 +411,7 @@ Informations
 
 <div class="subBtn">
 
-<span class="material-symbols-rounded iconPurple">
+<span class="material-symbols-rounded purple">
 event
 </span>
 
@@ -371,7 +421,7 @@ Garde posté
 
 <div class="subBtn">
 
-<span class="material-symbols-rounded iconGreen">
+<span class="material-symbols-rounded green">
 photo_library
 </span>
 
@@ -381,7 +431,7 @@ Galerie
 
 <div class="subBtn">
 
-<span class="material-symbols-rounded iconOrange">
+<span class="material-symbols-rounded orange">
 menu_book
 </span>
 
