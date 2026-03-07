@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>Admin — CS Consenvoye</title>
 
@@ -17,44 +17,27 @@
 font-size:22px;
 }
 
-/* ===== DASHBOARD ===== */
+/* ===== TABLEAU DE BORD ===== */
 
-.commandCenter{
+.dashboard{
 
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:10px;
+padding:12px;
 margin-bottom:14px;
 
-}
-
-.statusCard{
-
-border-radius:16px;
-padding:12px;
+border-radius:18px;
 
 background:linear-gradient(
 180deg,
-rgba(0,0,0,.45),
-rgba(0,0,0,.25)
+rgba(0,0,0,.55),
+rgba(0,0,0,.35)
 );
 
 border:1px solid rgba(255,255,255,.10);
 
-box-shadow:var(--shadow);
-
 text-align:center;
 
-}
+font-weight:900;
 
-.statusValue{
-font-size:20px;
-font-weight:950;
-}
-
-.statusLabel{
-font-size:12px;
-opacity:.7;
 }
 
 /* ===== BANDEAUX ===== */
@@ -62,14 +45,11 @@ opacity:.7;
 .menuBlock{
 
 border-radius:18px;
-
-box-shadow:var(--shadow);
-
 overflow:hidden;
 
 margin-bottom:12px;
 
-transition:.3s;
+box-shadow:var(--shadow);
 
 }
 
@@ -83,32 +63,17 @@ justify-content:space-between;
 
 padding:14px 16px;
 
-cursor:pointer;
-
 font-weight:900;
+
+cursor:pointer;
 
 }
 
 .menuLeft{
+
 display:flex;
 align-items:center;
 gap:12px;
-}
-
-/* ===== BADGE ===== */
-
-.badge{
-
-background:#ff4b4b;
-color:white;
-
-font-size:11px;
-
-padding:2px 6px;
-
-border-radius:8px;
-
-margin-left:6px;
 
 }
 
@@ -116,18 +81,16 @@ margin-left:6px;
 
 .subMenu{
 
-max-height:0;
+display:none;
 
-overflow:hidden;
+background:rgba(0,0,0,.35);
 
-transition:max-height .4s ease;
-
-background:rgba(0,0,0,.25);
+padding:10px;
 
 }
 
 .menuBlock.open .subMenu{
-max-height:400px;
+display:block;
 }
 
 /* ===== BOUTONS ===== */
@@ -142,15 +105,15 @@ padding:12px;
 
 border-radius:12px;
 
-font-weight:850;
-
-cursor:pointer;
-
-margin:8px;
-
 background:rgba(255,255,255,.05);
 
 border:1px solid rgba(255,255,255,.10);
+
+margin-bottom:8px;
+
+font-weight:850;
+
+cursor:pointer;
 
 }
 
@@ -158,33 +121,39 @@ border:1px solid rgba(255,255,255,.10);
 background:rgba(255,255,255,.08);
 }
 
-/* ===== COULEURS ===== */
+/* ===== COULEURS BANDEAUX ===== */
 
 .gestion{
+
 background:linear-gradient(
 180deg,
-rgba(47,123,211,.65),
-rgba(47,123,211,.35)
+#1f5fae,
+#174a8a
 );
+
 }
 
 .param{
+
 background:linear-gradient(
 180deg,
-rgba(255,177,90,.65),
-rgba(255,177,90,.35)
+#d46a00,
+#a65200
 );
+
 }
 
 .test{
+
 background:linear-gradient(
 180deg,
-rgba(47,168,107,.65),
-rgba(47,168,107,.35)
+#1c8f55,
+#136c3f
 );
+
 }
 
-/* ===== ICÔNES ===== */
+/* ===== COULEURS ICÔNES ===== */
 
 .blue{color:#4da3ff}
 .orange{color:#ffb15a}
@@ -223,45 +192,15 @@ Retour
 
 </div>
 
-<!-- TABLEAU DE COMMANDEMENT -->
+<!-- TABLEAU DE BORD -->
 
-<div class="commandCenter">
+<div class="dashboard">
 
-<div class="statusCard">
+<span class="material-symbols-rounded blue">
+dashboard
+</span>
 
-<div class="statusValue green">
-3
-</div>
-
-<div class="statusLabel">
-VSAV opérationnels
-</div>
-
-</div>
-
-<div class="statusCard">
-
-<div class="statusValue blue">
-12
-</div>
-
-<div class="statusLabel">
-Agents actifs
-</div>
-
-</div>
-
-<div class="statusCard">
-
-<div class="statusValue orange">
-2
-</div>
-
-<div class="statusLabel">
-Missions en attente
-</div>
-
-</div>
+Tableau de bord administration
 
 </div>
 
@@ -278,10 +217,6 @@ build
 </span>
 
 Gestion
-
-<span class="badge">
-3
-</span>
 
 </div>
 
@@ -387,7 +322,7 @@ Configuration
 science
 </span>
 
-Laboratoire
+Test
 
 </div>
 
