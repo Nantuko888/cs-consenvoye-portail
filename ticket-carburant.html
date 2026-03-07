@@ -962,11 +962,14 @@ function closeTicketPreview(){
   viewer.style.display = "none";
   img.src = "";
 }
-  document.getElementById("photoViewer").addEventListener("click", function(e){
-  if(e.target.id === "photoViewer"){
-    closeTicketPreview();
-  }
-});
+  const photoViewerEl = document.getElementById("photoViewer");
+if(photoViewerEl){
+  photoViewerEl.addEventListener("click", function(e){
+    if(e.target.id === "photoViewer"){
+      closeTicketPreview();
+    }
+  });
+}
 
 
 // ====== Init ======
