@@ -14,6 +14,7 @@
       --shadow: 0 18px 45px rgba(0,0,0,.45);
       --radius: 22px;
     }
+
     *{ box-sizing:border-box; }
 
     html, body{ height:100%; }
@@ -29,6 +30,7 @@
       padding:14px;
       overflow:auto;
     }
+
     body::before{
       content:"";
       position:fixed;
@@ -37,6 +39,7 @@
       transform: translateZ(0);
       z-index:-2;
     }
+
     body::after{
       content:"";
       position:fixed;
@@ -56,88 +59,69 @@
       background: transparent;
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
-
     }
 
-  header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-
-  margin: 10px 12px 8px;
-  padding: 10px 12px;
-  min-height: 46px;
-
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 14px 34px rgba(0,0,0,.40);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-
-.title{
-  font-weight:950;
-  letter-spacing:.8px;
-  text-transform: uppercase;
-  font-size: 18px;
-  margin:0;
-  white-space:nowrap;
-
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.btn{
-  border:1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.18);
-  color:var(--text);
-  padding: 9px 12px;
-  border-radius: 14px;
-  font-weight:900;
-  cursor:pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.btn:active{transform: translateY(1px)}
-
-.topBtns{
-  display:flex;
-  gap:10px;
-  flex: 0 0 auto;
-}
-
-    .chipBtn{
-      border:1px solid rgba(255,255,255,.15);
-      background: rgba(0,0,0,.40);
-      color: var(--text);
-      padding: 9px 12px;
-      border-radius: 999px;
-      font-weight:800;
-      cursor:pointer;
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin: 10px 12px 8px;
+      padding: 10px 12px;
+      min-height: 46px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 14px 34px rgba(0,0,0,.40);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 10px 25px rgba(0,0,0,.35);
+    }
+
+    .title{
+      font-weight:950;
+      letter-spacing:.8px;
+      text-transform: uppercase;
+      font-size: 18px;
+      margin:0;
+      white-space:nowrap;
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .btn{
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      color:var(--text);
+      padding: 9px 12px;
+      border-radius: 14px;
+      font-weight:900;
+      cursor:pointer;
       -webkit-tap-highlight-color: transparent;
     }
-    .:active{ transform: translateY(1px); }
+    .btn:active{transform: translateY(1px)}
+
+    .topBtns{
+      display:flex;
+      gap:10px;
+      flex: 0 0 auto;
+    }
 
     .card{
       margin: 8px 12px 10px;
-      padding: 10px;
+      padding: 12px;
       border-radius: var(--radius);
-      background: var(--glass);
-      border:1px solid var(--stroke);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 16px 40px rgba(0,0,0,.35);
+      background: linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.24));
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 16px 40px rgba(0,0,0,.32);
     }
 
     .directionWrap{ display:grid; gap:10px; }
     .chefRow{ display:flex; justify-content:center; }
+
     .adjRow{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -146,16 +130,19 @@
 
     .badge{
       width:100%;
-      border-radius: 16px;
-      padding: 10px 10px;
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow: 0 14px 28px rgba(0,0,0,.30);
+      border-radius: 18px;
+      padding: 12px 12px;
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: 0 14px 28px rgba(0,0,0,.22);
       text-align:center;
-      min-height: 68px;
+      min-height: 72px;
       display:flex;
       flex-direction:column;
       justify-content:center;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
+
     .badge .role{
       font-weight:1000;
       letter-spacing:.6px;
@@ -164,6 +151,7 @@
       opacity:.95;
       line-height:1.05;
     }
+
     .badge .name{
       margin-top:5px;
       font-weight:900;
@@ -174,9 +162,20 @@
       overflow-wrap: anywhere;
     }
 
-    .chef{ background: linear-gradient(180deg, rgba(250,190,80,.92), rgba(220,140,35,.88)); color:#1b1206; }
-    .adj1{ background: linear-gradient(180deg, rgba(95,150,210,.90), rgba(55,100,155,.88)); }
-    .adj2{ background: linear-gradient(180deg, rgba(140,120,190,.90), rgba(95,75,150,.88)); }
+    .chef{
+      background: linear-gradient(180deg, rgba(250,190,80,.42), rgba(220,140,35,.22));
+      color:#fff4df;
+    }
+
+    .adj1{
+      background: linear-gradient(180deg, rgba(95,150,210,.38), rgba(55,100,155,.18));
+      color:#eef6ff;
+    }
+
+    .adj2{
+      background: linear-gradient(180deg, rgba(140,120,190,.38), rgba(95,75,150,.18));
+      color:#f3ecff;
+    }
 
     .sectionTitle{
       margin: 6px 14px 8px;
@@ -190,28 +189,31 @@
 
     .polesGrid{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      padding: 0 14px 16px;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 0 12px 16px;
     }
 
     .poleBtn{
-      border: none;
-      border-radius: 20px;
-      padding: 16px 10px;
-      min-height: 86px;
+      width:100%;
+      border:none;
+      border-radius:18px;
+      padding: 16px 18px;
+      min-height: 64px;
       cursor:pointer;
       color:#fff;
-      font-weight: 1000;
+      font-weight:1000;
       letter-spacing:.6px;
-      text-transform: uppercase;
-      box-shadow: 0 18px 35px rgba(0,0,0,.35);
-      border: 1px solid rgba(255,255,255,.12);
+      text-transform:uppercase;
+      box-shadow: 0 14px 28px rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.12);
       display:flex;
       align-items:center;
       justify-content:center;
       text-align:center;
       line-height:1.1;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       -webkit-tap-highlight-color: transparent;
     }
     .poleBtn:active{ transform: translateY(1px); }
@@ -243,11 +245,13 @@
       border-bottom: 1px solid rgba(255,255,255,.10);
       color:#fff;
     }
+
     .modalTitle{
       font-weight: 1000;
       text-transform: uppercase;
       letter-spacing: .8px;
     }
+
     .closeBtn{
       border:none;
       cursor:pointer;
@@ -281,6 +285,7 @@
     .subBody{ padding: 10px 12px 12px; }
 
     ul{ margin:0; padding-left: 18px; }
+
     li{
       margin: 6px 0;
       color: rgba(255,255,255,.92);
@@ -311,50 +316,55 @@
       color:#ffd19a;
       display:none;
     }
+
     .syncPill{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding: 8px 10px;
-  border-radius: 999px;
-  background: rgba(0,0,0,.28);
-  border: 1px solid rgba(255,255,255,.14);
-  color: rgba(255,255,255,.92);
-  font-weight: 950;
-  font-size: 12px;
-  letter-spacing: .2px;
-  box-shadow: 0 10px 26px rgba(0,0,0,.35);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-  /* ✅ pastille synchro flottante */
-.syncToast{
-  position: fixed;
-  left: 12px;
-  right: 12px;
-  bottom: calc(env(safe-area-inset-bottom) + 12px);
-  z-index: 9999;
-  display: none;
-  max-width: 980px;
-  margin: 0 auto;
-}
-.syncToast .pill{
-  display:inline-flex;
-  gap:10px;
-  align-items:center;
-  padding:10px 12px;
-  border-radius: 16px;
-  background: rgba(0,0,0,.62);
-  border:1px solid rgba(255,255,255,.14);
-  box-shadow: 0 14px 34px rgba(0,0,0,.40);
-  color: rgba(255,255,255,.90);
-  font-weight:900;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-.syncToast .small{font-weight:800; opacity:.85; font-size:13px}
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.92);
+      font-weight: 950;
+      font-size: 12px;
+      letter-spacing: .2px;
+      box-shadow: 0 10px 26px rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
 
+    .syncToast{
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      bottom: calc(env(safe-area-inset-bottom) + 12px);
+      z-index: 9999;
+      display: none;
+      max-width: 980px;
+      margin: 0 auto;
+    }
 
+    .syncToast .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:10px 12px;
+      border-radius: 16px;
+      background: rgba(0,0,0,.62);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: 0 14px 34px rgba(0,0,0,.40);
+      color: rgba(255,255,255,.90);
+      font-weight:900;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .syncToast .small{
+      font-weight:800;
+      opacity:.85;
+      font-size:13px;
+    }
   </style>
 </head>
 
@@ -363,10 +373,9 @@
     <header>
       <div class="title">Organigramme</div>
       <div class="topBtns">
-  <span class="syncPill" id="syncPill" style="display:none;">Synchronisation…</span>
-  <button class="btn" id="btnBack">Retour</button>
-</div>
-
+        <span class="syncPill" id="syncPill" style="display:none;">Synchronisation…</span>
+        <button class="btn" id="btnBack">Retour</button>
+      </div>
     </header>
 
     <div class="card">
@@ -407,292 +416,281 @@
     </div>
   </div>
 
-  <script>
-  const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
-
-  // ✅ Cache navigateur (session = jusqu’à fermeture onglet)
-  const CACHE_KEY = "CS_ORGA_CACHE_V1";
-  const CACHE_TS_KEY = "CS_ORGA_CACHE_TS_V1";
-  const CACHE_MAX_AGE_MS = 6 * 60 * 60 * 1000; // 6h (mets 24h si tu veux)
-
-  const $chefName = document.getElementById("chefName");
-  const $adj1Name = document.getElementById("adj1Name");
-  const $adj2Name = document.getElementById("adj2Name");
-  const $grid = document.getElementById("polesGrid");
-  const $err = document.getElementById("errBox");
-
-  const $modal = document.getElementById("modal");
-  const $modalHead = document.getElementById("modalHead");
-  const $modalTitle = document.getElementById("modalTitle");
-  const $modalBody = document.getElementById("modalBody");
-
-  let DATA = { direction:{chef:"—",adj1:"—",adj2:"—"}, poles:[] };
-
-  function showErr(msg){
-    if(!$err) return;
-    $err.style.display = "block";
-    $err.textContent = msg;
-  }
-  function hideErr(){
-    if(!$err) return;
-    $err.style.display = "none";
-    $err.textContent = "";
-  }
-
-  function jsonp(url, cbName){
-    return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-
-      const timer = setTimeout(() => {
-        cleanup();
-        reject(new Error("Timeout JSONP"));
-      }, 12000);
-
-      function cleanup(){
-        clearTimeout(timer);
-        script.remove();
-        try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
-      }
-
-      window[cbName] = (data) => { cleanup(); resolve(data); };
-      script.onerror = () => { cleanup(); reject(new Error("Erreur JSONP")); };
-      script.src = url;
-      document.head.appendChild(script);
-    });
-  }
-
-  function hexToRgba(hex, a){
-    const h = (hex || "").replace("#","");
-    if(h.length !== 6) return `rgba(255,255,255,${a})`;
-    const r = parseInt(h.slice(0,2),16);
-    const g = parseInt(h.slice(2,4),16);
-    const b = parseInt(h.slice(4,6),16);
-    return `rgba(${r},${g},${b},${a})`;
-  }
-
-  function escapeHtml(s){
-    return String(s ?? "")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-
-  function normalizeOrgPayload(apiData){
-    const direction = apiData?.direction || {};
-    const polesIn = Array.isArray(apiData?.poles) ? apiData.poles : [];
-
-    const poles = polesIn.map(p => ({
-      id: p.id || "",
-      label: p.libelle || p.label || "",
-      color: p.couleur || p.color || "#888888",
-      subpoles: (p.sousPoles || p.subpoles || []).map(sp => ({
-        label: sp.libelle || sp.label || "",
-        membres: (sp.membres || []).map(m => {
-          if (typeof m === "string") return m;
-          const f = (m.fonction || "").trim();
-          const n = (m.nom || "").trim();
-          if (f && n) return `${f} : ${n}`;
-          return n || f || "—";
-        })
-      }))
-    })).filter(p => p.label);
-
-    return {
-      direction: {
-        chef: direction.chef || "—",
-        adj1: direction.adj1 || "—",
-        adj2: direction.adj2 || "—"
-      },
-      poles
-    };
-  }
-
-  function render(){
-    $chefName.textContent = DATA.direction.chef || "—";
-    $adj1Name.textContent = DATA.direction.adj1 || "—";
-    $adj2Name.textContent = DATA.direction.adj2 || "—";
-
-    $grid.innerHTML = "";
-    DATA.poles.forEach(p => {
-      const btn = document.createElement("button");
-      btn.className = "poleBtn";
-      btn.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .92)}, ${hexToRgba(p.color, .70)})`;
-      btn.textContent = p.label;
-      btn.onclick = () => openPole(p);
-      $grid.appendChild(btn);
-    });
-  }
-
-  function openPole(p){
-    $modalHead.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .95)}, ${hexToRgba(p.color, .75)})`;
-    $modalTitle.textContent = p.label;
-    $modalBody.innerHTML = "";
-
-    (p.subpoles || []).forEach(sp => {
-      const box = document.createElement("div");
-      box.className = "sub";
-
-      const bar = document.createElement("div");
-      bar.className = "subBar";
-      bar.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .92)}, ${hexToRgba(p.color, .72)})`;
-      bar.textContent = sp.label;
-
-      const body = document.createElement("div");
-      body.className = "subBody";
-
-      const ul = document.createElement("ul");
-
-      (sp.membres || []).forEach(m => {
-        const li = document.createElement("li");
-        const s = String(m ?? "");
-
-        if ((p.id === "amicale") && /bureau/i.test(sp.label || "") && s.includes(":")){
-          const [rolePart, ...rest] = s.split(":");
-          const namePart = rest.join(":").trim();
-          li.innerHTML = `<span class="roleU">${escapeHtml(rolePart.trim())} :</span> ${escapeHtml(namePart)}`;
-        } else {
-          li.textContent = s;
-        }
-        ul.appendChild(li);
-      });
-
-      body.appendChild(ul);
-      box.appendChild(bar);
-      box.appendChild(body);
-      $modalBody.appendChild(box);
-    });
-
-    const hint = document.createElement("div");
-    hint.className = "hint";
-    hint.textContent = "Clique sur Fermer pour revenir aux pôles.";
-    $modalBody.appendChild(hint);
-
-    $modal.classList.add("show");
-  }
-
-  function closeModal(){ $modal.classList.remove("show"); }
-  $modal.addEventListener("click", (e)=>{ if(e.target === $modal) closeModal(); });
-
-  /** ✅ Cache helpers */
-  function loadCache(){
-    try{
-      const ts = Number(sessionStorage.getItem(CACHE_TS_KEY) || "0");
-      const raw = sessionStorage.getItem(CACHE_KEY);
-      if(!raw) return null;
-      if(!ts) return null;
-      if(Date.now() - ts > CACHE_MAX_AGE_MS) return null;
-      return JSON.parse(raw);
-    }catch(e){
-      return null;
-    }
-  }
-
-  function saveCache(payload){
-    try{
-      sessionStorage.setItem(CACHE_KEY, JSON.stringify(payload));
-      sessionStorage.setItem(CACHE_TS_KEY, String(Date.now()));
-    }catch(e){
-      // ignore
-    }
-  }
-
-  // ✅ Appel manuel possible si un jour tu veux forcer (console: forceReloadOrg())
-  window.forceReloadOrg = async function(){
-    sessionStorage.removeItem(CACHE_KEY);
-    sessionStorage.removeItem(CACHE_TS_KEY);
-    await loadFromSheets();
-  };
-
-  function setSync(on, text){
-  const el = document.getElementById("syncPill");
-  if(!el) return;
-  if(on){
-    el.textContent = text || "Synchronisation…";
-    el.style.display = "inline-flex";
-  }else{
-    el.style.display = "none";
-  }
-}
-function showSync(msg="Synchronisation…", sub=""){
-  const t = document.getElementById("syncToast");
-  document.getElementById("syncTxt").textContent = msg;
-  document.getElementById("syncSub").textContent = sub || "Mise à jour des données";
-  t.style.display = "block";
-}
-function hideSync(){
-  const t = document.getElementById("syncToast");
-  if(t) t.style.display = "none";
-}
-
-
-async function loadFromSheets(){
-  hideErr();
-
-  // 1) ✅ affiche immédiatement le cache si dispo
-  let hadCache = false;
-  const cached = loadCache();
-  if(cached && cached.direction && Array.isArray(cached.poles)){
-    DATA = cached;
-    render();
-    hadCache = true;
-    setSync(true, "Synchronisation…");
-  }else{
-    setSync(true, "Chargement…");
-  }
-
-  // 2) ✅ rafraîchit ensuite via API (même si cache présent)
-  try{
-    const cb = "cb_org_" + Math.random().toString(36).slice(2);
-    const url = `${API}?view=org&callback=${cb}&nocache=1&_=${Date.now()}`;
-    const apiData = await jsonp(url, cb);
-
-    if(!apiData || apiData.ok === false){
-      throw new Error(apiData?.error || "Réponse org invalide");
-    }
-
-    const fresh = normalizeOrgPayload(apiData);
-
-    // met à jour + cache
-    DATA = fresh;
-    saveCache(DATA);
-    render();
-
-    setSync(false);
-
-  }catch(err){
-    console.error(err);
-
-    // si on avait déjà le cache → on garde l’affichage et on masque juste le pill
-    if(hadCache){
-      setSync(false);
-      return;
-    }
-
-    // sinon → vraie erreur
-    setSync(false);
-    showErr("Erreur de chargement depuis Sheets (API).");
-  }
-}
-// ✅ branche le bouton Retour
-document.getElementById("btnBack").addEventListener("click", () => {
-  location.replace("index.html?portal=1");
-});
-
-// ✅ BOOT : charge l’organigramme
-loadFromSheets();
-
-</script>
-<div class="syncToast" id="syncToast">
-  <div class="pill">
-    <span>🔄</span>
-    <div>
-      <div id="syncTxt">Synchronisation…</div>
-      <div class="small" id="syncSub">Mise à jour des données</div>
+  <div class="syncToast" id="syncToast">
+    <div class="pill">
+      <span>🔄</span>
+      <div>
+        <div id="syncTxt">Synchronisation…</div>
+        <div class="small" id="syncSub">Mise à jour des données</div>
+      </div>
     </div>
   </div>
-</div>
 
+  <script>
+    const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+
+    const CACHE_KEY = "CS_ORGA_CACHE_V1";
+    const CACHE_TS_KEY = "CS_ORGA_CACHE_TS_V1";
+    const CACHE_MAX_AGE_MS = 6 * 60 * 60 * 1000;
+
+    const $chefName = document.getElementById("chefName");
+    const $adj1Name = document.getElementById("adj1Name");
+    const $adj2Name = document.getElementById("adj2Name");
+    const $grid = document.getElementById("polesGrid");
+    const $err = document.getElementById("errBox");
+
+    const $modal = document.getElementById("modal");
+    const $modalHead = document.getElementById("modalHead");
+    const $modalTitle = document.getElementById("modalTitle");
+    const $modalBody = document.getElementById("modalBody");
+
+    let DATA = { direction:{chef:"—",adj1:"—",adj2:"—"}, poles:[] };
+
+    function showErr(msg){
+      if(!$err) return;
+      $err.style.display = "block";
+      $err.textContent = msg;
+    }
+
+    function hideErr(){
+      if(!$err) return;
+      $err.style.display = "none";
+      $err.textContent = "";
+    }
+
+    function jsonp(url, cbName){
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+
+        const timer = setTimeout(() => {
+          cleanup();
+          reject(new Error("Timeout JSONP"));
+        }, 12000);
+
+        function cleanup(){
+          clearTimeout(timer);
+          script.remove();
+          try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+        }
+
+        window[cbName] = (data) => { cleanup(); resolve(data); };
+        script.onerror = () => { cleanup(); reject(new Error("Erreur JSONP")); };
+        script.src = url;
+        document.head.appendChild(script);
+      });
+    }
+
+    function hexToRgba(hex, a){
+      const h = (hex || "").replace("#","");
+      if(h.length !== 6) return `rgba(255,255,255,${a})`;
+      const r = parseInt(h.slice(0,2),16);
+      const g = parseInt(h.slice(2,4),16);
+      const b = parseInt(h.slice(4,6),16);
+      return `rgba(${r},${g},${b},${a})`;
+    }
+
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function normalizeOrgPayload(apiData){
+      const direction = apiData?.direction || {};
+      const polesIn = Array.isArray(apiData?.poles) ? apiData.poles : [];
+
+      const poles = polesIn.map(p => ({
+        id: p.id || "",
+        label: p.libelle || p.label || "",
+        color: p.couleur || p.color || "#888888",
+        subpoles: (p.sousPoles || p.subpoles || []).map(sp => ({
+          label: sp.libelle || sp.label || "",
+          membres: (sp.membres || []).map(m => {
+            if (typeof m === "string") return m;
+            const f = (m.fonction || "").trim();
+            const n = (m.nom || "").trim();
+            if (f && n) return `${f} : ${n}`;
+            return n || f || "—";
+          })
+        }))
+      })).filter(p => p.label);
+
+      return {
+        direction: {
+          chef: direction.chef || "—",
+          adj1: direction.adj1 || "—",
+          adj2: direction.adj2 || "—"
+        },
+        poles
+      };
+    }
+
+    function render(){
+      $chefName.textContent = DATA.direction.chef || "—";
+      $adj1Name.textContent = DATA.direction.adj1 || "—";
+      $adj2Name.textContent = DATA.direction.adj2 || "—";
+
+      $grid.innerHTML = "";
+      DATA.poles.forEach(p => {
+        const btn = document.createElement("button");
+        btn.className = "poleBtn";
+        btn.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .34)}, ${hexToRgba(p.color, .16)})`;
+        btn.textContent = p.label;
+        btn.onclick = () => openPole(p);
+        $grid.appendChild(btn);
+      });
+    }
+
+    function openPole(p){
+      $modalHead.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .95)}, ${hexToRgba(p.color, .75)})`;
+      $modalTitle.textContent = p.label;
+      $modalBody.innerHTML = "";
+
+      (p.subpoles || []).forEach(sp => {
+        const box = document.createElement("div");
+        box.className = "sub";
+
+        const bar = document.createElement("div");
+        bar.className = "subBar";
+        bar.style.background = `linear-gradient(180deg, ${hexToRgba(p.color, .92)}, ${hexToRgba(p.color, .72)})`;
+        bar.textContent = sp.label;
+
+        const body = document.createElement("div");
+        body.className = "subBody";
+
+        const ul = document.createElement("ul");
+
+        (sp.membres || []).forEach(m => {
+          const li = document.createElement("li");
+          const s = String(m ?? "");
+
+          if ((p.id === "amicale") && /bureau/i.test(sp.label || "") && s.includes(":")){
+            const [rolePart, ...rest] = s.split(":");
+            const namePart = rest.join(":").trim();
+            li.innerHTML = `<span class="roleU">${escapeHtml(rolePart.trim())} :</span> ${escapeHtml(namePart)}`;
+          } else {
+            li.textContent = s;
+          }
+          ul.appendChild(li);
+        });
+
+        body.appendChild(ul);
+        box.appendChild(bar);
+        box.appendChild(body);
+        $modalBody.appendChild(box);
+      });
+
+      const hint = document.createElement("div");
+      hint.className = "hint";
+      hint.textContent = "Clique sur Fermer pour revenir aux pôles.";
+      $modalBody.appendChild(hint);
+
+      $modal.classList.add("show");
+    }
+
+    function closeModal(){ $modal.classList.remove("show"); }
+    $modal.addEventListener("click", (e)=>{ if(e.target === $modal) closeModal(); });
+
+    function loadCache(){
+      try{
+        const ts = Number(sessionStorage.getItem(CACHE_TS_KEY) || "0");
+        const raw = sessionStorage.getItem(CACHE_KEY);
+        if(!raw) return null;
+        if(!ts) return null;
+        if(Date.now() - ts > CACHE_MAX_AGE_MS) return null;
+        return JSON.parse(raw);
+      }catch(e){
+        return null;
+      }
+    }
+
+    function saveCache(payload){
+      try{
+        sessionStorage.setItem(CACHE_KEY, JSON.stringify(payload));
+        sessionStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+      }catch(e){}
+    }
+
+    window.forceReloadOrg = async function(){
+      sessionStorage.removeItem(CACHE_KEY);
+      sessionStorage.removeItem(CACHE_TS_KEY);
+      await loadFromSheets();
+    };
+
+    function setSync(on, text){
+      const el = document.getElementById("syncPill");
+      if(!el) return;
+      if(on){
+        el.textContent = text || "Synchronisation…";
+        el.style.display = "inline-flex";
+      }else{
+        el.style.display = "none";
+      }
+    }
+
+    function showSync(msg="Synchronisation…", sub=""){
+      const t = document.getElementById("syncToast");
+      document.getElementById("syncTxt").textContent = msg;
+      document.getElementById("syncSub").textContent = sub || "Mise à jour des données";
+      t.style.display = "block";
+    }
+
+    function hideSync(){
+      const t = document.getElementById("syncToast");
+      if(t) t.style.display = "none";
+    }
+
+    async function loadFromSheets(){
+      hideErr();
+
+      let hadCache = false;
+      const cached = loadCache();
+      if(cached && cached.direction && Array.isArray(cached.poles)){
+        DATA = cached;
+        render();
+        hadCache = true;
+        setSync(true, "Synchronisation…");
+      }else{
+        setSync(true, "Chargement…");
+      }
+
+      try{
+        const cb = "cb_org_" + Math.random().toString(36).slice(2);
+        const url = `${API}?view=org&callback=${cb}&nocache=1&_=${Date.now()}`;
+        const apiData = await jsonp(url, cb);
+
+        if(!apiData || apiData.ok === false){
+          throw new Error(apiData?.error || "Réponse org invalide");
+        }
+
+        const fresh = normalizeOrgPayload(apiData);
+        DATA = fresh;
+        saveCache(DATA);
+        render();
+
+        setSync(false);
+
+      }catch(err){
+        console.error(err);
+
+        if(hadCache){
+          setSync(false);
+          return;
+        }
+
+        setSync(false);
+        showErr("Erreur de chargement depuis Sheets (API).");
+      }
+    }
+
+    document.getElementById("btnBack").addEventListener("click", () => {
+      location.replace("index.html?portal=1");
+    });
+
+    loadFromSheets();
+  </script>
 </body>
 </html>
