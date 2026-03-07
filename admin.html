@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Admin — CS Consenvoye</title>
+<title>Administration — CS Consenvoye</title>
 
 <link rel="stylesheet" href="cs-theme.css">
 
@@ -13,30 +14,36 @@
 
 <style>
 
-.material-symbols-rounded{
-font-size:22px;
+/* ===== STRUCTURE ===== */
+
+.adminWrap{
+max-width:980px;
+margin:auto;
+padding:14px;
 }
 
 /* ===== TABLEAU DE BORD ===== */
 
 .dashboard{
 
-padding:12px;
-margin-bottom:14px;
+padding:14px;
+margin-bottom:16px;
 
 border-radius:18px;
 
 background:linear-gradient(
 180deg,
-rgba(0,0,0,.55),
+rgba(255,120,0,.35),
 rgba(0,0,0,.35)
 );
 
-border:1px solid rgba(255,255,255,.10);
-
-text-align:center;
+border:1px solid rgba(255,255,255,.12);
 
 font-weight:900;
+
+display:flex;
+align-items:center;
+gap:10px;
 
 }
 
@@ -44,16 +51,22 @@ font-weight:900;
 
 .menuBlock{
 
-border-radius:18px;
+border-radius:20px;
 overflow:hidden;
 
-margin-bottom:12px;
+margin-bottom:14px;
 
-box-shadow:var(--shadow);
+background:linear-gradient(
+180deg,
+rgba(0,0,0,.55),
+rgba(0,0,0,.35)
+);
+
+border:1px solid rgba(255,255,255,.12);
 
 }
 
-/* ===== HEADER ===== */
+/* ===== HEADER MENU ===== */
 
 .menuHeader{
 
@@ -61,20 +74,18 @@ display:flex;
 align-items:center;
 justify-content:space-between;
 
-padding:14px 16px;
-
-font-weight:900;
+padding:16px;
 
 cursor:pointer;
+
+font-weight:900;
 
 }
 
 .menuLeft{
-
 display:flex;
 align-items:center;
 gap:12px;
-
 }
 
 /* ===== SOUS MENU ===== */
@@ -83,9 +94,9 @@ gap:12px;
 
 display:none;
 
-background:rgba(0,0,0,.35);
-
 padding:10px;
+
+background:rgba(0,0,0,.25);
 
 }
 
@@ -103,11 +114,7 @@ gap:12px;
 
 padding:12px;
 
-border-radius:12px;
-
-background:rgba(255,255,255,.05);
-
-border:1px solid rgba(255,255,255,.10);
+border-radius:14px;
 
 margin-bottom:8px;
 
@@ -115,52 +122,29 @@ font-weight:850;
 
 cursor:pointer;
 
+border:1px solid rgba(255,255,255,.10);
+
 }
 
-.subBtn:hover{
-background:rgba(255,255,255,.08);
-}
-
-/* ===== COULEURS BANDEAUX ===== */
+/* ===== COULEURS ===== */
 
 .gestion{
-
-background:linear-gradient(
-180deg,
-#1f5fae,
-#174a8a
-);
-
+background:rgba(60,120,255,.18);
 }
 
 .param{
-
-background:linear-gradient(
-180deg,
-#d46a00,
-#a65200
-);
-
+background:rgba(255,140,40,.18);
 }
 
-.test{
-
-background:linear-gradient(
-180deg,
-#1c8f55,
-#136c3f
-);
-
+.tests{
+background:rgba(70,200,120,.18);
 }
 
-/* ===== COULEURS ICÔNES ===== */
+/* ===== ICONES ===== */
 
-.blue{color:#4da3ff}
-.orange{color:#ffb15a}
-.green{color:#50d890}
-.red{color:#ff6b6b}
-.purple{color:#c47cff}
-.yellow{color:#ffd166}
+.material-symbols-rounded{
+font-size:22px;
+}
 
 </style>
 
@@ -172,17 +156,15 @@ background:linear-gradient(
 
 <div class="wrap">
 
-<!-- BANDEAU -->
-
 <div class="topbar">
 
 <div class="title">
 
-<span class="material-symbols-rounded red">
-local_fire_department
+<span class="material-symbols-rounded">
+admin_panel_settings
 </span>
 
-Admin
+Administration
 
 </div>
 
@@ -192,11 +174,13 @@ Retour
 
 </div>
 
+<div class="adminWrap">
+
 <!-- TABLEAU DE BORD -->
 
 <div class="dashboard">
 
-<span class="material-symbols-rounded blue">
+<span class="material-symbols-rounded">
 dashboard
 </span>
 
@@ -206,14 +190,14 @@ Tableau de bord administration
 
 <!-- GESTION -->
 
-<div class="menuBlock gestion">
+<div class="menuBlock">
 
 <div class="menuHeader" onclick="toggleMenu(this)">
 
 <div class="menuLeft">
 
-<span class="material-symbols-rounded blue">
-build
+<span class="material-symbols-rounded">
+manage_accounts
 </span>
 
 Gestion
@@ -228,9 +212,9 @@ expand_more
 
 <div class="subMenu">
 
-<div class="subBtn">
+<div class="subBtn gestion">
 
-<span class="material-symbols-rounded purple">
+<span class="material-symbols-rounded">
 account_tree
 </span>
 
@@ -238,9 +222,9 @@ Organigramme
 
 </div>
 
-<div class="subBtn">
+<div class="subBtn gestion">
 
-<span class="material-symbols-rounded blue">
+<span class="material-symbols-rounded">
 groups
 </span>
 
@@ -248,10 +232,10 @@ groups
 
 </div>
 
-<div class="subBtn">
+<div class="subBtn gestion">
 
-<span class="material-symbols-rounded red">
-emergency
+<span class="material-symbols-rounded">
+ambulance
 </span>
 
 Désinfection VSAV
@@ -264,13 +248,13 @@ Désinfection VSAV
 
 <!-- PARAMETRES -->
 
-<div class="menuBlock param">
+<div class="menuBlock">
 
 <div class="menuHeader" onclick="toggleMenu(this)">
 
 <div class="menuLeft">
 
-<span class="material-symbols-rounded orange">
+<span class="material-symbols-rounded">
 settings
 </span>
 
@@ -286,19 +270,19 @@ expand_more
 
 <div class="subMenu">
 
-<div class="subBtn">
+<div class="subBtn param">
 
-<span class="material-symbols-rounded red">
-lock
+<span class="material-symbols-rounded">
+key
 </span>
 
 Accès
 
 </div>
 
-<div class="subBtn">
+<div class="subBtn param">
 
-<span class="material-symbols-rounded yellow">
+<span class="material-symbols-rounded">
 tune
 </span>
 
@@ -310,19 +294,19 @@ Configuration
 
 </div>
 
-<!-- TEST -->
+<!-- TESTS -->
 
-<div class="menuBlock test">
+<div class="menuBlock">
 
 <div class="menuHeader" onclick="toggleMenu(this)">
 
 <div class="menuLeft">
 
-<span class="material-symbols-rounded green">
-science
+<span class="material-symbols-rounded">
+construction
 </span>
 
-Test
+Tests
 
 </div>
 
@@ -334,9 +318,9 @@ expand_more
 
 <div class="subMenu">
 
-<div class="subBtn">
+<div class="subBtn tests">
 
-<span class="material-symbols-rounded blue">
+<span class="material-symbols-rounded">
 info
 </span>
 
@@ -344,19 +328,19 @@ Informations
 
 </div>
 
-<div class="subBtn">
+<div class="subBtn tests">
 
-<span class="material-symbols-rounded purple">
-event
+<span class="material-symbols-rounded">
+schedule
 </span>
 
-Garde posté
+Gardes postées
 
 </div>
 
-<div class="subBtn">
+<div class="subBtn tests">
 
-<span class="material-symbols-rounded green">
+<span class="material-symbols-rounded">
 photo_library
 </span>
 
@@ -364,13 +348,15 @@ Galerie
 
 </div>
 
-<div class="subBtn">
+<div class="subBtn tests">
 
-<span class="material-symbols-rounded orange">
+<span class="material-symbols-rounded">
 menu_book
 </span>
 
 Book
+
+</div>
 
 </div>
 
@@ -385,7 +371,6 @@ Book
 function toggleMenu(el){
 
 const block = el.parentElement
-
 block.classList.toggle("open")
 
 }
