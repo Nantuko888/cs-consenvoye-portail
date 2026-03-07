@@ -146,6 +146,7 @@
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
       padding:12px;
+      padding-bottom:calc(env(safe-area-inset-bottom) + 34px);
     }
 
     .sectionTitle{
@@ -155,41 +156,14 @@
       color:rgba(255,255,255,.96);
     }
 
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .row{
-      border-radius:16px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.08);
-      padding:10px 12px;
-    }
-
-    .rowTitle{
-      margin:0 0 6px;
-      font-size:15px;
-      font-weight:950;
-      color:#fff;
-    }
-
-    .rowLine{
-      margin:0;
-      color:rgba(255,255,255,.90);
-      font-size:14px;
-      font-weight:800;
-      line-height:1.3;
-      white-space:pre-wrap;
-    }
-
+    .list,
     .miniTable{
       display:flex;
       flex-direction:column;
       gap:10px;
     }
 
+    .row,
     .card{
       border-radius:16px;
       background:rgba(255,255,255,.05);
@@ -197,6 +171,7 @@
       padding:10px 12px;
     }
 
+    .rowTitle,
     .card h4{
       margin:0 0 8px;
       font-size:15px;
@@ -204,6 +179,7 @@
       color:#fff;
     }
 
+    .rowLine,
     .line{
       margin:0 0 4px;
       font-size:14px;
@@ -212,7 +188,10 @@
       line-height:1.3;
     }
 
-    .line:last-child{margin-bottom:0}
+    .rowLine:last-child,
+    .line:last-child{
+      margin-bottom:0;
+    }
 
     a.link{
       color:#9fd0ff;
@@ -229,13 +208,80 @@
 
     .hidden{display:none}
 
+    .contactCard{
+      border-radius:16px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      padding:12px;
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap:12px;
+      align-items:center;
+    }
+
+    .contactInfo{
+      min-width:0;
+    }
+
+    .contactName{
+      margin:0 0 6px;
+      font-size:15px;
+      font-weight:950;
+      color:#fff;
+      line-height:1.2;
+    }
+
+    .contactMeta{
+      margin:0 0 4px;
+      font-size:14px;
+      font-weight:800;
+      color:rgba(255,255,255,.90);
+      line-height:1.3;
+      overflow-wrap:anywhere;
+    }
+
+    .contactMeta:last-child{
+      margin-bottom:0;
+    }
+
+    .callBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:84px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.14);
+      background:linear-gradient(180deg, rgba(90,170,105,.34), rgba(90,170,105,.16));
+      color:#fff;
+      text-decoration:none;
+      font-weight:950;
+      box-shadow:0 10px 24px rgba(0,0,0,.20);
+      -webkit-tap-highlight-color:transparent;
+      white-space:nowrap;
+    }
+
+    .callBtn:active{
+      transform:translateY(1px);
+    }
+
     @media (max-width: 560px){
       .tabs{
         grid-template-columns: repeat(3, 1fr);
       }
+
       .tabBtn{
         font-size:14px;
         padding:11px 8px;
+      }
+
+      .contactCard{
+        grid-template-columns: 1fr;
+        align-items:stretch;
+      }
+
+      .callBtn{
+        width:100%;
       }
     }
   </style>
@@ -262,127 +308,189 @@
         <h3 class="sectionTitle">Annuaire téléphonique SDIS</h3>
 
         <div class="list">
-          <div class="row">
-            <p class="rowTitle">Cabinet de direction</p>
-            <p class="rowLine">Lieutenant-colonel HANTZO David</p>
-            <p class="rowLine">9 rue Hinot — 55000 Bar-le-Duc</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775742">03 29 77 57 42</a></p>
+
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Cabinet de direction</p>
+              <p class="contactMeta">Lieutenant-colonel HANTZO David</p>
+              <p class="contactMeta">9 rue Hinot — 55000 Bar-le-Duc</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775742">03 29 77 57 42</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775742">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Secrétariat de direction</p>
-            <p class="rowLine">Mme SZAL Stéphanie</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775718">03 29 77 57 18</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Secrétariat de direction</p>
+              <p class="contactMeta">Mme SZAL Stéphanie</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775718">03 29 77 57 18</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775718">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Hygiène et sécurité</p>
-            <p class="rowLine">M. IDDIR Stéphane</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775777">03 29 77 57 77</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Hygiène et sécurité</p>
+              <p class="contactMeta">M. IDDIR Stéphane</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775777">03 29 77 57 77</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775777">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Système des informations géographiques</p>
-            <p class="rowLine">LEBLANC Ingrid</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775854">03 29 77 58 54</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Système des informations géographiques</p>
+              <p class="contactMeta">LEBLANC Ingrid</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775854">03 29 77 58 54</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775854">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Évènementiel - Protocole - Cérémonies</p>
-            <p class="rowLine">Mme GIROT Delphine</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775727">03 29 77 57 27</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Évènementiel - Protocole - Cérémonies</p>
+              <p class="contactMeta">Mme GIROT Delphine</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775727">03 29 77 57 27</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775727">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Communication - Promotion du volontariat</p>
-            <p class="rowLine">M. HONORE Samuel</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775717">03 29 77 57 17</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Communication - Promotion du volontariat</p>
+              <p class="contactMeta">M. HONORE Samuel</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775717">03 29 77 57 17</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775717">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Sous-direction santé</p>
-            <p class="rowLine">Médecin hors classe DEMANGEON Marion</p>
-            <p class="rowLine">9 rue Hinot — 55000 Bar-le-Duc</p>
-            <p class="rowLine"><a class="tel" href="tel:0329774151">03 29 77 41 51</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Sous-direction santé</p>
+              <p class="contactMeta">Médecin hors classe DEMANGEON Marion</p>
+              <p class="contactMeta">9 rue Hinot — 55000 Bar-le-Duc</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329774151">03 29 77 41 51</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329774151">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Groupement ressources et moyens</p>
-            <p class="rowLine">Commandant DUFOUR Sylvain</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775743">03 29 77 57 43</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Groupement ressources et moyens</p>
+              <p class="contactMeta">Commandant DUFOUR Sylvain</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775743">03 29 77 57 43</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775743">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Service ressources humaines</p>
-            <p class="rowLine">Mme BLOT LIEUVRAIN Stéphanie</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775723">03 29 77 57 23</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Service ressources humaines</p>
+              <p class="contactMeta">Mme BLOT LIEUVRAIN Stéphanie</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775723">03 29 77 57 23</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775723">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Service des équipements</p>
-            <p class="rowLine">Technicien BARE Jérémy</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775751">03 29 77 57 51</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Service des équipements</p>
+              <p class="contactMeta">Technicien BARE Jérémy</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775751">03 29 77 57 51</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775751">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Service atelier départemental</p>
-            <p class="rowLine">M. RINALDI Pascal</p>
-            <p class="rowLine"><a class="tel" href="tel:0329799007">03 29 79 90 07</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Service atelier départemental</p>
+              <p class="contactMeta">M. RINALDI Pascal</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329799007">03 29 79 90 07</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329799007">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Groupement gestion des risques</p>
-            <p class="rowLine">Commandant CAUTENET Benjamin</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775740">03 29 77 57 40</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Groupement gestion des risques</p>
+              <p class="contactMeta">Commandant CAUTENET Benjamin</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775740">03 29 77 57 40</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775740">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Service prévision</p>
-            <p class="rowLine">Capitaine LEHMANN Cindy</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775748">03 29 77 57 48</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Service prévision</p>
+              <p class="contactMeta">Capitaine LEHMANN Cindy</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775748">03 29 77 57 48</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775748">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Service prévention</p>
-            <p class="rowLine">DRABIEC Christophe</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775749">03 29 77 57 49</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Service prévention</p>
+              <p class="contactMeta">DRABIEC Christophe</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775749">03 29 77 57 49</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775749">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Groupement opération formation</p>
-            <p class="rowLine">Commandant HABART Julien</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775715">03 29 77 57 15</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Groupement opération formation</p>
+              <p class="contactMeta">Commandant HABART Julien</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775715">03 29 77 57 15</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775715">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Service opération</p>
-            <p class="rowLine">Lieutenant MARCHAL Julien</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775737">03 29 77 57 37</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Service opération</p>
+              <p class="contactMeta">Lieutenant MARCHAL Julien</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775737">03 29 77 57 37</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775737">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Centre de traitement de l’alerte</p>
-            <p class="rowLine">Lieutenant PIERRE Fabrice</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775754">03 29 77 57 54</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Centre de traitement de l’alerte</p>
+              <p class="contactMeta">Lieutenant PIERRE Fabrice</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775754">03 29 77 57 54</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775754">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Service développement des compétences</p>
-            <p class="rowLine">Lieutenant MELINETTE Arnaud</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775745">03 29 77 57 45</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Service développement des compétences</p>
+              <p class="contactMeta">Lieutenant MELINETTE Arnaud</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775745">03 29 77 57 45</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775745">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Service des systèmes d’information</p>
-            <p class="rowLine">M. OULD MAHAMED Karim</p>
-            <p class="rowLine"><a class="tel" href="tel:0329774156">03 29 77 41 56</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Service des systèmes d’information</p>
+              <p class="contactMeta">M. OULD MAHAMED Karim</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329774156">03 29 77 41 56</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329774156">📞 Appel</a>
           </div>
 
-          <div class="row">
-            <p class="rowTitle">Mission valorisation du volontariat</p>
-            <p class="rowLine">Lieutenant-colonel LEBRUN Benoit</p>
-            <p class="rowLine"><a class="tel" href="tel:0329775755">03 29 77 57 55</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Mission valorisation du volontariat</p>
+              <p class="contactMeta">Lieutenant-colonel LEBRUN Benoit</p>
+              <p class="contactMeta"><a class="tel" href="tel:0329775755">03 29 77 57 55</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329775755">📞 Appel</a>
           </div>
+
         </div>
       </div>
 
@@ -391,116 +499,158 @@
         <h3 class="sectionTitle">Mairies</h3>
 
         <div class="miniTable">
-          <div class="card">
-            <h4>Béthincourt</h4>
-            <p class="line">Maire : Marie Claude Thil</p>
-            <p class="line">Adresse : Place du 21 juillet 55270</p>
-            <p class="line">Email : <a class="link" href="mailto:mairie.bethincourt@orange.fr">mairie.bethincourt@orange.fr</a></p>
-            <p class="line">Téléphone : <a class="tel" href="tel:0329858492">03 29 85 84 92</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Béthincourt</p>
+              <p class="contactMeta">Maire : Marie Claude Thil</p>
+              <p class="contactMeta">Adresse : Place du 21 juillet 55270</p>
+              <p class="contactMeta">Email : <a class="link" href="mailto:mairie.bethincourt@orange.fr">mairie.bethincourt@orange.fr</a></p>
+              <p class="contactMeta">Téléphone : <a class="tel" href="tel:0329858492">03 29 85 84 92</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329858492">📞 Appel</a>
           </div>
 
-          <div class="card">
-            <h4>Brabant-sur-Meuse</h4>
-            <p class="line">Maire : Christian Magisson</p>
-            <p class="line">Adresse : 1 Rue Basse 55100</p>
-            <p class="line">Email : <a class="link" href="mailto:mairiedebrabantsurmeuse@orange.fr">mairiedebrabantsurmeuse@orange.fr</a></p>
-            <p class="line">Téléphone : <a class="tel" href="tel:0329858768">03 29 85 87 68</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Brabant-sur-Meuse</p>
+              <p class="contactMeta">Maire : Christian Magisson</p>
+              <p class="contactMeta">Adresse : 1 Rue Basse 55100</p>
+              <p class="contactMeta">Email : <a class="link" href="mailto:mairiedebrabantsurmeuse@orange.fr">mairiedebrabantsurmeuse@orange.fr</a></p>
+              <p class="contactMeta">Téléphone : <a class="tel" href="tel:0329858768">03 29 85 87 68</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329858768">📞 Appel</a>
           </div>
 
-          <div class="card">
-            <h4>Champneuville</h4>
-            <p class="line">Maire : Fabrice Beaumet</p>
-            <p class="line">Adresse : 9 rue de l'Église 55100</p>
-            <p class="line">Email : <a class="link" href="mailto:mairie.champneuville@orange.fr">mairie.champneuville@orange.fr</a></p>
-            <p class="line">Téléphone : <a class="tel" href="tel:0329858738">03 29 85 87 38</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Champneuville</p>
+              <p class="contactMeta">Maire : Fabrice Beaumet</p>
+              <p class="contactMeta">Adresse : 9 rue de l'Église 55100</p>
+              <p class="contactMeta">Email : <a class="link" href="mailto:mairie.champneuville@orange.fr">mairie.champneuville@orange.fr</a></p>
+              <p class="contactMeta">Téléphone : <a class="tel" href="tel:0329858738">03 29 85 87 38</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329858738">📞 Appel</a>
           </div>
 
-          <div class="card">
-            <h4>Consenvoye</h4>
-            <p class="line">Maire : André Dormois</p>
-            <p class="line">Adresse : 22 bis Rue 55110</p>
-            <p class="line">Email : <a class="link" href="mailto:mairie@consenvoye.fr">mairie@consenvoye.fr</a></p>
-            <p class="line">Téléphone : <a class="tel" href="tel:0329858675">03 29 85 86 75</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Consenvoye</p>
+              <p class="contactMeta">Maire : André Dormois</p>
+              <p class="contactMeta">Adresse : 22 bis Rue 55110</p>
+              <p class="contactMeta">Email : <a class="link" href="mailto:mairie@consenvoye.fr">mairie@consenvoye.fr</a></p>
+              <p class="contactMeta">Téléphone : <a class="tel" href="tel:0329858675">03 29 85 86 75</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329858675">📞 Appel</a>
           </div>
 
-          <div class="card">
-            <h4>Cuisy</h4>
-            <p class="line">Maire : Marie-Anne Gobin</p>
-            <p class="line">Adresse : 4 Grande-Rue 55270</p>
-            <p class="line">Email : <a class="link" href="mailto:commune.cuisy@gmail.com">commune.cuisy@gmail.com</a></p>
-            <p class="line">Téléphone : <a class="tel" href="tel:0329851101">03 29 85 11 01</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Cuisy</p>
+              <p class="contactMeta">Maire : Marie-Anne Gobin</p>
+              <p class="contactMeta">Adresse : 4 Grande-Rue 55270</p>
+              <p class="contactMeta">Email : <a class="link" href="mailto:commune.cuisy@gmail.com">commune.cuisy@gmail.com</a></p>
+              <p class="contactMeta">Téléphone : <a class="tel" href="tel:0329851101">03 29 85 11 01</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329851101">📞 Appel</a>
           </div>
 
-          <div class="card">
-            <h4>Dannevoux</h4>
-            <p class="line">Maire : Michel Vuillaume</p>
-            <p class="line">Adresse : 3 Rue de Bonvaux 55110</p>
-            <p class="line">Email : <a class="link" href="mailto:mairiedannevoux@orange.fr">mairiedannevoux@orange.fr</a></p>
-            <p class="line">Téléphone : <a class="tel" href="tel:0329748373">03 29 74 83 73</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Dannevoux</p>
+              <p class="contactMeta">Maire : Michel Vuillaume</p>
+              <p class="contactMeta">Adresse : 3 Rue de Bonvaux 55110</p>
+              <p class="contactMeta">Email : <a class="link" href="mailto:mairiedannevoux@orange.fr">mairiedannevoux@orange.fr</a></p>
+              <p class="contactMeta">Téléphone : <a class="tel" href="tel:0329748373">03 29 74 83 73</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329748373">📞 Appel</a>
           </div>
 
-          <div class="card">
-            <h4>Forges-sur-Meuse</h4>
-            <p class="line">Maire : Françoise Tessier</p>
-            <p class="line">Adresse : Rue de la Mairie 55110</p>
-            <p class="line">Email : <a class="link" href="mailto:mairie.forges.55@wanadoo.fr">mairie.forges.55@wanadoo.fr</a></p>
-            <p class="line">Téléphone : <a class="tel" href="tel:0329858153">03 29 85 81 53</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Forges-sur-Meuse</p>
+              <p class="contactMeta">Maire : Françoise Tessier</p>
+              <p class="contactMeta">Adresse : Rue de la Mairie 55110</p>
+              <p class="contactMeta">Email : <a class="link" href="mailto:mairie.forges.55@wanadoo.fr">mairie.forges.55@wanadoo.fr</a></p>
+              <p class="contactMeta">Téléphone : <a class="tel" href="tel:0329858153">03 29 85 81 53</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329858153">📞 Appel</a>
           </div>
 
-          <div class="card">
-            <h4>Gercourt-Drillancourt</h4>
-            <p class="line">Maire : Cyril Lecourtier</p>
-            <p class="line">Adresse : 2 rue Alexis Vautrin 55110</p>
-            <p class="line">Email : <a class="link" href="mailto:mairie.gercourt@wanadoo.fr">mairie.gercourt@wanadoo.fr</a></p>
-            <p class="line">Téléphone : <a class="tel" href="tel:0329858860">03 29 85 88 60</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Gercourt-Drillancourt</p>
+              <p class="contactMeta">Maire : Cyril Lecourtier</p>
+              <p class="contactMeta">Adresse : 2 rue Alexis Vautrin 55110</p>
+              <p class="contactMeta">Email : <a class="link" href="mailto:mairie.gercourt@wanadoo.fr">mairie.gercourt@wanadoo.fr</a></p>
+              <p class="contactMeta">Téléphone : <a class="tel" href="tel:0329858860">03 29 85 88 60</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329858860">📞 Appel</a>
           </div>
 
-          <div class="card">
-            <h4>Malancourt</h4>
-            <p class="line">Maire : Régis Degoutin</p>
-            <p class="line">Adresse : 11 Rue Principale 55270</p>
-            <p class="line">Email : <a class="link" href="mailto:mairie.malancourt@orange.fr">mairie.malancourt@orange.fr</a></p>
-            <p class="line">Téléphone : <a class="tel" href="tel:0329850019">03 29 85 00 19</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Malancourt</p>
+              <p class="contactMeta">Maire : Régis Degoutin</p>
+              <p class="contactMeta">Adresse : 11 Rue Principale 55270</p>
+              <p class="contactMeta">Email : <a class="link" href="mailto:mairie.malancourt@orange.fr">mairie.malancourt@orange.fr</a></p>
+              <p class="contactMeta">Téléphone : <a class="tel" href="tel:0329850019">03 29 85 00 19</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329850019">📞 Appel</a>
           </div>
 
-          <div class="card">
-            <h4>Regnéville</h4>
-            <p class="line">Maire : André Trouslard</p>
-            <p class="line">Adresse : 1 rue Charles-Souhaut 55110</p>
-            <p class="line">Email : <a class="link" href="mailto:regneville422@free.fr">regneville422@free.fr</a></p>
-            <p class="line">Téléphone : <a class="tel" href="tel:0329858937">03 29 85 89 37</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Regnéville</p>
+              <p class="contactMeta">Maire : André Trouslard</p>
+              <p class="contactMeta">Adresse : 1 rue Charles-Souhaut 55110</p>
+              <p class="contactMeta">Email : <a class="link" href="mailto:regneville422@free.fr">regneville422@free.fr</a></p>
+              <p class="contactMeta">Téléphone : <a class="tel" href="tel:0329858937">03 29 85 89 37</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329858937">📞 Appel</a>
           </div>
 
-          <div class="card">
-            <h4>Samogneux</h4>
-            <p class="line">Maire : Jean Marie Addenet</p>
-            <p class="line">Adresse : 4 Rue Gaston Thiébaut 55110</p>
-            <p class="line">Email : <a class="link" href="mailto:communedesamogneux@orange.fr">communedesamogneux@orange.fr</a></p>
-            <p class="line">Téléphone : <a class="tel" href="tel:0329858639">03 29 85 86 39</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Samogneux</p>
+              <p class="contactMeta">Maire : Jean Marie Addenet</p>
+              <p class="contactMeta">Adresse : 4 Rue Gaston Thiébaut 55110</p>
+              <p class="contactMeta">Email : <a class="link" href="mailto:communedesamogneux@orange.fr">communedesamogneux@orange.fr</a></p>
+              <p class="contactMeta">Téléphone : <a class="tel" href="tel:0329858639">03 29 85 86 39</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329858639">📞 Appel</a>
           </div>
 
-          <div class="card">
-            <h4>Septsarges</h4>
-            <p class="line">Maire : Daniel Denis</p>
-            <p class="line">Adresse : 2 Rue Haute 55270</p>
-            <p class="line">Email : <a class="link" href="mailto:mairie.septsarges@gmail.com">mairie.septsarges@gmail.com</a></p>
-            <p class="line">Téléphone : <a class="tel" href="tel:0329851492">03 29 85 14 92</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Septsarges</p>
+              <p class="contactMeta">Maire : Daniel Denis</p>
+              <p class="contactMeta">Adresse : 2 Rue Haute 55270</p>
+              <p class="contactMeta">Email : <a class="link" href="mailto:mairie.septsarges@gmail.com">mairie.septsarges@gmail.com</a></p>
+              <p class="contactMeta">Téléphone : <a class="tel" href="tel:0329851492">03 29 85 14 92</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329851492">📞 Appel</a>
           </div>
 
-          <div class="card">
-            <h4>Sivry-sur-Meuse</h4>
-            <p class="line">Maire : Claude Vénante</p>
-            <p class="line">Adresse : 67 route nationale 55110</p>
-            <p class="line">Email : <a class="link" href="mailto:mairie.sivrysurmeuse@orange.fr">mairie.sivrysurmeuse@orange.fr</a></p>
-            <p class="line">Téléphone : <a class="tel" href="tel:0329858194">03 29 85 81 94</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Sivry-sur-Meuse</p>
+              <p class="contactMeta">Maire : Claude Vénante</p>
+              <p class="contactMeta">Adresse : 67 route nationale 55110</p>
+              <p class="contactMeta">Email : <a class="link" href="mailto:mairie.sivrysurmeuse@orange.fr">mairie.sivrysurmeuse@orange.fr</a></p>
+              <p class="contactMeta">Téléphone : <a class="tel" href="tel:0329858194">03 29 85 81 94</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329858194">📞 Appel</a>
           </div>
 
-          <div class="card">
-            <h4>Vilosnes-Haraumont</h4>
-            <p class="line">Maire : Vaudois Gérard</p>
-            <p class="line">Adresse : 1 Place de la Mairie 55110</p>
-            <p class="line">Email : <a class="link" href="mailto:communevilosnesharaumont@orange.fr">communevilosnesharaumont@orange.fr</a></p>
-            <p class="line">Téléphone : <a class="tel" href="tel:0329858390">03 29 85 83 90</a></p>
+          <div class="contactCard">
+            <div class="contactInfo">
+              <p class="contactName">Vilosnes-Haraumont</p>
+              <p class="contactMeta">Maire : Vaudois Gérard</p>
+              <p class="contactMeta">Adresse : 1 Place de la Mairie 55110</p>
+              <p class="contactMeta">Email : <a class="link" href="mailto:communevilosnesharaumont@orange.fr">communevilosnesharaumont@orange.fr</a></p>
+              <p class="contactMeta">Téléphone : <a class="tel" href="tel:0329858390">03 29 85 83 90</a></p>
+            </div>
+            <a class="callBtn" href="tel:0329858390">📞 Appel</a>
           </div>
         </div>
       </div>
@@ -510,29 +660,29 @@
         <h3 class="sectionTitle">Agents CS</h3>
 
         <div class="miniTable">
-          <div class="card"><h4>Bammé Melody</h4><p class="line">Téléphone : <a class="tel" href="tel:0643677434">06 43 67 74 34</a></p></div>
-          <div class="card"><h4>Barotte Christopher</h4><p class="line">Téléphone : <a class="tel" href="tel:0679754353">06 79 75 43 53</a></p></div>
-          <div class="card"><h4>Baur Benjamin</h4><p class="line">Téléphone : <a class="tel" href="tel:0637558500">06 37 55 85 00</a></p></div>
-          <div class="card"><h4>Christal Emeric</h4><p class="line">Téléphone : <a class="tel" href="tel:0631895309">06 31 89 53 09</a></p></div>
-          <div class="card"><h4>Christal Mallaury</h4><p class="line">Téléphone : <a class="tel" href="tel:0631287012">06 31 28 70 12</a></p></div>
-          <div class="card"><h4>Dur Amélie</h4><p class="line">Téléphone : <a class="tel" href="tel:0662885294">06 62 88 52 94</a></p></div>
-          <div class="card"><h4>Gaffard Robin</h4><p class="line">Téléphone : <a class="tel" href="tel:0610330746">06 10 33 07 46</a></p></div>
-          <div class="card"><h4>Joseph Judicael</h4><p class="line">Téléphone : <a class="tel" href="tel:0651015321">06 51 01 53 21</a></p></div>
-          <div class="card"><h4>Kolodziejczak Stéphane</h4><p class="line">Téléphone : <a class="tel" href="tel:0686843825">06 86 84 38 25</a></p></div>
-          <div class="card"><h4>Laleeuw Franck</h4><p class="line">Téléphone : <a class="tel" href="tel:0670822484">06 70 82 24 84</a></p></div>
-          <div class="card"><h4>Lepezel Laura</h4><p class="line">Téléphone : <a class="tel" href="tel:0619463615">06 19 46 36 15</a></p></div>
-          <div class="card"><h4>Michel Marianne</h4><p class="line">Téléphone : <a class="tel" href="tel:0680830343">06 80 83 03 43</a></p></div>
-          <div class="card"><h4>Morin Alexandre</h4><p class="line">Téléphone : <a class="tel" href="tel:0620013421">06 20 01 34 21</a></p></div>
-          <div class="card"><h4>Party Olivier</h4><p class="line">Téléphone : <a class="tel" href="tel:0628414840">06 28 41 48 40</a></p></div>
-          <div class="card"><h4>Perrot Baptiste</h4><p class="line">Téléphone : <a class="tel" href="tel:0623414145">06 23 41 41 45</a></p></div>
-          <div class="card"><h4>Rogie Florian</h4><p class="line">Téléphone : <a class="tel" href="tel:0620131151">06 20 13 11 51</a></p></div>
-          <div class="card"><h4>Sabouret Barotte Mathys</h4><p class="line">Téléphone : <a class="tel" href="tel:0675171064">06 75 17 10 64</a></p></div>
-          <div class="card"><h4>Sénéchal Benjamin</h4><p class="line">Téléphone : <a class="tel" href="tel:0788094062">07 88 09 40 62</a></p></div>
-          <div class="card"><h4>Stellato Vincent</h4><p class="line">Téléphone : <a class="tel" href="tel:0772773878">07 72 77 38 78</a></p></div>
-          <div class="card"><h4>Trontin Chloé</h4><p class="line">Téléphone : <a class="tel" href="tel:0605312940">06 05 31 29 40</a></p></div>
-          <div class="card"><h4>Vénante Amélie</h4><p class="line">Téléphone : <a class="tel" href="tel:0616536077">06 16 53 60 77</a></p></div>
-          <div class="card"><h4>Vénante Pierre</h4><p class="line">Téléphone : <a class="tel" href="tel:0680457210">06 80 45 72 10</a></p></div>
-          <div class="card"><h4>Wallarin Hélène</h4><p class="line">Téléphone : <a class="tel" href="tel:0630681735">06 30 68 17 35</a></p></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Bammé Melody</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0643677434">06 43 67 74 34</a></p></div><a class="callBtn" href="tel:0643677434">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Barotte Christopher</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0679754353">06 79 75 43 53</a></p></div><a class="callBtn" href="tel:0679754353">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Baur Benjamin</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0637558500">06 37 55 85 00</a></p></div><a class="callBtn" href="tel:0637558500">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Christal Emeric</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0631895309">06 31 89 53 09</a></p></div><a class="callBtn" href="tel:0631895309">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Christal Mallaury</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0631287012">06 31 28 70 12</a></p></div><a class="callBtn" href="tel:0631287012">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Dur Amélie</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0662885294">06 62 88 52 94</a></p></div><a class="callBtn" href="tel:0662885294">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Gaffard Robin</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0610330746">06 10 33 07 46</a></p></div><a class="callBtn" href="tel:0610330746">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Joseph Judicael</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0651015321">06 51 01 53 21</a></p></div><a class="callBtn" href="tel:0651015321">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Kolodziejczak Stéphane</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0686843825">06 86 84 38 25</a></p></div><a class="callBtn" href="tel:0686843825">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Laleeuw Franck</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0670822484">06 70 82 24 84</a></p></div><a class="callBtn" href="tel:0670822484">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Lepezel Laura</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0619463615">06 19 46 36 15</a></p></div><a class="callBtn" href="tel:0619463615">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Michel Marianne</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0680830343">06 80 83 03 43</a></p></div><a class="callBtn" href="tel:0680830343">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Morin Alexandre</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0620013421">06 20 01 34 21</a></p></div><a class="callBtn" href="tel:0620013421">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Party Olivier</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0628414840">06 28 41 48 40</a></p></div><a class="callBtn" href="tel:0628414840">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Perrot Baptiste</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0623414145">06 23 41 41 45</a></p></div><a class="callBtn" href="tel:0623414145">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Rogie Florian</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0620131151">06 20 13 11 51</a></p></div><a class="callBtn" href="tel:0620131151">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Sabouret Barotte Mathys</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0675171064">06 75 17 10 64</a></p></div><a class="callBtn" href="tel:0675171064">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Sénéchal Benjamin</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0788094062">07 88 09 40 62</a></p></div><a class="callBtn" href="tel:0788094062">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Stellato Vincent</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0772773878">07 72 77 38 78</a></p></div><a class="callBtn" href="tel:0772773878">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Trontin Chloé</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0605312940">06 05 31 29 40</a></p></div><a class="callBtn" href="tel:0605312940">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Vénante Amélie</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0616536077">06 16 53 60 77</a></p></div><a class="callBtn" href="tel:0616536077">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Vénante Pierre</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0680457210">06 80 45 72 10</a></p></div><a class="callBtn" href="tel:0680457210">📞 Appel</a></div>
+          <div class="contactCard"><div class="contactInfo"><p class="contactName">Wallarin Hélène</p><p class="contactMeta">Téléphone : <a class="tel" href="tel:0630681735">06 30 68 17 35</a></p></div><a class="callBtn" href="tel:0630681735">📞 Appel</a></div>
         </div>
       </div>
 
