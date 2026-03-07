@@ -9,118 +9,128 @@
 
 <link rel="stylesheet" href="cs-theme.css">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet" />
 
 <style>
 
-/* ===== TITRES ===== */
+.material-symbols-rounded{
+font-size:22px;
+}
 
 .sectionTitle{
-margin:14px 0 10px;
+margin:10px 0;
 font-weight:950;
-letter-spacing:.8px;
 text-transform:uppercase;
 text-align:center;
+letter-spacing:.8px;
 }
 
-/* ===== DASHBOARD ===== */
+/* ===== TABLEAU DE BORD ===== */
 
-.dashboardCard{
-
-border-radius:22px;
-
-background: linear-gradient(
-180deg,
-rgba(47,123,211,.35),
-rgba(47,123,211,.18)
-);
-
-border:1px solid rgba(140,190,255,.28);
-
-box-shadow:var(--shadow);
-
-padding:16px;
-
-margin-bottom:16px;
-
-}
-
-/* ===== GRID ===== */
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:14px;
-}
-
-/* ===== CARTES ===== */
-
-.cardBtn{
-
-position:relative;
-
-padding:22px 14px;
+.dashboardInfo{
 
 border-radius:20px;
 
-cursor:pointer;
+background:linear-gradient(
+180deg,
+rgba(47,123,211,.45),
+rgba(47,123,211,.20)
+);
 
-text-align:center;
-
-border:1px solid rgba(255,255,255,.12);
-
-backdrop-filter: blur(10px);
--webkit-backdrop-filter: blur(10px);
+border:1px solid rgba(140,190,255,.35);
 
 box-shadow:var(--shadow);
 
-transition:.2s;
+padding:14px;
+
+margin-bottom:14px;
+
+text-align:center;
+
+font-weight:900;
 
 }
 
-.cardBtn:hover{
-transform:translateY(-2px);
-}
+/* ===== BANDEAUX ===== */
 
-.cardBtn:active{
-transform:translateY(2px);
-}
+.menuBlock{
 
-/* ===== ICÔNES ===== */
+border-radius:18px;
 
-.cardIcon{
+box-shadow:var(--shadow);
 
-font-size:28px;
-margin-bottom:6px;
+overflow:hidden;
+
+margin-bottom:12px;
 
 }
 
-/* ===== TITRE ===== */
+/* ===== HEADER ===== */
 
-.cardTitle{
-font-weight:950;
-font-size:16px;
+.menuHeader{
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+padding:14px 16px;
+
+cursor:pointer;
+
+font-weight:900;
+
 }
 
-/* ===== BADGE ===== */
+.menuLeft{
 
-.badge{
+display:flex;
+align-items:center;
+gap:12px;
 
-position:absolute;
-top:8px;
-right:10px;
+}
 
-font-size:11px;
+/* ===== SOUS MENU ===== */
 
-padding:4px 8px;
+.subMenu{
 
-border-radius:999px;
+display:none;
 
-background:rgba(0,0,0,.4);
+padding:10px;
 
-border:1px solid rgba(255,255,255,.25);
+background:rgba(0,0,0,.25);
 
+}
+
+.menuBlock.open .subMenu{
+display:block;
+}
+
+/* ===== BOUTONS ===== */
+
+.subBtn{
+
+display:flex;
+align-items:center;
+gap:12px;
+
+padding:12px;
+
+border-radius:12px;
+
+font-weight:850;
+
+cursor:pointer;
+
+margin-bottom:8px;
+
+background:rgba(255,255,255,.05);
+
+border:1px solid rgba(255,255,255,.10);
+
+}
+
+.subBtn:active{
+transform:translateY(1px);
 }
 
 /* ===== COULEURS ===== */
@@ -129,7 +139,7 @@ border:1px solid rgba(255,255,255,.25);
 background:linear-gradient(
 180deg,
 rgba(47,123,211,.65),
-rgba(47,123,211,.40)
+rgba(47,123,211,.35)
 );
 }
 
@@ -137,7 +147,7 @@ rgba(47,123,211,.40)
 background:linear-gradient(
 180deg,
 rgba(255,177,90,.65),
-rgba(255,177,90,.40)
+rgba(255,177,90,.35)
 );
 }
 
@@ -145,68 +155,34 @@ rgba(255,177,90,.40)
 background:linear-gradient(
 180deg,
 rgba(47,168,107,.65),
-rgba(47,168,107,.40)
+rgba(47,168,107,.35)
 );
 }
 
-/* ===== SOUS MENUS ===== */
+/* icônes couleurs */
 
-.subGrid{
-margin-top:14px;
-display:grid;
-grid-template-columns:1fr;
-gap:12px;
+.iconBlue{
+color:#4da3ff;
 }
 
-.subBtn{
-
-display:flex;
-align-items:center;
-gap:12px;
-
-padding:16px;
-
-border-radius:16px;
-
-font-weight:900;
-
-cursor:pointer;
-
-border:1px solid rgba(255,255,255,.12);
-
-background:rgba(0,0,0,.30);
-
-backdrop-filter: blur(10px);
--webkit-backdrop-filter: blur(10px);
-
-box-shadow:var(--shadow);
-
+.iconOrange{
+color:#ffb15a;
 }
 
-.subIcon{
-font-size:20px;
-width:24px;
-text-align:center;
+.iconGreen{
+color:#50d890;
 }
 
-.subBtn:active{
-transform:translateY(2px);
+.iconRed{
+color:#ff6b6b;
 }
 
-/* ===== SECTIONS ===== */
-
-.section{
-display:none;
+.iconPurple{
+color:#c47cff;
 }
 
-.section.active{
-display:block;
-}
-
-/* ===== RETOUR ===== */
-
-.backBtn{
-margin-bottom:10px;
+.iconYellow{
+color:#ffd166;
 }
 
 </style>
@@ -222,183 +198,195 @@ margin-bottom:10px;
 <!-- BANDEAU -->
 
 <div class="topbar">
+
 <div class="title">
-<i class="fa-solid fa-fire"></i> Admin
+<span class="material-symbols-rounded">local_fire_department</span>
+Admin
 </div>
+
 <button class="btn" onclick="window.location.href='index.html'">
 Retour
 </button>
+
 </div>
 
-<!-- DASHBOARD -->
+<!-- TABLEAU DE BORD -->
 
-<div id="dashboard">
+<div class="dashboardInfo">
 
-<div class="dashboardCard">
+<span class="material-symbols-rounded iconBlue">dashboard</span>
+Tableau de bord administration
 
-<div class="sectionTitle">
-Tableau de bord
 </div>
 
-<div class="grid">
+<!-- ===== GESTION ===== -->
 
-<div class="cardBtn gestion" onclick="openSection('gestion')">
+<div class="menuBlock gestion">
 
-<div class="badge">3</div>
+<div class="menuHeader" onclick="toggleMenu(this)">
 
-<div class="cardIcon">
-<i class="fa-solid fa-screwdriver-wrench"></i>
-</div>
+<div class="menuLeft">
 
-<div class="cardTitle">
+<span class="material-symbols-rounded iconBlue">
+build
+</span>
+
 Gestion
-</div>
 
 </div>
 
-<div class="cardBtn param" onclick="openSection('parametres')">
-
-<div class="cardIcon">
-<i class="fa-solid fa-gears"></i>
-</div>
-
-<div class="cardTitle">
-Paramètres
-</div>
+<span class="material-symbols-rounded">
+expand_more
+</span>
 
 </div>
 
-<div class="cardBtn test" onclick="openSection('test')">
-
-<div class="badge">LAB</div>
-
-<div class="cardIcon">
-<i class="fa-solid fa-flask"></i>
-</div>
-
-<div class="cardTitle">
-Test
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- GESTION -->
-
-<div id="gestion" class="section">
-
-<button class="btn backBtn" onclick="goDashboard()">
-← Tableau de bord
-</button>
-
-<div class="sectionTitle">
-Gestion
-</div>
-
-<div class="subGrid">
+<div class="subMenu">
 
 <div class="subBtn">
-<div class="subIcon">
-<i class="fa-solid fa-sitemap"></i>
-</div>
+
+<span class="material-symbols-rounded iconPurple">
+account_tree
+</span>
+
 Organigramme
+
 </div>
 
 <div class="subBtn">
-<div class="subIcon">
-<i class="fa-solid fa-people-group"></i>
-</div>
+
+<span class="material-symbols-rounded iconBlue">
+groups
+</span>
+
 Équipes
+
 </div>
 
 <div class="subBtn">
-<div class="subIcon">
-<i class="fa-solid fa-truck-medical"></i>
-</div>
+
+<span class="material-symbols-rounded iconRed">
+emergency
+</span>
+
 Désinfection VSAV
-</div>
 
 </div>
 
 </div>
 
-<!-- PARAMETRES -->
+</div>
 
-<div id="parametres" class="section">
+<!-- ===== PARAMETRES ===== -->
 
-<button class="btn backBtn" onclick="goDashboard()">
-← Tableau de bord
-</button>
+<div class="menuBlock param">
 
-<div class="sectionTitle">
+<div class="menuHeader" onclick="toggleMenu(this)">
+
+<div class="menuLeft">
+
+<span class="material-symbols-rounded iconOrange">
+settings
+</span>
+
 Paramètres
+
 </div>
 
-<div class="subGrid">
+<span class="material-symbols-rounded">
+expand_more
+</span>
+
+</div>
+
+<div class="subMenu">
 
 <div class="subBtn">
-<div class="subIcon">
-<i class="fa-solid fa-user-lock"></i>
-</div>
+
+<span class="material-symbols-rounded iconRed">
+lock
+</span>
+
 Accès
+
 </div>
 
 <div class="subBtn">
-<div class="subIcon">
-<i class="fa-solid fa-sliders"></i>
-</div>
+
+<span class="material-symbols-rounded iconYellow">
+tune
+</span>
+
 Configuration
-</div>
 
 </div>
 
 </div>
 
-<!-- TEST -->
-
-<div id="test" class="section">
-
-<button class="btn backBtn" onclick="goDashboard()">
-← Tableau de bord
-</button>
-
-<div class="sectionTitle">
-Laboratoire
 </div>
 
-<div class="subGrid">
+<!-- ===== TEST ===== -->
+
+<div class="menuBlock test">
+
+<div class="menuHeader" onclick="toggleMenu(this)">
+
+<div class="menuLeft">
+
+<span class="material-symbols-rounded iconGreen">
+science
+</span>
+
+Test
+
+</div>
+
+<span class="material-symbols-rounded">
+expand_more
+</span>
+
+</div>
+
+<div class="subMenu">
 
 <div class="subBtn">
-<div class="subIcon">
-<i class="fa-solid fa-phone"></i>
-</div>
+
+<span class="material-symbols-rounded iconBlue">
+info
+</span>
+
 Informations
+
 </div>
 
 <div class="subBtn">
-<div class="subIcon">
-<i class="fa-solid fa-calendar-days"></i>
-</div>
-Gardes postées
+
+<span class="material-symbols-rounded iconPurple">
+event
+</span>
+
+Garde posté
+
 </div>
 
 <div class="subBtn">
-<div class="subIcon">
-<i class="fa-solid fa-images"></i>
-</div>
+
+<span class="material-symbols-rounded iconGreen">
+photo_library
+</span>
+
 Galerie
+
 </div>
 
 <div class="subBtn">
-<div class="subIcon">
-<i class="fa-solid fa-book-open"></i>
-</div>
+
+<span class="material-symbols-rounded iconOrange">
+menu_book
+</span>
+
 Book
+
 </div>
 
 </div>
@@ -409,25 +397,11 @@ Book
 
 <script>
 
-function openSection(name){
+function toggleMenu(el){
 
-document.getElementById("dashboard").style.display="none"
+const block = el.parentElement
 
-document.querySelectorAll(".section").forEach(sec=>{
-sec.classList.remove("active")
-})
-
-document.getElementById(name).classList.add("active")
-
-}
-
-function goDashboard(){
-
-document.getElementById("dashboard").style.display="block"
-
-document.querySelectorAll(".section").forEach(sec=>{
-sec.classList.remove("active")
-})
+block.classList.toggle("open")
 
 }
 
