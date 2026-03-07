@@ -1,1 +1,561 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Informations — CS Consenvoye</title>
+
+  <link rel="stylesheet" href="cs-theme.css">
+
+  <style>
+    /* ===== SPÉCIFIQUE À LA PAGE INFORMATIONS ===== */
+
+    .topbar h1{
+      flex: 1 1 auto;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tabs{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:10px;
+      margin:10px 0;
+    }
+
+    .tabBtn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.24);
+      color:rgba(255,255,255,.92);
+      padding:12px 10px;
+      border-radius:18px;
+      font-weight:950;
+      text-transform:uppercase;
+      letter-spacing:.5px;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .tabBtn.active{
+      background: linear-gradient(180deg, rgba(212,106,0,.45), rgba(185,88,0,.28));
+      border-color: rgba(255,177,90,.28);
+      color:#fff;
+    }
+
+    .subTabs{
+      display:flex;
+      gap:10px;
+      margin:0 0 12px;
+      flex-wrap:wrap;
+    }
+
+    .subBtn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+      color:rgba(255,255,255,.90);
+      padding:10px 12px;
+      border-radius:16px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .subBtn.active{
+      background: linear-gradient(180deg, rgba(47,123,211,.42), rgba(47,123,211,.24));
+      border-color: rgba(140,190,255,.25);
+    }
+
+    .section{
+      display:none;
+    }
+
+    .section.active{
+      display:block;
+    }
+
+    .infoBox{
+      margin-bottom:12px;
+      padding:12px 14px;
+      border-radius:18px;
+      background: rgba(255,255,255,.05);
+      border:1px dashed rgba(255,255,255,.12);
+      color:rgba(255,255,255,.74);
+      line-height:1.35;
+      font-weight:700;
+    }
+
+    .accordion{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .accItem{
+      border-radius:20px;
+      background: linear-gradient(180deg, rgba(0,0,0,.34), rgba(0,0,0,.18));
+      border:1px solid rgba(255,255,255,.10);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+
+    .accHead{
+      width:100%;
+      border:none;
+      background:none;
+      color:#fff;
+      text-align:left;
+      cursor:pointer;
+      padding:14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .accHead:active{ transform:translateY(1px); }
+
+    .accTitleWrap{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+      flex:1 1 auto;
+    }
+
+    .accBar{
+      width:10px;
+      align-self:stretch;
+      border-radius:999px;
+      background: linear-gradient(180deg, rgba(47,123,211,.95), rgba(47,123,211,.35));
+      flex:0 0 auto;
+    }
+
+    .accBar.green{
+      background: linear-gradient(180deg, rgba(47,168,107,.95), rgba(47,168,107,.35));
+    }
+
+    .accBar.orange{
+      background: linear-gradient(180deg, rgba(217,137,16,.95), rgba(217,137,16,.35));
+    }
+
+    .accBar.red{
+      background: linear-gradient(180deg, rgba(201,76,76,.95), rgba(201,76,76,.35));
+    }
+
+    .accTitle{
+      font-size:16px;
+      font-weight:950;
+      letter-spacing:.5px;
+      text-transform:uppercase;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .accArrow{
+      font-size:18px;
+      font-weight:900;
+      opacity:.85;
+      flex:0 0 auto;
+    }
+
+    .accBody{
+      display:none;
+      padding:0 14px 14px;
+    }
+
+    .accItem.open .accBody{
+      display:block;
+    }
+
+    .contactList{
+      display:grid;
+      gap:10px;
+      margin-top:4px;
+    }
+
+    .contactCard{
+      border-radius:18px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      padding:12px 14px;
+    }
+
+    .contactRole{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.7px;
+      font-weight:950;
+      color:var(--gold);
+      margin-bottom:4px;
+    }
+
+    .contactName{
+      font-size:16px;
+      font-weight:950;
+      margin-bottom:6px;
+      line-height:1.2;
+    }
+
+    .contactLine{
+      font-size:14px;
+      color:rgba(255,255,255,.88);
+      line-height:1.35;
+      font-weight:700;
+    }
+
+    .simpleBox{
+      padding:16px;
+      border-radius:20px;
+      background: linear-gradient(180deg, rgba(47,123,211,.16), rgba(47,123,211,.06));
+      border:1px solid rgba(140,190,255,.18);
+      color:#fff;
+      font-weight:800;
+      line-height:1.45;
+    }
+
+    .emptyState{
+      padding:18px;
+      border-radius:20px;
+      background: rgba(255,255,255,.05);
+      border:1px dashed rgba(255,255,255,.14);
+      color:rgba(255,255,255,.74);
+      font-weight:800;
+      line-height:1.45;
+    }
+
+    @media (max-width: 720px){
+      .tabs{
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 420px){
+      .accTitle{
+        font-size:15px;
+      }
+      .contactName{
+        font-size:15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <h1>Informations</h1>
+      <button class="btn" id="btnBack">Retour</button>
+    </div>
+
+    <div class="tabs">
+      <button class="tabBtn active" data-tab="contact">Contact</button>
+      <button class="tabBtn" data-tab="reglement">Règlement</button>
+      <button class="tabBtn" data-tab="amicale">Amicale</button>
+      <button class="tabBtn" data-tab="evenements">Événements</button>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="section active" id="section-contact">
+      <div class="subTabs">
+        <button class="subBtn active" data-parent="contact" data-sub="sdis">SDIS</button>
+        <button class="subBtn" data-parent="contact" data-sub="mairies">Mairies</button>
+      </div>
+
+      <div class="card" style="padding:14px;">
+        <div class="infoBox">
+          Démonstration de la structure <strong>Informations → Contact → SDIS</strong>.<br>
+          Chaque pôle / groupement est présenté sous forme de bandeau déroulant.
+        </div>
+
+        <div class="section active" id="sub-contact-sdis">
+          <div class="accordion">
+
+            <div class="accItem open">
+              <button class="accHead" type="button">
+                <div class="accTitleWrap">
+                  <div class="accBar orange"></div>
+                  <div class="accTitle">Cabinet de direction</div>
+                </div>
+                <div class="accArrow">▼</div>
+              </button>
+              <div class="accBody">
+                <div class="contactList">
+                  <div class="contactCard">
+                    <div class="contactRole">Cabinet de direction</div>
+                    <div class="contactName">Lieutenant-colonel HANTZO David</div>
+                    <div class="contactLine">9 rue Hinot — 55000 Bar-le-Duc</div>
+                    <div class="contactLine">03 29 77 57 42</div>
+                  </div>
+
+                  <div class="contactCard">
+                    <div class="contactRole">Secrétariat de direction</div>
+                    <div class="contactName">Mme SZAL Stéphanie</div>
+                    <div class="contactLine">03 29 77 57 18</div>
+                  </div>
+
+                  <div class="contactCard">
+                    <div class="contactRole">Hygiène et sécurité</div>
+                    <div class="contactName">Mr IDDIR Stéphane</div>
+                    <div class="contactLine">03 29 77 57 77</div>
+                  </div>
+
+                  <div class="contactCard">
+                    <div class="contactRole">Communication - Promotion du volontariat</div>
+                    <div class="contactName">Mr HONORE Samuel</div>
+                    <div class="contactLine">03 29 77 57 17</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accItem">
+              <button class="accHead" type="button">
+                <div class="accTitleWrap">
+                  <div class="accBar red"></div>
+                  <div class="accTitle">Sous-direction santé</div>
+                </div>
+                <div class="accArrow">▼</div>
+              </button>
+              <div class="accBody">
+                <div class="contactList">
+                  <div class="contactCard">
+                    <div class="contactRole">Sous-direction santé</div>
+                    <div class="contactName">Médecin hors classe DEMANGEON Marion</div>
+                    <div class="contactLine">9 rue Hinot — 55000 Bar-le-Duc</div>
+                    <div class="contactLine">03 29 77 41 51</div>
+                  </div>
+
+                  <div class="contactCard">
+                    <div class="contactRole">Groupement santé et secours</div>
+                    <div class="contactName">Cadre de santé de 1re classe STEIN Sophie</div>
+                    <div class="contactLine">03 29 77 57 64</div>
+                  </div>
+
+                  <div class="contactCard">
+                    <div class="contactRole">Service santé</div>
+                    <div class="contactName">Infirmier de classe normale MIGNOT Angéliqua</div>
+                    <div class="contactLine">03 29 77 57 19</div>
+                  </div>
+
+                  <div class="contactCard">
+                    <div class="contactRole">Service secours</div>
+                    <div class="contactName">Adjudant-chef VAXELAIRE Freddy</div>
+                    <div class="contactLine">03 29 77 57 65</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accItem">
+              <button class="accHead" type="button">
+                <div class="accTitleWrap">
+                  <div class="accBar green"></div>
+                  <div class="accTitle">Groupement ressources et moyens</div>
+                </div>
+                <div class="accArrow">▼</div>
+              </button>
+              <div class="accBody">
+                <div class="contactList">
+                  <div class="contactCard">
+                    <div class="contactRole">Groupement ressources et moyens</div>
+                    <div class="contactName">Commandant DUFOUR Sylvain</div>
+                    <div class="contactLine">9 rue Hinot — 55000 Bar-le-Duc</div>
+                    <div class="contactLine">03 29 77 57 43</div>
+                  </div>
+
+                  <div class="contactCard">
+                    <div class="contactRole">Service ressources humaines</div>
+                    <div class="contactName">Mme BLOT LIEUVRAIN Stéphanie</div>
+                    <div class="contactLine">03 29 77 57 23</div>
+                  </div>
+
+                  <div class="contactCard">
+                    <div class="contactRole">Service des équipements</div>
+                    <div class="contactName">Technicien BARE Jérémy</div>
+                    <div class="contactLine">03 29 77 57 51</div>
+                  </div>
+
+                  <div class="contactCard">
+                    <div class="contactRole">Service de l’atelier départemental</div>
+                    <div class="contactName">Mr RINALDI Pascal</div>
+                    <div class="contactLine">03 29 79 90 07</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accItem">
+              <button class="accHead" type="button">
+                <div class="accTitleWrap">
+                  <div class="accBar orange"></div>
+                  <div class="accTitle">Groupement opération formation</div>
+                </div>
+                <div class="accArrow">▼</div>
+              </button>
+              <div class="accBody">
+                <div class="contactList">
+                  <div class="contactCard">
+                    <div class="contactRole">Groupement opération formation</div>
+                    <div class="contactName">Commandant HABART Julien</div>
+                    <div class="contactLine">9 rue Hinot — 55000 Bar-le-Duc</div>
+                    <div class="contactLine">03 29 77 57 15</div>
+                  </div>
+
+                  <div class="contactCard">
+                    <div class="contactRole">Service opération</div>
+                    <div class="contactName">Lieutenant de 2ème classe MARCHAL Julien</div>
+                    <div class="contactLine">03 29 77 57 37</div>
+                  </div>
+
+                  <div class="contactCard">
+                    <div class="contactRole">Centre de traitement de l’alerte</div>
+                    <div class="contactName">Lieutenant 2ème classe PIERRE Fabrice</div>
+                    <div class="contactLine">03 29 77 57 54</div>
+                  </div>
+
+                  <div class="contactCard">
+                    <div class="contactRole">Service développement des compétences</div>
+                    <div class="contactName">Lieutenant de 1re classe MELINETTE Arnaud</div>
+                    <div class="contactLine">03 29 77 57 45</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="section" id="sub-contact-mairies">
+          <div class="emptyState">
+            Démonstration de la sous-catégorie <strong>Mairies</strong>.<br><br>
+            Tu pourras plus tard y mettre :
+            <br>– les communes
+            <br>– les maires
+            <br>– les coordonnées
+            <br>– les contacts utiles
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REGLEMENT -->
+    <div class="section" id="section-reglement">
+      <div class="subTabs">
+        <button class="subBtn active" data-parent="reglement" data-sub="centre">Règlement du centre</button>
+      </div>
+
+      <div class="card" style="padding:14px;">
+        <div class="simpleBox">
+          Ici tu pourras afficher le <strong>règlement du centre</strong> :
+          <br>– sous forme de texte
+          <br>– en PDF
+          <br>– ou en rubriques déroulantes
+        </div>
+      </div>
+    </div>
+
+    <!-- AMICALE -->
+    <div class="section" id="section-amicale">
+      <div class="subTabs">
+        <button class="subBtn active" data-parent="amicale" data-sub="cr">Compte-rendu de réunion et projets</button>
+      </div>
+
+      <div class="card" style="padding:14px;">
+        <div class="simpleBox">
+          Ici tu pourras afficher :
+          <br>– les comptes-rendus de réunion
+          <br>– les projets de l’amicale
+          <br>– les idées en cours
+          <br>– les actions prévues
+        </div>
+      </div>
+    </div>
+
+    <!-- EVENEMENTS -->
+    <div class="section" id="section-evenements">
+      <div class="subTabs">
+        <button class="subBtn active" data-parent="evenements" data-sub="demo">Démo</button>
+      </div>
+
+      <div class="card" style="padding:14px;">
+        <div class="emptyState">
+          Partie prévue pour les <strong>événements</strong>.<br><br>
+          Tu pourras plus tard créer les sous-catégories côté admin :
+          <br>– Sainte-Barbe
+          <br>– Cérémonies
+          <br>– Réunions
+          <br>– Sorties
+          <br>– Manifestations
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("btnBack").addEventListener("click", ()=>{
+      window.location.href = "index.html";
+    });
+
+    // Onglets principaux
+    const tabBtns = [...document.querySelectorAll(".tabBtn")];
+    const mainSections = {
+      contact: document.getElementById("section-contact"),
+      reglement: document.getElementById("section-reglement"),
+      amicale: document.getElementById("section-amicale"),
+      evenements: document.getElementById("section-evenements")
+    };
+
+    tabBtns.forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const tab = btn.dataset.tab;
+
+        tabBtns.forEach(b=> b.classList.remove("active"));
+        btn.classList.add("active");
+
+        Object.values(mainSections).forEach(sec=> sec.classList.remove("active"));
+        mainSections[tab].classList.add("active");
+      });
+    });
+
+    // Sous-onglets
+    const subBtns = [...document.querySelectorAll(".subBtn")];
+    subBtns.forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const parent = btn.dataset.parent;
+        const sub = btn.dataset.sub;
+
+        document.querySelectorAll(`.subBtn[data-parent="${parent}"]`).forEach(b=>{
+          b.classList.remove("active");
+        });
+        btn.classList.add("active");
+
+        if(parent === "contact"){
+          document.getElementById("sub-contact-sdis").classList.remove("active");
+          document.getElementById("sub-contact-mairies").classList.remove("active");
+          document.getElementById(`sub-contact-${sub}`).classList.add("active");
+        }
+      });
+    });
+
+    // Accordéons
+    document.querySelectorAll(".accHead").forEach(head=>{
+      head.addEventListener("click", ()=>{
+        const item = head.closest(".accItem");
+        item.classList.toggle("open");
+      });
+    });
+  </script>
+</body>
+</html>
 
