@@ -1,0 +1,178 @@
+/* ===============================
+   THEME PORTAIL CS CONSENVOYE
+   =============================== */
+
+:root{
+  --txt:#f4f4f4;
+  --muted:#cfcfcf;
+
+  --orange:#d46a00;
+  --orange2:#b95800;
+
+  --glass: rgba(0,0,0,.38);
+  --stroke: rgba(255,255,255,.12);
+
+  --radius:22px;
+  --shadow:0 14px 34px rgba(0,0,0,.40);
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  height:100%;
+}
+
+body{
+  margin:0;
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--txt);
+  background:#0b0b0b;
+}
+
+/* ===============================
+   FOND PORTAIL
+   =============================== */
+
+.bg{
+  position:fixed;
+  inset:0;
+
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.55)),
+    url("background.png") center top / cover no-repeat;
+
+  z-index:-2;
+}
+
+.bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background:
+    radial-gradient(
+      circle at 50% 10%,
+      rgba(255,170,60,.18),
+      rgba(0,0,0,.62) 62%
+    );
+
+  z-index:-1;
+}
+
+/* ===============================
+   CONTENEUR PAGE
+   =============================== */
+
+.wrap{
+  max-width:980px;
+  margin:0 auto;
+  padding:14px 14px 40px;
+}
+
+/* ===============================
+   BANDEAU PORTAIL
+   =============================== */
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+
+  margin:10px 0;
+
+  padding:10px 12px;
+  min-height:46px;
+
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(212,106,0,.75),
+      rgba(185,88,0,.58)
+    );
+
+  border:1px solid var(--stroke);
+
+  box-shadow:var(--shadow);
+
+  backdrop-filter:blur(10px);
+}
+
+.topbar h1{
+  margin:0;
+
+  font-size:18px;
+  font-weight:950;
+
+  letter-spacing:.8px;
+  text-transform:uppercase;
+}
+
+/* ===============================
+   BOUTONS
+   =============================== */
+
+.btn{
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.18);
+
+  color:var(--txt);
+
+  padding:9px 12px;
+
+  border-radius:14px;
+
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+.btn:active{
+  transform:translateY(1px);
+}
+
+/* ===============================
+   CARTES PORTAIL
+   =============================== */
+
+.card{
+  border-radius:var(--radius);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,.50),
+      rgba(0,0,0,.34)
+    );
+
+  border:1px solid var(--stroke);
+
+  box-shadow:var(--shadow);
+
+  backdrop-filter:blur(10px);
+
+  padding:14px;
+}
+
+/* ===============================
+   MODAL / OVERLAY
+   =============================== */
+
+.overlay{
+  position:fixed;
+  inset:0;
+
+  background: rgba(0,0,0,.55);
+
+  display:none;
+
+  backdrop-filter:blur(6px);
+
+  z-index:100;
+}
+
+.overlay.show{
+  display:block;
+}
