@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Événements Admin — CS Consenvoye</title>
+
+  <style>
+    :root{
+      --txt:#f4f4f4;
+      --muted:rgba(255,255,255,.78);
+      --shadow:0 14px 34px rgba(0,0,0,.40);
+      --stroke:rgba(255,255,255,.10);
+      --headerColor1: rgba(212,106,0,.75);
+      --headerColor2: rgba(185,88,0,.58);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--txt);
+      background:#0b0b0b;
+      overflow:hidden;
+    }
+
+    .bg{
+      position:fixed;
+      inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.54), rgba(0,0,0,.58)),
+        url("background.png") center top/cover no-repeat;
+      z-index:-2;
+      transform:translateZ(0);
+    }
+
+    .bg::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.66) 62%);
+      z-index:-1;
+    }
+
+    .wrap{
+      height:100vh;
+      max-width:980px;
+      margin:0 auto;
+      padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
+      display:grid;
+      grid-template-rows:auto auto 1fr;
+      gap:10px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:18px;
+      background:linear-gradient(180deg,var(--headerColor1),var(--headerColor2));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      min-height:46px;
+    }
+
+    .title{
+      font-weight:950;
+      letter-spacing:.8px;
+      text-transform:uppercase;
+      font-size:18px;
+      margin:0;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .btn{
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(0,0,0,.18);
+      color:var(--txt);
+      padding:9px 12px;
+      border-radius:14px;
+      font-weight:900;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .btn:active{transform:translateY(1px)}
+
+    .hero{
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.28));
+      border:1px solid var(--stroke);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      padding:12px 14px;
+    }
+
+    .hero h2{
+      margin:0 0 6px;
+      font-size:17px;
+      font-weight:950;
+    }
+
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      font-weight:800;
+      line-height:1.35;
+      white-space:pre-wrap;
+    }
+
+    .page{
+      min-height:0;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding-right:2px;
+      padding-bottom:calc(env(safe-area-inset-bottom) + 18px);
+    }
+
+    .section{
+      border-radius:22px;
+      padding:14px;
+      background:linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.28));
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+
+    .section h3{
+      margin:0 0 12px;
+      font-size:18px;
+      font-weight:950;
+      color:#fff;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .field label{
+      font-size:13px;
+      font-weight:950;
+      color:rgba(255,255,255,.92);
+    }
+
+    .input,
+    .select,
+    .textarea{
+      width:100%;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      padding:11px 12px;
+      font:inherit;
+      outline:none;
+    }
+
+    .textarea{
+      min-height:110px;
+      resize:vertical;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .adminBtn{
+      border:none;
+      border-radius:14px;
+      padding:10px 14px;
+      font-weight:950;
+      color:#fff;
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 10px 24px rgba(0,0,0,.20);
+      -webkit-tap-highlight-color:transparent;
+      background:linear-gradient(180deg, rgba(75,130,220,.34), rgba(75,130,220,.16));
+    }
+
+    .adminBtn.alt{
+      background:linear-gradient(180deg, rgba(210,70,70,.34), rgba(210,70,70,.16));
+    }
+
+    .adminBtn.green{
+      background:linear-gradient(180deg, rgba(90,170,105,.34), rgba(90,170,105,.16));
+    }
+
+    .adminBtn.orange{
+      background:linear-gradient(180deg, rgba(200,120,40,.34), rgba(200,120,40,.16));
+    }
+
+    .adminBtn:active{transform:translateY(1px)}
+
+    .catGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .catCard{
+      border-radius:16px;
+      padding:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+    }
+
+    .catName{
+      margin:0 0 8px;
+      font-size:15px;
+      font-weight:950;
+      color:#fff;
+    }
+
+    .colorBar{
+      height:10px;
+      border-radius:999px;
+      margin-bottom:10px;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .small{
+      margin:0;
+      font-size:13px;
+      font-weight:800;
+      color:rgba(255,255,255,.84);
+      line-height:1.35;
+      white-space:pre-wrap;
+    }
+
+    .eventCard{
+      border-radius:16px;
+      padding:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .eventTitle{
+      margin:0;
+      font-size:15px;
+      font-weight:950;
+      color:#fff;
+    }
+
+    .eventMeta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.92);
+    }
+
+    .previewWrap{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .previewHero{
+      border-radius:18px;
+      padding:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:linear-gradient(180deg, rgba(90,170,105,.34), rgba(90,170,105,.14));
+    }
+
+    .previewHero h4{
+      margin:0 0 8px;
+      font-size:17px;
+      font-weight:950;
+    }
+
+    .previewCat{
+      border-radius:16px;
+      padding:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+    }
+
+    .previewCat h4{
+      margin:0 0 8px;
+      font-size:15px;
+      font-weight:950;
+    }
+
+    .hint{
+      margin:0;
+      color:rgba(255,255,255,.72);
+      font-size:13px;
+      font-weight:800;
+      line-height:1.35;
+    }
+
+    @media (max-width: 700px){
+      .grid2,
+      .catGrid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="title">Événements Admin</div>
+      <button class="btn" id="btnBack">Retour</button>
+    </div>
+
+    <div class="hero">
+      <h2>Gestion des événements</h2>
+      <p>Cette page sert de base admin pour préparer la structure :
+catégories, couleurs, événements, mise à la une et aperçu.
+On branchera plus tard la sauvegarde réelle et la publication automatique.</p>
+    </div>
+
+    <div class="page">
+
+      <div class="section">
+        <h3>1. Gestion des catégories</h3>
+
+        <div class="grid2">
+          <div class="field">
+            <label>Nom de la catégorie</label>
+            <input class="input" type="text" value="Cérémonies">
+          </div>
+
+          <div class="field">
+            <label>Couleur de la catégorie</label>
+            <select class="select">
+              <option>Bleu</option>
+              <option>Rouge</option>
+              <option>Orange</option>
+              <option>Vert</option>
+              <option>Violet</option>
+              <option>Cyan</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <button class="adminBtn green">Ajouter une catégorie</button>
+          <button class="adminBtn">Modifier la catégorie</button>
+          <button class="adminBtn alt">Supprimer la catégorie</button>
+        </div>
+
+        <div class="catGrid" style="margin-top:12px">
+          <div class="catCard">
+            <p class="catName">Cérémonies</p>
+            <div class="colorBar" style="background:linear-gradient(90deg, rgba(75,130,220,.9), rgba(75,130,220,.35));"></div>
+            <p class="small">Catégorie visible sur la page publique.</p>
+          </div>
+
+          <div class="catCard">
+            <p class="catName">Réunions</p>
+            <div class="colorBar" style="background:linear-gradient(90deg, rgba(210,70,70,.9), rgba(210,70,70,.35));"></div>
+            <p class="small">Catégorie visible sur la page publique.</p>
+          </div>
+
+          <div class="catCard">
+            <p class="catName">Repas / convivialité</p>
+            <div class="colorBar" style="background:linear-gradient(90deg, rgba(200,120,40,.9), rgba(200,120,40,.35));"></div>
+            <p class="small">Catégorie visible sur la page publique.</p>
+          </div>
+
+          <div class="catCard">
+            <p class="catName">Sorties / activités</p>
+            <div class="colorBar" style="background:linear-gradient(90deg, rgba(90,170,105,.9), rgba(90,170,105,.35));"></div>
+            <p class="small">Catégorie visible sur la page publique.</p>
+          </div>
+
+          <div class="catCard">
+            <p class="catName">Projets</p>
+            <div class="colorBar" style="background:linear-gradient(90deg, rgba(145,105,220,.9), rgba(145,105,220,.35));"></div>
+            <p class="small">Catégorie visible sur la page publique.</p>
+          </div>
+
+          <div class="catCard">
+            <p class="catName">Comptes-rendus</p>
+            <div class="colorBar" style="background:linear-gradient(90deg, rgba(70,170,170,.9), rgba(70,170,170,.35));"></div>
+            <p class="small">Catégorie visible sur la page publique.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>2. Création d’un événement</h3>
+
+        <div class="grid2">
+          <div class="field">
+            <label>Titre</label>
+            <input class="input" type="text" placeholder="Ex. Sainte-Barbe 2026">
+          </div>
+
+          <div class="field">
+            <label>Catégorie</label>
+            <select class="select">
+              <option>Cérémonies</option>
+              <option>Réunions</option>
+              <option>Repas / convivialité</option>
+              <option>Sorties / activités</option>
+              <option>Projets</option>
+              <option>Comptes-rendus</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Date</label>
+            <input class="input" type="text" placeholder="Ex. 15 décembre 2026">
+          </div>
+
+          <div class="field">
+            <label>Lieu</label>
+            <input class="input" type="text" placeholder="Ex. Centre de secours">
+          </div>
+        </div>
+
+        <div class="field" style="margin-top:10px">
+          <label>Description</label>
+          <textarea class="textarea" placeholder="Texte de présentation de l’événement..."></textarea>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <button class="adminBtn green">Créer l’événement</button>
+          <button class="adminBtn orange">Mettre à la une</button>
+          <button class="adminBtn">Enregistrer en brouillon</button>
+          <button class="adminBtn alt">Supprimer</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>3. Liste des événements</h3>
+
+        <div class="eventCard">
+          <p class="eventTitle">Sainte-Barbe 2026</p>
+          <div class="eventMeta">
+            <span class="pill">📂 Cérémonies</span>
+            <span class="pill">📅 15 décembre 2026</span>
+            <span class="pill">📍 Centre de secours</span>
+            <span class="pill">⭐ À la une</span>
+          </div>
+          <p class="small">Exemple de fiche événement visible plus tard sur la page publique.</p>
+        </div>
+
+        <div class="eventCard">
+          <p class="eventTitle">Réunion d’organisation</p>
+          <div class="eventMeta">
+            <span class="pill">📂 Réunions</span>
+            <span class="pill">📅 À définir</span>
+            <span class="pill">📍 À définir</span>
+            <span class="pill">📝 Brouillon</span>
+          </div>
+          <p class="small">Exemple d’événement non encore finalisé.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>4. Aperçu public</h3>
+
+        <div class="previewWrap">
+          <div class="previewHero">
+            <h4>À la une</h4>
+            <p class="small">Ici apparaîtra l’événement principal publié.</p>
+          </div>
+
+          <div class="previewCat">
+            <h4>Cérémonies</h4>
+            <p class="small">Les événements publiés dans cette catégorie s’afficheront ici.</p>
+          </div>
+
+          <div class="previewCat">
+            <h4>Réunions</h4>
+            <p class="small">Les événements publiés dans cette catégorie s’afficheront ici.</p>
+          </div>
+
+          <div class="previewCat">
+            <h4>Repas / convivialité</h4>
+            <p class="small">Les événements publiés dans cette catégorie s’afficheront ici.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>5. Suite prévue</h3>
+        <p class="hint">La structure est prête pour la future étape admin réelle :
+sauvegarde, publication, modification, suppression, et alimentation automatique de la page `evenements.html`.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("btnBack").addEventListener("click", () => {
+      location.replace("evenements.html");
+    });
+  </script>
+</body>
+</html>
