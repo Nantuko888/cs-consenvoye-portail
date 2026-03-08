@@ -1,433 +1,138 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Événements — CS Consenvoye</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Événements</title>
 
-  <style>
-    :root{
-      --txt:#f4f4f4;
-      --muted:rgba(255,255,255,.78);
-      --shadow:0 14px 34px rgba(0,0,0,.40);
-      --stroke:rgba(255,255,255,.10);
-      --headerColor1: rgba(212,106,0,.75);
-      --headerColor2: rgba(185,88,0,.58);
-      --activeCat: rgba(90,170,105,.34);
-    }
+<style>
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
+:root{
+--txt:#f4f4f4;
+--shadow:0 14px 34px rgba(0,0,0,.40);
+--header1: rgba(212,106,0,.75);
+--header2: rgba(185,88,0,.58);
+}
 
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--txt);
-      background:#0b0b0b;
-      overflow:hidden;
-    }
+body{
+margin:0;
+font-family:system-ui;
+color:var(--txt);
+background:#0b0b0b;
+}
 
-    .bg{
-      position:fixed;
-      inset:0;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,.54), rgba(0,0,0,.58)),
-        url("background.png") center top/cover no-repeat;
-      z-index:-2;
-      transform:translateZ(0);
-    }
+.bg{
+position:fixed;
+inset:0;
+background:
+linear-gradient(180deg,rgba(0,0,0,.6),rgba(0,0,0,.6)),
+url("background.png") center/cover no-repeat;
+z-index:-1;
+}
 
-    .bg::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.66) 62%);
-      z-index:-1;
-    }
+.wrap{
+max-width:900px;
+margin:auto;
+padding:12px;
+display:flex;
+flex-direction:column;
+gap:12px;
+}
 
-    .wrap{
-      height:100vh;
-      max-width:980px;
-      margin:0 auto;
-      padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
-      display:grid;
-      grid-template-rows:auto 1fr;
-      gap:10px;
-    }
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px 12px;
+border-radius:18px;
+background:linear-gradient(180deg,var(--header1),var(--header2));
+box-shadow:var(--shadow);
+}
 
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:10px 12px;
-      border-radius:18px;
-      background:linear-gradient(180deg,var(--headerColor1),var(--headerColor2));
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      min-height:46px;
-    }
+.title{
+font-weight:900;
+letter-spacing:.5px;
+}
 
-    .title{
-      font-weight:950;
-      letter-spacing:.8px;
-      text-transform:uppercase;
-      font-size:18px;
-      margin:0;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
+.btn{
+padding:8px 12px;
+border-radius:12px;
+border:1px solid rgba(255,255,255,.2);
+background:rgba(0,0,0,.2);
+color:white;
+cursor:pointer;
+}
 
-    .btn{
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(0,0,0,.18);
-      color:var(--txt);
-      padding:9px 12px;
-      border-radius:14px;
-      font-weight:900;
-      cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
-    }
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
 
-    .btn:active{transform:translateY(1px)}
+.card{
+border-radius:18px;
+padding:18px;
+text-align:center;
+font-weight:900;
+cursor:pointer;
+border:1px solid rgba(255,255,255,.12);
+box-shadow:var(--shadow);
+}
 
-    .page{
-      min-height:0;
-      overflow:auto;
-      -webkit-overflow-scrolling:touch;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      padding-right:2px;
-      padding-bottom:calc(env(safe-area-inset-bottom) + 20px);
-    }
+.card:active{
+transform:translateY(1px);
+}
 
-    .hero{
-      border-radius:22px;
-      padding:18px;
-      background:linear-gradient(180deg, rgba(90,170,105,.34), rgba(90,170,105,.14));
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-    }
+.cat1{background:linear-gradient(180deg,rgba(75,130,220,.4),rgba(75,130,220,.2))}
+.cat2{background:linear-gradient(180deg,rgba(210,70,70,.4),rgba(210,70,70,.2))}
+.cat3{background:linear-gradient(180deg,rgba(200,120,40,.4),rgba(200,120,40,.2))}
+.cat4{background:linear-gradient(180deg,rgba(90,170,105,.4),rgba(90,170,105,.2))}
+.cat5{background:linear-gradient(180deg,rgba(145,105,220,.4),rgba(145,105,220,.2))}
+.cat6{background:linear-gradient(180deg,rgba(70,170,170,.4),rgba(70,170,170,.2))}
 
-    .hero h2{
-      margin:0 0 10px;
-      font-size:21px;
-      font-weight:950;
-      color:#fff;
-    }
-
-    .hero p{
-      margin:0;
-      line-height:1.6;
-      color:rgba(255,255,255,.92);
-      font-weight:800;
-      white-space:pre-wrap;
-    }
-
-    .featured{
-      border-radius:22px;
-      padding:16px;
-      background:linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.28));
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-    }
-
-    .featured h3,
-    .contentCard h3{
-      margin:0 0 10px;
-      font-size:18px;
-      font-weight:950;
-      color:#fff;
-    }
-
-    .eventCard{
-      border-radius:16px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.08);
-      padding:12px;
-    }
-
-    .eventTitle{
-      margin:0 0 8px;
-      font-size:16px;
-      font-weight:950;
-      color:#fff;
-    }
-
-    .eventMeta{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-bottom:8px;
-    }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);
-      font-size:13px;
-      font-weight:900;
-      color:rgba(255,255,255,.92);
-    }
-
-    .eventText{
-      margin:0;
-      line-height:1.55;
-      color:rgba(255,255,255,.90);
-      font-weight:800;
-      white-space:pre-wrap;
-    }
-
-    .catGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-
-    .catBtn{
-      border:none;
-      border-radius:18px;
-      padding:14px 12px;
-      min-height:64px;
-      cursor:pointer;
-      color:#fff;
-      font-weight:950;
-      font-size:15px;
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      -webkit-tap-highlight-color:transparent;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-    }
-
-    .catBtn:active{transform:translateY(1px)}
-
-    .catBtn.active{
-      box-shadow:
-        var(--shadow),
-        inset 0 0 0 1px rgba(255,255,255,.12);
-      filter:brightness(1.06);
-    }
-
-    .cat1{ background:linear-gradient(180deg, rgba(75,130,220,.34), rgba(75,130,220,.16)); }
-    .cat2{ background:linear-gradient(180deg, rgba(210,70,70,.34), rgba(210,70,70,.16)); }
-    .cat3{ background:linear-gradient(180deg, rgba(200,120,40,.34), rgba(200,120,40,.16)); }
-    .cat4{ background:linear-gradient(180deg, rgba(90,170,105,.34), rgba(90,170,105,.16)); }
-    .cat5{ background:linear-gradient(180deg, rgba(145,105,220,.34), rgba(145,105,220,.16)); }
-    .cat6{ background:linear-gradient(180deg, rgba(70,170,170,.34), rgba(70,170,170,.16)); }
-
-    .contentCard{
-      border-radius:22px;
-      padding:16px;
-      background:linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.28));
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-    }
-
-    .contentBody{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .placeholder{
-      margin:0;
-      line-height:1.6;
-      color:rgba(255,255,255,.88);
-      font-weight:800;
-      white-space:pre-wrap;
-    }
-
-    @media (max-width: 560px){
-      .catGrid{
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .catBtn{
-        font-size:14px;
-        min-height:60px;
-        padding:12px 10px;
-      }
-    }
-  </style>
+</style>
 </head>
+
 <body>
-  <div class="bg"></div>
 
-  <div class="wrap">
-    <div class="topbar">
-      <div class="title">Événements</div>
-      <button class="btn" id="btnBack">Retour</button>
-    </div>
+<div class="bg"></div>
 
-    <div class="page">
-      <div class="hero">
-        <h2>Vie événementielle du centre</h2>
-        <p>Cette page regroupera les événements, réunions, cérémonies, repas, projets et comptes-rendus du centre.
-La structure est maintenant prête pour être remplie proprement, puis pilotée plus tard depuis la partie administrative.</p>
-      </div>
+<div class="wrap">
 
-      <div class="featured">
-        <h3>À la une</h3>
+<div class="topbar">
+<div class="title">ÉVÉNEMENTS</div>
+<button class="btn" onclick="location.href='informations.html'">Retour</button>
+</div>
 
-        <div class="eventCard">
-          <p class="eventTitle">Aucun événement mis en avant pour le moment</p>
-          <div class="eventMeta">
-            <span class="pill">📌 À compléter</span>
-            <span class="pill">🛠 En préparation</span>
-          </div>
-          <p class="eventText">Tu pourras utiliser cette zone pour afficher rapidement un événement important : cérémonie, réunion, repas, sortie, compte-rendu ou projet du moment.</p>
-        </div>
-      </div>
+<div class="grid">
 
-      <div class="catGrid">
-        <button class="catBtn cat1 active" data-cat="ceremonies">Cérémonies</button>
-        <button class="catBtn cat2" data-cat="reunions">Réunions</button>
-        <button class="catBtn cat3" data-cat="repas">Repas / convivialité</button>
-        <button class="catBtn cat4" data-cat="sorties">Sorties / activités</button>
-        <button class="catBtn cat5" data-cat="projets">Projets</button>
-        <button class="catBtn cat6" data-cat="comptesrendus">Comptes-rendus</button>
-      </div>
+<div class="card cat1" onclick="location.href='evenement-ceremonies.html'">
+Cérémonies
+</div>
 
-      <div class="contentCard">
-        <h3 id="catTitle">Cérémonies</h3>
-        <div class="contentBody" id="catContent"></div>
-      </div>
-    </div>
-  </div>
+<div class="card cat2" onclick="location.href='evenement-reunions.html'">
+Réunions
+</div>
 
-  <script>
-    const EVENT_CATEGORIES = {
-      ceremonies: {
-        title: "Cérémonies",
-        html: `
-          <div class="eventCard">
-            <p class="eventTitle">Rubrique prête</p>
-            <div class="eventMeta">
-              <span class="pill">🎖 Cérémonies officielles</span>
-              <span class="pill">📍 À remplir</span>
-            </div>
-            <p class="eventText">Cette rubrique pourra accueillir les cérémonies du centre :
-Sainte-Barbe, commémorations, remises de grades, distinctions, hommages, manifestations officielles.</p>
-          </div>
-        `
-      },
+<div class="card cat3" onclick="location.href='evenement-repas.html'">
+Repas / convivialité
+</div>
 
-      reunions: {
-        title: "Réunions",
-        html: `
-          <div class="eventCard">
-            <p class="eventTitle">Rubrique prête</p>
-            <div class="eventMeta">
-              <span class="pill">🗓 Réunions</span>
-              <span class="pill">📍 À remplir</span>
-            </div>
-            <p class="eventText">Cette rubrique pourra accueillir les réunions du centre :
-réunions de service, réunions d’organisation, réunions amicale, réunions de préparation ou de bilan.</p>
-          </div>
-        `
-      },
+<div class="card cat4" onclick="location.href='evenement-sorties.html'">
+Sorties / activités
+</div>
 
-      repas: {
-        title: "Repas / convivialité",
-        html: `
-          <div class="eventCard">
-            <p class="eventTitle">Rubrique prête</p>
-            <div class="eventMeta">
-              <span class="pill">🍽 Convivialité</span>
-              <span class="pill">📍 À remplir</span>
-            </div>
-            <p class="eventText">Cette rubrique pourra accueillir les repas, moments conviviaux, barbecues, galettes, pots, repas de fin d’année ou autres temps de cohésion.</p>
-          </div>
-        `
-      },
+<div class="card cat5" onclick="location.href='evenement-projets.html'">
+Projets
+</div>
 
-      sorties: {
-        title: "Sorties / activités",
-        html: `
-          <div class="eventCard">
-            <p class="eventTitle">Rubrique prête</p>
-            <div class="eventMeta">
-              <span class="pill">🚍 Sorties</span>
-              <span class="pill">📍 À remplir</span>
-            </div>
-            <p class="eventText">Cette rubrique pourra accueillir les sorties, activités sportives, déplacements, visites, journées découvertes ou participations extérieures.</p>
-          </div>
-        `
-      },
+<div class="card cat6" onclick="location.href='evenement-comptes.html'">
+Comptes-rendus
+</div>
 
-      projets: {
-        title: "Projets",
-        html: `
-          <div class="eventCard">
-            <p class="eventTitle">Rubrique prête</p>
-            <div class="eventMeta">
-              <span class="pill">🧩 Projets</span>
-              <span class="pill">📍 À remplir</span>
-            </div>
-            <p class="eventText">Cette rubrique pourra accueillir les projets du centre :
-aménagements, achats, travaux, organisation d’événements, idées en préparation, partenariats ou actions futures.</p>
-          </div>
-        `
-      },
+</div>
 
-      comptesrendus: {
-        title: "Comptes-rendus",
-        html: `
-          <div class="eventCard">
-            <p class="eventTitle">Rubrique prête</p>
-            <div class="eventMeta">
-              <span class="pill">📝 Comptes-rendus</span>
-              <span class="pill">📍 À remplir</span>
-            </div>
-            <p class="eventText">Cette rubrique pourra accueillir les comptes-rendus de réunions, bilans d’événements, synthèses de décisions ou notes d’organisation.</p>
-          </div>
-        `
-      }
-    };
+</div>
 
-    const catButtons = document.querySelectorAll(".catBtn");
-    const catTitle = document.getElementById("catTitle");
-    const catContent = document.getElementById("catContent");
-
-    function renderCategory(key){
-      const data = EVENT_CATEGORIES[key];
-      catTitle.textContent = data.title;
-      catContent.innerHTML = data.html;
-    }
-
-    catButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        catButtons.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        renderCategory(btn.dataset.cat);
-      });
-    });
-
-    renderCategory("ceremonies");
-
-    document.getElementById("btnBack").addEventListener("click", () => {
-      location.replace("informations.html");
-    });
-  </script>
 </body>
 </html>
