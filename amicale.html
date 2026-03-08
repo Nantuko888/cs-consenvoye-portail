@@ -2,26 +2,50 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Amicale — CS Consenvoye</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Amicale — Accès réservé</title>
 
 <style>
 
 body{
-  margin:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:100vh;
-  background:black;
-  font-family:system-ui;
+margin:0;
+background:#0b0b0b;
+font-family:system-ui;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+height:100vh;
+color:white;
 }
 
-img{
-  max-width:95%;
-  max-height:95%;
-  border-radius:20px;
-  box-shadow:0 25px 60px rgba(0,0,0,.6);
+/* bouton retour */
+
+.backBtn{
+position:fixed;
+top:14px;
+left:14px;
+
+padding:10px 16px;
+border-radius:14px;
+
+background:linear-gradient(180deg,#ff8c00,#d86f00);
+border:1px solid rgba(255,255,255,.25);
+
+font-weight:900;
+color:white;
+
+box-shadow:0 10px 25px rgba(0,0,0,.4);
+
+cursor:pointer;
+}
+
+/* image */
+
+.lockImg{
+max-width:90%;
+max-height:70vh;
+object-fit:contain;
 }
 
 </style>
@@ -29,7 +53,9 @@ img{
 
 <body>
 
-<img src="membres_amicale.png">
+<button class="backBtn" onclick="history.back()">← Retour</button>
+
+<img src="amicale-refuse.png" class="lockImg">
 
 </body>
 </html>
