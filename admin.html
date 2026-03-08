@@ -27,6 +27,14 @@
       color:rgba(255,255,255,.95);
     }
 
+    .dashboardSmall{
+      margin-top:8px;
+      font-size:13px;
+      font-weight:800;
+      color:rgba(255,255,255,.78);
+      line-height:1.35;
+    }
+
     .menuBlock{
       border-radius:20px;
       overflow:hidden;
@@ -91,13 +99,18 @@
       display:block;
     }
 
+    .subGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+
     .subBtn{
       display:flex;
       align-items:center;
       gap:12px;
       padding:12px 14px;
       border-radius:14px;
-      margin-bottom:8px;
       font-weight:850;
       cursor:pointer;
       color:rgba(255,255,255,.95);
@@ -106,40 +119,71 @@
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
       -webkit-tap-highlight-color:transparent;
-    }
-
-    .subBtn:last-child{
-      margin-bottom:0;
+      text-decoration:none;
+      min-height:50px;
     }
 
     .subBtn:active{
       transform:translateY(1px);
     }
 
-    /* Catégories principales translucides */
-    .gestionHeader{
+    .subBtn span:last-child{
+      min-width:0;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .sectionHint{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      border:1px dashed rgba(255,255,255,.10);
+      color:rgba(255,255,255,.78);
+      font-weight:800;
+      line-height:1.35;
+      font-size:13px;
+    }
+
+    /* Catégories principales */
+    .contenuHeader{
       background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18));
     }
 
-    .paramHeader{
+    .orgaHeader{
       background:linear-gradient(180deg, rgba(212,106,0,.34), rgba(212,106,0,.18));
     }
 
-    .testsHeader{
+    .paramHeader{
       background:linear-gradient(180deg, rgba(47,158,91,.34), rgba(47,158,91,.18));
     }
 
-    /* Sous-catégories différentes et translucides */
-    .gestionSub{
+    .testsHeader{
+      background:linear-gradient(180deg, rgba(220,90,170,.28), rgba(220,90,170,.14));
+    }
+
+    /* Sous-catégories */
+    .contenuSub{
       background:linear-gradient(180deg, rgba(145,90,220,.28), rgba(145,90,220,.14));
     }
 
-    .paramSub{
+    .orgaSub{
       background:linear-gradient(180deg, rgba(255,190,60,.26), rgba(255,190,60,.13));
     }
 
+    .paramSub{
+      background:linear-gradient(180deg, rgba(70,170,170,.26), rgba(70,170,170,.13));
+    }
+
     .testsSub{
-      background:linear-gradient(180deg, rgba(220,90,170,.26), rgba(220,90,170,.13));
+      background:linear-gradient(180deg, rgba(90,170,105,.26), rgba(90,170,105,.13));
+    }
+
+    @media (max-width: 700px){
+      .subGrid{
+        grid-template-columns:1fr;
+      }
     }
   </style>
 </head>
@@ -154,22 +198,61 @@
     </div>
 
     <div class="adminWrap">
-      <div class="dashboard">📊 Tableau de bord administration</div>
+      <div class="dashboard">
+        📊 Tableau de bord administration
+        <div class="dashboardSmall">
+          Centre de gestion du portail CS Consenvoye
+        </div>
+      </div>
 
-      <!-- Gestion -->
-      <div class="menuBlock">
-        <div class="menuHeader gestionHeader" onclick="toggleMenu(this)">
+      <!-- Gestion contenu -->
+      <div class="menuBlock open">
+        <div class="menuHeader contenuHeader" onclick="toggleMenu(this)">
           <div class="menuTitle">
-            <span class="emoji">🧰</span>
-            <span>Gestion</span>
+            <span class="emoji">📝</span>
+            <span>Gestion contenu</span>
           </div>
           <span class="menuArrow">▾</span>
         </div>
 
         <div class="subMenu">
-          <div class="subBtn gestionSub">🧭 Organigramme</div>
-          <div class="subBtn gestionSub">👥 Équipes</div>
-          <div class="subBtn gestionSub">🚑 Désinfection VSAV</div>
+          <div class="subGrid">
+            <a class="subBtn contenuSub" href="contacts-admin.html"><span>📞</span><span>Contacts</span></a>
+            <a class="subBtn contenuSub" href="reglement-admin.html"><span>📘</span><span>Règlement</span></a>
+            <a class="subBtn contenuSub" href="evenements-admin.html"><span>📅</span><span>Événements</span></a>
+            <a class="subBtn contenuSub" href="amicale-admin.html"><span>🤝</span><span>Amicale</span></a>
+            <a class="subBtn contenuSub" href="documents-admin.html"><span>📄</span><span>Documents</span></a>
+            <a class="subBtn contenuSub" href="informations.html"><span>ℹ️</span><span>Informations (aperçu)</span></a>
+          </div>
+
+          <div class="sectionHint">
+            Cette zone doit servir à modifier les contenus publics du portail.
+          </div>
+        </div>
+      </div>
+
+      <!-- Organisation -->
+      <div class="menuBlock">
+        <div class="menuHeader orgaHeader" onclick="toggleMenu(this)">
+          <div class="menuTitle">
+            <span class="emoji">🧰</span>
+            <span>Organisation</span>
+          </div>
+          <span class="menuArrow">▾</span>
+        </div>
+
+        <div class="subMenu">
+          <div class="subGrid">
+            <a class="subBtn orgaSub" href="organigramme.html"><span>🧭</span><span>Organigramme</span></a>
+            <a class="subBtn orgaSub" href="equipes.html"><span>👥</span><span>Équipes</span></a>
+            <a class="subBtn orgaSub" href="desinfection-vsav.html"><span>🚑</span><span>Désinfection VSAV</span></a>
+            <a class="subBtn orgaSub" href="planning.html"><span>🗓️</span><span>Planning</span></a>
+            <a class="subBtn orgaSub" href="gardes-postees.html"><span>👨‍🚒</span><span>Gardes postées</span></a>
+          </div>
+
+          <div class="sectionHint">
+            Partie dédiée à l’organisation opérationnelle et au fonctionnement interne du centre.
+          </div>
         </div>
       </div>
 
@@ -184,8 +267,16 @@
         </div>
 
         <div class="subMenu">
-          <div class="subBtn paramSub">🔑 Accès</div>
-          <div class="subBtn paramSub">🛠️ Configuration</div>
+          <div class="subGrid">
+            <a class="subBtn paramSub" href="#"><span>🔑</span><span>Accès</span></a>
+            <a class="subBtn paramSub" href="#"><span>🛠️</span><span>Configuration</span></a>
+            <a class="subBtn paramSub" href="#"><span>🎨</span><span>Apparence</span></a>
+            <a class="subBtn paramSub" href="#"><span>🔗</span><span>Liens / navigation</span></a>
+          </div>
+
+          <div class="sectionHint">
+            Réglages globaux du portail : accès, affichage, structure et comportement général.
+          </div>
         </div>
       </div>
 
@@ -200,10 +291,16 @@
         </div>
 
         <div class="subMenu">
-          <div class="subBtn testsSub">ℹ️ Informations</div>
-          <div class="subBtn testsSub">👨‍🚒 Gardes postées</div>
-          <div class="subBtn testsSub">🖼️ Galerie</div>
-          <div class="subBtn testsSub">📘 Book</div>
+          <div class="subGrid">
+            <a class="subBtn testsSub" href="informations.html"><span>ℹ️</span><span>Informations</span></a>
+            <a class="subBtn testsSub" href="galerie.html"><span>🖼️</span><span>Galerie</span></a>
+            <a class="subBtn testsSub" href="book.html"><span>📘</span><span>Book</span></a>
+            <a class="subBtn testsSub" href="#"><span>🧱</span><span>Pages en préparation</span></a>
+          </div>
+
+          <div class="sectionHint">
+            Zone d’aperçu et d’essai avant mise en service définitive.
+          </div>
         </div>
       </div>
     </div>
