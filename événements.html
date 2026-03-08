@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Événements — CS Consenvoye</title>
+
+  <style>
+    :root{
+      --txt:#f4f4f4;
+      --shadow:0 14px 34px rgba(0,0,0,.40);
+      --headerColor1: rgba(212,106,0,.75);
+      --headerColor2: rgba(185,88,0,.58);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--txt);
+      background:#0b0b0b;
+      overflow:hidden;
+    }
+
+    .bg{
+      position:fixed;
+      inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.54), rgba(0,0,0,.58)),
+        url("background.png") center top/cover no-repeat;
+      z-index:-2;
+      transform:translateZ(0);
+    }
+
+    .bg::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.66) 62%);
+      z-index:-1;
+    }
+
+    .wrap{
+      height:100vh;
+      max-width:980px;
+      margin:0 auto;
+      padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
+      display:grid;
+      grid-template-rows:auto 1fr;
+      gap:10px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:18px;
+      background:linear-gradient(180deg,var(--headerColor1),var(--headerColor2));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      min-height:46px;
+    }
+
+    .title{
+      font-weight:950;
+      letter-spacing:.8px;
+      text-transform:uppercase;
+      font-size:18px;
+      margin:0;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .btn{
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(0,0,0,.18);
+      color:var(--txt);
+      padding:9px 12px;
+      border-radius:14px;
+      font-weight:900;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .btn:active{transform:translateY(1px)}
+
+    .page{
+      min-height:0;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      padding-right:2px;
+      padding-bottom:calc(env(safe-area-inset-bottom) + 18px);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .hero{
+      border-radius:22px;
+      padding:18px;
+      background:linear-gradient(180deg, rgba(90,170,105,.34), rgba(90,170,105,.14));
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+
+    .hero h2{
+      margin:0 0 10px;
+      font-size:21px;
+      font-weight:950;
+      color:#fff;
+    }
+
+    .hero p{
+      margin:0;
+      line-height:1.55;
+      color:rgba(255,255,255,.92);
+      font-weight:800;
+      white-space:pre-wrap;
+    }
+
+    .section{
+      border-radius:22px;
+      padding:16px;
+      background:linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.28));
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+
+    .section h3{
+      margin:0 0 10px;
+      font-size:18px;
+      font-weight:950;
+      color:#fff;
+    }
+
+    .section p{
+      margin:0 0 10px;
+      line-height:1.55;
+      color:rgba(255,255,255,.90);
+      font-weight:800;
+    }
+
+    .section p:last-child{
+      margin-bottom:0;
+    }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:8px;
+    }
+
+    .chip{
+      padding:8px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
+      font-weight:900;
+      color:rgba(255,255,255,.92);
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="title">Événements</div>
+      <button class="btn" id="btnBack">Retour</button>
+    </div>
+
+    <div class="page">
+      <div class="hero">
+        <h2>Page Événements</h2>
+        <p>Cette page est prête.
+Tu pourras la compléter plus tard avec les événements du centre, les cérémonies, les réunions, les repas, les sorties, les comptes-rendus et les projets.</p>
+      </div>
+
+      <div class="section">
+        <h3>Structure prévue</h3>
+        <div class="chips">
+          <div class="chip">Cérémonies</div>
+          <div class="chip">Réunions</div>
+          <div class="chip">Repas</div>
+          <div class="chip">Sorties</div>
+          <div class="chip">Manifestations</div>
+          <div class="chip">Projets</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>À compléter plus tard</h3>
+        <p>Tu pourras ensuite brancher cette page à la partie admin pour ajouter, modifier ou supprimer les catégories et les contenus sans refaire tout le code.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("btnBack").addEventListener("click", () => {
+      location.replace("informations.html");
+    });
+  </script>
+</body>
+</html>
