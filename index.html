@@ -65,6 +65,28 @@ body.mode-portal{
   transform: scale(1.25);
   transform-origin: center top;
 }
+  .refreshBtn{
+position:fixed;
+top:14px;
+left:14px;
+z-index:9999;
+
+width:44px;
+height:44px;
+
+border-radius:50%;
+
+background:linear-gradient(180deg,#ff8c00,#d86f00);
+border:1px solid rgba(255,255,255,.25);
+
+color:white;
+font-size:20px;
+font-weight:900;
+
+box-shadow:0 8px 20px rgba(0,0,0,.35);
+
+cursor:pointer;
+  }
 .grid{
   width: min(94vw, var(--maxw));
   margin-top: clamp(8px, 1.5vh, 16px);
@@ -610,7 +632,15 @@ document.addEventListener("click", (e)=>{
     showDenied();
   }
 });
+  <script>
+
+function forceRefresh(){
+location.reload(true);
+}
+
+</script>
 </script>
 
 </body>
+  <button class="refreshBtn" onclick="forceRefresh()">⟳</button>
 </html>
