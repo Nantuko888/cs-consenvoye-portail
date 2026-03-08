@@ -9,14 +9,12 @@
 
 body{
 margin:0;
-background:#0b0b0b;
-font-family:system-ui;
+background:#000;
 display:flex;
-flex-direction:column;
-align-items:center;
 justify-content:center;
+align-items:center;
 height:100vh;
-color:white;
+font-family:system-ui;
 }
 
 /* bouton retour */
@@ -26,14 +24,15 @@ position:fixed;
 top:14px;
 left:14px;
 
-padding:10px 16px;
-border-radius:14px;
+padding:10px 18px;
+border-radius:18px;
 
 background:linear-gradient(180deg,#ff8c00,#d86f00);
 border:1px solid rgba(255,255,255,.25);
 
 font-weight:900;
 color:white;
+font-size:16px;
 
 box-shadow:0 10px 25px rgba(0,0,0,.4);
 
@@ -43,8 +42,8 @@ cursor:pointer;
 /* image */
 
 .lockImg{
-max-width:90%;
-max-height:70vh;
+max-width:95%;
+max-height:90vh;
 object-fit:contain;
 }
 
@@ -55,7 +54,7 @@ object-fit:contain;
 
 <button class="backBtn" onclick="history.back()">← Retour</button>
 
-<img src="amicale-refuse.png" class="lockImg">
+<img src="membres_amicale.png" class="lockImg">
 
 </body>
 </html>
