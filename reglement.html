@@ -8,11 +8,11 @@
   <style>
     :root{
       --txt:#f4f4f4;
-      --muted:rgba(255,255,255,.78);
       --shadow:0 14px 34px rgba(0,0,0,.40);
       --stroke:rgba(255,255,255,.10);
       --headerColor1: rgba(212,106,0,.75);
       --headerColor2: rgba(185,88,0,.58);
+      --activeTitleBg: rgba(75,130,220,.35);
     }
 
     *{box-sizing:border-box}
@@ -117,7 +117,6 @@
       -webkit-backdrop-filter:blur(10px);
     }
 
-    /* Spirale gauche */
     .spiral{
       position:relative;
       border-top-left-radius:24px;
@@ -140,7 +139,6 @@
       opacity:.95;
     }
 
-    /* Contenu */
     .content{
       min-width:0;
       overflow:auto;
@@ -148,35 +146,53 @@
       padding:20px 18px 20px 16px;
     }
 
+    .content.switching{
+      animation: regFadeSlide .28s ease;
+    }
+
+    @keyframes regFadeSlide{
+      0%{
+        opacity:.15;
+        transform:translateX(10px);
+      }
+      100%{
+        opacity:1;
+        transform:translateX(0);
+      }
+    }
+
     .content h2{
-      margin:0 0 12px;
+      margin:0 0 18px;
+      padding:8px 12px;
       font-size:21px;
       font-weight:950;
-      color:rgba(255,255,255,.97);
+      color:#fff;
       line-height:1.15;
+      border-radius:12px;
+      background:var(--activeTitleBg);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
     }
 
     .content p{
-      margin:0 0 12px;
-      line-height:1.55;
-      color:rgba(255,255,255,.90);
-      font-weight:800;
+      margin:0 0 18px;
+      line-height:1.72;
+      color:rgba(255,255,255,.92);
+      font-weight:750;
       white-space:pre-wrap;
     }
 
     .content ul{
-      margin:0 0 12px 18px;
+      margin:0 0 18px 20px;
       padding:0;
     }
 
     .content li{
-      margin:6px 0;
-      line-height:1.45;
-      color:rgba(255,255,255,.90);
-      font-weight:800;
+      margin:8px 0;
+      line-height:1.55;
+      color:rgba(255,255,255,.92);
+      font-weight:750;
     }
 
-    /* Intercalaires droite */
     .tabs{
       display:flex;
       flex-direction:column;
@@ -219,25 +235,25 @@
       filter:brightness(1.08);
     }
 
-    .tab:nth-child(1){
+    .tab[data-key="vehicules"]{
       background:linear-gradient(180deg, rgba(75,130,220,.42), rgba(75,130,220,.20));
     }
-    .tab:nth-child(2){
+    .tab[data-key="vsav"]{
       background:linear-gradient(180deg, rgba(145,105,220,.42), rgba(145,105,220,.20));
     }
-    .tab:nth-child(3){
+    .tab[data-key="centre"]{
       background:linear-gradient(180deg, rgba(215,125,60,.42), rgba(215,125,60,.20));
     }
-    .tab:nth-child(4){
+    .tab[data-key="communication"]{
       background:linear-gradient(180deg, rgba(70,170,170,.42), rgba(70,170,170,.20));
     }
-    .tab:nth-child(5){
+    .tab[data-key="gardes"]{
       background:linear-gradient(180deg, rgba(210,70,70,.42), rgba(210,70,70,.20));
     }
-    .tab:nth-child(6){
+    .tab[data-key="collectivite"]{
       background:linear-gradient(180deg, rgba(90,170,105,.42), rgba(90,170,105,.20));
     }
-    .tab:nth-child(7){
+    .tab[data-key="tenue"]{
       background:linear-gradient(180deg, rgba(210,170,60,.42), rgba(210,170,60,.20));
     }
 
@@ -278,7 +294,6 @@
 
     <div class="page">
       <div class="book">
-
         <div class="spiral"></div>
 
         <div class="content" id="regContent"></div>
@@ -292,59 +307,85 @@
           <div class="tab" data-key="collectivite">Collectivité</div>
           <div class="tab" data-key="tenue">Tenue / Tabac</div>
         </div>
-
       </div>
     </div>
   </div>
 
   <script>
+    const TAB_COLORS = {
+      vehicules: "rgba(75,130,220,.35)",
+      vsav: "rgba(145,105,220,.35)",
+      centre: "rgba(215,125,60,.35)",
+      communication: "rgba(70,170,170,.35)",
+      gardes: "rgba(210,70,70,.35)",
+      collectivite: "rgba(90,170,105,.35)",
+      tenue: "rgba(210,170,60,.35)"
+    };
+
     const REGLEMENT_DATA = {
       vehicules: `
         <h2>Utilisation des véhicules</h2>
         <p>Les véhicules doivent être maintenus en permanence prêts à partir en intervention.
+
 Après chaque intervention ou manœuvre, l’équipage veille à remettre le matériel en place, remplir le carnet de bord et vérifier le niveau de carburant.
+
 Si la jauge est proche des 3/4, le complément doit être effectué. Si nécessaire, il est possible d’utiliser une autre station-service.
+
 Si le véhicule est sale au retour d’intervention, il doit être nettoyé. En cas d’impossibilité immédiate, prévenir et revenir le lendemain pour effectuer le lavage.
+
 En cas d’anomalie ou de dysfonctionnement, prévenir le responsable du pôle concerné.</p>
       `,
 
       vsav: `
         <h2>Inventaire et désinfection VSAV</h2>
         <p>Les personnels peuvent participer à la désinfection mensuelle du VSAV, organisée avec un référent.
+
 L’inscription peut se faire via la page web du centre ou sur la feuille d’inscription disponible au centre.
+
 Cette participation permet également de se remettre à jour sur l’emplacement du matériel dans le VSAV.
+
 La prise de garde mensuelle est également un moment permettant de réaliser l’inventaire du véhicule et de maintenir la connaissance du matériel.
+
 Les référents VSAV ont mis en place une page dédiée accessible via un QR code présent dans le VSAV, permettant d’accéder directement à la partie “Désinfection VSAV / Inventaire” de la page web du centre.</p>
       `,
 
       centre: `
         <h2>Investissement dans la vie du centre</h2>
         <p>Le bon fonctionnement du centre repose sur l’implication de chacun.</p>
+
         <ul>
           <li>L’encadrement ou l’accompagnement des JSP</li>
           <li>La préparation des manœuvres</li>
           <li>La prise de responsabilité dans un pôle</li>
           <li>La participation aux cérémonies officielles</li>
         </ul>
+
         <p>Ces engagements contribuent au bon fonctionnement du centre et au maintien du niveau opérationnel.</p>
       `,
 
       communication: `
         <h2>Communication / Manœuvres</h2>
         <p>La communication interne est essentielle au bon fonctionnement du centre.
+
 Les personnels sont invités à consulter régulièrement les moyens de communication du centre et à répondre aux sondages et aux questions posées.
+
 Il est recommandé de répondre dans les plus brefs délais, ou dans les délais demandés, aux sondages concernant les manœuvres, afin de permettre aux organisateurs de préparer au mieux les exercices.
+
 Répondre aux sollicitations est également une marque de respect pour les personnes qui prennent du temps pour organiser les activités du centre.</p>
 
         <p>Les manœuvres sont indispensables au maintien des compétences opérationnelles.
+
 Les personnels doivent arriver prêts au minimum dix minutes avant le début de la manœuvre, par respect pour les organisateurs.
+
 En cas d’impossibilité de présence, il est demandé de prévenir le responsable de la manœuvre dans les meilleurs délais.
+
 Lors des manœuvres, le matériel doit être remis correctement en place et reconditionné afin d’éviter toute mauvaise surprise lors d’une intervention.</p>
       `,
 
       gardes: `
         <h2>Gardes et gardes postées hors secteur / Prise de garde</h2>
         <p>Toute prise de garde hors secteur doit être signalée au chef de centre ou à ses adjoints.</p>
+
         <ul>
           <li>78 heures de disponibilité mensuelle : 1 garde</li>
           <li>108 heures de disponibilité mensuelle : 2 gardes</li>
@@ -352,33 +393,49 @@ Lors des manœuvres, le matériel doit être remis correctement en place et reco
         </ul>
 
         <p>La prise de garde est organisée mensuellement.
+
 Un responsable est désigné chaque mois afin d’organiser cette prise de garde avec les agents également désignés pour le mois.
+
 Il veille à ce que les missions prévues soient réalisées au cours du mois.
+
 Un onglet dédié sur la page web du centre a été créé afin de faciliter la gestion de cette prise de garde.
+
 Il est demandé de l’utiliser pour le suivi des missions.
+
 La propreté du centre est l’affaire de tous.</p>
       `,
 
       collectivite: `
         <h2>Vie en collectivité</h2>
         <p>Les sapeurs-pompiers ont vocation à aider les personnes, aussi bien les victimes que leurs collègues.
+
 Il est attendu de chacun une attitude respectueuse, contribuant à maintenir une bonne ambiance au centre et lors des manœuvres.
+
 Lors des retours d’intervention, chacun veille à respecter le voisinage.
+
 Les espaces communs doivent être respectés : après utilisation de la cuisine ou du matériel (café, tasses, etc.), chacun range et nettoie ce qu’il a utilisé.
+
 Les nouveaux arrivants doivent être accueillis et accompagnés afin de faciliter leur intégration.
+
 Le centre doit rester un lieu où l’on vient avec plaisir, dans un esprit de camaraderie et de solidarité.</p>
       `,
 
       tenue: `
         <h2>Tenue et image du centre / Interdiction de fumer et vapoter</h2>
         <p>La tenue portée lors des manœuvres, cérémonies ou représentations doit être propre et conforme.
+
 Chaque sapeur-pompier représente le centre de secours et le SDIS, que ce soit en intervention ou lors de déplacements en tenue.
+
 Il est attendu de chacun un comportement respectueux et exemplaire vis-à-vis de la population.
+
 Lors des cérémonies et événements officiels, une tenue soignée et une attitude appropriée sont demandées.
+
 Le respect de l’uniforme et de l’image du centre contribue à la crédibilité et à la reconnaissance du service auprès de la population.</p>
 
         <p>Il est strictement interdit de fumer ou de vapoter dans les locaux du centre de secours, ainsi que dans les véhicules de service.
+
 Cette règle s’applique à l’ensemble des personnels et des visiteurs.
+
 Des espaces extérieurs peuvent être utilisés pour fumer, dans le respect des lieux et du voisinage.</p>
       `
     };
@@ -387,7 +444,11 @@ Des espaces extérieurs peuvent être utilisés pour fumer, dans le respect des 
     const tabs = document.querySelectorAll(".tab");
 
     function renderReglement(key){
+      document.documentElement.style.setProperty("--activeTitleBg", TAB_COLORS[key]);
+      regContent.classList.remove("switching");
+      void regContent.offsetWidth;
       regContent.innerHTML = REGLEMENT_DATA[key];
+      regContent.classList.add("switching");
     }
 
     tabs.forEach(tab => {
