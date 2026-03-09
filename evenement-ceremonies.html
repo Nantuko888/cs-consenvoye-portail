@@ -189,7 +189,7 @@
         <div class="card">
           <h2>${ev.titre || ""}</h2>
           <div class="meta">
-            ${ev.date ? `<span class="pill">📅 ${ev.date}</span>` : ""}
+            ${ev.date ? `<span class="pill">📅 ${formatDateLong(ev.date)}</span>` : ""}
             ${ev.lieu ? `<span class="pill">📍 ${ev.lieu}</span>` : ""}
           </div>
           <p class="desc">${ev.description || ""}</p>
@@ -214,6 +214,18 @@
         list.innerHTML = `<div class="empty">Erreur réseau.</div>`;
       }
     })();
+
+    function formatDateLong(d){
+  if (!d) return "";
+  const date = new Date(d + "T00:00:00");
+  return date.toLocaleDateString("fr-FR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+}
+
   </script>
 </body>
 </html>
