@@ -1,256 +1,265 @@
 <!doctype html>
 <html lang="fr">
 <head>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Admin Événements — CS Consenvoye</title>
+
+<title>Admin événements</title>
 
 <style>
-:root{
-  --txt:#f4f4f4;
-  --shadow:0 14px 34px rgba(0,0,0,.40);
-  --header1: rgba(212,106,0,.75);
-  --header2: rgba(185,88,0,.58);
-}
-
-*{box-sizing:border-box}
-html,body{height:100%}
 
 body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  background:#000;
-  color:var(--txt);
-}
-
-.bg{
-  position:fixed;
-  inset:0;
-  background:
-    linear-gradient(180deg, rgba(0,0,0,.54), rgba(0,0,0,.58)),
-    url("background.png") center top/cover no-repeat;
-  z-index:-2;
-}
-
-.bg::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.66) 62%);
-  z-index:-1;
-}
-
-.wrap{
-  max-width:700px;
-  margin:0 auto;
-  min-height:100dvh;
-  padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 18px);
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
-.topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:10px 12px;
-  border-radius:18px;
-  background:linear-gradient(180deg,var(--header1),var(--header2));
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow:var(--shadow);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-}
-
-.title{
-  font-weight:950;
-  letter-spacing:.6px;
-  text-transform:uppercase;
-  font-size:18px;
-  margin:0;
-}
-
-.btn{
-  padding:9px 12px;
-  border:none;
-  border-radius:14px;
-  font-weight:900;
-  font-size:14px;
-  background:rgba(0,0,0,.18);
-  color:#fff;
-  border:1px solid rgba(255,255,255,.18);
-  cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
-}
-
-.btn:active{
-  transform:translateY(1px);
-}
-
-.card{
-  border-radius:22px;
-  background:linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.28));
-  border:1px solid rgba(255,255,255,.10);
-  box-shadow:var(--shadow);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  padding:16px;
+margin:0;
+font-family:system-ui;
+background:#111;
+color:white;
+padding:20px;
 }
 
 h1{
-  text-align:center;
-  margin:0 0 14px;
-  font-size:22px;
-  font-weight:950;
+text-align:center;
+margin-bottom:20px;
 }
 
 form{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
+max-width:500px;
+margin:auto;
+display:flex;
+flex-direction:column;
+gap:10px;
+margin-bottom:30px;
 }
 
 select,input,textarea{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.06);
-  color:#fff;
-  font-size:16px;
-  outline:none;
+padding:12px;
+border-radius:10px;
+border:none;
+font-size:16px;
 }
 
-textarea{
-  min-height:120px;
-  resize:vertical;
+button{
+padding:12px;
+border:none;
+border-radius:10px;
+font-weight:bold;
+background:#d46a00;
+color:white;
+cursor:pointer;
 }
 
-select option{
-  color:#000;
+button.delete{
+background:#a60000;
 }
 
-.submitBtn{
-  padding:14px;
-  border:none;
-  border-radius:14px;
-  font-weight:950;
-  font-size:16px;
-  background:linear-gradient(180deg,#d46a00,#b95800);
-  color:white;
-  cursor:pointer;
-  box-shadow:0 10px 24px rgba(0,0,0,.24);
+button.edit{
+background:#555;
 }
 
-.submitBtn:active{
-  transform:scale(.98);
+.section{
+margin-top:30px;
 }
 
-.msg{
-  text-align:center;
-  margin-top:4px;
-  font-weight:900;
-  min-height:24px;
-  color:#fff;
+.card{
+background:#1d1d1d;
+border-radius:12px;
+padding:12px;
+margin-bottom:10px;
 }
 
-.hint{
-  margin:0;
-  text-align:center;
-  color:rgba(255,255,255,.78);
-  font-weight:800;
-  line-height:1.35;
-  font-size:13px;
+.actions{
+margin-top:8px;
+display:flex;
+gap:8px;
 }
+
 </style>
+
 </head>
 
 <body>
-<div class="bg"></div>
 
-<div class="wrap">
-  <div class="topbar">
-    <div class="title">Événements Admin</div>
-    <button class="btn" onclick="location.href='admin.html'">Retour</button>
-  </div>
+<h1>Admin événements</h1>
 
-  <div class="card">
-    <h1>Créer un événement</h1>
+<form id="formEvent">
 
-    <form id="formEvent">
-      <select name="categorie" required>
-        <option value="">Catégorie</option>
-        <option value="ceremonies">Cérémonies</option>
-        <option value="reunions">Réunions</option>
-        <option value="repas">Repas / convivialité</option>
-        <option value="sorties">Sorties / activités</option>
-        <option value="projets">Projets</option>
-        <option value="comptes">Comptes-rendus</option>
-      </select>
+<input type="hidden" name="id" id="eventId">
 
-      <input name="titre" placeholder="Titre de l'événement" required>
-      <input type="date" name="date">
-      <input name="lieu" placeholder="Lieu">
-      <textarea name="description" placeholder="Description"></textarea>
+<select name="categorie" required>
 
-      <button class="submitBtn" type="submit">Publier l'événement</button>
-    </form>
+<option value="">Catégorie</option>
 
-    <div class="msg" id="msg"></div>
-    <p class="hint">Ajout direct depuis le téléphone, sans ouvrir Google Sheets.</p>
-  </div>
-</div>
+<option value="ceremonies">Cérémonies</option>
+<option value="reunions">Réunions</option>
+<option value="repas">Repas</option>
+<option value="sorties">Sorties</option>
+<option value="projets">Projets</option>
+
+</select>
+
+<input name="titre" placeholder="Titre" required>
+
+<input type="date" name="date">
+
+<input name="lieu" placeholder="Lieu">
+
+<textarea name="description" placeholder="Description"></textarea>
+
+<button type="submit">Enregistrer</button>
+
+</form>
+
+<div id="events"></div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-document.getElementById("formEvent").addEventListener("submit", function(e){
-  e.preventDefault();
+const API="https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec"
 
-  const form = e.target;
-  const data = new FormData(form);
-  const params = new URLSearchParams();
+const form=document.getElementById("formEvent")
 
-  params.append("view", "evenement_add");
+const container=document.getElementById("events")
 
-  for (const [k, v] of data.entries()){
-    params.append(k, v);
-  }
+function jsonp(url){
 
-  const callback = "cb_" + Math.random().toString(36).slice(2);
-  params.append("callback", callback);
+return new Promise(resolve=>{
 
-  const url = API + "?" + params.toString();
-  const script = document.createElement("script");
-  const msg = document.getElementById("msg");
+const cb="cb"+Math.random().toString(36).slice(2)
 
-  msg.textContent = "Enregistrement…";
+window[cb]=(data)=>{
 
-  window[callback] = (res) => {
-    if (res && res.ok) {
-      msg.textContent = "Événement enregistré ✔";
-      form.reset();
-    } else {
-      msg.textContent = "Erreur : " + (res?.error || "inconnue");
-    }
+resolve(data)
 
-    script.remove();
-    try { delete window[callback]; } catch(e) { window[callback] = undefined; }
-  };
+delete window[cb]
 
-  script.onerror = () => {
-    msg.textContent = "Erreur réseau / script.";
-    script.remove();
-    try { delete window[callback]; } catch(e) { window[callback] = undefined; }
-  };
+}
 
-  script.src = url;
-  document.body.appendChild(script);
-});
+const s=document.createElement("script")
+
+s.src=url+"&callback="+cb
+
+document.body.appendChild(s)
+
+})
+
+}
+
+async function loadEvents(){
+
+const res=await jsonp(API+"?view=evenements_list")
+
+if(!res.ok)return
+
+const data=res.items
+
+const cats={}
+
+data.forEach(e=>{
+
+if(!cats[e.categorie])cats[e.categorie]=[]
+
+cats[e.categorie].push(e)
+
+})
+
+container.innerHTML=""
+
+for(const cat in cats){
+
+const sec=document.createElement("div")
+
+sec.className="section"
+
+sec.innerHTML="<h2>"+cat+"</h2>"
+
+cats[cat].forEach(ev=>{
+
+const card=document.createElement("div")
+
+card.className="card"
+
+card.innerHTML=`
+
+<strong>${ev.titre}</strong><br>
+${ev.date||""}<br>
+${ev.lieu||""}<br>
+${ev.description||""}
+
+<div class="actions">
+
+<button class="edit">Modifier</button>
+<button class="delete">Supprimer</button>
+
+</div>
+`
+
+card.querySelector(".edit").onclick=()=>editEvent(ev)
+
+card.querySelector(".delete").onclick=()=>deleteEvent(ev.id)
+
+sec.appendChild(card)
+
+})
+
+container.appendChild(sec)
+
+}
+
+}
+
+function editEvent(ev){
+
+form.eventId.value=ev.id
+
+form.categorie.value=ev.categorie
+
+form.titre.value=ev.titre
+
+form.date.value=ev.date
+
+form.lieu.value=ev.lieu
+
+form.description.value=ev.description
+
+window.scrollTo(0,0)
+
+}
+
+async function deleteEvent(id){
+
+if(!confirm("Supprimer cet événement ?"))return
+
+await jsonp(API+"?view=evenement_delete&id="+id)
+
+loadEvents()
+
+}
+
+form.addEventListener("submit",async e=>{
+
+e.preventDefault()
+
+const data=new FormData(form)
+
+const id=form.eventId.value
+
+let view="evenement_add"
+
+if(id)view="evenement_update"
+
+const params=new URLSearchParams(data)
+
+const res=await jsonp(API+"?view="+view+"&"+params.toString())
+
+form.reset()
+
+loadEvents()
+
+})
+
+loadEvents()
+
 </script>
 
 </body>
+
 </html>
