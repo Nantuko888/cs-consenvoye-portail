@@ -200,42 +200,35 @@
     }
 
     function formatDateLong(value){
-      if (!value) return "";
+  if (!value) return "";
 
-      // Si déjà au bon format texte, on le garde
-      if (typeof value === "string" && /[a-zàâçéèêëîïôûùüÿñæœ]/i.test(value) && /\d{4}/.test(value)) {
-        return value;
-      }
+  // Cas 1 : format ISO venant du champ date
+  if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value.trim())) {
+    const [y, m, d] = value.trim().split("-");
+    const dt = new Date(Number(y), Number(m) - 1, Number(d));
+    return dt.toLocaleDateString("fr-FR", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+  }
 
-      let d = null;
+  // Cas 2 : format JS brut type "Tue Jul 14 2026 00:00:00 GMT+0200 ..."
+  const dt = new Date(value);
 
-      // Format YYYY-MM-DD
-      if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value.trim())) {
-        d = new Date(value.trim() + "T00:00:00");
-      }
+  if (isNaN(dt.getTime())) {
+    return String(value);
+  }
 
-      // Format DD/MM/YYYY
-      if (!d && typeof value === "string" && /^\d{2}\/\d{2}\/\d{4}$/.test(value.trim())) {
-        const [day, month, year] = value.trim().split("/");
-        d = new Date(`${year}-${month}-${day}T00:00:00`);
-      }
+  return dt.toLocaleDateString("fr-FR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+}
 
-      // Timestamp / string JS / objet Date
-      if (!d || isNaN(d.getTime())) {
-        d = new Date(value);
-      }
-
-      if (!d || isNaN(d.getTime())) {
-        return String(value);
-      }
-
-      return d.toLocaleDateString("fr-FR", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-      });
-    }
 
     function render(items){
       if (!items.length) {
