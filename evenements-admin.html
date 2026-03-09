@@ -3,147 +3,253 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Admin Événements</title>
+<title>Admin Événements — CS Consenvoye</title>
 
 <style>
+:root{
+  --txt:#f4f4f4;
+  --shadow:0 14px 34px rgba(0,0,0,.40);
+  --header1: rgba(212,106,0,.75);
+  --header2: rgba(185,88,0,.58);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
 
 body{
-margin:0;
-font-family:system-ui;
-background:#111;
-color:white;
-padding:20px;
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:#000;
+  color:var(--txt);
+}
+
+.bg{
+  position:fixed;
+  inset:0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.54), rgba(0,0,0,.58)),
+    url("background.png") center top/cover no-repeat;
+  z-index:-2;
+}
+
+.bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.66) 62%);
+  z-index:-1;
+}
+
+.wrap{
+  max-width:700px;
+  margin:0 auto;
+  min-height:100dvh;
+  padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 18px);
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:18px;
+  background:linear-gradient(180deg,var(--header1),var(--header2));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+
+.title{
+  font-weight:950;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  font-size:18px;
+  margin:0;
+}
+
+.btn{
+  padding:9px 12px;
+  border:none;
+  border-radius:14px;
+  font-weight:900;
+  font-size:14px;
+  background:rgba(0,0,0,.18);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.18);
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.btn:active{
+  transform:translateY(1px);
+}
+
+.card{
+  border-radius:22px;
+  background:linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.28));
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  padding:16px;
 }
 
 h1{
-text-align:center;
-margin-bottom:25px;
+  text-align:center;
+  margin:0 0 14px;
+  font-size:22px;
+  font-weight:950;
 }
 
 form{
-max-width:500px;
-margin:auto;
-display:flex;
-flex-direction:column;
-gap:12px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
 }
 
 select,input,textarea{
-padding:12px;
-border-radius:10px;
-border:none;
-font-size:16px;
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.06);
+  color:#fff;
+  font-size:16px;
+  outline:none;
 }
 
-button{
-padding:14px;
-border:none;
-border-radius:12px;
-font-weight:bold;
-font-size:16px;
-background:#d46a00;
-color:white;
-cursor:pointer;
+textarea{
+  min-height:120px;
+  resize:vertical;
 }
 
-button:active{
-transform:scale(.96);
+select option{
+  color:#000;
+}
+
+.submitBtn{
+  padding:14px;
+  border:none;
+  border-radius:14px;
+  font-weight:950;
+  font-size:16px;
+  background:linear-gradient(180deg,#d46a00,#b95800);
+  color:white;
+  cursor:pointer;
+  box-shadow:0 10px 24px rgba(0,0,0,.24);
+}
+
+.submitBtn:active{
+  transform:scale(.98);
 }
 
 .msg{
-text-align:center;
-margin-top:20px;
-font-weight:bold;
+  text-align:center;
+  margin-top:4px;
+  font-weight:900;
+  min-height:24px;
+  color:#fff;
 }
 
+.hint{
+  margin:0;
+  text-align:center;
+  color:rgba(255,255,255,.78);
+  font-weight:800;
+  line-height:1.35;
+  font-size:13px;
+}
 </style>
 </head>
 
 <body>
+<div class="bg"></div>
 
-<h1>Créer un événement</h1>
+<div class="wrap">
+  <div class="topbar">
+    <div class="title">Événements Admin</div>
+    <button class="btn" onclick="location.href='admin.html'">Retour</button>
+  </div>
 
-<form id="formEvent">
+  <div class="card">
+    <h1>Créer un événement</h1>
 
-<select name="categorie" required>
+    <form id="formEvent">
+      <select name="categorie" required>
+        <option value="">Catégorie</option>
+        <option value="ceremonies">Cérémonies</option>
+        <option value="reunions">Réunions</option>
+        <option value="repas">Repas / convivialité</option>
+        <option value="sorties">Sorties / activités</option>
+        <option value="projets">Projets</option>
+        <option value="comptes">Comptes-rendus</option>
+      </select>
 
-<option value="">Catégorie</option>
+      <input name="titre" placeholder="Titre de l'événement" required>
+      <input name="date" placeholder="Date">
+      <input name="lieu" placeholder="Lieu">
+      <textarea name="description" placeholder="Description"></textarea>
 
-<option value="ceremonies">Cérémonies</option>
-<option value="reunions">Réunions</option>
-<option value="repas">Repas</option>
-<option value="sorties">Sorties</option>
-<option value="projets">Projets</option>
+      <button class="submitBtn" type="submit">Publier l'événement</button>
+    </form>
 
-</select>
-
-<input name="titre" placeholder="Titre de l'événement" required>
-
-<input name="date" placeholder="Date">
-
-<input name="lieu" placeholder="Lieu">
-
-<textarea name="description" placeholder="Description"></textarea>
-
-<button type="submit">
-Publier l'événement
-</button>
-
-</form>
-
-<div class="msg" id="msg"></div>
+    <div class="msg" id="msg"></div>
+    <p class="hint">Ajout direct depuis le téléphone, sans ouvrir Google Sheets.</p>
+  </div>
+</div>
 
 <script>
+const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-const API="https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+document.getElementById("formEvent").addEventListener("submit", function(e){
+  e.preventDefault();
 
-document.getElementById("formEvent").addEventListener("submit",function(e){
+  const form = e.target;
+  const data = new FormData(form);
+  const params = new URLSearchParams();
 
-e.preventDefault();
+  params.append("view", "evenement_add");
 
-const data=new FormData(e.target);
+  for (const [k, v] of data.entries()){
+    params.append(k, v);
+  }
 
-const params=new URLSearchParams();
+  const callback = "cb_" + Math.random().toString(36).slice(2);
+  params.append("callback", callback);
 
-params.append("view","evenement_add");
+  const url = API + "?" + params.toString();
+  const script = document.createElement("script");
+  const msg = document.getElementById("msg");
 
-for(const [k,v] of data.entries()){
-params.append(k,v);
-}
+  msg.textContent = "Enregistrement…";
 
-const callback="cb_"+Math.random().toString(36).slice(2);
+  window[callback] = (res) => {
+    if (res && res.ok) {
+      msg.textContent = "Événement enregistré ✔";
+      form.reset();
+    } else {
+      msg.textContent = "Erreur : " + (res?.error || "inconnue");
+    }
 
-params.append("callback",callback);
+    script.remove();
+    try { delete window[callback]; } catch(e) { window[callback] = undefined; }
+  };
 
-const url=API+"?"+params.toString();
+  script.onerror = () => {
+    msg.textContent = "Erreur réseau / script.";
+    script.remove();
+    try { delete window[callback]; } catch(e) { window[callback] = undefined; }
+  };
 
-const script=document.createElement("script");
-
-window[callback]=(res)=>{
-
-if(res.ok){
-
-document.getElementById("msg").textContent="Événement enregistré ✔";
-
-e.target.reset();
-
-}else{
-
-document.getElementById("msg").textContent="Erreur : "+res.error;
-
-}
-
-script.remove();
-delete window[callback];
-
-};
-
-script.src=url;
-
-document.body.appendChild(script);
-
+  script.src = url;
+  document.body.appendChild(script);
 });
-
 </script>
 
 </body>
