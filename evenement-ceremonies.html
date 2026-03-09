@@ -83,6 +83,11 @@
       color:#fff;
       border:1px solid rgba(255,255,255,.18);
       cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .btn:active{
+      transform:translateY(1px);
     }
 
     .list{
@@ -105,6 +110,8 @@
       margin:0 0 10px;
       font-size:20px;
       font-weight:950;
+      color:#fff;
+      line-height:1.2;
     }
 
     .meta{
@@ -121,11 +128,12 @@
       border:1px solid rgba(255,255,255,.10);
       font-size:13px;
       font-weight:900;
+      color:rgba(255,255,255,.94);
     }
 
     .desc{
       margin:0;
-      line-height:1.55;
+      line-height:1.6;
       color:rgba(255,255,255,.92);
       white-space:pre-wrap;
       font-weight:800;
@@ -164,18 +172,68 @@
     function loadJSONP(url, callbackName){
       return new Promise((resolve, reject) => {
         const s = document.createElement("script");
+
         window[callbackName] = (data) => {
           resolve(data);
           s.remove();
           try { delete window[callbackName]; } catch(e){}
         };
+
         s.onerror = () => {
           reject(new Error("Erreur chargement"));
           s.remove();
           try { delete window[callbackName]; } catch(e){}
         };
+
         s.src = url;
         document.body.appendChild(s);
+      });
+    }
+
+    function escapeHtml(str){
+      return String(str || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function formatDateLong(value){
+      if (!value) return "";
+
+      // Si déjà au bon format texte, on le garde
+      if (typeof value === "string" && /[a-zàâçéèêëîïôûùüÿñæœ]/i.test(value) && /\d{4}/.test(value)) {
+        return value;
+      }
+
+      let d = null;
+
+      // Format YYYY-MM-DD
+      if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value.trim())) {
+        d = new Date(value.trim() + "T00:00:00");
+      }
+
+      // Format DD/MM/YYYY
+      if (!d && typeof value === "string" && /^\d{2}\/\d{2}\/\d{4}$/.test(value.trim())) {
+        const [day, month, year] = value.trim().split("/");
+        d = new Date(`${year}-${month}-${day}T00:00:00`);
+      }
+
+      // Timestamp / string JS / objet Date
+      if (!d || isNaN(d.getTime())) {
+        d = new Date(value);
+      }
+
+      if (!d || isNaN(d.getTime())) {
+        return String(value);
+      }
+
+      return d.toLocaleDateString("fr-FR", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
       });
     }
 
@@ -187,12 +245,12 @@
 
       list.innerHTML = items.map(ev => `
         <div class="card">
-          <h2>${ev.titre || ""}</h2>
+          <h2>${escapeHtml(ev.titre)}</h2>
           <div class="meta">
-            ${ev.date ? `<span class="pill">📅 ${formatDateLong(ev.date)}</span>` : ""}
-            ${ev.lieu ? `<span class="pill">📍 ${ev.lieu}</span>` : ""}
+            ${ev.date ? `<span class="pill">📅 ${escapeHtml(formatDateLong(ev.date))}</span>` : ""}
+            ${ev.lieu ? `<span class="pill">📍 ${escapeHtml(ev.lieu)}</span>` : ""}
           </div>
-          <p class="desc">${ev.description || ""}</p>
+          <p class="desc">${escapeHtml(ev.description)}</p>
         </div>
       `).join("");
     }
@@ -208,24 +266,15 @@
           return;
         }
 
-        const items = (res.items || []).filter(x => (x.categorie || "").toLowerCase() === TARGET_CAT);
+        const items = (res.items || []).filter(x =>
+          (x.categorie || "").toLowerCase() === TARGET_CAT
+        );
+
         render(items);
       }catch(err){
         list.innerHTML = `<div class="empty">Erreur réseau.</div>`;
       }
     })();
-
-    function formatDateLong(d){
-  if (!d) return "";
-  const date = new Date(d + "T00:00:00");
-  return date.toLocaleDateString("fr-FR", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric"
-  });
-}
-
   </script>
 </body>
 </html>
