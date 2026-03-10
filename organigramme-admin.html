@@ -163,48 +163,18 @@
       gap:8px;
     }
 
-    .memberRow{
-      display:flex;
-      align-items:center;
+    .memberEdit{
+      display:grid;
       gap:8px;
-      padding:10px 12px;
+      padding:10px;
       border-radius:12px;
       background:rgba(255,255,255,.06);
       border:1px solid rgba(255,255,255,.08);
-      min-height:42px;
     }
 
-    .memberDot{
-      width:8px;
-      height:8px;
-      border-radius:999px;
-      background:rgba(255,190,60,.95);
-      flex:0 0 auto;
-    }
-
-    .memberText{
-      font-size:14px;
-      font-weight:800;
-      color:rgba(255,255,255,.92);
-      line-height:1.35;
-      word-break:break-word;
-    }
-
-    .empty{
-      padding:14px;
-      border-radius:14px;
-      background:rgba(255,255,255,.05);
-      border:1px dashed rgba(255,255,255,.10);
-      color:rgba(255,255,255,.76);
-      font-weight:800;
-    }
-
-    .smallNote{
-      margin-top:8px;
-      color:rgba(255,255,255,.72);
-      font-size:13px;
-      font-weight:800;
-      line-height:1.35;
+    .memberActions{
+      display:flex;
+      justify-content:flex-end;
     }
 
     .btnRow{
@@ -234,6 +204,52 @@
       color:#fff;
       border:1px solid rgba(255,255,255,.12);
     }
+
+    .btnDanger{
+      background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
+      color:#fff;
+    }
+
+    .btnSmall{
+      min-height:40px;
+      padding:10px 12px;
+      border-radius:12px;
+      font-size:14px;
+      font-weight:900;
+      border:none;
+      cursor:pointer;
+    }
+
+    .btnAdd{
+      background:rgba(47,158,91,.90);
+      color:#fff;
+    }
+
+    .btnRemove{
+      background:rgba(220,70,70,.92);
+      color:#fff;
+    }
+
+    .empty{
+      padding:14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      border:1px dashed rgba(255,255,255,.10);
+      color:rgba(255,255,255,.76);
+      font-weight:800;
+    }
+
+    .smallNote{
+      margin-top:8px;
+      color:rgba(255,255,255,.72);
+      font-size:13px;
+      font-weight:800;
+      line-height:1.35;
+    }
+
+    .subpoleFooter{
+      margin-top:10px;
+    }
   </style>
 </head>
 
@@ -250,7 +266,7 @@
       <div class="dashboard">
         🧭 Administration de l’organigramme
         <div class="dashboardSmall">
-          Visualisation centralisée de la direction, des pôles, des sous-pôles et des membres.
+          Modifie la direction et les membres des sous-pôles depuis une seule page.
         </div>
       </div>
 
@@ -261,21 +277,17 @@
 
         <div class="field">
           <label class="label" for="chef">Chef de centre</label>
-          <input class="input" id="chef" type="text" readonly>
+          <input class="input" id="chef" type="text">
         </div>
 
         <div class="field">
           <label class="label" for="adj1">Adjoint 1</label>
-          <input class="input" id="adj1" type="text" readonly>
+          <input class="input" id="adj1" type="text">
         </div>
 
         <div class="field">
           <label class="label" for="adj2">Adjoint 2</label>
-          <input class="input" id="adj2" type="text" readonly>
-        </div>
-
-        <div class="smallNote">
-          On charge ici l’organigramme tel qu’il existe actuellement dans Sheets.
+          <input class="input" id="adj2" type="text">
         </div>
       </div>
 
@@ -286,8 +298,12 @@
         </div>
 
         <div class="btnRow">
-          <button type="button" class="btn2 btnSecondary" onclick="loadOrg()">Actualiser</button>
-          <button type="button" class="btn2 btnPrimary" onclick="alert('La modification viendra à l’étape suivante.')">Modifier</button>
+          <button type="button" class="btn2 btnSecondary" id="reloadBtn">Actualiser</button>
+          <button type="button" class="btn2 btnPrimary" id="saveBtn">Enregistrer</button>
+        </div>
+
+        <div class="smallNote">
+          Tu peux modifier les noms, ajouter des lignes ou supprimer des membres. La structure des pôles et sous-pôles reste celle déjà présente dans Sheets.
         </div>
       </div>
     </div>
@@ -295,6 +311,12 @@
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+    const EMAIL_KEY = "cs_portail_email_v1";
+
+    const state = {
+      actorEmail: "",
+      data: null
+    };
 
     function showStatus(type, message){
       const box = document.getElementById("statusBox");
@@ -309,6 +331,10 @@
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+    }
+
+    function getCurrentEmail(){
+      return (localStorage.getItem(EMAIL_KEY) || "").trim().toLowerCase();
     }
 
     function jsonp(params){
@@ -344,19 +370,64 @@
       });
     }
 
-    function renderPoles(poles){
-      const zone = document.getElementById("poleZone");
+    async function checkAdmin(){
+      state.actorEmail = getCurrentEmail();
 
-      if (!Array.isArray(poles) || !poles.length) {
+      if (!state.actorEmail) {
+        showStatus("err", "Aucun email admin détecté.");
+        return false;
+      }
+
+      const r = await jsonp({
+        view: "auth_check",
+        email: state.actorEmail
+      });
+
+      if (!r || !r.ok) {
+        showStatus("err", "Utilisateur non autorisé.");
+        return false;
+      }
+
+      if (String(r.role || "").toLowerCase() !== "admin") {
+        showStatus("err", "Accès refusé : admin uniquement.");
+        return false;
+      }
+
+      return true;
+    }
+
+    function memberRowHtml(membre){
+      return `
+        <div class="memberEdit">
+          <div class="field">
+            <label class="label">Fonction</label>
+            <input class="input member-fonction" type="text" value="${escapeHtml(membre.fonction || "")}" placeholder="Ex. Président, Trésorier, Responsable...">
+          </div>
+          <div class="field">
+            <label class="label">Nom</label>
+            <input class="input member-nom" type="text" value="${escapeHtml(membre.nom || "")}" placeholder="Nom de l'agent">
+          </div>
+          <div class="memberActions">
+            <button type="button" class="btnSmall btnRemove removeMemberBtn">Supprimer</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPoles(){
+      const zone = document.getElementById("poleZone");
+      const poles = (state.data && Array.isArray(state.data.poles)) ? state.data.poles : [];
+
+      if (!poles.length) {
         zone.innerHTML = '<div class="empty">Aucun pôle trouvé.</div>';
         return;
       }
 
       let html = '<div class="poleList">';
 
-      poles.forEach(pole => {
+      poles.forEach((pole, poleIndex) => {
         html += `
-          <div class="poleItem">
+          <div class="poleItem" data-pole-index="${poleIndex}">
             <div class="poleHead">
               <div class="poleName">${escapeHtml(pole.label || "")}</div>
               <div class="poleColor" style="background:${escapeHtml(pole.color || "#999")}"></div>
@@ -366,28 +437,29 @@
         if (Array.isArray(pole.subpoles) && pole.subpoles.length) {
           html += '<div class="subpoleList">';
 
-          pole.subpoles.forEach(subpole => {
+          pole.subpoles.forEach((subpole, subIndex) => {
             html += `
-              <div class="subpoleItem">
+              <div class="subpoleItem" data-pole-index="${poleIndex}" data-subpole-index="${subIndex}">
                 <div class="subpoleTitle">${escapeHtml(subpole.label || "")}</div>
+                <div class="memberList">
             `;
 
-            if (Array.isArray(subpole.membres) && subpole.membres.length) {
-              html += '<div class="memberList">';
-              subpole.membres.forEach(membre => {
-                html += `
-                  <div class="memberRow">
-                    <div class="memberDot"></div>
-                    <div class="memberText">${escapeHtml(membre || "")}</div>
-                  </div>
-                `;
+            const membres = Array.isArray(subpole.membres) ? subpole.membres : [];
+            if (membres.length) {
+              membres.forEach(membre => {
+                html += memberRowHtml(membre);
               });
-              html += '</div>';
             } else {
-              html += '<div class="empty">Aucun membre.</div>';
+              html += memberRowHtml({ fonction:"", nom:"" });
             }
 
-            html += '</div>';
+            html += `
+                </div>
+                <div class="subpoleFooter">
+                  <button type="button" class="btnSmall btnAdd addMemberBtn">Ajouter un nom</button>
+                </div>
+              </div>
+            `;
           });
 
           html += '</div>';
@@ -400,6 +472,32 @@
 
       html += '</div>';
       zone.innerHTML = html;
+
+      bindDynamicButtons();
+    }
+
+    function bindDynamicButtons(){
+      document.querySelectorAll(".addMemberBtn").forEach(btn => {
+        btn.onclick = function(){
+          const subpole = this.closest(".subpoleItem");
+          const list = subpole.querySelector(".memberList");
+          list.insertAdjacentHTML("beforeend", memberRowHtml({ fonction:"", nom:"" }));
+          bindDynamicButtons();
+        };
+      });
+
+      document.querySelectorAll(".removeMemberBtn").forEach(btn => {
+        btn.onclick = function(){
+          const member = this.closest(".memberEdit");
+          const list = member.parentElement;
+          member.remove();
+
+          if (!list.querySelector(".memberEdit")) {
+            list.insertAdjacentHTML("beforeend", memberRowHtml({ fonction:"", nom:"" }));
+            bindDynamicButtons();
+          }
+        };
+      });
     }
 
     async function loadOrg(){
@@ -407,7 +505,8 @@
         showStatus("info", "Chargement de l’organigramme...");
 
         const r = await jsonp({
-          view: "organigramme"
+          view: "org_admin_get",
+          actorEmail: state.actorEmail
         });
 
         if (!r || !r.ok) {
@@ -416,11 +515,13 @@
           return;
         }
 
+        state.data = r;
+
         document.getElementById("chef").value = (r.direction && r.direction.chef) || "";
         document.getElementById("adj1").value = (r.direction && r.direction.adj1) || "";
         document.getElementById("adj2").value = (r.direction && r.direction.adj2) || "";
 
-        renderPoles(r.poles || []);
+        renderPoles();
         showStatus("ok", "Organigramme chargé.");
       } catch(err) {
         showStatus("err", err && err.message ? err.message : String(err));
@@ -428,7 +529,99 @@
       }
     }
 
-    loadOrg();
+    function collectPayload(){
+      const payload = {
+        direction: {
+          chef: document.getElementById("chef").value.trim(),
+          adj1: document.getElementById("adj1").value.trim(),
+          adj2: document.getElementById("adj2").value.trim()
+        },
+        poles: []
+      };
+
+      const poleNodes = document.querySelectorAll(".poleItem");
+
+      poleNodes.forEach(poleNode => {
+        const poleIndex = Number(poleNode.dataset.poleIndex);
+        const originalPole = state.data.poles[poleIndex];
+
+        const poleObj = {
+          id: originalPole.id,
+          subpoles: []
+        };
+
+        const subpoleNodes = poleNode.querySelectorAll(".subpoleItem");
+        subpoleNodes.forEach(subNode => {
+          const subIndex = Number(subNode.dataset.subpoleIndex);
+          const originalSub = originalPole.subpoles[subIndex];
+
+          const subObj = {
+            id: originalSub.id,
+            membres: []
+          };
+
+          const memberNodes = subNode.querySelectorAll(".memberEdit");
+          let ordre = 1;
+
+          memberNodes.forEach(memberNode => {
+            const fonction = (memberNode.querySelector(".member-fonction")?.value || "").trim();
+            const nom = (memberNode.querySelector(".member-nom")?.value || "").trim();
+
+            if (!nom) return;
+
+            subObj.membres.push({
+              fonction,
+              nom,
+              ordre
+            });
+            ordre++;
+          });
+
+          poleObj.subpoles.push(subObj);
+        });
+
+        payload.poles.push(poleObj);
+      });
+
+      return payload;
+    }
+
+    async function saveOrg(){
+      try{
+        const payload = collectPayload();
+
+        showStatus("info", "Enregistrement en cours...");
+
+        const r = await jsonp({
+          view: "org_admin_save",
+          actorEmail: state.actorEmail,
+          payload: JSON.stringify(payload)
+        });
+
+        if (!r || !r.ok) {
+          showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
+          return;
+        }
+
+        showStatus("ok", "Organigramme enregistré.");
+        await loadOrg();
+
+      }catch(err){
+        showStatus("err", err && err.message ? err.message : String(err));
+      }
+    }
+
+    document.getElementById("reloadBtn").addEventListener("click", loadOrg);
+    document.getElementById("saveBtn").addEventListener("click", saveOrg);
+
+    (async function init(){
+      const ok = await checkAdmin();
+      if (!ok) {
+        document.getElementById("poleZone").innerHTML = '<div class="empty">Accès refusé.</div>';
+        return;
+      }
+      await loadOrg();
+    })();
   </script>
 </body>
 </html>
