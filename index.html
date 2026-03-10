@@ -71,21 +71,34 @@ body.mode-portal{
   top:14px;
   left:14px;
   z-index:9999;
+
   width:44px;
   height:44px;
+
   border-radius:50%;
-  background:linear-gradient(180deg,#ff8c00,#d86f00);
   border:1px solid rgba(255,255,255,.25);
+
+  background:linear-gradient(180deg,#ff8c00,#d86f00);
+
   color:white;
   font-size:20px;
   font-weight:900;
+
   box-shadow:0 8px 20px rgba(0,0,0,.35);
   cursor:pointer;
+
   display:none;
   -webkit-tap-highlight-color:transparent;
+
+  transition:background .25s ease, transform .25s ease;
 }
-.refreshBtn:active{
-  transform:translateY(1px);
+
+  .refreshBtn.loading{
+  background:linear-gradient(180deg,#3ccf4e,#2ca63b);
+}
+
+.refreshBtn.loading{
+  animation:spin .9s linear infinite;
 }
 
 .grid{
@@ -177,35 +190,7 @@ body.mode-portal{
   transform: scale(0.96);
 }
 
-/* mini indicateur synchro */
-#syncPill{
-  position: fixed;
-  top: calc(env(safe-area-inset-top) + 10px);
-  left: 12px;
-  z-index: 10000;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border-radius: 999px;
-  background: rgba(0,0,0,.55);
-  border: 1px solid rgba(255,255,255,.14);
-  box-shadow: 0 14px 34px rgba(0,0,0,.40);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
 
-#syncPill::before{
-  content:"";
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,.35);
-  border-top-color: #fff;
-  animation: spin .9s linear infinite;
-}
 
 @keyframes spin{
   to{ transform: rotate(360deg); }
@@ -276,10 +261,6 @@ body.mode-portal{
   </section>
 </main>
 
-<div id="syncPill" role="status" aria-live="polite">
-  <span class="srOnly">Synchronisation…</span>
-</div>
-
 <script>
 /* CONFIG */
 const GOOGLE_CLIENT_ID = "690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com";
@@ -300,13 +281,15 @@ function showMsg(t){
 }
 
 function showSync(){
-  if(!$syncPill) return;
-  $syncPill.style.display = "block";
+  if($refreshBtn){
+    $refreshBtn.classList.add("loading");
+  }
 }
 
 function hideSync(){
-  if(!$syncPill) return;
-  $syncPill.style.display = "none";
+  if($refreshBtn){
+    $refreshBtn.classList.remove("loading");
+  }
 }
 
 function showRefreshBtn(){
