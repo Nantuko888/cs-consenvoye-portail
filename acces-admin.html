@@ -50,18 +50,181 @@
     .cardTitle{
       font-size:18px;
       font-weight:900;
+      margin-bottom:12px;
+    }
+
+    .status{
+      display:none;
+      margin-bottom:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:800;
+      line-height:1.4;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .status.show{ display:block; }
+    .status.ok{
+      background:rgba(47,158,91,.18);
+      color:#d9ffe7;
+    }
+    .status.err{
+      background:rgba(220,70,70,.18);
+      color:#ffe1e1;
+    }
+    .status.info{
+      background:rgba(47,111,212,.18);
+      color:#dde9ff;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
       margin-bottom:10px;
     }
 
-    .placeholder{
-      padding:12px;
+    .field.full{
+      grid-column:1 / -1;
+    }
+
+    .label{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.80);
+    }
+
+    .input, .select{
+      width:100%;
+      min-height:46px;
+      border:none;
+      outline:none;
+      border-radius:14px;
+      padding:12px 14px;
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+      font-size:15px;
+    }
+
+    .select option{
+      color:#111;
+    }
+
+    .btnRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:4px;
+    }
+
+    .btn2{
+      border:none;
+      border-radius:14px;
+      min-height:46px;
+      padding:12px 16px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+
+    .btnPrimary{
+      background:linear-gradient(180deg, rgba(47,158,91,.95), rgba(34,125,68,.95));
+      color:#fff;
+    }
+
+    .btnSecondary{
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .btnDanger{
+      background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
+      color:#fff;
+    }
+
+    .tableWrap{
+      width:100%;
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .accessTable{
+      width:100%;
+      min-width:720px;
+      border-collapse:collapse;
+      color:rgba(255,255,255,.95);
+    }
+
+    .accessTable th,
+    .accessTable td{
+      text-align:left;
+      padding:12px 10px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      vertical-align:middle;
+      font-size:14px;
+    }
+
+    .accessTable th{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.75);
+      text-transform:uppercase;
+      letter-spacing:.3px;
+    }
+
+    .actionsCell{
+      white-space:nowrap;
+    }
+
+    .miniBtn{
+      border:none;
+      border-radius:10px;
+      padding:8px 10px;
+      font-weight:800;
+      cursor:pointer;
+      margin-right:6px;
+      margin-bottom:6px;
+    }
+
+    .editBtn{
+      background:rgba(255,180,60,.92);
+      color:#1f1f1f;
+    }
+
+    .deleteBtn{
+      background:rgba(220,70,70,.92);
+      color:#fff;
+    }
+
+    .empty{
+      padding:14px;
       border-radius:14px;
       background:rgba(255,255,255,.05);
-      border:1px dashed rgba(255,255,255,.12);
-      color:rgba(255,255,255,.78);
+      border:1px dashed rgba(255,255,255,.10);
+      color:rgba(255,255,255,.76);
       font-weight:800;
-      line-height:1.4;
-      font-size:14px;
+    }
+
+    .smallNote{
+      margin-top:8px;
+      color:rgba(255,255,255,.72);
+      font-size:13px;
+      font-weight:800;
+      line-height:1.35;
+    }
+
+    @media (max-width:700px){
+      .grid{
+        grid-template-columns:1fr;
+      }
     }
   </style>
 </head>
@@ -79,25 +242,346 @@
       <div class="dashboard">
         🔐 Administration des accès
         <div class="dashboardSmall">
-          Ajout, modification et suppression des utilisateurs autorisés.
+          Ajout, modification et suppression des utilisateurs autorisés du portail.
         </div>
+      </div>
+
+      <div id="statusBox" class="status info"></div>
+
+      <div class="card">
+        <div class="cardTitle">Ajout / modification</div>
+
+        <form id="accessForm">
+          <input type="hidden" id="originalEmail">
+
+          <div class="grid">
+            <div class="field">
+              <label class="label" for="email">Adresse mail</label>
+              <input class="input" id="email" type="email" placeholder="adresse@mail.com" required>
+            </div>
+
+            <div class="field">
+              <label class="label" for="role">Rôle</label>
+              <select class="select" id="role" required>
+                <option value="agent">agent</option>
+                <option value="admin">admin</option>
+              </select>
+            </div>
+
+            <div class="field full">
+              <label class="label" for="nom">Nom</label>
+              <input class="input" id="nom" type="text" placeholder="Nom affiché">
+            </div>
+          </div>
+
+          <div class="btnRow">
+            <button type="submit" class="btn2 btnPrimary" id="saveBtn">Ajouter</button>
+            <button type="button" class="btn2 btnSecondary" id="cancelBtn" style="display:none;">Annuler la modification</button>
+          </div>
+
+          <div class="smallNote">
+            La feuille Google Sheets reste la base de données, mais la gestion se fait ici directement.
+          </div>
+        </form>
       </div>
 
       <div class="card">
         <div class="cardTitle">Liste des accès</div>
-        <div class="placeholder">
-          Tableau des accès à venir.
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="cardTitle">Ajout / modification</div>
-        <div class="placeholder">
-          Formulaire à venir.
+        <div id="tableZone">
+          <div class="empty">Chargement...</div>
         </div>
       </div>
     </div>
   </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+
+    const state = {
+      actorEmail: "",
+      items: [],
+      editing: false
+    };
+
+    function showStatus(type, message){
+      const box = document.getElementById("statusBox");
+      box.className = "status show " + type;
+      box.textContent = message || "";
+    }
+
+    function hideStatus(){
+      const box = document.getElementById("statusBox");
+      box.className = "status info";
+      box.textContent = "";
+      box.style.display = "";
+    }
+
+    function escapeHtml(v){
+      return String(v == null ? "" : v)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function getCurrentEmail(){
+      const qs = new URLSearchParams(window.location.search);
+      const fromQuery = (qs.get("email") || "").trim().toLowerCase();
+      if (fromQuery) return fromQuery;
+
+      const possibleKeys = [
+        "userEmail",
+        "email",
+        "authEmail",
+        "cs_email",
+        "user_email",
+        "loginEmail"
+      ];
+
+      for (const key of possibleKeys) {
+        const v = (localStorage.getItem(key) || "").trim().toLowerCase();
+        if (v) return v;
+      }
+
+      return "";
+    }
+
+    function jsonp(params){
+      return new Promise((resolve, reject) => {
+        const callbackName = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+        const script = document.createElement("script");
+        const url = new URL(SCRIPT_URL);
+
+        window[callbackName] = function(data){
+          cleanup();
+          resolve(data);
+        };
+
+        function cleanup(){
+          try { delete window[callbackName]; } catch(e){}
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        script.onerror = function(){
+          cleanup();
+          reject(new Error("Erreur de chargement JSONP"));
+        };
+
+        url.searchParams.set("callback", callbackName);
+        url.searchParams.set("_ts", Date.now());
+
+        Object.keys(params || {}).forEach(k => {
+          url.searchParams.set(k, params[k]);
+        });
+
+        script.src = url.toString();
+        document.body.appendChild(script);
+      });
+    }
+
+    async function checkAdmin(){
+      state.actorEmail = getCurrentEmail();
+
+      if (!state.actorEmail) {
+        showStatus("err", "Aucun email admin détecté dans la session. Vérifie la clé localStorage utilisée pour la connexion.");
+        return false;
+      }
+
+      const r = await jsonp({
+        view: "auth_check",
+        email: state.actorEmail
+      });
+
+      if (!r || !r.ok) {
+        showStatus("err", "Utilisateur non autorisé.");
+        return false;
+      }
+
+      if (String(r.role || "").toLowerCase() !== "admin") {
+        showStatus("err", "Accès refusé : seul un admin peut gérer les accès.");
+        return false;
+      }
+
+      return true;
+    }
+
+    async function loadAccesses(){
+      showStatus("info", "Chargement des accès...");
+
+      const r = await jsonp({
+        view: "acces_list",
+        actorEmail: state.actorEmail
+      });
+
+      if (!r || !r.ok) {
+        showStatus("err", (r && r.error) ? r.error : "Erreur lors du chargement.");
+        document.getElementById("tableZone").innerHTML = '<div class="empty">Impossible de charger les accès.</div>';
+        return;
+      }
+
+      state.items = Array.isArray(r.items) ? r.items : [];
+      renderTable();
+      showStatus("ok", "Liste des accès chargée.");
+    }
+
+    function renderTable(){
+      const zone = document.getElementById("tableZone");
+
+      if (!state.items.length) {
+        zone.innerHTML = '<div class="empty">Aucun accès enregistré.</div>';
+        return;
+      }
+
+      let html = `
+        <div class="tableWrap">
+          <table class="accessTable">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Rôle</th>
+                <th>Nom</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      state.items.forEach(item => {
+        html += `
+          <tr>
+            <td>${escapeHtml(item.email)}</td>
+            <td>${escapeHtml(item.role)}</td>
+            <td>${escapeHtml(item.nom || "")}</td>
+            <td class="actionsCell">
+              <button class="miniBtn editBtn" onclick="startEdit('${escapeHtml(item.email)}')">Modifier</button>
+              <button class="miniBtn deleteBtn" onclick="deleteAccess('${escapeHtml(item.email)}')">Supprimer</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      html += `
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      zone.innerHTML = html;
+    }
+
+    function resetForm(){
+      state.editing = false;
+      document.getElementById("originalEmail").value = "";
+      document.getElementById("email").value = "";
+      document.getElementById("role").value = "agent";
+      document.getElementById("nom").value = "";
+      document.getElementById("saveBtn").textContent = "Ajouter";
+      document.getElementById("cancelBtn").style.display = "none";
+    }
+
+    function startEdit(email){
+      const item = state.items.find(x => String(x.email).toLowerCase() === String(email).toLowerCase());
+      if (!item) return;
+
+      state.editing = true;
+      document.getElementById("originalEmail").value = item.email || "";
+      document.getElementById("email").value = item.email || "";
+      document.getElementById("role").value = item.role || "agent";
+      document.getElementById("nom").value = item.nom || "";
+      document.getElementById("saveBtn").textContent = "Enregistrer";
+      document.getElementById("cancelBtn").style.display = "";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deleteAccess(email){
+      if (!confirm("Supprimer l'accès de " + email + " ?")) return;
+
+      showStatus("info", "Suppression en cours...");
+
+      const r = await jsonp({
+        view: "acces_delete",
+        actorEmail: state.actorEmail,
+        email: email
+      });
+
+      if (!r || !r.ok) {
+        showStatus("err", (r && r.error) ? r.error : "Erreur de suppression.");
+        return;
+      }
+
+      showStatus("ok", "Accès supprimé.");
+      await loadAccesses();
+      resetForm();
+    }
+
+    async function handleSubmit(ev){
+      ev.preventDefault();
+
+      const originalEmail = document.getElementById("originalEmail").value.trim().toLowerCase();
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const role = document.getElementById("role").value.trim().toLowerCase();
+      const nom = document.getElementById("nom").value.trim();
+
+      if (!email) {
+        showStatus("err", "Adresse mail manquante.");
+        return;
+      }
+
+      if (!role) {
+        showStatus("err", "Rôle manquant.");
+        return;
+      }
+
+      showStatus("info", state.editing ? "Modification en cours..." : "Ajout en cours...");
+
+      let r;
+
+      if (state.editing) {
+        r = await jsonp({
+          view: "acces_update",
+          actorEmail: state.actorEmail,
+          originalEmail: originalEmail,
+          email: email,
+          role: role,
+          nom: nom
+        });
+      } else {
+        r = await jsonp({
+          view: "acces_add",
+          actorEmail: state.actorEmail,
+          email: email,
+          role: role,
+          nom: nom
+        });
+      }
+
+      if (!r || !r.ok) {
+        showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
+        return;
+      }
+
+      showStatus("ok", state.editing ? "Accès modifié." : "Accès ajouté.");
+      resetForm();
+      await loadAccesses();
+    }
+
+    document.getElementById("accessForm").addEventListener("submit", handleSubmit);
+    document.getElementById("cancelBtn").addEventListener("click", resetForm);
+
+    (async function init(){
+      try {
+        const ok = await checkAdmin();
+        if (!ok) {
+          document.getElementById("tableZone").innerHTML = '<div class="empty">Accès refusé.</div>';
+          return;
+        }
+        await loadAccesses();
+      } catch(err) {
+        showStatus("err", err && err.message ? err.message : String(err));
+        document.getElementById("tableZone").innerHTML = '<div class="empty">Erreur de chargement.</div>';
+      }
+    })();
+  </script>
 </body>
 </html>
-
