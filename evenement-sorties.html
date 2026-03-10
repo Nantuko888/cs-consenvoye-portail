@@ -1,1 +1,239 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Repas — CS Consenvoye</title>
+
+<style>
+:root{
+  --txt:#f4f4f4;
+  --shadow:0 14px 34px rgba(0,0,0,.40);
+  --header1: rgba(212,106,0,.75);
+  --header2: rgba(185,88,0,.58);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--txt);
+  background:#0b0b0b;
+}
+.bg{
+  position:fixed;
+  inset:0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.54), rgba(0,0,0,.58)),
+    url("background.png") center top/cover no-repeat;
+  z-index:-2;
+}
+.bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.66) 62%);
+  z-index:-1;
+}
+.wrap{
+  max-width:900px;
+  margin:0 auto;
+  min-height:100dvh;
+  padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 18px);
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:18px;
+  background:linear-gradient(180deg,var(--header1),var(--header2));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+.title{
+  font-weight:950;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  font-size:18px;
+  margin:0;
+}
+.btn{
+  padding:9px 12px;
+  border:none;
+  border-radius:14px;
+  font-weight:900;
+  background:rgba(0,0,0,.18);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.18);
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn:active{ transform:translateY(1px); }
+.list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.card{
+  border-radius:20px;
+  background:linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.28));
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  padding:16px;
+}
+.card h2{
+  margin:0 0 10px;
+  font-size:20px;
+  font-weight:950;
+  color:#fff;
+  line-height:1.2;
+}
+.meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:10px;
+}
+.pill{
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.10);
+  font-size:13px;
+  font-weight:900;
+  color:rgba(255,255,255,.94);
+}
+.desc{
+  margin:0;
+  line-height:1.6;
+  color:rgba(255,255,255,.92);
+  white-space:pre-wrap;
+  font-weight:800;
+}
+.empty{
+  text-align:center;
+  padding:30px 16px;
+  border-radius:20px;
+  background:linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.28));
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:var(--shadow);
+  font-weight:900;
+}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="title">Repas</div>
+    <button class="btn" onclick="location.href='evenements.html'">Retour</button>
+  </div>
+
+  <div class="list" id="list">
+    <div class="empty">Chargement…</div>
+  </div>
+</div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+const TARGET_CAT = "repas";
+const list = document.getElementById("list");
+
+function loadJSONP(url, callbackName){
+  return new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    window[callbackName] = (data) => {
+      resolve(data);
+      s.remove();
+      try { delete window[callbackName]; } catch(e){}
+    };
+    s.onerror = () => {
+      reject(new Error("Erreur chargement"));
+      s.remove();
+      try { delete window[callbackName]; } catch(e){}
+    };
+    s.src = url;
+    document.body.appendChild(s);
+  });
+}
+
+function escapeHtml(str){
+  return String(str || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function formatDateLong(value){
+  if(!value) return "";
+  let d;
+  if(typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)){
+    d = new Date(value + "T00:00:00");
+  } else {
+    d = new Date(value);
+  }
+  if(isNaN(d)) return String(value);
+  return d.toLocaleDateString("fr-FR", {
+    weekday:"long",
+    day:"numeric",
+    month:"long",
+    year:"numeric"
+  });
+}
+
+function render(items){
+  if (!items.length) {
+    list.innerHTML = `<div class="empty">Aucun repas pour le moment.</div>`;
+    return;
+  }
+
+  list.innerHTML = items.map(ev => `
+    <div class="card">
+      <h2>${escapeHtml(ev.titre)}</h2>
+      <div class="meta">
+        ${ev.date ? `<span class="pill">📅 ${escapeHtml(formatDateLong(ev.date))}</span>` : ""}
+        ${ev.lieu ? `<span class="pill">📍 ${escapeHtml(ev.lieu)}</span>` : ""}
+      </div>
+      <p class="desc">${escapeHtml(ev.description)}</p>
+    </div>
+  `).join("");
+}
+
+(async function(){
+  try{
+    const cb = "cb_" + Math.random().toString(36).slice(2);
+    const url = `${API}?view=evenements_list&callback=${cb}`;
+    const res = await loadJSONP(url, cb);
+
+    if (!res || !res.ok) {
+      list.innerHTML = `<div class="empty">Erreur chargement.</div>`;
+      return;
+    }
+
+    const items = (res.items || []).filter(x =>
+      (x.categorie || "").toLowerCase() === TARGET_CAT
+    );
+
+    render(items);
+  }catch(err){
+    list.innerHTML = `<div class="empty">Erreur réseau.</div>`;
+  }
+})();
+</script>
+
+</body>
+</html>
 
