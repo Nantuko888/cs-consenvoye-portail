@@ -314,18 +314,13 @@
         .replace(/'/g, "&#039;");
     }
 
-    function getCurrentEmail(){
-      const qs = new URLSearchParams(window.location.search);
-      const fromQuery = (qs.get("email") || "").trim().toLowerCase();
-      if (fromQuery) return fromQuery;
+   function getCurrentEmail(){
+  const qs = new URLSearchParams(window.location.search);
+  const fromQuery = (qs.get("email") || "").trim().toLowerCase();
+  if (fromQuery) return fromQuery;
 
-      const keys = ["userEmail","email","authEmail","cs_email","user_email","loginEmail"];
-      for (const key of keys) {
-        const v = (localStorage.getItem(key) || "").trim().toLowerCase();
-        if (v) return v;
-      }
-      return "";
-    }
+  return (localStorage.getItem("cs_portail_email_v1") || "").trim().toLowerCase();
+}
 
     function jsonp(params){
       return new Promise((resolve, reject) => {
