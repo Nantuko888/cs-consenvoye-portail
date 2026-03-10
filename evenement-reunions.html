@@ -204,38 +204,30 @@ function escapeHtml(str){
 }
 
 function formatDateLong(value){
-  if (!value) return "";
 
-  if (typeof value === "string" && /[a-zàâçéèêëîïôûùüÿñæœ]/i.test(value) && /\d{4}/.test(value)) {
-    return value;
-  }
+if(!value) return ""
 
-  let d = null;
+let d
 
-  if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value.trim())) {
-    d = new Date(value.trim() + "T00:00:00");
-  }
-
-  if (!d && typeof value === "string" && /^\d{2}\/\d{2}\/\d{4}$/.test(value.trim())) {
-    const [day, month, year] = value.trim().split("/");
-    d = new Date(`${year}-${month}-${day}T00:00:00`);
-  }
-
-  if (!d || isNaN(d.getTime())) {
-    d = new Date(value);
-  }
-
-  if (!d || isNaN(d.getTime())) {
-    return String(value);
-  }
-
-  return d.toLocaleDateString("fr-FR", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric"
-  });
+// Si déjà format YYYY-MM-DD
+if(typeof value==="string" && /^\d{4}-\d{2}-\d{2}$/.test(value)){
+d=new Date(value+"T00:00:00")
 }
+else{
+d=new Date(value)
+}
+
+if(isNaN(d)) return value
+
+return d.toLocaleDateString("fr-FR",{
+weekday:"long",
+day:"numeric",
+month:"long",
+year:"numeric"
+})
+
+}
+
 
 function render(items){
   if (!items.length) {
