@@ -1,1 +1,434 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Organigramme admin — CS Consenvoye</title>
 
+  <link rel="stylesheet" href="cs-theme.css">
+
+  <style>
+    .adminWrap{
+      max-width:980px;
+      margin:0 auto;
+      padding:14px;
+    }
+
+    .dashboard{
+      padding:14px 16px;
+      margin-bottom:16px;
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      font-weight:900;
+      color:rgba(255,255,255,.95);
+    }
+
+    .dashboardSmall{
+      margin-top:8px;
+      font-size:13px;
+      font-weight:800;
+      color:rgba(255,255,255,.78);
+      line-height:1.35;
+    }
+
+    .card{
+      border-radius:20px;
+      padding:14px;
+      margin-bottom:14px;
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.95);
+    }
+
+    .cardTitle{
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:12px;
+    }
+
+    .status{
+      display:none;
+      margin-bottom:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:800;
+      line-height:1.4;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .status.show{ display:block; }
+    .status.ok{
+      background:rgba(47,158,91,.18);
+      color:#d9ffe7;
+    }
+    .status.err{
+      background:rgba(220,70,70,.18);
+      color:#ffe1e1;
+    }
+    .status.info{
+      background:rgba(47,111,212,.18);
+      color:#dde9ff;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:10px;
+    }
+
+    .label{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.80);
+    }
+
+    .input{
+      width:100%;
+      min-height:46px;
+      border:none;
+      outline:none;
+      border-radius:14px;
+      padding:12px 14px;
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+      font-size:15px;
+    }
+
+    .poleList{
+      display:grid;
+      gap:12px;
+    }
+
+    .poleItem{
+      border-radius:16px;
+      padding:14px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:0 8px 20px rgba(0,0,0,.12);
+    }
+
+    .poleHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .poleName{
+      font-size:17px;
+      font-weight:900;
+      color:rgba(255,255,255,.96);
+      line-height:1.25;
+    }
+
+    .poleColor{
+      width:16px;
+      height:16px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.25);
+      flex:0 0 auto;
+    }
+
+    .subpoleList{
+      display:grid;
+      gap:10px;
+    }
+
+    .subpoleItem{
+      border-radius:14px;
+      padding:12px;
+      background:rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .subpoleTitle{
+      font-size:14px;
+      font-weight:900;
+      color:rgba(255,255,255,.86);
+      margin-bottom:8px;
+    }
+
+    .memberList{
+      display:grid;
+      gap:8px;
+    }
+
+    .memberRow{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:12px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      min-height:42px;
+    }
+
+    .memberDot{
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background:rgba(255,190,60,.95);
+      flex:0 0 auto;
+    }
+
+    .memberText{
+      font-size:14px;
+      font-weight:800;
+      color:rgba(255,255,255,.92);
+      line-height:1.35;
+      word-break:break-word;
+    }
+
+    .empty{
+      padding:14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      border:1px dashed rgba(255,255,255,.10);
+      color:rgba(255,255,255,.76);
+      font-weight:800;
+    }
+
+    .smallNote{
+      margin-top:8px;
+      color:rgba(255,255,255,.72);
+      font-size:13px;
+      font-weight:800;
+      line-height:1.35;
+    }
+
+    .btnRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    .btn2{
+      border:none;
+      border-radius:14px;
+      min-height:46px;
+      padding:12px 16px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+
+    .btnPrimary{
+      background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
+      color:#fff;
+    }
+
+    .btnSecondary{
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg"></div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="title">🧭 Organigramme</div>
+      <button class="btn" onclick="window.location.href='admin.html'">Retour</button>
+    </div>
+
+    <div class="adminWrap">
+      <div class="dashboard">
+        🧭 Administration de l’organigramme
+        <div class="dashboardSmall">
+          Visualisation centralisée de la direction, des pôles, des sous-pôles et des membres.
+        </div>
+      </div>
+
+      <div id="statusBox" class="status info"></div>
+
+      <div class="card">
+        <div class="cardTitle">Direction</div>
+
+        <div class="field">
+          <label class="label" for="chef">Chef de centre</label>
+          <input class="input" id="chef" type="text" readonly>
+        </div>
+
+        <div class="field">
+          <label class="label" for="adj1">Adjoint 1</label>
+          <input class="input" id="adj1" type="text" readonly>
+        </div>
+
+        <div class="field">
+          <label class="label" for="adj2">Adjoint 2</label>
+          <input class="input" id="adj2" type="text" readonly>
+        </div>
+
+        <div class="smallNote">
+          On charge ici l’organigramme tel qu’il existe actuellement dans Sheets.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardTitle">Pôles</div>
+        <div id="poleZone">
+          <div class="empty">Chargement...</div>
+        </div>
+
+        <div class="btnRow">
+          <button type="button" class="btn2 btnSecondary" onclick="loadOrg()">Actualiser</button>
+          <button type="button" class="btn2 btnPrimary" onclick="alert('La modification viendra à l’étape suivante.')">Modifier</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+
+    function showStatus(type, message){
+      const box = document.getElementById("statusBox");
+      box.className = "status show " + type;
+      box.textContent = message || "";
+    }
+
+    function escapeHtml(v){
+      return String(v == null ? "" : v)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function jsonp(params){
+      return new Promise((resolve, reject) => {
+        const callbackName = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+        const script = document.createElement("script");
+        const url = new URL(SCRIPT_URL);
+
+        window[callbackName] = function(data){
+          cleanup();
+          resolve(data);
+        };
+
+        function cleanup(){
+          try { delete window[callbackName]; } catch(e){}
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        script.onerror = function(){
+          cleanup();
+          reject(new Error("Erreur de chargement JSONP"));
+        };
+
+        url.searchParams.set("callback", callbackName);
+        url.searchParams.set("_ts", Date.now());
+
+        Object.keys(params || {}).forEach(k => {
+          url.searchParams.set(k, params[k]);
+        });
+
+        script.src = url.toString();
+        document.body.appendChild(script);
+      });
+    }
+
+    function renderPoles(poles){
+      const zone = document.getElementById("poleZone");
+
+      if (!Array.isArray(poles) || !poles.length) {
+        zone.innerHTML = '<div class="empty">Aucun pôle trouvé.</div>';
+        return;
+      }
+
+      let html = '<div class="poleList">';
+
+      poles.forEach(pole => {
+        html += `
+          <div class="poleItem">
+            <div class="poleHead">
+              <div class="poleName">${escapeHtml(pole.label || "")}</div>
+              <div class="poleColor" style="background:${escapeHtml(pole.color || "#999")}"></div>
+            </div>
+        `;
+
+        if (Array.isArray(pole.subpoles) && pole.subpoles.length) {
+          html += '<div class="subpoleList">';
+
+          pole.subpoles.forEach(subpole => {
+            html += `
+              <div class="subpoleItem">
+                <div class="subpoleTitle">${escapeHtml(subpole.label || "")}</div>
+            `;
+
+            if (Array.isArray(subpole.membres) && subpole.membres.length) {
+              html += '<div class="memberList">';
+              subpole.membres.forEach(membre => {
+                html += `
+                  <div class="memberRow">
+                    <div class="memberDot"></div>
+                    <div class="memberText">${escapeHtml(membre || "")}</div>
+                  </div>
+                `;
+              });
+              html += '</div>';
+            } else {
+              html += '<div class="empty">Aucun membre.</div>';
+            }
+
+            html += '</div>';
+          });
+
+          html += '</div>';
+        } else {
+          html += '<div class="empty">Aucun sous-pôle.</div>';
+        }
+
+        html += '</div>';
+      });
+
+      html += '</div>';
+      zone.innerHTML = html;
+    }
+
+    async function loadOrg(){
+      try {
+        showStatus("info", "Chargement de l’organigramme...");
+
+        const r = await jsonp({
+          view: "organigramme"
+        });
+
+        if (!r || !r.ok) {
+          showStatus("err", (r && r.error) ? r.error : "Erreur de chargement.");
+          document.getElementById("poleZone").innerHTML = '<div class="empty">Impossible de charger l’organigramme.</div>';
+          return;
+        }
+
+        document.getElementById("chef").value = (r.direction && r.direction.chef) || "";
+        document.getElementById("adj1").value = (r.direction && r.direction.adj1) || "";
+        document.getElementById("adj2").value = (r.direction && r.direction.adj2) || "";
+
+        renderPoles(r.poles || []);
+        showStatus("ok", "Organigramme chargé.");
+      } catch(err) {
+        showStatus("err", err && err.message ? err.message : String(err));
+        document.getElementById("poleZone").innerHTML = '<div class="empty">Erreur de chargement.</div>';
+      }
+    }
+
+    loadOrg();
+  </script>
+</body>
+</html>
