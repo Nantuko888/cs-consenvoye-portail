@@ -1,0 +1,1891 @@
+/*********** CS CONSENVOYE — API JSONP UNIQUE (EQUIPES + ORGA + PLANNING) ***********/
+// ✅ ID DU GOOGLE SHEET (PAS L'URL)
+const SPREADSHEET_ID = "1z9jr9bBt89MwUzRYHpVEhPditJ5Xy528dvNco4CFMZk";
+
+// Onglets
+const TAB_EQUIPES = "Équipes";
+const TAB_DIRECTION = "Direction";
+const TAB_POLES = "Pôles";
+const TAB_SOUSPOLES = "SousPôles";
+const TAB_MEMBRES = "Membres";
+const TAB_PLANNING_EVENTS = "PlanningEvents";
+const TAB_PLANNING_CATEGORIES = "PlanningCategories";
+const TAB_DOCUMENTS = "Documents";
+const TAB_VSAV = "DesinfectionVSAV"; // EXACT
+const TAB_PLANNING_YEARS = "PlanningYears";
+const FOLDER_TICKETS_CARBURANT = "12rnE_u5XhUzsif27mWPF-fL3H9AGxn_M";
+
+
+/** ================== API JSONP UNIQUE ================== **/
+function doGet(e) {
+  const cb = (e?.parameter?.callback) || "callback";
+  const view = ((e?.parameter?.view) || "equipes").toString().toLowerCase();
+
+  if (view === "auth_check") return out_(authCheck_(e), cb);
+
+  // ✅ NO-CACHE: ?nocache=1 -> ignore le cache Apps Script
+  const nocache = String((e?.parameter?.nocache) || "") === "1";
+
+  try {
+    if (view === "equipes" || view === "teams") {
+      return out_(getEquipes_(), cb);
+    }
+
+    if (view === "org" || view === "orga" || view === "organigramme") {
+      return out_(getOrg_(), cb);
+    }
+
+    if (view === "planning_year" || view === "planningyear") {
+      const year = Number((e?.parameter?.year) || new Date().getFullYear());
+      return out_(getPlanningYear_(year, nocache), cb);
+    }
+
+    if (view === "planning_categories" || view === "planningcats") {
+      return out_(getPlanningCategories_(nocache), cb);
+    }
+
+    // ✅ Planning Years (liste + création)
+    if (view === "planning_years" || view === "planning_years_list" || view === "planningyears") {
+      return out_(getPlanningYears_(nocache), cb);
+    }
+
+    if (view === "planning_year_create" || view === "planning_create_year") {
+      return out_(planningYearCreate_(e), cb);
+    }
+
+    if (view === "planning_add" || view === "planning_add_event") {
+      return out_(planningAddEvent_(e), cb);
+    }
+
+    if (view === "planning_delete" || view === "planning_delete_event") {
+      return out_(planningDeleteEvent_(e), cb);
+    }
+
+    if (view === "documents" || view === "docs") {
+      return out_(getDocuments_(), cb);
+    }
+
+    if (view === "ticket_carburant_list") {
+      const r = listTicketsCarburant_(e);
+      return ContentService
+        .createTextOutput(JSON.stringify(r))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (view === "ticket_carburant_preview") {
+      return previewTicketCarburant_(e);
+    }
+
+    // ✅ EVENEMENTS
+    if (view === "evenements_list") {
+      return out_({
+        ok: true,
+        items: getEvenements_()
+      }, cb);
+    }
+
+    if (view === "evenement_add") {
+      return out_(addEvenement_(e.parameter), cb);
+    }
+    
+    if (view === "evenement_delete") {
+  return out_(deleteEvenement_(e.parameter), cb);
+}
+
+if (view === "evenement_update") {
+  return out_(updateEvenement_(e.parameter), cb);
+}
+
+    // ✅ Désinfection VSAV
+    if (view === "vsav_get" || view === "vsav" || view === "desinfectionvsav") {
+      return out_(getVsav_(), cb);
+    }
+
+    if (view === "vsav_set_agent") {
+      return out_(vsavSetAgent_(e), cb);
+    }
+
+    if (view === "vsav_unset_agent") {
+      return out_(vsavUnsetAgent_(e), cb);
+    }
+
+    if (view === "vsav_set_fait") {
+      return out_(vsavSetFait_(e), cb);
+    }
+
+    if (view === "vsav_set_nonfait") {
+      return out_(vsavSetNonfait_(e), cb);
+    }
+
+    if (view === "ticket_carburant_upload") {
+      const r = uploadTicketCarburant_(e);
+      return ContentService
+        .createTextOutput(JSON.stringify(r))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // fallback : évite "view inconnue" -> la page ne casse pas
+    return out_(getEquipes_(), cb);
+
+  } catch (err) {
+    return out_({
+      ok: false,
+      error: String(err && err.message ? err.message : err)
+    }, cb);
+  }
+}
+
+function doPost(e){
+  e = e || {};
+  e.parameter = e.parameter || {};
+
+  const contents = (e.postData && e.postData.contents) ? String(e.postData.contents) : "";
+  const ct = String((e.postData && (e.postData.type || e.postData.contentType)) || "");
+
+  if (contents) {
+    const t = contents.trim();
+
+    // 1) ON TENTE JSON D'ABORD (même si content-type = text/plain à cause de no-cors)
+    if (t.startsWith("{") || t.startsWith("[")) {
+      try {
+        const obj = JSON.parse(t);
+        if (obj && typeof obj === "object") {
+          Object.keys(obj).forEach(k => e.parameter[k] = obj[k]);
+        }
+      } catch(err) {
+        // si JSON invalide -> on tentera form-urlencoded
+      }
+    }
+
+    // 2) Si toujours pas de "vehicle", on tente form-urlencoded
+    if (!e.parameter.vehicle && t.indexOf("=") !== -1) {
+      try {
+        t.split("&").forEach(p => {
+          const [k, v] = p.split("=");
+          if (!k) return;
+          e.parameter[decodeURIComponent(k)] =
+            decodeURIComponent((v || "").replace(/\+/g, " "));
+        });
+      } catch(err) {}
+    }
+  }
+
+  return doGet(e);
+}
+
+
+
+
+/** ================== EQUIPES ================== **/
+function getEquipes_(){
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sh = ss.getSheetByName(TAB_EQUIPES);
+  if (!sh) return { ok:false, error:`Onglet introuvable: ${TAB_EQUIPES}` };
+
+  const values = sh.getDataRange().getValues();
+  if (values.length < 2) {
+    return { ok:true, teams:{ "1":[], "2":[] }, updatedAt:new Date().toISOString() };
+  }
+
+  const headers = values[0].map(h => normHeader_(h));
+  const idxEquipe = headers.indexOf("equipe");
+  const idxFonct = headers.indexOf("fonction");
+  const idxNom = headers.indexOf("nom");
+
+  let idxComp = headers.indexOf("comp");
+  if (idxComp === -1) idxComp = headers.indexOf("competences");
+
+  if (idxEquipe === -1 || idxFonct === -1 || idxNom === -1) {
+    return {
+      ok:false,
+      error:`Headers attendus ligne 1 : equipe | fonction | nom | (comp/competences). Reçu: ${headers.join(", ")}`
+    };
+  }
+
+  const teams = { "1":[], "2":[] };
+
+  for (let i=1; i<values.length; i++){
+    const row = values[i];
+    if (row.every(c => String(c||"").trim()==="")) continue;
+
+    const eq = String(row[idxEquipe]||"").trim(); // "1" ou "2"
+    const f = String(row[idxFonct]||"").trim();
+    const n = String(row[idxNom]||"").trim();
+    const c = (idxComp>-1) ? String(row[idxComp]||"").trim() : "";
+
+    if (!eq || !n) continue;
+    if (!teams[eq]) teams[eq] = [];
+    teams[eq].push({ fonction:f, nom:n, comp:c });
+  }
+
+  // ✅ TRI HIÉRARCHIQUE PAR FONCTION
+  const normText = (v) => {
+    const s = (v==null) ? "" : String(v).trim();
+    return s
+      .toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/['’]/g, "")
+      .replace(/\s+/g, " ");
+  };
+
+  const rank = (fonction) => {
+    const f = normText(fonction);
+    if (f.includes("resp")) return 0;
+    if (f.includes("adj")) return 1;
+    if (/\bca\b/.test(f)) return 2;
+    if (/\bce\b/.test(f)) return 3;
+    if (f.includes("equip")) return 4;
+    if (f.includes("isp")) return 5;
+    if (f.includes("appr") || /\bapp\b/.test(f)) return 6;
+    return 999;
+  };
+
+  Object.keys(teams).forEach(k => {
+    teams[k].sort((a,b) => rank(a.fonction) - rank(b.fonction));
+  });
+
+  return { ok:true, teams, updatedAt:new Date().toISOString() };
+}
+
+/** ================== ORGA ================== **/
+function getOrg_(){
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+
+  const dirT = readTable_(ss, TAB_DIRECTION);
+  const polesT= readTable_(ss, TAB_POLES);
+  const sousT = readTable_(ss, TAB_SOUSPOLES);
+  const memT = readTable_(ss, TAB_MEMBRES);
+
+  const pick_ = (r, keys) => {
+    for (const k of keys){
+      const v = r[k];
+      if (v !== undefined && v !== null && String(v).trim() !== "") return String(v).trim();
+    }
+    return "";
+  };
+  const norm_ = s => String(s || "").trim().toLowerCase();
+
+  const direction = { chef:"—", adj1:"—", adj2:"—" };
+  for (const r of dirT.rows){
+    const role = norm_(pick_(r, ["fonction","role","function"]));
+    const nom = pick_(r, ["nom","name"]);
+    if (!nom) continue;
+
+    if (role.includes("chef")) direction.chef = nom;
+    else if (role.includes("adj1") || role.includes("1") || role.includes("prem")) direction.adj1 = nom;
+    else if (role.includes("adj2") || role.includes("2") || role.includes("deux")) direction.adj2 = nom;
+  }
+
+  const sousByPole = new Map();
+  const spToPole = new Map();
+
+  for (const r of sousT.rows){
+    const poleId = pick_(r, ["pole_id","idpole","id_pole","idpole"]);
+    const spId = pick_(r, ["id","souspole_id","idsouspole","id_souspole","idsouspole"]);
+    const lib = pick_(r, ["libelle","label"]);
+    const ordre = Number(pick_(r, ["ordre","order"])) || 9999;
+
+    if (!poleId || !spId) continue;
+
+    spToPole.set(spId, poleId);
+    if (!sousByPole.has(poleId)) sousByPole.set(poleId, []);
+    sousByPole.get(poleId).push({ id: spId, libelle: lib, ordre });
+  }
+  for (const arr of sousByPole.values()) arr.sort((a,b)=>a.ordre-b.ordre);
+
+  const memByKey = new Map();
+  for (const r of memT.rows){
+    const spId = pick_(r, ["souspole_id","idsouspole","id_souspole","idsouspole","id"]);
+    const poleId = pick_(r, ["pole_id","idpole","id_pole"]) || spToPole.get(spId) || "";
+    if (!poleId || !spId) continue;
+
+    const key = poleId + "|" + spId;
+    const fonction = pick_(r, ["fonction","function","role"]);
+    const nom = pick_(r, ["nom","name"]);
+    const ordre = Number(pick_(r, ["ordre","order"])) || 9999;
+    if (!nom) continue;
+
+    if (!memByKey.has(key)) memByKey.set(key, []);
+    memByKey.get(key).push({ ordre, fonction, nom });
+  }
+  for (const arr of memByKey.values()) arr.sort((a,b)=>a.ordre-b.ordre);
+
+  const poles = polesT.rows
+    .map(r=>{
+      const id = pick_(r, ["id","idpole","pole_id","id_pole"]);
+      const label = pick_(r, ["libelle","label"]);
+      const color = pick_(r, ["couleur","color"]);
+      const ordre = Number(pick_(r, ["ordre","order"])) || 9999;
+      if (!id || !label) return null;
+
+      const subpoles = (sousByPole.get(id) || []).map(sp=>{
+        const key = id + "|" + sp.id;
+        const membres = (memByKey.get(key) || []).map(m=>{
+          const spLabel = norm_(sp.libelle);
+          if (id === "amicale" && spLabel.includes("bureau") && m.fonction){
+            return `${m.fonction} : ${m.nom}`;
+          }
+          return m.nom;
+        });
+        return { label: sp.libelle, membres };
+      });
+
+      return { id, label, color, ordre, subpoles };
+    })
+    .filter(Boolean)
+    .sort((a,b)=>a.ordre-b.ordre);
+
+  return { ok:true, direction, poles, updatedAt:new Date().toISOString() };
+}
+
+/** ================== OUTILS ================== **/
+function out_(obj, cb){
+  return ContentService
+    .createTextOutput(`${cb}(${JSON.stringify(obj)});`)
+    .setMimeType(ContentService.MimeType.JAVASCRIPT);
+}
+
+function readTable_(ss, name){
+  const sh = ss.getSheetByName(name);
+  if(!sh) throw new Error(`Onglet introuvable: ${name}`);
+
+  const v = sh.getDataRange().getValues();
+  if(v.length < 2) return { rows:[] };
+
+  const headers = v[0].map(h => normHeader_(h));
+  const rows = [];
+
+  for(let i=1;i<v.length;i++){
+    const row = v[i];
+    if(row.every(c=>String(c||"").trim()==="")) continue;
+
+    const o = {};
+    for(let j=0;j<headers.length;j++){
+      const key = headers[j];
+      if(key) o[key] = row[j];
+    }
+    rows.push(o);
+  }
+  return { rows };
+}
+
+function normHeader_(h){
+  return String(h||"")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/['’]/g, "")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+function getNameFromAcces_(email){
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sh = ss.getSheetByName("Acces");
+  if(!sh) return "";
+
+  const v = sh.getDataRange().getValues();
+  // headers: email | role | nom
+  for(let i=1;i<v.length;i++){
+    const e = String(v[i][0]||"").trim().toLowerCase();
+    if(e && e === String(email||"").trim().toLowerCase()){
+      return String(v[i][2]||"").trim(); // col C = nom
+    }
+  }
+  return "";
+}
+
+
+/**
+ * GET: ?view=planning_year&year=2026&nocache=1&callback=cb
+ */
+function getPlanningYear_(year, nocache){
+
+  year = Number(year);
+  if (!Number.isFinite(year) || year < 2000 || year > 2100){
+    return { ok:false, error:"Paramètre year invalide" };
+  }
+
+  const cache = CacheService.getScriptCache();
+  const cacheKey = "planning_year_" + year;
+
+  // ✅ cache uniquement si nocache != 1
+  if (!nocache){
+    const cached = cache.get(cacheKey);
+    if (cached){
+      try { return JSON.parse(cached); } catch(e){}
+    }
+  }
+
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const t = readTable_(ss, TAB_PLANNING_EVENTS);
+
+  const pick_ = (r, keys) => {
+    for (const k of keys){
+      const v = r[k];
+      if (v !== undefined && v !== null && String(v).trim() !== "") return v;
+    }
+    return "";
+  };
+
+  const normalizeDate_ = (v) => {
+    // Date native Sheets
+    if (v instanceof Date && !isNaN(v.getTime())){
+      const y = v.getFullYear();
+      const m = String(v.getMonth()+1).padStart(2,"0");
+      const d = String(v.getDate()).padStart(2,"0");
+      return `${y}-${m}-${d}`;
+    }
+
+    const s = String(v || "").trim();
+    if (!s) return "";
+
+    // déjà bon
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+
+    // dd/mm/yyyy ou d/m/yyyy
+    const m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (m){
+      const dd = String(m[1]).padStart(2,"0");
+      const mm = String(m[2]).padStart(2,"0");
+      const yy = m[3];
+      return `${yy}-${mm}-${dd}`;
+    }
+
+    // on renvoie tel quel (au cas où)
+    return s;
+  };
+
+  const events = [];
+
+  for (const r of t.rows){
+    const date = normalizeDate_(pick_(r, ["date","jour","day"]));
+    if (!date) continue;
+
+    // filtre année
+    if (!date.startsWith(String(year) + "-")) continue;
+
+    const start = String(pick_(r, ["start","debut","heure_debut","heuredebut","hdebut"]) || "").trim();
+    const end = String(pick_(r, ["end","fin","heure_fin","heurefin","hfin"]) || "").trim();
+
+    let title = String(pick_(r, ["title","titre","libelle","label","evenement","event"]) || "").trim();
+    const category = String(pick_(r, ["category","categorie","cat"]) || "").trim();
+    const details = String(pick_(r, ["details","detail","commentaire","remarque","notes","note"]) || "").trim();
+    const location = String(pick_(r, ["location","lieu","place"]) || "").trim();
+    const event_id = String(pick_(r, ["event_id","id","eventid"]) || "").trim();
+
+    // ✅ IMPORTANT :
+    // Avant, on jetait la ligne si title était vide.
+    // Maintenant on garde si (title OU details) existe, pour que les "notes" remontent.
+    if (!title && !details) continue;
+
+    // ✅ si note sans titre -> titre par défaut
+    if (!title && details) title = "Note";
+
+    events.push({ event_id, date, start, end, title, category, details, location });
+
+  events.sort((a,b) => (
+    a.date.localeCompare(b.date) ||
+    String(a.start||"").localeCompare(String(b.start||""))
+  ));
+
+  const out = { ok:true, year, events, updatedAt:new Date().toISOString() };
+
+  if (!nocache){
+    try { cache.put(cacheKey, JSON.stringify(out), 600); } catch(e){}
+  }
+
+  return out;
+}
+}
+
+
+/**
+ * GET: ?view=planning_categories&nocache=1&callback=cb
+ */
+function getPlanningCategories_(nocache){
+  const cache = CacheService.getScriptCache();
+  const cacheKey = "planning_categories";
+
+  if (!nocache){
+    const cached = cache.get(cacheKey);
+    if (cached){
+      try { return JSON.parse(cached); } catch(e){}
+    }
+  }
+
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const t = readTable_(ss, TAB_PLANNING_CATEGORIES);
+
+  const pick_ = (r, keys) => {
+    for (const k of keys){
+      const v = r[k];
+      if (v !== undefined && v !== null && String(v).trim() !== "") return v;
+    }
+    return "";
+  };
+
+  const categories = [];
+  for (const r of t.rows){
+    const category = String(pick_(r, ["category","categorie","cat","nom"]) || "").trim();
+    if (!category) continue;
+    const color = String(pick_(r, ["color","couleur"]) || "").trim() || "rgba(255,255,255,.30)";
+    const order = Number(pick_(r, ["order","ordre"]) || 9999) || 9999;
+    categories.push({ category, color, order });
+  }
+
+  categories.sort((a,b)=> (a.order - b.order) || a.category.localeCompare(b.category));
+
+  const out = { ok:true, categories, updatedAt:new Date().toISOString() };
+  if (!nocache){
+    try { cache.put(cacheKey, JSON.stringify(out), 600); } catch(e){}
+  }
+  return out;
+}
+
+function nowIso_(){
+  return Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "yyyy-MM-dd'T'HH:mm:ss");
+}
+
+// ID unique simple & robuste
+function makeEventId_(){
+  const ts = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "yyyyMMdd_HHmmss");
+  const rnd = Math.random().toString(16).slice(2, 8);
+  return `evt_${ts}_${rnd}`;
+}
+
+/**
+ * GET: ?view=planning_years_list&nocache=1&callback=cb
+ */
+function getPlanningYear_(year, nocache){
+  const cacheKey = `planning_year_v2_${year}`;
+  try{
+    if(!nocache){
+      const cached = CacheService.getScriptCache().get(cacheKey);
+      if(cached){
+        return JSON.parse(cached);
+      }
+    }
+  }catch(e){}
+
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sh = ss.getSheetByName(TAB_PLANNING_EVENTS);
+  if(!sh) return { ok:false, error:`Onglet introuvable: ${TAB_PLANNING_EVENTS}` };
+
+  const values = sh.getDataRange().getValues();
+  if(values.length < 2){
+    const out0 = { ok:true, year, events:[], updatedAt:new Date().toISOString() };
+    try{ CacheService.getScriptCache().put(cacheKey, JSON.stringify(out0), 60*10); }catch(e){}
+    return out0;
+  }
+
+  const headers = (values[0] || []).map(h => normHeader_(h));
+  const idx = (k)=> headers.indexOf(k);
+
+  const iEventId = idx("event_id");
+  const iDate = idx("date");
+  const iStart = idx("start");
+  const iEnd = idx("end");
+  const iTitle = idx("title");
+  const iCat = idx("category");
+  const iDetails = idx("details");
+  const iLoc = idx("location");
+
+  if(iDate === -1 || iTitle === -1){
+    return {
+      ok:false,
+      error:`Headers manquants dans ${TAB_PLANNING_EVENTS} (au minimum: date, title). Reçu: ${headers.join(", ")}`
+    };
+  }
+
+  const tz = Session.getScriptTimeZone();
+
+  const toYmd_ = (v)=>{
+    if(v instanceof Date && !isNaN(v.getTime())){
+      return Utilities.formatDate(v, tz, "yyyy-MM-dd");
+    }
+    const s = String(v||"").trim();
+    // déjà yyyy-mm-dd
+    if(/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+
+    // parfois Sheets renvoie "dd/MM/yyyy" ou autre -> on tente parse
+    const d = new Date(s);
+    if(!isNaN(d.getTime())){
+      return Utilities.formatDate(d, tz, "yyyy-MM-dd");
+    }
+    return ""; // invalide
+  };
+
+  const toHm_ = (v)=>{
+    // ✅ corrige les heures stockées comme Date (30/12/1899 ...)
+    if(v instanceof Date && !isNaN(v.getTime())){
+      return Utilities.formatDate(v, tz, "HH:mm");
+    }
+    return String(v||"").trim();
+  };
+
+  const events = [];
+  for(let r=1; r<values.length; r++){
+    const row = values[r];
+    const dateStr = toYmd_(row[iDate]);
+    if(!dateStr) continue;
+
+    // filtre année
+    const y = Number(String(dateStr).slice(0,4));
+    if(y !== Number(year)) continue;
+
+    const title = String(row[iTitle] || "").trim();
+    if(!title) continue;
+
+    const ev = {
+      date: dateStr,
+      title,
+      start: (iStart !== -1) ? toHm_(row[iStart]) : "",
+      end: (iEnd !== -1) ? toHm_(row[iEnd]) : "",
+      category: (iCat !== -1) ? String(row[iCat] || "").trim() : "",
+      details: (iDetails !== -1) ? String(row[iDetails] || "").trim() : "",
+      location: (iLoc !== -1) ? String(row[iLoc] || "").trim() : ""
+    };
+
+    if(iEventId !== -1){
+      ev.event_id = String(row[iEventId] || "").trim();
+    }
+
+    events.push(ev);
+  }
+
+  const out = { ok:true, year, events, updatedAt:new Date().toISOString() };
+
+  try{
+    CacheService.getScriptCache().put(cacheKey, JSON.stringify(out), 60*10); // 10 min
+  }catch(e){}
+
+  return out;
+}
+
+/**
+ * GET: ?view=planning_year_create&year=2027&email=...&callback=cb
+ * admin requis
+ */
+function planningYearCreate_(e){
+  const lock = LockService.getScriptLock();
+  try{
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+
+    const email = String(e?.parameter?.email || "").trim().toLowerCase();
+    if(!email) return { ok:false, error:"email manquant" };
+
+    const auth = authCheck_({ parameter:{ email } });
+    if(!auth || auth.ok !== true || auth.role !== "admin"){
+      return { ok:false, error:"Accès refusé (admin requis)" };
+    }
+
+    const year = Number(String(e?.parameter?.year || "").trim());
+    if(!Number.isFinite(year) || year < 2000 || year > 2100){
+      return { ok:false, error:"year invalide" };
+    }
+
+    lock.waitLock(15000);
+
+    const sh = ss.getSheetByName(TAB_PLANNING_YEARS);
+    if (!sh) return { ok:false, error:`Onglet introuvable: ${TAB_PLANNING_YEARS}` };
+
+    const v = sh.getDataRange().getValues();
+    const headers = (v[0] || []).map(h => normHeader_(h));
+    const iYear = headers.indexOf("year");
+    const iStatus = headers.indexOf("status");
+    const iCreatedAt = headers.indexOf("created_at");
+    const iCreatedBy = headers.indexOf("created_by");
+
+    if (iYear === -1) return { ok:false, error:"Header manquant: year" };
+
+    // déjà présent ?
+    for(let r=1;r<v.length;r++){
+      const y = Number(String(v[r][iYear]||"").trim());
+      if (y === year){
+        return { ok:true, created:false, exists:true, year };
+      }
+    }
+
+    const row = new Array(headers.length).fill("");
+    row[iYear] = year;
+    if (iStatus !== -1) row[iStatus] = "active";
+    if (iCreatedAt !== -1) row[iCreatedAt] = nowIso_();
+    if (iCreatedBy !== -1) row[iCreatedBy] = email;
+
+    sh.appendRow(row);
+
+    // purge cache
+    try { CacheService.getScriptCache().remove("planning_years_v1"); } catch(e){}
+
+    return { ok:true, created:true, year, updatedAt:new Date().toISOString() };
+
+  }catch(err){
+    return { ok:false, error:String(err && err.message ? err.message : err) };
+  }finally{
+    try{ lock.releaseLock(); }catch(e){}
+  }
+}
+
+
+/** ================== COLORATION GOOGLE SHEETS (PlanningEvents) ================== **/
+function colorPlanningEvents(){
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+
+  const shEvents = ss.getSheetByName("PlanningEvents");
+  const shCats = ss.getSheetByName("PlanningCategories");
+  if(!shEvents || !shCats) throw new Error("Onglets introuvables (PlanningEvents / PlanningCategories)");
+
+  // --- map category -> color (depuis PlanningCategories) ---
+  const cats = shCats.getDataRange().getValues();
+  if(cats.length < 2) throw new Error("PlanningCategories vide");
+  const hCats = cats[0].map(x=>String(x).trim().toLowerCase());
+  const iCat = hCats.indexOf("category");
+  const iCol = hCats.indexOf("color");
+  if(iCat === -1 || iCol === -1) throw new Error("Headers manquants dans PlanningCategories (category/color)");
+
+  const map = new Map();
+  for(let r=1;r<cats.length;r++){
+    const cat = String(cats[r][iCat]||"").trim().toLowerCase();
+    const col = String(cats[r][iCol]||"").trim();
+    if(cat && col) map.set(cat, col);
+  }
+
+  // --- events range ---
+  const lastRow = shEvents.getLastRow();
+  const lastColAll = shEvents.getLastColumn();
+  if(lastRow < 2) return;
+
+  // on colore A:G max (7 colonnes) comme ton code
+  const lastCol = Math.min(lastColAll, 7);
+
+  // values pour trouver "category"
+  const values = shEvents.getRange(1,1,lastRow,lastColAll).getValues();
+  const headers = values[0].map(x => String(x).trim().toLowerCase());
+  const idxCategory = headers.indexOf("category");
+  if(idxCategory === -1) throw new Error("Colonne 'category' introuvable dans PlanningEvents");
+
+  // on récupère les couleurs actuelles (IMPORTANT -> pas de null)
+  const rng = shEvents.getRange(1,1,lastRow,lastCol);
+  const bg = rng.getBackgrounds();
+  const fg = rng.getFontColors();
+
+  // ligne 1 = header : on touche pas
+  for(let r=2; r<=lastRow; r++){
+    const cat = String(values[r-1][idxCategory] || "").trim().toLowerCase();
+    const color = map.get(cat);
+
+    if(color){
+      for(let c=1; c<=lastCol; c++){
+        bg[r-1][c-1] = color;
+        fg[r-1][c-1] = "#ffffff";
+      }
+    }
+  }
+
+  rng.setBackgrounds(bg);
+  rng.setFontColors(fg);
+}
+
+/**
+ * ✅ Auto-coloration
+ * - Recolore dès que tu modifies PlanningEvents ou PlanningCategories.
+ * - Si tu veux pas d’auto: supprime cette fonction, ou laisse mais sans trigger.
+ */
+function onEdit(e){
+  try{
+    const sh = e && e.range && e.range.getSheet ? e.range.getSheet() : null;
+    if(!sh) return;
+
+    const name = sh.getName();
+    if (name === TAB_PLANNING_EVENTS || name === TAB_PLANNING_CATEGORIES){
+      colorPlanningEvents();
+    }
+  }catch(err){
+    // silencieux
+  }
+}
+function getDocuments_(){
+  const cache = CacheService.getScriptCache();
+  const cacheKey = "documents_v2";
+  const cached = cache.get(cacheKey);
+  if (cached){
+    try { return JSON.parse(cached); } catch(e){}
+  }
+
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const t = readTable_(ss, "Documents");
+
+  const pick_ = (r, keys) => {
+    for (const k of keys){
+      const v = r[k];
+      if (v !== undefined && v !== null && String(v).trim() !== "") return v;
+    }
+    return "";
+  };
+
+  const toBool_ = (v, def=true) => {
+    const s = String(v ?? "").trim().toLowerCase();
+    if (s === "") return def;
+    if (s === "false" || s === "0" || s === "non" || s === "no") return false;
+    return true;
+  };
+
+  const docs = [];
+  for (const r of t.rows){
+    const category = String(pick_(r, ["categorie","category","cat","categorie_document"]) || "").trim();
+    const title = String(pick_(r, ["nom","title","titre","libelle","label"]) || "").trim();
+    const url = String(pick_(r, ["url","lien","link"]) || "").trim();
+    const enabled = toBool_(pick_(r, ["enabled","actif","active"]), true);
+    const order = Number(pick_(r, ["ordre","order"]) || 9999) || 9999;
+
+    if(!enabled) continue;
+    if(!title || !url) continue;
+
+    docs.push({ category: category || "Autre", title, url, order });
+  }
+
+  docs.sort((a,b)=>(a.order-b.order) || a.category.localeCompare(b.category) || a.title.localeCompare(b.title));
+
+  const categories = [];
+  const seen = new Set();
+  for(const d of docs){
+    if(!seen.has(d.category)){
+      seen.add(d.category);
+      categories.push(d.category);
+    }
+  }
+
+  const out = { ok:true, categories, docs, updatedAt:new Date().toISOString() };
+  try { cache.put(cacheKey, JSON.stringify(out), 120); } catch(e){} // 2 min
+  return out;
+}
+function getVsav_(){
+  try{
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sh = ss.getSheetByName(TAB_VSAV);
+    if(!sh) return { ok:false, error:`Onglet introuvable: ${TAB_VSAV}` };
+
+    const v = sh.getDataRange().getValues();
+    if(!v || v.length < 2) return { ok:true, rows:[], updatedAt:new Date().toISOString() };
+
+    const headers = v[0].map(h => normHeader_(h));
+
+    const idxM = headers.indexOf("mois");
+    const idxRef = headers.indexOf("referent"); // chez toi = email référent
+    const idxAgent = headers.indexOf("agent"); // prénom agent
+    const idxAE = headers.indexOf("agent_email"); // email agent
+    const idxDate = headers.indexOf("date_validation"); // date validation
+    const idxJust = headers.indexOf("justificatif"); // justificatif
+
+    if(idxM === -1 || idxRef === -1){
+      return { ok:false, error:`Headers manquants: mois / referent. Reçu: ${headers.join(", ")}` };
+    }
+
+    // ✅ Map email -> prénom depuis Acces (col A=email, col C=prenom)
+    const accesMap = (()=>{
+      const map = new Map();
+      const shA = ss.getSheetByName("Acces");
+      if(!shA) return map;
+      const a = shA.getDataRange().getValues();
+      for(let i=1;i<a.length;i++){
+        const em = String(a[i][0]||"").trim().toLowerCase();
+        const pr = String(a[i][2]||"").trim();
+        if(em) map.set(em, pr);
+      }
+      return map;
+    })();
+
+    // ✅ fallback Membres: email -> "Prenom Nom" (si dispo)
+    const membresMap = (()=>{
+      const map = new Map();
+      const shM = ss.getSheetByName(TAB_MEMBRES);
+      if(!shM) return map;
+      const m = shM.getDataRange().getValues();
+      if(!m || m.length < 2) return map;
+
+      const h = m[0].map(x => normHeader_(x));
+      const iEmail = h.indexOf("email");
+      const iPrenom = h.indexOf("prenom");
+      const iNom = h.indexOf("nom");
+      if(iEmail === -1) return map;
+
+      for(let i=1;i<m.length;i++){
+        const em = String(m[i][iEmail]||"").trim().toLowerCase();
+        if(!em) continue;
+        const pr = (iPrenom !== -1) ? String(m[i][iPrenom]||"").trim() : "";
+        const no = (iNom !== -1) ? String(m[i][iNom]||"").trim() : "";
+        const full = (pr + " " + no).trim();
+        if(full) map.set(em, full);
+      }
+      return map;
+    })();
+
+    const toIso_ = (val)=>{
+      if(!val) return "";
+      if(val instanceof Date && !isNaN(val.getTime())){
+        return Utilities.formatDate(val, Session.getScriptTimeZone(), "yyyy-MM-dd");
+      }
+      const s = String(val).trim();
+      if(!s) return "";
+      if(/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+      const d = new Date(s);
+      if(!isNaN(d.getTime())){
+        return Utilities.formatDate(d, Session.getScriptTimeZone(), "yyyy-MM-dd");
+      }
+      return "";
+    };
+
+    const emailFallback_ = (email)=>{
+      const local = String(email||"").split("@")[0] || "";
+      const first = local.split(/[._-]/)[0] || local;
+      return first ? (first.charAt(0).toUpperCase() + first.slice(1)) : "";
+    };
+
+    const rows = [];
+    for(let i=1;i<v.length;i++){
+      const r = v[i];
+      if(r.every(c => String(c||"").trim()==="")) continue;
+
+      const mois = String(r[idxM]||"").trim();
+
+      const refEmail = String(r[idxRef]||"").trim().toLowerCase();
+      const refPrenom = accesMap.get(refEmail) || "";
+      const refMembres = membresMap.get(refEmail) || "";
+      const referentAff = (refPrenom || refMembres || emailFallback_(refEmail)).trim();
+
+      const agent = (idxAgent !== -1) ? String(r[idxAgent]||"").trim() : "";
+      const agent_email = (idxAE !== -1) ? String(r[idxAE]||"").trim().toLowerCase() : "";
+
+      const date_validation = (idxDate !== -1) ? toIso_(r[idxDate]) : "";
+      const justificatif = (idxJust !== -1) ? String(r[idxJust]||"").trim() : "";
+
+      // ✅ status dérivé: si date -> done ou not_done selon justificatif
+      const status = date_validation ? (justificatif ? "not_done" : "done") : (justificatif ? "not_done" : "");
+
+      rows.push({
+        mois,
+        referent: referentAff, // ✅ affichage propre
+        referent_email: refEmail, // ✅ pour droits UI
+        agent,
+        agent_email,
+        date_validation, // ✅ ISO YYYY-MM-DD
+        justificatif,
+        status
+      });
+    }
+
+    return { ok:true, rows, updatedAt:new Date().toISOString() };
+
+  }catch(err){
+    return { ok:false, error:String(err && err.message ? err.message : err) };
+  }
+}
+
+ 
+function normMonth_(s){
+  return String(s||"").trim().toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+}
+
+
+function toIsoDate_(val){
+  if(!val) return "";
+  if(Object.prototype.toString.call(val) === "[object Date]" && !isNaN(val.getTime())){
+    return Utilities.formatDate(val, Session.getScriptTimeZone(), "yyyy-MM-dd");
+  }
+  if(typeof val === "string"){
+    const s = val.trim();
+    if(/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+    const d = new Date(s);
+    if(!isNaN(d.getTime())){
+      return Utilities.formatDate(d, Session.getScriptTimeZone(), "yyyy-MM-dd");
+    }
+  }
+  return "";
+}
+
+function emailToNameSafe_(ss, email){
+  // si tu as une fonction existante, on l'utilise
+  try{
+    if(typeof emailToName_ === "function"){
+      const n = String(emailToName_(ss, email) || "").trim();
+      if(n) return n;
+    }
+  }catch(e){}
+
+  // fallback propre : "pierre.venante" -> "Pierre"
+  const local = String(email || "").split("@")[0] || "";
+  const first = local.split(/[._-]/)[0] || local;
+  return first ? (first.charAt(0).toUpperCase() + first.slice(1)) : "";
+}
+
+function buildAccesNameMap_(ss){
+  const map = new Map();
+  const sh = ss.getSheetByName("Acces");
+  if(!sh) return map;
+
+  const v = sh.getDataRange().getValues();
+  for(let i=1;i<v.length;i++){
+    const email = String(v[i][0] || "").trim().toLowerCase(); // col A
+    const name = String(v[i][2] || "").trim(); // col C
+    if(email) map.set(email, name);
+  }
+  return map;
+}
+
+/**
+ * Normalise une date en "YYYY-MM-DD"
+ * - si c’est un Date : ok
+ * - si c’est déjà "YYYY-MM-DD" : ok
+ * - si c’est "Sun Feb..." : on tente Date()
+ */
+function normIsoDate_(val){
+  if(!val) return "";
+
+  // Date Google Sheets
+  if(val instanceof Date && !isNaN(val.getTime())){
+    const y = val.getFullYear();
+    const m = String(val.getMonth()+1).padStart(2,"0");
+    const d = String(val.getDate()).padStart(2,"0");
+    return `${y}-${m}-${d}`;
+  }
+
+  const s = String(val).trim();
+  if(!s) return "";
+
+  // Déjà ISO
+  if(/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+
+  // Essaye de parser "Sun Feb..."
+  const dt = new Date(s);
+  if(!isNaN(dt.getTime())){
+    const y = dt.getFullYear();
+    const m = String(dt.getMonth()+1).padStart(2,"0");
+    const d = String(dt.getDate()).padStart(2,"0");
+    return `${y}-${m}-${d}`;
+  }
+
+  return "";
+}
+
+function emailToName_(ss, email){
+  try{
+    const sh = ss.getSheetByName("Membres");
+    if(!sh){
+      return email.split("@")[0].split(".")[0].replace(/^\w/, c => c.toUpperCase());
+    }
+
+    const v = sh.getDataRange().getValues();
+    if(!v || v.length < 2){
+      return email.split("@")[0].split(".")[0].replace(/^\w/, c => c.toUpperCase());
+    }
+
+    const h = v[0].map(x => normHeader_(x));
+    const idxEmail = h.indexOf("email");
+    const idxPrenom = h.indexOf("prenom");
+    const idxNom = h.indexOf("nom");
+
+    if(idxEmail === -1){
+      return email.split("@")[0].split(".")[0].replace(/^\w/, c => c.toUpperCase());
+    }
+
+    for(let i=1;i<v.length;i++){
+      const em = String(v[i][idxEmail] || "").trim().toLowerCase();
+      if(em === email){
+        const prenom = (idxPrenom !== -1) ? String(v[i][idxPrenom] || "").trim() : "";
+        const nom = (idxNom !== -1) ? String(v[i][idxNom] || "").trim() : "";
+        const full = (prenom + " " + nom).trim();
+        return full || email.split("@")[0].split(".")[0].replace(/^\w/, c => c.toUpperCase());
+      }
+    }
+
+    return email.split("@")[0].split(".")[0].replace(/^\w/, c => c.toUpperCase());
+
+  }catch(e){
+    return email.split("@")[0].split(".")[0].replace(/^\w/, c => c.toUpperCase());
+  }
+}
+
+
+
+
+function authCheck_(e){
+  try{
+    const email = String(e?.parameter?.email || "").trim().toLowerCase();
+    if(!email) return { ok:false, error:"email manquant" };
+
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sh = ss.getSheetByName("Acces");
+    if(!sh) return { ok:false, error:"onglet Acces introuvable", spreadsheetId: SPREADSHEET_ID };
+
+    const data = sh.getDataRange().getValues();
+    let found = false;
+    let foundRole = "";
+    let foundRow = -1;
+
+    for(let i=1;i<data.length;i++){
+      const eMail = String(data[i][0]||"").trim().toLowerCase();
+      const role = String(data[i][1]||"").trim().toLowerCase();
+      if(eMail && eMail === email){
+        found = true;
+        foundRole = role;
+        foundRow = i+1; // numéro de ligne Sheets
+        break;
+      }
+    }
+
+    return {
+      ok: found,
+      email,
+      role: foundRole,
+      debug: {
+        spreadsheetId: SPREADSHEET_ID,
+        spreadsheetName: ss.getName(),
+        sheetName: sh.getName(),
+        lastRow: sh.getLastRow(),
+        foundRow
+      }
+    };
+
+  }catch(err){
+    return { ok:false, error:String(err && err.message ? err.message : err), debug:{ spreadsheetId: SPREADSHEET_ID } };
+  }
+}
+
+function vsavUnsetAgent_(e){
+  try{
+    const month = String(e?.parameter?.month || "").trim();
+    const email = String(e?.parameter?.email || "").trim().toLowerCase();
+    if(!month) return { ok:false, error:"month manquant" };
+    if(!email) return { ok:false, error:"email manquant" };
+
+    const lock = LockService.getScriptLock();
+    lock.waitLock(15000);
+
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sh = ss.getSheetByName(TAB_VSAV);
+    if(!sh) return { ok:false, error:`Onglet introuvable: ${TAB_VSAV}` };
+
+    const v = sh.getDataRange().getValues();
+    if(v.length < 2) return { ok:true };
+
+    const headers = v[0].map(h => normHeader_(h));
+    const idxM = headers.indexOf("mois");
+    const idxA = headers.indexOf("agent");
+    const idxAE = headers.indexOf("agent_email"); // IMPORTANT
+
+    if(idxM === -1 || idxA === -1 || idxAE === -1){
+      return { ok:false, error:"Headers attendus: mois | agent | agent_email" };
+    }
+
+    const mNeed = normMonth_(month);
+    let rowIndex = -1;
+    for(let i=1;i<v.length;i++){
+      const m = normMonth_(v[i][idxM]);
+      if(m && m === mNeed){ rowIndex = i; break; }
+    }
+    if(rowIndex === -1) return { ok:false, error:"Mois introuvable" };
+
+    const currentEmail = String(v[rowIndex][idxAE] || "").trim().toLowerCase();
+    if(!currentEmail) return { ok:true }; // déjà vide
+
+    // sécurité : seul celui qui a pris (email) peut annuler
+    if(currentEmail !== email){
+      return { ok:false, error:"Tu ne peux pas annuler à la place d’un autre" };
+    }
+
+    // ✅ on vide TOUT
+    sh.getRange(rowIndex+1, idxA+1).setValue("");
+    sh.getRange(rowIndex+1, idxAE+1).setValue("");
+
+    return { ok:true };
+
+  }catch(err){
+    return { ok:false, error:String(err && err.message ? err.message : err) };
+  }finally{
+    try{ LockService.getScriptLock().releaseLock(); }catch(e){}
+  }
+}
+
+
+
+function vsavSetFait_(e){
+  try{
+    const month = String(e?.parameter?.month || "").trim();
+    const email = String(e?.parameter?.email || "").trim().toLowerCase();
+    const date = String(e?.parameter?.date || "").trim();
+
+    if(!month || !email || !date){
+      return { ok:false, error:"Paramètres manquants" };
+    }
+
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sh = ss.getSheetByName(TAB_VSAV);
+    if(!sh) return { ok:false, error:"Onglet VSAV introuvable" };
+
+    const v = sh.getDataRange().getValues();
+    if(v.length < 2) return { ok:false, error:"Feuille vide" };
+
+    const headers = v[0].map(h => normHeader_(h));
+    const idxM = headers.indexOf("mois");
+    const idxDate = headers.indexOf("date_validation");
+    const idxJust = headers.indexOf("justificatif");
+
+    if(idxM === -1 || idxDate === -1 || idxJust === -1){
+      return { ok:false, error:"Headers attendus: mois | date_validation | justificatif" };
+    }
+
+    for(let i=1;i<v.length;i++){
+      if(String(v[i][idxM]).trim().toUpperCase() === month.toUpperCase()){
+        sh.getRange(i+1, idxDate+1).setValue(date); // ✅ date validation
+        sh.getRange(i+1, idxJust+1).setValue(""); // ✅ on efface le justificatif
+        return { ok:true };
+      }
+    }
+
+    return { ok:false, error:"Mois introuvable" };
+
+  }catch(err){
+    return { ok:false, error:String(err && err.message ? err.message : err) };
+  }
+}
+
+
+function vsavSetNonfait_(e){
+  try{
+    const month = String(e?.parameter?.month || "").trim();
+    const email = String(e?.parameter?.email || "").trim().toLowerCase();
+    const date = String(e?.parameter?.date || "").trim(); // ✅ on récupère la date
+    const justificatif = String(
+      e?.parameter?.justificatif || e?.parameter?.justif || ""
+    ).trim(); // ✅ tolérance
+
+    if(!month || !email || !date || !justificatif){
+      return { ok:false, error:"Paramètres manquants (month/email/date/justificatif)" };
+    }
+
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sh = ss.getSheetByName(TAB_VSAV);
+    const v = sh.getDataRange().getValues();
+    const headers = v[0].map(h => normHeader_(h));
+
+    const idxM = headers.indexOf("mois");
+    const idxDate = headers.indexOf("date_validation"); // ✅ ta colonne E
+    const idxJust = headers.indexOf("justificatif"); // ✅ ta colonne F
+
+    // (optionnel) si tu as une colonne status/fait_statut
+    const idxStatus = headers.indexOf("fait_statut");
+
+    if(idxM === -1 || idxDate === -1 || idxJust === -1){
+      return { ok:false, error:"Headers manquants (mois/date_validation/justificatif)" };
+    }
+
+    for(let i=1;i<v.length;i++){
+      if(String(v[i][idxM]).trim().toUpperCase() === month.toUpperCase()){
+        // ✅ on écrit la date dans date_validation même pour NON FAIT
+        sh.getRange(i+1, idxDate+1).setValue(date);
+
+        // ✅ justificatif
+        sh.getRange(i+1, idxJust+1).setValue(justificatif);
+
+        // ✅ statut si la colonne existe
+        if(idxStatus !== -1){
+          sh.getRange(i+1, idxStatus+1).setValue("not_done");
+        }
+
+        return { ok:true };
+      }
+    }
+
+    return { ok:false, error:"Mois introuvable" };
+
+  }catch(err){
+    return { ok:false, error:String(err) };
+  }
+}
+function vsavSetAgent_(e){
+  const lock = LockService.getScriptLock();
+  try{
+    const month = String(e?.parameter?.month || "").trim();
+    const email = String(e?.parameter?.email || "").trim().toLowerCase();
+
+    if(!month) return { ok:false, error:"month manquant" };
+    if(!email) return { ok:false, error:"email manquant" };
+
+    lock.waitLock(15000);
+
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sh = ss.getSheetByName(TAB_VSAV);
+    if(!sh) return { ok:false, error:`Onglet introuvable: ${TAB_VSAV}` };
+
+    // ✅ prénom depuis Acces (col A=email, col C=prenom)
+    const shAcces = ss.getSheetByName("Acces");
+    if(!shAcces) return { ok:false, error:"Onglet Acces introuvable" };
+
+    const a = shAcces.getDataRange().getValues();
+    let prenom = "";
+    for(let i=1;i<a.length;i++){
+      const em = String(a[i][0]||"").trim().toLowerCase();
+      if(em === email){
+        prenom = String(a[i][2]||"").trim();
+        break;
+      }
+    }
+    if(!prenom) return { ok:false, error:"Utilisateur non trouvé dans Acces" };
+
+    const v = sh.getDataRange().getValues();
+    if(v.length < 2) return { ok:false, error:"Feuille VSAV vide" };
+
+    const headers = v[0].map(h => normHeader_(h));
+    const idxM = headers.indexOf("mois");
+    const idxA = headers.indexOf("agent");
+    const idxAE = headers.indexOf("agent_email");
+
+    if(idxM === -1 || idxA === -1 || idxAE === -1){
+      return { ok:false, error:"Headers attendus: mois | agent | agent_email" };
+    }
+
+    const mNeed = normMonth_(month);
+    let rowIndex = -1;
+    for(let i=1;i<v.length;i++){
+      const m = normMonth_(v[i][idxM]);
+      if(m && m === mNeed){ rowIndex = i; break; }
+    }
+    if(rowIndex === -1) return { ok:false, error:"Mois introuvable" };
+
+    const currentAgent = String(v[rowIndex][idxA] || "").trim();
+    const currentMail = String(v[rowIndex][idxAE] || "").trim().toLowerCase();
+    if(currentAgent || currentMail){
+      return { ok:false, error:"Déjà pris" };
+    }
+
+    // ✅ écriture prénom + email
+    sh.getRange(rowIndex+1, idxA+1).setValue(prenom);
+    sh.getRange(rowIndex+1, idxAE+1).setValue(email);
+
+    return { ok:true };
+
+  }catch(err){
+    return { ok:false, error:String(err && err.message ? err.message : err) };
+  }finally{
+    try{ lock.releaseLock(); }catch(e){}
+  }
+}
+
+function isAdminEmail_(ss, email){
+  email = String(email||"").trim().toLowerCase();
+  if(!email) return false;
+
+  const sh = ss.getSheetByName("Acces");
+  if(!sh) return false;
+
+  const v = sh.getDataRange().getValues();
+  for(let i=1;i<v.length;i++){
+    const em = String(v[i][0]||"").trim().toLowerCase();
+    const role = String(v[i][1]||"").trim().toLowerCase(); // col B = role
+    if(em === email){
+      // adapte si tu utilises "admin" / "administrateur" / "chef" etc.
+      return (role === "admin" || role === "administrateur");
+    }
+  }
+  return false;
+}
+
+function planningAddEvent_(e){
+  const lock = LockService.getScriptLock();
+  try{
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+
+    const email = String(e?.parameter?.email || "").trim().toLowerCase();
+    if(!email) return { ok:false, error:"email manquant" };
+
+    const auth = authCheck_({ parameter:{ email } });
+    if(!auth || auth.ok !== true || String(auth.role||"").toLowerCase() !== "admin"){
+      return { ok:false, error:"Accès refusé (admin requis)" };
+    }
+
+    const date = String(e?.parameter?.date || "").trim(); // YYYY-MM-DD
+    const start = String(e?.parameter?.start || "").trim();
+    const end = String(e?.parameter?.end || "").trim();
+    const title = String(e?.parameter?.title || "").trim();
+    const category = String(e?.parameter?.category || "").trim();
+    const details = String(e?.parameter?.details || "").trim();
+    const location = String(e?.parameter?.location || "").trim();
+
+    if(!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return { ok:false, error:"date invalide" };
+    if(!title) return { ok:false, error:"title manquant" };
+
+    lock.waitLock(15000);
+
+    const sh = ss.getSheetByName(TAB_PLANNING_EVENTS);
+    if(!sh) return { ok:false, error:`Onglet introuvable: ${TAB_PLANNING_EVENTS}` };
+
+    const v = sh.getDataRange().getValues();
+    if(v.length < 1) return { ok:false, error:"Feuille vide (ligne d'entête manquante)" };
+
+    const headers = (v[0] || []).map(h => normHeader_(h));
+
+    // Cherche la colonne avec plusieurs alias possibles
+    const findIndex_ = (keys) => {
+      for(const k of keys){
+        const i = headers.indexOf(k);
+        if(i !== -1) return i;
+      }
+      return -1;
+    };
+
+    // ✅ alias FR/EN + tolérance "eventid"
+    const iEventId = findIndex_(["event_id","eventid","id"]);
+    const iDate = findIndex_(["date","jour","day"]);
+    const iStart = findIndex_(["start","debut","heure_debut","heuredebut","hdebut"]);
+    const iEnd = findIndex_(["end","fin","heure_fin","heurefin","hfin"]);
+    const iTitle = findIndex_(["title","titre","libelle","label","evenement","event"]);
+    const iCat = findIndex_(["category","categorie","cat"]);
+    const iDetails = findIndex_(["details","detail","commentaire","remarque","notes","note"]);
+    const iLoc = findIndex_(["location","lieu","place"]);
+
+    if(iDate === -1 || iTitle === -1){
+      return { ok:false, error:`Headers manquants (au minimum: date + title/titre). Reçu: ${headers.join(", ")}` };
+    }
+
+    const row = new Array(headers.length).fill("");
+
+    row[iDate] = date;
+    if(iStart !== -1) row[iStart] = start;
+    if(iEnd !== -1) row[iEnd] = end;
+    row[iTitle] = title;
+    if(iCat !== -1) row[iCat] = category;
+    if(iDetails !== -1) row[iDetails] = details;
+    if(iLoc !== -1) row[iLoc] = location;
+
+    if(iEventId !== -1){
+      row[iEventId] = makeEventId_(); // ton générateur existant
+    }
+
+    sh.appendRow(row);
+    // Tri auto par date (colonne B)
+if (sh.getLastRow() > 2) {
+  sh.getRange(2, 1, sh.getLastRow() - 1, sh.getLastColumn())
+    .sort({ column: 2, ascending: true });
+}
+
+
+    return { ok:true, added:true, updatedAt:new Date().toISOString() };
+
+  }catch(err){
+    return { ok:false, error:String(err && err.message ? err.message : err) };
+  }finally{
+    try{ lock.releaseLock(); }catch(e){}
+  }
+}
+
+function planningDeleteEvent_(e){
+  const lock = LockService.getScriptLock();
+  try{
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+
+    const email = String(e?.parameter?.email || "").trim().toLowerCase();
+    if(!email) return { ok:false, error:"email manquant" };
+
+    const auth = authCheck_({ parameter:{ email } });
+    if(!auth || auth.ok !== true || String(auth.role||"").toLowerCase() !== "admin"){
+      return { ok:false, error:"Accès refusé (admin requis)" };
+    }
+
+    // priorité: event_id
+    const event_id = String(e?.parameter?.event_id || e?.parameter?.id || "").trim();
+
+    // fallback: date + title (+ start optionnel)
+    const date = String(e?.parameter?.date || "").trim(); // YYYY-MM-DD
+    const title = String(e?.parameter?.title || "").trim();
+    const start = String(e?.parameter?.start || "").trim();
+
+    if(!event_id && (!date || !title)){
+      return { ok:false, error:"Paramètres manquants (event_id OU date/title)" };
+    }
+
+    lock.waitLock(15000);
+
+    const sh = ss.getSheetByName(TAB_PLANNING_EVENTS);
+    if(!sh) return { ok:false, error:`Onglet introuvable: ${TAB_PLANNING_EVENTS}` };
+
+    const v = sh.getDataRange().getValues();
+    if(v.length < 2) return { ok:true, deleted:0 };
+
+    const headers = (v[0] || []).map(h => normHeader_(h));
+
+    const findIndex_ = (keys) => {
+      for(const k of keys){
+        const i = headers.indexOf(k);
+        if(i !== -1) return i;
+      }
+      return -1;
+    };
+
+    const iEventId = findIndex_(["event_id","eventid","id"]);
+    const iDate = findIndex_(["date","jour","day"]);
+    const iStart = findIndex_(["start","debut","heure_debut","heuredebut","hdebut"]);
+    const iTitle = findIndex_(["title","titre","libelle","label","evenement","event"]);
+
+    if(iEventId === -1 && (iDate === -1 || iTitle === -1)){
+      return { ok:false, error:"Headers manquants: event_id/eventid OU (date + title/titre)" };
+    }
+
+    const normalizeDate_ = (val) => {
+      if(val instanceof Date && !isNaN(val.getTime())){
+        const y = val.getFullYear();
+        const m = String(val.getMonth()+1).padStart(2,"0");
+        const d = String(val.getDate()).padStart(2,"0");
+        return `${y}-${m}-${d}`;
+      }
+      const s = String(val || "").trim();
+      if(!s) return "";
+      if(/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+      const m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/); // dd/mm/yyyy
+      if(m){
+        const dd = String(m[1]).padStart(2,"0");
+        const mm = String(m[2]).padStart(2,"0");
+        const yy = m[3];
+        return `${yy}-${mm}-${dd}`;
+      }
+      return s;
+    };
+
+    let deleted = 0;
+
+    for(let r = v.length - 1; r >= 1; r--){
+      let same = false;
+
+      if(event_id && iEventId !== -1){
+        const eid = String(v[r][iEventId] || "").trim();
+        same = (eid === event_id);
+      }else{
+        const d = normalizeDate_(iDate !== -1 ? v[r][iDate] : "");
+        const t = String(iTitle !== -1 ? v[r][iTitle] : "").trim();
+        const s = String(iStart !== -1 ? v[r][iStart] : "").trim();
+
+        same = (d === date && t === title && (start ? s === start : true));
+      }
+
+      if(same){
+        sh.deleteRow(r + 1);
+        deleted++;
+        if(event_id) break; // une seule ligne
+      }
+    }
+
+    return { ok:true, deleted };
+
+  }catch(err){
+    return { ok:false, error:String(err && err.message ? err.message : err) };
+  }finally{
+    try{ lock.releaseLock(); }catch(e){}
+  }
+}
+
+
+function uploadTicketCarburant_(e){
+  try{
+    const folderRoot = DriveApp.getFolderById(FOLDER_TICKETS_CARBURANT);
+
+    const p = (e && e.parameter) ? e.parameter : {};
+    let body = {};
+    if (e && e.postData && e.postData.contents) {
+      try { body = JSON.parse(e.postData.contents); } catch(err){ body = {}; }
+    }
+
+    const vehicle = String(p.vehicle || body.vehicle || "").trim();
+    const agent = String(p.agent || body.agent || "").trim();
+    let imageB64 = String(p.image || body.image || "").trim();
+
+    if (imageB64.includes(",")) imageB64 = imageB64.split(",").pop();
+
+    if(!vehicle || !imageB64){
+      return { ok:false, error:"Paramètres manquants (vehicle/image)" };
+    }
+
+    const now = new Date();
+    const year = Utilities.formatDate(now, "Europe/Paris", "yyyy");
+
+    const datePart = Utilities.formatDate(now, "Europe/Paris", "yyyy-MM-dd");
+    const timePart = Utilities.formatDate(now, "Europe/Paris", "HH-mm-ss");
+
+    const folders = folderRoot.getFoldersByName(year);
+    const yearFolder = folders.hasNext() ? folders.next() : folderRoot.createFolder(year);
+
+    const safeVeh = vehicle.replace(/[^\w-]/g, "_");
+    const safeAgent = agent ? agent.replace(/[^\w-]/g, "_") : "agent";
+
+    const filename = `${datePart}__${timePart}__${safeVeh}_${safeAgent}.jpg`;
+
+    const bytes = Utilities.base64Decode(imageB64);
+    const blob = Utilities.newBlob(bytes, "image/jpeg", filename);
+    const file = yearFolder.createFile(blob).setName(filename);
+
+    return {
+      ok: true,
+      fileId: file.getId(),
+      url: file.getUrl(),
+      name: file.getName(),
+      year: yearFolder.getName()
+    };
+
+  }catch(err){
+    return { ok:false, error:String(err && err.message ? err.message : err) };
+  }
+}
+
+function listTicketsCarburant_(e){
+  try{
+    const folderRoot = DriveApp.getFolderById(FOLDER_TICKETS_CARBURANT);
+    const year = String((e && e.parameter && e.parameter.year) || new Date().getFullYear());
+
+    const yearFolders = folderRoot.getFoldersByName(year);
+    if(!yearFolders.hasNext()) return { ok:true, year, count:0, files:[] };
+    const yearFolder = yearFolders.next();
+
+    const filesIt = yearFolder.getFiles();
+    const all = [];
+    const previewsByBase = {};
+
+    while(filesIt.hasNext()){
+      const f = filesIt.next();
+      const name = String(f.getName() || "");
+      const created = f.getDateCreated();
+      const url = f.getUrl();
+      const id = f.getId();
+
+      if(name.endsWith("__preview.jpg")){
+        const base = name.replace(/__preview\.jpg$/i, "");
+        previewsByBase[base] = {
+          id: id,
+          url: url
+        };
+        continue;
+      }
+
+      all.push({
+        id,
+        name,
+        url,
+        created: created ? created.toISOString() : ""
+      });
+    }
+
+    const out = [];
+
+    all.forEach(file => {
+      const name = file.name;
+
+      let veh = "";
+      let agent = "";
+      let time = "";
+      let dateFromName = "";
+
+      const cleanExt = String(name).replace(/\.[a-z0-9]+$/i,"");
+
+      if(cleanExt.includes("__")){
+        const parts = cleanExt.split("__");
+        if(parts.length >= 3){
+          dateFromName = parts[0] || "";
+          const timeRaw = parts[1] || "";
+          const third = parts[2] || "";
+          const v = third.split("_");
+          veh = (v[0] || "").trim();
+          agent = (v[1] || "").trim();
+
+          const t = timeRaw.split("-");
+          if(t.length >= 2){
+            time = `${String(t[0]).padStart(2,"0")}:${String(t[1]).padStart(2,"0")}`;
+          }
+        }
+      }
+
+      const preview = previewsByBase[cleanExt] || null;
+
+      out.push({
+        id: file.id,
+        name: file.name,
+        url: file.url,
+        created: file.created,
+        veh,
+        agent,
+        time,
+        dateFromName,
+        previewId: preview ? preview.id : file.id,
+        previewUrl: preview ? preview.url : file.url
+      });
+    });
+
+    out.sort((a,b)=>{
+      const ak = (a.dateFromName || "") + " " + (a.time || "");
+      const bk = (b.dateFromName || "") + " " + (b.time || "");
+      return bk.localeCompare(ak);
+    });
+
+    return { ok:true, year, count: out.length, files: out };
+
+  }catch(err){
+    return { ok:false, error:String(err && err.message ? err.message : err) };
+  }
+}
+function previewTicketCarburant_(e){
+  try{
+    const id = String((e && e.parameter && e.parameter.id) || "").trim();
+
+    if(!id){
+      return ContentService
+        .createTextOutput("ID manquant")
+        .setMimeType(ContentService.MimeType.TEXT);
+    }
+
+    const file = DriveApp.getFileById(id);
+    const blob = file.getBlob();
+    const base64 = Utilities.base64Encode(blob.getBytes());
+
+    return ContentService
+      .createTextOutput(base64)
+      .setMimeType(ContentService.MimeType.TEXT);
+
+  }catch(err){
+    return ContentService
+      .createTextOutput("preview error: " + err)
+      .setMimeType(ContentService.MimeType.TEXT);
+  }
+}
+
+function jsonp_(callback, obj) {
+  const json = JSON.stringify(obj);
+  return ContentService
+    .createTextOutput(`${callback}(${json})`)
+    .setMimeType(ContentService.MimeType.JAVASCRIPT);
+}
+
+function getSheet_(name) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(name);
+  if (!sh) throw new Error("Onglet introuvable : " + name);
+  return sh;
+}
+
+function nextEventId_(sh) {
+  const lastRow = sh.getLastRow();
+  if (lastRow < 2) return 1;
+
+  const ids = sh.getRange(2, 1, lastRow - 1, 1).getValues().flat();
+  let maxId = 0;
+
+  ids.forEach(v => {
+    const n = Number(v);
+    if (!isNaN(n) && n > maxId) maxId = n;
+  });
+
+  return maxId + 1;
+}
+
+function getEvenements_() {
+  const sh = getSheet_("Evenements");
+  const lastRow = sh.getLastRow();
+  if (lastRow < 2) return [];
+
+  const values = sh.getRange(2, 1, lastRow - 1, 6).getValues();
+
+  return values
+    .map(r => ({
+      id: r[0],
+      categorie: String(r[1] || "").trim(),
+      titre: String(r[2] || "").trim(),
+      date: String(r[3] || "").trim(),
+      lieu: String(r[4] || "").trim(),
+      description: String(r[5] || "").trim()
+    }))
+    .filter(e => e.titre);
+}
+
+function addEvenement_(params) {
+  const sh = getSheet_("Evenements");
+
+  const categorie = String(params.categorie || "").trim();
+  const titre = String(params.titre || "").trim();
+  const date = String(params.date || "").trim();
+  const lieu = String(params.lieu || "").trim();
+  const description = String(params.description || "").trim();
+
+  if (!categorie || !titre) {
+    throw new Error("Champs obligatoires manquants.");
+  }
+
+  const id = nextEventId_(sh);
+
+  sh.appendRow([
+    id,
+    categorie,
+    titre,
+    date,
+    lieu,
+    description
+  ]);
+
+  return {
+    ok: true,
+    id: id
+  };
+}
+
+function deleteEvenement_(params) {
+  const sh = getSheet_("Evenements");
+  const id = Number(params.id || 0);
+  if (!id) throw new Error("ID manquant.");
+
+  const lastRow = sh.getLastRow();
+  if (lastRow < 2) throw new Error("Aucun événement.");
+
+  const ids = sh.getRange(2, 1, lastRow - 1, 1).getValues().flat();
+
+  for (let i = 0; i < ids.length; i++) {
+    if (Number(ids[i]) === id) {
+      sh.deleteRow(i + 2);
+      return { ok: true, deletedId: id };
+    }
+  }
+
+  throw new Error("Événement introuvable.");
+}
+
+function updateEvenement_(params) {
+  const sh = getSheet_("Evenements");
+  const id = Number(params.id || 0);
+  if (!id) throw new Error("ID manquant.");
+
+  const categorie = String(params.categorie || "").trim();
+  const titre = String(params.titre || "").trim();
+  const date = String(params.date || "").trim();
+  const lieu = String(params.lieu || "").trim();
+  const description = String(params.description || "").trim();
+
+  if (!categorie || !titre) {
+    throw new Error("Champs obligatoires manquants.");
+  }
+
+  const lastRow = sh.getLastRow();
+  if (lastRow < 2) throw new Error("Aucun événement.");
+
+  const ids = sh.getRange(2, 1, lastRow - 1, 1).getValues().flat();
+
+  for (let i = 0; i < ids.length; i++) {
+    if (Number(ids[i]) === id) {
+      sh.getRange(i + 2, 1, 1, 6).setValues([[
+        id,
+        categorie,
+        titre,
+        date,
+        lieu,
+        description
+      ]]);
+      return { ok: true, updatedId: id };
+    }
+  }
+
+  throw new Error("Événement introuvable.");
+}
+
