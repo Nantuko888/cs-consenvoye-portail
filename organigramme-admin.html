@@ -110,18 +110,45 @@
 
     .poleItem{
       border-radius:16px;
-      padding:14px;
+      overflow:hidden;
       background:rgba(255,255,255,.07);
       border:1px solid rgba(255,255,255,.10);
       box-shadow:0 8px 20px rgba(0,0,0,.12);
     }
 
-    .poleHead{
+    .poleHeader{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:10px;
-      margin-bottom:10px;
+      padding:14px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .poleHeader:active{
+      transform:translateY(1px);
+    }
+
+    .poleHeaderLeft{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+      flex:1 1 auto;
+    }
+
+    .poleChevron{
+      width:18px;
+      text-align:center;
+      font-size:16px;
+      color:rgba(255,255,255,.80);
+      flex:0 0 auto;
+    }
+
+    .poleItem.open .poleChevron{
+      transform:rotate(90deg);
     }
 
     .poleName{
@@ -129,6 +156,8 @@
       font-weight:900;
       color:rgba(255,255,255,.96);
       line-height:1.25;
+      min-width:0;
+      word-break:break-word;
     }
 
     .poleColor{
@@ -139,9 +168,19 @@
       flex:0 0 auto;
     }
 
+    .poleContent{
+      display:none;
+      padding:0 14px 14px;
+    }
+
+    .poleItem.open .poleContent{
+      display:block;
+    }
+
     .subpoleList{
       display:grid;
       gap:10px;
+      margin-top:4px;
     }
 
     .subpoleItem{
@@ -203,11 +242,6 @@
       background:rgba(255,255,255,.14);
       color:#fff;
       border:1px solid rgba(255,255,255,.12);
-    }
-
-    .btnDanger{
-      background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
-      color:#fff;
     }
 
     .btnSmall{
@@ -303,7 +337,7 @@
         </div>
 
         <div class="smallNote">
-          Tu peux modifier les noms, ajouter des lignes ou supprimer des membres. La structure des pôles et sous-pôles reste celle déjà présente dans Sheets.
+          Tous les pôles sont repliés au chargement. Appuie sur un pôle pour l’ouvrir.
         </div>
       </div>
     </div>
@@ -315,7 +349,8 @@
 
     const state = {
       actorEmail: "",
-      data: null
+      data: null,
+      openPoleIndex: null
     };
 
     function showStatus(type, message){
@@ -426,12 +461,19 @@
       let html = '<div class="poleList">';
 
       poles.forEach((pole, poleIndex) => {
+        const isOpen = state.openPoleIndex === poleIndex;
+
         html += `
-          <div class="poleItem" data-pole-index="${poleIndex}">
-            <div class="poleHead">
-              <div class="poleName">${escapeHtml(pole.label || "")}</div>
+          <div class="poleItem ${isOpen ? 'open' : ''}" data-pole-index="${poleIndex}">
+            <div class="poleHeader" data-pole-index="${poleIndex}">
+              <div class="poleHeaderLeft">
+                <div class="poleChevron">▶</div>
+                <div class="poleName">${escapeHtml(pole.label || "")}</div>
+              </div>
               <div class="poleColor" style="background:${escapeHtml(pole.color || "#999")}"></div>
             </div>
+
+            <div class="poleContent">
         `;
 
         if (Array.isArray(pole.subpoles) && pole.subpoles.length) {
@@ -467,13 +509,27 @@
           html += '<div class="empty">Aucun sous-pôle.</div>';
         }
 
-        html += '</div>';
+        html += `
+            </div>
+          </div>
+        `;
       });
 
       html += '</div>';
       zone.innerHTML = html;
 
       bindDynamicButtons();
+      bindPoleHeaders();
+    }
+
+    function bindPoleHeaders(){
+      document.querySelectorAll(".poleHeader").forEach(header => {
+        header.onclick = function(){
+          const idx = Number(this.dataset.poleIndex);
+          state.openPoleIndex = (state.openPoleIndex === idx) ? null : idx;
+          renderPoles();
+        };
+      });
     }
 
     function bindDynamicButtons(){
@@ -516,6 +572,7 @@
         }
 
         state.data = r;
+        state.openPoleIndex = null;
 
         document.getElementById("chef").value = (r.direction && r.direction.chef) || "";
         document.getElementById("adj1").value = (r.direction && r.direction.adj1) || "";
