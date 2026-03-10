@@ -1,1 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Accès admin — CS Consenvoye</title>
+
+  <link rel="stylesheet" href="cs-theme.css">
+
+  <style>
+    .adminWrap{
+      max-width:980px;
+      margin:0 auto;
+      padding:14px;
+    }
+
+    .dashboard{
+      padding:14px 16px;
+      margin-bottom:16px;
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(47,158,91,.34), rgba(47,158,91,.18));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      font-weight:900;
+      color:rgba(255,255,255,.95);
+    }
+
+    .dashboardSmall{
+      margin-top:8px;
+      font-size:13px;
+      font-weight:800;
+      color:rgba(255,255,255,.78);
+      line-height:1.35;
+    }
+
+    .card{
+      border-radius:20px;
+      padding:14px;
+      margin-bottom:14px;
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.95);
+    }
+
+    .cardTitle{
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+
+    .placeholder{
+      padding:12px;
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      border:1px dashed rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      font-weight:800;
+      line-height:1.4;
+      font-size:14px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg"></div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="title">🔑 Gestion des accès</div>
+      <button class="btn" onclick="window.location.href='admin.html'">Retour</button>
+    </div>
+
+    <div class="adminWrap">
+      <div class="dashboard">
+        🔐 Administration des accès
+        <div class="dashboardSmall">
+          Ajout, modification et suppression des utilisateurs autorisés.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardTitle">Liste des accès</div>
+        <div class="placeholder">
+          Tableau des accès à venir.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardTitle">Ajout / modification</div>
+        <div class="placeholder">
+          Formulaire à venir.
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
 
