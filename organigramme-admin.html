@@ -9,19 +9,23 @@
 
 <style>
 
+body{
+font-family:system-ui;
+background:#000;
+color:#fff;
+}
+
 .adminWrap{
-max-width:980px;
-margin:0 auto;
+max-width:900px;
+margin:auto;
 padding:14px;
 }
 
 .card{
-border-radius:20px;
+border-radius:16px;
 padding:14px;
 margin-bottom:14px;
-border:1px solid rgba(255,255,255,.10);
 background:rgba(255,255,255,.06);
-color:#fff;
 }
 
 .cardTitle{
@@ -32,18 +36,17 @@ margin-bottom:12px;
 
 .input{
 width:100%;
-min-height:44px;
-border-radius:12px;
-border:1px solid rgba(255,255,255,.2);
-background:rgba(255,255,255,.1);
-color:#fff;
 padding:10px;
+border-radius:10px;
+border:1px solid rgba(255,255,255,.2);
+background:rgba(255,255,255,.08);
+color:#fff;
+margin-bottom:8px;
 }
 
 .poleItem{
 border-radius:14px;
 overflow:hidden;
-background:rgba(255,255,255,.05);
 margin-bottom:10px;
 }
 
@@ -58,6 +61,7 @@ justify-content:space-between;
 .poleContent{
 display:none;
 padding:14px;
+background:rgba(0,0,0,.25);
 }
 
 .poleItem.open .poleContent{
@@ -65,17 +69,18 @@ display:block;
 }
 
 .memberEdit{
-border-radius:12px;
+background:rgba(255,255,255,.05);
+border-radius:10px;
 padding:10px;
 margin-bottom:10px;
-background:rgba(255,255,255,.05);
 }
 
-.btnSmall{
-padding:8px 10px;
+.btn{
+padding:8px 12px;
+border-radius:8px;
 border:none;
-border-radius:10px;
 cursor:pointer;
+font-weight:700;
 }
 
 .btnAdd{
@@ -91,13 +96,32 @@ color:#fff;
 .btnSave{
 background:#ff8c00;
 color:#fff;
-padding:12px;
-border:none;
-border-radius:12px;
-font-weight:900;
-cursor:pointer;
 width:100%;
+padding:12px;
+font-weight:900;
 margin-top:12px;
+}
+
+#loader{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+display:none;
+z-index:9999;
+}
+
+.spinner{
+width:36px;
+height:36px;
+border:4px solid rgba(255,255,255,.2);
+border-top:4px solid #ff8c00;
+border-radius:50%;
+animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+to{transform:rotate(360deg)}
 }
 
 </style>
@@ -105,11 +129,8 @@ margin-top:12px;
 
 <body>
 
-<div class="wrap">
-
-<div class="topbar">
-<div class="title">Organigramme Admin</div>
-<button class="btn" onclick="window.location.href='admin.html'">Retour</button>
+<div id="loader">
+<div class="spinner"></div>
 </div>
 
 <div class="adminWrap">
@@ -119,13 +140,7 @@ margin-top:12px;
 <div class="cardTitle">Direction</div>
 
 <input id="chef" class="input" placeholder="Chef">
-
-<br><br>
-
 <input id="adj1" class="input" placeholder="Adjoint 1">
-
-<br><br>
-
 <input id="adj2" class="input" placeholder="Adjoint 2">
 
 </div>
@@ -136,11 +151,10 @@ margin-top:12px;
 
 <div id="poleZone"></div>
 
-<button class="btnSave" onclick="saveOrg()">Enregistrer</button>
+<button class="btn btnSave" onclick="saveOrg()">Enregistrer</button>
 
 </div>
 
-</div>
 </div>
 
 <script>
@@ -149,11 +163,16 @@ const API="https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1
 
 let orgData=null
 
-function jsonp(url,cb){
+function showLoader(v){
+document.getElementById("loader").style.display=v?"block":"none"
+}
+
+function jsonp(url){
 return new Promise(resolve=>{
+const cb="cb"+Date.now()
 const s=document.createElement("script")
-window[cb]=data=>{
-resolve(data)
+window[cb]=d=>{
+resolve(d)
 delete window[cb]
 s.remove()
 }
@@ -164,45 +183,30 @@ document.body.appendChild(s)
 
 function parseMember(txt){
 
-if(typeof txt!=="string"){
-return txt
-}
+if(typeof txt!=="string") return txt
 
 const parts=txt.split(" : ")
 
 if(parts.length===2){
-
-return{
-fonction:parts[0].trim(),
-nom:parts[1].trim()
+return{fonction:parts[0].trim(),nom:parts[1].trim()}
 }
 
-}
-
-return{
-fonction:"",
-nom:txt.trim()
-}
+return{fonction:"",nom:txt.trim()}
 
 }
 
 function memberRow(m){
 
-const membre=parseMember(m)
+const mem=parseMember(m||"")
 
 return`
 
 <div class="memberEdit">
 
-<input class="input memberFonction" placeholder="Fonction" value="${membre.fonction||""}">
+<input class="input memberFonction" placeholder="Fonction" value="${mem.fonction||""}">
+<input class="input memberNom" placeholder="Nom" value="${mem.nom||""}">
 
-<br><br>
-
-<input class="input memberNom" placeholder="Nom" value="${membre.nom||""}">
-
-<br><br>
-
-<button class="btnSmall btnRemove" onclick="this.parentElement.remove()">Supprimer</button>
+<button class="btn btnRemove" onclick="this.parentElement.remove()">Supprimer</button>
 
 </div>
 
@@ -220,9 +224,11 @@ orgData.poles.forEach((pole,i)=>{
 
 html+=`
 
-<div class="poleItem">
+<div class="poleItem" style="border-left:6px solid ${pole.color||'#888'}">
 
-<div class="poleHeader" onclick="this.parentElement.classList.toggle('open')">
+<div class="poleHeader"
+style="background:${pole.color||'#444'}20"
+onclick="this.parentElement.classList.toggle('open')">
 
 ${pole.label}
 
@@ -248,13 +254,13 @@ html+=memberRow(m)
 
 }else{
 
-html+=memberRow("")
+html+=memberRow()
 
 }
 
 html+=`
 
-<button class="btnSmall btnAdd" onclick="addMember(this)">Ajouter</button>
+<button class="btn btnAdd" onclick="addMember(this)">Ajouter</button>
 
 <br><br>
 
@@ -271,16 +277,14 @@ zone.innerHTML=html
 }
 
 function addMember(btn){
-
-btn.insertAdjacentHTML("beforebegin",memberRow(""))
-
+btn.insertAdjacentHTML("beforebegin",memberRow())
 }
 
 async function loadOrg(){
 
-const cb="cb"+Date.now()
+showLoader(true)
 
-const r=await jsonp(API+"?view=org_admin_get",cb)
+const r=await jsonp(API+"?view=org_admin_get")
 
 orgData=r
 
@@ -290,20 +294,21 @@ document.getElementById("adj2").value=r.direction.adj2||""
 
 render()
 
+showLoader(false)
+
 }
 
 async function saveOrg(){
 
-const payload={
+showLoader(true)
 
+const payload={
 direction:{
 chef:document.getElementById("chef").value,
 adj1:document.getElementById("adj1").value,
 adj2:document.getElementById("adj2").value
 },
-
 poles:[]
-
 }
 
 document.querySelectorAll(".poleItem").forEach((pole,i)=>{
@@ -332,10 +337,8 @@ const nom=m.querySelector(".memberNom").value
 if(nom){
 
 subObj.membres.push({
-
 fonction,
 nom
-
 })
 
 }
@@ -350,9 +353,9 @@ payload.poles.push(poleObj)
 
 })
 
-const cb="cb"+Date.now()
+await jsonp(API+"?view=org_admin_save&payload="+encodeURIComponent(JSON.stringify(payload)))
 
-await jsonp(API+"?view=org_admin_save&payload="+encodeURIComponent(JSON.stringify(payload)),cb)
+showLoader(false)
 
 alert("Organigramme enregistré")
 
