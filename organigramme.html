@@ -1,753 +1,743 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Organigramme admin — CS Consenvoye</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Organigramme — CS Consenvoye</title>
 
-<link rel="stylesheet" href="cs-theme.css">
+  <style>
+    :root{
+      --glass: rgba(20,20,20,.55);
+      --stroke: rgba(255,255,255,.12);
+      --text: #f3f3f3;
+      --muted: rgba(255,255,255,.75);
+      --shadow: 0 18px 45px rgba(0,0,0,.45);
+      --radius: 22px;
+    }
 
-<style>
-  .adminWrap{
-    max-width:980px;
-    margin:0 auto;
-    padding:14px;
-  }
+    *{ box-sizing:border-box; }
 
-  .dashboard{
-    padding:14px 16px;
-    margin-bottom:16px;
-    border-radius:18px;
-    background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15));
-    border:1px solid rgba(255,255,255,.12);
-    box-shadow:var(--shadow);
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-    font-weight:900;
-    color:rgba(255,255,255,.95);
-  }
+    html, body{ height:100%; }
 
-  .dashboardSmall{
-    margin-top:8px;
-    font-size:13px;
-    font-weight:800;
-    color:rgba(255,255,255,.78);
-    line-height:1.35;
-  }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:#000;
+      min-height:100svh;
+      display:flex;
+      justify-content:center;
+      padding:14px;
+      overflow:auto;
+    }
 
-  .card{
-    border-radius:20px;
-    padding:14px;
-    margin-bottom:14px;
-    border:1px solid rgba(255,255,255,.10);
-    box-shadow:var(--shadow);
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-    background:rgba(255,255,255,.06);
-    color:rgba(255,255,255,.95);
-  }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:url("background.png") center top / cover no-repeat;
+      transform: translateZ(0);
+      z-index:-2;
+    }
 
-  .cardTitle{
-    font-size:18px;
-    font-weight:900;
-    margin-bottom:12px;
-  }
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(circle at 30% 10%, rgba(255,255,255,.10), transparent 45%),
+        linear-gradient(to bottom, rgba(0,0,0,.30), rgba(0,0,0,.60));
+      z-index:-1;
+    }
 
-  .status{
-    display:none;
-    margin-bottom:14px;
-    padding:12px 14px;
-    border-radius:14px;
-    font-weight:800;
-    line-height:1.4;
-    border:1px solid rgba(255,255,255,.12);
-  }
+    .page{
+      width:min(520px, 100%);
+      border-radius:28px;
+      overflow:visible;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.08);
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
 
-  .status.show{ display:block; }
-  .status.ok{
-    background:rgba(47,158,91,.18);
-    color:#d9ffe7;
-  }
-  .status.err{
-    background:rgba(220,70,70,.18);
-    color:#ffe1e1;
-  }
-  .status.info{
-    background:rgba(47,111,212,.18);
-    color:#dde9ff;
-  }
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin: 10px 12px 8px;
+      padding: 10px 12px;
+      min-height: 46px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 14px 34px rgba(0,0,0,.40);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
 
-  .field{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    margin-bottom:10px;
-  }
+    .title{
+      font-weight:950;
+      letter-spacing:.8px;
+      text-transform: uppercase;
+      font-size: 18px;
+      margin:0;
+      white-space:nowrap;
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-  .label{
-    font-size:13px;
-    font-weight:900;
-    color:rgba(255,255,255,.80);
-  }
+    .btn{
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      color:var(--text);
+      padding: 9px 12px;
+      border-radius: 14px;
+      font-weight:900;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active{transform: translateY(1px)}
 
-  .input{
-    width:100%;
-    min-height:46px;
-    border:none;
-    outline:none;
-    border-radius:14px;
-    padding:12px 14px;
-    background:rgba(255,255,255,.10);
-    color:#fff;
-    border:1px solid rgba(255,255,255,.12);
-    font-size:15px;
-  }
+    .topBtns{
+      display:flex;
+      gap:10px;
+      flex: 0 0 auto;
+    }
 
-  .poleList{
-    display:grid;
-    gap:12px;
-  }
+    .card{
+      margin: 8px 12px 10px;
+      padding: 12px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.24));
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 16px 40px rgba(0,0,0,.32);
+    }
 
-  .poleItem{
-    border-radius:16px;
-    overflow:hidden;
-    background:rgba(255,255,255,.07);
-    border:1px solid rgba(255,255,255,.10);
-    box-shadow:0 8px 20px rgba(0,0,0,.12);
-  }
+    .directionWrap{ display:grid; gap:10px; }
+    .chefRow{ display:flex; justify-content:center; }
 
-  .poleHeader{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    padding:14px;
-    cursor:pointer;
-    user-select:none;
-    -webkit-tap-highlight-color:transparent;
-  }
+    .adjRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
 
-  .poleHeader:active{
-    transform:translateY(1px);
-  }
+    .badge{
+      width:100%;
+      border-radius: 18px;
+      padding: 12px 12px;
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: 0 14px 28px rgba(0,0,0,.22);
+      text-align:center;
+      min-height: 72px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
 
-  .poleHeaderLeft{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    min-width:0;
-    flex:1 1 auto;
-  }
+    .badge .role{
+      font-weight:1000;
+      letter-spacing:.6px;
+      text-transform:uppercase;
+      font-size:12px;
+      opacity:.95;
+      line-height:1.05;
+    }
 
-  .poleChevron{
-    width:18px;
-    text-align:center;
-    font-size:16px;
-    color:rgba(255,255,255,.80);
-    flex:0 0 auto;
-    transition:transform .18s ease;
-  }
+    .badge .name{
+      margin-top:5px;
+      font-weight:900;
+      font-size:15px;
+      text-shadow: 0 10px 16px rgba(0,0,0,.55);
+      line-height:1.15;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
 
-  .poleItem.open .poleChevron{
-    transform:rotate(90deg);
-  }
+    .chef{
+      background: linear-gradient(180deg, rgba(250,190,80,.42), rgba(220,140,35,.22));
+      color:#fff4df;
+    }
 
-  .poleName{
-    font-size:17px;
-    font-weight:900;
-    color:rgba(255,255,255,.96);
-    line-height:1.25;
-    min-width:0;
-    word-break:break-word;
-  }
+    .adj1{
+      background: linear-gradient(180deg, rgba(95,150,210,.38), rgba(55,100,155,.18));
+      color:#eef6ff;
+    }
 
-  .poleColor{
-    width:16px;
-    height:16px;
-    border-radius:999px;
-    border:1px solid rgba(255,255,255,.25);
-    flex:0 0 auto;
-  }
+    .adj2{
+      background: linear-gradient(180deg, rgba(140,120,190,.38), rgba(95,75,150,.18));
+      color:#f3ecff;
+    }
 
-  .poleContent{
-    display:none;
-    padding:0 14px 14px;
-  }
+    .sectionTitle{
+      margin: 6px 14px 8px;
+      font-weight: 1000;
+      letter-spacing:.8px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.78);
+      text-shadow: 0 10px 16px rgba(0,0,0,.55);
+      text-align:center;
+    }
 
-  .poleItem.open .poleContent{
-    display:block;
-  }
+    .polesGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 0 12px 16px;
+    }
 
-  .subpoleList{
-    display:grid;
-    gap:10px;
-    margin-top:4px;
-  }
+    .poleBtn{
+      width:100%;
+      border:none;
+      border-radius:18px;
+      padding: 16px 18px;
+      min-height: 64px;
+      cursor:pointer;
+      color:#fff;
+      font-weight:1000;
+      letter-spacing:.6px;
+      text-transform:uppercase;
+      box-shadow: 0 14px 28px rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.12);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      line-height:1.1;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .poleBtn:active{ transform: translateY(1px); }
 
-  .subpoleItem{
-    border-radius:14px;
-    padding:12px;
-    background:rgba(0,0,0,.18);
-    border:1px solid rgba(255,255,255,.08);
-  }
+    .modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      background: rgba(0,0,0,.60);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 9999;
+      padding: 14px;
+    }
+    .modal.show{ display:block; }
 
-  .subpoleTitle{
-    font-size:14px;
-    font-weight:900;
-    color:rgba(255,255,255,.86);
-    margin-bottom:8px;
-  }
+    .modalBox{
+      max-width: 560px;
+      margin: 0 auto;
+      border-radius: 22px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: 0 25px 70px rgba(0,0,0,.55);
+      background: rgba(18,18,18,.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
 
-  .memberList{
-    display:grid;
-    gap:8px;
-  }
+    .modalHead{
+      padding: 14px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      color:#fff;
+    }
 
-  .memberEdit{
-    display:grid;
-    gap:8px;
-    padding:10px;
-    border-radius:12px;
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.08);
-  }
+    .modalTitle{
+      font-weight: 1000;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
 
-  .memberActions{
-    display:flex;
-    justify-content:flex-end;
-  }
+    .closeBtn{
+      border:none;
+      cursor:pointer;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 1000;
+      color:#fff;
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.14);
+      -webkit-tap-highlight-color: transparent;
+    }
 
-  .btnRow{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:8px;
-  }
+    .modalBody{ padding: 12px 14px 16px; }
 
-  .btn2{
-    border:none;
-    border-radius:14px;
-    min-height:46px;
-    padding:12px 16px;
-    font-weight:900;
-    cursor:pointer;
-    box-shadow:0 10px 24px rgba(0,0,0,.18);
-  }
+    .sub{
+      margin-top: 10px;
+      border-radius: 18px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+      box-shadow: 0 12px 28px rgba(0,0,0,.18);
+    }
 
-  .btnPrimary{
-    background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
-    color:#fff;
-  }
+    .subBar{
+      padding: 10px 12px;
+      font-weight: 1000;
+      text-transform: uppercase;
+      letter-spacing:.6px;
+      color:#fff;
+    }
 
-  .btnSecondary{
-    background:rgba(255,255,255,.14);
-    color:#fff;
-    border:1px solid rgba(255,255,255,.12);
-  }
+    .subBody{
+      padding: 10px 12px 12px;
+      background: rgba(0,0,0,.18);
+    }
 
-  .btnSmall{
-    min-height:40px;
-    padding:10px 12px;
-    border-radius:12px;
-    font-size:14px;
-    font-weight:900;
-    border:none;
-    cursor:pointer;
-  }
+    ul{ margin:0; padding-left: 18px; }
 
-  .btnAdd{
-    background:rgba(47,158,91,.90);
-    color:#fff;
-  }
+    li{
+      margin: 6px 0;
+      color: rgba(255,255,255,.92);
+      font-weight:650;
+      line-height:1.25;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
 
-  .btnRemove{
-    background:rgba(220,70,70,.92);
-    color:#fff;
-  }
+    .hint{
+      color: rgba(255,255,255,.70);
+      font-size: 13px;
+      margin-top: 10px;
+    }
 
-  .empty{
-    padding:14px;
-    border-radius:14px;
-    background:rgba(255,255,255,.05);
-    border:1px dashed rgba(255,255,255,.10);
-    color:rgba(255,255,255,.76);
-    font-weight:800;
-  }
+    .roleU{
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-weight: 1000;
+    }
 
-  .smallNote{
-    margin-top:8px;
-    color:rgba(255,255,255,.72);
-    font-size:13px;
-    font-weight:800;
-    line-height:1.35;
-  }
+    .err{
+      margin: 8px 12px 12px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border:1px dashed rgba(255,170,60,.35);
+      background: rgba(0,0,0,.25);
+      color:#ffd19a;
+      display:none;
+    }
 
-  .subpoleFooter{
-    margin-top:10px;
-  }
+    .syncPill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.92);
+      font-weight: 950;
+      font-size: 12px;
+      letter-spacing: .2px;
+      box-shadow: 0 10px 26px rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
 
-  .loaderOverlay{
-    position:fixed;
-    inset:0;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    background:rgba(0,0,0,.35);
-    backdrop-filter:blur(4px);
-    -webkit-backdrop-filter:blur(4px);
-    z-index:99999;
-  }
+    .syncToast{
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      bottom: calc(env(safe-area-inset-bottom) + 12px);
+      z-index: 9999;
+      display: none;
+      max-width: 980px;
+      margin: 0 auto;
+    }
 
-  .loaderOverlay.show{
-    display:flex;
-  }
+    .syncToast .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:10px 12px;
+      border-radius: 16px;
+      background: rgba(0,0,0,.62);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: 0 14px 34px rgba(0,0,0,.40);
+      color: rgba(255,255,255,.90);
+      font-weight:900;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
 
-  .loaderBox{
-    width:52px;
-    height:52px;
-    border-radius:999px;
-    background:rgba(0,0,0,.55);
-    border:1px solid rgba(255,255,255,.15);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    box-shadow:0 14px 34px rgba(0,0,0,.40);
-  }
-
-  .loaderSpinner{
-    width:24px;
-    height:24px;
-    border-radius:50%;
-    border:3px solid rgba(255,255,255,.25);
-    border-top-color:#ff8c00;
-    animation:spin .8s linear infinite;
-  }
-
-  @keyframes spin{
-    to{ transform:rotate(360deg); }
-  }
-</style>
+    .syncToast .small{
+      font-weight:800;
+      opacity:.85;
+      font-size:13px;
+    }
+  </style>
 </head>
 
 <body>
-  <div class="bg"></div>
+  <div class="page">
+    <header>
+      <div class="title">Organigramme</div>
+      <div class="topBtns">
+        <span class="syncPill" id="syncPill" style="display:none;">Synchronisation…</span>
+        <button class="btn" id="btnBack">Retour</button>
+      </div>
+    </header>
 
-  <div id="loader" class="loaderOverlay">
-    <div class="loaderBox">
-      <div class="loaderSpinner"></div>
+    <div class="card">
+      <div class="directionWrap">
+        <div class="chefRow">
+          <div class="badge chef">
+            <div class="role">Chef de centre</div>
+            <div class="name" id="chefName">—</div>
+          </div>
+        </div>
+
+        <div class="adjRow">
+          <div class="badge adj1">
+            <div class="role">1er adjoint</div>
+            <div class="name" id="adj1Name">—</div>
+          </div>
+          <div class="badge adj2">
+            <div class="role">2ème adjoint</div>
+            <div class="name" id="adj2Name">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="err" id="errBox"></div>
+
+    <div class="sectionTitle">Pôles</div>
+    <div class="polesGrid" id="polesGrid"></div>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modalBox">
+      <div class="modalHead" id="modalHead">
+        <div class="modalTitle" id="modalTitle">—</div>
+        <button class="closeBtn" onclick="closeModal()">Fermer</button>
+      </div>
+      <div class="modalBody" id="modalBody"></div>
     </div>
   </div>
 
-  <div class="wrap">
-    <div class="topbar">
-      <div class="title">🧭 Organigramme</div>
-      <button class="btn" onclick="window.location.href='admin.html'">Retour</button>
-    </div>
-
-    <div class="adminWrap">
-      <div class="dashboard">
-        🧭 Administration de l’organigramme
-        <div class="dashboardSmall">
-          Direction visible directement, pôles repliés par défaut.
-        </div>
-      </div>
-
-      <div id="statusBox" class="status info"></div>
-
-      <div class="card">
-        <div class="cardTitle">Direction</div>
-
-        <div class="field">
-          <label class="label" for="chef">Chef de centre</label>
-          <input class="input" id="chef" type="text">
-        </div>
-
-        <div class="field">
-          <label class="label" for="adj1">Adjoint 1</label>
-          <input class="input" id="adj1" type="text">
-        </div>
-
-        <div class="field">
-          <label class="label" for="adj2">Adjoint 2</label>
-          <input class="input" id="adj2" type="text">
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="cardTitle">Pôles</div>
-        <div id="poleZone">
-          <div class="empty">Chargement...</div>
-        </div>
-
-        <div class="btnRow">
-          <button type="button" class="btn2 btnSecondary" id="reloadBtn">Actualiser</button>
-          <button type="button" class="btn2 btnPrimary" id="saveBtn">Enregistrer</button>
-        </div>
-
-        <div class="smallNote">
-          Fonction et nom sont éditables séparément.
-        </div>
+  <div class="syncToast" id="syncToast">
+    <div class="pill">
+      <span>🔄</span>
+      <div>
+        <div id="syncTxt">Synchronisation…</div>
+        <div class="small" id="syncSub">Mise à jour des données</div>
       </div>
     </div>
   </div>
 
-<script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
-const EMAIL_KEY = "cs_portail_email_v1";
+  <script>
+    const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-const state = {
-  actorEmail: "",
-  data: null,
-  openPoleIndex: null
-};
+    const CACHE_KEY = "CS_ORGA_CACHE_V1";
+    const CACHE_TS_KEY = "CS_ORGA_CACHE_TS_V1";
+    const CACHE_MAX_AGE_MS = 6 * 60 * 60 * 1000;
 
-function showLoader(v){
-  document.getElementById("loader").classList.toggle("show", !!v);
-}
+    const $chefName = document.getElementById("chefName");
+    const $adj1Name = document.getElementById("adj1Name");
+    const $adj2Name = document.getElementById("adj2Name");
+    const $grid = document.getElementById("polesGrid");
+    const $err = document.getElementById("errBox");
 
-function showStatus(type, message){
-  const box = document.getElementById("statusBox");
-  box.className = "status show " + type;
-  box.textContent = message || "";
-}
+    const $modal = document.getElementById("modal");
+    const $modalHead = document.getElementById("modalHead");
+    const $modalTitle = document.getElementById("modalTitle");
+    const $modalBody = document.getElementById("modalBody");
 
-function escapeHtml(v){
-  return String(v == null ? "" : v)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
+    let DATA = { direction:{chef:"—",adj1:"—",adj2:"—"}, poles:[] };
 
-function getCurrentEmail(){
-  return (localStorage.getItem(EMAIL_KEY) || "").trim().toLowerCase();
-}
-
-function jsonp(params){
-  return new Promise((resolve, reject) => {
-    const callbackName = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-    const script = document.createElement("script");
-    const url = new URL(SCRIPT_URL);
-
-    window[callbackName] = function(data){
-      cleanup();
-      resolve(data);
-    };
-
-    function cleanup(){
-      try { delete window[callbackName]; } catch(e){}
-      if (script.parentNode) script.parentNode.removeChild(script);
+    function showErr(msg){
+      if(!$err) return;
+      $err.style.display = "block";
+      $err.textContent = msg;
     }
 
-    script.onerror = function(){
-      cleanup();
-      reject(new Error("Erreur de chargement JSONP"));
-    };
+    function hideErr(){
+      if(!$err) return;
+      $err.style.display = "none";
+      $err.textContent = "";
+    }
 
-    url.searchParams.set("callback", callbackName);
-    url.searchParams.set("_ts", Date.now());
+    function jsonp(url, cbName){
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
 
-    Object.keys(params || {}).forEach(k => {
-      url.searchParams.set(k, params[k]);
-    });
+        const timer = setTimeout(() => {
+          cleanup();
+          reject(new Error("Timeout JSONP"));
+        }, 12000);
 
-    script.src = url.toString();
-    document.body.appendChild(script);
-  });
-}
-
-async function checkAdmin(){
-  state.actorEmail = getCurrentEmail();
-
-  if (!state.actorEmail) {
-    showStatus("err", "Aucun email admin détecté.");
-    return false;
-  }
-
-  const r = await jsonp({
-    view: "auth_check",
-    email: state.actorEmail
-  });
-
-  if (!r || !r.ok) {
-    showStatus("err", "Utilisateur non autorisé.");
-    return false;
-  }
-
-  if (String(r.role || "").toLowerCase() !== "admin") {
-    showStatus("err", "Accès refusé : admin uniquement.");
-    return false;
-  }
-
-  return true;
-}
-
-function memberRowHtml(membre){
-  const fonction = String((membre && membre.fonction) || "").trim();
-  const nom = String((membre && membre.nom) || "").trim();
-
-  return `
-    <div class="memberEdit">
-      <div class="field">
-        <label class="label">Fonction</label>
-        <input class="input member-fonction" type="text" value="${escapeHtml(fonction)}" placeholder="Ex. Président, Trésorier, Responsable...">
-      </div>
-      <div class="field">
-        <label class="label">Nom</label>
-        <input class="input member-nom" type="text" value="${escapeHtml(nom)}" placeholder="Nom de l'agent">
-      </div>
-      <div class="memberActions">
-        <button type="button" class="btnSmall btnRemove removeMemberBtn">Supprimer</button>
-      </div>
-    </div>
-  `;
-}
-
-function renderPoles(){
-  const zone = document.getElementById("poleZone");
-  const poles = (state.data && Array.isArray(state.data.poles)) ? state.data.poles : [];
-
-  if (!poles.length) {
-    zone.innerHTML = '<div class="empty">Aucun pôle trouvé.</div>';
-    return;
-  }
-
-  let html = '<div class="poleList">';
-
-  poles.forEach((pole, poleIndex) => {
-    const isOpen = state.openPoleIndex === poleIndex;
-    const poleBg = (pole.color ? pole.color + "20" : "rgba(255,255,255,.08)");
-
-    html += `
-      <div class="poleItem ${isOpen ? 'open' : ''}" data-pole-index="${poleIndex}" style="border-left:6px solid ${escapeHtml(pole.color || '#888')}">
-        <div class="poleHeader" data-pole-index="${poleIndex}" style="background:${escapeHtml(poleBg)}">
-          <div class="poleHeaderLeft">
-            <div class="poleChevron">▶</div>
-            <div class="poleName">${escapeHtml(pole.label || "")}</div>
-          </div>
-          <div class="poleColor" style="background:${escapeHtml(pole.color || "#999")}"></div>
-        </div>
-
-        <div class="poleContent">
-    `;
-
-    if (Array.isArray(pole.subpoles) && pole.subpoles.length) {
-      html += '<div class="subpoleList">';
-
-      pole.subpoles.forEach((subpole, subIndex) => {
-        html += `
-          <div class="subpoleItem" data-pole-index="${poleIndex}" data-subpole-index="${subIndex}">
-            <div class="subpoleTitle">${escapeHtml(subpole.label || "")}</div>
-            <div class="memberList">
-        `;
-
-        const membres = Array.isArray(subpole.membres) ? subpole.membres : [];
-        if (membres.length) {
-          membres.forEach(membre => {
-            html += memberRowHtml(membre);
-          });
-        } else {
-          html += memberRowHtml({ fonction:"", nom:"" });
+        function cleanup(){
+          clearTimeout(timer);
+          script.remove();
+          try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
         }
 
-        html += `
-            </div>
-            <div class="subpoleFooter">
-              <button type="button" class="btnSmall btnAdd addMemberBtn">Ajouter un nom</button>
-            </div>
-          </div>
-        `;
+        window[cbName] = (data) => { cleanup(); resolve(data); };
+        script.onerror = () => { cleanup(); reject(new Error("Erreur JSONP")); };
+        script.src = url;
+        document.head.appendChild(script);
       });
-
-      html += '</div>';
-    } else {
-      html += '<div class="empty">Aucun sous-pôle.</div>';
     }
 
-    html += `
-        </div>
-      </div>
-    `;
-  });
-
-  html += '</div>';
-  zone.innerHTML = html;
-
-  bindDynamicButtons();
-  bindPoleHeaders();
-}
-
-function bindPoleHeaders(){
-  document.querySelectorAll(".poleHeader").forEach(header => {
-    header.onclick = function(){
-      const idx = Number(this.dataset.poleIndex);
-      state.openPoleIndex = (state.openPoleIndex === idx) ? null : idx;
-      renderPoles();
-    };
-  });
-}
-
-function bindDynamicButtons(){
-  document.querySelectorAll(".addMemberBtn").forEach(btn => {
-    btn.onclick = function(){
-      const subpole = this.closest(".subpoleItem");
-      const list = subpole.querySelector(".memberList");
-      list.insertAdjacentHTML("beforeend", memberRowHtml({ fonction:"", nom:"" }));
-      bindDynamicButtons();
-    };
-  });
-
-  document.querySelectorAll(".removeMemberBtn").forEach(btn => {
-    btn.onclick = function(){
-      const member = this.closest(".memberEdit");
-      const list = member.parentElement;
-      member.remove();
-
-      if (!list.querySelector(".memberEdit")) {
-        list.insertAdjacentHTML("beforeend", memberRowHtml({ fonction:"", nom:"" }));
-        bindDynamicButtons();
-      }
-    };
-  });
-}
-
-async function loadOrg(){
-  try {
-    showLoader(true);
-    showStatus("info", "Chargement de l’organigramme...");
-
-    const r = await jsonp({
-      view: "org_admin_get",
-      actorEmail: state.actorEmail
-    });
-
-    if (!r || !r.ok) {
-      showStatus("err", (r && r.error) ? r.error : "Erreur de chargement.");
-      document.getElementById("poleZone").innerHTML = '<div class="empty">Impossible de charger l’organigramme.</div>';
-      showLoader(false);
-      return;
+    function hexToRgba(hex, a){
+      const h = (hex || "").replace("#","");
+      if(h.length !== 6) return `rgba(255,255,255,${a})`;
+      const r = parseInt(h.slice(0,2),16);
+      const g = parseInt(h.slice(2,4),16);
+      const b = parseInt(h.slice(4,6),16);
+      return `rgba(${r},${g},${b},${a})`;
     }
 
-    state.data = r;
-    state.openPoleIndex = null;
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
 
-    document.getElementById("chef").value = (r.direction && r.direction.chef) || "";
-    document.getElementById("adj1").value = (r.direction && r.direction.adj1) || "";
-    document.getElementById("adj2").value = (r.direction && r.direction.adj2) || "";
+    function normalizeOrgPayload(apiData){
+      const direction = apiData?.direction || {};
+      const polesIn = Array.isArray(apiData?.poles) ? apiData.poles : [];
 
-    renderPoles();
-    showStatus("ok", "Organigramme chargé.");
-    showLoader(false);
-  } catch(err) {
-    showStatus("err", err && err.message ? err.message : String(err));
-    document.getElementById("poleZone").innerHTML = '<div class="empty">Erreur de chargement.</div>';
-    showLoader(false);
-  }
-}
+      const poles = polesIn.map(p => ({
+        id: p.id || "",
+        label: p.libelle || p.label || "",
+        color: p.couleur || p.color || "#888888",
+        subpoles: (p.sousPoles || p.subpoles || []).map(sp => ({
+          label: sp.libelle || sp.label || "",
+          membres: (sp.membres || []).map(m => {
+            if (typeof m === "string") return m;
+            const f = (m.fonction || "").trim();
+            const n = (m.nom || "").trim();
+            if (f && n) return `${f} : ${n}`;
+            return n || f || "—";
+          })
+        }))
+      })).filter(p => p.label);
 
-function collectPayload(){
-  const payload = {
-    direction: {
-      chef: document.getElementById("chef").value.trim(),
-      adj1: document.getElementById("adj1").value.trim(),
-      adj2: document.getElementById("adj2").value.trim()
-    },
-    poles: []
-  };
-
-  const poleNodes = document.querySelectorAll(".poleItem");
-
-  poleNodes.forEach(poleNode => {
-    const poleIndex = Number(poleNode.dataset.poleIndex);
-    const originalPole = state.data.poles[poleIndex];
-
-    const poleObj = {
-      id: originalPole.id,
-      subpoles: []
-    };
-
-    const subpoleNodes = poleNode.querySelectorAll(".subpoleItem");
-    subpoleNodes.forEach(subNode => {
-      const subIndex = Number(subNode.dataset.subpoleIndex);
-      const originalSub = originalPole.subpoles[subIndex];
-
-      const subObj = {
-        id: originalSub.id,
-        membres: []
+      return {
+        direction: {
+          chef: direction.chef || "—",
+          adj1: direction.adj1 || "—",
+          adj2: direction.adj2 || "—"
+        },
+        poles
       };
+    }
 
-      const memberNodes = subNode.querySelectorAll(".memberEdit");
-      let ordre = 1;
+    function getPolePalette(label){
+      const s = String(label || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-      memberNodes.forEach(memberNode => {
-        const fonction = (memberNode.querySelector(".member-fonction")?.value || "").trim();
-        const nom = (memberNode.querySelector(".member-nom")?.value || "").trim();
+      if (s.includes("technique") || s.includes("logistique")) {
+        return { main: "#d38a1a", sub: "#f0a52a" };
+      }
 
-        if (!nom) return;
+      if (s.includes("operationnel") || s.includes("operation")) {
+        return { main: "#d9b019", sub: "#f1c93a" };
+      }
 
-        subObj.membres.push({
-          fonction,
-          nom,
-          ordre
+      if (s.includes("formation") || s.includes("sport")) {
+        return { main: "#7f68d8", sub: "#9a84f0" };
+      }
+
+      if (s.includes("jsp")) {
+        return { main: "#1faa7c", sub: "#39c794" };
+      }
+
+      if (s.includes("recrutement")) {
+        return { main: "#a64fd5", sub: "#c46cf0" };
+      }
+
+      if (s.includes("amicale")) {
+        return { main: "#4f8fd5", sub: "#71aef0" };
+      }
+
+      if (s.includes("soutien")) {
+        return { main: "#3a9fc0", sub: "#63bedc" };
+      }
+
+      return { main: "#777777", sub: "#9b9b9b" };
+    }
+
+    function render(){
+      $chefName.textContent = DATA.direction.chef || "—";
+      $adj1Name.textContent = DATA.direction.adj1 || "—";
+      $adj2Name.textContent = DATA.direction.adj2 || "—";
+
+      $grid.innerHTML = "";
+
+      DATA.poles.forEach(p => {
+        const palette = getPolePalette(p.label);
+
+        const btn = document.createElement("button");
+        btn.className = "poleBtn";
+        btn.style.background = `linear-gradient(180deg, ${hexToRgba(palette.main, .34)}, ${hexToRgba(palette.main, .16)})`;
+        btn.textContent = p.label;
+        btn.onclick = () => openPole(p, palette);
+        $grid.appendChild(btn);
+      });
+    }
+
+    function openPole(p, palette){
+      $modalHead.style.background = `linear-gradient(180deg, ${hexToRgba(palette.main, .42)}, ${hexToRgba(palette.main, .18)})`;
+      $modalTitle.textContent = p.label;
+      $modalBody.innerHTML = "";
+
+      (p.subpoles || []).forEach(sp => {
+        const box = document.createElement("div");
+        box.className = "sub";
+
+        const bar = document.createElement("div");
+        bar.className = "subBar";
+        bar.style.background = `linear-gradient(180deg, ${hexToRgba(palette.sub, .36)}, ${hexToRgba(palette.sub, .16)})`;
+        bar.textContent = sp.label;
+
+        const body = document.createElement("div");
+        body.className = "subBody";
+
+        const ul = document.createElement("ul");
+
+        (sp.membres || []).forEach(m => {
+          const li = document.createElement("li");
+          const s = String(m ?? "");
+
+          if ((p.id === "amicale") && /bureau/i.test(sp.label || "") && s.includes(":")){
+            const [rolePart, ...rest] = s.split(":");
+            const namePart = rest.join(":").trim();
+            li.innerHTML = `<span class="roleU">${escapeHtml(rolePart.trim())} :</span> ${escapeHtml(namePart)}`;
+          } else {
+            li.textContent = s;
+          }
+          ul.appendChild(li);
         });
-        ordre++;
+
+        body.appendChild(ul);
+        box.appendChild(bar);
+        box.appendChild(body);
+        $modalBody.appendChild(box);
       });
 
-      poleObj.subpoles.push(subObj);
+      const hint = document.createElement("div");
+      hint.className = "hint";
+      hint.textContent = "Clique sur Fermer pour revenir aux pôles.";
+      $modalBody.appendChild(hint);
+
+      $modal.classList.add("show");
+    }
+
+    function closeModal(){ $modal.classList.remove("show"); }
+    $modal.addEventListener("click", (e)=>{ if(e.target === $modal) closeModal(); });
+
+    function loadCache(){
+      try{
+        const ts = Number(sessionStorage.getItem(CACHE_TS_KEY) || "0");
+        const raw = sessionStorage.getItem(CACHE_KEY);
+        if(!raw) return null;
+        if(!ts) return null;
+        if(Date.now() - ts > CACHE_MAX_AGE_MS) return null;
+        return JSON.parse(raw);
+      }catch(e){
+        return null;
+      }
+    }
+
+    function saveCache(payload){
+      try{
+        sessionStorage.setItem(CACHE_KEY, JSON.stringify(payload));
+        sessionStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+      }catch(e){}
+    }
+
+    window.forceReloadOrg = async function(){
+      sessionStorage.removeItem(CACHE_KEY);
+      sessionStorage.removeItem(CACHE_TS_KEY);
+      await loadFromSheets();
+    };
+
+    function setSync(on, text){
+      const el = document.getElementById("syncPill");
+      if(!el) return;
+      if(on){
+        el.textContent = text || "Synchronisation…";
+        el.style.display = "inline-flex";
+      }else{
+        el.style.display = "none";
+      }
+    }
+
+    function showSync(msg="Synchronisation…", sub=""){
+      const t = document.getElementById("syncToast");
+      document.getElementById("syncTxt").textContent = msg;
+      document.getElementById("syncSub").textContent = sub || "Mise à jour des données";
+      t.style.display = "block";
+    }
+
+    function hideSync(){
+      const t = document.getElementById("syncToast");
+      if(t) t.style.display = "none";
+    }
+
+    async function loadFromSheets(){
+      hideErr();
+
+      let hadCache = false;
+      const cached = loadCache();
+      if(cached && cached.direction && Array.isArray(cached.poles)){
+        DATA = cached;
+        render();
+        hadCache = true;
+        setSync(true, "Synchronisation…");
+      }else{
+        setSync(true, "Chargement…");
+      }
+
+      try{
+        const cb = "cb_org_" + Math.random().toString(36).slice(2);
+        const url = `${API}?view=org&callback=${cb}&nocache=1&_=${Date.now()}`;
+        const apiData = await jsonp(url, cb);
+
+        if(!apiData || apiData.ok === false){
+          throw new Error(apiData?.error || "Réponse org invalide");
+        }
+
+        const fresh = normalizeOrgPayload(apiData);
+        DATA = fresh;
+        saveCache(DATA);
+        render();
+
+        setSync(false);
+
+      }catch(err){
+        console.error(err);
+
+        if(hadCache){
+          setSync(false);
+          return;
+        }
+
+        setSync(false);
+        showErr("Erreur de chargement depuis Sheets (API).");
+      }
+    }
+
+    document.getElementById("btnBack").addEventListener("click", () => {
+      location.replace("index.html?portal=1");
     });
 
-    payload.poles.push(poleObj);
-  });
-
-  return payload;
-}
-
-async function saveOrg(){
-  try{
-    showLoader(true);
-    showStatus("info","Enregistrement...");
-
-    const payload = collectPayload();
-
-    const params = new URLSearchParams();
-    params.set("view","org_admin_save");
-    params.set("actorEmail", state.actorEmail);
-    params.set("payload", JSON.stringify(payload));
-
-    await fetch(SCRIPT_URL,{
-      method:"POST",
-      mode:"no-cors",
-      headers:{
-        "Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"
-      },
-      body: params.toString()
-    });
-
-    showStatus("ok","Organigramme enregistré");
-
-    setTimeout(async ()=>{
-      await loadOrg();
-      showLoader(false);
-    },700);
-
-  }catch(err){
-    showLoader(false);
-    showStatus("err", err?.message || String(err));
-  }
-}
-
-document.getElementById("reloadBtn").addEventListener("click", loadOrg);
-document.getElementById("saveBtn").addEventListener("click", saveOrg);
-
-(async function init(){
-  const ok = await checkAdmin();
-  if (!ok) {
-    document.getElementById("poleZone").innerHTML = '<div class="empty">Accès refusé.</div>';
-    return;
-  }
-  await loadOrg();
-})();
-</script>
+    loadFromSheets();
+  </script>
 </body>
 </html>
