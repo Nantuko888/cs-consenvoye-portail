@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Accès admin — CS Consenvoye</title>
+
   <link rel="stylesheet" href="cs-theme.css">
 
   <style>
@@ -17,13 +18,18 @@
       padding:14px 16px;
       margin-bottom:16px;
       border-radius:18px;
-      background:linear-gradient(180deg, rgba(47,158,91,.34), rgba(47,158,91,.18));
+      background:linear-gradient(180deg, rgba(47,158,91,.30), rgba(47,158,91,.16));
       border:1px solid rgba(255,255,255,.12);
       box-shadow:var(--shadow);
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
+      color:rgba(255,255,255,.96);
+    }
+
+    .dashboardTitle{
+      font-size:20px;
       font-weight:900;
-      color:rgba(255,255,255,.95);
+      line-height:1.2;
     }
 
     .dashboardSmall{
@@ -32,24 +38,6 @@
       font-weight:800;
       color:rgba(255,255,255,.78);
       line-height:1.35;
-    }
-
-    .card{
-      border-radius:20px;
-      padding:14px;
-      margin-bottom:14px;
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      background:rgba(255,255,255,.06);
-      color:rgba(255,255,255,.95);
-    }
-
-    .cardTitle{
-      font-size:18px;
-      font-weight:900;
-      margin-bottom:12px;
     }
 
     .status{
@@ -61,7 +49,6 @@
       line-height:1.4;
       border:1px solid rgba(255,255,255,.12);
     }
-
     .status.show{ display:block; }
     .status.ok{
       background:rgba(47,158,91,.18);
@@ -74,6 +61,107 @@
     .status.info{
       background:rgba(47,111,212,.18);
       color:#dde9ff;
+    }
+
+    .accordion{
+      border-radius:20px;
+      overflow:hidden;
+      margin-bottom:14px;
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      background:rgba(255,255,255,.06);
+    }
+
+    .accordionHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .accordionHeader:active{
+      transform:translateY(1px);
+    }
+
+    .accordionTitle{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+      flex:1 1 auto;
+      color:rgba(255,255,255,.96);
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .accordionArrow{
+      font-size:18px;
+      color:rgba(255,255,255,.88);
+      transition:transform .18s ease;
+      flex:0 0 auto;
+    }
+
+    .accordion.open .accordionArrow{
+      transform:rotate(180deg);
+    }
+
+    .accordionContent{
+      display:none;
+      padding:0 12px 12px;
+    }
+
+    .accordion.open .accordionContent{
+      display:block;
+    }
+
+    .portalHeader{
+      background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18));
+    }
+
+    .amicaleHeader{
+      background:linear-gradient(180deg, rgba(212,106,0,.34), rgba(212,106,0,.18));
+    }
+
+    .card{
+      border-radius:16px;
+      padding:12px;
+      margin-top:12px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:0 8px 20px rgba(0,0,0,.12);
+      color:rgba(255,255,255,.95);
+    }
+
+    .cardTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .cardName{
+      font-size:16px;
+      font-weight:900;
+      line-height:1.25;
+      color:rgba(255,255,255,.96);
+    }
+
+    .badge{
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.18);
+      color:#fff;
+      flex:0 0 auto;
     }
 
     .field{
@@ -91,11 +179,11 @@
 
     .input, .select{
       width:100%;
-      min-height:46px;
+      min-height:44px;
       border:none;
       outline:none;
-      border-radius:14px;
-      padding:12px 14px;
+      border-radius:12px;
+      padding:10px 12px;
       background:rgba(255,255,255,.10);
       color:#fff;
       border:1px solid rgba(255,255,255,.12);
@@ -106,25 +194,55 @@
       color:#111;
     }
 
+    .switchRow{
+      display:grid;
+      gap:8px;
+      grid-template-columns:1fr 1fr;
+      margin-bottom:10px;
+    }
+
+    .switchBox{
+      border-radius:12px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .switchLabel{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      font-size:14px;
+      font-weight:900;
+      color:rgba(255,255,255,.92);
+    }
+
+    .switchLabel input{
+      width:20px;
+      height:20px;
+      accent-color:#ff8c00;
+    }
+
     .btnRow{
       display:flex;
-      gap:10px;
+      gap:8px;
       flex-wrap:wrap;
-      margin-top:6px;
+      margin-top:8px;
     }
 
     .btn2{
       border:none;
-      border-radius:14px;
-      min-height:46px;
-      padding:12px 16px;
+      border-radius:12px;
+      min-height:42px;
+      padding:10px 14px;
       font-weight:900;
       cursor:pointer;
       box-shadow:0 10px 24px rgba(0,0,0,.18);
     }
 
     .btnPrimary{
-      background:linear-gradient(180deg, rgba(47,158,91,.95), rgba(34,125,68,.95));
+      background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
       color:#fff;
     }
 
@@ -134,95 +252,27 @@
       border:1px solid rgba(255,255,255,.12);
     }
 
+    .btnDanger{
+      background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
+      color:#fff;
+    }
+
+    .hint{
+      font-size:12px;
+      line-height:1.35;
+      color:rgba(255,255,255,.72);
+      font-weight:800;
+      margin-top:4px;
+    }
+
     .empty{
       padding:14px;
+      margin-top:12px;
       border-radius:14px;
       background:rgba(255,255,255,.05);
       border:1px dashed rgba(255,255,255,.10);
       color:rgba(255,255,255,.76);
       font-weight:800;
-    }
-
-    .accessList{
-      display:grid;
-      gap:12px;
-    }
-
-    .accessItem{
-      border-radius:16px;
-      padding:14px;
-      background:rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:0 8px 20px rgba(0,0,0,.12);
-    }
-
-    .accessTop{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:8px;
-    }
-
-    .accessName{
-      font-size:16px;
-      font-weight:900;
-      color:rgba(255,255,255,.96);
-      line-height:1.3;
-    }
-
-    .roleBadge{
-      flex:0 0 auto;
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.3px;
-      background:rgba(255,190,60,.20);
-      border:1px solid rgba(255,190,60,.35);
-      color:#ffe7b0;
-    }
-
-    .accessMeta{
-      font-size:14px;
-      line-height:1.5;
-      color:rgba(255,255,255,.84);
-      word-break:break-word;
-    }
-
-    .metaLabel{
-      color:rgba(255,255,255,.62);
-      font-weight:800;
-    }
-
-    .itemActions{
-      margin-top:12px;
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-
-    .miniBtn{
-      border:none;
-      border-radius:12px;
-      padding:10px 12px;
-      font-weight:900;
-      cursor:pointer;
-      min-height:42px;
-    }
-
-    .editBtn{
-      background:rgba(255,180,60,.92);
-      color:#1f1f1f;
-    }
-
-    .smallNote{
-      margin-top:8px;
-      color:rgba(255,255,255,.72);
-      font-size:13px;
-      font-weight:800;
-      line-height:1.35;
     }
   </style>
 </head>
@@ -238,296 +288,313 @@
 
     <div class="adminWrap">
       <div class="dashboard">
-        🔐 Administration des accès
+        <div class="dashboardTitle">Administration des accès</div>
         <div class="dashboardSmall">
-          Liste existante, ajout et modification des utilisateurs autorisés.
+          Deux blocs distincts : Portail et Amicale. La partie Amicale se base sur les membres déjà présents dans l’organigramme.
         </div>
       </div>
 
       <div id="statusBox" class="status info"></div>
 
-      <div class="card">
-        <div class="cardTitle">Ajouter / modifier un accès</div>
-
-        <form id="accessForm">
-          <input type="hidden" id="originalEmail">
-
-          <div class="field">
-            <label class="label" for="nom">Nom</label>
-            <input class="input" id="nom" type="text" placeholder="Nom affiché">
-          </div>
-
-          <div class="field">
-            <label class="label" for="email">Adresse mail</label>
-            <input class="input" id="email" type="email" placeholder="adresse@mail.com" required>
-          </div>
-
-          <div class="field">
-            <label class="label" for="role">Rôle</label>
-            <select class="select" id="role" required>
-              <option value="agent">agent</option>
-              <option value="admin">admin</option>
-            </select>
-          </div>
-
-          <div class="btnRow">
-            <button type="submit" class="btn2 btnPrimary" id="saveBtn">Ajouter</button>
-            <button type="button" class="btn2 btnSecondary" id="cancelBtn" style="display:none;">Annuler</button>
-          </div>
-
-          <div class="smallNote">
-            La feuille <strong>Acces</strong> reste la base de données, mais la gestion se fait ici.
-          </div>
-        </form>
+      <div class="accordion" id="portalAccordion">
+        <div class="accordionHeader portalHeader" onclick="toggleAccordion('portalAccordion')">
+          <div class="accordionTitle">🖥️ Accès Portail</div>
+          <div class="accordionArrow">▾</div>
+        </div>
+        <div class="accordionContent">
+          <div id="portalList"></div>
+        </div>
       </div>
 
-      <div class="card">
-        <div class="cardTitle">Accès existants</div>
-        <div id="listZone">
-          <div class="empty">Chargement...</div>
+      <div class="accordion" id="amicaleAccordion">
+        <div class="accordionHeader amicaleHeader" onclick="toggleAccordion('amicaleAccordion')">
+          <div class="accordionTitle">🤝 Accès Amicale</div>
+          <div class="accordionArrow">▾</div>
+        </div>
+        <div class="accordionContent">
+          <div id="amicaleList"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+const EMAIL_KEY = "cs_portail_email_v1";
 
-    const state = {
-      actorEmail: "",
-      items: [],
-      editing: false
-    };
+const state = {
+  actorEmail: "",
+  portalItems: [],
+  amicaleItems: []
+};
 
-    function showStatus(type, message){
-      const box = document.getElementById("statusBox");
-      box.className = "status show " + type;
-      box.textContent = message || "";
-    }
-
-    function escapeHtml(v){
-      return String(v == null ? "" : v)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-   function getCurrentEmail(){
-  const qs = new URLSearchParams(window.location.search);
-  const fromQuery = (qs.get("email") || "").trim().toLowerCase();
-  if (fromQuery) return fromQuery;
-
-  return (localStorage.getItem("cs_portail_email_v1") || "").trim().toLowerCase();
+function showStatus(type, message){
+  const box = document.getElementById("statusBox");
+  box.className = "status show " + type;
+  box.textContent = message || "";
 }
 
-    function jsonp(params){
-      return new Promise((resolve, reject) => {
-        const callbackName = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-        const script = document.createElement("script");
-        const url = new URL(SCRIPT_URL);
+function escapeHtml(v){
+  return String(v == null ? "" : v)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
-        window[callbackName] = function(data){
-          cleanup();
-          resolve(data);
-        };
+function getCurrentEmail(){
+  return (localStorage.getItem(EMAIL_KEY) || "").trim().toLowerCase();
+}
 
-        function cleanup(){
-          try { delete window[callbackName]; } catch(e){}
-          if (script.parentNode) script.parentNode.removeChild(script);
-        }
+function jsonp(params){
+  return new Promise((resolve, reject) => {
+    const callbackName = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+    const script = document.createElement("script");
+    const url = new URL(SCRIPT_URL);
 
-        script.onerror = function(){
-          cleanup();
-          reject(new Error("Erreur de chargement JSONP"));
-        };
+    window[callbackName] = function(data){
+      cleanup();
+      resolve(data);
+    };
 
-        url.searchParams.set("callback", callbackName);
-        url.searchParams.set("_ts", Date.now());
-
-        Object.keys(params || {}).forEach(k => {
-          url.searchParams.set(k, params[k]);
-        });
-
-        script.src = url.toString();
-        document.body.appendChild(script);
-      });
+    function cleanup(){
+      try { delete window[callbackName]; } catch(e){}
+      if (script.parentNode) script.parentNode.removeChild(script);
     }
 
-    async function checkAdmin(){
-      state.actorEmail = getCurrentEmail();
+    script.onerror = function(){
+      cleanup();
+      reject(new Error("Erreur de chargement JSONP"));
+    };
 
-      if (!state.actorEmail) {
-        showStatus("err", "Aucun email admin détecté.");
-        return false;
-      }
+    url.searchParams.set("callback", callbackName);
+    url.searchParams.set("_ts", Date.now());
 
-      const r = await jsonp({
-        view: "auth_check",
-        email: state.actorEmail
-      });
+    Object.keys(params || {}).forEach(k => {
+      url.searchParams.set(k, params[k]);
+    });
 
-      if (!r || !r.ok) {
-        showStatus("err", "Utilisateur non autorisé.");
-        return false;
-      }
+    script.src = url.toString();
+    document.body.appendChild(script);
+  });
+}
 
-      if (String(r.role || "").toLowerCase() !== "admin") {
-        showStatus("err", "Accès refusé : admin uniquement.");
-        return false;
-      }
+function toggleAccordion(id){
+  const target = document.getElementById(id);
+  if (!target) return;
+  target.classList.toggle("open");
+}
 
-      return true;
-    }
+async function checkAdmin(){
+  state.actorEmail = getCurrentEmail();
 
-    async function loadAccesses(){
-      showStatus("info", "Chargement des accès...");
+  if (!state.actorEmail) {
+    showStatus("err", "Aucun email admin détecté.");
+    return false;
+  }
 
-      const r = await jsonp({
-        view: "acces_list",
-        actorEmail: state.actorEmail
-      });
+  const r = await jsonp({
+    view: "auth_check",
+    email: state.actorEmail
+  });
 
-      if (!r || !r.ok) {
-        showStatus("err", (r && r.error) ? r.error : "Erreur de chargement.");
-        document.getElementById("listZone").innerHTML = '<div class="empty">Impossible de charger la liste.</div>';
-        return;
-      }
+  if (!r || !r.ok) {
+    showStatus("err", "Utilisateur non autorisé.");
+    return false;
+  }
 
-      state.items = Array.isArray(r.items) ? r.items : [];
-      renderList();
-      showStatus("ok", "Liste chargée.");
-    }
+  if (String(r.role || "").toLowerCase() !== "admin") {
+    showStatus("err", "Accès refusé : admin uniquement.");
+    return false;
+  }
 
-    function renderList(){
-      const zone = document.getElementById("listZone");
+  return true;
+}
 
-      if (!state.items.length) {
-        zone.innerHTML = '<div class="empty">Aucun accès enregistré.</div>';
-        return;
-      }
+function accessCardHtml(item, section){
+  const email = item.email || "";
+  const nom = item.nom || "";
+  const role = (item.role || "agent").toLowerCase();
+  const portail = Number(item.portail || 0) === 1;
+  const amical = Number(item.amical || 0) === 1;
+  const isExisting = !!email;
+  const badge = section === "amicale"
+    ? (item.sourceSousPole ? `Amicale · ${escapeHtml(item.sourceSousPole)}` : "Amicale")
+    : (role === "admin" ? "admin" : "agent");
 
-      let html = '<div class="accessList">';
+  return `
+    <div class="card access-card" data-section="${escapeHtml(section)}" data-original-email="${escapeHtml(email)}">
+      <div class="cardTop">
+        <div class="cardName">${escapeHtml(nom || "Nouvel accès")}</div>
+        <div class="badge">${badge}</div>
+      </div>
 
-      state.items.forEach(item => {
-        const nomAffiche = item.nom && item.nom.trim() ? item.nom : "Sans nom";
+      <div class="field">
+        <label class="label">Nom</label>
+        <input class="input field-nom" type="text" value="${escapeHtml(nom)}" placeholder="Nom affiché">
+      </div>
 
-        html += `
-          <div class="accessItem">
-            <div class="accessTop">
-              <div class="accessName">${escapeHtml(nomAffiche)}</div>
-              <div class="roleBadge">${escapeHtml(item.role || "")}</div>
-            </div>
+      <div class="field">
+        <label class="label">Adresse mail</label>
+        <input class="input field-email" type="email" value="${escapeHtml(email)}" placeholder="adresse@mail.com">
+      </div>
 
-            <div class="accessMeta">
-              <div><span class="metaLabel">Email :</span> ${escapeHtml(item.email || "")}</div>
-              <div><span class="metaLabel">Nom :</span> ${escapeHtml(item.nom || "")}</div>
-            </div>
+      <div class="field">
+        <label class="label">Rôle</label>
+        <select class="select field-role">
+          <option value="agent" ${role === "agent" ? "selected" : ""}>agent</option>
+          <option value="admin" ${role === "admin" ? "selected" : ""}>admin</option>
+        </select>
+      </div>
 
-            <div class="itemActions">
-              <button class="miniBtn editBtn" onclick="startEdit('${encodeURIComponent(item.email || "")}')">Modifier</button>
-            </div>
-          </div>
-        `;
-      });
+      <div class="switchRow">
+        <div class="switchBox">
+          <label class="switchLabel">
+            <span>Accès Portail</span>
+            <input class="field-portail" type="checkbox" ${portail ? "checked" : ""}>
+          </label>
+        </div>
 
-      html += '</div>';
-      zone.innerHTML = html;
-    }
+        <div class="switchBox">
+          <label class="switchLabel">
+            <span>Accès Amicale</span>
+            <input class="field-amical" type="checkbox" ${amical ? "checked" : ""}>
+          </label>
+        </div>
+      </div>
 
-    function resetForm(){
-      state.editing = false;
-      document.getElementById("originalEmail").value = "";
-      document.getElementById("nom").value = "";
-      document.getElementById("email").value = "";
-      document.getElementById("role").value = "agent";
-      document.getElementById("saveBtn").textContent = "Ajouter";
-      document.getElementById("cancelBtn").style.display = "none";
-    }
+      ${section === "amicale" && item.orgDisplay ? `<div class="hint">Source organigramme : ${escapeHtml(item.orgDisplay)}</div>` : ""}
 
-    function startEdit(encodedEmail){
-      const email = decodeURIComponent(encodedEmail || "");
-      const item = state.items.find(x => String(x.email).toLowerCase() === String(email).toLowerCase());
-      if (!item) return;
+      <div class="btnRow">
+        <button class="btn2 btnPrimary" onclick="saveCard(this)">Enregistrer</button>
+        ${isExisting ? `<button class="btn2 btnDanger" onclick="deleteCard(this)">Supprimer</button>` : ""}
+      </div>
+    </div>
+  `;
+}
 
-      state.editing = true;
-      document.getElementById("originalEmail").value = item.email || "";
-      document.getElementById("nom").value = item.nom || "";
-      document.getElementById("email").value = item.email || "";
-      document.getElementById("role").value = item.role || "agent";
-      document.getElementById("saveBtn").textContent = "Enregistrer";
-      document.getElementById("cancelBtn").style.display = "";
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+function renderPortal(){
+  const zone = document.getElementById("portalList");
+  const items = Array.isArray(state.portalItems) ? [...state.portalItems] : [];
 
-    async function handleSubmit(ev){
-      ev.preventDefault();
+  const newCard = {
+    email: "",
+    role: "agent",
+    nom: "",
+    portail: 1,
+    amical: 0
+  };
 
-      const originalEmail = document.getElementById("originalEmail").value.trim().toLowerCase();
-      const nom = document.getElementById("nom").value.trim();
-      const email = document.getElementById("email").value.trim().toLowerCase();
-      const role = document.getElementById("role").value.trim().toLowerCase();
+  let html = accessCardHtml(newCard, "portal");
+  items.forEach(item => {
+    html += accessCardHtml(item, "portal");
+  });
 
-      if (!email) {
-        showStatus("err", "Adresse mail manquante.");
-        return;
-      }
+  zone.innerHTML = html || '<div class="empty">Aucun accès portail.</div>';
+}
 
-      if (!role) {
-        showStatus("err", "Rôle manquant.");
-        return;
-      }
+function renderAmicale(){
+  const zone = document.getElementById("amicaleList");
+  const items = Array.isArray(state.amicaleItems) ? state.amicaleItems : [];
 
-      showStatus("info", state.editing ? "Modification en cours..." : "Ajout en cours...");
+  if (!items.length) {
+    zone.innerHTML = '<div class="empty">Aucun membre Amicale trouvé.</div>';
+    return;
+  }
 
-      let r;
+  let html = "";
+  items.forEach(item => {
+    html += accessCardHtml(item, "amicale");
+  });
 
-      if (state.editing) {
-        r = await jsonp({
-          view: "acces_update",
-          actorEmail: state.actorEmail,
-          originalEmail: originalEmail,
-          email: email,
-          role: role,
-          nom: nom
-        });
-      } else {
-        r = await jsonp({
-          view: "acces_add",
-          actorEmail: state.actorEmail,
-          email: email,
-          role: role,
-          nom: nom
-        });
-      }
+  zone.innerHTML = html;
+}
 
-      if (!r || !r.ok) {
-        showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
-        return;
-      }
+async function loadData(){
+  showStatus("info", "Chargement des accès...");
 
-      showStatus("ok", state.editing ? "Accès modifié." : "Accès ajouté.");
-      resetForm();
-      await loadAccesses();
-    }
+  const r = await jsonp({
+    view: "acces_admin_data",
+    actorEmail: state.actorEmail
+  });
 
-    document.getElementById("accessForm").addEventListener("submit", handleSubmit);
-    document.getElementById("cancelBtn").addEventListener("click", resetForm);
+  if (!r || !r.ok) {
+    showStatus("err", (r && r.error) ? r.error : "Erreur de chargement.");
+    return;
+  }
 
-    (async function init(){
-      try {
-        const ok = await checkAdmin();
-        if (!ok) {
-          document.getElementById("listZone").innerHTML = '<div class="empty">Accès refusé.</div>';
-          return;
-        }
-        await loadAccesses();
-      } catch(err) {
-        showStatus("err", err && err.message ? err.message : String(err));
-        document.getElementById("listZone").innerHTML = '<div class="empty">Erreur de chargement.</div>';
-      }
-    })();
-  </script>
+  state.portalItems = Array.isArray(r.portalItems) ? r.portalItems : [];
+  state.amicaleItems = Array.isArray(r.amicaleItems) ? r.amicaleItems : [];
+
+  renderPortal();
+  renderAmicale();
+
+  showStatus("ok", "Accès chargés.");
+}
+
+async function saveCard(btn){
+  const card = btn.closest(".access-card");
+  if (!card) return;
+
+  const originalEmail = (card.dataset.originalEmail || "").trim().toLowerCase();
+  const email = (card.querySelector(".field-email")?.value || "").trim().toLowerCase();
+  const nom = (card.querySelector(".field-nom")?.value || "").trim();
+  const role = (card.querySelector(".field-role")?.value || "agent").trim().toLowerCase();
+  const portail = card.querySelector(".field-portail")?.checked ? 1 : 0;
+  const amical = card.querySelector(".field-amical")?.checked ? 1 : 0;
+
+  showStatus("info", "Enregistrement...");
+
+  const r = await jsonp({
+    view: "acces_save",
+    actorEmail: state.actorEmail,
+    originalEmail,
+    email,
+    nom,
+    role,
+    portail,
+    amical
+  });
+
+  if (!r || !r.ok) {
+    showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
+    return;
+  }
+
+  showStatus("ok", "Accès enregistré.");
+  await loadData();
+}
+
+async function deleteCard(btn){
+  const card = btn.closest(".access-card");
+  if (!card) return;
+
+  const email = (card.dataset.originalEmail || "").trim().toLowerCase();
+  if (!email) return;
+
+  showStatus("info", "Suppression...");
+
+  const r = await jsonp({
+    view: "acces_delete",
+    actorEmail: state.actorEmail,
+    email
+  });
+
+  if (!r || !r.ok) {
+    showStatus("err", (r && r.error) ? r.error : "Erreur de suppression.");
+    return;
+  }
+
+  showStatus("ok", "Accès supprimé.");
+  await loadData();
+}
+
+(async function init(){
+  const ok = await checkAdmin();
+  if (!ok) return;
+  await loadData();
+})();
+</script>
 </body>
 </html>
