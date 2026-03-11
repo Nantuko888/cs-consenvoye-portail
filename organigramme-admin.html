@@ -3,369 +3,759 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Organigramme Admin</title>
+<title>Organigramme admin — CS Consenvoye</title>
 
 <link rel="stylesheet" href="cs-theme.css">
 
 <style>
+  .adminWrap{
+    max-width:980px;
+    margin:0 auto;
+    padding:14px;
+  }
 
-body{
-font-family:system-ui;
-background:#000;
-color:#fff;
-}
+  .dashboard{
+    padding:14px 16px;
+    margin-bottom:16px;
+    border-radius:18px;
+    background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15));
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    font-weight:900;
+    color:rgba(255,255,255,.95);
+  }
 
-.adminWrap{
-max-width:900px;
-margin:auto;
-padding:14px;
-}
+  .dashboardSmall{
+    margin-top:8px;
+    font-size:13px;
+    font-weight:800;
+    color:rgba(255,255,255,.78);
+    line-height:1.35;
+  }
 
-.card{
-border-radius:16px;
-padding:14px;
-margin-bottom:14px;
-background:rgba(255,255,255,.06);
-}
+  .card{
+    border-radius:20px;
+    padding:14px;
+    margin-bottom:14px;
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    background:rgba(255,255,255,.06);
+    color:rgba(255,255,255,.95);
+  }
 
-.cardTitle{
-font-size:18px;
-font-weight:900;
-margin-bottom:12px;
-}
+  .cardTitle{
+    font-size:18px;
+    font-weight:900;
+    margin-bottom:12px;
+  }
 
-.input{
-width:100%;
-padding:10px;
-border-radius:10px;
-border:1px solid rgba(255,255,255,.2);
-background:rgba(255,255,255,.08);
-color:#fff;
-margin-bottom:8px;
-}
+  .status{
+    display:none;
+    margin-bottom:14px;
+    padding:12px 14px;
+    border-radius:14px;
+    font-weight:800;
+    line-height:1.4;
+    border:1px solid rgba(255,255,255,.12);
+  }
 
-.poleItem{
-border-radius:14px;
-overflow:hidden;
-margin-bottom:10px;
-}
+  .status.show{ display:block; }
+  .status.ok{
+    background:rgba(47,158,91,.18);
+    color:#d9ffe7;
+  }
+  .status.err{
+    background:rgba(220,70,70,.18);
+    color:#ffe1e1;
+  }
+  .status.info{
+    background:rgba(47,111,212,.18);
+    color:#dde9ff;
+  }
 
-.poleHeader{
-padding:14px;
-font-weight:900;
-cursor:pointer;
-display:flex;
-justify-content:space-between;
-}
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-bottom:10px;
+  }
 
-.poleContent{
-display:none;
-padding:14px;
-background:rgba(0,0,0,.25);
-}
+  .label{
+    font-size:13px;
+    font-weight:900;
+    color:rgba(255,255,255,.80);
+  }
 
-.poleItem.open .poleContent{
-display:block;
-}
+  .input{
+    width:100%;
+    min-height:46px;
+    border:none;
+    outline:none;
+    border-radius:14px;
+    padding:12px 14px;
+    background:rgba(255,255,255,.10);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.12);
+    font-size:15px;
+  }
 
-.memberEdit{
-background:rgba(255,255,255,.05);
-border-radius:10px;
-padding:10px;
-margin-bottom:10px;
-}
+  .poleList{
+    display:grid;
+    gap:12px;
+  }
 
-.btn{
-padding:8px 12px;
-border-radius:8px;
-border:none;
-cursor:pointer;
-font-weight:700;
-}
+  .poleItem{
+    border-radius:16px;
+    overflow:hidden;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+  }
 
-.btnAdd{
-background:#2ecc71;
-color:#fff;
-}
+  .poleHeader{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:14px;
+    cursor:pointer;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
 
-.btnRemove{
-background:#e74c3c;
-color:#fff;
-}
+  .poleHeader:active{
+    transform:translateY(1px);
+  }
 
-.btnSave{
-background:#ff8c00;
-color:#fff;
-width:100%;
-padding:12px;
-font-weight:900;
-margin-top:12px;
-}
+  .poleHeaderLeft{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width:0;
+    flex:1 1 auto;
+  }
 
-#loader{
-position:fixed;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-display:none;
-z-index:9999;
-}
+  .poleChevron{
+    width:18px;
+    text-align:center;
+    font-size:16px;
+    color:rgba(255,255,255,.80);
+    flex:0 0 auto;
+    transition:transform .18s ease;
+  }
 
-.spinner{
-width:36px;
-height:36px;
-border:4px solid rgba(255,255,255,.2);
-border-top:4px solid #ff8c00;
-border-radius:50%;
-animation:spin .8s linear infinite;
-}
+  .poleItem.open .poleChevron{
+    transform:rotate(90deg);
+  }
 
-@keyframes spin{
-to{transform:rotate(360deg)}
-}
+  .poleName{
+    font-size:17px;
+    font-weight:900;
+    color:rgba(255,255,255,.96);
+    line-height:1.25;
+    min-width:0;
+    word-break:break-word;
+  }
 
+  .poleColor{
+    width:16px;
+    height:16px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.25);
+    flex:0 0 auto;
+  }
+
+  .poleContent{
+    display:none;
+    padding:0 14px 14px;
+  }
+
+  .poleItem.open .poleContent{
+    display:block;
+  }
+
+  .subpoleList{
+    display:grid;
+    gap:10px;
+    margin-top:4px;
+  }
+
+  .subpoleItem{
+    border-radius:14px;
+    padding:12px;
+    background:rgba(0,0,0,.18);
+    border:1px solid rgba(255,255,255,.08);
+  }
+
+  .subpoleTitle{
+    font-size:14px;
+    font-weight:900;
+    color:rgba(255,255,255,.86);
+    margin-bottom:8px;
+  }
+
+  .memberList{
+    display:grid;
+    gap:8px;
+  }
+
+  .memberEdit{
+    display:grid;
+    gap:8px;
+    padding:10px;
+    border-radius:12px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.08);
+  }
+
+  .memberActions{
+    display:flex;
+    justify-content:flex-end;
+  }
+
+  .btnRow{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:8px;
+  }
+
+  .btn2{
+    border:none;
+    border-radius:14px;
+    min-height:46px;
+    padding:12px 16px;
+    font-weight:900;
+    cursor:pointer;
+    box-shadow:0 10px 24px rgba(0,0,0,.18);
+  }
+
+  .btnPrimary{
+    background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
+    color:#fff;
+  }
+
+  .btnSecondary{
+    background:rgba(255,255,255,.14);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.12);
+  }
+
+  .btnSmall{
+    min-height:40px;
+    padding:10px 12px;
+    border-radius:12px;
+    font-size:14px;
+    font-weight:900;
+    border:none;
+    cursor:pointer;
+  }
+
+  .btnAdd{
+    background:rgba(47,158,91,.90);
+    color:#fff;
+  }
+
+  .btnRemove{
+    background:rgba(220,70,70,.92);
+    color:#fff;
+  }
+
+  .empty{
+    padding:14px;
+    border-radius:14px;
+    background:rgba(255,255,255,.05);
+    border:1px dashed rgba(255,255,255,.10);
+    color:rgba(255,255,255,.76);
+    font-weight:800;
+  }
+
+  .smallNote{
+    margin-top:8px;
+    color:rgba(255,255,255,.72);
+    font-size:13px;
+    font-weight:800;
+    line-height:1.35;
+  }
+
+  .subpoleFooter{
+    margin-top:10px;
+  }
+
+  .loaderOverlay{
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,.35);
+    backdrop-filter:blur(4px);
+    -webkit-backdrop-filter:blur(4px);
+    z-index:99999;
+  }
+
+  .loaderOverlay.show{
+    display:flex;
+  }
+
+  .loaderBox{
+    width:52px;
+    height:52px;
+    border-radius:999px;
+    background:rgba(0,0,0,.55);
+    border:1px solid rgba(255,255,255,.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 14px 34px rgba(0,0,0,.40);
+  }
+
+  .loaderSpinner{
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    border:3px solid rgba(255,255,255,.25);
+    border-top-color:#ff8c00;
+    animation:spin .8s linear infinite;
+  }
+
+  @keyframes spin{
+    to{ transform:rotate(360deg); }
+  }
 </style>
 </head>
 
 <body>
+  <div class="bg"></div>
 
-<div id="loader">
-<div class="spinner"></div>
-</div>
+  <div id="loader" class="loaderOverlay">
+    <div class="loaderBox">
+      <div class="loaderSpinner"></div>
+    </div>
+  </div>
 
-<div class="adminWrap">
+  <div class="wrap">
+    <div class="topbar">
+      <div class="title">🧭 Organigramme</div>
+      <button class="btn" onclick="window.location.href='admin.html'">Retour</button>
+    </div>
 
-<div class="card">
+    <div class="adminWrap">
+      <div class="dashboard">
+        🧭 Administration de l’organigramme
+        <div class="dashboardSmall">
+          Direction visible directement, pôles repliés par défaut.
+        </div>
+      </div>
 
-<div class="cardTitle">Direction</div>
+      <div id="statusBox" class="status info"></div>
 
-<input id="chef" class="input" placeholder="Chef">
-<input id="adj1" class="input" placeholder="Adjoint 1">
-<input id="adj2" class="input" placeholder="Adjoint 2">
+      <div class="card">
+        <div class="cardTitle">Direction</div>
 
-</div>
+        <div class="field">
+          <label class="label" for="chef">Chef de centre</label>
+          <input class="input" id="chef" type="text">
+        </div>
 
-<div class="card">
+        <div class="field">
+          <label class="label" for="adj1">Adjoint 1</label>
+          <input class="input" id="adj1" type="text">
+        </div>
 
-<div class="cardTitle">Pôles</div>
+        <div class="field">
+          <label class="label" for="adj2">Adjoint 2</label>
+          <input class="input" id="adj2" type="text">
+        </div>
+      </div>
 
-<div id="poleZone"></div>
+      <div class="card">
+        <div class="cardTitle">Pôles</div>
+        <div id="poleZone">
+          <div class="empty">Chargement...</div>
+        </div>
 
-<button class="btn btnSave" onclick="saveOrg()">Enregistrer</button>
+        <div class="btnRow">
+          <button type="button" class="btn2 btnSecondary" id="reloadBtn">Actualiser</button>
+          <button type="button" class="btn2 btnPrimary" id="saveBtn">Enregistrer</button>
+        </div>
 
-</div>
-
-</div>
+        <div class="smallNote">
+          Fonction et nom sont éditables séparément.
+        </div>
+      </div>
+    </div>
+  </div>
 
 <script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+const EMAIL_KEY = "cs_portail_email_v1";
 
-const API="https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec"
-
-let orgData=null
+const state = {
+  actorEmail: "",
+  data: null,
+  openPoleIndex: null
+};
 
 function showLoader(v){
-document.getElementById("loader").style.display=v?"block":"none"
+  document.getElementById("loader").classList.toggle("show", !!v);
 }
 
-function jsonp(url){
-return new Promise(resolve=>{
-const cb="cb"+Date.now()
-const s=document.createElement("script")
-window[cb]=d=>{
-resolve(d)
-delete window[cb]
-s.remove()
-}
-s.src=url+"&callback="+cb
-document.body.appendChild(s)
-})
+function showStatus(type, message){
+  const box = document.getElementById("statusBox");
+  box.className = "status show " + type;
+  box.textContent = message || "";
 }
 
-function parseMember(txt){
-
-if(typeof txt!=="string") return txt
-
-const parts=txt.split(" : ")
-
-if(parts.length===2){
-return{fonction:parts[0].trim(),nom:parts[1].trim()}
+function escapeHtml(v){
+  return String(v == null ? "" : v)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
-return{fonction:"",nom:txt.trim()}
-
+function getCurrentEmail(){
+  return (localStorage.getItem(EMAIL_KEY) || "").trim().toLowerCase();
 }
 
-function memberRow(m){
+function jsonp(params){
+  return new Promise((resolve, reject) => {
+    const callbackName = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+    const script = document.createElement("script");
+    const url = new URL(SCRIPT_URL);
 
-const mem=parseMember(m||"")
+    window[callbackName] = function(data){
+      cleanup();
+      resolve(data);
+    };
 
-return`
+    function cleanup(){
+      try { delete window[callbackName]; } catch(e){}
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
 
-<div class="memberEdit">
+    script.onerror = function(){
+      cleanup();
+      reject(new Error("Erreur de chargement JSONP"));
+    };
 
-<input class="input memberFonction" placeholder="Fonction" value="${mem.fonction||""}">
-<input class="input memberNom" placeholder="Nom" value="${mem.nom||""}">
+    url.searchParams.set("callback", callbackName);
+    url.searchParams.set("_ts", Date.now());
 
-<button class="btn btnRemove" onclick="this.parentElement.remove()">Supprimer</button>
+    Object.keys(params || {}).forEach(k => {
+      url.searchParams.set(k, params[k]);
+    });
 
-</div>
-
-`
-
+    script.src = url.toString();
+    document.body.appendChild(script);
+  });
 }
 
-function render(){
+async function postJson(payload){
+  const res = await fetch(SCRIPT_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
 
-const zone=document.getElementById("poleZone")
-
-let html=""
-
-orgData.poles.forEach((pole,i)=>{
-
-html+=`
-
-<div class="poleItem" style="border-left:6px solid ${pole.color||'#888'}">
-
-<div class="poleHeader"
-style="background:${pole.color||'#444'}20"
-onclick="this.parentElement.classList.toggle('open')">
-
-${pole.label}
-
-<span>▼</span>
-
-</div>
-
-<div class="poleContent">
-
-`
-
-pole.subpoles.forEach((sp,j)=>{
-
-html+=`<h4>${sp.label}</h4>`
-
-const membres=sp.membres||[]
-
-if(membres.length){
-
-membres.forEach(m=>{
-html+=memberRow(m)
-})
-
-}else{
-
-html+=memberRow()
-
+  const data = await res.json();
+  return data;
 }
 
-html+=`
+async function checkAdmin(){
+  state.actorEmail = getCurrentEmail();
 
-<button class="btn btnAdd" onclick="addMember(this)">Ajouter</button>
+  if (!state.actorEmail) {
+    showStatus("err", "Aucun email admin détecté.");
+    return false;
+  }
 
-<br><br>
+  const r = await jsonp({
+    view: "auth_check",
+    email: state.actorEmail
+  });
 
-`
+  if (!r || !r.ok) {
+    showStatus("err", "Utilisateur non autorisé.");
+    return false;
+  }
 
-})
+  if (String(r.role || "").toLowerCase() !== "admin") {
+    showStatus("err", "Accès refusé : admin uniquement.");
+    return false;
+  }
 
-html+=`</div></div>`
-
-})
-
-zone.innerHTML=html
-
+  return true;
 }
 
-function addMember(btn){
-btn.insertAdjacentHTML("beforebegin",memberRow())
+function memberRowHtml(membre){
+  const fonction = String((membre && membre.fonction) || "").trim();
+  const nom = String((membre && membre.nom) || "").trim();
+
+  return `
+    <div class="memberEdit">
+      <div class="field">
+        <label class="label">Fonction</label>
+        <input class="input member-fonction" type="text" value="${escapeHtml(fonction)}" placeholder="Ex. Président, Trésorier, Responsable...">
+      </div>
+      <div class="field">
+        <label class="label">Nom</label>
+        <input class="input member-nom" type="text" value="${escapeHtml(nom)}" placeholder="Nom de l'agent">
+      </div>
+      <div class="memberActions">
+        <button type="button" class="btnSmall btnRemove removeMemberBtn">Supprimer</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderPoles(){
+  const zone = document.getElementById("poleZone");
+  const poles = (state.data && Array.isArray(state.data.poles)) ? state.data.poles : [];
+
+  if (!poles.length) {
+    zone.innerHTML = '<div class="empty">Aucun pôle trouvé.</div>';
+    return;
+  }
+
+  let html = '<div class="poleList">';
+
+  poles.forEach((pole, poleIndex) => {
+    const isOpen = state.openPoleIndex === poleIndex;
+    const poleBg = (pole.color ? pole.color + "20" : "rgba(255,255,255,.08)");
+
+    html += `
+      <div class="poleItem ${isOpen ? 'open' : ''}" data-pole-index="${poleIndex}" style="border-left:6px solid ${escapeHtml(pole.color || '#888')}">
+        <div class="poleHeader" data-pole-index="${poleIndex}" style="background:${escapeHtml(poleBg)}">
+          <div class="poleHeaderLeft">
+            <div class="poleChevron">▶</div>
+            <div class="poleName">${escapeHtml(pole.label || "")}</div>
+          </div>
+          <div class="poleColor" style="background:${escapeHtml(pole.color || "#999")}"></div>
+        </div>
+
+        <div class="poleContent">
+    `;
+
+    if (Array.isArray(pole.subpoles) && pole.subpoles.length) {
+      html += '<div class="subpoleList">';
+
+      pole.subpoles.forEach((subpole, subIndex) => {
+        html += `
+          <div class="subpoleItem" data-pole-index="${poleIndex}" data-subpole-index="${subIndex}">
+            <div class="subpoleTitle">${escapeHtml(subpole.label || "")}</div>
+            <div class="memberList">
+        `;
+
+        const membres = Array.isArray(subpole.membres) ? subpole.membres : [];
+        if (membres.length) {
+          membres.forEach(membre => {
+            html += memberRowHtml(membre);
+          });
+        } else {
+          html += memberRowHtml({ fonction:"", nom:"" });
+        }
+
+        html += `
+            </div>
+            <div class="subpoleFooter">
+              <button type="button" class="btnSmall btnAdd addMemberBtn">Ajouter un nom</button>
+            </div>
+          </div>
+        `;
+      });
+
+      html += '</div>';
+    } else {
+      html += '<div class="empty">Aucun sous-pôle.</div>';
+    }
+
+    html += `
+        </div>
+      </div>
+    `;
+  });
+
+  html += '</div>';
+  zone.innerHTML = html;
+
+  bindDynamicButtons();
+  bindPoleHeaders();
+}
+
+function bindPoleHeaders(){
+  document.querySelectorAll(".poleHeader").forEach(header => {
+    header.onclick = function(){
+      const idx = Number(this.dataset.poleIndex);
+      state.openPoleIndex = (state.openPoleIndex === idx) ? null : idx;
+      renderPoles();
+    };
+  });
+}
+
+function bindDynamicButtons(){
+  document.querySelectorAll(".addMemberBtn").forEach(btn => {
+    btn.onclick = function(){
+      const subpole = this.closest(".subpoleItem");
+      const list = subpole.querySelector(".memberList");
+      list.insertAdjacentHTML("beforeend", memberRowHtml({ fonction:"", nom:"" }));
+      bindDynamicButtons();
+    };
+  });
+
+  document.querySelectorAll(".removeMemberBtn").forEach(btn => {
+    btn.onclick = function(){
+      const member = this.closest(".memberEdit");
+      const list = member.parentElement;
+      member.remove();
+
+      if (!list.querySelector(".memberEdit")) {
+        list.insertAdjacentHTML("beforeend", memberRowHtml({ fonction:"", nom:"" }));
+        bindDynamicButtons();
+      }
+    };
+  });
 }
 
 async function loadOrg(){
+  try {
+    showLoader(true);
+    showStatus("info", "Chargement de l’organigramme...");
 
-showLoader(true)
+    const r = await jsonp({
+      view: "org_admin_get",
+      actorEmail: state.actorEmail
+    });
 
-const r=await jsonp(API+"?view=org_admin_get")
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de chargement.");
+      document.getElementById("poleZone").innerHTML = '<div class="empty">Impossible de charger l’organigramme.</div>';
+      showLoader(false);
+      return;
+    }
 
-orgData=r
+    state.data = r;
+    state.openPoleIndex = null;
 
-document.getElementById("chef").value=r.direction.chef||""
-document.getElementById("adj1").value=r.direction.adj1||""
-document.getElementById("adj2").value=r.direction.adj2||""
+    document.getElementById("chef").value = (r.direction && r.direction.chef) || "";
+    document.getElementById("adj1").value = (r.direction && r.direction.adj1) || "";
+    document.getElementById("adj2").value = (r.direction && r.direction.adj2) || "";
 
-render()
+    renderPoles();
+    showStatus("ok", "Organigramme chargé.");
+    showLoader(false);
+  } catch(err) {
+    showStatus("err", err && err.message ? err.message : String(err));
+    document.getElementById("poleZone").innerHTML = '<div class="empty">Erreur de chargement.</div>';
+    showLoader(false);
+  }
+}
 
-showLoader(false)
+function collectPayload(){
+  const payload = {
+    direction: {
+      chef: document.getElementById("chef").value.trim(),
+      adj1: document.getElementById("adj1").value.trim(),
+      adj2: document.getElementById("adj2").value.trim()
+    },
+    poles: []
+  };
 
+  const poleNodes = document.querySelectorAll(".poleItem");
+
+  poleNodes.forEach(poleNode => {
+    const poleIndex = Number(poleNode.dataset.poleIndex);
+    const originalPole = state.data.poles[poleIndex];
+
+    const poleObj = {
+      id: originalPole.id,
+      subpoles: []
+    };
+
+    const subpoleNodes = poleNode.querySelectorAll(".subpoleItem");
+    subpoleNodes.forEach(subNode => {
+      const subIndex = Number(subNode.dataset.subpoleIndex);
+      const originalSub = originalPole.subpoles[subIndex];
+
+      const subObj = {
+        id: originalSub.id,
+        membres: []
+      };
+
+      const memberNodes = subNode.querySelectorAll(".memberEdit");
+      let ordre = 1;
+
+      memberNodes.forEach(memberNode => {
+        const fonction = (memberNode.querySelector(".member-fonction")?.value || "").trim();
+        const nom = (memberNode.querySelector(".member-nom")?.value || "").trim();
+
+        if (!nom) return;
+
+        subObj.membres.push({
+          fonction,
+          nom,
+          ordre
+        });
+        ordre++;
+      });
+
+      poleObj.subpoles.push(subObj);
+    });
+
+    payload.poles.push(poleObj);
+  });
+
+  return payload;
 }
 
 async function saveOrg(){
+  try{
+    const payload = collectPayload();
 
-showLoader(true)
+    showLoader(true);
+    showStatus("info", "Enregistrement en cours...");
 
-const payload={
-direction:{
-chef:document.getElementById("chef").value,
-adj1:document.getElementById("adj1").value,
-adj2:document.getElementById("adj2").value
-},
-poles:[]
+    const r = await postJson({
+      view: "org_admin_save",
+      actorEmail: state.actorEmail,
+      payload: JSON.stringify(payload)
+    });
+
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
+      showLoader(false);
+      return;
+    }
+
+    showStatus("ok", "Organigramme enregistré.");
+    await loadOrg();
+    showLoader(false);
+
+  }catch(err){
+    showStatus("err", err && err.message ? err.message : String(err));
+    showLoader(false);
+  }
 }
 
-document.querySelectorAll(".poleItem").forEach((pole,i)=>{
+document.getElementById("reloadBtn").addEventListener("click", loadOrg);
+document.getElementById("saveBtn").addEventListener("click", saveOrg);
 
-const poleData=orgData.poles[i]
-
-const poleObj={
-id:poleData.id,
-subpoles:[]
-}
-
-pole.querySelectorAll(".poleContent h4").forEach((title,j)=>{
-
-const sp=poleData.subpoles[j]
-
-const subObj={
-id:sp.id,
-membres:[]
-}
-
-title.parentElement.querySelectorAll(".memberEdit").forEach(m=>{
-
-const fonction=m.querySelector(".memberFonction").value
-const nom=m.querySelector(".memberNom").value
-
-if(nom){
-
-subObj.membres.push({
-fonction,
-nom
-})
-
-}
-
-})
-
-poleObj.subpoles.push(subObj)
-
-})
-
-payload.poles.push(poleObj)
-
-})
-
-await jsonp(API+"?view=org_admin_save&payload="+encodeURIComponent(JSON.stringify(payload)))
-
-showLoader(false)
-
-alert("Organigramme enregistré")
-
-loadOrg()
-
-}
-
-loadOrg()
-
+(async function init(){
+  const ok = await checkAdmin();
+  if (!ok) {
+    document.getElementById("poleZone").innerHTML = '<div class="empty">Accès refusé.</div>';
+    return;
+  }
+  await loadOrg();
+})();
 </script>
-
 </body>
 </html>
