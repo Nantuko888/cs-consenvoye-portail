@@ -97,10 +97,20 @@
       font-weight:900;
       cursor:pointer;
       box-shadow:0 10px 24px rgba(0,0,0,.18);
+      transition:background .22s ease, transform .12s ease, opacity .18s ease;
+    }
+
+    .btn2:active{
+      transform:translateY(1px);
     }
 
     .btnPrimary{
       background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
+      color:#fff;
+    }
+
+    .btnPrimary.saving{
+      background:linear-gradient(180deg, rgba(47,158,91,.95), rgba(34,128,73,.95));
       color:#fff;
     }
 
@@ -113,6 +123,11 @@
     .btnDanger{
       background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
       color:#fff;
+    }
+
+    .btn2[disabled]{
+      opacity:.7;
+      cursor:default;
     }
 
     .collapsible{
@@ -431,7 +446,7 @@
             </div>
 
             <div class="agentActions">
-              <button class="btn2 btnPrimary" type="button" onclick="createAgent()">Créer l’agent</button>
+              <button class="btn2 btnPrimary" type="button" onclick="createAgent(this)">Créer l’agent</button>
             </div>
           </div>
         </div>
@@ -456,6 +471,20 @@ function showStatus(type, message){
   const box = document.getElementById("statusBox");
   box.className = "status show " + type;
   box.textContent = message || "";
+}
+
+function setButtonSaving(btn, saving, savingText = "Enregistrement..."){
+  if (!btn) return;
+  if (saving) {
+    btn.dataset.originalText = btn.textContent;
+    btn.textContent = savingText;
+    btn.classList.add("saving");
+    btn.disabled = true;
+  } else {
+    btn.textContent = btn.dataset.originalText || btn.textContent;
+    btn.classList.remove("saving");
+    btn.disabled = false;
+  }
 }
 
 function escapeHtml(v){
@@ -711,6 +740,7 @@ async function saveCard(btn){
   const amical = card.querySelector(".field-amical")?.checked ? 1 : 0;
 
   try{
+    setButtonSaving(btn, true);
     showStatus("info", "Enregistrement...");
 
     const r = await jsonp({
@@ -726,6 +756,7 @@ async function saveCard(btn){
 
     if (!r || !r.ok) {
       showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
+      setButtonSaving(btn, false);
       return;
     }
 
@@ -734,6 +765,8 @@ async function saveCard(btn){
 
   }catch(err){
     showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false);
   }
 }
 
@@ -766,7 +799,7 @@ async function deleteCard(btn){
   }
 }
 
-async function createAgent(){
+async function createAgent(btn){
   const nom = (document.getElementById("new_nom")?.value || "").trim();
   const email = (document.getElementById("new_email")?.value || "").trim().toLowerCase();
   const role = (document.getElementById("new_role")?.value || "agent").trim().toLowerCase();
@@ -774,6 +807,7 @@ async function createAgent(){
   const amical = document.getElementById("new_amical")?.checked ? 1 : 0;
 
   try{
+    setButtonSaving(btn, true, "Création...");
     showStatus("info", "Création de l’agent...");
 
     const r = await jsonp({
@@ -789,6 +823,7 @@ async function createAgent(){
 
     if (!r || !r.ok) {
       showStatus("err", (r && r.error) ? r.error : "Erreur de création.");
+      setButtonSaving(btn, false);
       return;
     }
 
@@ -803,6 +838,8 @@ async function createAgent(){
 
   }catch(err){
     showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false, "Créer l’agent");
   }
 }
 
