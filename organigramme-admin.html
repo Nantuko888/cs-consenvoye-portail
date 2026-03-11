@@ -1,332 +1,365 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Organigramme admin — CS Consenvoye</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Organigramme admin — CS Consenvoye</title>
 
-<link rel="stylesheet" href="cs-theme.css">
+  <link rel="stylesheet" href="cs-theme.css">
 
-<style>
-  .adminWrap{
-    max-width:980px;
-    margin:0 auto;
-    padding:14px;
-  }
+  <style>
+    .adminWrap{
+      max-width:980px;
+      margin:0 auto;
+      padding:14px;
+    }
 
-  .dashboard{
-    padding:14px 16px;
-    margin-bottom:16px;
-    border-radius:18px;
-    background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15));
-    border:1px solid rgba(255,255,255,.12);
-    box-shadow:var(--shadow);
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-    font-weight:900;
-    color:rgba(255,255,255,.95);
-  }
+    .dashboard{
+      padding:14px 16px;
+      margin-bottom:16px;
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      color:rgba(255,255,255,.96);
+    }
 
-  .dashboardSmall{
-    margin-top:8px;
-    font-size:13px;
-    font-weight:800;
-    color:rgba(255,255,255,.78);
-    line-height:1.35;
-  }
+    .dashboardTitle{
+      font-size:20px;
+      font-weight:900;
+      line-height:1.2;
+    }
 
-  .card{
-    border-radius:20px;
-    padding:14px;
-    margin-bottom:14px;
-    border:1px solid rgba(255,255,255,.10);
-    box-shadow:var(--shadow);
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-    background:rgba(255,255,255,.06);
-    color:rgba(255,255,255,.95);
-  }
+    .dashboardSmall{
+      margin-top:8px;
+      font-size:13px;
+      font-weight:800;
+      color:rgba(255,255,255,.78);
+      line-height:1.35;
+    }
 
-  .cardTitle{
-    font-size:18px;
-    font-weight:900;
-    margin-bottom:12px;
-  }
+    .status{
+      display:none;
+      margin-bottom:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:800;
+      line-height:1.4;
+      border:1px solid rgba(255,255,255,.12);
+    }
 
-  .status{
-    display:none;
-    margin-bottom:14px;
-    padding:12px 14px;
-    border-radius:14px;
-    font-weight:800;
-    line-height:1.4;
-    border:1px solid rgba(255,255,255,.12);
-  }
+    .status.show{ display:block; }
+    .status.ok{
+      background:rgba(47,158,91,.18);
+      color:#d9ffe7;
+    }
+    .status.err{
+      background:rgba(220,70,70,.18);
+      color:#ffe1e1;
+    }
+    .status.info{
+      background:rgba(47,111,212,.18);
+      color:#dde9ff;
+    }
 
-  .status.show{ display:block; }
-  .status.ok{
-    background:rgba(47,158,91,.18);
-    color:#d9ffe7;
-  }
-  .status.err{
-    background:rgba(220,70,70,.18);
-    color:#ffe1e1;
-  }
-  .status.info{
-    background:rgba(47,111,212,.18);
-    color:#dde9ff;
-  }
+    .card{
+      border-radius:20px;
+      padding:14px;
+      margin-bottom:14px;
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.95);
+    }
 
-  .field{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    margin-bottom:10px;
-  }
+    .cardTitle{
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:12px;
+    }
 
-  .label{
-    font-size:13px;
-    font-weight:900;
-    color:rgba(255,255,255,.80);
-  }
+    .directionGrid{
+      display:grid;
+      gap:10px;
+      grid-template-columns:1fr;
+    }
 
-  .input{
-    width:100%;
-    min-height:46px;
-    border:none;
-    outline:none;
-    border-radius:14px;
-    padding:12px 14px;
-    background:rgba(255,255,255,.10);
-    color:#fff;
-    border:1px solid rgba(255,255,255,.12);
-    font-size:15px;
-  }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
 
-  .poleList{
-    display:grid;
-    gap:12px;
-  }
+    .label{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.80);
+    }
 
-  .poleItem{
-    border-radius:16px;
-    overflow:hidden;
-    background:rgba(255,255,255,.07);
-    border:1px solid rgba(255,255,255,.10);
-    box-shadow:0 8px 20px rgba(0,0,0,.12);
-  }
+    .input{
+      width:100%;
+      min-height:46px;
+      border:none;
+      outline:none;
+      border-radius:14px;
+      padding:12px 14px;
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+      font-size:15px;
+    }
 
-  .poleHeader{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    padding:14px;
-    cursor:pointer;
-    user-select:none;
-    -webkit-tap-highlight-color:transparent;
-  }
+    .poleList{
+      display:grid;
+      gap:12px;
+    }
 
-  .poleHeader:active{
-    transform:translateY(1px);
-  }
+    .poleItem{
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      box-shadow:0 8px 20px rgba(0,0,0,.12);
+    }
 
-  .poleHeaderLeft{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    min-width:0;
-    flex:1 1 auto;
-  }
+    .poleHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:14px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+    }
 
-  .poleChevron{
-    width:18px;
-    text-align:center;
-    font-size:16px;
-    color:rgba(255,255,255,.80);
-    flex:0 0 auto;
-    transition:transform .18s ease;
-  }
+    .poleHeaderLeft{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+      flex:1 1 auto;
+    }
 
-  .poleItem.open .poleChevron{
-    transform:rotate(90deg);
-  }
+    .poleChevron{
+      width:18px;
+      text-align:center;
+      font-size:16px;
+      color:rgba(255,255,255,.85);
+      transition:transform .18s ease;
+      flex:0 0 auto;
+    }
 
-  .poleName{
-    font-size:17px;
-    font-weight:900;
-    color:rgba(255,255,255,.96);
-    line-height:1.25;
-    min-width:0;
-    word-break:break-word;
-  }
+    .poleItem.open .poleChevron{
+      transform:rotate(90deg);
+    }
 
-  .poleColor{
-    width:16px;
-    height:16px;
-    border-radius:999px;
-    border:1px solid rgba(255,255,255,.25);
-    flex:0 0 auto;
-  }
+    .poleName{
+      font-size:17px;
+      font-weight:900;
+      color:rgba(255,255,255,.98);
+      line-height:1.2;
+      word-break:break-word;
+    }
 
-  .poleContent{
-    display:none;
-    padding:0 14px 14px;
-  }
+    .poleBadge{
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      color:#fff;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      flex:0 0 auto;
+    }
 
-  .poleItem.open .poleContent{
-    display:block;
-  }
+    .poleContent{
+      display:none;
+      padding:0 14px 14px;
+    }
 
-  .subpoleList{
-    display:grid;
-    gap:10px;
-    margin-top:4px;
-  }
+    .poleItem.open .poleContent{
+      display:block;
+    }
 
-  .subpoleItem{
-    border-radius:14px;
-    padding:12px;
-    background:rgba(0,0,0,.18);
-    border:1px solid rgba(255,255,255,.08);
-  }
+    .subpoleList{
+      display:grid;
+      gap:10px;
+      margin-top:4px;
+    }
 
-  .subpoleTitle{
-    font-size:14px;
-    font-weight:900;
-    color:rgba(255,255,255,.86);
-    margin-bottom:8px;
-  }
+    .subpoleItem{
+      border-radius:16px;
+      padding:12px;
+      background:rgba(0,0,0,.16);
+      border:1px solid rgba(255,255,255,.08);
+    }
 
-  .memberList{
-    display:grid;
-    gap:8px;
-  }
+    .subpoleTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+    }
 
-  .memberEdit{
-    display:grid;
-    gap:8px;
-    padding:10px;
-    border-radius:12px;
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.08);
-  }
+    .subpoleTitle{
+      font-size:14px;
+      font-weight:900;
+      color:rgba(255,255,255,.90);
+      line-height:1.3;
+    }
 
-  .memberActions{
-    display:flex;
-    justify-content:flex-end;
-  }
+    .memberList{
+      display:grid;
+      gap:8px;
+    }
 
-  .btnRow{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:8px;
-  }
+    .memberEdit{
+      display:grid;
+      gap:8px;
+      padding:10px;
+      border-radius:14px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+    }
 
-  .btn2{
-    border:none;
-    border-radius:14px;
-    min-height:46px;
-    padding:12px 16px;
-    font-weight:900;
-    cursor:pointer;
-    box-shadow:0 10px 24px rgba(0,0,0,.18);
-  }
+    .preview{
+      padding:8px 10px;
+      border-radius:12px;
+      background:rgba(255,255,255,.05);
+      border:1px dashed rgba(255,255,255,.10);
+      font-size:13px;
+      font-weight:800;
+      color:rgba(255,255,255,.80);
+      line-height:1.35;
+    }
 
-  .btnPrimary{
-    background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
-    color:#fff;
-  }
+    .memberActions{
+      display:flex;
+      justify-content:flex-end;
+    }
 
-  .btnSecondary{
-    background:rgba(255,255,255,.14);
-    color:#fff;
-    border:1px solid rgba(255,255,255,.12);
-  }
+    .btnRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
 
-  .btnSmall{
-    min-height:40px;
-    padding:10px 12px;
-    border-radius:12px;
-    font-size:14px;
-    font-weight:900;
-    border:none;
-    cursor:pointer;
-  }
+    .btn2{
+      border:none;
+      border-radius:14px;
+      min-height:46px;
+      padding:12px 16px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
 
-  .btnAdd{
-    background:rgba(47,158,91,.90);
-    color:#fff;
-  }
+    .btnPrimary{
+      background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
+      color:#fff;
+    }
 
-  .btnRemove{
-    background:rgba(220,70,70,.92);
-    color:#fff;
-  }
+    .btnSecondary{
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+    }
 
-  .empty{
-    padding:14px;
-    border-radius:14px;
-    background:rgba(255,255,255,.05);
-    border:1px dashed rgba(255,255,255,.10);
-    color:rgba(255,255,255,.76);
-    font-weight:800;
-  }
+    .btnSmall{
+      min-height:40px;
+      padding:10px 12px;
+      border-radius:12px;
+      font-size:14px;
+      font-weight:900;
+      border:none;
+      cursor:pointer;
+    }
 
-  .smallNote{
-    margin-top:8px;
-    color:rgba(255,255,255,.72);
-    font-size:13px;
-    font-weight:800;
-    line-height:1.35;
-  }
+    .btnAdd{
+      background:rgba(47,158,91,.90);
+      color:#fff;
+    }
 
-  .subpoleFooter{
-    margin-top:10px;
-  }
+    .btnRemove{
+      background:rgba(220,70,70,.92);
+      color:#fff;
+    }
 
-  .loaderOverlay{
-    position:fixed;
-    inset:0;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    background:rgba(0,0,0,.35);
-    backdrop-filter:blur(4px);
-    -webkit-backdrop-filter:blur(4px);
-    z-index:99999;
-  }
+    .empty{
+      padding:14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      border:1px dashed rgba(255,255,255,.10);
+      color:rgba(255,255,255,.76);
+      font-weight:800;
+    }
 
-  .loaderOverlay.show{
-    display:flex;
-  }
+    .smallNote{
+      margin-top:8px;
+      color:rgba(255,255,255,.72);
+      font-size:13px;
+      font-weight:800;
+      line-height:1.35;
+    }
 
-  .loaderBox{
-    width:52px;
-    height:52px;
-    border-radius:999px;
-    background:rgba(0,0,0,.55);
-    border:1px solid rgba(255,255,255,.15);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    box-shadow:0 14px 34px rgba(0,0,0,.40);
-  }
+    .loaderOverlay{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.35);
+      backdrop-filter:blur(4px);
+      -webkit-backdrop-filter:blur(4px);
+      z-index:99999;
+    }
 
-  .loaderSpinner{
-    width:24px;
-    height:24px;
-    border-radius:50%;
-    border:3px solid rgba(255,255,255,.25);
-    border-top-color:#ff8c00;
-    animation:spin .8s linear infinite;
-  }
+    .loaderOverlay.show{
+      display:flex;
+    }
 
-  @keyframes spin{
-    to{ transform:rotate(360deg); }
-  }
-</style>
+    .loaderBox{
+      width:52px;
+      height:52px;
+      border-radius:999px;
+      background:rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.15);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 14px 34px rgba(0,0,0,.40);
+    }
+
+    .loaderSpinner{
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      border:3px solid rgba(255,255,255,.25);
+      border-top-color:#ff8c00;
+      animation:spin .8s linear infinite;
+    }
+
+    @keyframes spin{
+      to{ transform:rotate(360deg); }
+    }
+
+    iframe[name="saveFrame"]{
+      display:none;
+    }
+
+    @media (min-width:800px){
+      .directionGrid{
+        grid-template-columns:repeat(3, minmax(0,1fr));
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -338,6 +371,8 @@
     </div>
   </div>
 
+  <iframe name="saveFrame"></iframe>
+
   <div class="wrap">
     <div class="topbar">
       <div class="title">🧭 Organigramme</div>
@@ -346,9 +381,9 @@
 
     <div class="adminWrap">
       <div class="dashboard">
-        🧭 Administration de l’organigramme
+        <div class="dashboardTitle">Administration de l’organigramme</div>
         <div class="dashboardSmall">
-          Direction visible directement, pôles repliés par défaut.
+          Modifie la direction et les membres des sous-pôles depuis une seule page.
         </div>
       </div>
 
@@ -357,24 +392,27 @@
       <div class="card">
         <div class="cardTitle">Direction</div>
 
-        <div class="field">
-          <label class="label" for="chef">Chef de centre</label>
-          <input class="input" id="chef" type="text">
-        </div>
+        <div class="directionGrid">
+          <div class="field">
+            <label class="label" for="chef">Chef de centre</label>
+            <input class="input" id="chef" type="text">
+          </div>
 
-        <div class="field">
-          <label class="label" for="adj1">Adjoint 1</label>
-          <input class="input" id="adj1" type="text">
-        </div>
+          <div class="field">
+            <label class="label" for="adj1">Adjoint 1</label>
+            <input class="input" id="adj1" type="text">
+          </div>
 
-        <div class="field">
-          <label class="label" for="adj2">Adjoint 2</label>
-          <input class="input" id="adj2" type="text">
+          <div class="field">
+            <label class="label" for="adj2">Adjoint 2</label>
+            <input class="input" id="adj2" type="text">
+          </div>
         </div>
       </div>
 
       <div class="card">
         <div class="cardTitle">Pôles</div>
+
         <div id="poleZone">
           <div class="empty">Chargement...</div>
         </div>
@@ -385,7 +423,7 @@
         </div>
 
         <div class="smallNote">
-          Fonction et nom sont éditables séparément.
+          Les pôles sont repliés au départ. Chaque ligne te montre aussi l’aperçu affiché dans l’organigramme.
         </div>
       </div>
     </div>
@@ -457,19 +495,6 @@ function jsonp(params){
   });
 }
 
-async function postJson(payload){
-  const res = await fetch(SCRIPT_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  });
-
-  const data = await res.json();
-  return data;
-}
-
 async function checkAdmin(){
   state.actorEmail = getCurrentEmail();
 
@@ -496,9 +521,17 @@ async function checkAdmin(){
   return true;
 }
 
+function getPreviewText(fonction, nom){
+  const f = String(fonction || "").trim();
+  const n = String(nom || "").trim();
+  if (f && n) return `${f} : ${n}`;
+  return n || "Aucun nom renseigné";
+}
+
 function memberRowHtml(membre){
   const fonction = String((membre && membre.fonction) || "").trim();
   const nom = String((membre && membre.nom) || "").trim();
+  const preview = getPreviewText(fonction, nom);
 
   return `
     <div class="memberEdit">
@@ -510,6 +543,7 @@ function memberRowHtml(membre){
         <label class="label">Nom</label>
         <input class="input member-nom" type="text" value="${escapeHtml(nom)}" placeholder="Nom de l'agent">
       </div>
+      <div class="preview member-preview">${escapeHtml(preview)}</div>
       <div class="memberActions">
         <button type="button" class="btnSmall btnRemove removeMemberBtn">Supprimer</button>
       </div>
@@ -531,6 +565,7 @@ function renderPoles(){
   poles.forEach((pole, poleIndex) => {
     const isOpen = state.openPoleIndex === poleIndex;
     const poleBg = (pole.color ? pole.color + "20" : "rgba(255,255,255,.08)");
+    const count = (pole.subpoles || []).reduce((sum, sp) => sum + ((sp.membres || []).length || 0), 0);
 
     html += `
       <div class="poleItem ${isOpen ? 'open' : ''}" data-pole-index="${poleIndex}" style="border-left:6px solid ${escapeHtml(pole.color || '#888')}">
@@ -539,7 +574,7 @@ function renderPoles(){
             <div class="poleChevron">▶</div>
             <div class="poleName">${escapeHtml(pole.label || "")}</div>
           </div>
-          <div class="poleColor" style="background:${escapeHtml(pole.color || "#999")}"></div>
+          <div class="poleBadge">${count} membre${count > 1 ? 's' : ''}</div>
         </div>
 
         <div class="poleContent">
@@ -551,7 +586,10 @@ function renderPoles(){
       pole.subpoles.forEach((subpole, subIndex) => {
         html += `
           <div class="subpoleItem" data-pole-index="${poleIndex}" data-subpole-index="${subIndex}">
-            <div class="subpoleTitle">${escapeHtml(subpole.label || "")}</div>
+            <div class="subpoleTop">
+              <div class="subpoleTitle">${escapeHtml(subpole.label || "")}</div>
+            </div>
+
             <div class="memberList">
         `;
 
@@ -566,6 +604,7 @@ function renderPoles(){
 
         html += `
             </div>
+
             <div class="subpoleFooter">
               <button type="button" class="btnSmall btnAdd addMemberBtn">Ajouter un nom</button>
             </div>
@@ -589,6 +628,7 @@ function renderPoles(){
 
   bindDynamicButtons();
   bindPoleHeaders();
+  bindPreviewInputs();
 }
 
 function bindPoleHeaders(){
@@ -601,6 +641,21 @@ function bindPoleHeaders(){
   });
 }
 
+function bindPreviewInputs(){
+  document.querySelectorAll(".memberEdit").forEach(box => {
+    const f = box.querySelector(".member-fonction");
+    const n = box.querySelector(".member-nom");
+    const p = box.querySelector(".member-preview");
+
+    function refreshPreview(){
+      p.textContent = getPreviewText(f.value, n.value);
+    }
+
+    f.addEventListener("input", refreshPreview);
+    n.addEventListener("input", refreshPreview);
+  });
+}
+
 function bindDynamicButtons(){
   document.querySelectorAll(".addMemberBtn").forEach(btn => {
     btn.onclick = function(){
@@ -608,6 +663,7 @@ function bindDynamicButtons(){
       const list = subpole.querySelector(".memberList");
       list.insertAdjacentHTML("beforeend", memberRowHtml({ fonction:"", nom:"" }));
       bindDynamicButtons();
+      bindPreviewInputs();
     };
   });
 
@@ -620,6 +676,7 @@ function bindDynamicButtons(){
       if (!list.querySelector(".memberEdit")) {
         list.insertAdjacentHTML("beforeend", memberRowHtml({ fonction:"", nom:"" }));
         bindDynamicButtons();
+        bindPreviewInputs();
       }
     };
   });
@@ -716,32 +773,73 @@ function collectPayload(){
   return payload;
 }
 
-async function saveOrg(){
-  try{
-    const payload = collectPayload();
+function submitToAppsScript(payload){
+  return new Promise((resolve, reject) => {
+    const iframe = document.querySelector('iframe[name="saveFrame"]');
+    const form = document.createElement("form");
 
-    showLoader(true);
-    showStatus("info", "Enregistrement en cours...");
+    form.method = "POST";
+    form.action = SCRIPT_URL;
+    form.target = "saveFrame";
+    form.style.display = "none";
 
-    const r = await postJson({
+    const fields = {
       view: "org_admin_save",
       actorEmail: state.actorEmail,
       payload: JSON.stringify(payload)
+    };
+
+    Object.keys(fields).forEach(key => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value = fields[key];
+      form.appendChild(input);
     });
 
-    if (!r || !r.ok) {
-      showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
-      showLoader(false);
-      return;
-    }
+    let done = false;
 
-    showStatus("ok", "Organigramme enregistré.");
+    const cleanup = () => {
+      if (form.parentNode) form.parentNode.removeChild(form);
+      iframe.removeEventListener("load", onLoad);
+    };
+
+    const onLoad = () => {
+      if (done) return;
+      done = true;
+      cleanup();
+      resolve(true);
+    };
+
+    iframe.addEventListener("load", onLoad);
+    document.body.appendChild(form);
+    form.submit();
+
+    setTimeout(() => {
+      if (done) return;
+      done = true;
+      cleanup();
+      resolve(true);
+    }, 1500);
+  });
+}
+
+async function saveOrg(){
+  try{
+    showLoader(true);
+    showStatus("info","Enregistrement...");
+
+    const payload = collectPayload();
+
+    await submitToAppsScript(payload);
+
+    showStatus("ok","Organigramme enregistré");
     await loadOrg();
     showLoader(false);
 
   }catch(err){
-    showStatus("err", err && err.message ? err.message : String(err));
     showLoader(false);
+    showStatus("err", err?.message || String(err));
   }
 }
 
