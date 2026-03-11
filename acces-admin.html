@@ -49,6 +49,7 @@
       line-height:1.4;
       border:1px solid rgba(255,255,255,.12);
     }
+
     .status.show{ display:block; }
     .status.ok{
       background:rgba(47,158,91,.18);
@@ -63,105 +64,144 @@
       color:#dde9ff;
     }
 
-    .accordion{
+    .card{
       border-radius:20px;
-      overflow:hidden;
+      padding:14px;
       margin-bottom:14px;
       border:1px solid rgba(255,255,255,.10);
       box-shadow:var(--shadow);
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
       background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.95);
     }
 
-    .accordionHeader{
+    .cardTitle{
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:12px;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    .btn2{
+      border:none;
+      border-radius:14px;
+      min-height:44px;
+      padding:12px 16px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+
+    .btnPrimary{
+      background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
+      color:#fff;
+    }
+
+    .btnSecondary{
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .btnDanger{
+      background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
+      color:#fff;
+    }
+
+    .collapsible{
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      margin-bottom:12px;
+      box-shadow:0 8px 20px rgba(0,0,0,.12);
+    }
+
+    .collapsibleHeader{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
-      padding:16px;
+      gap:10px;
+      padding:14px;
       cursor:pointer;
       user-select:none;
       -webkit-tap-highlight-color:transparent;
     }
 
-    .accordionHeader:active{
+    .collapsibleHeader:active{
       transform:translateY(1px);
     }
 
-    .accordionTitle{
+    .collapsibleLeft{
       display:flex;
       align-items:center;
-      gap:12px;
+      gap:10px;
       min-width:0;
       flex:1 1 auto;
-      color:rgba(255,255,255,.96);
-      font-size:18px;
-      font-weight:900;
     }
 
-    .accordionArrow{
-      font-size:18px;
-      color:rgba(255,255,255,.88);
+    .chevron{
+      width:18px;
+      text-align:center;
+      font-size:16px;
+      color:rgba(255,255,255,.85);
       transition:transform .18s ease;
       flex:0 0 auto;
     }
 
-    .accordion.open .accordionArrow{
-      transform:rotate(180deg);
+    .collapsible.open .chevron{
+      transform:rotate(90deg);
     }
 
-    .accordionContent{
-      display:none;
-      padding:0 12px 12px;
-    }
-
-    .accordion.open .accordionContent{
-      display:block;
-    }
-
-    .portalHeader{
-      background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18));
-    }
-
-    .amicaleHeader{
-      background:linear-gradient(180deg, rgba(212,106,0,.34), rgba(212,106,0,.18));
-    }
-
-    .card{
-      border-radius:16px;
-      padding:12px;
-      margin-top:12px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:0 8px 20px rgba(0,0,0,.12);
-      color:rgba(255,255,255,.95);
-    }
-
-    .cardTop{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:10px;
-    }
-
-    .cardName{
+    .agentName{
       font-size:16px;
       font-weight:900;
-      line-height:1.25;
-      color:rgba(255,255,255,.96);
+      color:rgba(255,255,255,.97);
+      line-height:1.2;
+      word-break:break-word;
     }
 
-    .badge{
+    .summarySwitches{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex:0 0 auto;
+    }
+
+    .miniSwitch{
+      display:flex;
+      align-items:center;
+      gap:6px;
       padding:6px 10px;
       border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
       font-size:12px;
       font-weight:900;
-      background:rgba(255,255,255,.12);
-      border:1px solid rgba(255,255,255,.18);
       color:#fff;
-      flex:0 0 auto;
+    }
+
+    .miniSwitch input{
+      width:18px;
+      height:18px;
+      accent-color:#ff8c00;
+      margin:0;
+    }
+
+    .collapsibleContent{
+      display:none;
+      padding:0 14px 14px;
+    }
+
+    .collapsible.open .collapsibleContent{
+      display:block;
     }
 
     .field{
@@ -194,9 +234,15 @@
       color:#111;
     }
 
-    .switchRow{
+    .detailsGrid{
       display:grid;
-      gap:8px;
+      gap:10px;
+      grid-template-columns:1fr;
+    }
+
+    .switchGrid{
+      display:grid;
+      gap:10px;
       grid-template-columns:1fr 1fr;
       margin-bottom:10px;
     }
@@ -222,39 +268,14 @@
       width:20px;
       height:20px;
       accent-color:#ff8c00;
+      margin:0;
     }
 
-    .btnRow{
+    .agentActions{
       display:flex;
       gap:8px;
       flex-wrap:wrap;
       margin-top:8px;
-    }
-
-    .btn2{
-      border:none;
-      border-radius:12px;
-      min-height:42px;
-      padding:10px 14px;
-      font-weight:900;
-      cursor:pointer;
-      box-shadow:0 10px 24px rgba(0,0,0,.18);
-    }
-
-    .btnPrimary{
-      background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
-      color:#fff;
-    }
-
-    .btnSecondary{
-      background:rgba(255,255,255,.14);
-      color:#fff;
-      border:1px solid rgba(255,255,255,.12);
-    }
-
-    .btnDanger{
-      background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
-      color:#fff;
     }
 
     .hint{
@@ -267,18 +288,70 @@
 
     .empty{
       padding:14px;
-      margin-top:12px;
       border-radius:14px;
       background:rgba(255,255,255,.05);
       border:1px dashed rgba(255,255,255,.10);
       color:rgba(255,255,255,.76);
       font-weight:800;
     }
+
+    .loaderOverlay{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.35);
+      backdrop-filter:blur(4px);
+      -webkit-backdrop-filter:blur(4px);
+      z-index:99999;
+    }
+
+    .loaderOverlay.show{
+      display:flex;
+    }
+
+    .loaderBox{
+      width:52px;
+      height:52px;
+      border-radius:999px;
+      background:rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.15);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 14px 34px rgba(0,0,0,.40);
+    }
+
+    .loaderSpinner{
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      border:3px solid rgba(255,255,255,.25);
+      border-top-color:#ff8c00;
+      animation:spin .8s linear infinite;
+    }
+
+    @keyframes spin{
+      to{ transform:rotate(360deg); }
+    }
+
+    @media (min-width:800px){
+      .detailsGrid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
   </style>
 </head>
 
 <body>
   <div class="bg"></div>
+
+  <div id="loader" class="loaderOverlay">
+    <div class="loaderBox">
+      <div class="loaderSpinner"></div>
+    </div>
+  </div>
 
   <div class="wrap">
     <div class="topbar">
@@ -288,31 +361,79 @@
 
     <div class="adminWrap">
       <div class="dashboard">
-        <div class="dashboardTitle">Administration des accès</div>
+        <div class="dashboardTitle">Accès global</div>
         <div class="dashboardSmall">
-          Deux blocs distincts : Portail et Amicale. La partie Amicale se base sur les membres déjà présents dans l’organigramme.
+          Une seule liste d’agents. Les accès Portail et Amical sont visibles directement sur la ligne. Les détails restent repliés au départ.
         </div>
       </div>
 
       <div id="statusBox" class="status info"></div>
 
-      <div class="accordion" id="portalAccordion">
-        <div class="accordionHeader portalHeader" onclick="toggleAccordion('portalAccordion')">
-          <div class="accordionTitle">🖥️ Accès Portail</div>
-          <div class="accordionArrow">▾</div>
+      <div class="card">
+        <div class="cardTitle">Agents</div>
+
+        <div class="toolbar">
+          <button class="btn2 btnSecondary" type="button" onclick="loadData()">Actualiser</button>
         </div>
-        <div class="accordionContent">
-          <div id="portalList"></div>
-        </div>
+
+        <div id="accessList"></div>
       </div>
 
-      <div class="accordion" id="amicaleAccordion">
-        <div class="accordionHeader amicaleHeader" onclick="toggleAccordion('amicaleAccordion')">
-          <div class="accordionTitle">🤝 Accès Amicale</div>
-          <div class="accordionArrow">▾</div>
-        </div>
-        <div class="accordionContent">
-          <div id="amicaleList"></div>
+      <div class="card">
+        <div class="cardTitle">Ajouter un agent</div>
+
+        <div class="collapsible" id="addAgentBox">
+          <div class="collapsibleHeader" onclick="toggleCollapseById('addAgentBox')">
+            <div class="collapsibleLeft">
+              <div class="chevron">▶</div>
+              <div class="agentName">Nouvel agent</div>
+            </div>
+            <div class="summarySwitches">
+              <div class="miniSwitch">Ajouter</div>
+            </div>
+          </div>
+
+          <div class="collapsibleContent">
+            <div class="detailsGrid">
+              <div class="field">
+                <label class="label" for="new_nom">Nom</label>
+                <input class="input" id="new_nom" type="text" placeholder="Nom affiché">
+              </div>
+
+              <div class="field">
+                <label class="label" for="new_email">Adresse mail</label>
+                <input class="input" id="new_email" type="email" placeholder="adresse@mail.com">
+              </div>
+
+              <div class="field">
+                <label class="label" for="new_role">Rôle</label>
+                <select class="select" id="new_role">
+                  <option value="agent">agent</option>
+                  <option value="admin">admin</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="switchGrid">
+              <div class="switchBox">
+                <label class="switchLabel">
+                  <span>Accès Portail</span>
+                  <input id="new_portail" type="checkbox" checked>
+                </label>
+              </div>
+
+              <div class="switchBox">
+                <label class="switchLabel">
+                  <span>Accès Amical</span>
+                  <input id="new_amical" type="checkbox">
+                </label>
+              </div>
+            </div>
+
+            <div class="agentActions">
+              <button class="btn2 btnPrimary" type="button" onclick="createAgent()">Créer l’agent</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -324,9 +445,12 @@ const EMAIL_KEY = "cs_portail_email_v1";
 
 const state = {
   actorEmail: "",
-  portalItems: [],
-  amicaleItems: []
+  items: []
 };
+
+function showLoader(v){
+  document.getElementById("loader").classList.toggle("show", !!v);
+}
 
 function showStatus(type, message){
   const box = document.getElementById("statusBox");
@@ -380,12 +504,6 @@ function jsonp(params){
   });
 }
 
-function toggleAccordion(id){
-  const target = document.getElementById(id);
-  if (!target) return;
-  target.classList.toggle("open");
-}
-
 async function checkAdmin(){
   state.actorEmail = getCurrentEmail();
 
@@ -412,125 +530,173 @@ async function checkAdmin(){
   return true;
 }
 
-function accessCardHtml(item, section){
-  const email = item.email || "";
-  const nom = item.nom || "";
-  const role = (item.role || "agent").toLowerCase();
-  const portail = Number(item.portail || 0) === 1;
-  const amical = Number(item.amical || 0) === 1;
-  const isExisting = !!email;
-  const badge = section === "amicale"
-    ? (item.sourceSousPole ? `Amicale · ${escapeHtml(item.sourceSousPole)}` : "Amicale")
-    : (role === "admin" ? "admin" : "agent");
-
-  return `
-    <div class="card access-card" data-section="${escapeHtml(section)}" data-original-email="${escapeHtml(email)}">
-      <div class="cardTop">
-        <div class="cardName">${escapeHtml(nom || "Nouvel accès")}</div>
-        <div class="badge">${badge}</div>
-      </div>
-
-      <div class="field">
-        <label class="label">Nom</label>
-        <input class="input field-nom" type="text" value="${escapeHtml(nom)}" placeholder="Nom affiché">
-      </div>
-
-      <div class="field">
-        <label class="label">Adresse mail</label>
-        <input class="input field-email" type="email" value="${escapeHtml(email)}" placeholder="adresse@mail.com">
-      </div>
-
-      <div class="field">
-        <label class="label">Rôle</label>
-        <select class="select field-role">
-          <option value="agent" ${role === "agent" ? "selected" : ""}>agent</option>
-          <option value="admin" ${role === "admin" ? "selected" : ""}>admin</option>
-        </select>
-      </div>
-
-      <div class="switchRow">
-        <div class="switchBox">
-          <label class="switchLabel">
-            <span>Accès Portail</span>
-            <input class="field-portail" type="checkbox" ${portail ? "checked" : ""}>
-          </label>
-        </div>
-
-        <div class="switchBox">
-          <label class="switchLabel">
-            <span>Accès Amicale</span>
-            <input class="field-amical" type="checkbox" ${amical ? "checked" : ""}>
-          </label>
-        </div>
-      </div>
-
-      ${section === "amicale" && item.orgDisplay ? `<div class="hint">Source organigramme : ${escapeHtml(item.orgDisplay)}</div>` : ""}
-
-      <div class="btnRow">
-        <button class="btn2 btnPrimary" onclick="saveCard(this)">Enregistrer</button>
-        ${isExisting ? `<button class="btn2 btnDanger" onclick="deleteCard(this)">Supprimer</button>` : ""}
-      </div>
-    </div>
-  `;
+function toggleCollapseById(id){
+  const box = document.getElementById(id);
+  if (!box) return;
+  box.classList.toggle("open");
 }
 
-function renderPortal(){
-  const zone = document.getElementById("portalList");
-  const items = Array.isArray(state.portalItems) ? [...state.portalItems] : [];
+function bindSummarySync(card){
+  const summaryPortail = card.querySelector(".summary-portail");
+  const summaryAmical = card.querySelector(".summary-amical");
+  const detailPortail = card.querySelector(".field-portail");
+  const detailAmical = card.querySelector(".field-amical");
 
-  const newCard = {
-    email: "",
-    role: "agent",
-    nom: "",
-    portail: 1,
-    amical: 0
-  };
+  if (summaryPortail && detailPortail) {
+    summaryPortail.addEventListener("change", () => {
+      detailPortail.checked = summaryPortail.checked;
+    });
+    detailPortail.addEventListener("change", () => {
+      summaryPortail.checked = detailPortail.checked;
+    });
+  }
 
-  let html = accessCardHtml(newCard, "portal");
-  items.forEach(item => {
-    html += accessCardHtml(item, "portal");
-  });
-
-  zone.innerHTML = html || '<div class="empty">Aucun accès portail.</div>';
+  if (summaryAmical && detailAmical) {
+    summaryAmical.addEventListener("change", () => {
+      detailAmical.checked = summaryAmical.checked;
+    });
+    detailAmical.addEventListener("change", () => {
+      summaryAmical.checked = detailAmical.checked;
+    });
+  }
 }
 
-function renderAmicale(){
-  const zone = document.getElementById("amicaleList");
-  const items = Array.isArray(state.amicaleItems) ? state.amicaleItems : [];
+function renderList(){
+  const zone = document.getElementById("accessList");
+  const items = Array.isArray(state.items) ? state.items : [];
 
   if (!items.length) {
-    zone.innerHTML = '<div class="empty">Aucun membre Amicale trouvé.</div>';
+    zone.innerHTML = '<div class="empty">Aucun agent trouvé.</div>';
     return;
   }
 
   let html = "";
-  items.forEach(item => {
-    html += accessCardHtml(item, "amicale");
+
+  items.forEach((item, index) => {
+    const name = item.nom || item.email || "Sans nom";
+    const role = (item.role || "agent").toLowerCase();
+    const portail = Number(item.portail || 0) === 1;
+    const amical = Number(item.amical || 0) === 1;
+
+    html += `
+      <div class="collapsible access-card" id="accessCard_${index}" data-original-email="${escapeHtml(item.email || "")}">
+        <div class="collapsibleHeader cardHeader" onclick="toggleCard(event, 'accessCard_${index}')">
+          <div class="collapsibleLeft">
+            <div class="chevron">▶</div>
+            <div class="agentName">${escapeHtml(name)}</div>
+          </div>
+
+          <div class="summarySwitches">
+            <label class="miniSwitch" onclick="event.stopPropagation()">
+              <span>Portail</span>
+              <input class="summary-portail" type="checkbox" ${portail ? "checked" : ""}>
+            </label>
+
+            <label class="miniSwitch" onclick="event.stopPropagation()">
+              <span>Amical</span>
+              <input class="summary-amical" type="checkbox" ${amical ? "checked" : ""}>
+            </label>
+          </div>
+        </div>
+
+        <div class="collapsibleContent">
+          <div class="detailsGrid">
+            <div class="field">
+              <label class="label">Nom</label>
+              <input class="input field-nom" type="text" value="${escapeHtml(item.nom || "")}">
+            </div>
+
+            <div class="field">
+              <label class="label">Adresse mail</label>
+              <input class="input field-email" type="email" value="${escapeHtml(item.email || "")}">
+            </div>
+
+            <div class="field">
+              <label class="label">Rôle</label>
+              <select class="select field-role">
+                <option value="agent" ${role === "agent" ? "selected" : ""}>agent</option>
+                <option value="admin" ${role === "admin" ? "selected" : ""}>admin</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="switchGrid">
+            <div class="switchBox">
+              <label class="switchLabel">
+                <span>Accès Portail</span>
+                <input class="field-portail" type="checkbox" ${portail ? "checked" : ""}>
+              </label>
+            </div>
+
+            <div class="switchBox">
+              <label class="switchLabel">
+                <span>Accès Amical</span>
+                <input class="field-amical" type="checkbox" ${amical ? "checked" : ""}>
+              </label>
+            </div>
+          </div>
+
+          <div class="hint">Adresse mail et rôle restent masqués tant que la ligne n’est pas dépliée.</div>
+
+          <div class="agentActions">
+            <button class="btn2 btnPrimary" type="button" onclick="saveCard(this)">Enregistrer</button>
+            <button class="btn2 btnDanger" type="button" onclick="deleteCard(this)">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    `;
   });
 
   zone.innerHTML = html;
+
+  document.querySelectorAll(".access-card").forEach(bindSummarySync);
+}
+
+function toggleCard(event, id){
+  const box = document.getElementById(id);
+  if (!box) return;
+  box.classList.toggle("open");
 }
 
 async function loadData(){
-  showStatus("info", "Chargement des accès...");
+  try{
+    showLoader(true);
+    showStatus("info", "Chargement des accès...");
 
-  const r = await jsonp({
-    view: "acces_admin_data",
-    actorEmail: state.actorEmail
-  });
+    const r = await jsonp({
+      view: "acces_list",
+      actorEmail: state.actorEmail
+    });
 
-  if (!r || !r.ok) {
-    showStatus("err", (r && r.error) ? r.error : "Erreur de chargement.");
-    return;
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de chargement.");
+      showLoader(false);
+      return;
+    }
+
+    const items = Array.isArray(r.items) ? r.items : [];
+    state.items = items
+      .map(it => ({
+        email: it.email || "",
+        role: (it.role || "agent").toLowerCase(),
+        nom: it.nom || "",
+        portail: Number(it.portail || 0),
+        amical: Number(it.amical || 0)
+      }))
+      .sort((a, b) => {
+        const an = (a.nom || a.email || "").toLowerCase();
+        const bn = (b.nom || b.email || "").toLowerCase();
+        return an.localeCompare(bn, "fr", { sensitivity: "base" });
+      });
+
+    renderList();
+    showStatus("ok", "Accès chargés.");
+    showLoader(false);
+
+  }catch(err){
+    showLoader(false);
+    showStatus("err", err?.message || String(err));
   }
-
-  state.portalItems = Array.isArray(r.portalItems) ? r.portalItems : [];
-  state.amicaleItems = Array.isArray(r.amicaleItems) ? r.amicaleItems : [];
-
-  renderPortal();
-  renderAmicale();
-
-  showStatus("ok", "Accès chargés.");
 }
 
 async function saveCard(btn){
@@ -544,26 +710,31 @@ async function saveCard(btn){
   const portail = card.querySelector(".field-portail")?.checked ? 1 : 0;
   const amical = card.querySelector(".field-amical")?.checked ? 1 : 0;
 
-  showStatus("info", "Enregistrement...");
+  try{
+    showStatus("info", "Enregistrement...");
 
-  const r = await jsonp({
-    view: "acces_save",
-    actorEmail: state.actorEmail,
-    originalEmail,
-    email,
-    nom,
-    role,
-    portail,
-    amical
-  });
+    const r = await jsonp({
+      view: "acces_save",
+      actorEmail: state.actorEmail,
+      originalEmail,
+      email,
+      nom,
+      role,
+      portail,
+      amical
+    });
 
-  if (!r || !r.ok) {
-    showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
-    return;
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
+      return;
+    }
+
+    showStatus("ok", "Accès enregistré.");
+    await loadData();
+
+  }catch(err){
+    showStatus("err", err?.message || String(err));
   }
-
-  showStatus("ok", "Accès enregistré.");
-  await loadData();
 }
 
 async function deleteCard(btn){
@@ -573,21 +744,66 @@ async function deleteCard(btn){
   const email = (card.dataset.originalEmail || "").trim().toLowerCase();
   if (!email) return;
 
-  showStatus("info", "Suppression...");
+  try{
+    showStatus("info", "Suppression...");
 
-  const r = await jsonp({
-    view: "acces_delete",
-    actorEmail: state.actorEmail,
-    email
-  });
+    const r = await jsonp({
+      view: "acces_delete",
+      actorEmail: state.actorEmail,
+      email
+    });
 
-  if (!r || !r.ok) {
-    showStatus("err", (r && r.error) ? r.error : "Erreur de suppression.");
-    return;
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de suppression.");
+      return;
+    }
+
+    showStatus("ok", "Accès supprimé.");
+    await loadData();
+
+  }catch(err){
+    showStatus("err", err?.message || String(err));
   }
+}
 
-  showStatus("ok", "Accès supprimé.");
-  await loadData();
+async function createAgent(){
+  const nom = (document.getElementById("new_nom")?.value || "").trim();
+  const email = (document.getElementById("new_email")?.value || "").trim().toLowerCase();
+  const role = (document.getElementById("new_role")?.value || "agent").trim().toLowerCase();
+  const portail = document.getElementById("new_portail")?.checked ? 1 : 0;
+  const amical = document.getElementById("new_amical")?.checked ? 1 : 0;
+
+  try{
+    showStatus("info", "Création de l’agent...");
+
+    const r = await jsonp({
+      view: "acces_save",
+      actorEmail: state.actorEmail,
+      originalEmail: "",
+      email,
+      nom,
+      role,
+      portail,
+      amical
+    });
+
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de création.");
+      return;
+    }
+
+    document.getElementById("new_nom").value = "";
+    document.getElementById("new_email").value = "";
+    document.getElementById("new_role").value = "agent";
+    document.getElementById("new_portail").checked = true;
+    document.getElementById("new_amical").checked = false;
+
+    showStatus("ok", "Agent créé.");
+    await loadData();
+
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  }
 }
 
 (async function init(){
