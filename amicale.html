@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
   <title>Amicale — CS Consenvoye</title>
-
   <link rel="stylesheet" href="cs-theme.css">
 
   <style>
@@ -36,9 +35,7 @@
       box-shadow:0 10px 24px rgba(0,0,0,.18);
     }
 
-    .lockBtn:active{
-      transform:translateY(1px);
-    }
+    .lockBtn:active{ transform:translateY(1px); }
 
     .hero{
       padding:16px 18px;
@@ -50,14 +47,6 @@
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
       color:rgba(255,255,255,.96);
-    }
-
-    .heroTop{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
     }
 
     .heroTitle{
@@ -72,26 +61,6 @@
       font-weight:800;
       color:rgba(255,255,255,.78);
       line-height:1.4;
-    }
-
-    .heroBadges{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-
-    .heroBadge{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:7px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.10);
-      border:1px solid rgba(255,255,255,.14);
-      color:#fff;
-      font-size:12px;
-      font-weight:900;
     }
 
     .status{
@@ -118,70 +87,6 @@
       color:#dde9ff;
     }
 
-    .memberView{
-      display:block;
-    }
-
-    .adminPanel{
-      display:none;
-      margin-bottom:16px;
-    }
-
-    body.adminMode .adminPanel{
-      display:block;
-    }
-
-    .adminBar{
-      border-radius:20px;
-      padding:14px 16px;
-      margin-bottom:14px;
-      background:linear-gradient(180deg, rgba(47,158,91,.28), rgba(47,158,91,.14));
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow);
-      color:#fff;
-    }
-
-    .adminBarTitle{
-      font-size:18px;
-      font-weight:900;
-      margin-bottom:6px;
-    }
-
-    .adminBarText{
-      font-size:13px;
-      line-height:1.4;
-      color:rgba(255,255,255,.82);
-      font-weight:800;
-    }
-
-    .adminGrid{
-      display:grid;
-      gap:12px;
-      grid-template-columns:1fr;
-    }
-
-    .adminCard{
-      border-radius:18px;
-      padding:14px;
-      background:rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:var(--shadow);
-      color:#fff;
-    }
-
-    .adminCardTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:10px;
-    }
-
-    .adminCardTitle{
-      font-size:16px;
-      font-weight:900;
-    }
-
     .toolbar{
       display:flex;
       gap:10px;
@@ -199,9 +104,7 @@
       transition:background .22s ease, transform .12s ease, opacity .18s ease;
     }
 
-    .btn2:active{
-      transform:translateY(1px);
-    }
+    .btn2:active{ transform:translateY(1px); }
 
     .btnPrimary{
       background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
@@ -236,39 +139,13 @@
       cursor:default;
     }
 
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      margin-bottom:10px;
+    .adminPanel{
+      display:none;
+      margin-bottom:16px;
     }
 
-    .label{
-      font-size:13px;
-      font-weight:900;
-      color:rgba(255,255,255,.82);
-    }
-
-    .input, .textarea{
-      width:100%;
-      border:none;
-      outline:none;
-      border-radius:12px;
-      padding:10px 12px;
-      background:rgba(255,255,255,.10);
-      color:#fff;
-      border:1px solid rgba(255,255,255,.12);
-      font-size:15px;
-      font-family:inherit;
-    }
-
-    .input{
-      min-height:44px;
-    }
-
-    .textarea{
-      min-height:100px;
-      resize:vertical;
+    body.adminMode .adminPanel{
+      display:block;
     }
 
     .accordion{
@@ -335,26 +212,6 @@
       display:block;
     }
 
-    .hdr-reunions{
-      background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18));
-    }
-
-    .hdr-cr{
-      background:linear-gradient(180deg, rgba(145,90,220,.30), rgba(145,90,220,.15));
-    }
-
-    .hdr-projets{
-      background:linear-gradient(180deg, rgba(47,158,91,.30), rgba(47,158,91,.15));
-    }
-
-    .hdr-evenements{
-      background:linear-gradient(180deg, rgba(220,90,170,.28), rgba(220,90,170,.14));
-    }
-
-    .hdr-cal{
-      background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15));
-    }
-
     .subAccordion{
       border-radius:16px;
       overflow:hidden;
@@ -399,29 +256,18 @@
       display:block;
     }
 
-    .activeHeader{
-      background:linear-gradient(180deg, rgba(255,190,60,.20), rgba(255,190,60,.08));
-    }
+    .hdr-reunions{ background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18)); }
+    .hdr-cr{ background:linear-gradient(180deg, rgba(145,90,220,.30), rgba(145,90,220,.15)); }
+    .hdr-projets{ background:linear-gradient(180deg, rgba(47,158,91,.30), rgba(47,158,91,.15)); }
+    .hdr-evenements{ background:linear-gradient(180deg, rgba(220,90,170,.28), rgba(220,90,170,.14)); }
+    .hdr-cal{ background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15)); }
 
-    .yearHeader{
-      background:linear-gradient(180deg, rgba(47,111,212,.22), rgba(47,111,212,.10));
-    }
-
-    .sectorHeader{
-      background:linear-gradient(180deg, rgba(47,158,91,.22), rgba(47,158,91,.10));
-    }
-
-    .archiveHeader{
-      background:linear-gradient(180deg, rgba(145,90,220,.24), rgba(145,90,220,.10));
-    }
-
-    .archiveYearHeader{
-      background:linear-gradient(180deg, rgba(220,90,170,.22), rgba(220,90,170,.10));
-    }
-
-    .archiveSectorHeader{
-      background:linear-gradient(180deg, rgba(212,106,0,.24), rgba(212,106,0,.10));
-    }
+    .activeHeader{ background:linear-gradient(180deg, rgba(255,190,60,.20), rgba(255,190,60,.08)); }
+    .yearHeader{ background:linear-gradient(180deg, rgba(47,111,212,.22), rgba(47,111,212,.10)); }
+    .sectorHeader{ background:linear-gradient(180deg, rgba(47,158,91,.22), rgba(47,158,91,.10)); }
+    .archiveHeader{ background:linear-gradient(180deg, rgba(145,90,220,.24), rgba(145,90,220,.10)); }
+    .archiveYearHeader{ background:linear-gradient(180deg, rgba(220,90,170,.22), rgba(220,90,170,.10)); }
+    .archiveSectorHeader{ background:linear-gradient(180deg, rgba(212,106,0,.24), rgba(212,106,0,.10)); }
 
     .card{
       border-radius:16px;
@@ -466,22 +312,6 @@
       grid-template-columns:1fr;
     }
 
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      min-height:32px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.10);
-      color:#fff;
-      font-size:12px;
-      font-weight:900;
-      margin-right:6px;
-      margin-bottom:6px;
-    }
-
     .summaryBox{
       border-radius:16px;
       padding:12px;
@@ -507,8 +337,61 @@
       border-bottom:1px dashed rgba(255,255,255,.08);
     }
 
-    .summaryRow:last-child{
-      border-bottom:none;
+    .summaryRow:last-child{ border-bottom:none; }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      min-height:32px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
+      color:#fff;
+      font-size:12px;
+      font-weight:900;
+      margin-right:6px;
+      margin-bottom:6px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:10px;
+    }
+
+    .label{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.82);
+    }
+
+    .input, .textarea{
+      width:100%;
+      border:none;
+      outline:none;
+      border-radius:12px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+      font-size:15px;
+      font-family:inherit;
+    }
+
+    .input{
+      min-height:44px;
+    }
+
+    .textarea{
+      min-height:100px;
+      resize:vertical;
+    }
+
+    input[type="date"]{
+      color-scheme:dark;
     }
 
     .empty{
@@ -583,10 +466,6 @@
       .grid2{
         grid-template-columns:1fr 1fr;
       }
-
-      .adminGrid{
-        grid-template-columns:1fr 1fr;
-      }
     }
   </style>
 </head>
@@ -595,9 +474,7 @@
   <div class="bg"></div>
 
   <div id="loader" class="loaderOverlay">
-    <div class="loaderBox">
-      <div class="loaderSpinner"></div>
-    </div>
+    <div class="loaderBox"><div class="loaderSpinner"></div></div>
   </div>
 
   <div class="wrap" id="pageWrap" style="display:none;">
@@ -611,37 +488,147 @@
 
     <div class="pageWrap">
       <div class="hero">
-        <div class="heroTop">
-          <div>
-            <div class="heroTitle">Espace Amicale</div>
-            <div class="heroSmall">
-              Consultation réservée aux membres de l’Amicale. Les administrateurs Amicale peuvent déverrouiller le mode création via le cadenas.
-            </div>
-            <div class="heroBadges">
-              <div class="heroBadge">👀 Visu membres</div>
-              <div class="heroBadge">📁 Données Amicale</div>
-              <div class="heroBadge">📘 Tournées & archives</div>
-            </div>
-          </div>
+        <div class="heroTitle">Espace Amicale</div>
+        <div class="heroSmall">
+          Consultation réservée aux membres de l’Amicale. Les administrateurs peuvent déverrouiller le mode création via le cadenas.
         </div>
       </div>
 
       <div id="statusBox" class="status info"></div>
 
       <div class="adminPanel" id="adminPanel">
-        <div class="adminBar">
-          <div class="adminBarTitle">Mode administration Amicale activé</div>
-          <div class="adminBarText">
-            Tu peux créer, modifier, supprimer et archiver depuis ce panneau. La visu des membres reste séparée en dessous.
+        <div class="accordion" id="admin-reunions">
+          <div class="accordionHeader hdr-reunions" onclick="toggleAccordion('admin-reunions')">
+            <div class="accordionTitle"><span class="emoji">📅</span><span>Admin Réunions</span></div>
+            <span class="accordionArrow">▾</span>
+          </div>
+          <div class="accordionContent">
+            <div class="field">
+              <label class="label">Date</label>
+              <input class="input" id="admin_reunion_date" type="date">
+            </div>
+            <div class="field">
+              <label class="label">Lieu</label>
+              <input class="input" id="admin_reunion_lieu" type="text">
+            </div>
+            <div class="field">
+              <label class="label">Notes</label>
+              <textarea class="textarea" id="admin_reunion_notes"></textarea>
+            </div>
+            <div class="toolbar">
+              <button class="btn2 btnPrimary" type="button" onclick="createReunion(this)">Ajouter une réunion</button>
+            </div>
           </div>
         </div>
 
-        <div class="adminGrid" id="adminGrid"></div>
+        <div class="accordion" id="admin-cr">
+          <div class="accordionHeader hdr-cr" onclick="toggleAccordion('admin-cr')">
+            <div class="accordionTitle"><span class="emoji">📝</span><span>Admin Comptes-rendus</span></div>
+            <span class="accordionArrow">▾</span>
+          </div>
+          <div class="accordionContent">
+            <div class="field">
+              <label class="label">Date</label>
+              <input class="input" id="admin_cr_date" type="date">
+            </div>
+            <div class="field">
+              <label class="label">Titre</label>
+              <input class="input" id="admin_cr_titre" type="text">
+            </div>
+            <div class="field">
+              <label class="label">Texte</label>
+              <textarea class="textarea" id="admin_cr_texte"></textarea>
+            </div>
+            <div class="field">
+              <label class="label">Documents (un par ligne)</label>
+              <textarea class="textarea" id="admin_cr_docs"></textarea>
+            </div>
+            <div class="toolbar">
+              <button class="btn2 btnPrimary" type="button" onclick="createCR(this)">Ajouter un compte-rendu</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion" id="admin-projets">
+          <div class="accordionHeader hdr-projets" onclick="toggleAccordion('admin-projets')">
+            <div class="accordionTitle"><span class="emoji">🧩</span><span>Admin Projets</span></div>
+            <span class="accordionArrow">▾</span>
+          </div>
+          <div class="accordionContent">
+            <div class="field">
+              <label class="label">Titre</label>
+              <input class="input" id="admin_projet_title" type="text">
+            </div>
+            <div class="field">
+              <label class="label">Contenu</label>
+              <textarea class="textarea" id="admin_projet_content"></textarea>
+            </div>
+            <div class="toolbar">
+              <button class="btn2 btnPrimary" type="button" onclick="createSimple('projet', this)">Ajouter un projet</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion" id="admin-evenements">
+          <div class="accordionHeader hdr-evenements" onclick="toggleAccordion('admin-evenements')">
+            <div class="accordionTitle"><span class="emoji">🎉</span><span>Admin Événements</span></div>
+            <span class="accordionArrow">▾</span>
+          </div>
+          <div class="accordionContent">
+            <div class="field">
+              <label class="label">Titre</label>
+              <input class="input" id="admin_evenement_title" type="text">
+            </div>
+            <div class="field">
+              <label class="label">Contenu</label>
+              <textarea class="textarea" id="admin_evenement_content"></textarea>
+            </div>
+            <div class="toolbar">
+              <button class="btn2 btnPrimary" type="button" onclick="createSimple('evenement', this)">Ajouter un événement</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion" id="admin-tournees">
+          <div class="accordionHeader hdr-cal" onclick="toggleAccordion('admin-tournees')">
+            <div class="accordionTitle"><span class="emoji">📘</span><span>Admin Tournées calendriers</span></div>
+            <span class="accordionArrow">▾</span>
+          </div>
+          <div class="accordionContent">
+            <div class="field">
+              <label class="label">Année</label>
+              <input class="input" id="admin_tournee_annee" type="text">
+            </div>
+            <div class="field">
+              <label class="label">Secteur / commune</label>
+              <input class="input" id="admin_tournee_secteur" type="text">
+            </div>
+            <div class="field">
+              <label class="label">Agents (séparés par virgules)</label>
+              <textarea class="textarea" id="admin_tournee_agents"></textarea>
+            </div>
+            <div class="grid2">
+              <div class="field">
+                <label class="label">Calendriers attribués</label>
+                <input class="input" id="admin_tournee_attribues" type="text">
+              </div>
+              <div class="field">
+                <label class="label">Calendriers vendus</label>
+                <input class="input" id="admin_tournee_vendus" type="text">
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Somme restituée</label>
+              <input class="input" id="admin_tournee_somme" type="text">
+            </div>
+            <div class="toolbar">
+              <button class="btn2 btnPrimary" type="button" onclick="createTourneeActive(this)">Ajouter une tournée active</button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="memberView">
-        <div id="sections"></div>
-      </div>
+      <div id="sections"></div>
     </div>
   </div>
 
@@ -756,10 +743,8 @@ function toggleSubAccordion(ev, id){
 function setAdminMode(on){
   state.adminMode = !!on;
   document.body.classList.toggle("adminMode", state.adminMode);
-
   const lock = document.getElementById("amicaleLock");
   if (lock) lock.textContent = state.adminMode ? "🔓" : "🔒";
-
   showStatus("ok", state.adminMode ? "Mode administration Amicale activé." : "Mode consultation.");
 }
 
@@ -868,13 +853,11 @@ function totalRows(items){
 
 function groupByYear(items){
   const map = new Map();
-
   items.forEach(it => {
     const year = String(it.annee || "").trim() || "Sans année";
     if (!map.has(year)) map.set(year, []);
     map.get(year).push(it);
   });
-
   return Array.from(map.entries()).map(([annee, rows]) => ({ annee, rows }));
 }
 
@@ -893,7 +876,6 @@ function renderTourneesGroup(items, prefix, yearClass, sectorClass){
           <span class="subArrow">▾</span>
         </div>
         <div class="subContent">
-
           <div class="summaryBox">
             <div class="summaryTitle">Somme totale</div>
             <div class="summaryRow"><span>Calendriers attribués</span><strong>${totals.attribues}</strong></div>
@@ -923,7 +905,6 @@ function renderTourneesGroup(items, prefix, yearClass, sectorClass){
               </div>
             `;
           }).join("")}
-
         </div>
       </div>
     `;
@@ -966,143 +947,12 @@ function renderMemberView(){
   document.getElementById("sections").innerHTML = html;
 }
 
-function renderAdminPanel(){
-  const grid = document.getElementById("adminGrid");
-  if (!grid) return;
-
-  grid.innerHTML = `
-    <div class="adminCard">
-      <div class="adminCardTop">
-        <div class="adminCardTitle">📅 Réunions</div>
-      </div>
-      <div class="field">
-        <label class="label">Date</label>
-        <input class="input" id="admin_reunion_date" type="text">
-      </div>
-      <div class="field">
-        <label class="label">Lieu</label>
-        <input class="input" id="admin_reunion_lieu" type="text">
-      </div>
-      <div class="field">
-        <label class="label">Notes</label>
-        <textarea class="textarea" id="admin_reunion_notes"></textarea>
-      </div>
-      <div class="toolbar">
-        <button class="btn2 btnPrimary" type="button" onclick="createReunion(this)">Ajouter une réunion</button>
-      </div>
-    </div>
-
-    <div class="adminCard">
-      <div class="adminCardTop">
-        <div class="adminCardTitle">📝 Comptes-rendus</div>
-      </div>
-      <div class="field">
-        <label class="label">Date</label>
-        <input class="input" id="admin_cr_date" type="text">
-      </div>
-      <div class="field">
-        <label class="label">Titre</label>
-        <input class="input" id="admin_cr_titre" type="text">
-      </div>
-      <div class="field">
-        <label class="label">Texte</label>
-        <textarea class="textarea" id="admin_cr_texte"></textarea>
-      </div>
-      <div class="field">
-        <label class="label">Documents (un par ligne)</label>
-        <textarea class="textarea" id="admin_cr_docs"></textarea>
-      </div>
-      <div class="toolbar">
-        <button class="btn2 btnPrimary" type="button" onclick="createCR(this)">Ajouter un compte-rendu</button>
-      </div>
-    </div>
-
-    <div class="adminCard">
-      <div class="adminCardTop">
-        <div class="adminCardTitle">🧩 Projets</div>
-      </div>
-      <div class="field">
-        <label class="label">Titre</label>
-        <input class="input" id="admin_projet_title" type="text">
-      </div>
-      <div class="field">
-        <label class="label">Contenu</label>
-        <textarea class="textarea" id="admin_projet_content"></textarea>
-      </div>
-      <div class="toolbar">
-        <button class="btn2 btnPrimary" type="button" onclick="createSimple('projet', this)">Ajouter un projet</button>
-      </div>
-    </div>
-
-    <div class="adminCard">
-      <div class="adminCardTop">
-        <div class="adminCardTitle">🎉 Événements</div>
-      </div>
-      <div class="field">
-        <label class="label">Titre</label>
-        <input class="input" id="admin_evenement_title" type="text">
-      </div>
-      <div class="field">
-        <label class="label">Contenu</label>
-        <textarea class="textarea" id="admin_evenement_content"></textarea>
-      </div>
-      <div class="toolbar">
-        <button class="btn2 btnPrimary" type="button" onclick="createSimple('evenement', this)">Ajouter un événement</button>
-      </div>
-    </div>
-
-    <div class="adminCard" style="grid-column:1 / -1;">
-      <div class="adminCardTop">
-        <div class="adminCardTitle">📘 Tournées calendriers</div>
-      </div>
-      <div class="grid2">
-        <div class="field">
-          <label class="label">Année</label>
-          <input class="input" id="admin_tournee_annee" type="text">
-        </div>
-        <div class="field">
-          <label class="label">Secteur / commune</label>
-          <input class="input" id="admin_tournee_secteur" type="text">
-        </div>
-      </div>
-      <div class="field">
-        <label class="label">Agents (séparés par virgules)</label>
-        <textarea class="textarea" id="admin_tournee_agents"></textarea>
-      </div>
-      <div class="grid2">
-        <div class="field">
-          <label class="label">Calendriers attribués</label>
-          <input class="input" id="admin_tournee_attribues" type="text">
-        </div>
-        <div class="field">
-          <label class="label">Calendriers vendus</label>
-          <input class="input" id="admin_tournee_vendus" type="text">
-        </div>
-      </div>
-      <div class="field">
-        <label class="label">Somme restituée</label>
-        <input class="input" id="admin_tournee_somme" type="text">
-      </div>
-      <div class="toolbar">
-        <button class="btn2 btnPrimary" type="button" onclick="createTourneeActive(this)">Ajouter une tournée active</button>
-      </div>
-    </div>
-  `;
-}
-
 async function loadAll(){
   try{
     showLoader(true);
     showStatus("info", "Chargement de la page Amicale...");
 
-    const [
-      reunions,
-      cr,
-      projets,
-      evenements,
-      tourneesActives,
-      tourneesArchives
-    ] = await Promise.all([
+    const [reunions, cr, projets, evenements, tourneesActives, tourneesArchives] = await Promise.all([
       jsonp({ view:"amicale_reunions_list", actorEmail:getCurrentEmail() }),
       jsonp({ view:"amicale_cr_list", actorEmail:getCurrentEmail() }),
       jsonp({ view:"amicale_projets_list", actorEmail:getCurrentEmail() }),
@@ -1119,9 +969,7 @@ async function loadAll(){
     state.tourneesArchives = Array.isArray(tourneesArchives.items) ? tourneesArchives.items : [];
 
     renderMemberView();
-    renderAdminPanel();
-
-    showStatus("ok", state.adminMode ? "Mode administration prêt." : "Mode consultation.");
+    showStatus("ok", state.adminMode ? "Mode administration activé." : "Mode consultation.");
     showLoader(false);
 
   }catch(err){
