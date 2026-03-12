@@ -64,6 +64,86 @@
       color:#dde9ff;
     }
 
+    .topTitleWrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .lockBtn{
+      display:none;
+      border:none;
+      border-radius:12px;
+      min-height:36px;
+      min-width:42px;
+      padding:8px 10px;
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      font-size:18px;
+      font-weight:900;
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+
+    .lockBtn:active{
+      transform:translateY(1px);
+    }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn2{
+      border:none;
+      border-radius:14px;
+      min-height:42px;
+      padding:10px 14px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+      transition:background .22s ease, transform .12s ease, opacity .18s ease;
+    }
+
+    .btn2:active{
+      transform:translateY(1px);
+    }
+
+    .btnPrimary{
+      background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
+      color:#fff;
+    }
+
+    .btnPrimary.saving{
+      background:linear-gradient(180deg, rgba(47,158,91,.95), rgba(34,128,73,.95));
+      color:#fff;
+    }
+
+    .btnSecondary{
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .btnDanger{
+      background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
+      color:#fff;
+    }
+
+    .btnMini{
+      min-height:36px;
+      padding:8px 10px;
+      font-size:13px;
+      border-radius:12px;
+    }
+
+    .btn2[disabled]{
+      opacity:.7;
+      cursor:default;
+    }
+
     .accordion{
       border-radius:20px;
       overflow:hidden;
@@ -81,12 +161,20 @@
       justify-content:space-between;
       gap:12px;
       padding:16px;
+    }
+
+    .accordionHeaderMain{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+      flex:1 1 auto;
       cursor:pointer;
       user-select:none;
       -webkit-tap-highlight-color:transparent;
     }
 
-    .accordionHeader:active{
+    .accordionHeaderMain:active{
       transform:translateY(1px);
     }
 
@@ -225,10 +313,17 @@
       color:rgba(255,255,255,.95);
     }
 
+    .cardTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+    }
+
     .cardTitle{
       font-size:15px;
       font-weight:900;
-      margin-bottom:8px;
       color:rgba(255,255,255,.98);
     }
 
@@ -250,6 +345,60 @@
       display:grid;
       gap:10px;
       grid-template-columns:1fr;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:10px;
+    }
+
+    .label{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.80);
+    }
+
+    .input, .textarea{
+      width:100%;
+      border:none;
+      outline:none;
+      border-radius:12px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+      font-size:15px;
+      font-family:inherit;
+    }
+
+    .input{
+      min-height:44px;
+    }
+
+    .textarea{
+      min-height:110px;
+      resize:vertical;
+    }
+
+    .editorBox{
+      display:none;
+      margin-top:10px;
+      padding-top:10px;
+      border-top:1px dashed rgba(255,255,255,.10);
+    }
+
+    .adminMode .editorBox.show{
+      display:block;
+    }
+
+    .adminOnly{
+      display:none;
+    }
+
+    .adminMode .adminOnly{
+      display:flex;
     }
 
     .pill{
@@ -384,7 +533,10 @@
 
   <div class="wrap" id="pageWrap" style="display:none;">
     <div class="topbar">
-      <div class="title">🤝 Amicale</div>
+      <div class="topTitleWrap">
+        <div class="title">🤝 Amicale</div>
+        <button id="amicaleLock" class="lockBtn" type="button">🔒</button>
+      </div>
       <button class="btn" onclick="window.location.href='index.html'">Retour</button>
     </div>
 
@@ -392,7 +544,7 @@
       <div class="hero">
         <div class="heroTitle">Espace Amicale</div>
         <div class="heroSmall">
-          Consultation réservée aux membres de l’Amicale. Tous les bandeaux sont repliés au départ.
+          Consultation réservée aux membres de l’Amicale. Les administrateurs Amicale peuvent déverrouiller le mode création avec le cadenas.
         </div>
       </div>
 
@@ -416,6 +568,8 @@ const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnj
 const EMAIL_KEY = "cs_portail_email_v1";
 
 const state = {
+  auth: null,
+  adminMode: false,
   reunions: [],
   comptesRendus: [],
   projets: [],
@@ -432,6 +586,20 @@ function showStatus(type, message){
   const box = document.getElementById("statusBox");
   box.className = "status show " + type;
   box.textContent = message || "";
+}
+
+function setButtonSaving(btn, saving, savingText = "Enregistrement..."){
+  if (!btn) return;
+  if (saving) {
+    btn.dataset.originalText = btn.textContent;
+    btn.textContent = savingText;
+    btn.classList.add("saving");
+    btn.disabled = true;
+  } else {
+    btn.textContent = btn.dataset.originalText || btn.textContent;
+    btn.classList.remove("saving");
+    btn.disabled = false;
+  }
 }
 
 function escapeHtml(v){
@@ -493,6 +661,24 @@ function toggleSubAccordion(ev, id){
   el.classList.toggle("open");
 }
 
+function toggleEditor(id){
+  const box = document.getElementById(id);
+  if (!box) return;
+  box.classList.toggle("show");
+}
+
+function setAdminMode(on){
+  state.adminMode = !!on;
+  document.body.classList.toggle("adminMode", state.adminMode);
+
+  const lock = document.getElementById("amicaleLock");
+  if (lock) {
+    lock.textContent = state.adminMode ? "🔓" : "🔒";
+  }
+
+  showStatus("ok", state.adminMode ? "Mode création Amicale activé." : "Mode consultation.");
+}
+
 async function checkAmicaleAccess(){
   const email = getCurrentEmail();
 
@@ -513,18 +699,20 @@ async function checkAmicaleAccess(){
     return { ok:false };
   }
 
-  return { ok:true };
+  return { ok:true, auth };
 }
 
 function sectionShell(id, headerClass, emoji, title, bodyHtml){
   return `
     <div class="accordion" id="${id}">
-      <div class="accordionHeader ${headerClass}" onclick="toggleAccordion('${id}')">
-        <div class="accordionTitle">
-          <span class="emoji">${emoji}</span>
-          <span>${title}</span>
+      <div class="accordionHeader ${headerClass}">
+        <div class="accordionHeaderMain" onclick="toggleAccordion('${id}')">
+          <div class="accordionTitle">
+            <span class="emoji">${emoji}</span>
+            <span>${title}</span>
+          </div>
+          <span class="accordionArrow">▾</span>
         </div>
-        <span class="accordionArrow">▾</span>
       </div>
       <div class="accordionContent">${bodyHtml}</div>
     </div>
@@ -533,58 +721,192 @@ function sectionShell(id, headerClass, emoji, title, bodyHtml){
 
 function renderReunions(){
   const items = state.reunions || [];
-  if (!items.length) return `<div class="empty">Aucune réunion enregistrée.</div>`;
 
   return `
-    <div class="grid2">
-      ${items.map((r, i) => `
-        <div class="card">
-          <div class="cardTitle">Réunion ${i + 1}</div>
-          <div class="line"><strong>Date :</strong> ${escapeHtml(r.date || "—")}</div>
-          <div class="line"><strong>Lieu :</strong> ${escapeHtml(r.lieu || "—")}</div>
-          <div class="line"><strong>Notes :</strong> ${escapeHtml(r.notes || "—")}</div>
-        </div>
-      `).join("")}
+    ${items.length ? `
+      <div class="grid2">
+        ${items.map((r, i) => `
+          <div class="card">
+            <div class="cardTop">
+              <div class="cardTitle">Réunion ${i + 1}</div>
+              <div class="toolbar adminOnly">
+                <button class="btn2 btnSecondary btnMini" type="button" onclick="toggleEditor('reunion_edit_${i}')">🖍</button>
+              </div>
+            </div>
+
+            <div class="line"><strong>Date :</strong> ${escapeHtml(r.date || "—")}</div>
+            <div class="line"><strong>Lieu :</strong> ${escapeHtml(r.lieu || "—")}</div>
+            <div class="line"><strong>Notes :</strong> ${escapeHtml(r.notes || "—")}</div>
+
+            <div class="editorBox" id="reunion_edit_${i}">
+              <div class="field">
+                <label class="label">Date</label>
+                <input class="input" id="reunion_date_${i}" type="text" value="${escapeHtml(r.date || "")}">
+              </div>
+              <div class="field">
+                <label class="label">Lieu</label>
+                <input class="input" id="reunion_lieu_${i}" type="text" value="${escapeHtml(r.lieu || "")}">
+              </div>
+              <div class="field">
+                <label class="label">Notes</label>
+                <textarea class="textarea" id="reunion_notes_${i}">${escapeHtml(r.notes || "")}</textarea>
+              </div>
+              <div class="toolbar">
+                <button class="btn2 btnPrimary" type="button" onclick="saveReunion(${i}, this)">Enregistrer</button>
+                <button class="btn2 btnDanger" type="button" onclick="deleteReunion('${escapeHtml(r.id)}', this)">Supprimer</button>
+              </div>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    ` : `<div class="empty">Aucune réunion enregistrée.</div>`}
+
+    <div class="card adminOnly">
+      <div class="cardTitle">Ajouter une réunion</div>
+      <div class="field">
+        <label class="label">Date</label>
+        <input class="input" id="new_reunion_date" type="text">
+      </div>
+      <div class="field">
+        <label class="label">Lieu</label>
+        <input class="input" id="new_reunion_lieu" type="text">
+      </div>
+      <div class="field">
+        <label class="label">Notes</label>
+        <textarea class="textarea" id="new_reunion_notes"></textarea>
+      </div>
+      <div class="toolbar">
+        <button class="btn2 btnPrimary" type="button" onclick="createReunion(this)">Créer</button>
+      </div>
     </div>
   `;
 }
 
 function renderCR(){
   const items = state.comptesRendus || [];
-  if (!items.length) return `<div class="empty">Aucun compte-rendu enregistré.</div>`;
 
-  return items.map((r, i) => {
-    const docs = String(r.documents || "").split(/\n+/).map(x => x.trim()).filter(Boolean);
-    return `
-      <div class="card">
-        <div class="cardTitle">${escapeHtml(r.titre || `Compte-rendu ${i + 1}`)}</div>
-        <div class="line"><strong>Date :</strong> ${escapeHtml(r.date || "—")}</div>
-        <div class="line"><strong>Texte :</strong></div>
-        <div class="line">${escapeHtml(r.texte || "—")}</div>
-        <div class="line" style="margin-top:8px;"><strong>Documents :</strong></div>
-        ${docs.length ? docs.map(d => `<div class="pill">📎 ${escapeHtml(d)}</div>`).join("") : `<div class="muted">Aucun document</div>`}
-      </div>
-    `;
-  }).join("");
-}
-
-function renderSimpleBlocks(items, label){
-  if (!items.length) return `<div class="empty">Aucun ${label.toLowerCase()} enregistré.</div>`;
-
-  return items.map((r, i) => `
-    <div class="subAccordion" id="${label}_${i}">
-      <div class="subHeader" onclick="toggleSubAccordion(event, '${label}_${i}')">
-        <span>${escapeHtml(r.titre || `${label} ${i + 1}`)}</span>
-        <span class="subArrow">▾</span>
-      </div>
-      <div class="subContent">
+  return `
+    ${items.length ? items.map((r, i) => {
+      const docs = String(r.documents || "").split(/\n+/).map(x => x.trim()).filter(Boolean);
+      return `
         <div class="card">
-          <div class="cardTitle">${escapeHtml(r.titre || `${label} ${i + 1}`)}</div>
-          <div class="line">${escapeHtml(r.contenu || "—")}</div>
+          <div class="cardTop">
+            <div class="cardTitle">${escapeHtml(r.titre || `Compte-rendu ${i + 1}`)}</div>
+            <div class="toolbar adminOnly">
+              <button class="btn2 btnSecondary btnMini" type="button" onclick="toggleEditor('cr_edit_${i}')">🖍</button>
+            </div>
+          </div>
+
+          <div class="line"><strong>Date :</strong> ${escapeHtml(r.date || "—")}</div>
+          <div class="line"><strong>Texte :</strong></div>
+          <div class="line">${escapeHtml(r.texte || "—")}</div>
+          <div class="line" style="margin-top:8px;"><strong>Documents :</strong></div>
+          ${docs.length ? docs.map(d => `<div class="pill">📎 ${escapeHtml(d)}</div>`).join("") : `<div class="muted">Aucun document</div>`}
+
+          <div class="editorBox" id="cr_edit_${i}">
+            <div class="field">
+              <label class="label">Date</label>
+              <input class="input" id="cr_date_${i}" type="text" value="${escapeHtml(r.date || "")}">
+            </div>
+            <div class="field">
+              <label class="label">Titre</label>
+              <input class="input" id="cr_titre_${i}" type="text" value="${escapeHtml(r.titre || "")}">
+            </div>
+            <div class="field">
+              <label class="label">Texte</label>
+              <textarea class="textarea" id="cr_texte_${i}">${escapeHtml(r.texte || "")}</textarea>
+            </div>
+            <div class="field">
+              <label class="label">Documents (un par ligne)</label>
+              <textarea class="textarea" id="cr_docs_${i}">${escapeHtml(r.documents || "")}</textarea>
+            </div>
+            <div class="toolbar">
+              <button class="btn2 btnPrimary" type="button" onclick="saveCR(${i}, this)">Enregistrer</button>
+              <button class="btn2 btnDanger" type="button" onclick="deleteCR('${escapeHtml(r.id)}', this)">Supprimer</button>
+            </div>
+          </div>
         </div>
+      `;
+    }).join("") : `<div class="empty">Aucun compte-rendu enregistré.</div>`}
+
+    <div class="card adminOnly">
+      <div class="cardTitle">Ajouter un compte-rendu</div>
+      <div class="field">
+        <label class="label">Date</label>
+        <input class="input" id="new_cr_date" type="text">
+      </div>
+      <div class="field">
+        <label class="label">Titre</label>
+        <input class="input" id="new_cr_titre" type="text">
+      </div>
+      <div class="field">
+        <label class="label">Texte</label>
+        <textarea class="textarea" id="new_cr_texte"></textarea>
+      </div>
+      <div class="field">
+        <label class="label">Documents (un par ligne)</label>
+        <textarea class="textarea" id="new_cr_docs"></textarea>
+      </div>
+      <div class="toolbar">
+        <button class="btn2 btnPrimary" type="button" onclick="createCR(this)">Créer</button>
       </div>
     </div>
-  `).join("");
+  `;
+}
+
+function renderSimpleBlocks(items, label, prefix){
+  return `
+    ${items.length ? items.map((r, i) => `
+      <div class="subAccordion" id="${prefix}_${i}">
+        <div class="subHeader" onclick="toggleSubAccordion(event, '${prefix}_${i}')">
+          <span>${escapeHtml(r.titre || `${label} ${i + 1}`)}</span>
+          <span class="subArrow">▾</span>
+        </div>
+        <div class="subContent">
+          <div class="card">
+            <div class="cardTop">
+              <div class="cardTitle">${escapeHtml(r.titre || `${label} ${i + 1}`)}</div>
+              <div class="toolbar adminOnly">
+                <button class="btn2 btnSecondary btnMini" type="button" onclick="toggleEditor('${prefix}_edit_${i}')">🖍</button>
+              </div>
+            </div>
+
+            <div class="line">${escapeHtml(r.contenu || "—")}</div>
+
+            <div class="editorBox" id="${prefix}_edit_${i}">
+              <div class="field">
+                <label class="label">Titre</label>
+                <input class="input" id="${prefix}_title_${i}" type="text" value="${escapeHtml(r.titre || "")}">
+              </div>
+              <div class="field">
+                <label class="label">Contenu</label>
+                <textarea class="textarea" id="${prefix}_content_${i}">${escapeHtml(r.contenu || "")}</textarea>
+              </div>
+              <div class="toolbar">
+                <button class="btn2 btnPrimary" type="button" onclick="saveSimple('${prefix}', ${i}, this)">Enregistrer</button>
+                <button class="btn2 btnDanger" type="button" onclick="deleteSimple('${prefix}', '${escapeHtml(r.id)}', this)">Supprimer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join("") : `<div class="empty">Aucun ${label.toLowerCase()} enregistré.</div>`}
+
+    <div class="card adminOnly">
+      <div class="cardTitle">Ajouter ${label === "Projet" ? "un projet" : "un événement"}</div>
+      <div class="field">
+        <label class="label">Titre</label>
+        <input class="input" id="new_${prefix}_title" type="text">
+      </div>
+      <div class="field">
+        <label class="label">Contenu</label>
+        <textarea class="textarea" id="new_${prefix}_content"></textarea>
+      </div>
+      <div class="toolbar">
+        <button class="btn2 btnPrimary" type="button" onclick="createSimple('${prefix}', this)">Créer</button>
+      </div>
+    </div>
+  `;
 }
 
 function totalRows(items){
@@ -613,7 +935,7 @@ function groupByYear(items){
   return Array.from(map.entries()).map(([annee, rows]) => ({ annee, rows }));
 }
 
-function renderTourneesGroup(items, prefix, yearClass, sectorClass){
+function renderTourneesGroup(items, prefix, yearClass, sectorClass, archiveMode){
   const groups = groupByYear(items);
   if (!groups.length) return `<div class="empty">Aucune donnée.</div>`;
 
@@ -648,17 +970,55 @@ function renderTourneesGroup(items, prefix, yearClass, sectorClass){
                 </div>
                 <div class="subContent">
                   <div class="card">
-                    <div class="cardTitle">${escapeHtml(r.secteur || "Secteur")}</div>
+                    <div class="cardTop">
+                      <div class="cardTitle">${escapeHtml(r.secteur || "Secteur")}</div>
+                      <div class="toolbar adminOnly">
+                        <button class="btn2 btnSecondary btnMini" type="button" onclick="toggleEditor('${prefix}_edit_${gi}_${ri}')">🖍</button>
+                        ${!archiveMode ? `<button class="btn2 btnDanger btnMini" type="button" onclick="archiveTournee('${escapeHtml(r.annee)}','${escapeHtml(r.secteur)}', this)">Archiver</button>` : ``}
+                      </div>
+                    </div>
+
                     ${agents.length ? agents.map(a => `<div class="pill">${escapeHtml(a)}</div>`).join("") : `<div class="muted">Aucun agent</div>`}
                     <div class="line" style="margin-top:8px;"><strong>Calendriers attribués :</strong> ${escapeHtml(r.attribues || "0")}</div>
                     <div class="line"><strong>Calendriers vendus :</strong> ${escapeHtml(r.vendus || "0")}</div>
                     <div class="line"><strong>Somme restituée :</strong> ${escapeHtml(r.somme || "0")} €</div>
+
+                    <div class="editorBox" id="${prefix}_edit_${gi}_${ri}">
+                      <div class="field">
+                        <label class="label">Année</label>
+                        <input class="input" id="${prefix}_annee_${gi}_${ri}" type="text" value="${escapeHtml(r.annee || "")}">
+                      </div>
+                      <div class="field">
+                        <label class="label">Secteur / commune</label>
+                        <input class="input" id="${prefix}_secteur_${gi}_${ri}" type="text" value="${escapeHtml(r.secteur || "")}">
+                      </div>
+                      <div class="field">
+                        <label class="label">Agents (séparés par virgules)</label>
+                        <textarea class="textarea" id="${prefix}_agents_${gi}_${ri}">${escapeHtml(r.agents || "")}</textarea>
+                      </div>
+                      <div class="grid2">
+                        <div class="field">
+                          <label class="label">Calendriers attribués</label>
+                          <input class="input" id="${prefix}_attribues_${gi}_${ri}" type="text" value="${escapeHtml(r.attribues || "")}">
+                        </div>
+                        <div class="field">
+                          <label class="label">Calendriers vendus</label>
+                          <input class="input" id="${prefix}_vendus_${gi}_${ri}" type="text" value="${escapeHtml(r.vendus || "")}">
+                        </div>
+                      </div>
+                      <div class="field">
+                        <label class="label">Somme restituée</label>
+                        <input class="input" id="${prefix}_somme_${gi}_${ri}" type="text" value="${escapeHtml(r.somme || "")}">
+                      </div>
+                      <div class="toolbar">
+                        <button class="btn2 btnPrimary" type="button" onclick="saveTournee('${prefix}', '${escapeHtml(r.annee)}', '${escapeHtml(r.secteur)}', ${gi}, ${ri}, this)">Enregistrer</button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             `;
           }).join("")}
-
         </div>
       </div>
     `;
@@ -673,7 +1033,40 @@ function renderTournees(){
         <span class="subArrow">▾</span>
       </div>
       <div class="subContent">
-        ${renderTourneesGroup(state.tourneesActives, "active", "yearHeader", "sectorHeader")}
+        ${renderTourneesGroup(state.tourneesActives, "active", "yearHeader", "sectorHeader", false)}
+
+        <div class="card adminOnly">
+          <div class="cardTitle">Ajouter une tournée active</div>
+          <div class="field">
+            <label class="label">Année</label>
+            <input class="input" id="new_tournee_active_annee" type="text">
+          </div>
+          <div class="field">
+            <label class="label">Secteur / commune</label>
+            <input class="input" id="new_tournee_active_secteur" type="text">
+          </div>
+          <div class="field">
+            <label class="label">Agents (séparés par virgules)</label>
+            <textarea class="textarea" id="new_tournee_active_agents"></textarea>
+          </div>
+          <div class="grid2">
+            <div class="field">
+              <label class="label">Calendriers attribués</label>
+              <input class="input" id="new_tournee_active_attribues" type="text">
+            </div>
+            <div class="field">
+              <label class="label">Calendriers vendus</label>
+              <input class="input" id="new_tournee_active_vendus" type="text">
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Somme restituée</label>
+            <input class="input" id="new_tournee_active_somme" type="text">
+          </div>
+          <div class="toolbar">
+            <button class="btn2 btnPrimary" type="button" onclick="createTourneeActive(this)">Créer</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -683,7 +1076,7 @@ function renderTournees(){
         <span class="subArrow">▾</span>
       </div>
       <div class="subContent">
-        ${renderTourneesGroup(state.tourneesArchives, "archive", "archiveYearHeader", "archiveSectorHeader")}
+        ${renderTourneesGroup(state.tourneesArchives, "archive", "archiveYearHeader", "archiveSectorHeader", true)}
       </div>
     </div>
   `;
@@ -693,8 +1086,8 @@ function renderAll(){
   const html = [
     sectionShell("acc_reunions", "hdr-reunions", "📅", "Réunions", renderReunions()),
     sectionShell("acc_cr", "hdr-cr", "📝", "Comptes-rendus de réunion", renderCR()),
-    sectionShell("acc_projets", "hdr-projets", "🧩", "Projets", renderSimpleBlocks(state.projets, "Projet")),
-    sectionShell("acc_evenements", "hdr-evenements", "🎉", "Événements", renderSimpleBlocks(state.evenements, "Événement")),
+    sectionShell("acc_projets", "hdr-projets", "🧩", "Projets", renderSimpleBlocks(state.projets, "Projet", "projet")),
+    sectionShell("acc_evenements", "hdr-evenements", "🎉", "Événements", renderSimpleBlocks(state.evenements, "Événement", "evenement")),
     sectionShell("acc_tournees", "hdr-cal", "📘", "Tournées calendriers", renderTournees())
   ].join("");
 
@@ -730,12 +1123,318 @@ async function loadAll(){
     state.tourneesArchives = Array.isArray(tourneesArchives.items) ? tourneesArchives.items : [];
 
     renderAll();
-    showStatus("ok", "Page Amicale chargée.");
+    showStatus("ok", state.adminMode ? "Mode création prêt." : "Mode consultation.");
     showLoader(false);
 
   }catch(err){
     showLoader(false);
     showStatus("err", err?.message || String(err));
+  }
+}
+
+async function createReunion(btn){
+  try{
+    setButtonSaving(btn, true, "Création...");
+    const r = await jsonp({
+      view:"amicale_reunion_add",
+      actorEmail:getCurrentEmail(),
+      date:document.getElementById("new_reunion_date").value.trim(),
+      lieu:document.getElementById("new_reunion_lieu").value.trim(),
+      notes:document.getElementById("new_reunion_notes").value.trim()
+    });
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de création.");
+      return;
+    }
+    await loadAll();
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false, "Créer");
+  }
+}
+
+async function saveReunion(index, btn){
+  try{
+    setButtonSaving(btn, true);
+    const oldItem = state.reunions[index];
+
+    await jsonp({
+      view:"amicale_reunion_delete",
+      actorEmail:getCurrentEmail(),
+      id:oldItem.id
+    });
+
+    const r = await jsonp({
+      view:"amicale_reunion_add",
+      actorEmail:getCurrentEmail(),
+      date:document.getElementById(`reunion_date_${index}`).value.trim(),
+      lieu:document.getElementById(`reunion_lieu_${index}`).value.trim(),
+      notes:document.getElementById(`reunion_notes_${index}`).value.trim()
+    });
+
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
+      return;
+    }
+
+    await loadAll();
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false, "Enregistrer");
+  }
+}
+
+async function deleteReunion(id, btn){
+  try{
+    setButtonSaving(btn, true, "Suppression...");
+    const r = await jsonp({
+      view:"amicale_reunion_delete",
+      actorEmail:getCurrentEmail(),
+      id
+    });
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de suppression.");
+      return;
+    }
+    await loadAll();
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false, "Supprimer");
+  }
+}
+
+async function createCR(btn){
+  try{
+    setButtonSaving(btn, true, "Création...");
+    const r = await jsonp({
+      view:"amicale_cr_add",
+      actorEmail:getCurrentEmail(),
+      date:document.getElementById("new_cr_date").value.trim(),
+      titre:document.getElementById("new_cr_titre").value.trim(),
+      texte:document.getElementById("new_cr_texte").value.trim(),
+      documents:document.getElementById("new_cr_docs").value.trim()
+    });
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de création.");
+      return;
+    }
+    await loadAll();
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false, "Créer");
+  }
+}
+
+async function saveCR(index, btn){
+  try{
+    setButtonSaving(btn, true);
+    const oldItem = state.comptesRendus[index];
+
+    await jsonp({
+      view:"amicale_cr_delete",
+      actorEmail:getCurrentEmail(),
+      id:oldItem.id
+    });
+
+    const r = await jsonp({
+      view:"amicale_cr_add",
+      actorEmail:getCurrentEmail(),
+      date:document.getElementById(`cr_date_${index}`).value.trim(),
+      titre:document.getElementById(`cr_titre_${index}`).value.trim(),
+      texte:document.getElementById(`cr_texte_${index}`).value.trim(),
+      documents:document.getElementById(`cr_docs_${index}`).value.trim()
+    });
+
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
+      return;
+    }
+
+    await loadAll();
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false, "Enregistrer");
+  }
+}
+
+async function deleteCR(id, btn){
+  try{
+    setButtonSaving(btn, true, "Suppression...");
+    const r = await jsonp({
+      view:"amicale_cr_delete",
+      actorEmail:getCurrentEmail(),
+      id
+    });
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de suppression.");
+      return;
+    }
+    await loadAll();
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false, "Supprimer");
+  }
+}
+
+async function createSimple(prefix, btn){
+  try{
+    setButtonSaving(btn, true, "Création...");
+    const isProjet = prefix === "projet";
+    const r = await jsonp({
+      view: isProjet ? "amicale_projet_add" : "amicale_evenement_add",
+      actorEmail:getCurrentEmail(),
+      titre:document.getElementById(`new_${prefix}_title`).value.trim(),
+      contenu:document.getElementById(`new_${prefix}_content`).value.trim()
+    });
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de création.");
+      return;
+    }
+    await loadAll();
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false, "Créer");
+  }
+}
+
+async function saveSimple(prefix, index, btn){
+  try{
+    setButtonSaving(btn, true);
+    const items = prefix === "projet" ? state.projets : state.evenements;
+    const oldItem = items[index];
+
+    await jsonp({
+      view: prefix === "projet" ? "amicale_projet_delete" : "amicale_evenement_delete",
+      actorEmail:getCurrentEmail(),
+      id:oldItem.id
+    });
+
+    const r = await jsonp({
+      view: prefix === "projet" ? "amicale_projet_add" : "amicale_evenement_add",
+      actorEmail:getCurrentEmail(),
+      titre:document.getElementById(`${prefix}_title_${index}`).value.trim(),
+      contenu:document.getElementById(`${prefix}_content_${index}`).value.trim()
+    });
+
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
+      return;
+    }
+
+    await loadAll();
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false, "Enregistrer");
+  }
+}
+
+async function deleteSimple(prefix, id, btn){
+  try{
+    setButtonSaving(btn, true, "Suppression...");
+    const r = await jsonp({
+      view: prefix === "projet" ? "amicale_projet_delete" : "amicale_evenement_delete",
+      actorEmail:getCurrentEmail(),
+      id
+    });
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de suppression.");
+      return;
+    }
+    await loadAll();
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false, "Supprimer");
+  }
+}
+
+async function createTourneeActive(btn){
+  try{
+    setButtonSaving(btn, true, "Création...");
+    const r = await jsonp({
+      view:"amicale_tournee_add",
+      actorEmail:getCurrentEmail(),
+      annee:document.getElementById("new_tournee_active_annee").value.trim(),
+      secteur:document.getElementById("new_tournee_active_secteur").value.trim(),
+      agents:document.getElementById("new_tournee_active_agents").value.trim(),
+      attribues:document.getElementById("new_tournee_active_attribues").value.trim(),
+      vendus:document.getElementById("new_tournee_active_vendus").value.trim(),
+      somme:document.getElementById("new_tournee_active_somme").value.trim()
+    });
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de création.");
+      return;
+    }
+    await loadAll();
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false, "Créer");
+  }
+}
+
+async function saveTournee(prefix, originalAnnee, originalSecteur, gi, ri, btn){
+  try{
+    setButtonSaving(btn, true);
+    const base = prefix === "active" ? "active" : "archive";
+
+    await jsonp({
+      view: prefix === "active" ? "amicale_tournee_delete" : "amicale_tournee_archive_delete",
+      actorEmail:getCurrentEmail(),
+      annee:originalAnnee,
+      secteur:originalSecteur
+    });
+
+    const r = await jsonp({
+      view: prefix === "active" ? "amicale_tournee_add" : "amicale_tournee_archive_add",
+      actorEmail:getCurrentEmail(),
+      annee:document.getElementById(`${base}_annee_${gi}_${ri}`).value.trim(),
+      secteur:document.getElementById(`${base}_secteur_${gi}_${ri}`).value.trim(),
+      agents:document.getElementById(`${base}_agents_${gi}_${ri}`).value.trim(),
+      attribues:document.getElementById(`${base}_attribues_${gi}_${ri}`).value.trim(),
+      vendus:document.getElementById(`${base}_vendus_${gi}_${ri}`).value.trim(),
+      somme:document.getElementById(`${base}_somme_${gi}_${ri}`).value.trim()
+    });
+
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
+      return;
+    }
+
+    await loadAll();
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false, "Enregistrer");
+  }
+}
+
+async function archiveTournee(annee, secteur, btn){
+  try{
+    setButtonSaving(btn, true, "Archivage...");
+    const r = await jsonp({
+      view:"amicale_tournee_archive",
+      actorEmail:getCurrentEmail(),
+      annee,
+      secteur
+    });
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur d'archivage.");
+      return;
+    }
+    await loadAll();
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false, "Archiver");
   }
 }
 
@@ -751,7 +1450,21 @@ async function loadAll(){
       return;
     }
 
+    state.auth = access.auth || null;
+
     document.getElementById("pageWrap").style.display = "block";
+
+    const canAdmin = Number(state.auth?.amicale_admin || 0) === 1 || String(state.auth?.role || "").toLowerCase() === "admin";
+    const lock = document.getElementById("amicaleLock");
+
+    if (canAdmin && lock) {
+      lock.style.display = "inline-flex";
+      lock.addEventListener("click", function(){
+        setAdminMode(!state.adminMode);
+      });
+    }
+
+    setAdminMode(false);
     await loadAll();
 
   }catch(err){
