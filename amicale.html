@@ -9,59 +9,9 @@
 
   <style>
     .pageWrap{
-      max-width:980px;
+      max-width:1100px;
       margin:0 auto;
       padding:14px;
-    }
-
-    .hero{
-      padding:14px 16px;
-      margin-bottom:16px;
-      border-radius:18px;
-      background:linear-gradient(180deg, rgba(212,106,0,.34), rgba(212,106,0,.16));
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      color:rgba(255,255,255,.96);
-    }
-
-    .heroTitle{
-      font-size:20px;
-      font-weight:900;
-      line-height:1.2;
-    }
-
-    .heroSmall{
-      margin-top:8px;
-      font-size:13px;
-      font-weight:800;
-      color:rgba(255,255,255,.78);
-      line-height:1.35;
-    }
-
-    .status{
-      display:none;
-      margin-bottom:14px;
-      padding:12px 14px;
-      border-radius:14px;
-      font-weight:800;
-      line-height:1.4;
-      border:1px solid rgba(255,255,255,.12);
-    }
-
-    .status.show{ display:block; }
-    .status.ok{
-      background:rgba(47,158,91,.18);
-      color:#d9ffe7;
-    }
-    .status.err{
-      background:rgba(220,70,70,.18);
-      color:#ffe1e1;
-    }
-    .status.info{
-      background:rgba(47,111,212,.18);
-      color:#dde9ff;
     }
 
     .topTitleWrap{
@@ -88,6 +38,148 @@
 
     .lockBtn:active{
       transform:translateY(1px);
+    }
+
+    .hero{
+      padding:16px 18px;
+      margin-bottom:16px;
+      border-radius:20px;
+      background:linear-gradient(180deg, rgba(212,106,0,.34), rgba(212,106,0,.16));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      color:rgba(255,255,255,.96);
+    }
+
+    .heroTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .heroTitle{
+      font-size:22px;
+      font-weight:900;
+      line-height:1.2;
+    }
+
+    .heroSmall{
+      margin-top:8px;
+      font-size:13px;
+      font-weight:800;
+      color:rgba(255,255,255,.78);
+      line-height:1.4;
+    }
+
+    .heroBadges{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .heroBadge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.14);
+      color:#fff;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .status{
+      display:none;
+      margin-bottom:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:800;
+      line-height:1.4;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .status.show{ display:block; }
+    .status.ok{
+      background:rgba(47,158,91,.18);
+      color:#d9ffe7;
+    }
+    .status.err{
+      background:rgba(220,70,70,.18);
+      color:#ffe1e1;
+    }
+    .status.info{
+      background:rgba(47,111,212,.18);
+      color:#dde9ff;
+    }
+
+    .memberView{
+      display:block;
+    }
+
+    .adminPanel{
+      display:none;
+      margin-bottom:16px;
+    }
+
+    body.adminMode .adminPanel{
+      display:block;
+    }
+
+    .adminBar{
+      border-radius:20px;
+      padding:14px 16px;
+      margin-bottom:14px;
+      background:linear-gradient(180deg, rgba(47,158,91,.28), rgba(47,158,91,.14));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      color:#fff;
+    }
+
+    .adminBarTitle{
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .adminBarText{
+      font-size:13px;
+      line-height:1.4;
+      color:rgba(255,255,255,.82);
+      font-weight:800;
+    }
+
+    .adminGrid{
+      display:grid;
+      gap:12px;
+      grid-template-columns:1fr;
+    }
+
+    .adminCard{
+      border-radius:18px;
+      padding:14px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
+      color:#fff;
+    }
+
+    .adminCardTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .adminCardTitle{
+      font-size:16px;
+      font-weight:900;
     }
 
     .toolbar{
@@ -133,15 +225,50 @@
     }
 
     .btnMini{
-      min-height:36px;
-      padding:8px 10px;
-      font-size:13px;
+      min-height:34px;
+      padding:7px 10px;
+      font-size:12px;
       border-radius:12px;
     }
 
     .btn2[disabled]{
       opacity:.7;
       cursor:default;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:10px;
+    }
+
+    .label{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.82);
+    }
+
+    .input, .textarea{
+      width:100%;
+      border:none;
+      outline:none;
+      border-radius:12px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+      font-size:15px;
+      font-family:inherit;
+    }
+
+    .input{
+      min-height:44px;
+    }
+
+    .textarea{
+      min-height:100px;
+      resize:vertical;
     }
 
     .accordion{
@@ -161,20 +288,12 @@
       justify-content:space-between;
       gap:12px;
       padding:16px;
-    }
-
-    .accordionHeaderMain{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-      flex:1 1 auto;
       cursor:pointer;
       user-select:none;
       -webkit-tap-highlight-color:transparent;
     }
 
-    .accordionHeaderMain:active{
+    .accordionHeader:active{
       transform:translateY(1px);
     }
 
@@ -347,60 +466,6 @@
       grid-template-columns:1fr;
     }
 
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      margin-bottom:10px;
-    }
-
-    .label{
-      font-size:13px;
-      font-weight:900;
-      color:rgba(255,255,255,.80);
-    }
-
-    .input, .textarea{
-      width:100%;
-      border:none;
-      outline:none;
-      border-radius:12px;
-      padding:10px 12px;
-      background:rgba(255,255,255,.10);
-      color:#fff;
-      border:1px solid rgba(255,255,255,.12);
-      font-size:15px;
-      font-family:inherit;
-    }
-
-    .input{
-      min-height:44px;
-    }
-
-    .textarea{
-      min-height:110px;
-      resize:vertical;
-    }
-
-    .editorBox{
-      display:none;
-      margin-top:10px;
-      padding-top:10px;
-      border-top:1px dashed rgba(255,255,255,.10);
-    }
-
-    .adminMode .editorBox.show{
-      display:block;
-    }
-
-    .adminOnly{
-      display:none;
-    }
-
-    .adminMode .adminOnly{
-      display:flex;
-    }
-
     .pill{
       display:inline-flex;
       align-items:center;
@@ -514,8 +579,12 @@
       to{ transform:rotate(360deg); }
     }
 
-    @media (min-width:800px){
+    @media (min-width:900px){
       .grid2{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .adminGrid{
         grid-template-columns:1fr 1fr;
       }
     }
@@ -542,14 +611,37 @@
 
     <div class="pageWrap">
       <div class="hero">
-        <div class="heroTitle">Espace Amicale</div>
-        <div class="heroSmall">
-          Consultation réservée aux membres de l’Amicale. Les administrateurs Amicale peuvent déverrouiller le mode création avec le cadenas.
+        <div class="heroTop">
+          <div>
+            <div class="heroTitle">Espace Amicale</div>
+            <div class="heroSmall">
+              Consultation réservée aux membres de l’Amicale. Les administrateurs Amicale peuvent déverrouiller le mode création via le cadenas.
+            </div>
+            <div class="heroBadges">
+              <div class="heroBadge">👀 Visu membres</div>
+              <div class="heroBadge">📁 Données Amicale</div>
+              <div class="heroBadge">📘 Tournées & archives</div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div id="statusBox" class="status info"></div>
-      <div id="sections"></div>
+
+      <div class="adminPanel" id="adminPanel">
+        <div class="adminBar">
+          <div class="adminBarTitle">Mode administration Amicale activé</div>
+          <div class="adminBarText">
+            Tu peux créer, modifier, supprimer et archiver depuis ce panneau. La visu des membres reste séparée en dessous.
+          </div>
+        </div>
+
+        <div class="adminGrid" id="adminGrid"></div>
+      </div>
+
+      <div class="memberView">
+        <div id="sections"></div>
+      </div>
     </div>
   </div>
 
@@ -661,39 +753,26 @@ function toggleSubAccordion(ev, id){
   el.classList.toggle("open");
 }
 
-function toggleEditor(id){
-  const box = document.getElementById(id);
-  if (!box) return;
-  box.classList.toggle("show");
-}
-
 function setAdminMode(on){
   state.adminMode = !!on;
   document.body.classList.toggle("adminMode", state.adminMode);
 
   const lock = document.getElementById("amicaleLock");
-  if (lock) {
-    lock.textContent = state.adminMode ? "🔓" : "🔒";
-  }
+  if (lock) lock.textContent = state.adminMode ? "🔓" : "🔒";
 
-  showStatus("ok", state.adminMode ? "Mode création Amicale activé." : "Mode consultation.");
+  showStatus("ok", state.adminMode ? "Mode administration Amicale activé." : "Mode consultation.");
 }
 
 async function checkAmicaleAccess(){
   const email = getCurrentEmail();
-
-  if (!email) {
-    return { ok:false };
-  }
+  if (!email) return { ok:false };
 
   const auth = await jsonp({
     view: "auth_check",
     email
   });
 
-  if (!auth || !auth.ok) {
-    return { ok:false };
-  }
+  if (!auth || !auth.ok) return { ok:false };
 
   if (Number(auth.amical || 0) !== 1 && String(auth.role || "").toLowerCase() !== "admin") {
     return { ok:false };
@@ -705,14 +784,12 @@ async function checkAmicaleAccess(){
 function sectionShell(id, headerClass, emoji, title, bodyHtml){
   return `
     <div class="accordion" id="${id}">
-      <div class="accordionHeader ${headerClass}">
-        <div class="accordionHeaderMain" onclick="toggleAccordion('${id}')">
-          <div class="accordionTitle">
-            <span class="emoji">${emoji}</span>
-            <span>${title}</span>
-          </div>
-          <span class="accordionArrow">▾</span>
+      <div class="accordionHeader ${headerClass}" onclick="toggleAccordion('${id}')">
+        <div class="accordionTitle">
+          <span class="emoji">${emoji}</span>
+          <span>${title}</span>
         </div>
+        <span class="accordionArrow">▾</span>
       </div>
       <div class="accordionContent">${bodyHtml}</div>
     </div>
@@ -721,192 +798,58 @@ function sectionShell(id, headerClass, emoji, title, bodyHtml){
 
 function renderReunions(){
   const items = state.reunions || [];
+  if (!items.length) return `<div class="empty">Aucune réunion enregistrée.</div>`;
 
   return `
-    ${items.length ? `
-      <div class="grid2">
-        ${items.map((r, i) => `
-          <div class="card">
-            <div class="cardTop">
-              <div class="cardTitle">Réunion ${i + 1}</div>
-              <div class="toolbar adminOnly">
-                <button class="btn2 btnSecondary btnMini" type="button" onclick="toggleEditor('reunion_edit_${i}')">🖍</button>
-              </div>
-            </div>
-
-            <div class="line"><strong>Date :</strong> ${escapeHtml(r.date || "—")}</div>
-            <div class="line"><strong>Lieu :</strong> ${escapeHtml(r.lieu || "—")}</div>
-            <div class="line"><strong>Notes :</strong> ${escapeHtml(r.notes || "—")}</div>
-
-            <div class="editorBox" id="reunion_edit_${i}">
-              <div class="field">
-                <label class="label">Date</label>
-                <input class="input" id="reunion_date_${i}" type="text" value="${escapeHtml(r.date || "")}">
-              </div>
-              <div class="field">
-                <label class="label">Lieu</label>
-                <input class="input" id="reunion_lieu_${i}" type="text" value="${escapeHtml(r.lieu || "")}">
-              </div>
-              <div class="field">
-                <label class="label">Notes</label>
-                <textarea class="textarea" id="reunion_notes_${i}">${escapeHtml(r.notes || "")}</textarea>
-              </div>
-              <div class="toolbar">
-                <button class="btn2 btnPrimary" type="button" onclick="saveReunion(${i}, this)">Enregistrer</button>
-                <button class="btn2 btnDanger" type="button" onclick="deleteReunion('${escapeHtml(r.id)}', this)">Supprimer</button>
-              </div>
-            </div>
-          </div>
-        `).join("")}
-      </div>
-    ` : `<div class="empty">Aucune réunion enregistrée.</div>`}
-
-    <div class="card adminOnly">
-      <div class="cardTitle">Ajouter une réunion</div>
-      <div class="field">
-        <label class="label">Date</label>
-        <input class="input" id="new_reunion_date" type="text">
-      </div>
-      <div class="field">
-        <label class="label">Lieu</label>
-        <input class="input" id="new_reunion_lieu" type="text">
-      </div>
-      <div class="field">
-        <label class="label">Notes</label>
-        <textarea class="textarea" id="new_reunion_notes"></textarea>
-      </div>
-      <div class="toolbar">
-        <button class="btn2 btnPrimary" type="button" onclick="createReunion(this)">Créer</button>
-      </div>
+    <div class="grid2">
+      ${items.map((r, i) => `
+        <div class="card">
+          <div class="cardTitle">Réunion ${i + 1}</div>
+          <div class="line"><strong>Date :</strong> ${escapeHtml(r.date || "—")}</div>
+          <div class="line"><strong>Lieu :</strong> ${escapeHtml(r.lieu || "—")}</div>
+          <div class="line"><strong>Notes :</strong> ${escapeHtml(r.notes || "—")}</div>
+        </div>
+      `).join("")}
     </div>
   `;
 }
 
 function renderCR(){
   const items = state.comptesRendus || [];
+  if (!items.length) return `<div class="empty">Aucun compte-rendu enregistré.</div>`;
 
-  return `
-    ${items.length ? items.map((r, i) => {
-      const docs = String(r.documents || "").split(/\n+/).map(x => x.trim()).filter(Boolean);
-      return `
-        <div class="card">
-          <div class="cardTop">
-            <div class="cardTitle">${escapeHtml(r.titre || `Compte-rendu ${i + 1}`)}</div>
-            <div class="toolbar adminOnly">
-              <button class="btn2 btnSecondary btnMini" type="button" onclick="toggleEditor('cr_edit_${i}')">🖍</button>
-            </div>
-          </div>
-
-          <div class="line"><strong>Date :</strong> ${escapeHtml(r.date || "—")}</div>
-          <div class="line"><strong>Texte :</strong></div>
-          <div class="line">${escapeHtml(r.texte || "—")}</div>
-          <div class="line" style="margin-top:8px;"><strong>Documents :</strong></div>
-          ${docs.length ? docs.map(d => `<div class="pill">📎 ${escapeHtml(d)}</div>`).join("") : `<div class="muted">Aucun document</div>`}
-
-          <div class="editorBox" id="cr_edit_${i}">
-            <div class="field">
-              <label class="label">Date</label>
-              <input class="input" id="cr_date_${i}" type="text" value="${escapeHtml(r.date || "")}">
-            </div>
-            <div class="field">
-              <label class="label">Titre</label>
-              <input class="input" id="cr_titre_${i}" type="text" value="${escapeHtml(r.titre || "")}">
-            </div>
-            <div class="field">
-              <label class="label">Texte</label>
-              <textarea class="textarea" id="cr_texte_${i}">${escapeHtml(r.texte || "")}</textarea>
-            </div>
-            <div class="field">
-              <label class="label">Documents (un par ligne)</label>
-              <textarea class="textarea" id="cr_docs_${i}">${escapeHtml(r.documents || "")}</textarea>
-            </div>
-            <div class="toolbar">
-              <button class="btn2 btnPrimary" type="button" onclick="saveCR(${i}, this)">Enregistrer</button>
-              <button class="btn2 btnDanger" type="button" onclick="deleteCR('${escapeHtml(r.id)}', this)">Supprimer</button>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join("") : `<div class="empty">Aucun compte-rendu enregistré.</div>`}
-
-    <div class="card adminOnly">
-      <div class="cardTitle">Ajouter un compte-rendu</div>
-      <div class="field">
-        <label class="label">Date</label>
-        <input class="input" id="new_cr_date" type="text">
+  return items.map((r, i) => {
+    const docs = String(r.documents || "").split(/\n+/).map(x => x.trim()).filter(Boolean);
+    return `
+      <div class="card">
+        <div class="cardTitle">${escapeHtml(r.titre || `Compte-rendu ${i + 1}`)}</div>
+        <div class="line"><strong>Date :</strong> ${escapeHtml(r.date || "—")}</div>
+        <div class="line"><strong>Texte :</strong></div>
+        <div class="line">${escapeHtml(r.texte || "—")}</div>
+        <div class="line" style="margin-top:8px;"><strong>Documents :</strong></div>
+        ${docs.length ? docs.map(d => `<div class="pill">📎 ${escapeHtml(d)}</div>`).join("") : `<div class="muted">Aucun document</div>`}
       </div>
-      <div class="field">
-        <label class="label">Titre</label>
-        <input class="input" id="new_cr_titre" type="text">
-      </div>
-      <div class="field">
-        <label class="label">Texte</label>
-        <textarea class="textarea" id="new_cr_texte"></textarea>
-      </div>
-      <div class="field">
-        <label class="label">Documents (un par ligne)</label>
-        <textarea class="textarea" id="new_cr_docs"></textarea>
-      </div>
-      <div class="toolbar">
-        <button class="btn2 btnPrimary" type="button" onclick="createCR(this)">Créer</button>
-      </div>
-    </div>
-  `;
+    `;
+  }).join("");
 }
 
 function renderSimpleBlocks(items, label, prefix){
-  return `
-    ${items.length ? items.map((r, i) => `
-      <div class="subAccordion" id="${prefix}_${i}">
-        <div class="subHeader" onclick="toggleSubAccordion(event, '${prefix}_${i}')">
-          <span>${escapeHtml(r.titre || `${label} ${i + 1}`)}</span>
-          <span class="subArrow">▾</span>
+  if (!items.length) return `<div class="empty">Aucun ${label.toLowerCase()} enregistré.</div>`;
+
+  return items.map((r, i) => `
+    <div class="subAccordion" id="${prefix}_${i}">
+      <div class="subHeader" onclick="toggleSubAccordion(event, '${prefix}_${i}')">
+        <span>${escapeHtml(r.titre || `${label} ${i + 1}`)}</span>
+        <span class="subArrow">▾</span>
+      </div>
+      <div class="subContent">
+        <div class="card">
+          <div class="cardTitle">${escapeHtml(r.titre || `${label} ${i + 1}`)}</div>
+          <div class="line">${escapeHtml(r.contenu || "—")}</div>
         </div>
-        <div class="subContent">
-          <div class="card">
-            <div class="cardTop">
-              <div class="cardTitle">${escapeHtml(r.titre || `${label} ${i + 1}`)}</div>
-              <div class="toolbar adminOnly">
-                <button class="btn2 btnSecondary btnMini" type="button" onclick="toggleEditor('${prefix}_edit_${i}')">🖍</button>
-              </div>
-            </div>
-
-            <div class="line">${escapeHtml(r.contenu || "—")}</div>
-
-            <div class="editorBox" id="${prefix}_edit_${i}">
-              <div class="field">
-                <label class="label">Titre</label>
-                <input class="input" id="${prefix}_title_${i}" type="text" value="${escapeHtml(r.titre || "")}">
-              </div>
-              <div class="field">
-                <label class="label">Contenu</label>
-                <textarea class="textarea" id="${prefix}_content_${i}">${escapeHtml(r.contenu || "")}</textarea>
-              </div>
-              <div class="toolbar">
-                <button class="btn2 btnPrimary" type="button" onclick="saveSimple('${prefix}', ${i}, this)">Enregistrer</button>
-                <button class="btn2 btnDanger" type="button" onclick="deleteSimple('${prefix}', '${escapeHtml(r.id)}', this)">Supprimer</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    `).join("") : `<div class="empty">Aucun ${label.toLowerCase()} enregistré.</div>`}
-
-    <div class="card adminOnly">
-      <div class="cardTitle">Ajouter ${label === "Projet" ? "un projet" : "un événement"}</div>
-      <div class="field">
-        <label class="label">Titre</label>
-        <input class="input" id="new_${prefix}_title" type="text">
-      </div>
-      <div class="field">
-        <label class="label">Contenu</label>
-        <textarea class="textarea" id="new_${prefix}_content"></textarea>
-      </div>
-      <div class="toolbar">
-        <button class="btn2 btnPrimary" type="button" onclick="createSimple('${prefix}', this)">Créer</button>
       </div>
     </div>
-  `;
+  `).join("");
 }
 
 function totalRows(items){
@@ -935,7 +878,7 @@ function groupByYear(items){
   return Array.from(map.entries()).map(([annee, rows]) => ({ annee, rows }));
 }
 
-function renderTourneesGroup(items, prefix, yearClass, sectorClass, archiveMode){
+function renderTourneesGroup(items, prefix, yearClass, sectorClass){
   const groups = groupByYear(items);
   if (!groups.length) return `<div class="empty">Aucune donnée.</div>`;
 
@@ -970,55 +913,17 @@ function renderTourneesGroup(items, prefix, yearClass, sectorClass, archiveMode)
                 </div>
                 <div class="subContent">
                   <div class="card">
-                    <div class="cardTop">
-                      <div class="cardTitle">${escapeHtml(r.secteur || "Secteur")}</div>
-                      <div class="toolbar adminOnly">
-                        <button class="btn2 btnSecondary btnMini" type="button" onclick="toggleEditor('${prefix}_edit_${gi}_${ri}')">🖍</button>
-                        ${!archiveMode ? `<button class="btn2 btnDanger btnMini" type="button" onclick="archiveTournee('${escapeHtml(r.annee)}','${escapeHtml(r.secteur)}', this)">Archiver</button>` : ``}
-                      </div>
-                    </div>
-
+                    <div class="cardTitle">${escapeHtml(r.secteur || "Secteur")}</div>
                     ${agents.length ? agents.map(a => `<div class="pill">${escapeHtml(a)}</div>`).join("") : `<div class="muted">Aucun agent</div>`}
                     <div class="line" style="margin-top:8px;"><strong>Calendriers attribués :</strong> ${escapeHtml(r.attribues || "0")}</div>
                     <div class="line"><strong>Calendriers vendus :</strong> ${escapeHtml(r.vendus || "0")}</div>
                     <div class="line"><strong>Somme restituée :</strong> ${escapeHtml(r.somme || "0")} €</div>
-
-                    <div class="editorBox" id="${prefix}_edit_${gi}_${ri}">
-                      <div class="field">
-                        <label class="label">Année</label>
-                        <input class="input" id="${prefix}_annee_${gi}_${ri}" type="text" value="${escapeHtml(r.annee || "")}">
-                      </div>
-                      <div class="field">
-                        <label class="label">Secteur / commune</label>
-                        <input class="input" id="${prefix}_secteur_${gi}_${ri}" type="text" value="${escapeHtml(r.secteur || "")}">
-                      </div>
-                      <div class="field">
-                        <label class="label">Agents (séparés par virgules)</label>
-                        <textarea class="textarea" id="${prefix}_agents_${gi}_${ri}">${escapeHtml(r.agents || "")}</textarea>
-                      </div>
-                      <div class="grid2">
-                        <div class="field">
-                          <label class="label">Calendriers attribués</label>
-                          <input class="input" id="${prefix}_attribues_${gi}_${ri}" type="text" value="${escapeHtml(r.attribues || "")}">
-                        </div>
-                        <div class="field">
-                          <label class="label">Calendriers vendus</label>
-                          <input class="input" id="${prefix}_vendus_${gi}_${ri}" type="text" value="${escapeHtml(r.vendus || "")}">
-                        </div>
-                      </div>
-                      <div class="field">
-                        <label class="label">Somme restituée</label>
-                        <input class="input" id="${prefix}_somme_${gi}_${ri}" type="text" value="${escapeHtml(r.somme || "")}">
-                      </div>
-                      <div class="toolbar">
-                        <button class="btn2 btnPrimary" type="button" onclick="saveTournee('${prefix}', '${escapeHtml(r.annee)}', '${escapeHtml(r.secteur)}', ${gi}, ${ri}, this)">Enregistrer</button>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
             `;
           }).join("")}
+
         </div>
       </div>
     `;
@@ -1033,40 +938,7 @@ function renderTournees(){
         <span class="subArrow">▾</span>
       </div>
       <div class="subContent">
-        ${renderTourneesGroup(state.tourneesActives, "active", "yearHeader", "sectorHeader", false)}
-
-        <div class="card adminOnly">
-          <div class="cardTitle">Ajouter une tournée active</div>
-          <div class="field">
-            <label class="label">Année</label>
-            <input class="input" id="new_tournee_active_annee" type="text">
-          </div>
-          <div class="field">
-            <label class="label">Secteur / commune</label>
-            <input class="input" id="new_tournee_active_secteur" type="text">
-          </div>
-          <div class="field">
-            <label class="label">Agents (séparés par virgules)</label>
-            <textarea class="textarea" id="new_tournee_active_agents"></textarea>
-          </div>
-          <div class="grid2">
-            <div class="field">
-              <label class="label">Calendriers attribués</label>
-              <input class="input" id="new_tournee_active_attribues" type="text">
-            </div>
-            <div class="field">
-              <label class="label">Calendriers vendus</label>
-              <input class="input" id="new_tournee_active_vendus" type="text">
-            </div>
-          </div>
-          <div class="field">
-            <label class="label">Somme restituée</label>
-            <input class="input" id="new_tournee_active_somme" type="text">
-          </div>
-          <div class="toolbar">
-            <button class="btn2 btnPrimary" type="button" onclick="createTourneeActive(this)">Créer</button>
-          </div>
-        </div>
+        ${renderTourneesGroup(state.tourneesActives, "active", "yearHeader", "sectorHeader")}
       </div>
     </div>
 
@@ -1076,13 +948,13 @@ function renderTournees(){
         <span class="subArrow">▾</span>
       </div>
       <div class="subContent">
-        ${renderTourneesGroup(state.tourneesArchives, "archive", "archiveYearHeader", "archiveSectorHeader", true)}
+        ${renderTourneesGroup(state.tourneesArchives, "archive", "archiveYearHeader", "archiveSectorHeader")}
       </div>
     </div>
   `;
 }
 
-function renderAll(){
+function renderMemberView(){
   const html = [
     sectionShell("acc_reunions", "hdr-reunions", "📅", "Réunions", renderReunions()),
     sectionShell("acc_cr", "hdr-cr", "📝", "Comptes-rendus de réunion", renderCR()),
@@ -1092,6 +964,130 @@ function renderAll(){
   ].join("");
 
   document.getElementById("sections").innerHTML = html;
+}
+
+function renderAdminPanel(){
+  const grid = document.getElementById("adminGrid");
+  if (!grid) return;
+
+  grid.innerHTML = `
+    <div class="adminCard">
+      <div class="adminCardTop">
+        <div class="adminCardTitle">📅 Réunions</div>
+      </div>
+      <div class="field">
+        <label class="label">Date</label>
+        <input class="input" id="admin_reunion_date" type="text">
+      </div>
+      <div class="field">
+        <label class="label">Lieu</label>
+        <input class="input" id="admin_reunion_lieu" type="text">
+      </div>
+      <div class="field">
+        <label class="label">Notes</label>
+        <textarea class="textarea" id="admin_reunion_notes"></textarea>
+      </div>
+      <div class="toolbar">
+        <button class="btn2 btnPrimary" type="button" onclick="createReunion(this)">Ajouter une réunion</button>
+      </div>
+    </div>
+
+    <div class="adminCard">
+      <div class="adminCardTop">
+        <div class="adminCardTitle">📝 Comptes-rendus</div>
+      </div>
+      <div class="field">
+        <label class="label">Date</label>
+        <input class="input" id="admin_cr_date" type="text">
+      </div>
+      <div class="field">
+        <label class="label">Titre</label>
+        <input class="input" id="admin_cr_titre" type="text">
+      </div>
+      <div class="field">
+        <label class="label">Texte</label>
+        <textarea class="textarea" id="admin_cr_texte"></textarea>
+      </div>
+      <div class="field">
+        <label class="label">Documents (un par ligne)</label>
+        <textarea class="textarea" id="admin_cr_docs"></textarea>
+      </div>
+      <div class="toolbar">
+        <button class="btn2 btnPrimary" type="button" onclick="createCR(this)">Ajouter un compte-rendu</button>
+      </div>
+    </div>
+
+    <div class="adminCard">
+      <div class="adminCardTop">
+        <div class="adminCardTitle">🧩 Projets</div>
+      </div>
+      <div class="field">
+        <label class="label">Titre</label>
+        <input class="input" id="admin_projet_title" type="text">
+      </div>
+      <div class="field">
+        <label class="label">Contenu</label>
+        <textarea class="textarea" id="admin_projet_content"></textarea>
+      </div>
+      <div class="toolbar">
+        <button class="btn2 btnPrimary" type="button" onclick="createSimple('projet', this)">Ajouter un projet</button>
+      </div>
+    </div>
+
+    <div class="adminCard">
+      <div class="adminCardTop">
+        <div class="adminCardTitle">🎉 Événements</div>
+      </div>
+      <div class="field">
+        <label class="label">Titre</label>
+        <input class="input" id="admin_evenement_title" type="text">
+      </div>
+      <div class="field">
+        <label class="label">Contenu</label>
+        <textarea class="textarea" id="admin_evenement_content"></textarea>
+      </div>
+      <div class="toolbar">
+        <button class="btn2 btnPrimary" type="button" onclick="createSimple('evenement', this)">Ajouter un événement</button>
+      </div>
+    </div>
+
+    <div class="adminCard" style="grid-column:1 / -1;">
+      <div class="adminCardTop">
+        <div class="adminCardTitle">📘 Tournées calendriers</div>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label class="label">Année</label>
+          <input class="input" id="admin_tournee_annee" type="text">
+        </div>
+        <div class="field">
+          <label class="label">Secteur / commune</label>
+          <input class="input" id="admin_tournee_secteur" type="text">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Agents (séparés par virgules)</label>
+        <textarea class="textarea" id="admin_tournee_agents"></textarea>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label class="label">Calendriers attribués</label>
+          <input class="input" id="admin_tournee_attribues" type="text">
+        </div>
+        <div class="field">
+          <label class="label">Calendriers vendus</label>
+          <input class="input" id="admin_tournee_vendus" type="text">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Somme restituée</label>
+        <input class="input" id="admin_tournee_somme" type="text">
+      </div>
+      <div class="toolbar">
+        <button class="btn2 btnPrimary" type="button" onclick="createTourneeActive(this)">Ajouter une tournée active</button>
+      </div>
+    </div>
+  `;
 }
 
 async function loadAll(){
@@ -1122,8 +1118,10 @@ async function loadAll(){
     state.tourneesActives = Array.isArray(tourneesActives.items) ? tourneesActives.items : [];
     state.tourneesArchives = Array.isArray(tourneesArchives.items) ? tourneesArchives.items : [];
 
-    renderAll();
-    showStatus("ok", state.adminMode ? "Mode création prêt." : "Mode consultation.");
+    renderMemberView();
+    renderAdminPanel();
+
+    showStatus("ok", state.adminMode ? "Mode administration prêt." : "Mode consultation.");
     showLoader(false);
 
   }catch(err){
@@ -1138,9 +1136,9 @@ async function createReunion(btn){
     const r = await jsonp({
       view:"amicale_reunion_add",
       actorEmail:getCurrentEmail(),
-      date:document.getElementById("new_reunion_date").value.trim(),
-      lieu:document.getElementById("new_reunion_lieu").value.trim(),
-      notes:document.getElementById("new_reunion_notes").value.trim()
+      date:document.getElementById("admin_reunion_date").value.trim(),
+      lieu:document.getElementById("admin_reunion_lieu").value.trim(),
+      notes:document.getElementById("admin_reunion_notes").value.trim()
     });
     if (!r || !r.ok) {
       showStatus("err", (r && r.error) ? r.error : "Erreur de création.");
@@ -1150,59 +1148,7 @@ async function createReunion(btn){
   }catch(err){
     showStatus("err", err?.message || String(err));
   } finally {
-    setButtonSaving(btn, false, "Créer");
-  }
-}
-
-async function saveReunion(index, btn){
-  try{
-    setButtonSaving(btn, true);
-    const oldItem = state.reunions[index];
-
-    await jsonp({
-      view:"amicale_reunion_delete",
-      actorEmail:getCurrentEmail(),
-      id:oldItem.id
-    });
-
-    const r = await jsonp({
-      view:"amicale_reunion_add",
-      actorEmail:getCurrentEmail(),
-      date:document.getElementById(`reunion_date_${index}`).value.trim(),
-      lieu:document.getElementById(`reunion_lieu_${index}`).value.trim(),
-      notes:document.getElementById(`reunion_notes_${index}`).value.trim()
-    });
-
-    if (!r || !r.ok) {
-      showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
-      return;
-    }
-
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false, "Enregistrer");
-  }
-}
-
-async function deleteReunion(id, btn){
-  try{
-    setButtonSaving(btn, true, "Suppression...");
-    const r = await jsonp({
-      view:"amicale_reunion_delete",
-      actorEmail:getCurrentEmail(),
-      id
-    });
-    if (!r || !r.ok) {
-      showStatus("err", (r && r.error) ? r.error : "Erreur de suppression.");
-      return;
-    }
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false, "Supprimer");
+    setButtonSaving(btn, false, "Ajouter une réunion");
   }
 }
 
@@ -1212,10 +1158,10 @@ async function createCR(btn){
     const r = await jsonp({
       view:"amicale_cr_add",
       actorEmail:getCurrentEmail(),
-      date:document.getElementById("new_cr_date").value.trim(),
-      titre:document.getElementById("new_cr_titre").value.trim(),
-      texte:document.getElementById("new_cr_texte").value.trim(),
-      documents:document.getElementById("new_cr_docs").value.trim()
+      date:document.getElementById("admin_cr_date").value.trim(),
+      titre:document.getElementById("admin_cr_titre").value.trim(),
+      texte:document.getElementById("admin_cr_texte").value.trim(),
+      documents:document.getElementById("admin_cr_docs").value.trim()
     });
     if (!r || !r.ok) {
       showStatus("err", (r && r.error) ? r.error : "Erreur de création.");
@@ -1225,60 +1171,7 @@ async function createCR(btn){
   }catch(err){
     showStatus("err", err?.message || String(err));
   } finally {
-    setButtonSaving(btn, false, "Créer");
-  }
-}
-
-async function saveCR(index, btn){
-  try{
-    setButtonSaving(btn, true);
-    const oldItem = state.comptesRendus[index];
-
-    await jsonp({
-      view:"amicale_cr_delete",
-      actorEmail:getCurrentEmail(),
-      id:oldItem.id
-    });
-
-    const r = await jsonp({
-      view:"amicale_cr_add",
-      actorEmail:getCurrentEmail(),
-      date:document.getElementById(`cr_date_${index}`).value.trim(),
-      titre:document.getElementById(`cr_titre_${index}`).value.trim(),
-      texte:document.getElementById(`cr_texte_${index}`).value.trim(),
-      documents:document.getElementById(`cr_docs_${index}`).value.trim()
-    });
-
-    if (!r || !r.ok) {
-      showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
-      return;
-    }
-
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false, "Enregistrer");
-  }
-}
-
-async function deleteCR(id, btn){
-  try{
-    setButtonSaving(btn, true, "Suppression...");
-    const r = await jsonp({
-      view:"amicale_cr_delete",
-      actorEmail:getCurrentEmail(),
-      id
-    });
-    if (!r || !r.ok) {
-      showStatus("err", (r && r.error) ? r.error : "Erreur de suppression.");
-      return;
-    }
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false, "Supprimer");
+    setButtonSaving(btn, false, "Ajouter un compte-rendu");
   }
 }
 
@@ -1289,8 +1182,8 @@ async function createSimple(prefix, btn){
     const r = await jsonp({
       view: isProjet ? "amicale_projet_add" : "amicale_evenement_add",
       actorEmail:getCurrentEmail(),
-      titre:document.getElementById(`new_${prefix}_title`).value.trim(),
-      contenu:document.getElementById(`new_${prefix}_content`).value.trim()
+      titre:document.getElementById(`admin_${prefix}_title`).value.trim(),
+      contenu:document.getElementById(`admin_${prefix}_content`).value.trim()
     });
     if (!r || !r.ok) {
       showStatus("err", (r && r.error) ? r.error : "Erreur de création.");
@@ -1300,59 +1193,7 @@ async function createSimple(prefix, btn){
   }catch(err){
     showStatus("err", err?.message || String(err));
   } finally {
-    setButtonSaving(btn, false, "Créer");
-  }
-}
-
-async function saveSimple(prefix, index, btn){
-  try{
-    setButtonSaving(btn, true);
-    const items = prefix === "projet" ? state.projets : state.evenements;
-    const oldItem = items[index];
-
-    await jsonp({
-      view: prefix === "projet" ? "amicale_projet_delete" : "amicale_evenement_delete",
-      actorEmail:getCurrentEmail(),
-      id:oldItem.id
-    });
-
-    const r = await jsonp({
-      view: prefix === "projet" ? "amicale_projet_add" : "amicale_evenement_add",
-      actorEmail:getCurrentEmail(),
-      titre:document.getElementById(`${prefix}_title_${index}`).value.trim(),
-      contenu:document.getElementById(`${prefix}_content_${index}`).value.trim()
-    });
-
-    if (!r || !r.ok) {
-      showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
-      return;
-    }
-
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false, "Enregistrer");
-  }
-}
-
-async function deleteSimple(prefix, id, btn){
-  try{
-    setButtonSaving(btn, true, "Suppression...");
-    const r = await jsonp({
-      view: prefix === "projet" ? "amicale_projet_delete" : "amicale_evenement_delete",
-      actorEmail:getCurrentEmail(),
-      id
-    });
-    if (!r || !r.ok) {
-      showStatus("err", (r && r.error) ? r.error : "Erreur de suppression.");
-      return;
-    }
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false, "Supprimer");
+    setButtonSaving(btn, false, isProjet ? "Ajouter un projet" : "Ajouter un événement");
   }
 }
 
@@ -1362,12 +1203,12 @@ async function createTourneeActive(btn){
     const r = await jsonp({
       view:"amicale_tournee_add",
       actorEmail:getCurrentEmail(),
-      annee:document.getElementById("new_tournee_active_annee").value.trim(),
-      secteur:document.getElementById("new_tournee_active_secteur").value.trim(),
-      agents:document.getElementById("new_tournee_active_agents").value.trim(),
-      attribues:document.getElementById("new_tournee_active_attribues").value.trim(),
-      vendus:document.getElementById("new_tournee_active_vendus").value.trim(),
-      somme:document.getElementById("new_tournee_active_somme").value.trim()
+      annee:document.getElementById("admin_tournee_annee").value.trim(),
+      secteur:document.getElementById("admin_tournee_secteur").value.trim(),
+      agents:document.getElementById("admin_tournee_agents").value.trim(),
+      attribues:document.getElementById("admin_tournee_attribues").value.trim(),
+      vendus:document.getElementById("admin_tournee_vendus").value.trim(),
+      somme:document.getElementById("admin_tournee_somme").value.trim()
     });
     if (!r || !r.ok) {
       showStatus("err", (r && r.error) ? r.error : "Erreur de création.");
@@ -1377,64 +1218,7 @@ async function createTourneeActive(btn){
   }catch(err){
     showStatus("err", err?.message || String(err));
   } finally {
-    setButtonSaving(btn, false, "Créer");
-  }
-}
-
-async function saveTournee(prefix, originalAnnee, originalSecteur, gi, ri, btn){
-  try{
-    setButtonSaving(btn, true);
-    const base = prefix === "active" ? "active" : "archive";
-
-    await jsonp({
-      view: prefix === "active" ? "amicale_tournee_delete" : "amicale_tournee_archive_delete",
-      actorEmail:getCurrentEmail(),
-      annee:originalAnnee,
-      secteur:originalSecteur
-    });
-
-    const r = await jsonp({
-      view: prefix === "active" ? "amicale_tournee_add" : "amicale_tournee_archive_add",
-      actorEmail:getCurrentEmail(),
-      annee:document.getElementById(`${base}_annee_${gi}_${ri}`).value.trim(),
-      secteur:document.getElementById(`${base}_secteur_${gi}_${ri}`).value.trim(),
-      agents:document.getElementById(`${base}_agents_${gi}_${ri}`).value.trim(),
-      attribues:document.getElementById(`${base}_attribues_${gi}_${ri}`).value.trim(),
-      vendus:document.getElementById(`${base}_vendus_${gi}_${ri}`).value.trim(),
-      somme:document.getElementById(`${base}_somme_${gi}_${ri}`).value.trim()
-    });
-
-    if (!r || !r.ok) {
-      showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
-      return;
-    }
-
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false, "Enregistrer");
-  }
-}
-
-async function archiveTournee(annee, secteur, btn){
-  try{
-    setButtonSaving(btn, true, "Archivage...");
-    const r = await jsonp({
-      view:"amicale_tournee_archive",
-      actorEmail:getCurrentEmail(),
-      annee,
-      secteur
-    });
-    if (!r || !r.ok) {
-      showStatus("err", (r && r.error) ? r.error : "Erreur d'archivage.");
-      return;
-    }
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false, "Archiver");
+    setButtonSaving(btn, false, "Ajouter une tournée active");
   }
 }
 
@@ -1451,7 +1235,6 @@ async function archiveTournee(annee, secteur, btn){
     }
 
     state.auth = access.auth || null;
-
     document.getElementById("pageWrap").style.display = "block";
 
     const canAdmin = Number(state.auth?.amicale_admin || 0) === 1 || String(state.auth?.role || "").toLowerCase() === "admin";
