@@ -1,60 +1,788 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Amicale — Accès réservé</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Amicale — CS Consenvoye</title>
 
-<style>
+  <link rel="stylesheet" href="cs-theme.css">
 
-body{
-margin:0;
-background:#000;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-font-family:system-ui;
-}
+  <style>
+    .pageWrap{
+      max-width:980px;
+      margin:0 auto;
+      padding:14px;
+    }
 
-/* bouton retour */
+    .hero{
+      padding:14px 16px;
+      margin-bottom:16px;
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(212,106,0,.34), rgba(212,106,0,.16));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      color:rgba(255,255,255,.96);
+    }
 
-.backBtn{
-position:fixed;
-top:14px;
-left:14px;
+    .heroTitle{
+      font-size:20px;
+      font-weight:900;
+      line-height:1.2;
+    }
 
-padding:10px 18px;
-border-radius:18px;
+    .heroSmall{
+      margin-top:8px;
+      font-size:13px;
+      font-weight:800;
+      color:rgba(255,255,255,.78);
+      line-height:1.35;
+    }
 
-background:linear-gradient(180deg,#ff8c00,#d86f00);
-border:1px solid rgba(255,255,255,.25);
+    .status{
+      display:none;
+      margin-bottom:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:800;
+      line-height:1.4;
+      border:1px solid rgba(255,255,255,.12);
+    }
 
-font-weight:900;
-color:white;
-font-size:16px;
+    .status.show{ display:block; }
+    .status.ok{
+      background:rgba(47,158,91,.18);
+      color:#d9ffe7;
+    }
+    .status.err{
+      background:rgba(220,70,70,.18);
+      color:#ffe1e1;
+    }
+    .status.info{
+      background:rgba(47,111,212,.18);
+      color:#dde9ff;
+    }
 
-box-shadow:0 10px 25px rgba(0,0,0,.4);
+    .accordion{
+      border-radius:20px;
+      overflow:hidden;
+      margin-bottom:14px;
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      background:rgba(255,255,255,.06);
+    }
 
-cursor:pointer;
-}
+    .accordionHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px;
+      font-weight:900;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+    }
 
-/* image */
+    .accordionHeader:active{
+      transform:translateY(1px);
+    }
 
-.lockImg{
-max-width:95%;
-max-height:90vh;
-object-fit:contain;
-}
+    .accordionTitle{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+      flex:1 1 auto;
+      color:rgba(255,255,255,.96);
+      font-size:18px;
+    }
 
-</style>
+    .emoji{
+      font-size:22px;
+      line-height:1;
+      flex:0 0 auto;
+    }
+
+    .accordionArrow{
+      font-size:18px;
+      color:rgba(255,255,255,.88);
+      transition:transform .18s ease;
+      flex:0 0 auto;
+    }
+
+    .accordion.open .accordionArrow{
+      transform:rotate(180deg);
+    }
+
+    .accordionContent{
+      display:none;
+      padding:12px;
+      background:rgba(0,0,0,.10);
+    }
+
+    .accordion.open .accordionContent{
+      display:block;
+    }
+
+    .hdr-reunions{
+      background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18));
+    }
+
+    .hdr-cr{
+      background:linear-gradient(180deg, rgba(145,90,220,.30), rgba(145,90,220,.15));
+    }
+
+    .hdr-projets{
+      background:linear-gradient(180deg, rgba(47,158,91,.30), rgba(47,158,91,.15));
+    }
+
+    .hdr-evenements{
+      background:linear-gradient(180deg, rgba(220,90,170,.28), rgba(220,90,170,.14));
+    }
+
+    .hdr-cal{
+      background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15));
+    }
+
+    .subAccordion{
+      border-radius:16px;
+      overflow:hidden;
+      margin-bottom:10px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.05);
+    }
+
+    .subHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:13px 14px;
+      cursor:pointer;
+      font-weight:900;
+      color:rgba(255,255,255,.95);
+      background:rgba(255,255,255,.06);
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .subHeader:active{
+      transform:translateY(1px);
+    }
+
+    .subArrow{
+      transition:transform .18s ease;
+      color:rgba(255,255,255,.82);
+    }
+
+    .subAccordion.open .subArrow{
+      transform:rotate(180deg);
+    }
+
+    .subContent{
+      display:none;
+      padding:12px;
+      background:rgba(0,0,0,.14);
+    }
+
+    .subAccordion.open .subContent{
+      display:block;
+    }
+
+    .card{
+      border-radius:16px;
+      padding:12px;
+      margin-bottom:10px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      color:rgba(255,255,255,.95);
+    }
+
+    .cardTitle{
+      font-size:15px;
+      font-weight:900;
+      margin-bottom:8px;
+      color:rgba(255,255,255,.98);
+    }
+
+    .line{
+      font-size:14px;
+      line-height:1.45;
+      color:rgba(255,255,255,.86);
+      margin-bottom:4px;
+    }
+
+    .muted{
+      color:rgba(255,255,255,.68);
+      font-weight:800;
+      font-size:13px;
+    }
+
+    .grid2{
+      display:grid;
+      gap:10px;
+      grid-template-columns:1fr;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      min-height:32px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
+      color:#fff;
+      font-size:12px;
+      font-weight:900;
+      margin-right:6px;
+      margin-bottom:6px;
+    }
+
+    .summaryBox{
+      border-radius:16px;
+      padding:12px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.10);
+      margin-bottom:10px;
+    }
+
+    .summaryTitle{
+      font-size:15px;
+      font-weight:900;
+      color:rgba(255,255,255,.97);
+      margin-bottom:8px;
+    }
+
+    .summaryRow{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:6px 0;
+      font-size:14px;
+      color:rgba(255,255,255,.88);
+      border-bottom:1px dashed rgba(255,255,255,.08);
+    }
+
+    .summaryRow:last-child{
+      border-bottom:none;
+    }
+
+    .empty{
+      padding:14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      border:1px dashed rgba(255,255,255,.10);
+      color:rgba(255,255,255,.76);
+      font-weight:800;
+    }
+
+    .deny{
+      max-width:680px;
+      margin:24px auto;
+      padding:16px;
+      border-radius:20px;
+      background:rgba(0,0,0,.45);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      color:#fff;
+      text-align:center;
+    }
+
+    .denyTitle{
+      font-size:22px;
+      font-weight:950;
+      margin-bottom:10px;
+    }
+
+    .loaderOverlay{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.35);
+      backdrop-filter:blur(4px);
+      -webkit-backdrop-filter:blur(4px);
+      z-index:99999;
+    }
+
+    .loaderOverlay.show{
+      display:flex;
+    }
+
+    .loaderBox{
+      width:52px;
+      height:52px;
+      border-radius:999px;
+      background:rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.15);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 14px 34px rgba(0,0,0,.40);
+    }
+
+    .loaderSpinner{
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      border:3px solid rgba(255,255,255,.25);
+      border-top-color:#ff8c00;
+      animation:spin .8s linear infinite;
+    }
+
+    @keyframes spin{
+      to{ transform:rotate(360deg); }
+    }
+
+    @media (min-width:800px){
+      .grid2{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="bg"></div>
 
-<button class="backBtn" onclick="history.back()">← Retour</button>
+  <div id="loader" class="loaderOverlay">
+    <div class="loaderBox">
+      <div class="loaderSpinner"></div>
+    </div>
+  </div>
 
-<img src="membres_amicale.png" class="lockImg">
+  <div class="wrap" id="pageWrap" style="display:none;">
+    <div class="topbar">
+      <div class="title">🤝 Amicale</div>
+      <button class="btn" onclick="window.location.href='index.html'">Retour</button>
+    </div>
 
+    <div class="pageWrap">
+      <div class="hero">
+        <div class="heroTitle">Espace Amicale</div>
+        <div class="heroSmall">
+          Accès réservé aux membres autorisés. Tous les onglets sont repliés par défaut.
+        </div>
+      </div>
+
+      <div id="statusBox" class="status info"></div>
+
+      <!-- Réunions -->
+      <div class="accordion" id="acc-reunions">
+        <div class="accordionHeader hdr-reunions" onclick="toggleAccordion('acc-reunions')">
+          <div class="accordionTitle">
+            <span class="emoji">📅</span>
+            <span>Réunions</span>
+          </div>
+          <span class="accordionArrow">▾</span>
+        </div>
+
+        <div class="accordionContent">
+          <div class="empty">
+            Cette partie servira à inscrire les dates de réunion.
+          </div>
+
+          <div class="grid2" style="margin-top:10px;">
+            <div class="card">
+              <div class="cardTitle">Réunion n°1</div>
+              <div class="line"><strong>Date :</strong> à renseigner</div>
+              <div class="line"><strong>Lieu :</strong> à renseigner</div>
+              <div class="line"><strong>Notes :</strong> à renseigner</div>
+            </div>
+
+            <div class="card">
+              <div class="cardTitle">Réunion n°2</div>
+              <div class="line"><strong>Date :</strong> à renseigner</div>
+              <div class="line"><strong>Lieu :</strong> à renseigner</div>
+              <div class="line"><strong>Notes :</strong> à renseigner</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comptes-rendus -->
+      <div class="accordion" id="acc-cr">
+        <div class="accordionHeader hdr-cr" onclick="toggleAccordion('acc-cr')">
+          <div class="accordionTitle">
+            <span class="emoji">📝</span>
+            <span>Comptes-rendus de réunion</span>
+          </div>
+          <span class="accordionArrow">▾</span>
+        </div>
+
+        <div class="accordionContent">
+          <div class="empty">
+            Cette partie servira à mettre du texte et des documents stockés sur Drive.
+          </div>
+
+          <div class="card" style="margin-top:10px;">
+            <div class="cardTitle">Compte-rendu type</div>
+            <div class="line"><strong>Date :</strong> à renseigner</div>
+            <div class="line"><strong>Titre :</strong> à renseigner</div>
+            <div class="line"><strong>Texte :</strong> zone prévue pour le contenu du compte-rendu.</div>
+            <div class="line"><strong>Documents Drive :</strong></div>
+            <div class="pill">📎 Document 1</div>
+            <div class="pill">📎 Document 2</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Projets -->
+      <div class="accordion" id="acc-projets">
+        <div class="accordionHeader hdr-projets" onclick="toggleAccordion('acc-projets')">
+          <div class="accordionTitle">
+            <span class="emoji">🧩</span>
+            <span>Projets</span>
+          </div>
+          <span class="accordionArrow">▾</span>
+        </div>
+
+        <div class="accordionContent">
+          <div class="subAccordion" id="projet-1">
+            <div class="subHeader" onclick="toggleSubAccordion(event, 'projet-1')">
+              <span>Projet 1</span>
+              <span class="subArrow">▾</span>
+            </div>
+            <div class="subContent">
+              <div class="card">
+                <div class="cardTitle">Contenu du projet</div>
+                <div class="line">Bloc simple prévu pour un projet Amicale.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="subAccordion" id="projet-2">
+            <div class="subHeader" onclick="toggleSubAccordion(event, 'projet-2')">
+              <span>Projet 2</span>
+              <span class="subArrow">▾</span>
+            </div>
+            <div class="subContent">
+              <div class="card">
+                <div class="cardTitle">Contenu du projet</div>
+                <div class="line">Bloc simple prévu pour un projet Amicale.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Événements -->
+      <div class="accordion" id="acc-evenements">
+        <div class="accordionHeader hdr-evenements" onclick="toggleAccordion('acc-evenements')">
+          <div class="accordionTitle">
+            <span class="emoji">🎉</span>
+            <span>Événements</span>
+          </div>
+          <span class="accordionArrow">▾</span>
+        </div>
+
+        <div class="accordionContent">
+          <div class="subAccordion" id="evt-1">
+            <div class="subHeader" onclick="toggleSubAccordion(event, 'evt-1')">
+              <span>Événement 1</span>
+              <span class="subArrow">▾</span>
+            </div>
+            <div class="subContent">
+              <div class="card">
+                <div class="cardTitle">Contenu de l’événement</div>
+                <div class="line">Bloc simple prévu pour un événement Amicale.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="subAccordion" id="evt-2">
+            <div class="subHeader" onclick="toggleSubAccordion(event, 'evt-2')">
+              <span>Événement 2</span>
+              <span class="subArrow">▾</span>
+            </div>
+            <div class="subContent">
+              <div class="card">
+                <div class="cardTitle">Contenu de l’événement</div>
+                <div class="line">Bloc simple prévu pour un événement Amicale.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tournées calendriers -->
+      <div class="accordion" id="acc-cal">
+        <div class="accordionHeader hdr-cal" onclick="toggleAccordion('acc-cal')">
+          <div class="accordionTitle">
+            <span class="emoji">📘</span>
+            <span>Tournées calendriers</span>
+          </div>
+          <span class="accordionArrow">▾</span>
+        </div>
+
+        <div class="accordionContent">
+
+          <!-- Actives -->
+          <div class="subAccordion" id="cal-active">
+            <div class="subHeader" onclick="toggleSubAccordion(event, 'cal-active')">
+              <span>Tournées actives</span>
+              <span class="subArrow">▾</span>
+            </div>
+            <div class="subContent">
+
+              <div class="subAccordion" id="annee-2026">
+                <div class="subHeader" onclick="toggleSubAccordion(event, 'annee-2026')">
+                  <span>Année 2026</span>
+                  <span class="subArrow">▾</span>
+                </div>
+                <div class="subContent">
+
+                  <div class="summaryBox">
+                    <div class="summaryTitle">Somme totale</div>
+                    <div class="summaryRow">
+                      <span>Calendriers attribués</span>
+                      <strong>0</strong>
+                    </div>
+                    <div class="summaryRow">
+                      <span>Calendriers vendus</span>
+                      <strong>0</strong>
+                    </div>
+                    <div class="summaryRow">
+                      <span>Somme restituée</span>
+                      <strong>0 €</strong>
+                    </div>
+                  </div>
+
+                  <div class="subAccordion" id="secteur-2026-1">
+                    <div class="subHeader" onclick="toggleSubAccordion(event, 'secteur-2026-1')">
+                      <span>Commune / secteur 1</span>
+                      <span class="subArrow">▾</span>
+                    </div>
+                    <div class="subContent">
+                      <div class="card">
+                        <div class="cardTitle">Agents par tournée</div>
+                        <div class="pill">Agent 1</div>
+                        <div class="pill">Agent 2</div>
+                      </div>
+
+                      <div class="card">
+                        <div class="cardTitle">Suivi</div>
+                        <div class="line"><strong>Calendriers attribués :</strong> 0</div>
+                        <div class="line"><strong>Calendriers vendus :</strong> 0</div>
+                        <div class="line"><strong>Somme restituée :</strong> 0 €</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="subAccordion" id="secteur-2026-2">
+                    <div class="subHeader" onclick="toggleSubAccordion(event, 'secteur-2026-2')">
+                      <span>Commune / secteur 2</span>
+                      <span class="subArrow">▾</span>
+                    </div>
+                    <div class="subContent">
+                      <div class="card">
+                        <div class="cardTitle">Agents par tournée</div>
+                        <div class="pill">Agent 1</div>
+                        <div class="pill">Agent 2</div>
+                      </div>
+
+                      <div class="card">
+                        <div class="cardTitle">Suivi</div>
+                        <div class="line"><strong>Calendriers attribués :</strong> 0</div>
+                        <div class="line"><strong>Calendriers vendus :</strong> 0</div>
+                        <div class="line"><strong>Somme restituée :</strong> 0 €</div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Archives -->
+          <div class="subAccordion" id="cal-archives">
+            <div class="subHeader" onclick="toggleSubAccordion(event, 'cal-archives')">
+              <span>Archives</span>
+              <span class="subArrow">▾</span>
+            </div>
+            <div class="subContent">
+
+              <div class="subAccordion" id="archive-2025">
+                <div class="subHeader" onclick="toggleSubAccordion(event, 'archive-2025')">
+                  <span>Année 2025</span>
+                  <span class="subArrow">▾</span>
+                </div>
+                <div class="subContent">
+
+                  <div class="summaryBox">
+                    <div class="summaryTitle">Somme totale</div>
+                    <div class="summaryRow">
+                      <span>Calendriers attribués</span>
+                      <strong>0</strong>
+                    </div>
+                    <div class="summaryRow">
+                      <span>Calendriers vendus</span>
+                      <strong>0</strong>
+                    </div>
+                    <div class="summaryRow">
+                      <span>Somme restituée</span>
+                      <strong>0 €</strong>
+                    </div>
+                  </div>
+
+                  <div class="subAccordion" id="archive-2025-secteur-1">
+                    <div class="subHeader" onclick="toggleSubAccordion(event, 'archive-2025-secteur-1')">
+                      <span>Commune / secteur 1</span>
+                      <span class="subArrow">▾</span>
+                    </div>
+                    <div class="subContent">
+                      <div class="card">
+                        <div class="cardTitle">Agents par tournée</div>
+                        <div class="pill">Agent 1</div>
+                        <div class="pill">Agent 2</div>
+                      </div>
+
+                      <div class="card">
+                        <div class="cardTitle">Suivi</div>
+                        <div class="line"><strong>Calendriers attribués :</strong> 0</div>
+                        <div class="line"><strong>Calendriers vendus :</strong> 0</div>
+                        <div class="line"><strong>Somme restituée :</strong> 0 €</div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="denyBox" style="display:none;">
+    <div class="deny">
+      <div class="denyTitle">Accès réservé</div>
+      <div class="line">Cette page est réservée aux membres autorisés de l’Amicale.</div>
+      <div class="line" style="margin-top:10px;">
+        <button class="btn" onclick="window.location.href='index.html'">Retour</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+const EMAIL_KEY = "cs_portail_email_v1";
+
+function showLoader(v){
+  document.getElementById("loader").classList.toggle("show", !!v);
+}
+
+function showStatus(type, message){
+  const box = document.getElementById("statusBox");
+  box.className = "status show " + type;
+  box.textContent = message || "";
+}
+
+function getCurrentEmail(){
+  return (localStorage.getItem(EMAIL_KEY) || "").trim().toLowerCase();
+}
+
+function jsonp(params){
+  return new Promise((resolve, reject) => {
+    const callbackName = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+    const script = document.createElement("script");
+    const url = new URL(API);
+
+    window[callbackName] = function(data){
+      cleanup();
+      resolve(data);
+    };
+
+    function cleanup(){
+      try { delete window[callbackName]; } catch(e){}
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    script.onerror = function(){
+      cleanup();
+      reject(new Error("Erreur JSONP"));
+    };
+
+    url.searchParams.set("callback", callbackName);
+    url.searchParams.set("_ts", Date.now());
+
+    Object.keys(params || {}).forEach(k => {
+      url.searchParams.set(k, params[k]);
+    });
+
+    script.src = url.toString();
+    document.body.appendChild(script);
+  });
+}
+
+function toggleAccordion(id){
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle("open");
+}
+
+function toggleSubAccordion(ev, id){
+  ev.stopPropagation();
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle("open");
+}
+
+async function checkAmicaleAccess(){
+  const email = getCurrentEmail();
+
+  if (!email) {
+    return { ok:false, reason:"Aucun email détecté." };
+  }
+
+  const auth = await jsonp({
+    view: "auth_check",
+    email
+  });
+
+  if (!auth || !auth.ok) {
+    return { ok:false, reason:"Accès refusé." };
+  }
+
+  if (Number(auth.amical || 0) !== 1 && String(auth.role || "").toLowerCase() !== "admin") {
+    return { ok:false, reason:"Vous n’avez pas l’accès Amicale." };
+  }
+
+  return { ok:true };
+}
+
+(async function init(){
+  showLoader(true);
+
+  try{
+    const access = await checkAmicaleAccess();
+
+    if (!access.ok) {
+      document.getElementById("denyBox").style.display = "block";
+      showLoader(false);
+      return;
+    }
+
+    document.getElementById("pageWrap").style.display = "block";
+    showStatus("ok", "Accès Amicale autorisé.");
+    showLoader(false);
+
+  }catch(err){
+    document.getElementById("denyBox").style.display = "block";
+    showLoader(false);
+  }
+})();
+</script>
 </body>
 </html>
