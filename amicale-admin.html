@@ -227,10 +227,17 @@
       color:rgba(255,255,255,.95);
     }
 
+    .cardTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+    }
+
     .cardTitle{
       font-size:15px;
       font-weight:900;
-      margin-bottom:8px;
       color:rgba(255,255,255,.98);
     }
 
@@ -247,6 +254,52 @@
       color:rgba(255,255,255,.72);
       font-weight:800;
       margin-top:4px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:10px;
+    }
+
+    .label{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.80);
+    }
+
+    .input, .textarea{
+      width:100%;
+      border:none;
+      outline:none;
+      border-radius:12px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+      font-size:15px;
+      font-family:inherit;
+    }
+
+    .input{
+      min-height:44px;
+    }
+
+    .textarea{
+      min-height:110px;
+      resize:vertical;
+    }
+
+    .editorBox{
+      display:none;
+      margin-top:10px;
+      padding-top:10px;
+      border-top:1px dashed rgba(255,255,255,.10);
+    }
+
+    .editorBox.show{
+      display:block;
     }
 
     .empty{
@@ -306,24 +359,8 @@
       background:linear-gradient(180deg, rgba(255,190,60,.20), rgba(255,190,60,.08));
     }
 
-    .yearHeader{
-      background:linear-gradient(180deg, rgba(47,111,212,.22), rgba(47,111,212,.10));
-    }
-
-    .sectorHeader{
-      background:linear-gradient(180deg, rgba(47,158,91,.22), rgba(47,158,91,.10));
-    }
-
     .archiveHeader{
       background:linear-gradient(180deg, rgba(145,90,220,.24), rgba(145,90,220,.10));
-    }
-
-    .archiveYearHeader{
-      background:linear-gradient(180deg, rgba(220,90,170,.22), rgba(220,90,170,.10));
-    }
-
-    .archiveSectorHeader{
-      background:linear-gradient(180deg, rgba(212,106,0,.24), rgba(212,106,0,.10));
     }
 
     .deny{
@@ -407,13 +444,11 @@
         <div class="heroTop">
           <div>
             <div class="heroTitle">Administration Amicale</div>
-            <div class="heroSmall">
-              Création, modification et archivage. Tous les bandeaux sont repliés au départ.
-            </div>
+            <div class="heroSmall">Création, modification et archivage. Les membres ne voient pas ce paramétrage.</div>
           </div>
 
           <div class="toolbar">
-            <button class="btn2 btnSecondary" type="button" onclick="showStatus('info','Squelette admin prêt.')">Actualiser</button>
+            <button class="btn2 btnSecondary" type="button" onclick="loadEvents()">Actualiser les événements</button>
           </div>
         </div>
       </div>
@@ -430,15 +465,9 @@
             </div>
             <span class="accordionArrow">▾</span>
           </div>
-
-          <div class="toolbar">
-            <button class="btn2 btnPrimary btnMini" type="button">Ajouter</button>
-          </div>
         </div>
-
         <div class="accordionContent">
-          <div class="empty">Aucune réunion pour l’instant.</div>
-          <div class="hint">Ici on branchera ensuite la création, la modification et la suppression.</div>
+          <div class="empty">Section non branchée pour l’instant.</div>
         </div>
       </div>
 
@@ -452,14 +481,9 @@
             </div>
             <span class="accordionArrow">▾</span>
           </div>
-
-          <div class="toolbar">
-            <button class="btn2 btnPrimary btnMini" type="button">Ajouter</button>
-          </div>
         </div>
-
         <div class="accordionContent">
-          <div class="empty">Aucun compte-rendu pour l’instant.</div>
+          <div class="empty">Section non branchée pour l’instant.</div>
         </div>
       </div>
 
@@ -473,14 +497,9 @@
             </div>
             <span class="accordionArrow">▾</span>
           </div>
-
-          <div class="toolbar">
-            <button class="btn2 btnPrimary btnMini" type="button">Ajouter</button>
-          </div>
         </div>
-
         <div class="accordionContent">
-          <div class="empty">Aucun projet pour l’instant.</div>
+          <div class="empty">Section non branchée pour l’instant.</div>
         </div>
       </div>
 
@@ -496,12 +515,30 @@
           </div>
 
           <div class="toolbar">
-            <button class="btn2 btnPrimary btnMini" type="button">Ajouter</button>
+            <button class="btn2 btnPrimary btnMini" type="button" onclick="toggleEventCreateBox()">Ajouter</button>
           </div>
         </div>
 
         <div class="accordionContent">
-          <div class="empty">Aucun événement pour l’instant.</div>
+          <div id="eventsList"></div>
+
+          <div class="card" id="eventCreateBox" style="display:none;">
+            <div class="cardTitle">Créer un événement</div>
+
+            <div class="field">
+              <label class="label">Titre</label>
+              <input class="input" id="new_event_title" type="text">
+            </div>
+
+            <div class="field">
+              <label class="label">Contenu</label>
+              <textarea class="textarea" id="new_event_content"></textarea>
+            </div>
+
+            <div class="toolbar">
+              <button class="btn2 btnPrimary" type="button" onclick="createEvent(this)">Enregistrer</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -515,10 +552,6 @@
             </div>
             <span class="accordionArrow">▾</span>
           </div>
-
-          <div class="toolbar">
-            <button class="btn2 btnPrimary btnMini" type="button">Créer une année</button>
-          </div>
         </div>
 
         <div class="accordionContent">
@@ -528,7 +561,7 @@
               <span class="subArrow">▾</span>
             </div>
             <div class="subContent">
-              <div class="empty">Aucune année active pour l’instant.</div>
+              <div class="empty">Section non branchée pour l’instant.</div>
             </div>
           </div>
 
@@ -538,7 +571,7 @@
               <span class="subArrow">▾</span>
             </div>
             <div class="subContent">
-              <div class="empty">Aucune archive pour l’instant.</div>
+              <div class="empty">Section non branchée pour l’instant.</div>
             </div>
           </div>
         </div>
@@ -560,6 +593,7 @@
 <script>
 const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 const EMAIL_KEY = "cs_portail_email_v1";
+let amicaleEvents = [];
 
 function showLoader(v){
   document.getElementById("loader").classList.toggle("show", !!v);
@@ -569,6 +603,29 @@ function showStatus(type, message){
   const box = document.getElementById("statusBox");
   box.className = "status show " + type;
   box.textContent = message || "";
+}
+
+function setButtonSaving(btn, saving, savingText = "Enregistrement..."){
+  if (!btn) return;
+  if (saving) {
+    btn.dataset.originalText = btn.textContent;
+    btn.textContent = savingText;
+    btn.classList.add("saving");
+    btn.disabled = true;
+  } else {
+    btn.textContent = btn.dataset.originalText || btn.textContent;
+    btn.classList.remove("saving");
+    btn.disabled = false;
+  }
+}
+
+function escapeHtml(v){
+  return String(v == null ? "" : v)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 function getCurrentEmail(){
@@ -644,6 +701,172 @@ async function checkAdminAccess(){
   return { ok:true };
 }
 
+function toggleEventCreateBox(){
+  const box = document.getElementById("eventCreateBox");
+  if (!box) return;
+  box.style.display = box.style.display === "none" ? "block" : "none";
+}
+
+function toggleEventEditBox(index){
+  const box = document.getElementById("eventEdit_" + index);
+  if (!box) return;
+  box.style.display = box.style.display === "none" ? "block" : "none";
+}
+
+async function loadEvents(){
+  try{
+    showLoader(true);
+
+    const r = await jsonp({
+      view: "amicale_evenements_list",
+      actorEmail: getCurrentEmail()
+    });
+
+    amicaleEvents = Array.isArray(r.items) ? r.items : [];
+    renderEvents();
+    showStatus("ok", "Événements chargés.");
+    showLoader(false);
+
+  }catch(err){
+    showLoader(false);
+    showStatus("err", err?.message || String(err));
+  }
+}
+
+function renderEvents(){
+  const zone = document.getElementById("eventsList");
+  if (!zone) return;
+
+  if (!amicaleEvents.length) {
+    zone.innerHTML = `<div class="empty">Aucun événement pour l’instant.</div>`;
+    return;
+  }
+
+  zone.innerHTML = amicaleEvents.map((ev, i) => `
+    <div class="card">
+      <div class="cardTop">
+        <div class="cardTitle">${escapeHtml(ev.titre || "Sans titre")}</div>
+        <div class="toolbar">
+          <button class="btn2 btnSecondary btnMini" type="button" onclick="toggleEventEditBox(${i})">🖍</button>
+        </div>
+      </div>
+
+      <div class="line">${escapeHtml(ev.contenu || "—")}</div>
+
+      <div class="editorBox" id="eventEdit_${i}">
+        <div class="field">
+          <label class="label">Titre</label>
+          <input class="input" id="event_title_${i}" type="text" value="${escapeHtml(ev.titre || "")}">
+        </div>
+
+        <div class="field">
+          <label class="label">Contenu</label>
+          <textarea class="textarea" id="event_content_${i}">${escapeHtml(ev.contenu || "")}</textarea>
+        </div>
+
+        <div class="toolbar">
+          <button class="btn2 btnPrimary" type="button" onclick="saveEvent(${i}, this)">Enregistrer</button>
+          <button class="btn2 btnDanger" type="button" onclick="deleteEvent('${escapeHtml(ev.id)}', this)">Supprimer</button>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+async function createEvent(btn){
+  try{
+    setButtonSaving(btn, true);
+
+    const titre = document.getElementById("new_event_title").value.trim();
+    const contenu = document.getElementById("new_event_content").value.trim();
+
+    const r = await jsonp({
+      view: "amicale_evenement_add",
+      actorEmail: getCurrentEmail(),
+      titre,
+      contenu
+    });
+
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de création.");
+      return;
+    }
+
+    document.getElementById("new_event_title").value = "";
+    document.getElementById("new_event_content").value = "";
+    document.getElementById("eventCreateBox").style.display = "none";
+
+    showStatus("ok", "Événement créé.");
+    await loadEvents();
+
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false);
+  }
+}
+
+async function saveEvent(index, btn){
+  try{
+    setButtonSaving(btn, true);
+
+    const oldItem = amicaleEvents[index];
+    const titre = document.getElementById(`event_title_${index}`).value.trim();
+    const contenu = document.getElementById(`event_content_${index}`).value.trim();
+
+    await jsonp({
+      view: "amicale_evenement_delete",
+      actorEmail: getCurrentEmail(),
+      id: oldItem.id
+    });
+
+    const r = await jsonp({
+      view: "amicale_evenement_add",
+      actorEmail: getCurrentEmail(),
+      titre,
+      contenu
+    });
+
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
+      return;
+    }
+
+    showStatus("ok", "Événement enregistré.");
+    await loadEvents();
+
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false);
+  }
+}
+
+async function deleteEvent(id, btn){
+  try{
+    setButtonSaving(btn, true, "Suppression...");
+
+    const r = await jsonp({
+      view: "amicale_evenement_delete",
+      actorEmail: getCurrentEmail(),
+      id
+    });
+
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de suppression.");
+      return;
+    }
+
+    showStatus("ok", "Événement supprimé.");
+    await loadEvents();
+
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false, "Supprimer");
+  }
+}
+
 (async function init(){
   showLoader(true);
 
@@ -657,6 +880,7 @@ async function checkAdminAccess(){
     }
 
     document.getElementById("pageWrap").style.display = "block";
+    await loadEvents();
     showStatus("ok", "Amicale Admin prêt.");
     showLoader(false);
 
