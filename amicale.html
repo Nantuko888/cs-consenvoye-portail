@@ -26,14 +26,6 @@
       color:rgba(255,255,255,.96);
     }
 
-    .heroTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
     .heroTitle{
       font-size:20px;
       font-weight:900;
@@ -72,60 +64,6 @@
       color:#dde9ff;
     }
 
-    .toolbar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .btn2{
-      border:none;
-      border-radius:14px;
-      min-height:42px;
-      padding:10px 14px;
-      font-weight:900;
-      cursor:pointer;
-      box-shadow:0 10px 24px rgba(0,0,0,.18);
-      transition:background .22s ease, transform .12s ease, opacity .18s ease;
-    }
-
-    .btn2:active{
-      transform:translateY(1px);
-    }
-
-    .btnPrimary{
-      background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
-      color:#fff;
-    }
-
-    .btnPrimary.saving{
-      background:linear-gradient(180deg, rgba(47,158,91,.95), rgba(34,128,73,.95));
-      color:#fff;
-    }
-
-    .btnSecondary{
-      background:rgba(255,255,255,.14);
-      color:#fff;
-      border:1px solid rgba(255,255,255,.12);
-    }
-
-    .btnDanger{
-      background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
-      color:#fff;
-    }
-
-    .btnMini{
-      min-height:36px;
-      padding:8px 10px;
-      font-size:13px;
-      border-radius:12px;
-    }
-
-    .btn2[disabled]{
-      opacity:.7;
-      cursor:default;
-    }
-
     .accordion{
       border-radius:20px;
       overflow:hidden;
@@ -143,20 +81,12 @@
       justify-content:space-between;
       gap:12px;
       padding:16px;
+      cursor:pointer;
       user-select:none;
       -webkit-tap-highlight-color:transparent;
     }
 
-    .accordionHeaderMain{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-      flex:1 1 auto;
-      cursor:pointer;
-    }
-
-    .accordionHeaderMain:active{
+    .accordionHeader:active{
       transform:translateY(1px);
     }
 
@@ -216,110 +146,6 @@
 
     .hdr-cal{
       background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15));
-    }
-
-    .card{
-      border-radius:16px;
-      padding:12px;
-      margin-bottom:10px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);
-      color:rgba(255,255,255,.95);
-    }
-
-    .cardTop{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:8px;
-    }
-
-    .cardTitle{
-      font-size:15px;
-      font-weight:900;
-      color:rgba(255,255,255,.98);
-    }
-
-    .line{
-      font-size:14px;
-      line-height:1.45;
-      color:rgba(255,255,255,.86);
-      margin-bottom:4px;
-    }
-
-    .muted{
-      color:rgba(255,255,255,.68);
-      font-weight:800;
-      font-size:13px;
-    }
-
-    .grid2{
-      display:grid;
-      gap:10px;
-      grid-template-columns:1fr;
-    }
-
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      margin-bottom:10px;
-    }
-
-    .label{
-      font-size:13px;
-      font-weight:900;
-      color:rgba(255,255,255,.80);
-    }
-
-    .input, .textarea{
-      width:100%;
-      border:none;
-      outline:none;
-      border-radius:12px;
-      padding:10px 12px;
-      background:rgba(255,255,255,.10);
-      color:#fff;
-      border:1px solid rgba(255,255,255,.12);
-      font-size:15px;
-      font-family:inherit;
-    }
-
-    .input{
-      min-height:44px;
-    }
-
-    .textarea{
-      min-height:100px;
-      resize:vertical;
-    }
-
-    .editorBox{
-      display:none;
-      margin-top:10px;
-      padding-top:10px;
-      border-top:1px dashed rgba(255,255,255,.10);
-    }
-
-    .editorBox.show{
-      display:block;
-    }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      min-height:32px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.10);
-      color:#fff;
-      font-size:12px;
-      font-weight:900;
-      margin-right:6px;
-      margin-bottom:6px;
     }
 
     .subAccordion{
@@ -388,6 +214,58 @@
 
     .archiveSectorHeader{
       background:linear-gradient(180deg, rgba(212,106,0,.24), rgba(212,106,0,.10));
+    }
+
+    .card{
+      border-radius:16px;
+      padding:12px;
+      margin-bottom:10px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      color:rgba(255,255,255,.95);
+    }
+
+    .cardTitle{
+      font-size:15px;
+      font-weight:900;
+      margin-bottom:8px;
+      color:rgba(255,255,255,.98);
+    }
+
+    .line{
+      font-size:14px;
+      line-height:1.45;
+      color:rgba(255,255,255,.86);
+      margin-bottom:4px;
+      white-space:pre-wrap;
+    }
+
+    .muted{
+      color:rgba(255,255,255,.68);
+      font-weight:800;
+      font-size:13px;
+    }
+
+    .grid2{
+      display:grid;
+      gap:10px;
+      grid-template-columns:1fr;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      min-height:32px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
+      color:#fff;
+      font-size:12px;
+      font-weight:900;
+      margin-right:6px;
+      margin-bottom:6px;
     }
 
     .summaryBox{
@@ -512,19 +390,13 @@
 
     <div class="pageWrap">
       <div class="hero">
-        <div class="heroTop">
-          <div>
-            <div class="heroTitle">Espace Amicale</div>
-            <div class="heroSmall">Accès réservé aux membres autorisés.</div>
-          </div>
-          <div class="toolbar">
-            <button class="btn2 btnSecondary" type="button" onclick="loadAll()">Actualiser</button>
-          </div>
+        <div class="heroTitle">Espace Amicale</div>
+        <div class="heroSmall">
+          Consultation réservée aux membres de l’Amicale. Tous les bandeaux sont repliés au départ.
         </div>
       </div>
 
       <div id="statusBox" class="status info"></div>
-
       <div id="sections"></div>
     </div>
   </div>
@@ -544,7 +416,6 @@ const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnj
 const EMAIL_KEY = "cs_portail_email_v1";
 
 const state = {
-  actorEmail: "",
   reunions: [],
   comptesRendus: [],
   projets: [],
@@ -563,21 +434,7 @@ function showStatus(type, message){
   box.textContent = message || "";
 }
 
-function setButtonSaving(btn, saving, savingText = "Enregistrement..."){
-  if (!btn) return;
-  if (saving) {
-    btn.dataset.originalText = btn.textContent;
-    btn.textContent = savingText;
-    btn.classList.add("saving");
-    btn.disabled = true;
-  } else {
-    btn.textContent = btn.dataset.originalText || btn.textContent;
-    btn.classList.remove("saving");
-    btn.disabled = false;
-  }
-}
-
-function eHtml(v){
+function escapeHtml(v){
   return String(v == null ? "" : v)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -623,29 +480,6 @@ function jsonp(params){
   });
 }
 
-async function checkAmicaleAccess(){
-  state.actorEmail = getCurrentEmail();
-
-  if (!state.actorEmail) {
-    return { ok:false, reason:"Aucun email détecté." };
-  }
-
-  const auth = await jsonp({
-    view: "auth_check",
-    email: state.actorEmail
-  });
-
-  if (!auth || !auth.ok) {
-    return { ok:false, reason:"Accès refusé." };
-  }
-
-  if (Number(auth.amical || 0) !== 1 && String(auth.role || "").toLowerCase() !== "admin") {
-    return { ok:false, reason:"Vous n’avez pas l’accès Amicale." };
-  }
-
-  return { ok:true };
-}
-
 function toggleAccordion(id){
   const el = document.getElementById(id);
   if (!el) return;
@@ -659,25 +493,38 @@ function toggleSubAccordion(ev, id){
   el.classList.toggle("open");
 }
 
-function toggleEditor(id){
-  const box = document.getElementById(id);
-  if (!box) return;
-  const editor = box.querySelector(".editorBox");
-  if (!editor) return;
-  editor.classList.toggle("show");
+async function checkAmicaleAccess(){
+  const email = getCurrentEmail();
+
+  if (!email) {
+    return { ok:false };
+  }
+
+  const auth = await jsonp({
+    view: "auth_check",
+    email
+  });
+
+  if (!auth || !auth.ok) {
+    return { ok:false };
+  }
+
+  if (Number(auth.amical || 0) !== 1 && String(auth.role || "").toLowerCase() !== "admin") {
+    return { ok:false };
+  }
+
+  return { ok:true };
 }
 
 function sectionShell(id, headerClass, emoji, title, bodyHtml){
   return `
     <div class="accordion" id="${id}">
-      <div class="accordionHeader ${headerClass}">
-        <div class="accordionHeaderMain" onclick="toggleAccordion('${id}')">
-          <div class="accordionTitle">
-            <span class="emoji">${emoji}</span>
-            <span>${title}</span>
-          </div>
-          <span class="accordionArrow">▾</span>
+      <div class="accordionHeader ${headerClass}" onclick="toggleAccordion('${id}')">
+        <div class="accordionTitle">
+          <span class="emoji">${emoji}</span>
+          <span>${title}</span>
         </div>
+        <span class="accordionArrow">▾</span>
       </div>
       <div class="accordionContent">${bodyHtml}</div>
     </div>
@@ -686,205 +533,87 @@ function sectionShell(id, headerClass, emoji, title, bodyHtml){
 
 function renderReunions(){
   const items = state.reunions || [];
+  if (!items.length) return `<div class="empty">Aucune réunion enregistrée.</div>`;
+
   return `
-    ${items.length ? items.map((r, i) => `
-      <div class="card">
-        <div class="cardTop">
+    <div class="grid2">
+      ${items.map((r, i) => `
+        <div class="card">
           <div class="cardTitle">Réunion ${i + 1}</div>
-          <div class="toolbar">
-            <button class="btn2 btnSecondary btnMini" type="button" onclick="toggleEditor('reunion_${i}')">🖍</button>
-          </div>
+          <div class="line"><strong>Date :</strong> ${escapeHtml(r.date || "—")}</div>
+          <div class="line"><strong>Lieu :</strong> ${escapeHtml(r.lieu || "—")}</div>
+          <div class="line"><strong>Notes :</strong> ${escapeHtml(r.notes || "—")}</div>
         </div>
-        <div class="line"><strong>Date :</strong> ${eHtml(r.date || "—")}</div>
-        <div class="line"><strong>Lieu :</strong> ${eHtml(r.lieu || "—")}</div>
-        <div class="line"><strong>Notes :</strong> ${eHtml(r.notes || "—")}</div>
-
-        <div class="editorBox" id="reunion_${i}">
-          <div class="field">
-            <label class="label">Date</label>
-            <input class="input" id="reunion_date_${i}" type="text" value="${eHtml(r.date || "")}">
-          </div>
-          <div class="field">
-            <label class="label">Lieu</label>
-            <input class="input" id="reunion_lieu_${i}" type="text" value="${eHtml(r.lieu || "")}">
-          </div>
-          <div class="field">
-            <label class="label">Notes</label>
-            <textarea class="textarea" id="reunion_notes_${i}">${eHtml(r.notes || "")}</textarea>
-          </div>
-          <div class="toolbar">
-            <button class="btn2 btnPrimary" type="button" onclick="saveReunion(${i}, this)">Enregistrer</button>
-            <button class="btn2 btnDanger" type="button" onclick="deleteReunion('${eHtml(r.id)}', this)">Supprimer</button>
-          </div>
-        </div>
-      </div>
-    `).join("") : `<div class="empty">Aucune réunion.</div>`}
-
-    <div class="card">
-      <div class="cardTop">
-        <div class="cardTitle">Ajouter une réunion</div>
-      </div>
-      <div class="editorBox show">
-        <div class="field">
-          <label class="label">Date</label>
-          <input class="input" id="new_reunion_date" type="text">
-        </div>
-        <div class="field">
-          <label class="label">Lieu</label>
-          <input class="input" id="new_reunion_lieu" type="text">
-        </div>
-        <div class="field">
-          <label class="label">Notes</label>
-          <textarea class="textarea" id="new_reunion_notes"></textarea>
-        </div>
-        <div class="toolbar">
-          <button class="btn2 btnPrimary" type="button" onclick="createReunion(this)">Créer</button>
-        </div>
-      </div>
+      `).join("")}
     </div>
   `;
 }
 
 function renderCR(){
   const items = state.comptesRendus || [];
-  return `
-    ${items.length ? items.map((r, i) => `
+  if (!items.length) return `<div class="empty">Aucun compte-rendu enregistré.</div>`;
+
+  return items.map((r, i) => {
+    const docs = String(r.documents || "").split(/\n+/).map(x => x.trim()).filter(Boolean);
+    return `
       <div class="card">
-        <div class="cardTop">
-          <div class="cardTitle">${eHtml(r.titre || `Compte-rendu ${i + 1}`)}</div>
-          <div class="toolbar">
-            <button class="btn2 btnSecondary btnMini" type="button" onclick="toggleEditor('cr_${i}')">🖍</button>
-          </div>
-        </div>
-        <div class="line"><strong>Date :</strong> ${eHtml(r.date || "—")}</div>
-        <div class="line"><strong>Texte :</strong> ${eHtml(r.texte || "—")}</div>
-        <div class="line"><strong>Documents :</strong> ${eHtml(r.documents || "—")}</div>
-
-        <div class="editorBox" id="cr_${i}">
-          <div class="field">
-            <label class="label">Date</label>
-            <input class="input" id="cr_date_${i}" type="text" value="${eHtml(r.date || "")}">
-          </div>
-          <div class="field">
-            <label class="label">Titre</label>
-            <input class="input" id="cr_titre_${i}" type="text" value="${eHtml(r.titre || "")}">
-          </div>
-          <div class="field">
-            <label class="label">Texte</label>
-            <textarea class="textarea" id="cr_texte_${i}">${eHtml(r.texte || "")}</textarea>
-          </div>
-          <div class="field">
-            <label class="label">Documents Drive</label>
-            <textarea class="textarea" id="cr_docs_${i}">${eHtml(r.documents || "")}</textarea>
-          </div>
-          <div class="toolbar">
-            <button class="btn2 btnPrimary" type="button" onclick="saveCR(${i}, this)">Enregistrer</button>
-            <button class="btn2 btnDanger" type="button" onclick="deleteCR('${eHtml(r.id)}', this)">Supprimer</button>
-          </div>
-        </div>
+        <div class="cardTitle">${escapeHtml(r.titre || `Compte-rendu ${i + 1}`)}</div>
+        <div class="line"><strong>Date :</strong> ${escapeHtml(r.date || "—")}</div>
+        <div class="line"><strong>Texte :</strong></div>
+        <div class="line">${escapeHtml(r.texte || "—")}</div>
+        <div class="line" style="margin-top:8px;"><strong>Documents :</strong></div>
+        ${docs.length ? docs.map(d => `<div class="pill">📎 ${escapeHtml(d)}</div>`).join("") : `<div class="muted">Aucun document</div>`}
       </div>
-    `).join("") : `<div class="empty">Aucun compte-rendu.</div>`}
-
-    <div class="card">
-      <div class="cardTop">
-        <div class="cardTitle">Ajouter un compte-rendu</div>
-      </div>
-      <div class="editorBox show">
-        <div class="field">
-          <label class="label">Date</label>
-          <input class="input" id="new_cr_date" type="text">
-        </div>
-        <div class="field">
-          <label class="label">Titre</label>
-          <input class="input" id="new_cr_titre" type="text">
-        </div>
-        <div class="field">
-          <label class="label">Texte</label>
-          <textarea class="textarea" id="new_cr_texte"></textarea>
-        </div>
-        <div class="field">
-          <label class="label">Documents Drive</label>
-          <textarea class="textarea" id="new_cr_docs"></textarea>
-        </div>
-        <div class="toolbar">
-          <button class="btn2 btnPrimary" type="button" onclick="createCR(this)">Créer</button>
-        </div>
-      </div>
-    </div>
-  `;
+    `;
+  }).join("");
 }
 
-function renderSimpleSection(items, prefix, singular){
-  return `
-    ${items.length ? items.map((r, i) => `
-      <div class="card">
-        <div class="cardTop">
-          <div class="cardTitle">${eHtml(r.titre || `${singular} ${i + 1}`)}</div>
-          <div class="toolbar">
-            <button class="btn2 btnSecondary btnMini" type="button" onclick="toggleEditor('${prefix}_${i}')">🖍</button>
-          </div>
-        </div>
-        <div class="line">${eHtml(r.contenu || "—")}</div>
+function renderSimpleBlocks(items, label){
+  if (!items.length) return `<div class="empty">Aucun ${label.toLowerCase()} enregistré.</div>`;
 
-        <div class="editorBox" id="${prefix}_${i}">
-          <div class="field">
-            <label class="label">Titre</label>
-            <input class="input" id="${prefix}_titre_${i}" type="text" value="${eHtml(r.titre || "")}">
-          </div>
-          <div class="field">
-            <label class="label">Contenu</label>
-            <textarea class="textarea" id="${prefix}_contenu_${i}">${eHtml(r.contenu || "")}</textarea>
-          </div>
-          <div class="toolbar">
-            <button class="btn2 btnPrimary" type="button" onclick="saveSimple('${prefix}', ${i}, this)">Enregistrer</button>
-            <button class="btn2 btnDanger" type="button" onclick="deleteSimple('${prefix}', '${eHtml(r.id)}', this)">Supprimer</button>
-          </div>
-        </div>
+  return items.map((r, i) => `
+    <div class="subAccordion" id="${label}_${i}">
+      <div class="subHeader" onclick="toggleSubAccordion(event, '${label}_${i}')">
+        <span>${escapeHtml(r.titre || `${label} ${i + 1}`)}</span>
+        <span class="subArrow">▾</span>
       </div>
-    `).join("") : `<div class="empty">Aucun ${singular.toLowerCase()}.</div>`}
-
-    <div class="card">
-      <div class="cardTop">
-        <div class="cardTitle">Ajouter ${singular === "Projet" ? "un projet" : "un événement"}</div>
-      </div>
-      <div class="editorBox show">
-        <div class="field">
-          <label class="label">Titre</label>
-          <input class="input" id="new_${prefix}_titre" type="text">
-        </div>
-        <div class="field">
-          <label class="label">Contenu</label>
-          <textarea class="textarea" id="new_${prefix}_contenu"></textarea>
-        </div>
-        <div class="toolbar">
-          <button class="btn2 btnPrimary" type="button" onclick="createSimple('${prefix}', this)">Créer</button>
+      <div class="subContent">
+        <div class="card">
+          <div class="cardTitle">${escapeHtml(r.titre || `${label} ${i + 1}`)}</div>
+          <div class="line">${escapeHtml(r.contenu || "—")}</div>
         </div>
       </div>
     </div>
-  `;
+  `).join("");
 }
 
 function totalRows(items){
-  let attribues = 0, vendus = 0, somme = 0;
+  let attribues = 0;
+  let vendus = 0;
+  let somme = 0;
+
   items.forEach(r => {
     attribues += Number(r.attribues || 0) || 0;
     vendus += Number(r.vendus || 0) || 0;
     somme += Number(String(r.somme || "").replace(",", ".")) || 0;
   });
+
   return { attribues, vendus, somme };
 }
 
 function groupByYear(items){
   const map = new Map();
+
   items.forEach(it => {
     const year = String(it.annee || "").trim() || "Sans année";
     if (!map.has(year)) map.set(year, []);
     map.get(year).push(it);
   });
+
   return Array.from(map.entries()).map(([annee, rows]) => ({ annee, rows }));
 }
 
-function renderTourneesGroup(items, prefix, groupClass, yearClass, sectorClass, archiveMode){
+function renderTourneesGroup(items, prefix, yearClass, sectorClass){
   const groups = groupByYear(items);
   if (!groups.length) return `<div class="empty">Aucune donnée.</div>`;
 
@@ -895,7 +624,7 @@ function renderTourneesGroup(items, prefix, groupClass, yearClass, sectorClass, 
     return `
       <div class="subAccordion" id="${gid}">
         <div class="subHeader ${yearClass}" onclick="toggleSubAccordion(event, '${gid}')">
-          <span>Année ${eHtml(g.annee)}</span>
+          <span>Année ${escapeHtml(g.annee)}</span>
           <span class="subArrow">▾</span>
         </div>
         <div class="subContent">
@@ -910,58 +639,20 @@ function renderTourneesGroup(items, prefix, groupClass, yearClass, sectorClass, 
           ${g.rows.map((r, ri) => {
             const sid = `${gid}_sector_${ri}`;
             const agents = String(r.agents || "").split(",").map(x => x.trim()).filter(Boolean);
+
             return `
               <div class="subAccordion" id="${sid}">
                 <div class="subHeader ${sectorClass}" onclick="toggleSubAccordion(event, '${sid}')">
-                  <span>${eHtml(r.secteur || "Secteur")}</span>
+                  <span>${escapeHtml(r.secteur || "Secteur")}</span>
                   <span class="subArrow">▾</span>
                 </div>
                 <div class="subContent">
                   <div class="card">
-                    <div class="cardTop">
-                      <div class="cardTitle">${eHtml(r.secteur || "Secteur")}</div>
-                      <div class="toolbar">
-                        <button class="btn2 btnSecondary btnMini" type="button" onclick="toggleEditor('${prefix}_edit_${gi}_${ri}')">🖍</button>
-                        ${!archiveMode ? `<button class="btn2 btnDanger btnMini" type="button" onclick="archiveTournee('${eHtml(r.annee)}','${eHtml(r.secteur)}', this)">Archiver</button>` : ``}
-                      </div>
-                    </div>
-
-                    ${agents.length ? agents.map(a => `<div class="pill">${eHtml(a)}</div>`).join("") : `<div class="muted">Aucun agent</div>`}
-                    <div class="line" style="margin-top:6px;"><strong>Attribués :</strong> ${eHtml(r.attribues || "0")}</div>
-                    <div class="line"><strong>Vendus :</strong> ${eHtml(r.vendus || "0")}</div>
-                    <div class="line"><strong>Somme :</strong> ${eHtml(r.somme || "0")} €</div>
-
-                    <div class="editorBox" id="${prefix}_edit_${gi}_${ri}">
-                      <div class="field">
-                        <label class="label">Année</label>
-                        <input class="input" id="${prefix}_annee_${gi}_${ri}" type="text" value="${eHtml(r.annee || "")}">
-                      </div>
-                      <div class="field">
-                        <label class="label">Secteur / commune</label>
-                        <input class="input" id="${prefix}_secteur_${gi}_${ri}" type="text" value="${eHtml(r.secteur || "")}">
-                      </div>
-                      <div class="field">
-                        <label class="label">Agents (séparés par virgules)</label>
-                        <textarea class="textarea" id="${prefix}_agents_${gi}_${ri}">${eHtml(r.agents || "")}</textarea>
-                      </div>
-                      <div class="grid2">
-                        <div class="field">
-                          <label class="label">Calendriers attribués</label>
-                          <input class="input" id="${prefix}_attribues_${gi}_${ri}" type="text" value="${eHtml(r.attribues || "")}">
-                        </div>
-                        <div class="field">
-                          <label class="label">Calendriers vendus</label>
-                          <input class="input" id="${prefix}_vendus_${gi}_${ri}" type="text" value="${eHtml(r.vendus || "")}">
-                        </div>
-                      </div>
-                      <div class="field">
-                        <label class="label">Somme restituée</label>
-                        <input class="input" id="${prefix}_somme_${gi}_${ri}" type="text" value="${eHtml(r.somme || "")}">
-                      </div>
-                      <div class="toolbar">
-                        <button class="btn2 btnPrimary" type="button" onclick="saveTournee('${prefix}', '${eHtml(r.annee)}', '${eHtml(r.secteur)}', ${gi}, ${ri}, this)">Enregistrer</button>
-                      </div>
-                    </div>
+                    <div class="cardTitle">${escapeHtml(r.secteur || "Secteur")}</div>
+                    ${agents.length ? agents.map(a => `<div class="pill">${escapeHtml(a)}</div>`).join("") : `<div class="muted">Aucun agent</div>`}
+                    <div class="line" style="margin-top:8px;"><strong>Calendriers attribués :</strong> ${escapeHtml(r.attribues || "0")}</div>
+                    <div class="line"><strong>Calendriers vendus :</strong> ${escapeHtml(r.vendus || "0")}</div>
+                    <div class="line"><strong>Somme restituée :</strong> ${escapeHtml(r.somme || "0")} €</div>
                   </div>
                 </div>
               </div>
@@ -982,44 +673,7 @@ function renderTournees(){
         <span class="subArrow">▾</span>
       </div>
       <div class="subContent">
-        ${renderTourneesGroup(state.tourneesActives, "active", "activeHeader", "yearHeader", "sectorHeader", false)}
-
-        <div class="card">
-          <div class="cardTop">
-            <div class="cardTitle">Ajouter une tournée active</div>
-          </div>
-          <div class="editorBox show">
-            <div class="field">
-              <label class="label">Année</label>
-              <input class="input" id="new_tournee_active_annee" type="text">
-            </div>
-            <div class="field">
-              <label class="label">Secteur / commune</label>
-              <input class="input" id="new_tournee_active_secteur" type="text">
-            </div>
-            <div class="field">
-              <label class="label">Agents (séparés par virgules)</label>
-              <textarea class="textarea" id="new_tournee_active_agents"></textarea>
-            </div>
-            <div class="grid2">
-              <div class="field">
-                <label class="label">Calendriers attribués</label>
-                <input class="input" id="new_tournee_active_attribues" type="text">
-              </div>
-              <div class="field">
-                <label class="label">Calendriers vendus</label>
-                <input class="input" id="new_tournee_active_vendus" type="text">
-              </div>
-            </div>
-            <div class="field">
-              <label class="label">Somme restituée</label>
-              <input class="input" id="new_tournee_active_somme" type="text">
-            </div>
-            <div class="toolbar">
-              <button class="btn2 btnPrimary" type="button" onclick="createTourneeActive(this)">Créer</button>
-            </div>
-          </div>
-        </div>
+        ${renderTourneesGroup(state.tourneesActives, "active", "yearHeader", "sectorHeader")}
       </div>
     </div>
 
@@ -1029,7 +683,7 @@ function renderTournees(){
         <span class="subArrow">▾</span>
       </div>
       <div class="subContent">
-        ${renderTourneesGroup(state.tourneesArchives, "archive", "archiveHeader", "archiveYearHeader", "archiveSectorHeader", true)}
+        ${renderTourneesGroup(state.tourneesArchives, "archive", "archiveYearHeader", "archiveSectorHeader")}
       </div>
     </div>
   `;
@@ -1039,8 +693,8 @@ function renderAll(){
   const html = [
     sectionShell("acc_reunions", "hdr-reunions", "📅", "Réunions", renderReunions()),
     sectionShell("acc_cr", "hdr-cr", "📝", "Comptes-rendus de réunion", renderCR()),
-    sectionShell("acc_projets", "hdr-projets", "🧩", "Projets", renderSimpleSection(state.projets, "projet", "Projet")),
-    sectionShell("acc_evenements", "hdr-evenements", "🎉", "Événements", renderSimpleSection(state.evenements, "evenement", "Événement")),
+    sectionShell("acc_projets", "hdr-projets", "🧩", "Projets", renderSimpleBlocks(state.projets, "Projet")),
+    sectionShell("acc_evenements", "hdr-evenements", "🎉", "Événements", renderSimpleBlocks(state.evenements, "Événement")),
     sectionShell("acc_tournees", "hdr-cal", "📘", "Tournées calendriers", renderTournees())
   ].join("");
 
@@ -1052,12 +706,20 @@ async function loadAll(){
     showLoader(true);
     showStatus("info", "Chargement de la page Amicale...");
 
-    const [reunions, cr, projets, evenements, tourneesActives] = await Promise.all([
-      jsonp({ view:"amicale_reunions_list", actorEmail:state.actorEmail }),
-      jsonp({ view:"amicale_cr_list", actorEmail:state.actorEmail }),
-      jsonp({ view:"amicale_projets_list", actorEmail:state.actorEmail }),
-      jsonp({ view:"amicale_evenements_list", actorEmail:state.actorEmail }),
-      jsonp({ view:"amicale_tournees_actives", actorEmail:state.actorEmail })
+    const [
+      reunions,
+      cr,
+      projets,
+      evenements,
+      tourneesActives,
+      tourneesArchives
+    ] = await Promise.all([
+      jsonp({ view:"amicale_reunions_list", actorEmail:getCurrentEmail() }),
+      jsonp({ view:"amicale_cr_list", actorEmail:getCurrentEmail() }),
+      jsonp({ view:"amicale_projets_list", actorEmail:getCurrentEmail() }),
+      jsonp({ view:"amicale_evenements_list", actorEmail:getCurrentEmail() }),
+      jsonp({ view:"amicale_tournees_actives", actorEmail:getCurrentEmail() }),
+      jsonp({ view:"amicale_tournees_archives", actorEmail:getCurrentEmail() })
     ]);
 
     state.reunions = Array.isArray(reunions.items) ? reunions.items : [];
@@ -1065,9 +727,7 @@ async function loadAll(){
     state.projets = Array.isArray(projets.items) ? projets.items : [];
     state.evenements = Array.isArray(evenements.items) ? evenements.items : [];
     state.tourneesActives = Array.isArray(tourneesActives.items) ? tourneesActives.items : [];
-
-    const archivesRes = await fetchArchivesDirect();
-    state.tourneesArchives = archivesRes;
+    state.tourneesArchives = Array.isArray(tourneesArchives.items) ? tourneesArchives.items : [];
 
     renderAll();
     showStatus("ok", "Page Amicale chargée.");
@@ -1076,248 +736,6 @@ async function loadAll(){
   }catch(err){
     showLoader(false);
     showStatus("err", err?.message || String(err));
-  }
-}
-
-async function fetchArchivesDirect(){
-  try{
-    const res = await jsonp({ view:"amicale_tournees_archives", actorEmail:state.actorEmail });
-    return Array.isArray(res.items) ? res.items : [];
-  }catch(err){
-    return [];
-  }
-}
-
-async function createReunion(btn){
-  try{
-    setButtonSaving(btn, true, "Création...");
-    const r = await jsonp({
-      view:"amicale_reunion_add",
-      actorEmail:state.actorEmail,
-      date:document.getElementById("new_reunion_date").value,
-      lieu:document.getElementById("new_reunion_lieu").value,
-      notes:document.getElementById("new_reunion_notes").value
-    });
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false);
-  }
-}
-
-async function saveReunion(index, btn){
-  try{
-    setButtonSaving(btn, true);
-    const item = state.reunions[index];
-    await deleteReunionCore(item.id);
-    await jsonp({
-      view:"amicale_reunion_add",
-      actorEmail:state.actorEmail,
-      date:document.getElementById(`reunion_date_${index}`).value,
-      lieu:document.getElementById(`reunion_lieu_${index}`).value,
-      notes:document.getElementById(`reunion_notes_${index}`).value
-    });
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false);
-  }
-}
-
-async function deleteReunionCore(id){
-  return await jsonp({
-    view:"amicale_reunion_delete",
-    actorEmail:state.actorEmail,
-    id
-  });
-}
-
-async function deleteReunion(id, btn){
-  try{
-    setButtonSaving(btn, true, "Suppression...");
-    await deleteReunionCore(id);
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false, "Supprimer");
-  }
-}
-
-async function createCR(btn){
-  try{
-    setButtonSaving(btn, true, "Création...");
-    await jsonp({
-      view:"amicale_cr_add",
-      actorEmail:state.actorEmail,
-      date:document.getElementById("new_cr_date").value,
-      titre:document.getElementById("new_cr_titre").value,
-      texte:document.getElementById("new_cr_texte").value,
-      documents:document.getElementById("new_cr_docs").value
-    });
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false);
-  }
-}
-
-async function saveCR(index, btn){
-  try{
-    setButtonSaving(btn, true);
-    const item = state.comptesRendus[index];
-    await jsonp({ view:"amicale_cr_delete", actorEmail:state.actorEmail, id:item.id });
-    await jsonp({
-      view:"amicale_cr_add",
-      actorEmail:state.actorEmail,
-      date:document.getElementById(`cr_date_${index}`).value,
-      titre:document.getElementById(`cr_titre_${index}`).value,
-      texte:document.getElementById(`cr_texte_${index}`).value,
-      documents:document.getElementById(`cr_docs_${index}`).value
-    });
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false);
-  }
-}
-
-async function deleteCR(id, btn){
-  try{
-    setButtonSaving(btn, true, "Suppression...");
-    await jsonp({ view:"amicale_cr_delete", actorEmail:state.actorEmail, id });
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false, "Supprimer");
-  }
-}
-
-async function createSimple(prefix, btn){
-  try{
-    setButtonSaving(btn, true, "Création...");
-    const isProjet = prefix === "projet";
-    await jsonp({
-      view: isProjet ? "amicale_projet_add" : "amicale_evenement_add",
-      actorEmail:state.actorEmail,
-      titre:document.getElementById(`new_${prefix}_titre`).value,
-      contenu:document.getElementById(`new_${prefix}_contenu`).value
-    });
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false);
-  }
-}
-
-async function saveSimple(prefix, index, btn){
-  try{
-    setButtonSaving(btn, true);
-    const items = prefix === "projet" ? state.projets : state.evenements;
-    const item = items[index];
-    await jsonp({
-      view: prefix === "projet" ? "amicale_projet_delete" : "amicale_evenement_delete",
-      actorEmail:state.actorEmail,
-      id:item.id
-    });
-    await jsonp({
-      view: prefix === "projet" ? "amicale_projet_add" : "amicale_evenement_add",
-      actorEmail:state.actorEmail,
-      titre:document.getElementById(`${prefix}_titre_${index}`).value,
-      contenu:document.getElementById(`${prefix}_contenu_${index}`).value
-    });
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false);
-  }
-}
-
-async function deleteSimple(prefix, id, btn){
-  try{
-    setButtonSaving(btn, true, "Suppression...");
-    await jsonp({
-      view: prefix === "projet" ? "amicale_projet_delete" : "amicale_evenement_delete",
-      actorEmail:state.actorEmail,
-      id
-    });
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false, "Supprimer");
-  }
-}
-
-async function createTourneeActive(btn){
-  try{
-    setButtonSaving(btn, true, "Création...");
-    await jsonp({
-      view:"amicale_tournee_add",
-      actorEmail:state.actorEmail,
-      annee:document.getElementById("new_tournee_active_annee").value,
-      secteur:document.getElementById("new_tournee_active_secteur").value,
-      agents:document.getElementById("new_tournee_active_agents").value,
-      attribues:document.getElementById("new_tournee_active_attribues").value,
-      vendus:document.getElementById("new_tournee_active_vendus").value,
-      somme:document.getElementById("new_tournee_active_somme").value
-    });
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false);
-  }
-}
-
-async function saveTournee(prefix, originalAnnee, originalSecteur, gi, ri, btn){
-  try{
-    setButtonSaving(btn, true);
-    const base = prefix === "active" ? prefix : "archive";
-    await jsonp({
-      view: prefix === "active" ? "amicale_tournee_delete" : "amicale_tournee_archive_delete",
-      actorEmail:state.actorEmail,
-      annee:originalAnnee,
-      secteur:originalSecteur
-    });
-    await jsonp({
-      view: prefix === "active" ? "amicale_tournee_add" : "amicale_tournee_archive_add",
-      actorEmail:state.actorEmail,
-      annee:document.getElementById(`${base}_annee_${gi}_${ri}`).value,
-      secteur:document.getElementById(`${base}_secteur_${gi}_${ri}`).value,
-      agents:document.getElementById(`${base}_agents_${gi}_${ri}`).value,
-      attribues:document.getElementById(`${base}_attribues_${gi}_${ri}`).value,
-      vendus:document.getElementById(`${base}_vendus_${gi}_${ri}`).value,
-      somme:document.getElementById(`${base}_somme_${gi}_${ri}`).value
-    });
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false);
-  }
-}
-
-async function archiveTournee(annee, secteur, btn){
-  try{
-    setButtonSaving(btn, true, "Archivage...");
-    await jsonp({
-      view:"amicale_tournee_archive",
-      actorEmail:state.actorEmail,
-      annee, secteur
-    });
-    await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false, "Archiver");
   }
 }
 
