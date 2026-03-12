@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <title>Amicale Admin — CS Consenvoye</title>
+
+  <link rel="stylesheet" href="cs-theme.css">
+
+  <style>
+    .pageWrap{
+      max-width:980px;
+      margin:0 auto;
+      padding:14px;
+    }
+
+    .hero{
+      padding:14px 16px;
+      margin-bottom:16px;
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(212,106,0,.34), rgba(212,106,0,.16));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      color:rgba(255,255,255,.96);
+    }
+
+    .heroTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .heroTitle{
+      font-size:20px;
+      font-weight:900;
+      line-height:1.2;
+    }
+
+    .heroSmall{
+      margin-top:8px;
+      font-size:13px;
+      font-weight:800;
+      color:rgba(255,255,255,.78);
+      line-height:1.35;
+    }
+
+    .status{
+      display:none;
+      margin-bottom:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:800;
+      line-height:1.4;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .status.show{ display:block; }
+    .status.ok{
+      background:rgba(47,158,91,.18);
+      color:#d9ffe7;
+    }
+    .status.err{
+      background:rgba(220,70,70,.18);
+      color:#ffe1e1;
+    }
+    .status.info{
+      background:rgba(47,111,212,.18);
+      color:#dde9ff;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn2{
+      border:none;
+      border-radius:14px;
+      min-height:42px;
+      padding:10px 14px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+      transition:background .22s ease, transform .12s ease, opacity .18s ease;
+    }
+
+    .btn2:active{
+      transform:translateY(1px);
+    }
+
+    .btnPrimary{
+      background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
+      color:#fff;
+    }
+
+    .btnPrimary.saving{
+      background:linear-gradient(180deg, rgba(47,158,91,.95), rgba(34,128,73,.95));
+      color:#fff;
+    }
+
+    .btnSecondary{
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .btnDanger{
+      background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
+      color:#fff;
+    }
+
+    .btnMini{
+      min-height:36px;
+      padding:8px 10px;
+      font-size:13px;
+      border-radius:12px;
+    }
+
+    .btn2[disabled]{
+      opacity:.7;
+      cursor:default;
+    }
+
+    .accordion{
+      border-radius:20px;
+      overflow:hidden;
+      margin-bottom:14px;
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      background:rgba(255,255,255,.06);
+    }
+
+    .accordionHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px;
+    }
+
+    .accordionHeaderMain{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+      flex:1 1 auto;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .accordionHeaderMain:active{
+      transform:translateY(1px);
+    }
+
+    .accordionTitle{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+      flex:1 1 auto;
+      color:rgba(255,255,255,.96);
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .emoji{
+      font-size:22px;
+      line-height:1;
+      flex:0 0 auto;
+    }
+
+    .accordionArrow{
+      font-size:18px;
+      color:rgba(255,255,255,.88);
+      transition:transform .18s ease;
+      flex:0 0 auto;
+    }
+
+    .accordion.open .accordionArrow{
+      transform:rotate(180deg);
+    }
+
+    .accordionContent{
+      display:none;
+      padding:12px;
+      background:rgba(0,0,0,.10);
+    }
+
+    .accordion.open .accordionContent{
+      display:block;
+    }
+
+    .hdr-reunions{
+      background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18));
+    }
+
+    .hdr-cr{
+      background:linear-gradient(180deg, rgba(145,90,220,.30), rgba(145,90,220,.15));
+    }
+
+    .hdr-projets{
+      background:linear-gradient(180deg, rgba(47,158,91,.30), rgba(47,158,91,.15));
+    }
+
+    .hdr-evenements{
+      background:linear-gradient(180deg, rgba(220,90,170,.28), rgba(220,90,170,.14));
+    }
+
+    .hdr-cal{
+      background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15));
+    }
+
+    .card{
+      border-radius:16px;
+      padding:12px;
+      margin-bottom:10px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      color:rgba(255,255,255,.95);
+    }
+
+    .cardTitle{
+      font-size:15px;
+      font-weight:900;
+      margin-bottom:8px;
+      color:rgba(255,255,255,.98);
+    }
+
+    .line{
+      font-size:14px;
+      line-height:1.45;
+      color:rgba(255,255,255,.86);
+      margin-bottom:4px;
+    }
+
+    .hint{
+      font-size:12px;
+      line-height:1.35;
+      color:rgba(255,255,255,.72);
+      font-weight:800;
+      margin-top:4px;
+    }
+
+    .empty{
+      padding:14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      border:1px dashed rgba(255,255,255,.10);
+      color:rgba(255,255,255,.76);
+      font-weight:800;
+    }
+
+    .subAccordion{
+      border-radius:16px;
+      overflow:hidden;
+      margin-bottom:10px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.05);
+    }
+
+    .subHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:13px 14px;
+      cursor:pointer;
+      font-weight:900;
+      color:rgba(255,255,255,.95);
+      background:rgba(255,255,255,.06);
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .subHeader:active{
+      transform:translateY(1px);
+    }
+
+    .subArrow{
+      transition:transform .18s ease;
+      color:rgba(255,255,255,.82);
+    }
+
+    .subAccordion.open .subArrow{
+      transform:rotate(180deg);
+    }
+
+    .subContent{
+      display:none;
+      padding:12px;
+      background:rgba(0,0,0,.14);
+    }
+
+    .subAccordion.open .subContent{
+      display:block;
+    }
+
+    .activeHeader{
+      background:linear-gradient(180deg, rgba(255,190,60,.20), rgba(255,190,60,.08));
+    }
+
+    .yearHeader{
+      background:linear-gradient(180deg, rgba(47,111,212,.22), rgba(47,111,212,.10));
+    }
+
+    .sectorHeader{
+      background:linear-gradient(180deg, rgba(47,158,91,.22), rgba(47,158,91,.10));
+    }
+
+    .archiveHeader{
+      background:linear-gradient(180deg, rgba(145,90,220,.24), rgba(145,90,220,.10));
+    }
+
+    .archiveYearHeader{
+      background:linear-gradient(180deg, rgba(220,90,170,.22), rgba(220,90,170,.10));
+    }
+
+    .archiveSectorHeader{
+      background:linear-gradient(180deg, rgba(212,106,0,.24), rgba(212,106,0,.10));
+    }
+
+    .deny{
+      max-width:680px;
+      margin:24px auto;
+      padding:16px;
+      border-radius:20px;
+      background:rgba(0,0,0,.45);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      color:#fff;
+      text-align:center;
+    }
+
+    .denyTitle{
+      font-size:22px;
+      font-weight:950;
+      margin-bottom:10px;
+    }
+
+    .loaderOverlay{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.35);
+      backdrop-filter:blur(4px);
+      -webkit-backdrop-filter:blur(4px);
+      z-index:99999;
+    }
+
+    .loaderOverlay.show{
+      display:flex;
+    }
+
+    .loaderBox{
+      width:52px;
+      height:52px;
+      border-radius:999px;
+      background:rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.15);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 14px 34px rgba(0,0,0,.40);
+    }
+
+    .loaderSpinner{
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      border:3px solid rgba(255,255,255,.25);
+      border-top-color:#ff8c00;
+      animation:spin .8s linear infinite;
+    }
+
+    @keyframes spin{
+      to{ transform:rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg"></div>
+
+  <div id="loader" class="loaderOverlay">
+    <div class="loaderBox">
+      <div class="loaderSpinner"></div>
+    </div>
+  </div>
+
+  <div class="wrap" id="pageWrap" style="display:none;">
+    <div class="topbar">
+      <div class="title">🤝 Amicale Admin</div>
+      <button class="btn" onclick="window.location.href='admin.html'">Retour</button>
+    </div>
+
+    <div class="pageWrap">
+      <div class="hero">
+        <div class="heroTop">
+          <div>
+            <div class="heroTitle">Administration Amicale</div>
+            <div class="heroSmall">
+              Création, modification et archivage. Tous les bandeaux sont repliés au départ.
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <button class="btn2 btnSecondary" type="button" onclick="showStatus('info','Squelette admin prêt.')">Actualiser</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="statusBox" class="status info"></div>
+
+      <!-- Réunions -->
+      <div class="accordion" id="acc-reunions">
+        <div class="accordionHeader hdr-reunions">
+          <div class="accordionHeaderMain" onclick="toggleAccordion('acc-reunions')">
+            <div class="accordionTitle">
+              <span class="emoji">📅</span>
+              <span>Réunions</span>
+            </div>
+            <span class="accordionArrow">▾</span>
+          </div>
+
+          <div class="toolbar">
+            <button class="btn2 btnPrimary btnMini" type="button">Ajouter</button>
+          </div>
+        </div>
+
+        <div class="accordionContent">
+          <div class="empty">Aucune réunion pour l’instant.</div>
+          <div class="hint">Ici on branchera ensuite la création, la modification et la suppression.</div>
+        </div>
+      </div>
+
+      <!-- Comptes-rendus -->
+      <div class="accordion" id="acc-cr">
+        <div class="accordionHeader hdr-cr">
+          <div class="accordionHeaderMain" onclick="toggleAccordion('acc-cr')">
+            <div class="accordionTitle">
+              <span class="emoji">📝</span>
+              <span>Comptes-rendus de réunion</span>
+            </div>
+            <span class="accordionArrow">▾</span>
+          </div>
+
+          <div class="toolbar">
+            <button class="btn2 btnPrimary btnMini" type="button">Ajouter</button>
+          </div>
+        </div>
+
+        <div class="accordionContent">
+          <div class="empty">Aucun compte-rendu pour l’instant.</div>
+        </div>
+      </div>
+
+      <!-- Projets -->
+      <div class="accordion" id="acc-projets">
+        <div class="accordionHeader hdr-projets">
+          <div class="accordionHeaderMain" onclick="toggleAccordion('acc-projets')">
+            <div class="accordionTitle">
+              <span class="emoji">🧩</span>
+              <span>Projets</span>
+            </div>
+            <span class="accordionArrow">▾</span>
+          </div>
+
+          <div class="toolbar">
+            <button class="btn2 btnPrimary btnMini" type="button">Ajouter</button>
+          </div>
+        </div>
+
+        <div class="accordionContent">
+          <div class="empty">Aucun projet pour l’instant.</div>
+        </div>
+      </div>
+
+      <!-- Événements -->
+      <div class="accordion" id="acc-evenements">
+        <div class="accordionHeader hdr-evenements">
+          <div class="accordionHeaderMain" onclick="toggleAccordion('acc-evenements')">
+            <div class="accordionTitle">
+              <span class="emoji">🎉</span>
+              <span>Événements</span>
+            </div>
+            <span class="accordionArrow">▾</span>
+          </div>
+
+          <div class="toolbar">
+            <button class="btn2 btnPrimary btnMini" type="button">Ajouter</button>
+          </div>
+        </div>
+
+        <div class="accordionContent">
+          <div class="empty">Aucun événement pour l’instant.</div>
+        </div>
+      </div>
+
+      <!-- Tournées calendriers -->
+      <div class="accordion" id="acc-cal">
+        <div class="accordionHeader hdr-cal">
+          <div class="accordionHeaderMain" onclick="toggleAccordion('acc-cal')">
+            <div class="accordionTitle">
+              <span class="emoji">📘</span>
+              <span>Tournées calendriers</span>
+            </div>
+            <span class="accordionArrow">▾</span>
+          </div>
+
+          <div class="toolbar">
+            <button class="btn2 btnPrimary btnMini" type="button">Créer une année</button>
+          </div>
+        </div>
+
+        <div class="accordionContent">
+          <div class="subAccordion" id="tournees-active">
+            <div class="subHeader activeHeader" onclick="toggleSubAccordion(event, 'tournees-active')">
+              <span>Tournées actives</span>
+              <span class="subArrow">▾</span>
+            </div>
+            <div class="subContent">
+              <div class="empty">Aucune année active pour l’instant.</div>
+            </div>
+          </div>
+
+          <div class="subAccordion" id="tournees-archives">
+            <div class="subHeader archiveHeader" onclick="toggleSubAccordion(event, 'tournees-archives')">
+              <span>Archives</span>
+              <span class="subArrow">▾</span>
+            </div>
+            <div class="subContent">
+              <div class="empty">Aucune archive pour l’instant.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="denyBox" style="display:none;">
+    <div class="deny">
+      <div class="denyTitle">Accès réservé</div>
+      <div class="line">Cette page est réservée aux administrateurs.</div>
+      <div class="line" style="margin-top:10px;">
+        <button class="btn" onclick="window.location.href='admin.html'">Retour</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+const EMAIL_KEY = "cs_portail_email_v1";
+
+function showLoader(v){
+  document.getElementById("loader").classList.toggle("show", !!v);
+}
+
+function showStatus(type, message){
+  const box = document.getElementById("statusBox");
+  box.className = "status show " + type;
+  box.textContent = message || "";
+}
+
+function getCurrentEmail(){
+  return (localStorage.getItem(EMAIL_KEY) || "").trim().toLowerCase();
+}
+
+function jsonp(params){
+  return new Promise((resolve, reject) => {
+    const callbackName = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+    const script = document.createElement("script");
+    const url = new URL(API);
+
+    window[callbackName] = function(data){
+      cleanup();
+      resolve(data);
+    };
+
+    function cleanup(){
+      try { delete window[callbackName]; } catch(e){}
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    script.onerror = function(){
+      cleanup();
+      reject(new Error("Erreur JSONP"));
+    };
+
+    url.searchParams.set("callback", callbackName);
+    url.searchParams.set("_ts", Date.now());
+
+    Object.keys(params || {}).forEach(k => {
+      url.searchParams.set(k, params[k]);
+    });
+
+    script.src = url.toString();
+    document.body.appendChild(script);
+  });
+}
+
+function toggleAccordion(id){
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle("open");
+}
+
+function toggleSubAccordion(ev, id){
+  ev.stopPropagation();
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle("open");
+}
+
+async function checkAdminAccess(){
+  const email = getCurrentEmail();
+
+  if (!email) {
+    return { ok:false };
+  }
+
+  const auth = await jsonp({
+    view: "auth_check",
+    email
+  });
+
+  if (!auth || !auth.ok) {
+    return { ok:false };
+  }
+
+  if (String(auth.role || "").toLowerCase() !== "admin") {
+    return { ok:false };
+  }
+
+  return { ok:true };
+}
+
+(async function init(){
+  showLoader(true);
+
+  try{
+    const access = await checkAdminAccess();
+
+    if (!access.ok) {
+      document.getElementById("denyBox").style.display = "block";
+      showLoader(false);
+      return;
+    }
+
+    document.getElementById("pageWrap").style.display = "block";
+    showStatus("ok", "Amicale Admin prêt.");
+    showLoader(false);
+
+  }catch(err){
+    document.getElementById("denyBox").style.display = "block";
+    showLoader(false);
+  }
+})();
+</script>
+</body>
+</html>
