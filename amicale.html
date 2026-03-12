@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
   <title>Amicale — CS Consenvoye</title>
 
   <link rel="stylesheet" href="cs-theme.css">
@@ -24,6 +24,14 @@
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
       color:rgba(255,255,255,.96);
+    }
+
+    .heroTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
     }
 
     .heroTitle{
@@ -64,6 +72,60 @@
       color:#dde9ff;
     }
 
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn2{
+      border:none;
+      border-radius:14px;
+      min-height:42px;
+      padding:10px 14px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+      transition:background .22s ease, transform .12s ease, opacity .18s ease;
+    }
+
+    .btn2:active{
+      transform:translateY(1px);
+    }
+
+    .btnPrimary{
+      background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
+      color:#fff;
+    }
+
+    .btnPrimary.saving{
+      background:linear-gradient(180deg, rgba(47,158,91,.95), rgba(34,128,73,.95));
+      color:#fff;
+    }
+
+    .btnSecondary{
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .btnDanger{
+      background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
+      color:#fff;
+    }
+
+    .btnMini{
+      min-height:36px;
+      padding:8px 10px;
+      font-size:13px;
+      border-radius:12px;
+    }
+
+    .btn2[disabled]{
+      opacity:.7;
+      cursor:default;
+    }
+
     .accordion{
       border-radius:20px;
       overflow:hidden;
@@ -81,13 +143,20 @@
       justify-content:space-between;
       gap:12px;
       padding:16px;
-      font-weight:900;
-      cursor:pointer;
       user-select:none;
       -webkit-tap-highlight-color:transparent;
     }
 
-    .accordionHeader:active{
+    .accordionHeaderMain{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+      flex:1 1 auto;
+      cursor:pointer;
+    }
+
+    .accordionHeaderMain:active{
       transform:translateY(1px);
     }
 
@@ -99,6 +168,7 @@
       flex:1 1 auto;
       color:rgba(255,255,255,.96);
       font-size:18px;
+      font-weight:900;
     }
 
     .emoji{
@@ -148,6 +218,143 @@
       background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15));
     }
 
+    .sectionView{
+      display:block;
+    }
+
+    .sectionEditor{
+      display:none;
+      margin-top:10px;
+    }
+
+    .sectionEditor.show{
+      display:block;
+    }
+
+    .card{
+      border-radius:16px;
+      padding:12px;
+      margin-bottom:10px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      color:rgba(255,255,255,.95);
+    }
+
+    .cardTitle{
+      font-size:15px;
+      font-weight:900;
+      margin-bottom:8px;
+      color:rgba(255,255,255,.98);
+    }
+
+    .line{
+      font-size:14px;
+      line-height:1.45;
+      color:rgba(255,255,255,.86);
+      margin-bottom:4px;
+    }
+
+    .muted{
+      color:rgba(255,255,255,.68);
+      font-weight:800;
+      font-size:13px;
+    }
+
+    .grid2{
+      display:grid;
+      gap:10px;
+      grid-template-columns:1fr;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:10px;
+    }
+
+    .label{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.80);
+    }
+
+    .input, .textarea{
+      width:100%;
+      border:none;
+      outline:none;
+      border-radius:12px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+      font-size:15px;
+      font-family:inherit;
+    }
+
+    .input{
+      min-height:44px;
+    }
+
+    .textarea{
+      min-height:100px;
+      resize:vertical;
+    }
+
+    .editorItem{
+      border-radius:16px;
+      padding:12px;
+      margin-bottom:10px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .editorItemTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .editorItemTitle{
+      font-size:15px;
+      font-weight:900;
+      color:rgba(255,255,255,.96);
+    }
+
+    .editorActions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      min-height:32px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
+      color:#fff;
+      font-size:12px;
+      font-weight:900;
+      margin-right:6px;
+      margin-bottom:6px;
+    }
+
+    .empty{
+      padding:14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      border:1px dashed rgba(255,255,255,.10);
+      color:rgba(255,255,255,.76);
+      font-weight:800;
+    }
+
     .subAccordion{
       border-radius:16px;
       overflow:hidden;
@@ -192,55 +399,28 @@
       display:block;
     }
 
-    .card{
-      border-radius:16px;
-      padding:12px;
-      margin-bottom:10px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);
-      color:rgba(255,255,255,.95);
+    .activeHeader{
+      background:linear-gradient(180deg, rgba(255,190,60,.20), rgba(255,190,60,.08));
     }
 
-    .cardTitle{
-      font-size:15px;
-      font-weight:900;
-      margin-bottom:8px;
-      color:rgba(255,255,255,.98);
+    .yearHeader{
+      background:linear-gradient(180deg, rgba(47,111,212,.22), rgba(47,111,212,.10));
     }
 
-    .line{
-      font-size:14px;
-      line-height:1.45;
-      color:rgba(255,255,255,.86);
-      margin-bottom:4px;
+    .sectorHeader{
+      background:linear-gradient(180deg, rgba(47,158,91,.22), rgba(47,158,91,.10));
     }
 
-    .muted{
-      color:rgba(255,255,255,.68);
-      font-weight:800;
-      font-size:13px;
+    .archiveHeader{
+      background:linear-gradient(180deg, rgba(145,90,220,.24), rgba(145,90,220,.10));
     }
 
-    .grid2{
-      display:grid;
-      gap:10px;
-      grid-template-columns:1fr;
+    .archiveYearHeader{
+      background:linear-gradient(180deg, rgba(220,90,170,.22), rgba(220,90,170,.10));
     }
 
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      min-height:32px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.10);
-      color:#fff;
-      font-size:12px;
-      font-weight:900;
-      margin-right:6px;
-      margin-bottom:6px;
+    .archiveSectorHeader{
+      background:linear-gradient(180deg, rgba(212,106,0,.24), rgba(212,106,0,.10));
     }
 
     .summaryBox{
@@ -270,15 +450,6 @@
 
     .summaryRow:last-child{
       border-bottom:none;
-    }
-
-    .empty{
-      padding:14px;
-      border-radius:14px;
-      background:rgba(255,255,255,.05);
-      border:1px dashed rgba(255,255,255,.10);
-      color:rgba(255,255,255,.76);
-      font-weight:800;
     }
 
     .deny{
@@ -365,303 +536,23 @@
 
     <div class="pageWrap">
       <div class="hero">
-        <div class="heroTitle">Espace Amicale</div>
-        <div class="heroSmall">
-          Accès réservé aux membres autorisés. Tous les onglets sont repliés par défaut.
+        <div class="heroTop">
+          <div>
+            <div class="heroTitle">Espace Amicale</div>
+            <div class="heroSmall">
+              Accès réservé aux membres autorisés. Tous les onglets sont repliés par défaut.
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <button class="btn2 btnSecondary" type="button" onclick="loadData()">Actualiser</button>
+          </div>
         </div>
       </div>
 
       <div id="statusBox" class="status info"></div>
 
-      <!-- Réunions -->
-      <div class="accordion" id="acc-reunions">
-        <div class="accordionHeader hdr-reunions" onclick="toggleAccordion('acc-reunions')">
-          <div class="accordionTitle">
-            <span class="emoji">📅</span>
-            <span>Réunions</span>
-          </div>
-          <span class="accordionArrow">▾</span>
-        </div>
-
-        <div class="accordionContent">
-          <div class="empty">
-            Cette partie servira à inscrire les dates de réunion.
-          </div>
-
-          <div class="grid2" style="margin-top:10px;">
-            <div class="card">
-              <div class="cardTitle">Réunion n°1</div>
-              <div class="line"><strong>Date :</strong> à renseigner</div>
-              <div class="line"><strong>Lieu :</strong> à renseigner</div>
-              <div class="line"><strong>Notes :</strong> à renseigner</div>
-            </div>
-
-            <div class="card">
-              <div class="cardTitle">Réunion n°2</div>
-              <div class="line"><strong>Date :</strong> à renseigner</div>
-              <div class="line"><strong>Lieu :</strong> à renseigner</div>
-              <div class="line"><strong>Notes :</strong> à renseigner</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Comptes-rendus -->
-      <div class="accordion" id="acc-cr">
-        <div class="accordionHeader hdr-cr" onclick="toggleAccordion('acc-cr')">
-          <div class="accordionTitle">
-            <span class="emoji">📝</span>
-            <span>Comptes-rendus de réunion</span>
-          </div>
-          <span class="accordionArrow">▾</span>
-        </div>
-
-        <div class="accordionContent">
-          <div class="empty">
-            Cette partie servira à mettre du texte et des documents stockés sur Drive.
-          </div>
-
-          <div class="card" style="margin-top:10px;">
-            <div class="cardTitle">Compte-rendu type</div>
-            <div class="line"><strong>Date :</strong> à renseigner</div>
-            <div class="line"><strong>Titre :</strong> à renseigner</div>
-            <div class="line"><strong>Texte :</strong> zone prévue pour le contenu du compte-rendu.</div>
-            <div class="line"><strong>Documents Drive :</strong></div>
-            <div class="pill">📎 Document 1</div>
-            <div class="pill">📎 Document 2</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Projets -->
-      <div class="accordion" id="acc-projets">
-        <div class="accordionHeader hdr-projets" onclick="toggleAccordion('acc-projets')">
-          <div class="accordionTitle">
-            <span class="emoji">🧩</span>
-            <span>Projets</span>
-          </div>
-          <span class="accordionArrow">▾</span>
-        </div>
-
-        <div class="accordionContent">
-          <div class="subAccordion" id="projet-1">
-            <div class="subHeader" onclick="toggleSubAccordion(event, 'projet-1')">
-              <span>Projet 1</span>
-              <span class="subArrow">▾</span>
-            </div>
-            <div class="subContent">
-              <div class="card">
-                <div class="cardTitle">Contenu du projet</div>
-                <div class="line">Bloc simple prévu pour un projet Amicale.</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="subAccordion" id="projet-2">
-            <div class="subHeader" onclick="toggleSubAccordion(event, 'projet-2')">
-              <span>Projet 2</span>
-              <span class="subArrow">▾</span>
-            </div>
-            <div class="subContent">
-              <div class="card">
-                <div class="cardTitle">Contenu du projet</div>
-                <div class="line">Bloc simple prévu pour un projet Amicale.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Événements -->
-      <div class="accordion" id="acc-evenements">
-        <div class="accordionHeader hdr-evenements" onclick="toggleAccordion('acc-evenements')">
-          <div class="accordionTitle">
-            <span class="emoji">🎉</span>
-            <span>Événements</span>
-          </div>
-          <span class="accordionArrow">▾</span>
-        </div>
-
-        <div class="accordionContent">
-          <div class="subAccordion" id="evt-1">
-            <div class="subHeader" onclick="toggleSubAccordion(event, 'evt-1')">
-              <span>Événement 1</span>
-              <span class="subArrow">▾</span>
-            </div>
-            <div class="subContent">
-              <div class="card">
-                <div class="cardTitle">Contenu de l’événement</div>
-                <div class="line">Bloc simple prévu pour un événement Amicale.</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="subAccordion" id="evt-2">
-            <div class="subHeader" onclick="toggleSubAccordion(event, 'evt-2')">
-              <span>Événement 2</span>
-              <span class="subArrow">▾</span>
-            </div>
-            <div class="subContent">
-              <div class="card">
-                <div class="cardTitle">Contenu de l’événement</div>
-                <div class="line">Bloc simple prévu pour un événement Amicale.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tournées calendriers -->
-      <div class="accordion" id="acc-cal">
-        <div class="accordionHeader hdr-cal" onclick="toggleAccordion('acc-cal')">
-          <div class="accordionTitle">
-            <span class="emoji">📘</span>
-            <span>Tournées calendriers</span>
-          </div>
-          <span class="accordionArrow">▾</span>
-        </div>
-
-        <div class="accordionContent">
-
-          <!-- Actives -->
-          <div class="subAccordion" id="cal-active">
-            <div class="subHeader" onclick="toggleSubAccordion(event, 'cal-active')">
-              <span>Tournées actives</span>
-              <span class="subArrow">▾</span>
-            </div>
-            <div class="subContent">
-
-              <div class="subAccordion" id="annee-2026">
-                <div class="subHeader" onclick="toggleSubAccordion(event, 'annee-2026')">
-                  <span>Année 2026</span>
-                  <span class="subArrow">▾</span>
-                </div>
-                <div class="subContent">
-
-                  <div class="summaryBox">
-                    <div class="summaryTitle">Somme totale</div>
-                    <div class="summaryRow">
-                      <span>Calendriers attribués</span>
-                      <strong>0</strong>
-                    </div>
-                    <div class="summaryRow">
-                      <span>Calendriers vendus</span>
-                      <strong>0</strong>
-                    </div>
-                    <div class="summaryRow">
-                      <span>Somme restituée</span>
-                      <strong>0 €</strong>
-                    </div>
-                  </div>
-
-                  <div class="subAccordion" id="secteur-2026-1">
-                    <div class="subHeader" onclick="toggleSubAccordion(event, 'secteur-2026-1')">
-                      <span>Commune / secteur 1</span>
-                      <span class="subArrow">▾</span>
-                    </div>
-                    <div class="subContent">
-                      <div class="card">
-                        <div class="cardTitle">Agents par tournée</div>
-                        <div class="pill">Agent 1</div>
-                        <div class="pill">Agent 2</div>
-                      </div>
-
-                      <div class="card">
-                        <div class="cardTitle">Suivi</div>
-                        <div class="line"><strong>Calendriers attribués :</strong> 0</div>
-                        <div class="line"><strong>Calendriers vendus :</strong> 0</div>
-                        <div class="line"><strong>Somme restituée :</strong> 0 €</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="subAccordion" id="secteur-2026-2">
-                    <div class="subHeader" onclick="toggleSubAccordion(event, 'secteur-2026-2')">
-                      <span>Commune / secteur 2</span>
-                      <span class="subArrow">▾</span>
-                    </div>
-                    <div class="subContent">
-                      <div class="card">
-                        <div class="cardTitle">Agents par tournée</div>
-                        <div class="pill">Agent 1</div>
-                        <div class="pill">Agent 2</div>
-                      </div>
-
-                      <div class="card">
-                        <div class="cardTitle">Suivi</div>
-                        <div class="line"><strong>Calendriers attribués :</strong> 0</div>
-                        <div class="line"><strong>Calendriers vendus :</strong> 0</div>
-                        <div class="line"><strong>Somme restituée :</strong> 0 €</div>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Archives -->
-          <div class="subAccordion" id="cal-archives">
-            <div class="subHeader" onclick="toggleSubAccordion(event, 'cal-archives')">
-              <span>Archives</span>
-              <span class="subArrow">▾</span>
-            </div>
-            <div class="subContent">
-
-              <div class="subAccordion" id="archive-2025">
-                <div class="subHeader" onclick="toggleSubAccordion(event, 'archive-2025')">
-                  <span>Année 2025</span>
-                  <span class="subArrow">▾</span>
-                </div>
-                <div class="subContent">
-
-                  <div class="summaryBox">
-                    <div class="summaryTitle">Somme totale</div>
-                    <div class="summaryRow">
-                      <span>Calendriers attribués</span>
-                      <strong>0</strong>
-                    </div>
-                    <div class="summaryRow">
-                      <span>Calendriers vendus</span>
-                      <strong>0</strong>
-                    </div>
-                    <div class="summaryRow">
-                      <span>Somme restituée</span>
-                      <strong>0 €</strong>
-                    </div>
-                  </div>
-
-                  <div class="subAccordion" id="archive-2025-secteur-1">
-                    <div class="subHeader" onclick="toggleSubAccordion(event, 'archive-2025-secteur-1')">
-                      <span>Commune / secteur 1</span>
-                      <span class="subArrow">▾</span>
-                    </div>
-                    <div class="subContent">
-                      <div class="card">
-                        <div class="cardTitle">Agents par tournée</div>
-                        <div class="pill">Agent 1</div>
-                        <div class="pill">Agent 2</div>
-                      </div>
-
-                      <div class="card">
-                        <div class="cardTitle">Suivi</div>
-                        <div class="line"><strong>Calendriers attribués :</strong> 0</div>
-                        <div class="line"><strong>Calendriers vendus :</strong> 0</div>
-                        <div class="line"><strong>Somme restituée :</strong> 0 €</div>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-      </div>
+      <div id="sections"></div>
     </div>
   </div>
 
@@ -679,6 +570,19 @@
 const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 const EMAIL_KEY = "cs_portail_email_v1";
 
+const state = {
+  actorEmail: "",
+  canEdit: false,
+  updatedAt: "",
+  data: {
+    reunions: [],
+    comptesRendus: [],
+    projets: [],
+    evenements: [],
+    tournees: { active: [], archives: [] }
+  }
+};
+
 function showLoader(v){
   document.getElementById("loader").classList.toggle("show", !!v);
 }
@@ -687,6 +591,29 @@ function showStatus(type, message){
   const box = document.getElementById("statusBox");
   box.className = "status show " + type;
   box.textContent = message || "";
+}
+
+function setButtonSaving(btn, saving, savingText = "Enregistrement..."){
+  if (!btn) return;
+  if (saving) {
+    btn.dataset.originalText = btn.textContent;
+    btn.textContent = savingText;
+    btn.classList.add("saving");
+    btn.disabled = true;
+  } else {
+    btn.textContent = btn.dataset.originalText || btn.textContent;
+    btn.classList.remove("saving");
+    btn.disabled = false;
+  }
+}
+
+function eHtml(v){
+  return String(v == null ? "" : v)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 function getCurrentEmail(){
@@ -726,10 +653,73 @@ function jsonp(params){
   });
 }
 
+function submitPayload(payload){
+  return new Promise((resolve) => {
+    const iframeName = "amicaleSaveFrame";
+    let iframe = document.querySelector(`iframe[name="${iframeName}"]`);
+    if (!iframe) {
+      iframe = document.createElement("iframe");
+      iframe.name = iframeName;
+      iframe.style.display = "none";
+      document.body.appendChild(iframe);
+    }
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = API;
+    form.target = iframeName;
+    form.style.display = "none";
+
+    const fields = {
+      view: "amicale_save",
+      actorEmail: state.actorEmail,
+      payload: JSON.stringify(payload)
+    };
+
+    Object.keys(fields).forEach(key => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value = fields[key];
+      form.appendChild(input);
+    });
+
+    let done = false;
+
+    const cleanup = () => {
+      iframe.removeEventListener("load", onLoad);
+      if (form.parentNode) form.parentNode.removeChild(form);
+    };
+
+    const onLoad = () => {
+      if (done) return;
+      done = true;
+      cleanup();
+      resolve(true);
+    };
+
+    iframe.addEventListener("load", onLoad);
+    document.body.appendChild(form);
+    form.submit();
+
+    setTimeout(() => {
+      if (done) return;
+      done = true;
+      cleanup();
+      resolve(true);
+    }, 1500);
+  });
+}
+
 function toggleAccordion(id){
   const el = document.getElementById(id);
   if (!el) return;
   el.classList.toggle("open");
+}
+
+function toggleAccordionOnlyMain(ev, id){
+  if (ev.target.closest(".toolbar")) return;
+  toggleAccordion(id);
 }
 
 function toggleSubAccordion(ev, id){
@@ -739,16 +729,22 @@ function toggleSubAccordion(ev, id){
   el.classList.toggle("open");
 }
 
-async function checkAmicaleAccess(){
-  const email = getCurrentEmail();
+function toggleEditor(sectionId){
+  const editor = document.querySelector(`#${sectionId} .sectionEditor`);
+  if (!editor) return;
+  editor.classList.toggle("show");
+}
 
-  if (!email) {
+async function checkAmicaleAccess(){
+  state.actorEmail = getCurrentEmail();
+
+  if (!state.actorEmail) {
     return { ok:false, reason:"Aucun email détecté." };
   }
 
   const auth = await jsonp({
     view: "auth_check",
-    email
+    email: state.actorEmail
   });
 
   if (!auth || !auth.ok) {
@@ -760,6 +756,577 @@ async function checkAmicaleAccess(){
   }
 
   return { ok:true };
+}
+
+function sectionShell(id, headerClass, emoji, title, viewHtml, editorHtml){
+  return `
+    <div class="accordion" id="${id}">
+      <div class="accordionHeader ${headerClass}">
+        <div class="accordionHeaderMain" onclick="toggleAccordion('${id}')">
+          <div class="accordionTitle">
+            <span class="emoji">${emoji}</span>
+            <span>${title}</span>
+          </div>
+          <span class="accordionArrow">▾</span>
+        </div>
+
+        <div class="toolbar">
+          <button class="btn2 btnSecondary btnMini" type="button" onclick="event.stopPropagation();toggleEditor('${id}')">🖍 Modifier</button>
+        </div>
+      </div>
+
+      <div class="accordionContent">
+        <div class="sectionView">${viewHtml}</div>
+        <div class="sectionEditor">${editorHtml}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderReunionsView(){
+  const items = state.data.reunions || [];
+  if (!items.length) return `<div class="empty">Aucune réunion renseignée.</div>`;
+
+  return `
+    <div class="grid2">
+      ${items.map((r, i) => `
+        <div class="card">
+          <div class="cardTitle">Réunion ${i + 1}</div>
+          <div class="line"><strong>Date :</strong> ${eHtml(r.date || "—")}</div>
+          <div class="line"><strong>Lieu :</strong> ${eHtml(r.lieu || "—")}</div>
+          <div class="line"><strong>Notes :</strong> ${eHtml(r.notes || "—")}</div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderCRView(){
+  const items = state.data.comptesRendus || [];
+  if (!items.length) return `<div class="empty">Aucun compte-rendu renseigné.</div>`;
+
+  return items.map((r, i) => {
+    const docs = String(r.documents || "").split(/\n+/).map(x => x.trim()).filter(Boolean);
+    return `
+      <div class="card">
+        <div class="cardTitle">${eHtml(r.titre || `Compte-rendu ${i + 1}`)}</div>
+        <div class="line"><strong>Date :</strong> ${eHtml(r.date || "—")}</div>
+        <div class="line"><strong>Texte :</strong></div>
+        <div class="line">${eHtml(r.texte || "—")}</div>
+        <div class="line" style="margin-top:8px;"><strong>Documents Drive :</strong></div>
+        ${docs.length ? docs.map(d => `<div class="pill">📎 ${eHtml(d)}</div>`).join("") : `<div class="muted">Aucun document</div>`}
+      </div>
+    `;
+  }).join("");
+}
+
+function renderSimpleBlocksView(items, label){
+  if (!items.length) return `<div class="empty">Aucun ${label.toLowerCase()} renseigné.</div>`;
+
+  return items.map((r, i) => `
+    <div class="subAccordion" id="v-${label}-${i}">
+      <div class="subHeader" onclick="toggleSubAccordion(event, 'v-${label}-${i}')">
+        <span>${eHtml(r.titre || `${label} ${i + 1}`)}</span>
+        <span class="subArrow">▾</span>
+      </div>
+      <div class="subContent">
+        <div class="card">
+          <div class="cardTitle">${eHtml(r.titre || `${label} ${i + 1}`)}</div>
+          <div class="line">${eHtml(r.contenu || "—")}</div>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+function calcYearTotals(yearObj){
+  const secteurs = Array.isArray(yearObj.secteurs) ? yearObj.secteurs : [];
+  let attribues = 0;
+  let vendus = 0;
+  let somme = 0;
+
+  secteurs.forEach(s => {
+    attribues += Number(s.attribues || 0) || 0;
+    vendus += Number(s.vendus || 0) || 0;
+    somme += Number(String(s.somme || "").replace(",", ".")) || 0;
+  });
+
+  return { attribues, vendus, somme };
+}
+
+function renderTourneesGroupView(years, groupPrefix, classes){
+  if (!years.length) return `<div class="empty">Aucune donnée.</div>`;
+
+  return years.map((y, yi) => {
+    const totals = calcYearTotals(y);
+    const yearId = `${groupPrefix}-year-${yi}`;
+
+    return `
+      <div class="subAccordion" id="${yearId}">
+        <div class="subHeader ${classes.year}" onclick="toggleSubAccordion(event, '${yearId}')">
+          <span>Année ${eHtml(y.annee || "—")}</span>
+          <span class="subArrow">▾</span>
+        </div>
+        <div class="subContent">
+
+          <div class="summaryBox">
+            <div class="summaryTitle">Somme totale</div>
+            <div class="summaryRow"><span>Calendriers attribués</span><strong>${totals.attribues}</strong></div>
+            <div class="summaryRow"><span>Calendriers vendus</span><strong>${totals.vendus}</strong></div>
+            <div class="summaryRow"><span>Somme restituée</span><strong>${totals.somme} €</strong></div>
+          </div>
+
+          ${(Array.isArray(y.secteurs) && y.secteurs.length) ? y.secteurs.map((s, si) => {
+            const secId = `${yearId}-sec-${si}`;
+            const agents = String(s.agents || "").split(",").map(x => x.trim()).filter(Boolean);
+
+            return `
+              <div class="subAccordion" id="${secId}">
+                <div class="subHeader ${classes.sector}" onclick="toggleSubAccordion(event, '${secId}')">
+                  <span>${eHtml(s.nom || `Secteur ${si + 1}`)}</span>
+                  <span class="subArrow">▾</span>
+                </div>
+                <div class="subContent">
+                  <div class="card">
+                    <div class="cardTitle">Agents par tournée</div>
+                    ${agents.length ? agents.map(a => `<div class="pill">${eHtml(a)}</div>`).join("") : `<div class="muted">Aucun agent</div>`}
+                  </div>
+
+                  <div class="card">
+                    <div class="cardTitle">Suivi</div>
+                    <div class="line"><strong>Calendriers attribués :</strong> ${eHtml(s.attribues || "0")}</div>
+                    <div class="line"><strong>Calendriers vendus :</strong> ${eHtml(s.vendus || "0")}</div>
+                    <div class="line"><strong>Somme restituée :</strong> ${eHtml(s.somme || "0")} €</div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join("") : `<div class="empty">Aucun secteur.</div>`}
+
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderTourneesView(){
+  const active = (state.data.tournees && state.data.tournees.active) || [];
+  const archives = (state.data.tournees && state.data.tournees.archives) || [];
+
+  return `
+    <div class="subAccordion" id="tournees-active-view">
+      <div class="subHeader activeHeader" onclick="toggleSubAccordion(event, 'tournees-active-view')">
+        <span>Tournées actives</span>
+        <span class="subArrow">▾</span>
+      </div>
+      <div class="subContent">
+        ${renderTourneesGroupView(active, "activeView", { year:"yearHeader", sector:"sectorHeader" })}
+      </div>
+    </div>
+
+    <div class="subAccordion" id="tournees-archives-view">
+      <div class="subHeader archiveHeader" onclick="toggleSubAccordion(event, 'tournees-archives-view')">
+        <span>Archives</span>
+        <span class="subArrow">▾</span>
+      </div>
+      <div class="subContent">
+        ${renderTourneesGroupView(archives, "archiveView", { year:"archiveYearHeader", sector:"archiveSectorHeader" })}
+      </div>
+    </div>
+  `;
+}
+
+function editorReunionRow(item = {}, i = 0){
+  return `
+    <div class="editorItem reunion-item">
+      <div class="editorItemTop">
+        <div class="editorItemTitle">Réunion ${i + 1}</div>
+        <button class="btn2 btnDanger btnMini" type="button" onclick="this.closest('.reunion-item').remove()">Supprimer</button>
+      </div>
+
+      <div class="field">
+        <label class="label">Date</label>
+        <input class="input reunion-date" type="text" value="${eHtml(item.date || "")}">
+      </div>
+
+      <div class="field">
+        <label class="label">Lieu</label>
+        <input class="input reunion-lieu" type="text" value="${eHtml(item.lieu || "")}">
+      </div>
+
+      <div class="field">
+        <label class="label">Notes</label>
+        <textarea class="textarea reunion-notes">${eHtml(item.notes || "")}</textarea>
+      </div>
+    </div>
+  `;
+}
+
+function renderReunionsEditor(){
+  const items = state.data.reunions || [];
+  return `
+    <div id="reunionsEditorList">
+      ${items.length ? items.map((r, i) => editorReunionRow(r, i)).join("") : ""}
+    </div>
+
+    <div class="editorActions">
+      <button class="btn2 btnSecondary btnMini" type="button" onclick="addReunion()">➕ Ajouter une réunion</button>
+      <button class="btn2 btnPrimary" type="button" onclick="saveSection('reunions', this)">Enregistrer</button>
+    </div>
+  `;
+}
+
+function editorCRRow(item = {}, i = 0){
+  return `
+    <div class="editorItem cr-item">
+      <div class="editorItemTop">
+        <div class="editorItemTitle">Compte-rendu ${i + 1}</div>
+        <button class="btn2 btnDanger btnMini" type="button" onclick="this.closest('.cr-item').remove()">Supprimer</button>
+      </div>
+
+      <div class="field">
+        <label class="label">Date</label>
+        <input class="input cr-date" type="text" value="${eHtml(item.date || "")}">
+      </div>
+
+      <div class="field">
+        <label class="label">Titre</label>
+        <input class="input cr-titre" type="text" value="${eHtml(item.titre || "")}">
+      </div>
+
+      <div class="field">
+        <label class="label">Texte</label>
+        <textarea class="textarea cr-texte">${eHtml(item.texte || "")}</textarea>
+      </div>
+
+      <div class="field">
+        <label class="label">Documents Drive (un par ligne)</label>
+        <textarea class="textarea cr-docs">${eHtml(item.documents || "")}</textarea>
+      </div>
+    </div>
+  `;
+}
+
+function renderCREditor(){
+  const items = state.data.comptesRendus || [];
+  return `
+    <div id="crEditorList">
+      ${items.length ? items.map((r, i) => editorCRRow(r, i)).join("") : ""}
+    </div>
+
+    <div class="editorActions">
+      <button class="btn2 btnSecondary btnMini" type="button" onclick="addCR()">➕ Ajouter un compte-rendu</button>
+      <button class="btn2 btnPrimary" type="button" onclick="saveSection('comptesRendus', this)">Enregistrer</button>
+    </div>
+  `;
+}
+
+function editorSimpleRow(item = {}, i = 0, cls = "simple-item", titleLabel = "Titre", contentLabel = "Contenu"){
+  return `
+    <div class="editorItem ${cls}">
+      <div class="editorItemTop">
+        <div class="editorItemTitle">${titleLabel} ${i + 1}</div>
+        <button class="btn2 btnDanger btnMini" type="button" onclick="this.closest('.${cls}').remove()">Supprimer</button>
+      </div>
+
+      <div class="field">
+        <label class="label">${titleLabel}</label>
+        <input class="input simple-titre" type="text" value="${eHtml(item.titre || "")}">
+      </div>
+
+      <div class="field">
+        <label class="label">${contentLabel}</label>
+        <textarea class="textarea simple-contenu">${eHtml(item.contenu || "")}</textarea>
+      </div>
+    </div>
+  `;
+}
+
+function renderSimpleEditor(items, listId, addFn, saveKey, rowCls, titleLabel, contentLabel, addLabel){
+  return `
+    <div id="${listId}">
+      ${items.length ? items.map((r, i) => editorSimpleRow(r, i, rowCls, titleLabel, contentLabel)).join("") : ""}
+    </div>
+
+    <div class="editorActions">
+      <button class="btn2 btnSecondary btnMini" type="button" onclick="${addFn}()">➕ ${addLabel}</button>
+      <button class="btn2 btnPrimary" type="button" onclick="saveSection('${saveKey}', this)">Enregistrer</button>
+    </div>
+  `;
+}
+
+function secteurEditorRow(item = {}, archive = false){
+  return `
+    <div class="editorItem secteur-item">
+      <div class="editorItemTop">
+        <div class="editorItemTitle">Secteur / commune</div>
+        <button class="btn2 btnDanger btnMini" type="button" onclick="this.closest('.secteur-item').remove()">Supprimer</button>
+      </div>
+
+      <div class="field">
+        <label class="label">Nom du secteur / commune</label>
+        <input class="input secteur-nom" type="text" value="${eHtml(item.nom || "")}">
+      </div>
+
+      <div class="field">
+        <label class="label">Agents (séparés par des virgules)</label>
+        <textarea class="textarea secteur-agents">${eHtml(item.agents || "")}</textarea>
+      </div>
+
+      <div class="grid2">
+        <div class="field">
+          <label class="label">Calendriers attribués</label>
+          <input class="input secteur-attribues" type="text" value="${eHtml(item.attribues || "")}">
+        </div>
+
+        <div class="field">
+          <label class="label">Calendriers vendus</label>
+          <input class="input secteur-vendus" type="text" value="${eHtml(item.vendus || "")}">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Somme restituée (€)</label>
+        <input class="input secteur-somme" type="text" value="${eHtml(item.somme || "")}">
+      </div>
+    </div>
+  `;
+}
+
+function yearEditorRow(item = {}, section = "active"){
+  const secteurs = Array.isArray(item.secteurs) ? item.secteurs : [];
+  const uniqueId = "year_" + Math.random().toString(36).slice(2, 9);
+
+  return `
+    <div class="editorItem year-item" data-year-box="${uniqueId}">
+      <div class="editorItemTop">
+        <div class="editorItemTitle">Année</div>
+        <button class="btn2 btnDanger btnMini" type="button" onclick="this.closest('.year-item').remove()">Supprimer l'année</button>
+      </div>
+
+      <div class="field">
+        <label class="label">Année</label>
+        <input class="input year-annee" type="text" value="${eHtml(item.annee || "")}">
+      </div>
+
+      <div class="field">
+        <label class="label">Secteurs / communes</label>
+      </div>
+
+      <div class="year-secteurs-list">
+        ${secteurs.length ? secteurs.map(s => secteurEditorRow(s, section === "archives")).join("") : ""}
+      </div>
+
+      <div class="editorActions">
+        <button class="btn2 btnSecondary btnMini" type="button" onclick="addSecteurToYear(this)">➕ Ajouter un secteur</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderTourneesEditor(){
+  const active = (state.data.tournees && state.data.tournees.active) || [];
+  const archives = (state.data.tournees && state.data.tournees.archives) || [];
+
+  return `
+    <div class="subAccordion open" id="tournees-editor-active">
+      <div class="subHeader activeHeader" onclick="toggleSubAccordion(event, 'tournees-editor-active')">
+        <span>Tournées actives</span>
+        <span class="subArrow">▾</span>
+      </div>
+      <div class="subContent">
+        <div id="tourneesActiveEditorList">
+          ${active.length ? active.map(y => yearEditorRow(y, "active")).join("") : ""}
+        </div>
+
+        <div class="editorActions">
+          <button class="btn2 btnSecondary btnMini" type="button" onclick="addYear('active')">➕ Ajouter une année active</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="subAccordion" id="tournees-editor-archives">
+      <div class="subHeader archiveHeader" onclick="toggleSubAccordion(event, 'tournees-editor-archives')">
+        <span>Archives</span>
+        <span class="subArrow">▾</span>
+      </div>
+      <div class="subContent">
+        <div id="tourneesArchivesEditorList">
+          ${archives.length ? archives.map(y => yearEditorRow(y, "archives")).join("") : ""}
+        </div>
+
+        <div class="editorActions">
+          <button class="btn2 btnSecondary btnMini" type="button" onclick="addYear('archives')">➕ Ajouter une année archive</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="editorActions">
+      <button class="btn2 btnPrimary" type="button" onclick="saveSection('tournees', this)">Enregistrer</button>
+    </div>
+  `;
+}
+
+function renderAll(){
+  const html = [
+    sectionShell("acc-reunions", "hdr-reunions", "📅", "Réunions", renderReunionsView(), renderReunionsEditor()),
+    sectionShell("acc-cr", "hdr-cr", "📝", "Comptes-rendus de réunion", renderCRView(), renderCREditor()),
+    sectionShell("acc-projets", "hdr-projets", "🧩", "Projets", renderSimpleBlocksView(state.data.projets || [], "Projet"), renderSimpleEditor(state.data.projets || [], "projetsEditorList", "addProjet", "projets", "projet-item", "Projet", "Contenu", "Ajouter un projet")),
+    sectionShell("acc-evenements", "hdr-evenements", "🎉", "Événements", renderSimpleBlocksView(state.data.evenements || [], "Événement"), renderSimpleEditor(state.data.evenements || [], "evenementsEditorList", "addEvenement", "evenements", "evenement-item", "Événement", "Contenu", "Ajouter un événement")),
+    sectionShell("acc-cal", "hdr-cal", "📘", "Tournées calendriers", renderTourneesView(), renderTourneesEditor())
+  ].join("");
+
+  document.getElementById("sections").innerHTML = html;
+}
+
+async function loadData(){
+  try{
+    showLoader(true);
+    showStatus("info", "Chargement de la page Amicale...");
+
+    const r = await jsonp({
+      view: "amicale_get",
+      actorEmail: state.actorEmail
+    });
+
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de chargement.");
+      showLoader(false);
+      return;
+    }
+
+    state.canEdit = !!r.canEdit;
+    state.updatedAt = r.updatedAt || "";
+    state.data = r.data || {
+      reunions: [],
+      comptesRendus: [],
+      projets: [],
+      evenements: [],
+      tournees: { active: [], archives: [] }
+    };
+
+    renderAll();
+    showStatus("ok", "Page Amicale chargée.");
+    showLoader(false);
+
+  }catch(err){
+    showLoader(false);
+    showStatus("err", err?.message || String(err));
+  }
+}
+
+function addReunion(){
+  const list = document.getElementById("reunionsEditorList");
+  const count = list.querySelectorAll(".reunion-item").length;
+  list.insertAdjacentHTML("beforeend", editorReunionRow({}, count));
+}
+
+function addCR(){
+  const list = document.getElementById("crEditorList");
+  const count = list.querySelectorAll(".cr-item").length;
+  list.insertAdjacentHTML("beforeend", editorCRRow({}, count));
+}
+
+function addProjet(){
+  const list = document.getElementById("projetsEditorList");
+  const count = list.querySelectorAll(".projet-item").length;
+  list.insertAdjacentHTML("beforeend", editorSimpleRow({}, count, "projet-item", "Projet", "Contenu"));
+}
+
+function addEvenement(){
+  const list = document.getElementById("evenementsEditorList");
+  const count = list.querySelectorAll(".evenement-item").length;
+  list.insertAdjacentHTML("beforeend", editorSimpleRow({}, count, "evenement-item", "Événement", "Contenu"));
+}
+
+function addYear(type){
+  const target = type === "archives"
+    ? document.getElementById("tourneesArchivesEditorList")
+    : document.getElementById("tourneesActiveEditorList");
+
+  target.insertAdjacentHTML("beforeend", yearEditorRow({}, type));
+}
+
+function addSecteurToYear(btn){
+  const yearBox = btn.closest(".year-item");
+  if (!yearBox) return;
+  const list = yearBox.querySelector(".year-secteurs-list");
+  list.insertAdjacentHTML("beforeend", secteurEditorRow({}));
+}
+
+function collectReunions(){
+  return Array.from(document.querySelectorAll("#reunionsEditorList .reunion-item")).map(item => ({
+    date: (item.querySelector(".reunion-date")?.value || "").trim(),
+    lieu: (item.querySelector(".reunion-lieu")?.value || "").trim(),
+    notes: (item.querySelector(".reunion-notes")?.value || "").trim()
+  })).filter(r => r.date || r.lieu || r.notes);
+}
+
+function collectCR(){
+  return Array.from(document.querySelectorAll("#crEditorList .cr-item")).map(item => ({
+    date: (item.querySelector(".cr-date")?.value || "").trim(),
+    titre: (item.querySelector(".cr-titre")?.value || "").trim(),
+    texte: (item.querySelector(".cr-texte")?.value || "").trim(),
+    documents: (item.querySelector(".cr-docs")?.value || "").trim()
+  })).filter(r => r.date || r.titre || r.texte || r.documents);
+}
+
+function collectSimple(listSelector, itemClass){
+  return Array.from(document.querySelectorAll(`${listSelector} .${itemClass}`)).map(item => ({
+    titre: (item.querySelector(".simple-titre")?.value || "").trim(),
+    contenu: (item.querySelector(".simple-contenu")?.value || "").trim()
+  })).filter(r => r.titre || r.contenu);
+}
+
+function collectYears(listSelector){
+  return Array.from(document.querySelectorAll(`${listSelector} .year-item`)).map(yearItem => {
+    const annee = (yearItem.querySelector(".year-annee")?.value || "").trim();
+
+    const secteurs = Array.from(yearItem.querySelectorAll(".year-secteurs-list .secteur-item")).map(sec => ({
+      nom: (sec.querySelector(".secteur-nom")?.value || "").trim(),
+      agents: (sec.querySelector(".secteur-agents")?.value || "").trim(),
+      attribues: (sec.querySelector(".secteur-attribues")?.value || "").trim(),
+      vendus: (sec.querySelector(".secteur-vendus")?.value || "").trim(),
+      somme: (sec.querySelector(".secteur-somme")?.value || "").trim()
+    })).filter(s => s.nom || s.agents || s.attribues || s.vendus || s.somme);
+
+    return { annee, secteurs };
+  }).filter(y => y.annee || y.secteurs.length);
+}
+
+function collectTournees(){
+  return {
+    active: collectYears("#tourneesActiveEditorList"),
+    archives: collectYears("#tourneesArchivesEditorList")
+  };
+}
+
+async function saveSection(sectionKey, btn){
+  try{
+    setButtonSaving(btn, true);
+    showStatus("info", "Enregistrement...");
+
+    if (sectionKey === "reunions") {
+      state.data.reunions = collectReunions();
+    } else if (sectionKey === "comptesRendus") {
+      state.data.comptesRendus = collectCR();
+    } else if (sectionKey === "projets") {
+      state.data.projets = collectSimple("#projetsEditorList", "projet-item");
+    } else if (sectionKey === "evenements") {
+      state.data.evenements = collectSimple("#evenementsEditorList", "evenement-item");
+    } else if (sectionKey === "tournees") {
+      state.data.tournees = collectTournees();
+    }
+
+    await submitPayload(state.data);
+    await loadData();
+    showStatus("ok", "Enregistrement effectué.");
+
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false);
+  }
 }
 
 (async function init(){
@@ -775,8 +1342,7 @@ async function checkAmicaleAccess(){
     }
 
     document.getElementById("pageWrap").style.display = "block";
-    showStatus("ok", "Accès Amicale autorisé.");
-    showLoader(false);
+    await loadData();
 
   }catch(err){
     document.getElementById("denyBox").style.display = "block";
