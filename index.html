@@ -1,1354 +1,639 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-  <title>Amicale — CS Consenvoye</title>
-
-  <link rel="stylesheet" href="cs-theme.css">
-
-  <style>
-    .pageWrap{
-      max-width:980px;
-      margin:0 auto;
-      padding:14px;
-    }
-
-    .hero{
-      padding:14px 16px;
-      margin-bottom:16px;
-      border-radius:18px;
-      background:linear-gradient(180deg, rgba(212,106,0,.34), rgba(212,106,0,.16));
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      color:rgba(255,255,255,.96);
-    }
-
-    .heroTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .heroTitle{
-      font-size:20px;
-      font-weight:900;
-      line-height:1.2;
-    }
-
-    .heroSmall{
-      margin-top:8px;
-      font-size:13px;
-      font-weight:800;
-      color:rgba(255,255,255,.78);
-      line-height:1.35;
-    }
-
-    .status{
-      display:none;
-      margin-bottom:14px;
-      padding:12px 14px;
-      border-radius:14px;
-      font-weight:800;
-      line-height:1.4;
-      border:1px solid rgba(255,255,255,.12);
-    }
-
-    .status.show{ display:block; }
-    .status.ok{
-      background:rgba(47,158,91,.18);
-      color:#d9ffe7;
-    }
-    .status.err{
-      background:rgba(220,70,70,.18);
-      color:#ffe1e1;
-    }
-    .status.info{
-      background:rgba(47,111,212,.18);
-      color:#dde9ff;
-    }
-
-    .toolbar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .btn2{
-      border:none;
-      border-radius:14px;
-      min-height:42px;
-      padding:10px 14px;
-      font-weight:900;
-      cursor:pointer;
-      box-shadow:0 10px 24px rgba(0,0,0,.18);
-      transition:background .22s ease, transform .12s ease, opacity .18s ease;
-    }
-
-    .btn2:active{
-      transform:translateY(1px);
-    }
-
-    .btnPrimary{
-      background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
-      color:#fff;
-    }
-
-    .btnPrimary.saving{
-      background:linear-gradient(180deg, rgba(47,158,91,.95), rgba(34,128,73,.95));
-      color:#fff;
-    }
-
-    .btnSecondary{
-      background:rgba(255,255,255,.14);
-      color:#fff;
-      border:1px solid rgba(255,255,255,.12);
-    }
-
-    .btnDanger{
-      background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
-      color:#fff;
-    }
-
-    .btnMini{
-      min-height:36px;
-      padding:8px 10px;
-      font-size:13px;
-      border-radius:12px;
-    }
-
-    .btn2[disabled]{
-      opacity:.7;
-      cursor:default;
-    }
-
-    .accordion{
-      border-radius:20px;
-      overflow:hidden;
-      margin-bottom:14px;
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      background:rgba(255,255,255,.06);
-    }
-
-    .accordionHeader{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:16px;
-      user-select:none;
-      -webkit-tap-highlight-color:transparent;
-    }
-
-    .accordionHeaderMain{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-      flex:1 1 auto;
-      cursor:pointer;
-    }
-
-    .accordionHeaderMain:active{
-      transform:translateY(1px);
-    }
-
-    .accordionTitle{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-      flex:1 1 auto;
-      color:rgba(255,255,255,.96);
-      font-size:18px;
-      font-weight:900;
-    }
-
-    .emoji{
-      font-size:22px;
-      line-height:1;
-      flex:0 0 auto;
-    }
-
-    .accordionArrow{
-      font-size:18px;
-      color:rgba(255,255,255,.88);
-      transition:transform .18s ease;
-      flex:0 0 auto;
-    }
-
-    .accordion.open .accordionArrow{
-      transform:rotate(180deg);
-    }
-
-    .accordionContent{
-      display:none;
-      padding:12px;
-      background:rgba(0,0,0,.10);
-    }
-
-    .accordion.open .accordionContent{
-      display:block;
-    }
-
-    .hdr-reunions{
-      background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18));
-    }
-
-    .hdr-cr{
-      background:linear-gradient(180deg, rgba(145,90,220,.30), rgba(145,90,220,.15));
-    }
-
-    .hdr-projets{
-      background:linear-gradient(180deg, rgba(47,158,91,.30), rgba(47,158,91,.15));
-    }
-
-    .hdr-evenements{
-      background:linear-gradient(180deg, rgba(220,90,170,.28), rgba(220,90,170,.14));
-    }
-
-    .hdr-cal{
-      background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15));
-    }
-
-    .sectionView{
-      display:block;
-    }
-
-    .sectionEditor{
-      display:none;
-      margin-top:10px;
-    }
-
-    .sectionEditor.show{
-      display:block;
-    }
-
-    .card{
-      border-radius:16px;
-      padding:12px;
-      margin-bottom:10px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);
-      color:rgba(255,255,255,.95);
-    }
-
-    .cardTitle{
-      font-size:15px;
-      font-weight:900;
-      margin-bottom:8px;
-      color:rgba(255,255,255,.98);
-    }
-
-    .line{
-      font-size:14px;
-      line-height:1.45;
-      color:rgba(255,255,255,.86);
-      margin-bottom:4px;
-    }
-
-    .muted{
-      color:rgba(255,255,255,.68);
-      font-weight:800;
-      font-size:13px;
-    }
-
-    .grid2{
-      display:grid;
-      gap:10px;
-      grid-template-columns:1fr;
-    }
-
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      margin-bottom:10px;
-    }
-
-    .label{
-      font-size:13px;
-      font-weight:900;
-      color:rgba(255,255,255,.80);
-    }
-
-    .input, .textarea{
-      width:100%;
-      border:none;
-      outline:none;
-      border-radius:12px;
-      padding:10px 12px;
-      background:rgba(255,255,255,.10);
-      color:#fff;
-      border:1px solid rgba(255,255,255,.12);
-      font-size:15px;
-      font-family:inherit;
-    }
-
-    .input{
-      min-height:44px;
-    }
-
-    .textarea{
-      min-height:100px;
-      resize:vertical;
-    }
-
-    .editorItem{
-      border-radius:16px;
-      padding:12px;
-      margin-bottom:10px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);
-    }
-
-    .editorItemTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:10px;
-    }
-
-    .editorItemTitle{
-      font-size:15px;
-      font-weight:900;
-      color:rgba(255,255,255,.96);
-    }
-
-    .editorActions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:8px;
-    }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      min-height:32px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.10);
-      color:#fff;
-      font-size:12px;
-      font-weight:900;
-      margin-right:6px;
-      margin-bottom:6px;
-    }
-
-    .empty{
-      padding:14px;
-      border-radius:14px;
-      background:rgba(255,255,255,.05);
-      border:1px dashed rgba(255,255,255,.10);
-      color:rgba(255,255,255,.76);
-      font-weight:800;
-    }
-
-    .subAccordion{
-      border-radius:16px;
-      overflow:hidden;
-      margin-bottom:10px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.05);
-    }
-
-    .subHeader{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:13px 14px;
-      cursor:pointer;
-      font-weight:900;
-      color:rgba(255,255,255,.95);
-      background:rgba(255,255,255,.06);
-      -webkit-tap-highlight-color:transparent;
-    }
-
-    .subHeader:active{
-      transform:translateY(1px);
-    }
-
-    .subArrow{
-      transition:transform .18s ease;
-      color:rgba(255,255,255,.82);
-    }
-
-    .subAccordion.open .subArrow{
-      transform:rotate(180deg);
-    }
-
-    .subContent{
-      display:none;
-      padding:12px;
-      background:rgba(0,0,0,.14);
-    }
-
-    .subAccordion.open .subContent{
-      display:block;
-    }
-
-    .activeHeader{
-      background:linear-gradient(180deg, rgba(255,190,60,.20), rgba(255,190,60,.08));
-    }
-
-    .yearHeader{
-      background:linear-gradient(180deg, rgba(47,111,212,.22), rgba(47,111,212,.10));
-    }
-
-    .sectorHeader{
-      background:linear-gradient(180deg, rgba(47,158,91,.22), rgba(47,158,91,.10));
-    }
-
-    .archiveHeader{
-      background:linear-gradient(180deg, rgba(145,90,220,.24), rgba(145,90,220,.10));
-    }
-
-    .archiveYearHeader{
-      background:linear-gradient(180deg, rgba(220,90,170,.22), rgba(220,90,170,.10));
-    }
-
-    .archiveSectorHeader{
-      background:linear-gradient(180deg, rgba(212,106,0,.24), rgba(212,106,0,.10));
-    }
-
-    .summaryBox{
-      border-radius:16px;
-      padding:12px;
-      background:rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.10);
-      margin-bottom:10px;
-    }
-
-    .summaryTitle{
-      font-size:15px;
-      font-weight:900;
-      color:rgba(255,255,255,.97);
-      margin-bottom:8px;
-    }
-
-    .summaryRow{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      padding:6px 0;
-      font-size:14px;
-      color:rgba(255,255,255,.88);
-      border-bottom:1px dashed rgba(255,255,255,.08);
-    }
-
-    .summaryRow:last-child{
-      border-bottom:none;
-    }
-
-    .deny{
-      max-width:680px;
-      margin:24px auto;
-      padding:16px;
-      border-radius:20px;
-      background:rgba(0,0,0,.45);
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow);
-      color:#fff;
-      text-align:center;
-    }
-
-    .denyTitle{
-      font-size:22px;
-      font-weight:950;
-      margin-bottom:10px;
-    }
-
-    .loaderOverlay{
-      position:fixed;
-      inset:0;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      background:rgba(0,0,0,.35);
-      backdrop-filter:blur(4px);
-      -webkit-backdrop-filter:blur(4px);
-      z-index:99999;
-    }
-
-    .loaderOverlay.show{
-      display:flex;
-    }
-
-    .loaderBox{
-      width:52px;
-      height:52px;
-      border-radius:999px;
-      background:rgba(0,0,0,.55);
-      border:1px solid rgba(255,255,255,.15);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      box-shadow:0 14px 34px rgba(0,0,0,.40);
-    }
-
-    .loaderSpinner{
-      width:24px;
-      height:24px;
-      border-radius:50%;
-      border:3px solid rgba(255,255,255,.25);
-      border-top-color:#ff8c00;
-      animation:spin .8s linear infinite;
-    }
-
-    @keyframes spin{
-      to{ transform:rotate(360deg); }
-    }
-
-    @media (min-width:800px){
-      .grid2{
-        grid-template-columns:1fr 1fr;
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>CS Consenvoye</title>
+
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#d46a00">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<style>
+:root{
+  --maxw: 760px;
+  --titleMaxH: 34vh;
+  --btn: clamp(100px, min(22vw, 15vh), 170px);
+  --gap: clamp(10px, min(3vw, 2vh), 18px);
+}
+*{ box-sizing:border-box; }
+html, body{
+  margin:0; padding:0; height:100%;
+  overflow:hidden;
+  overscroll-behavior-y:none;
+  background:#000;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  -webkit-text-size-adjust:100%;
+}
+body{
+  background:#000 url("background.png") center top / cover no-repeat fixed;
+}
+
+/* modes */
+body.mode-login{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+body.mode-portal{
+  display:block;
+}
+
+.wrap{
+  min-height:100dvh;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.title{
+  margin-top: calc(env(safe-area-inset-top) + 2px);
+  width: min(94vw, 680px);
+  max-height: var(--titleMaxH);
+  height:auto;
+  object-fit:contain;
+  display:block;
+  pointer-events:none;
+  user-select:none;
+  transform: scale(1.25);
+  transform-origin: center top;
+}
+
+.refreshBtn{
+  position:fixed;
+  top:14px;
+  left:14px;
+  z-index:9999;
+
+  width:44px;
+  height:44px;
+
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.25);
+
+  background:linear-gradient(180deg,#ff8c00,#d86f00);
+
+  color:white;
+  font-size:20px;
+  font-weight:900;
+
+  box-shadow:0 8px 20px rgba(0,0,0,.35);
+  cursor:pointer;
+
+  display:none;
+  -webkit-tap-highlight-color:transparent;
+
+  transition:background .25s ease, transform .25s ease;
+}
+
+  .refreshBtn.loading{
+  background:linear-gradient(180deg,#3ccf4e,#2ca63b);
+}
+
+.refreshBtn.loading{
+  animation:spin .9s linear infinite;
+}
+
+.grid{
+  width: min(94vw, var(--maxw));
+  margin-top: clamp(8px, 1.5vh, 16px);
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap);
+  justify-items:center;
+  align-content:start;
+}
+.btn{
+  width: var(--btn);
+  height: var(--btn);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.btn img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+}
+@media (min-width:768px){
+  :root{
+    --btn: clamp(110px, 16vw, 180px);
+    --titleMaxH: 26vh;
+    --maxw:900px;
+  }
+}
+
+/* LOGIN */
+#loginBox{
+  width: 90%;
+  max-width: 380px;
+  padding: 40px 30px;
+  border-radius: 18px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: rgba(0, 0, 0, 0.65);
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+
+#loginTitle{
+  margin: 0 0 30px 0;
+  font-size: 24px;
+  letter-spacing: 2px;
+  color: #ffffff;
+}
+
+.g_id_signin{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+#loginMsg{
+  margin-top: 10px;
+  font-size: 14px;
+  color: #ff6b6b;
+}
+
+/* bouton déconnexion top-right */
+.logoutTopBtn{
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 10px);
+  right: 12px;
+  z-index: 9999;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.logoutTopBtn img{
+  height: 60px;
+  width: auto;
+  display: block;
+}
+.logoutTopBtn:active{
+  transform: scale(0.96);
+}
+
+
+
+@keyframes spin{
+  to{ transform: rotate(360deg); }
+}
+
+.srOnly{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+</style>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
-<body>
-  <div class="bg"></div>
+<body class="mode-login">
 
-  <div id="loader" class="loaderOverlay">
-    <div class="loaderBox">
-      <div class="loaderSpinner"></div>
-    </div>
+<button class="refreshBtn" id="refreshBtn" onclick="refreshPage()" aria-label="Rafraîchir">⟳</button>
+
+<!-- LOGIN -->
+<div id="loginBox">
+  <h2 id="loginTitle">Accès Portail</h2>
+
+  <div id="g_id_onload"
+       data-client_id="690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com"
+       data-callback="handleCredentialResponse"
+       data-auto_prompt="false">
   </div>
 
-  <div class="wrap" id="pageWrap" style="display:none;">
-    <div class="topbar">
-      <div class="title">🤝 Amicale</div>
-      <button class="btn" onclick="window.location.href='index.html'">Retour</button>
-    </div>
-
-    <div class="pageWrap">
-      <div class="hero">
-        <div class="heroTop">
-          <div>
-            <div class="heroTitle">Espace Amicale</div>
-            <div class="heroSmall">
-              Accès réservé aux membres autorisés. Tous les onglets sont repliés par défaut.
-            </div>
-          </div>
-
-          <div class="toolbar">
-            <button class="btn2 btnSecondary" type="button" onclick="loadData()">Actualiser</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="statusBox" class="status info"></div>
-
-      <div id="sections"></div>
-    </div>
+  <div class="g_id_signin"
+       data-type="standard"
+       data-size="large"
+       data-theme="outline"
+       data-text="sign_in_with"
+       data-shape="rectangular">
   </div>
 
-  <div id="denyBox" style="display:none;">
-    <div class="deny">
-      <div class="denyTitle">Accès réservé</div>
-      <div class="line">Cette page est réservée aux membres autorisés de l’Amicale.</div>
-      <div class="line" style="margin-top:10px;">
-        <button class="btn" onclick="window.location.href='index.html'">Retour</button>
-      </div>
-    </div>
-  </div>
+  <p id="loginMsg"></p>
+</div>
+
+<!-- PORTAIL -->
+<main class="wrap" id="portal" style="display:none;">
+  <button id="logoutBtnPortal" class="logoutTopBtn" aria-label="Déconnexion">
+    <img src="deconnexion.png" alt="Déconnexion">
+  </button>
+
+  <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
+
+  <section class="grid" aria-label="Menu">
+    <a class="btn" href="organigramme.html"><img src="organigramme.png" alt="Organigramme"></a>
+    <a class="btn" href="equipes.html"><img src="equipes.png" alt="Équipes"></a>
+    <a class="btn" href="planning.html"><img src="planning.png" alt="Planning"></a>
+    <a class="btn" href="desinfection-vsav.html"><img src="désinfection VSAV.png" alt="Désinfection VSAV"></a>
+    <a class="btn" href="https://nantuko888.github.io/Entretien-CS-Consenvoye-/"><img src="entretien.png" alt="Entretien"></a>
+    <a class="btn" href="ticket-carburant.html"><img src="tickets carburant.png" alt="Tickets carburant"></a>
+    <a class="btn" href="documents.html"><img src="documents.png" alt="Documents"></a>
+    <a class="btn" href="informations.html"><img src="informations.png" alt="Informations"></a>
+    <a class="btn" href="#" id="btnAdmin"><img src="admin.png" alt="Admin"></a>
+    <a class="btn" href="construction.html"><img src="book.png" alt="Book"></a>
+    <a class="btn" href="amicale.html"><img src="amicale.png" alt="Amicale"></a>
+    <a class="btn" href="construction.html"><img src="gardes postées.png" alt="Gardes postées"></a>
+  </section>
+</main>
 
 <script>
+/* CONFIG */
+const GOOGLE_CLIENT_ID = "690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com";
 const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
-const EMAIL_KEY = "cs_portail_email_v1";
+const LS_KEY = "cs_portail_email_v1";
 
-const state = {
-  actorEmail: "",
-  canEdit: false,
-  updatedAt: "",
-  data: {
-    reunions: [],
-    comptesRendus: [],
-    projets: [],
-    evenements: [],
-    tournees: { active: [], archives: [] }
+/* DOM */
+const $loginBox = document.getElementById("loginBox");
+const $portal = document.getElementById("portal");
+const $msg = document.getElementById("loginMsg");
+const $logoutPortal = document.getElementById("logoutBtnPortal");
+
+const $refreshBtn = document.getElementById("refreshBtn");
+
+/* UI */
+function showMsg(t){
+  $msg.textContent = t || "";
+}
+
+function showSync(){
+  if($refreshBtn){
+    $refreshBtn.classList.add("loading");
   }
-};
-
-function showLoader(v){
-  document.getElementById("loader").classList.toggle("show", !!v);
 }
 
-function showStatus(type, message){
-  const box = document.getElementById("statusBox");
-  box.className = "status show " + type;
-  box.textContent = message || "";
+function hideSync(){
+  if($refreshBtn){
+    $refreshBtn.classList.remove("loading");
+  }
 }
 
-function setButtonSaving(btn, saving, savingText = "Enregistrement..."){
-  if (!btn) return;
-  if (saving) {
-    btn.dataset.originalText = btn.textContent;
-    btn.textContent = savingText;
-    btn.classList.add("saving");
-    btn.disabled = true;
+function showRefreshBtn(){
+  if($refreshBtn) $refreshBtn.style.display = "block";
+}
+
+function hideRefreshBtn(){
+  if($refreshBtn) $refreshBtn.style.display = "none";
+}
+
+/* État URL portail */
+function markPortalUrl_(){
+  if (!location.search.includes("portal=1")) {
+    history.replaceState({page:"portal"}, "", location.pathname + "?portal=1");
   } else {
-    btn.textContent = btn.dataset.originalText || btn.textContent;
-    btn.classList.remove("saving");
-    btn.disabled = false;
+    history.replaceState({page:"portal"}, "", location.pathname + location.search);
   }
 }
 
-function eHtml(v){
-  return String(v == null ? "" : v)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+function clearPortalUrl_(){
+  history.replaceState({page:"login"}, "", location.pathname);
 }
 
-function getCurrentEmail(){
-  return (localStorage.getItem(EMAIL_KEY) || "").trim().toLowerCase();
+function showPortal(){
+  document.body.classList.remove("mode-login");
+  document.body.classList.add("mode-portal");
+  $loginBox.style.display = "none";
+  $portal.style.display = "flex";
+  showRefreshBtn();
+  markPortalUrl_();
 }
 
-function jsonp(params){
+function showLogin(){
+  document.body.classList.remove("mode-portal");
+  document.body.classList.add("mode-login");
+  $portal.style.display = "none";
+  $loginBox.style.display = "block";
+  hideRefreshBtn();
+  clearPortalUrl_();
+}
+
+/* Refresh sûr */
+function refreshPage(){
+  window.location.href = window.location.pathname + "?r=" + Date.now();
+}
+
+/* JWT email */
+function b64urlToUtf8(b64url){
+  let s = String(b64url || "").replace(/-/g, "+").replace(/_/g, "/");
+  while (s.length % 4) s += "=";
+  const bin = atob(s);
+  let out = "";
+  for (let i=0;i<bin.length;i++){
+    out += "%" + bin.charCodeAt(i).toString(16).padStart(2,"0");
+  }
+  return decodeURIComponent(out);
+}
+
+function parseJwtEmail(credential){
+  const parts = String(credential || "").split(".");
+  if (parts.length < 2) return "";
+  const payloadJson = b64urlToUtf8(parts[1]);
+  const payload = JSON.parse(payloadJson);
+  return String(payload.email || "").trim().toLowerCase();
+}
+
+/* JSONP */
+function jsonp(url, cbName, timeoutMs = 30000){
   return new Promise((resolve, reject) => {
-    const callbackName = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
     const script = document.createElement("script");
-    const url = new URL(API);
+    script.async = true;
+    script.defer = true;
+    script.crossOrigin = "anonymous";
 
-    window[callbackName] = function(data){
+    const cleanup = () => {
+      script.remove();
+      try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+    };
+
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error("Timeout JSONP"));
+    }, timeoutMs);
+
+    window[cbName] = (data) => {
+      clearTimeout(timer);
       cleanup();
       resolve(data);
     };
 
-    function cleanup(){
-      try { delete window[callbackName]; } catch(e){}
-      if (script.parentNode) script.parentNode.removeChild(script);
-    }
+    const sep = url.includes("?") ? "&" : "?";
+    script.src = url + sep + "_t=" + Date.now();
 
-    script.onerror = function(){
+    script.onerror = () => {
+      clearTimeout(timer);
       cleanup();
-      reject(new Error("Erreur JSONP"));
+      reject(new Error("Erreur JSONP (script bloqué)"));
     };
 
-    url.searchParams.set("callback", callbackName);
-    url.searchParams.set("_ts", Date.now());
-
-    Object.keys(params || {}).forEach(k => {
-      url.searchParams.set(k, params[k]);
-    });
-
-    script.src = url.toString();
-    document.body.appendChild(script);
+    document.head.appendChild(script);
   });
 }
 
-function submitPayload(payload){
-  return new Promise((resolve) => {
-    const iframeName = "amicaleSaveFrame";
-    let iframe = document.querySelector(`iframe[name="${iframeName}"]`);
-    if (!iframe) {
-      iframe = document.createElement("iframe");
-      iframe.name = iframeName;
-      iframe.style.display = "none";
-      document.body.appendChild(iframe);
-    }
-
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = API;
-    form.target = iframeName;
-    form.style.display = "none";
-
-    const fields = {
-      view: "amicale_save",
-      actorEmail: state.actorEmail,
-      payload: JSON.stringify(payload)
-    };
-
-    Object.keys(fields).forEach(key => {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = key;
-      input.value = fields[key];
-      form.appendChild(input);
-    });
-
-    let done = false;
-
-    const cleanup = () => {
-      iframe.removeEventListener("load", onLoad);
-      if (form.parentNode) form.parentNode.removeChild(form);
-    };
-
-    const onLoad = () => {
-      if (done) return;
-      done = true;
-      cleanup();
-      resolve(true);
-    };
-
-    iframe.addEventListener("load", onLoad);
-    document.body.appendChild(form);
-    form.submit();
-
-    setTimeout(() => {
-      if (done) return;
-      done = true;
-      cleanup();
-      resolve(true);
-    }, 1500);
-  });
-}
-
-function toggleAccordion(id){
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.classList.toggle("open");
-}
-
-function toggleAccordionOnlyMain(ev, id){
-  if (ev.target.closest(".toolbar")) return;
-  toggleAccordion(id);
-}
-
-function toggleSubAccordion(ev, id){
-  ev.stopPropagation();
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.classList.toggle("open");
-}
-
-function toggleEditor(sectionId){
-  const editor = document.querySelector(`#${sectionId} .sectionEditor`);
-  if (!editor) return;
-  editor.classList.toggle("show");
-}
-
-async function checkAmicaleAccess(){
-  state.actorEmail = getCurrentEmail();
-
-  if (!state.actorEmail) {
-    return { ok:false, reason:"Aucun email détecté." };
+async function authCheck(email){
+  const cb = "cb_auth_" + Math.random().toString(36).slice(2);
+  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
+  try {
+    return await jsonp(url, cb, 30000);
+  } catch(e1){
+    return await jsonp(url, cb, 30000);
   }
-
-  const auth = await jsonp({
-    view: "auth_check",
-    email: state.actorEmail
-  });
-
-  if (!auth || !auth.ok) {
-    return { ok:false, reason:"Accès refusé." };
-  }
-
-  if (Number(auth.amical || 0) !== 1 && String(auth.role || "").toLowerCase() !== "admin") {
-    return { ok:false, reason:"Vous n’avez pas l’accès Amicale." };
-  }
-
-  return { ok:true };
 }
 
-function sectionShell(id, headerClass, emoji, title, viewHtml, editorHtml){
-  return `
-    <div class="accordion" id="${id}">
-      <div class="accordionHeader ${headerClass}">
-        <div class="accordionHeaderMain" onclick="toggleAccordion('${id}')">
-          <div class="accordionTitle">
-            <span class="emoji">${emoji}</span>
-            <span>${title}</span>
-          </div>
-          <span class="accordionArrow">▾</span>
-        </div>
+/* Overlay Vérification */
+let $checking = null;
 
-        <div class="toolbar">
-          <button class="btn2 btnSecondary btnMini" type="button" onclick="event.stopPropagation();toggleEditor('${id}')">🖍 Modifier</button>
-        </div>
-      </div>
+function ensureChecking(){
+  if($checking) return;
 
-      <div class="accordionContent">
-        <div class="sectionView">${viewHtml}</div>
-        <div class="sectionEditor">${editorHtml}</div>
-      </div>
+  $checking = document.createElement("div");
+  $checking.style.position = "fixed";
+  $checking.style.inset = "0";
+  $checking.style.display = "none";
+  $checking.style.alignItems = "center";
+  $checking.style.justifyContent = "center";
+  $checking.style.background = "rgba(0,0,0,.55)";
+  $checking.style.backdropFilter = "blur(8px)";
+  $checking.style.webkitBackdropFilter = "blur(8px)";
+  $checking.style.zIndex = "999999";
+  $checking.innerHTML = `
+    <div style="padding:16px 18px;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.60);color:#fff;font-weight:900;">
+      Vérification de l’accès…
     </div>
   `;
+  document.body.appendChild($checking);
 }
 
-function renderReunionsView(){
-  const items = state.data.reunions || [];
-  if (!items.length) return `<div class="empty">Aucune réunion renseignée.</div>`;
-
-  return `
-    <div class="grid2">
-      ${items.map((r, i) => `
-        <div class="card">
-          <div class="cardTitle">Réunion ${i + 1}</div>
-          <div class="line"><strong>Date :</strong> ${eHtml(r.date || "—")}</div>
-          <div class="line"><strong>Lieu :</strong> ${eHtml(r.lieu || "—")}</div>
-          <div class="line"><strong>Notes :</strong> ${eHtml(r.notes || "—")}</div>
-        </div>
-      `).join("")}
-    </div>
-  `;
+function showChecking(){
+  ensureChecking();
+  $loginBox.style.display = "none";
+  $portal.style.display = "none";
+  hideRefreshBtn();
+  $checking.style.display = "flex";
 }
 
-function renderCRView(){
-  const items = state.data.comptesRendus || [];
-  if (!items.length) return `<div class="empty">Aucun compte-rendu renseigné.</div>`;
-
-  return items.map((r, i) => {
-    const docs = String(r.documents || "").split(/\n+/).map(x => x.trim()).filter(Boolean);
-    return `
-      <div class="card">
-        <div class="cardTitle">${eHtml(r.titre || `Compte-rendu ${i + 1}`)}</div>
-        <div class="line"><strong>Date :</strong> ${eHtml(r.date || "—")}</div>
-        <div class="line"><strong>Texte :</strong></div>
-        <div class="line">${eHtml(r.texte || "—")}</div>
-        <div class="line" style="margin-top:8px;"><strong>Documents Drive :</strong></div>
-        ${docs.length ? docs.map(d => `<div class="pill">📎 ${eHtml(d)}</div>`).join("") : `<div class="muted">Aucun document</div>`}
-      </div>
-    `;
-  }).join("");
+function hideChecking(){
+  ensureChecking();
+  $checking.style.display = "none";
 }
 
-function renderSimpleBlocksView(items, label){
-  if (!items.length) return `<div class="empty">Aucun ${label.toLowerCase()} renseigné.</div>`;
-
-  return items.map((r, i) => `
-    <div class="subAccordion" id="v-${label}-${i}">
-      <div class="subHeader" onclick="toggleSubAccordion(event, 'v-${label}-${i}')">
-        <span>${eHtml(r.titre || `${label} ${i + 1}`)}</span>
-        <span class="subArrow">▾</span>
-      </div>
-      <div class="subContent">
-        <div class="card">
-          <div class="cardTitle">${eHtml(r.titre || `${label} ${i + 1}`)}</div>
-          <div class="line">${eHtml(r.contenu || "—")}</div>
-        </div>
-      </div>
-    </div>
-  `).join("");
+/* Déconnexion */
+function doLogout(){
+  localStorage.removeItem(LS_KEY);
+  localStorage.removeItem("cs_role_v1");
+  showLogin();
+  showMsg("Déconnecté.");
 }
+$logoutPortal.addEventListener("click", doLogout);
 
-function calcYearTotals(yearObj){
-  const secteurs = Array.isArray(yearObj.secteurs) ? yearObj.secteurs : [];
-  let attribues = 0;
-  let vendus = 0;
-  let somme = 0;
+/* logique centrale login */
+async function checkAndShow_(email){
+  showChecking();
+  showMsg("");
 
-  secteurs.forEach(s => {
-    attribues += Number(s.attribues || 0) || 0;
-    vendus += Number(s.vendus || 0) || 0;
-    somme += Number(String(s.somme || "").replace(",", ".")) || 0;
-  });
-
-  return { attribues, vendus, somme };
-}
-
-function renderTourneesGroupView(years, groupPrefix, classes){
-  if (!years.length) return `<div class="empty">Aucune donnée.</div>`;
-
-  return years.map((y, yi) => {
-    const totals = calcYearTotals(y);
-    const yearId = `${groupPrefix}-year-${yi}`;
-
-    return `
-      <div class="subAccordion" id="${yearId}">
-        <div class="subHeader ${classes.year}" onclick="toggleSubAccordion(event, '${yearId}')">
-          <span>Année ${eHtml(y.annee || "—")}</span>
-          <span class="subArrow">▾</span>
-        </div>
-        <div class="subContent">
-
-          <div class="summaryBox">
-            <div class="summaryTitle">Somme totale</div>
-            <div class="summaryRow"><span>Calendriers attribués</span><strong>${totals.attribues}</strong></div>
-            <div class="summaryRow"><span>Calendriers vendus</span><strong>${totals.vendus}</strong></div>
-            <div class="summaryRow"><span>Somme restituée</span><strong>${totals.somme} €</strong></div>
-          </div>
-
-          ${(Array.isArray(y.secteurs) && y.secteurs.length) ? y.secteurs.map((s, si) => {
-            const secId = `${yearId}-sec-${si}`;
-            const agents = String(s.agents || "").split(",").map(x => x.trim()).filter(Boolean);
-
-            return `
-              <div class="subAccordion" id="${secId}">
-                <div class="subHeader ${classes.sector}" onclick="toggleSubAccordion(event, '${secId}')">
-                  <span>${eHtml(s.nom || `Secteur ${si + 1}`)}</span>
-                  <span class="subArrow">▾</span>
-                </div>
-                <div class="subContent">
-                  <div class="card">
-                    <div class="cardTitle">Agents par tournée</div>
-                    ${agents.length ? agents.map(a => `<div class="pill">${eHtml(a)}</div>`).join("") : `<div class="muted">Aucun agent</div>`}
-                  </div>
-
-                  <div class="card">
-                    <div class="cardTitle">Suivi</div>
-                    <div class="line"><strong>Calendriers attribués :</strong> ${eHtml(s.attribues || "0")}</div>
-                    <div class="line"><strong>Calendriers vendus :</strong> ${eHtml(s.vendus || "0")}</div>
-                    <div class="line"><strong>Somme restituée :</strong> ${eHtml(s.somme || "0")} €</div>
-                  </div>
-                </div>
-              </div>
-            `;
-          }).join("") : `<div class="empty">Aucun secteur.</div>`}
-
-        </div>
-      </div>
-    `;
-  }).join("");
-}
-
-function renderTourneesView(){
-  const active = (state.data.tournees && state.data.tournees.active) || [];
-  const archives = (state.data.tournees && state.data.tournees.archives) || [];
-
-  return `
-    <div class="subAccordion" id="tournees-active-view">
-      <div class="subHeader activeHeader" onclick="toggleSubAccordion(event, 'tournees-active-view')">
-        <span>Tournées actives</span>
-        <span class="subArrow">▾</span>
-      </div>
-      <div class="subContent">
-        ${renderTourneesGroupView(active, "activeView", { year:"yearHeader", sector:"sectorHeader" })}
-      </div>
-    </div>
-
-    <div class="subAccordion" id="tournees-archives-view">
-      <div class="subHeader archiveHeader" onclick="toggleSubAccordion(event, 'tournees-archives-view')">
-        <span>Archives</span>
-        <span class="subArrow">▾</span>
-      </div>
-      <div class="subContent">
-        ${renderTourneesGroupView(archives, "archiveView", { year:"archiveYearHeader", sector:"archiveSectorHeader" })}
-      </div>
-    </div>
-  `;
-}
-
-function editorReunionRow(item = {}, i = 0){
-  return `
-    <div class="editorItem reunion-item">
-      <div class="editorItemTop">
-        <div class="editorItemTitle">Réunion ${i + 1}</div>
-        <button class="btn2 btnDanger btnMini" type="button" onclick="this.closest('.reunion-item').remove()">Supprimer</button>
-      </div>
-
-      <div class="field">
-        <label class="label">Date</label>
-        <input class="input reunion-date" type="text" value="${eHtml(item.date || "")}">
-      </div>
-
-      <div class="field">
-        <label class="label">Lieu</label>
-        <input class="input reunion-lieu" type="text" value="${eHtml(item.lieu || "")}">
-      </div>
-
-      <div class="field">
-        <label class="label">Notes</label>
-        <textarea class="textarea reunion-notes">${eHtml(item.notes || "")}</textarea>
-      </div>
-    </div>
-  `;
-}
-
-function renderReunionsEditor(){
-  const items = state.data.reunions || [];
-  return `
-    <div id="reunionsEditorList">
-      ${items.length ? items.map((r, i) => editorReunionRow(r, i)).join("") : ""}
-    </div>
-
-    <div class="editorActions">
-      <button class="btn2 btnSecondary btnMini" type="button" onclick="addReunion()">➕ Ajouter une réunion</button>
-      <button class="btn2 btnPrimary" type="button" onclick="saveSection('reunions', this)">Enregistrer</button>
-    </div>
-  `;
-}
-
-function editorCRRow(item = {}, i = 0){
-  return `
-    <div class="editorItem cr-item">
-      <div class="editorItemTop">
-        <div class="editorItemTitle">Compte-rendu ${i + 1}</div>
-        <button class="btn2 btnDanger btnMini" type="button" onclick="this.closest('.cr-item').remove()">Supprimer</button>
-      </div>
-
-      <div class="field">
-        <label class="label">Date</label>
-        <input class="input cr-date" type="text" value="${eHtml(item.date || "")}">
-      </div>
-
-      <div class="field">
-        <label class="label">Titre</label>
-        <input class="input cr-titre" type="text" value="${eHtml(item.titre || "")}">
-      </div>
-
-      <div class="field">
-        <label class="label">Texte</label>
-        <textarea class="textarea cr-texte">${eHtml(item.texte || "")}</textarea>
-      </div>
-
-      <div class="field">
-        <label class="label">Documents Drive (un par ligne)</label>
-        <textarea class="textarea cr-docs">${eHtml(item.documents || "")}</textarea>
-      </div>
-    </div>
-  `;
-}
-
-function renderCREditor(){
-  const items = state.data.comptesRendus || [];
-  return `
-    <div id="crEditorList">
-      ${items.length ? items.map((r, i) => editorCRRow(r, i)).join("") : ""}
-    </div>
-
-    <div class="editorActions">
-      <button class="btn2 btnSecondary btnMini" type="button" onclick="addCR()">➕ Ajouter un compte-rendu</button>
-      <button class="btn2 btnPrimary" type="button" onclick="saveSection('comptesRendus', this)">Enregistrer</button>
-    </div>
-  `;
-}
-
-function editorSimpleRow(item = {}, i = 0, cls = "simple-item", titleLabel = "Titre", contentLabel = "Contenu"){
-  return `
-    <div class="editorItem ${cls}">
-      <div class="editorItemTop">
-        <div class="editorItemTitle">${titleLabel} ${i + 1}</div>
-        <button class="btn2 btnDanger btnMini" type="button" onclick="this.closest('.${cls}').remove()">Supprimer</button>
-      </div>
-
-      <div class="field">
-        <label class="label">${titleLabel}</label>
-        <input class="input simple-titre" type="text" value="${eHtml(item.titre || "")}">
-      </div>
-
-      <div class="field">
-        <label class="label">${contentLabel}</label>
-        <textarea class="textarea simple-contenu">${eHtml(item.contenu || "")}</textarea>
-      </div>
-    </div>
-  `;
-}
-
-function renderSimpleEditor(items, listId, addFn, saveKey, rowCls, titleLabel, contentLabel, addLabel){
-  return `
-    <div id="${listId}">
-      ${items.length ? items.map((r, i) => editorSimpleRow(r, i, rowCls, titleLabel, contentLabel)).join("") : ""}
-    </div>
-
-    <div class="editorActions">
-      <button class="btn2 btnSecondary btnMini" type="button" onclick="${addFn}()">➕ ${addLabel}</button>
-      <button class="btn2 btnPrimary" type="button" onclick="saveSection('${saveKey}', this)">Enregistrer</button>
-    </div>
-  `;
-}
-
-function secteurEditorRow(item = {}, archive = false){
-  return `
-    <div class="editorItem secteur-item">
-      <div class="editorItemTop">
-        <div class="editorItemTitle">Secteur / commune</div>
-        <button class="btn2 btnDanger btnMini" type="button" onclick="this.closest('.secteur-item').remove()">Supprimer</button>
-      </div>
-
-      <div class="field">
-        <label class="label">Nom du secteur / commune</label>
-        <input class="input secteur-nom" type="text" value="${eHtml(item.nom || "")}">
-      </div>
-
-      <div class="field">
-        <label class="label">Agents (séparés par des virgules)</label>
-        <textarea class="textarea secteur-agents">${eHtml(item.agents || "")}</textarea>
-      </div>
-
-      <div class="grid2">
-        <div class="field">
-          <label class="label">Calendriers attribués</label>
-          <input class="input secteur-attribues" type="text" value="${eHtml(item.attribues || "")}">
-        </div>
-
-        <div class="field">
-          <label class="label">Calendriers vendus</label>
-          <input class="input secteur-vendus" type="text" value="${eHtml(item.vendus || "")}">
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="label">Somme restituée (€)</label>
-        <input class="input secteur-somme" type="text" value="${eHtml(item.somme || "")}">
-      </div>
-    </div>
-  `;
-}
-
-function yearEditorRow(item = {}, section = "active"){
-  const secteurs = Array.isArray(item.secteurs) ? item.secteurs : [];
-  const uniqueId = "year_" + Math.random().toString(36).slice(2, 9);
-
-  return `
-    <div class="editorItem year-item" data-year-box="${uniqueId}">
-      <div class="editorItemTop">
-        <div class="editorItemTitle">Année</div>
-        <button class="btn2 btnDanger btnMini" type="button" onclick="this.closest('.year-item').remove()">Supprimer l'année</button>
-      </div>
-
-      <div class="field">
-        <label class="label">Année</label>
-        <input class="input year-annee" type="text" value="${eHtml(item.annee || "")}">
-      </div>
-
-      <div class="field">
-        <label class="label">Secteurs / communes</label>
-      </div>
-
-      <div class="year-secteurs-list">
-        ${secteurs.length ? secteurs.map(s => secteurEditorRow(s, section === "archives")).join("") : ""}
-      </div>
-
-      <div class="editorActions">
-        <button class="btn2 btnSecondary btnMini" type="button" onclick="addSecteurToYear(this)">➕ Ajouter un secteur</button>
-      </div>
-    </div>
-  `;
-}
-
-function renderTourneesEditor(){
-  const active = (state.data.tournees && state.data.tournees.active) || [];
-  const archives = (state.data.tournees && state.data.tournees.archives) || [];
-
-  return `
-    <div class="subAccordion open" id="tournees-editor-active">
-      <div class="subHeader activeHeader" onclick="toggleSubAccordion(event, 'tournees-editor-active')">
-        <span>Tournées actives</span>
-        <span class="subArrow">▾</span>
-      </div>
-      <div class="subContent">
-        <div id="tourneesActiveEditorList">
-          ${active.length ? active.map(y => yearEditorRow(y, "active")).join("") : ""}
-        </div>
-
-        <div class="editorActions">
-          <button class="btn2 btnSecondary btnMini" type="button" onclick="addYear('active')">➕ Ajouter une année active</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="subAccordion" id="tournees-editor-archives">
-      <div class="subHeader archiveHeader" onclick="toggleSubAccordion(event, 'tournees-editor-archives')">
-        <span>Archives</span>
-        <span class="subArrow">▾</span>
-      </div>
-      <div class="subContent">
-        <div id="tourneesArchivesEditorList">
-          ${archives.length ? archives.map(y => yearEditorRow(y, "archives")).join("") : ""}
-        </div>
-
-        <div class="editorActions">
-          <button class="btn2 btnSecondary btnMini" type="button" onclick="addYear('archives')">➕ Ajouter une année archive</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="editorActions">
-      <button class="btn2 btnPrimary" type="button" onclick="saveSection('tournees', this)">Enregistrer</button>
-    </div>
-  `;
-}
-
-function renderAll(){
-  const html = [
-    sectionShell("acc-reunions", "hdr-reunions", "📅", "Réunions", renderReunionsView(), renderReunionsEditor()),
-    sectionShell("acc-cr", "hdr-cr", "📝", "Comptes-rendus de réunion", renderCRView(), renderCREditor()),
-    sectionShell("acc-projets", "hdr-projets", "🧩", "Projets", renderSimpleBlocksView(state.data.projets || [], "Projet"), renderSimpleEditor(state.data.projets || [], "projetsEditorList", "addProjet", "projets", "projet-item", "Projet", "Contenu", "Ajouter un projet")),
-    sectionShell("acc-evenements", "hdr-evenements", "🎉", "Événements", renderSimpleBlocksView(state.data.evenements || [], "Événement"), renderSimpleEditor(state.data.evenements || [], "evenementsEditorList", "addEvenement", "evenements", "evenement-item", "Événement", "Contenu", "Ajouter un événement")),
-    sectionShell("acc-cal", "hdr-cal", "📘", "Tournées calendriers", renderTourneesView(), renderTourneesEditor())
-  ].join("");
-
-  document.getElementById("sections").innerHTML = html;
-}
-
-async function loadData(){
   try{
-    showLoader(true);
-    showStatus("info", "Chargement de la page Amicale...");
+    const res = await authCheck(email);
 
-    const r = await jsonp({
-      view: "amicale_get",
-      actorEmail: state.actorEmail
-    });
+    if(res && res.ok === true){
+      localStorage.setItem(LS_KEY, email);
+      localStorage.setItem("cs_role_v1", String(res.role || "").trim().toLowerCase());
 
-    if (!r || !r.ok) {
-      showStatus("err", (r && r.error) ? r.error : "Erreur de chargement.");
-      showLoader(false);
+      hideChecking();
+      showPortal();
+      showMsg("");
+      return true;
+    }
+
+    localStorage.removeItem(LS_KEY);
+    localStorage.removeItem("cs_role_v1");
+    hideChecking();
+    showLogin();
+    showMsg("Accès refusé.");
+    return false;
+
+  }catch(err){
+    localStorage.removeItem(LS_KEY);
+    localStorage.removeItem("cs_role_v1");
+    hideChecking();
+    showLogin();
+    showMsg("Erreur réseau / serveur.");
+    return false;
+  }
+}
+
+/* Google callback */
+async function handleCredentialResponse(response){
+  showMsg("Vérification de l’accès…");
+
+  const email = parseJwtEmail(response.credential);
+  if(!email){
+    localStorage.removeItem(LS_KEY);
+    localStorage.removeItem("cs_role_v1");
+    showLogin();
+    showMsg("Erreur : email introuvable.");
+    return;
+  }
+
+  await checkAndShow_(email);
+}
+
+/* Boot */
+(async function(){
+  const saved = (localStorage.getItem(LS_KEY) || "").trim().toLowerCase();
+
+  if(saved){
+    showPortal();
+    showSync();
+
+    try{
+      const res = await authCheck(saved);
+
+      if(res && res.ok === true){
+        localStorage.setItem("cs_role_v1", String(res.role || "").trim().toLowerCase());
+        hideSync();
+        return;
+      }
+
+      hideSync();
+      localStorage.removeItem(LS_KEY);
+      localStorage.removeItem("cs_role_v1");
+      showLogin();
+      showMsg("Accès refusé.");
+      return;
+
+    }catch(e){
+      showSync();
+      setTimeout(() => hideSync(), 1800);
       return;
     }
-
-    state.canEdit = !!r.canEdit;
-    state.updatedAt = r.updatedAt || "";
-    state.data = r.data || {
-      reunions: [],
-      comptesRendus: [],
-      projets: [],
-      evenements: [],
-      tournees: { active: [], archives: [] }
-    };
-
-    renderAll();
-    showStatus("ok", "Page Amicale chargée.");
-    showLoader(false);
-
-  }catch(err){
-    showLoader(false);
-    showStatus("err", err?.message || String(err));
   }
-}
 
-function addReunion(){
-  const list = document.getElementById("reunionsEditorList");
-  const count = list.querySelectorAll(".reunion-item").length;
-  list.insertAdjacentHTML("beforeend", editorReunionRow({}, count));
-}
-
-function addCR(){
-  const list = document.getElementById("crEditorList");
-  const count = list.querySelectorAll(".cr-item").length;
-  list.insertAdjacentHTML("beforeend", editorCRRow({}, count));
-}
-
-function addProjet(){
-  const list = document.getElementById("projetsEditorList");
-  const count = list.querySelectorAll(".projet-item").length;
-  list.insertAdjacentHTML("beforeend", editorSimpleRow({}, count, "projet-item", "Projet", "Contenu"));
-}
-
-function addEvenement(){
-  const list = document.getElementById("evenementsEditorList");
-  const count = list.querySelectorAll(".evenement-item").length;
-  list.insertAdjacentHTML("beforeend", editorSimpleRow({}, count, "evenement-item", "Événement", "Contenu"));
-}
-
-function addYear(type){
-  const target = type === "archives"
-    ? document.getElementById("tourneesArchivesEditorList")
-    : document.getElementById("tourneesActiveEditorList");
-
-  target.insertAdjacentHTML("beforeend", yearEditorRow({}, type));
-}
-
-function addSecteurToYear(btn){
-  const yearBox = btn.closest(".year-item");
-  if (!yearBox) return;
-  const list = yearBox.querySelector(".year-secteurs-list");
-  list.insertAdjacentHTML("beforeend", secteurEditorRow({}));
-}
-
-function collectReunions(){
-  return Array.from(document.querySelectorAll("#reunionsEditorList .reunion-item")).map(item => ({
-    date: (item.querySelector(".reunion-date")?.value || "").trim(),
-    lieu: (item.querySelector(".reunion-lieu")?.value || "").trim(),
-    notes: (item.querySelector(".reunion-notes")?.value || "").trim()
-  })).filter(r => r.date || r.lieu || r.notes);
-}
-
-function collectCR(){
-  return Array.from(document.querySelectorAll("#crEditorList .cr-item")).map(item => ({
-    date: (item.querySelector(".cr-date")?.value || "").trim(),
-    titre: (item.querySelector(".cr-titre")?.value || "").trim(),
-    texte: (item.querySelector(".cr-texte")?.value || "").trim(),
-    documents: (item.querySelector(".cr-docs")?.value || "").trim()
-  })).filter(r => r.date || r.titre || r.texte || r.documents);
-}
-
-function collectSimple(listSelector, itemClass){
-  return Array.from(document.querySelectorAll(`${listSelector} .${itemClass}`)).map(item => ({
-    titre: (item.querySelector(".simple-titre")?.value || "").trim(),
-    contenu: (item.querySelector(".simple-contenu")?.value || "").trim()
-  })).filter(r => r.titre || r.contenu);
-}
-
-function collectYears(listSelector){
-  return Array.from(document.querySelectorAll(`${listSelector} .year-item`)).map(yearItem => {
-    const annee = (yearItem.querySelector(".year-annee")?.value || "").trim();
-
-    const secteurs = Array.from(yearItem.querySelectorAll(".year-secteurs-list .secteur-item")).map(sec => ({
-      nom: (sec.querySelector(".secteur-nom")?.value || "").trim(),
-      agents: (sec.querySelector(".secteur-agents")?.value || "").trim(),
-      attribues: (sec.querySelector(".secteur-attribues")?.value || "").trim(),
-      vendus: (sec.querySelector(".secteur-vendus")?.value || "").trim(),
-      somme: (sec.querySelector(".secteur-somme")?.value || "").trim()
-    })).filter(s => s.nom || s.agents || s.attribues || s.vendus || s.somme);
-
-    return { annee, secteurs };
-  }).filter(y => y.annee || y.secteurs.length);
-}
-
-function collectTournees(){
-  return {
-    active: collectYears("#tourneesActiveEditorList"),
-    archives: collectYears("#tourneesArchivesEditorList")
-  };
-}
-
-async function saveSection(sectionKey, btn){
-  try{
-    setButtonSaving(btn, true);
-    showStatus("info", "Enregistrement...");
-
-    if (sectionKey === "reunions") {
-      state.data.reunions = collectReunions();
-    } else if (sectionKey === "comptesRendus") {
-      state.data.comptesRendus = collectCR();
-    } else if (sectionKey === "projets") {
-      state.data.projets = collectSimple("#projetsEditorList", "projet-item");
-    } else if (sectionKey === "evenements") {
-      state.data.evenements = collectSimple("#evenementsEditorList", "evenement-item");
-    } else if (sectionKey === "tournees") {
-      state.data.tournees = collectTournees();
-    }
-
-    await submitPayload(state.data);
-    await loadData();
-    showStatus("ok", "Enregistrement effectué.");
-
-  }catch(err){
-    showStatus("err", err?.message || String(err));
-  } finally {
-    setButtonSaving(btn, false);
-  }
-}
-
-(async function init(){
-  showLoader(true);
-
-  try{
-    const access = await checkAmicaleAccess();
-
-    if (!access.ok) {
-      document.getElementById("denyBox").style.display = "block";
-      showLoader(false);
-      return;
-    }
-
-    document.getElementById("pageWrap").style.display = "block";
-    await loadData();
-
-  }catch(err){
-    document.getElementById("denyBox").style.display = "block";
-    showLoader(false);
-  }
+  showLogin();
 })();
+
+/* ADMIN */
+const ADMIN_URL = "admin.html";
+const DENIED_IMG = "acces_refuse.png";
+
+function isAdminLocal(){
+  return (localStorage.getItem("cs_role_v1") || "").trim().toLowerCase() === "admin";
+}
+
+let _denyActive = false;
+let _denyPopHandler = null;
+
+function showDenied(){
+  if (document.getElementById("denyOverlay")) return;
+
+  _denyActive = true;
+
+  const overlay = document.createElement("div");
+  overlay.id = "denyOverlay";
+  overlay.style.cssText = `
+    position:fixed; inset:0; z-index:999999;
+    background:#000;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:12px;
+  `;
+
+  const img = document.createElement("img");
+  img.src = DENIED_IMG;
+  img.alt = "Accès refusé";
+  img.style.cssText = `
+    max-width:100%;
+    max-height: calc(100dvh - 110px);
+    width:auto;
+    height:auto;
+    object-fit:contain;
+    display:block;
+  `;
+
+  const btn = document.createElement("button");
+  btn.id = "denyBackBtn";
+  btn.textContent = "← Retour";
+  btn.style.cssText = `
+    position:fixed;
+    left:12px;
+    right:12px;
+    bottom: calc(env(safe-area-inset-bottom) + 14px);
+    padding:14px 16px;
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,.25);
+    background: rgba(0,0,0,.65);
+    color:#fff;
+    font-weight:950;
+    font-size:16px;
+    z-index:1000000;
+    -webkit-tap-highlight-color: transparent;
+  `;
+
+  history.pushState({ deny: 1 }, "", location.href);
+
+  const closeDenied = () => {
+    if(!_denyActive) return;
+    _denyActive = false;
+
+    if(_denyPopHandler){
+      window.removeEventListener("popstate", _denyPopHandler);
+      _denyPopHandler = null;
+    }
+
+    const ov = document.getElementById("denyOverlay");
+    const b = document.getElementById("denyBackBtn");
+    if (ov) ov.remove();
+    if (b) b.remove();
+
+    history.back();
+  };
+
+  _denyPopHandler = () => {
+    if(!_denyActive) return;
+    closeDenied();
+  };
+
+  window.addEventListener("popstate", _denyPopHandler);
+  btn.addEventListener("click", closeDenied);
+
+  overlay.appendChild(img);
+  document.body.appendChild(overlay);
+  document.body.appendChild(btn);
+}
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("#btnAdmin");
+  if(!btn) return;
+  e.preventDefault();
+
+  if(isAdminLocal()){
+    location.href = ADMIN_URL;
+  }else{
+    showDenied();
+  }
+});
 </script>
+
 </body>
 </html>
