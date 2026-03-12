@@ -7,466 +7,82 @@
   <link rel="stylesheet" href="cs-theme.css">
 
   <style>
-    .pageWrap{
-      max-width:1100px;
-      margin:0 auto;
-      padding:14px;
-    }
-
-    .topTitleWrap{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-
-    .lockBtn{
-      display:none;
-      border:none;
-      border-radius:12px;
-      min-height:36px;
-      min-width:42px;
-      padding:8px 10px;
-      background:rgba(255,255,255,.14);
-      color:#fff;
-      font-size:18px;
-      font-weight:900;
-      cursor:pointer;
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:0 10px 24px rgba(0,0,0,.18);
-    }
-
-    .lockBtn:active{ transform:translateY(1px); }
-
-    .hero{
-      padding:16px 18px;
-      margin-bottom:16px;
-      border-radius:20px;
-      background:linear-gradient(180deg, rgba(212,106,0,.34), rgba(212,106,0,.16));
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      color:rgba(255,255,255,.96);
-    }
-
-    .heroTitle{
-      font-size:22px;
-      font-weight:900;
-      line-height:1.2;
-    }
-
-    .heroSmall{
-      margin-top:8px;
-      font-size:13px;
-      font-weight:800;
-      color:rgba(255,255,255,.78);
-      line-height:1.4;
-    }
-
-    .status{
-      display:none;
-      margin-bottom:14px;
-      padding:12px 14px;
-      border-radius:14px;
-      font-weight:800;
-      line-height:1.4;
-      border:1px solid rgba(255,255,255,.12);
-    }
-
-    .status.show{ display:block; }
-    .status.ok{
-      background:rgba(47,158,91,.18);
-      color:#d9ffe7;
-    }
-    .status.err{
-      background:rgba(220,70,70,.18);
-      color:#ffe1e1;
-    }
-    .status.info{
-      background:rgba(47,111,212,.18);
-      color:#dde9ff;
-    }
-
-    .toolbar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .btn2{
-      border:none;
-      border-radius:14px;
-      min-height:42px;
-      padding:10px 14px;
-      font-weight:900;
-      cursor:pointer;
-      box-shadow:0 10px 24px rgba(0,0,0,.18);
-      transition:background .22s ease, transform .12s ease, opacity .18s ease;
-    }
-
-    .btn2:active{ transform:translateY(1px); }
-
-    .btnPrimary{
-      background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
-      color:#fff;
-    }
-
-    .btnPrimary.saving{
-      background:linear-gradient(180deg, rgba(47,158,91,.95), rgba(34,128,73,.95));
-      color:#fff;
-    }
-
-    .btnSecondary{
-      background:rgba(255,255,255,.14);
-      color:#fff;
-      border:1px solid rgba(255,255,255,.12);
-    }
-
-    .btnDanger{
-      background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
-      color:#fff;
-    }
-
-    .btnMini{
-      min-height:34px;
-      padding:7px 10px;
-      font-size:12px;
-      border-radius:12px;
-    }
-
-    .btn2[disabled]{
-      opacity:.7;
-      cursor:default;
-    }
-
-    .adminPanel{
-      display:none;
-      margin-bottom:16px;
-    }
-
-    body.adminMode .adminPanel{
-      display:block;
-    }
-
-    .accordion{
-      border-radius:20px;
-      overflow:hidden;
-      margin-bottom:14px;
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      background:rgba(255,255,255,.06);
-    }
-
-    .accordionHeader{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:16px;
-      cursor:pointer;
-      user-select:none;
-      -webkit-tap-highlight-color:transparent;
-    }
-
-    .accordionHeader:active{
-      transform:translateY(1px);
-    }
-
-    .accordionTitle{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-      flex:1 1 auto;
-      color:rgba(255,255,255,.96);
-      font-size:18px;
-      font-weight:900;
-    }
-
-    .emoji{
-      font-size:22px;
-      line-height:1;
-      flex:0 0 auto;
-    }
-
-    .accordionArrow{
-      font-size:18px;
-      color:rgba(255,255,255,.88);
-      transition:transform .18s ease;
-      flex:0 0 auto;
-    }
-
-    .accordion.open .accordionArrow{
-      transform:rotate(180deg);
-    }
-
-    .accordionContent{
-      display:none;
-      padding:12px;
-      background:rgba(0,0,0,.10);
-    }
-
-    .accordion.open .accordionContent{
-      display:block;
-    }
-
-    .subAccordion{
-      border-radius:16px;
-      overflow:hidden;
-      margin-bottom:10px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.05);
-    }
-
-    .subHeader{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:13px 14px;
-      cursor:pointer;
-      font-weight:900;
-      color:rgba(255,255,255,.95);
-      background:rgba(255,255,255,.06);
-      -webkit-tap-highlight-color:transparent;
-    }
-
-    .subHeader:active{
-      transform:translateY(1px);
-    }
-
-    .subArrow{
-      transition:transform .18s ease;
-      color:rgba(255,255,255,.82);
-    }
-
-    .subAccordion.open .subArrow{
-      transform:rotate(180deg);
-    }
-
-    .subContent{
-      display:none;
-      padding:12px;
-      background:rgba(0,0,0,.14);
-    }
-
-    .subAccordion.open .subContent{
-      display:block;
-    }
-
-    .hdr-reunions{ background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18)); }
-    .hdr-cr{ background:linear-gradient(180deg, rgba(145,90,220,.30), rgba(145,90,220,.15)); }
-    .hdr-projets{ background:linear-gradient(180deg, rgba(47,158,91,.30), rgba(47,158,91,.15)); }
-    .hdr-evenements{ background:linear-gradient(180deg, rgba(220,90,170,.28), rgba(220,90,170,.14)); }
-    .hdr-cal{ background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15)); }
-
-    .activeHeader{ background:linear-gradient(180deg, rgba(255,190,60,.20), rgba(255,190,60,.08)); }
-    .yearHeader{ background:linear-gradient(180deg, rgba(47,111,212,.22), rgba(47,111,212,.10)); }
-    .sectorHeader{ background:linear-gradient(180deg, rgba(47,158,91,.22), rgba(47,158,91,.10)); }
-    .archiveHeader{ background:linear-gradient(180deg, rgba(145,90,220,.24), rgba(145,90,220,.10)); }
-    .archiveYearHeader{ background:linear-gradient(180deg, rgba(220,90,170,.22), rgba(220,90,170,.10)); }
-    .archiveSectorHeader{ background:linear-gradient(180deg, rgba(212,106,0,.24), rgba(212,106,0,.10)); }
-
-    .card{
-      border-radius:16px;
-      padding:12px;
-      margin-bottom:10px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);
-      color:rgba(255,255,255,.95);
-    }
-
-    .cardTop{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:8px;
-    }
-
-    .cardTitle{
-      font-size:15px;
-      font-weight:900;
-      color:rgba(255,255,255,.98);
-    }
-
-    .line{
-      font-size:14px;
-      line-height:1.45;
-      color:rgba(255,255,255,.86);
-      margin-bottom:4px;
-      white-space:pre-wrap;
-    }
-
-    .muted{
-      color:rgba(255,255,255,.68);
-      font-weight:800;
-      font-size:13px;
-    }
-
-    .grid2{
-      display:grid;
-      gap:10px;
-      grid-template-columns:1fr;
-    }
-
-    .summaryBox{
-      border-radius:16px;
-      padding:12px;
-      background:rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.10);
-      margin-bottom:10px;
-    }
-
-    .summaryTitle{
-      font-size:15px;
-      font-weight:900;
-      color:rgba(255,255,255,.97);
-      margin-bottom:8px;
-    }
-
-    .summaryRow{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      padding:6px 0;
-      font-size:14px;
-      color:rgba(255,255,255,.88);
-      border-bottom:1px dashed rgba(255,255,255,.08);
-    }
-
-    .summaryRow:last-child{ border-bottom:none; }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      min-height:32px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.10);
-      color:#fff;
-      font-size:12px;
-      font-weight:900;
-      margin-right:6px;
-      margin-bottom:6px;
-    }
-
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      margin-bottom:10px;
-    }
-
-    .label{
-      font-size:13px;
-      font-weight:900;
-      color:rgba(255,255,255,.82);
-    }
-
-    .input, .textarea{
-      width:100%;
-      border:none;
-      outline:none;
-      border-radius:12px;
-      padding:10px 12px;
-      background:rgba(255,255,255,.10);
-      color:#fff;
-      border:1px solid rgba(255,255,255,.12);
-      font-size:15px;
-      font-family:inherit;
-    }
-
-    .input{
-      min-height:44px;
-    }
-
-    .textarea{
-      min-height:100px;
-      resize:vertical;
-    }
-
-    input[type="date"]{
-      color-scheme:dark;
-    }
-
-    .empty{
-      padding:14px;
-      border-radius:14px;
-      background:rgba(255,255,255,.05);
-      border:1px dashed rgba(255,255,255,.10);
-      color:rgba(255,255,255,.76);
-      font-weight:800;
-    }
-
-    .deny{
-      max-width:680px;
-      margin:24px auto;
-      padding:16px;
-      border-radius:20px;
-      background:rgba(0,0,0,.45);
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow);
-      color:#fff;
-      text-align:center;
-    }
-
-    .denyTitle{
-      font-size:22px;
-      font-weight:950;
-      margin-bottom:10px;
-    }
-
-    .loaderOverlay{
-      position:fixed;
-      inset:0;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      background:rgba(0,0,0,.35);
-      backdrop-filter:blur(4px);
-      -webkit-backdrop-filter:blur(4px);
-      z-index:99999;
-    }
-
-    .loaderOverlay.show{
-      display:flex;
-    }
-
-    .loaderBox{
-      width:52px;
-      height:52px;
-      border-radius:999px;
-      background:rgba(0,0,0,.55);
-      border:1px solid rgba(255,255,255,.15);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      box-shadow:0 14px 34px rgba(0,0,0,.40);
-    }
-
-    .loaderSpinner{
-      width:24px;
-      height:24px;
-      border-radius:50%;
-      border:3px solid rgba(255,255,255,.25);
-      border-top-color:#ff8c00;
-      animation:spin .8s linear infinite;
-    }
-
-    @keyframes spin{
-      to{ transform:rotate(360deg); }
-    }
-
-    @media (min-width:900px){
-      .grid2{
-        grid-template-columns:1fr 1fr;
-      }
-    }
+    .pageWrap{max-width:1100px;margin:0 auto;padding:14px}
+    .topTitleWrap{display:flex;align-items:center;gap:10px}
+    .lockBtn{display:none;border:none;border-radius:12px;min-height:36px;min-width:42px;padding:8px 10px;background:rgba(255,255,255,.14);color:#fff;font-size:18px;font-weight:900;cursor:pointer;border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 24px rgba(0,0,0,.18)}
+    .lockBtn:active{transform:translateY(1px)}
+    .hero{padding:16px 18px;margin-bottom:16px;border-radius:20px;background:linear-gradient(180deg, rgba(212,106,0,.34), rgba(212,106,0,.16));border:1px solid rgba(255,255,255,.12);box-shadow:var(--shadow);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:rgba(255,255,255,.96)}
+    .heroTitle{font-size:22px;font-weight:900;line-height:1.2}
+    .heroSmall{margin-top:8px;font-size:13px;font-weight:800;color:rgba(255,255,255,.78);line-height:1.4}
+    .status{display:none;margin-bottom:14px;padding:12px 14px;border-radius:14px;font-weight:800;line-height:1.4;border:1px solid rgba(255,255,255,.12)}
+    .status.show{display:block}
+    .status.ok{background:rgba(47,158,91,.18);color:#d9ffe7}
+    .status.err{background:rgba(220,70,70,.18);color:#ffe1e1}
+    .status.info{background:rgba(47,111,212,.18);color:#dde9ff}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap}
+    .btn2{border:none;border-radius:14px;min-height:42px;padding:10px 14px;font-weight:900;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.18);transition:background .22s ease, transform .12s ease, opacity .18s ease}
+    .btn2:active{transform:translateY(1px)}
+    .btnPrimary{background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));color:#fff}
+    .btnPrimary.saving{background:linear-gradient(180deg, rgba(47,158,91,.95), rgba(34,128,73,.95));color:#fff}
+    .btnSecondary{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.12)}
+    .btnDanger{background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));color:#fff}
+    .btnMini{min-height:34px;padding:7px 10px;font-size:12px;border-radius:12px}
+    .btn2[disabled]{opacity:.7;cursor:default}
+    .adminPanel{display:none;margin-bottom:16px}
+    body.adminMode .adminPanel{display:block}
+    .accordion{border-radius:20px;overflow:hidden;margin-bottom:14px;border:1px solid rgba(255,255,255,.10);box-shadow:var(--shadow);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:rgba(255,255,255,.06)}
+    .accordionHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+    .accordionHeader:active{transform:translateY(1px)}
+    .accordionTitle{display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto;color:rgba(255,255,255,.96);font-size:18px;font-weight:900}
+    .emoji{font-size:22px;line-height:1;flex:0 0 auto}
+    .accordionArrow{font-size:18px;color:rgba(255,255,255,.88);transition:transform .18s ease;flex:0 0 auto}
+    .accordion.open .accordionArrow{transform:rotate(180deg)}
+    .accordionContent{display:none;padding:12px;background:rgba(0,0,0,.10)}
+    .accordion.open .accordionContent{display:block}
+    .subAccordion{border-radius:16px;overflow:hidden;margin-bottom:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.05)}
+    .subHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;cursor:pointer;font-weight:900;color:rgba(255,255,255,.95);background:rgba(255,255,255,.06);-webkit-tap-highlight-color:transparent}
+    .subHeader:active{transform:translateY(1px)}
+    .subArrow{transition:transform .18s ease;color:rgba(255,255,255,.82)}
+    .subAccordion.open .subArrow{transform:rotate(180deg)}
+    .subContent{display:none;padding:12px;background:rgba(0,0,0,.14)}
+    .subAccordion.open .subContent{display:block}
+    .hdr-reunions{background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18))}
+    .hdr-cr{background:linear-gradient(180deg, rgba(145,90,220,.30), rgba(145,90,220,.15))}
+    .hdr-projets{background:linear-gradient(180deg, rgba(47,158,91,.30), rgba(47,158,91,.15))}
+    .hdr-evenements{background:linear-gradient(180deg, rgba(220,90,170,.28), rgba(220,90,170,.14))}
+    .hdr-cal{background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15))}
+    .activeHeader{background:linear-gradient(180deg, rgba(255,190,60,.20), rgba(255,190,60,.08))}
+    .yearHeader{background:linear-gradient(180deg, rgba(47,111,212,.22), rgba(47,111,212,.10))}
+    .sectorHeader{background:linear-gradient(180deg, rgba(47,158,91,.22), rgba(47,158,91,.10))}
+    .archiveHeader{background:linear-gradient(180deg, rgba(145,90,220,.24), rgba(145,90,220,.10))}
+    .archiveYearHeader{background:linear-gradient(180deg, rgba(220,90,170,.22), rgba(220,90,170,.10))}
+    .archiveSectorHeader{background:linear-gradient(180deg, rgba(212,106,0,.24), rgba(212,106,0,.10))}
+    .card{border-radius:16px;padding:12px;margin-bottom:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.95)}
+    .cardTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
+    .cardTitle{font-size:15px;font-weight:900;color:rgba(255,255,255,.98)}
+    .line{font-size:14px;line-height:1.45;color:rgba(255,255,255,.86);margin-bottom:4px;white-space:pre-wrap}
+    .muted{color:rgba(255,255,255,.68);font-weight:800;font-size:13px}
+    .grid2{display:grid;gap:10px;grid-template-columns:1fr}
+    .summaryBox{border-radius:16px;padding:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);margin-bottom:10px}
+    .summaryTitle{font-size:15px;font-weight:900;color:rgba(255,255,255,.97);margin-bottom:8px}
+    .summaryRow{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:14px;color:rgba(255,255,255,.88);border-bottom:1px dashed rgba(255,255,255,.08)}
+    .summaryRow:last-child{border-bottom:none}
+    .pill{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);color:#fff;font-size:12px;font-weight:900;margin-right:6px;margin-bottom:6px}
+    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+    .label{font-size:13px;font-weight:900;color:rgba(255,255,255,.82)}
+    .input,.textarea{width:100%;border:none;outline:none;border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.12);font-size:15px;font-family:inherit}
+    .input{min-height:44px}
+    .textarea{min-height:100px;resize:vertical}
+    input[type="date"]{color-scheme:dark}
+    .empty{padding:14px;border-radius:14px;background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.10);color:rgba(255,255,255,.76);font-weight:800}
+    .deny{max-width:680px;margin:24px auto;padding:16px;border-radius:20px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.12);box-shadow:var(--shadow);color:#fff;text-align:center}
+    .denyTitle{font-size:22px;font-weight:950;margin-bottom:10px}
+    .loaderOverlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.35);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:99999}
+    .loaderOverlay.show{display:flex}
+    .loaderBox{width:52px;height:52px;border-radius:999px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;box-shadow:0 14px 34px rgba(0,0,0,.40)}
+    .loaderSpinner{width:24px;height:24px;border-radius:50%;border:3px solid rgba(255,255,255,.25);border-top-color:#ff8c00;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @media (min-width:900px){.grid2{grid-template-columns:1fr 1fr}}
   </style>
 </head>
 
@@ -503,20 +119,13 @@
             <span class="accordionArrow">▾</span>
           </div>
           <div class="accordionContent">
-            <div class="field">
-              <label class="label">Date</label>
-              <input class="input" id="admin_reunion_date" type="date">
-            </div>
-            <div class="field">
-              <label class="label">Lieu</label>
-              <input class="input" id="admin_reunion_lieu" type="text">
-            </div>
-            <div class="field">
-              <label class="label">Notes</label>
-              <textarea class="textarea" id="admin_reunion_notes"></textarea>
-            </div>
-            <div class="toolbar">
-              <button class="btn2 btnPrimary" type="button" onclick="createReunion(this)">Ajouter une réunion</button>
+            <div id="adminReunionsList"></div>
+            <div class="card">
+              <div class="cardTitle">Ajouter une réunion</div>
+              <div class="field"><label class="label">Date</label><input class="input" id="new_reunion_date" type="date"></div>
+              <div class="field"><label class="label">Lieu</label><input class="input" id="new_reunion_lieu" type="text"></div>
+              <div class="field"><label class="label">Notes</label><textarea class="textarea" id="new_reunion_notes"></textarea></div>
+              <div class="toolbar"><button class="btn2 btnPrimary" type="button" onclick="createReunion(this)">Ajouter une réunion</button></div>
             </div>
           </div>
         </div>
@@ -527,24 +136,14 @@
             <span class="accordionArrow">▾</span>
           </div>
           <div class="accordionContent">
-            <div class="field">
-              <label class="label">Date</label>
-              <input class="input" id="admin_cr_date" type="date">
-            </div>
-            <div class="field">
-              <label class="label">Titre</label>
-              <input class="input" id="admin_cr_titre" type="text">
-            </div>
-            <div class="field">
-              <label class="label">Texte</label>
-              <textarea class="textarea" id="admin_cr_texte"></textarea>
-            </div>
-            <div class="field">
-              <label class="label">Documents (un par ligne)</label>
-              <textarea class="textarea" id="admin_cr_docs"></textarea>
-            </div>
-            <div class="toolbar">
-              <button class="btn2 btnPrimary" type="button" onclick="createCR(this)">Ajouter un compte-rendu</button>
+            <div id="adminCRList"></div>
+            <div class="card">
+              <div class="cardTitle">Ajouter un compte-rendu</div>
+              <div class="field"><label class="label">Date</label><input class="input" id="new_cr_date" type="date"></div>
+              <div class="field"><label class="label">Titre</label><input class="input" id="new_cr_titre" type="text"></div>
+              <div class="field"><label class="label">Texte</label><textarea class="textarea" id="new_cr_texte"></textarea></div>
+              <div class="field"><label class="label">Documents (un par ligne)</label><textarea class="textarea" id="new_cr_docs"></textarea></div>
+              <div class="toolbar"><button class="btn2 btnPrimary" type="button" onclick="createCR(this)">Ajouter un compte-rendu</button></div>
             </div>
           </div>
         </div>
@@ -555,16 +154,12 @@
             <span class="accordionArrow">▾</span>
           </div>
           <div class="accordionContent">
-            <div class="field">
-              <label class="label">Titre</label>
-              <input class="input" id="admin_projet_title" type="text">
-            </div>
-            <div class="field">
-              <label class="label">Contenu</label>
-              <textarea class="textarea" id="admin_projet_content"></textarea>
-            </div>
-            <div class="toolbar">
-              <button class="btn2 btnPrimary" type="button" onclick="createSimple('projet', this)">Ajouter un projet</button>
+            <div id="adminProjetsList"></div>
+            <div class="card">
+              <div class="cardTitle">Ajouter un projet</div>
+              <div class="field"><label class="label">Titre</label><input class="input" id="new_projet_titre" type="text"></div>
+              <div class="field"><label class="label">Contenu</label><textarea class="textarea" id="new_projet_contenu"></textarea></div>
+              <div class="toolbar"><button class="btn2 btnPrimary" type="button" onclick="createProjet(this)">Ajouter un projet</button></div>
             </div>
           </div>
         </div>
@@ -575,16 +170,12 @@
             <span class="accordionArrow">▾</span>
           </div>
           <div class="accordionContent">
-            <div class="field">
-              <label class="label">Titre</label>
-              <input class="input" id="admin_evenement_title" type="text">
-            </div>
-            <div class="field">
-              <label class="label">Contenu</label>
-              <textarea class="textarea" id="admin_evenement_content"></textarea>
-            </div>
-            <div class="toolbar">
-              <button class="btn2 btnPrimary" type="button" onclick="createSimple('evenement', this)">Ajouter un événement</button>
+            <div id="adminEvenementsList"></div>
+            <div class="card">
+              <div class="cardTitle">Ajouter un événement</div>
+              <div class="field"><label class="label">Titre</label><input class="input" id="new_evenement_titre" type="text"></div>
+              <div class="field"><label class="label">Contenu</label><textarea class="textarea" id="new_evenement_contenu"></textarea></div>
+              <div class="toolbar"><button class="btn2 btnPrimary" type="button" onclick="createEvenement(this)">Ajouter un événement</button></div>
             </div>
           </div>
         </div>
@@ -595,34 +186,28 @@
             <span class="accordionArrow">▾</span>
           </div>
           <div class="accordionContent">
-            <div class="field">
-              <label class="label">Année</label>
-              <input class="input" id="admin_tournee_annee" type="text">
-            </div>
-            <div class="field">
-              <label class="label">Secteur / commune</label>
-              <input class="input" id="admin_tournee_secteur" type="text">
-            </div>
-            <div class="field">
-              <label class="label">Agents (séparés par virgules)</label>
-              <textarea class="textarea" id="admin_tournee_agents"></textarea>
-            </div>
-            <div class="grid2">
-              <div class="field">
-                <label class="label">Calendriers attribués</label>
-                <input class="input" id="admin_tournee_attribues" type="text">
+            <div id="adminTourneesActivesList"></div>
+            <div class="card">
+              <div class="cardTitle">Ajouter une tournée active</div>
+              <div class="field"><label class="label">Année</label><input class="input" id="new_tournee_annee" type="text"></div>
+              <div class="field"><label class="label">Secteur / commune</label><input class="input" id="new_tournee_secteur" type="text"></div>
+              <div class="field"><label class="label">Agents (séparés par virgules)</label><textarea class="textarea" id="new_tournee_agents"></textarea></div>
+              <div class="grid2">
+                <div class="field"><label class="label">Calendriers attribués</label><input class="input" id="new_tournee_attribues" type="text"></div>
+                <div class="field"><label class="label">Calendriers vendus</label><input class="input" id="new_tournee_vendus" type="text"></div>
               </div>
-              <div class="field">
-                <label class="label">Calendriers vendus</label>
-                <input class="input" id="admin_tournee_vendus" type="text">
+              <div class="field"><label class="label">Somme restituée</label><input class="input" id="new_tournee_somme" type="text"></div>
+              <div class="toolbar"><button class="btn2 btnPrimary" type="button" onclick="createTournee(this)">Ajouter une tournée active</button></div>
+            </div>
+
+            <div class="accordion" id="admin-tournees-archives" style="margin-top:12px;">
+              <div class="accordionHeader archiveHeader" onclick="toggleAccordion('admin-tournees-archives')">
+                <div class="accordionTitle"><span class="emoji">🗄️</span><span>Admin Archives tournées</span></div>
+                <span class="accordionArrow">▾</span>
               </div>
-            </div>
-            <div class="field">
-              <label class="label">Somme restituée</label>
-              <input class="input" id="admin_tournee_somme" type="text">
-            </div>
-            <div class="toolbar">
-              <button class="btn2 btnPrimary" type="button" onclick="createTourneeActive(this)">Ajouter une tournée active</button>
+              <div class="accordionContent">
+                <div id="adminTourneesArchivesList"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -636,9 +221,7 @@
     <div class="deny">
       <div class="denyTitle">Accès réservé</div>
       <div class="line">Cette page est réservée aux membres autorisés de l’Amicale.</div>
-      <div class="line" style="margin-top:10px;">
-        <button class="btn" onclick="window.location.href='index.html'">Retour</button>
-      </div>
+      <div class="line" style="margin-top:10px;"><button class="btn" onclick="window.location.href='index.html'">Retour</button></div>
     </div>
   </div>
 
@@ -752,11 +335,7 @@ async function checkAmicaleAccess(){
   const email = getCurrentEmail();
   if (!email) return { ok:false };
 
-  const auth = await jsonp({
-    view: "auth_check",
-    email
-  });
-
+  const auth = await jsonp({ view: "auth_check", email });
   if (!auth || !auth.ok) return { ok:false };
 
   if (Number(auth.amical || 0) !== 1 && String(auth.role || "").toLowerCase() !== "admin") {
@@ -782,12 +361,10 @@ function sectionShell(id, headerClass, emoji, title, bodyHtml){
 }
 
 function renderReunions(){
-  const items = state.reunions || [];
-  if (!items.length) return `<div class="empty">Aucune réunion enregistrée.</div>`;
-
+  if (!state.reunions.length) return `<div class="empty">Aucune réunion enregistrée.</div>`;
   return `
     <div class="grid2">
-      ${items.map((r, i) => `
+      ${state.reunions.map((r, i) => `
         <div class="card">
           <div class="cardTitle">Réunion ${i + 1}</div>
           <div class="line"><strong>Date :</strong> ${escapeHtml(r.date || "—")}</div>
@@ -800,10 +377,8 @@ function renderReunions(){
 }
 
 function renderCR(){
-  const items = state.comptesRendus || [];
-  if (!items.length) return `<div class="empty">Aucun compte-rendu enregistré.</div>`;
-
-  return items.map((r, i) => {
+  if (!state.comptesRendus.length) return `<div class="empty">Aucun compte-rendu enregistré.</div>`;
+  return state.comptesRendus.map((r, i) => {
     const docs = String(r.documents || "").split(/\n+/).map(x => x.trim()).filter(Boolean);
     return `
       <div class="card">
@@ -820,7 +395,6 @@ function renderCR(){
 
 function renderSimpleBlocks(items, label, prefix){
   if (!items.length) return `<div class="empty">Aucun ${label.toLowerCase()} enregistré.</div>`;
-
   return items.map((r, i) => `
     <div class="subAccordion" id="${prefix}_${i}">
       <div class="subHeader" onclick="toggleSubAccordion(event, '${prefix}_${i}')">
@@ -838,16 +412,12 @@ function renderSimpleBlocks(items, label, prefix){
 }
 
 function totalRows(items){
-  let attribues = 0;
-  let vendus = 0;
-  let somme = 0;
-
+  let attribues = 0, vendus = 0, somme = 0;
   items.forEach(r => {
     attribues += Number(r.attribues || 0) || 0;
     vendus += Number(r.vendus || 0) || 0;
     somme += Number(String(r.somme || "").replace(",", ".")) || 0;
   });
-
   return { attribues, vendus, somme };
 }
 
@@ -886,7 +456,6 @@ function renderTourneesGroup(items, prefix, yearClass, sectorClass){
           ${g.rows.map((r, ri) => {
             const sid = `${gid}_sector_${ri}`;
             const agents = String(r.agents || "").split(",").map(x => x.trim()).filter(Boolean);
-
             return `
               <div class="subAccordion" id="${sid}">
                 <div class="subHeader ${sectorClass}" onclick="toggleSubAccordion(event, '${sid}')">
@@ -943,8 +512,100 @@ function renderMemberView(){
     sectionShell("acc_evenements", "hdr-evenements", "🎉", "Événements", renderSimpleBlocks(state.evenements, "Événement", "evenement")),
     sectionShell("acc_tournees", "hdr-cal", "📘", "Tournées calendriers", renderTournees())
   ].join("");
-
   document.getElementById("sections").innerHTML = html;
+}
+
+function renderAdminList(containerId, items, type){
+  const zone = document.getElementById(containerId);
+  if (!zone) return;
+
+  if (!items.length) {
+    zone.innerHTML = `<div class="empty">Aucun élément.</div>`;
+    return;
+  }
+
+  if (type === "reunions") {
+    zone.innerHTML = items.map(item => `
+      <div class="card">
+        <div class="cardTop">
+          <div class="cardTitle">${escapeHtml(item.date || "Sans date")} — ${escapeHtml(item.lieu || "")}</div>
+        </div>
+        <div class="field"><label class="label">Date</label><input class="input" type="date" id="edit_reunion_date_${item.id}" value="${escapeHtml(item.date || "")}"></div>
+        <div class="field"><label class="label">Lieu</label><input class="input" type="text" id="edit_reunion_lieu_${item.id}" value="${escapeHtml(item.lieu || "")}"></div>
+        <div class="field"><label class="label">Notes</label><textarea class="textarea" id="edit_reunion_notes_${item.id}">${escapeHtml(item.notes || "")}</textarea></div>
+        <div class="toolbar">
+          <button class="btn2 btnPrimary btnMini" onclick="updateReunion('${item.id}', this)">Enregistrer</button>
+          <button class="btn2 btnDanger btnMini" onclick="deleteReunion('${item.id}', this)">Supprimer</button>
+        </div>
+      </div>
+    `).join("");
+    return;
+  }
+
+  if (type === "cr") {
+    zone.innerHTML = items.map(item => `
+      <div class="card">
+        <div class="cardTitle">${escapeHtml(item.titre || "Sans titre")}</div>
+        <div class="field"><label class="label">Date</label><input class="input" type="date" id="edit_cr_date_${item.id}" value="${escapeHtml(item.date || "")}"></div>
+        <div class="field"><label class="label">Titre</label><input class="input" type="text" id="edit_cr_titre_${item.id}" value="${escapeHtml(item.titre || "")}"></div>
+        <div class="field"><label class="label">Texte</label><textarea class="textarea" id="edit_cr_texte_${item.id}">${escapeHtml(item.texte || "")}</textarea></div>
+        <div class="field"><label class="label">Documents</label><textarea class="textarea" id="edit_cr_docs_${item.id}">${escapeHtml(item.documents || "")}</textarea></div>
+        <div class="toolbar">
+          <button class="btn2 btnPrimary btnMini" onclick="updateCR('${item.id}', this)">Enregistrer</button>
+          <button class="btn2 btnDanger btnMini" onclick="deleteCR('${item.id}', this)">Supprimer</button>
+        </div>
+      </div>
+    `).join("");
+    return;
+  }
+
+  if (type === "projets" || type === "evenements") {
+    const prefix = type === "projets" ? "projet" : "evenement";
+    zone.innerHTML = items.map(item => `
+      <div class="card">
+        <div class="cardTitle">${escapeHtml(item.titre || "Sans titre")}</div>
+        <div class="field"><label class="label">Titre</label><input class="input" type="text" id="edit_${prefix}_titre_${item.id}" value="${escapeHtml(item.titre || "")}"></div>
+        <div class="field"><label class="label">Contenu</label><textarea class="textarea" id="edit_${prefix}_contenu_${item.id}">${escapeHtml(item.contenu || "")}</textarea></div>
+        <div class="toolbar">
+          <button class="btn2 btnPrimary btnMini" onclick="updateSimple('${prefix}', '${item.id}', this)">Enregistrer</button>
+          <button class="btn2 btnDanger btnMini" onclick="deleteSimple('${prefix}', '${item.id}', this)">Supprimer</button>
+        </div>
+      </div>
+    `).join("");
+    return;
+  }
+
+  if (type === "tournees_active" || type === "tournees_archive") {
+    const source = type === "tournees_archive" ? "archive" : "active";
+    const withArchive = source === "active";
+    zone.innerHTML = items.map(item => `
+      <div class="card">
+        <div class="cardTitle">${escapeHtml(item.annee || "")} — ${escapeHtml(item.secteur || "")}</div>
+        <div class="field"><label class="label">Année</label><input class="input" type="text" id="edit_tournee_annee_${source}_${item.id}" value="${escapeHtml(item.annee || "")}"></div>
+        <div class="field"><label class="label">Secteur / commune</label><input class="input" type="text" id="edit_tournee_secteur_${source}_${item.id}" value="${escapeHtml(item.secteur || "")}"></div>
+        <div class="field"><label class="label">Agents</label><textarea class="textarea" id="edit_tournee_agents_${source}_${item.id}">${escapeHtml(item.agents || "")}</textarea></div>
+        <div class="grid2">
+          <div class="field"><label class="label">Attribués</label><input class="input" type="text" id="edit_tournee_attribues_${source}_${item.id}" value="${escapeHtml(item.attribues || "")}"></div>
+          <div class="field"><label class="label">Vendus</label><input class="input" type="text" id="edit_tournee_vendus_${source}_${item.id}" value="${escapeHtml(item.vendus || "")}"></div>
+        </div>
+        <div class="field"><label class="label">Somme</label><input class="input" type="text" id="edit_tournee_somme_${source}_${item.id}" value="${escapeHtml(item.somme || "")}"></div>
+        <div class="toolbar">
+          <button class="btn2 btnPrimary btnMini" onclick="updateTournee('${source}', '${item.id}', this)">Enregistrer</button>
+          <button class="btn2 btnDanger btnMini" onclick="deleteTournee('${source}', '${item.id}', this)">Supprimer</button>
+          ${withArchive ? `<button class="btn2 btnSecondary btnMini" onclick="archiveTournee('${item.id}', this)">Archiver</button>` : ``}
+        </div>
+      </div>
+    `).join("");
+  }
+}
+
+function renderAdminView(){
+  renderAdminList("adminReunionsList", state.reunions, "reunions");
+  renderAdminList("adminCRList", state.comptesRendus, "cr");
+  renderAdminList("adminProjetsList", state.projets, "projets");
+  renderAdminList("adminEvenementsList", state.evenements, "evenements");
+  renderAdminList("adminTourneesActivesList", state.tourneesActives, "tournees_active");
+  renderAdminList("adminTourneesArchivesList", state.tourneesArchives, "tournees_archive");
 }
 
 async function loadAll(){
@@ -969,6 +630,7 @@ async function loadAll(){
     state.tourneesArchives = Array.isArray(tourneesArchives.items) ? tourneesArchives.items : [];
 
     renderMemberView();
+    renderAdminView();
     showStatus("ok", state.adminMode ? "Mode administration activé." : "Mode consultation.");
     showLoader(false);
 
@@ -984,19 +646,43 @@ async function createReunion(btn){
     const r = await jsonp({
       view:"amicale_reunion_add",
       actorEmail:getCurrentEmail(),
-      date:document.getElementById("admin_reunion_date").value.trim(),
-      lieu:document.getElementById("admin_reunion_lieu").value.trim(),
-      notes:document.getElementById("admin_reunion_notes").value.trim()
+      date:document.getElementById("new_reunion_date").value.trim(),
+      lieu:document.getElementById("new_reunion_lieu").value.trim(),
+      notes:document.getElementById("new_reunion_notes").value.trim()
     });
-    if (!r || !r.ok) {
-      showStatus("err", (r && r.error) ? r.error : "Erreur de création.");
-      return;
-    }
+    if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de création.");
     await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
   } finally {
     setButtonSaving(btn, false, "Ajouter une réunion");
+  }
+}
+
+async function updateReunion(id, btn){
+  try{
+    setButtonSaving(btn, true);
+    const r = await jsonp({
+      view:"amicale_reunion_update",
+      actorEmail:getCurrentEmail(),
+      id,
+      date:document.getElementById(`edit_reunion_date_${id}`).value.trim(),
+      lieu:document.getElementById(`edit_reunion_lieu_${id}`).value.trim(),
+      notes:document.getElementById(`edit_reunion_notes_${id}`).value.trim()
+    });
+    if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de mise à jour.");
+    await loadAll();
+  } finally {
+    setButtonSaving(btn, false, "Enregistrer");
+  }
+}
+
+async function deleteReunion(id, btn){
+  try{
+    setButtonSaving(btn, true, "Suppression...");
+    const r = await jsonp({ view:"amicale_reunion_delete", actorEmail:getCurrentEmail(), id });
+    if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de suppression.");
+    await loadAll();
+  } finally {
+    setButtonSaving(btn, false, "Supprimer");
   }
 }
 
@@ -1006,73 +692,189 @@ async function createCR(btn){
     const r = await jsonp({
       view:"amicale_cr_add",
       actorEmail:getCurrentEmail(),
-      date:document.getElementById("admin_cr_date").value.trim(),
-      titre:document.getElementById("admin_cr_titre").value.trim(),
-      texte:document.getElementById("admin_cr_texte").value.trim(),
-      documents:document.getElementById("admin_cr_docs").value.trim()
+      date:document.getElementById("new_cr_date").value.trim(),
+      titre:document.getElementById("new_cr_titre").value.trim(),
+      texte:document.getElementById("new_cr_texte").value.trim(),
+      documents:document.getElementById("new_cr_docs").value.trim()
     });
-    if (!r || !r.ok) {
-      showStatus("err", (r && r.error) ? r.error : "Erreur de création.");
-      return;
-    }
+    if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de création.");
     await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
   } finally {
     setButtonSaving(btn, false, "Ajouter un compte-rendu");
   }
 }
 
-async function createSimple(prefix, btn){
+async function updateCR(id, btn){
   try{
-    setButtonSaving(btn, true, "Création...");
-    const isProjet = prefix === "projet";
+    setButtonSaving(btn, true);
     const r = await jsonp({
-      view: isProjet ? "amicale_projet_add" : "amicale_evenement_add",
+      view:"amicale_cr_update",
       actorEmail:getCurrentEmail(),
-      titre:document.getElementById(`admin_${prefix}_title`).value.trim(),
-      contenu:document.getElementById(`admin_${prefix}_content`).value.trim()
+      id,
+      date:document.getElementById(`edit_cr_date_${id}`).value.trim(),
+      titre:document.getElementById(`edit_cr_titre_${id}`).value.trim(),
+      texte:document.getElementById(`edit_cr_texte_${id}`).value.trim(),
+      documents:document.getElementById(`edit_cr_docs_${id}`).value.trim()
     });
-    if (!r || !r.ok) {
-      showStatus("err", (r && r.error) ? r.error : "Erreur de création.");
-      return;
-    }
+    if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de mise à jour.");
     await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
   } finally {
-    setButtonSaving(btn, false, isProjet ? "Ajouter un projet" : "Ajouter un événement");
+    setButtonSaving(btn, false, "Enregistrer");
   }
 }
 
-async function createTourneeActive(btn){
+async function deleteCR(id, btn){
+  try{
+    setButtonSaving(btn, true, "Suppression...");
+    const r = await jsonp({ view:"amicale_cr_delete", actorEmail:getCurrentEmail(), id });
+    if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de suppression.");
+    await loadAll();
+  } finally {
+    setButtonSaving(btn, false, "Supprimer");
+  }
+}
+
+async function createProjet(btn){
+  try{
+    setButtonSaving(btn, true, "Création...");
+    const r = await jsonp({
+      view:"amicale_projet_add",
+      actorEmail:getCurrentEmail(),
+      titre:document.getElementById("new_projet_titre").value.trim(),
+      contenu:document.getElementById("new_projet_contenu").value.trim()
+    });
+    if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de création.");
+    await loadAll();
+  } finally {
+    setButtonSaving(btn, false, "Ajouter un projet");
+  }
+}
+
+async function createEvenement(btn){
+  try{
+    setButtonSaving(btn, true, "Création...");
+    const r = await jsonp({
+      view:"amicale_evenement_add",
+      actorEmail:getCurrentEmail(),
+      titre:document.getElementById("new_evenement_titre").value.trim(),
+      contenu:document.getElementById("new_evenement_contenu").value.trim()
+    });
+    if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de création.");
+    await loadAll();
+  } finally {
+    setButtonSaving(btn, false, "Ajouter un événement");
+  }
+}
+
+async function updateSimple(prefix, id, btn){
+  try{
+    setButtonSaving(btn, true);
+    const isProjet = prefix === "projet";
+    const r = await jsonp({
+      view: isProjet ? "amicale_projet_update" : "amicale_evenement_update",
+      actorEmail:getCurrentEmail(),
+      id,
+      titre:document.getElementById(`edit_${prefix}_titre_${id}`).value.trim(),
+      contenu:document.getElementById(`edit_${prefix}_contenu_${id}`).value.trim()
+    });
+    if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de mise à jour.");
+    await loadAll();
+  } finally {
+    setButtonSaving(btn, false, "Enregistrer");
+  }
+}
+
+async function deleteSimple(prefix, id, btn){
+  try{
+    setButtonSaving(btn, true, "Suppression...");
+    const isProjet = prefix === "projet";
+    const r = await jsonp({
+      view: isProjet ? "amicale_projet_delete" : "amicale_evenement_delete",
+      actorEmail:getCurrentEmail(),
+      id
+    });
+    if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de suppression.");
+    await loadAll();
+  } finally {
+    setButtonSaving(btn, false, "Supprimer");
+  }
+}
+
+async function createTournee(btn){
   try{
     setButtonSaving(btn, true, "Création...");
     const r = await jsonp({
       view:"amicale_tournee_add",
       actorEmail:getCurrentEmail(),
-      annee:document.getElementById("admin_tournee_annee").value.trim(),
-      secteur:document.getElementById("admin_tournee_secteur").value.trim(),
-      agents:document.getElementById("admin_tournee_agents").value.trim(),
-      attribues:document.getElementById("admin_tournee_attribues").value.trim(),
-      vendus:document.getElementById("admin_tournee_vendus").value.trim(),
-      somme:document.getElementById("admin_tournee_somme").value.trim()
+      annee:document.getElementById("new_tournee_annee").value.trim(),
+      secteur:document.getElementById("new_tournee_secteur").value.trim(),
+      agents:document.getElementById("new_tournee_agents").value.trim(),
+      attribues:document.getElementById("new_tournee_attribues").value.trim(),
+      vendus:document.getElementById("new_tournee_vendus").value.trim(),
+      somme:document.getElementById("new_tournee_somme").value.trim()
     });
-    if (!r || !r.ok) {
-      showStatus("err", (r && r.error) ? r.error : "Erreur de création.");
-      return;
-    }
+    if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de création.");
     await loadAll();
-  }catch(err){
-    showStatus("err", err?.message || String(err));
   } finally {
     setButtonSaving(btn, false, "Ajouter une tournée active");
   }
 }
 
+async function updateTournee(source, id, btn){
+  try{
+    setButtonSaving(btn, true);
+    const r = await jsonp({
+      view:"amicale_tournee_update",
+      actorEmail:getCurrentEmail(),
+      source,
+      id,
+      annee:document.getElementById(`edit_tournee_annee_${source}_${id}`).value.trim(),
+      secteur:document.getElementById(`edit_tournee_secteur_${source}_${id}`).value.trim(),
+      agents:document.getElementById(`edit_tournee_agents_${source}_${id}`).value.trim(),
+      attribues:document.getElementById(`edit_tournee_attribues_${source}_${id}`).value.trim(),
+      vendus:document.getElementById(`edit_tournee_vendus_${source}_${id}`).value.trim(),
+      somme:document.getElementById(`edit_tournee_somme_${source}_${id}`).value.trim()
+    });
+    if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de mise à jour.");
+    await loadAll();
+  } finally {
+    setButtonSaving(btn, false, "Enregistrer");
+  }
+}
+
+async function deleteTournee(source, id, btn){
+  try{
+    setButtonSaving(btn, true, "Suppression...");
+    const r = await jsonp({
+      view:"amicale_tournee_delete",
+      actorEmail:getCurrentEmail(),
+      source,
+      id
+    });
+    if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de suppression.");
+    await loadAll();
+  } finally {
+    setButtonSaving(btn, false, "Supprimer");
+  }
+}
+
+async function archiveTournee(id, btn){
+  try{
+    setButtonSaving(btn, true, "Archivage...");
+    const r = await jsonp({
+      view:"amicale_tournee_archive",
+      actorEmail:getCurrentEmail(),
+      id
+    });
+    if (!r || !r.ok) return showStatus("err", r?.error || "Erreur d'archivage.");
+    await loadAll();
+  } finally {
+    setButtonSaving(btn, false, "Archiver");
+  }
+}
+
 (async function init(){
   showLoader(true);
-
   try{
     const access = await checkAmicaleAccess();
 
@@ -1098,7 +900,7 @@ async function createTourneeActive(btn){
     setAdminMode(false);
     await loadAll();
 
-  }catch(err){
+  } catch (err) {
     document.getElementById("denyBox").style.display = "block";
     showLoader(false);
   }
