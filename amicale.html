@@ -7,484 +7,166 @@
   <link rel="stylesheet" href="cs-theme.css">
 
   <style>
-    .pageWrap{
-      max-width:1100px;
-      margin:0 auto;
-      padding:14px;
-    }
-
-    .topTitleWrap{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
+    .pageWrap{max-width:1100px;margin:0 auto;padding:14px}
+    .topTitleWrap{display:flex;align-items:center;gap:10px}
 
     .lockBtn{
-      display:none;
-      border:none;
-      border-radius:12px;
-      min-height:36px;
-      min-width:42px;
-      padding:8px 10px;
-      background:rgba(255,255,255,.14);
-      color:#fff;
-      font-size:18px;
-      font-weight:900;
-      cursor:pointer;
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:0 10px 24px rgba(0,0,0,.18);
+      display:none;border:none;border-radius:12px;min-height:36px;min-width:42px;
+      padding:8px 10px;background:rgba(255,255,255,.14);color:#fff;font-size:18px;
+      font-weight:900;cursor:pointer;border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 10px 24px rgba(0,0,0,.18)
     }
-
-    .lockBtn:active{ transform:translateY(1px); }
+    .lockBtn:active{transform:translateY(1px)}
 
     .hero{
-      padding:16px 18px;
-      margin-bottom:16px;
-      border-radius:20px;
+      padding:16px 18px;margin-bottom:16px;border-radius:20px;
       background:linear-gradient(180deg, rgba(212,106,0,.34), rgba(212,106,0,.16));
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      color:rgba(255,255,255,.96);
+      border:1px solid rgba(255,255,255,.12);box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:rgba(255,255,255,.96)
     }
-
-    .heroTitle{
-      font-size:22px;
-      font-weight:900;
-      line-height:1.2;
-    }
-
-    .heroSmall{
-      margin-top:8px;
-      font-size:13px;
-      font-weight:800;
-      color:rgba(255,255,255,.78);
-      line-height:1.4;
-    }
+    .heroTitle{font-size:22px;font-weight:900;line-height:1.2}
+    .heroSmall{margin-top:8px;font-size:13px;font-weight:800;color:rgba(255,255,255,.78);line-height:1.4}
 
     .status{
-      display:none;
-      margin-bottom:14px;
-      padding:12px 14px;
-      border-radius:14px;
-      font-weight:800;
-      line-height:1.4;
-      border:1px solid rgba(255,255,255,.12);
+      display:none;margin-bottom:14px;padding:12px 14px;border-radius:14px;
+      font-weight:800;line-height:1.4;border:1px solid rgba(255,255,255,.12)
     }
+    .status.show{display:block}
+    .status.ok{background:rgba(47,158,91,.18);color:#d9ffe7}
+    .status.err{background:rgba(220,70,70,.18);color:#ffe1e1}
+    .status.info{background:rgba(47,111,212,.18);color:#dde9ff}
 
-    .status.show{ display:block; }
-    .status.ok{
-      background:rgba(47,158,91,.18);
-      color:#d9ffe7;
-    }
-    .status.err{
-      background:rgba(220,70,70,.18);
-      color:#ffe1e1;
-    }
-    .status.info{
-      background:rgba(47,111,212,.18);
-      color:#dde9ff;
-    }
-
-    .toolbar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap}
     .btn2{
-      border:none;
-      border-radius:14px;
-      min-height:42px;
-      padding:10px 14px;
-      font-weight:900;
-      cursor:pointer;
-      box-shadow:0 10px 24px rgba(0,0,0,.18);
-      transition:background .22s ease, transform .12s ease, opacity .18s ease;
+      border:none;border-radius:14px;min-height:42px;padding:10px 14px;font-weight:900;
+      cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.18);
+      transition:background .22s ease, transform .12s ease, opacity .18s ease
     }
+    .btn2:active{transform:translateY(1px)}
+    .btnPrimary{background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));color:#fff}
+    .btnPrimary.saving{background:linear-gradient(180deg, rgba(47,158,91,.95), rgba(34,128,73,.95));color:#fff}
+    .btnSecondary{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.12)}
+    .btnDanger{background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));color:#fff}
+    .btnMini{min-height:34px;padding:7px 10px;font-size:12px;border-radius:12px}
+    .btn2[disabled]{opacity:.7;cursor:default}
 
-    .btn2:active{ transform:translateY(1px); }
-
-    .btnPrimary{
-      background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
-      color:#fff;
-    }
-
-    .btnPrimary.saving{
-      background:linear-gradient(180deg, rgba(47,158,91,.95), rgba(34,128,73,.95));
-      color:#fff;
-    }
-
-    .btnSecondary{
-      background:rgba(255,255,255,.14);
-      color:#fff;
-      border:1px solid rgba(255,255,255,.12);
-    }
-
-    .btnDanger{
-      background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
-      color:#fff;
-    }
-
-    .btnMini{
-      min-height:34px;
-      padding:7px 10px;
-      font-size:12px;
-      border-radius:12px;
-    }
-
-    .btn2[disabled]{
-      opacity:.7;
-      cursor:default;
-    }
-
-    .memberView{
-      display:block;
-    }
-
-    .adminPanel{
-      display:none;
-      margin-bottom:16px;
-    }
-
-    body.adminMode .adminPanel{
-      display:block;
-    }
-
-    body.adminMode .memberView{
-      display:none;
-    }
+    .memberView{display:block}
+    .adminPanel{display:none;margin-bottom:16px}
+    body.adminMode .adminPanel{display:block}
+    body.adminMode .memberView{display:none}
 
     .accordion{
-      border-radius:20px;
-      overflow:hidden;
-      margin-bottom:14px;
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      background:rgba(255,255,255,.06);
+      border-radius:20px;overflow:hidden;margin-bottom:14px;border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+      background:rgba(255,255,255,.06)
     }
-
     .accordionHeader{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:16px;
-      cursor:pointer;
-      user-select:none;
-      -webkit-tap-highlight-color:transparent;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;
+      cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent
     }
-
-    .accordionHeader:active{
-      transform:translateY(1px);
-    }
-
+    .accordionHeader:active{transform:translateY(1px)}
     .accordionTitle{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-      flex:1 1 auto;
-      color:rgba(255,255,255,.96);
-      font-size:18px;
-      font-weight:900;
+      display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto;
+      color:rgba(255,255,255,.96);font-size:18px;font-weight:900
     }
-
-    .emoji{
-      font-size:22px;
-      line-height:1;
-      flex:0 0 auto;
-    }
-
-    .accordionArrow{
-      font-size:18px;
-      color:rgba(255,255,255,.88);
-      transition:transform .18s ease;
-      flex:0 0 auto;
-    }
-
-    .accordion.open .accordionArrow{
-      transform:rotate(180deg);
-    }
-
-    .accordionContent{
-      display:none;
-      padding:12px;
-      background:rgba(0,0,0,.10);
-    }
-
-    .accordion.open .accordionContent{
-      display:block;
-    }
+    .emoji{font-size:22px;line-height:1;flex:0 0 auto}
+    .accordionArrow{font-size:18px;color:rgba(255,255,255,.88);transition:transform .18s ease;flex:0 0 auto}
+    .accordion.open .accordionArrow{transform:rotate(180deg)}
+    .accordionContent{display:none;padding:12px;background:rgba(0,0,0,.10)}
+    .accordion.open .accordionContent{display:block}
 
     .subAccordion{
-      border-radius:16px;
-      overflow:hidden;
-      margin-bottom:10px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.05);
+      border-radius:16px;overflow:hidden;margin-bottom:10px;border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.05)
     }
-
     .subHeader{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:13px 14px;
-      cursor:pointer;
-      font-weight:900;
-      color:rgba(255,255,255,.95);
-      background:rgba(255,255,255,.06);
-      -webkit-tap-highlight-color:transparent;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;
+      cursor:pointer;font-weight:900;color:rgba(255,255,255,.95);background:rgba(255,255,255,.06);
+      -webkit-tap-highlight-color:transparent
     }
+    .subHeader:active{transform:translateY(1px)}
+    .subArrow{transition:transform .18s ease;color:rgba(255,255,255,.82)}
+    .subAccordion.open .subArrow{transform:rotate(180deg)}
+    .subContent{display:none;padding:12px;background:rgba(0,0,0,.14)}
+    .subAccordion.open .subContent{display:block}
 
-    .subHeader:active{
-      transform:translateY(1px);
-    }
+    .hdr-reunions{background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18))}
+    .hdr-cr{background:linear-gradient(180deg, rgba(145,90,220,.30), rgba(145,90,220,.15))}
+    .hdr-projets{background:linear-gradient(180deg, rgba(47,158,91,.30), rgba(47,158,91,.15))}
+    .hdr-evenements{background:linear-gradient(180deg, rgba(220,90,170,.28), rgba(220,90,170,.14))}
+    .hdr-cal{background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15))}
 
-    .subArrow{
-      transition:transform .18s ease;
-      color:rgba(255,255,255,.82);
-    }
-
-    .subAccordion.open .subArrow{
-      transform:rotate(180deg);
-    }
-
-    .subContent{
-      display:none;
-      padding:12px;
-      background:rgba(0,0,0,.14);
-    }
-
-    .subAccordion.open .subContent{
-      display:block;
-    }
-
-    .hdr-reunions{ background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18)); }
-    .hdr-cr{ background:linear-gradient(180deg, rgba(145,90,220,.30), rgba(145,90,220,.15)); }
-    .hdr-projets{ background:linear-gradient(180deg, rgba(47,158,91,.30), rgba(47,158,91,.15)); }
-    .hdr-evenements{ background:linear-gradient(180deg, rgba(220,90,170,.28), rgba(220,90,170,.14)); }
-    .hdr-cal{ background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15)); }
-
-    .activeHeader{ background:linear-gradient(180deg, rgba(255,190,60,.20), rgba(255,190,60,.08)); }
-    .yearHeader{ background:linear-gradient(180deg, rgba(47,111,212,.22), rgba(47,111,212,.10)); }
-    .sectorHeader{ background:linear-gradient(180deg, rgba(47,158,91,.22), rgba(47,158,91,.10)); }
-    .archiveHeader{ background:linear-gradient(180deg, rgba(145,90,220,.24), rgba(145,90,220,.10)); }
-    .archiveYearHeader{ background:linear-gradient(180deg, rgba(220,90,170,.22), rgba(220,90,170,.10)); }
-    .archiveSectorHeader{ background:linear-gradient(180deg, rgba(212,106,0,.24), rgba(212,106,0,.10)); }
+    .activeHeader{background:linear-gradient(180deg, rgba(255,190,60,.20), rgba(255,190,60,.08))}
+    .yearHeader{background:linear-gradient(180deg, rgba(47,111,212,.22), rgba(47,111,212,.10))}
+    .sectorHeader{background:linear-gradient(180deg, rgba(47,158,91,.22), rgba(47,158,91,.10))}
+    .archiveHeader{background:linear-gradient(180deg, rgba(145,90,220,.24), rgba(145,90,220,.10))}
+    .archiveYearHeader{background:linear-gradient(180deg, rgba(220,90,170,.22), rgba(220,90,170,.10))}
+    .archiveSectorHeader{background:linear-gradient(180deg, rgba(212,106,0,.24), rgba(212,106,0,.10))}
 
     .card{
-      border-radius:16px;
-      padding:12px;
-      margin-bottom:10px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);
-      color:rgba(255,255,255,.95);
+      border-radius:16px;padding:12px;margin-bottom:10px;background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.95)
     }
+    .cardTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
+    .cardTitle{font-size:15px;font-weight:900;color:rgba(255,255,255,.98)}
+    .line{font-size:14px;line-height:1.45;color:rgba(255,255,255,.86);margin-bottom:4px;white-space:pre-wrap}
+    .dateLine{display:flex;align-items:center;gap:8px;font-size:14px;line-height:1.45;color:rgba(255,255,255,.90);margin-bottom:6px;font-weight:900}
+    .muted{color:rgba(255,255,255,.68);font-weight:800;font-size:13px}
+    .grid2{display:grid;gap:10px;grid-template-columns:1fr}
 
-    .cardTop{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:8px;
-    }
-
-    .cardTitle{
-      font-size:15px;
-      font-weight:900;
-      color:rgba(255,255,255,.98);
-    }
-
-    .line{
-      font-size:14px;
-      line-height:1.45;
-      color:rgba(255,255,255,.86);
-      margin-bottom:4px;
-      white-space:pre-wrap;
-    }
-
-    .dateLine{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      font-size:14px;
-      line-height:1.45;
-      color:rgba(255,255,255,.90);
-      margin-bottom:6px;
-      font-weight:900;
-    }
-
-    .muted{
-      color:rgba(255,255,255,.68);
-      font-weight:800;
-      font-size:13px;
-    }
-
-    .grid2{
-      display:grid;
-      gap:10px;
-      grid-template-columns:1fr;
-    }
-
-    .summaryBox{
-      border-radius:16px;
-      padding:12px;
-      background:rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.10);
-      margin-bottom:10px;
-    }
-
-    .summaryTitle{
-      font-size:15px;
-      font-weight:900;
-      color:rgba(255,255,255,.97);
-      margin-bottom:8px;
-    }
-
-    .summaryRow{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      padding:6px 0;
-      font-size:14px;
-      color:rgba(255,255,255,.88);
-      border-bottom:1px dashed rgba(255,255,255,.08);
-    }
-
-    .summaryRow:last-child{ border-bottom:none; }
+    .summaryBox{border-radius:16px;padding:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);margin-bottom:10px}
+    .summaryTitle{font-size:15px;font-weight:900;color:rgba(255,255,255,.97);margin-bottom:8px}
+    .summaryRow{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:14px;color:rgba(255,255,255,.88);border-bottom:1px dashed rgba(255,255,255,.08)}
+    .summaryRow:last-child{border-bottom:none}
 
     .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      min-height:32px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.10);
-      color:#fff;
-      font-size:12px;
-      font-weight:900;
-      margin-right:6px;
-      margin-bottom:6px;
+      display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:6px 10px;
+      border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);
+      color:#fff;font-size:12px;font-weight:900;margin-right:6px;margin-bottom:6px
     }
 
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      margin-bottom:10px;
-    }
-
-    .label{
-      font-size:13px;
-      font-weight:900;
-      color:rgba(255,255,255,.82);
-    }
-
+    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+    .label{font-size:13px;font-weight:900;color:rgba(255,255,255,.82)}
     .input,.textarea{
-      width:100%;
-      border:none;
-      outline:none;
-      border-radius:12px;
-      padding:10px 12px;
-      background:rgba(255,255,255,.10);
-      color:#fff;
-      border:1px solid rgba(255,255,255,.12);
-      font-size:15px;
-      font-family:inherit;
+      width:100%;border:none;outline:none;border-radius:12px;padding:10px 12px;
+      background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.12);
+      font-size:15px;font-family:inherit
     }
-
-    .input{
-      min-height:44px;
-    }
-
-    .textarea{
-      min-height:100px;
-      resize:vertical;
-    }
-
-    input[type="date"]{
-      color-scheme:dark;
-    }
+    .input{min-height:44px}
+    .textarea{min-height:100px;resize:vertical}
+    input[type="date"]{color-scheme:dark}
 
     .empty{
-      padding:14px;
-      border-radius:14px;
-      background:rgba(255,255,255,.05);
-      border:1px dashed rgba(255,255,255,.10);
-      color:rgba(255,255,255,.76);
-      font-weight:800;
+      padding:14px;border-radius:14px;background:rgba(255,255,255,.05);
+      border:1px dashed rgba(255,255,255,.10);color:rgba(255,255,255,.76);font-weight:800
     }
 
     .deny{
-      max-width:680px;
-      margin:24px auto;
-      padding:16px;
-      border-radius:20px;
-      background:rgba(0,0,0,.45);
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow);
-      color:#fff;
-      text-align:center;
+      max-width:680px;margin:24px auto;padding:16px;border-radius:20px;background:rgba(0,0,0,.45);
+      border:1px solid rgba(255,255,255,.12);box-shadow:var(--shadow);color:#fff;text-align:center
     }
-
-    .denyTitle{
-      font-size:22px;
-      font-weight:950;
-      margin-bottom:10px;
-    }
+    .denyTitle{font-size:22px;font-weight:950;margin-bottom:10px}
 
     .loaderOverlay{
-      position:fixed;
-      inset:0;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      background:rgba(0,0,0,.35);
-      backdrop-filter:blur(4px);
-      -webkit-backdrop-filter:blur(4px);
-      z-index:99999;
+      position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+      background:rgba(0,0,0,.35);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:99999
     }
-
-    .loaderOverlay.show{
-      display:flex;
-    }
-
+    .loaderOverlay.show{display:flex}
     .loaderBox{
-      width:52px;
-      height:52px;
-      border-radius:999px;
-      background:rgba(0,0,0,.55);
-      border:1px solid rgba(255,255,255,.15);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      box-shadow:0 14px 34px rgba(0,0,0,.40);
+      width:52px;height:52px;border-radius:999px;background:rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;
+      box-shadow:0 14px 34px rgba(0,0,0,.40)
     }
-
     .loaderSpinner{
-      width:24px;
-      height:24px;
-      border-radius:50%;
-      border:3px solid rgba(255,255,255,.25);
-      border-top-color:#ff8c00;
-      animation:spin .8s linear infinite;
+      width:24px;height:24px;border-radius:50%;
+      border:3px solid rgba(255,255,255,.25);border-top-color:#ff8c00;
+      animation:spin .8s linear infinite
     }
 
-    @keyframes spin{
-      to{ transform:rotate(360deg); }
-    }
+    @keyframes spin{to{transform:rotate(360deg)}}
 
     @media (min-width:900px){
-      .grid2{
-        grid-template-columns:1fr 1fr;
-      }
+      .grid2{grid-template-columns:1fr 1fr}
     }
   </style>
 </head>
@@ -589,26 +271,35 @@
             <span class="accordionArrow">▾</span>
           </div>
           <div class="accordionContent">
-            <div id="adminTourneesActivesList"></div>
-            <div class="card">
-              <div class="cardTitle">Ajouter une tournée active</div>
-              <div class="field"><label class="label">Année</label><input class="input" id="new_tournee_annee" type="text"></div>
-              <div class="field"><label class="label">Secteur / commune</label><input class="input" id="new_tournee_secteur" type="text"></div>
-              <div class="field"><label class="label">Agents (séparés par virgules)</label><textarea class="textarea" id="new_tournee_agents"></textarea></div>
-              <div class="grid2">
-                <div class="field"><label class="label">Calendriers attribués</label><input class="input" id="new_tournee_attribues" type="text"></div>
-                <div class="field"><label class="label">Calendriers vendus</label><input class="input" id="new_tournee_vendus" type="text"></div>
+            <div class="subAccordion" id="admin-tournees-actives-wrap">
+              <div class="subHeader activeHeader" onclick="toggleSubAccordion(event, 'admin-tournees-actives-wrap')">
+                <span>Tournées actives</span>
+                <span class="subArrow">▾</span>
               </div>
-              <div class="field"><label class="label">Somme restituée</label><input class="input" id="new_tournee_somme" type="text"></div>
-              <div class="toolbar"><button class="btn2 btnPrimary" type="button" onclick="createTournee(this)">Ajouter une tournée active</button></div>
+              <div class="subContent">
+                <div id="adminTourneesActivesList"></div>
+
+                <div class="card">
+                  <div class="cardTitle">Ajouter une tournée active</div>
+                  <div class="field"><label class="label">Année</label><input class="input" id="new_tournee_annee" type="text"></div>
+                  <div class="field"><label class="label">Secteur / commune</label><input class="input" id="new_tournee_secteur" type="text"></div>
+                  <div class="field"><label class="label">Agents (séparés par virgules)</label><textarea class="textarea" id="new_tournee_agents"></textarea></div>
+                  <div class="grid2">
+                    <div class="field"><label class="label">Calendriers attribués</label><input class="input" id="new_tournee_attribues" type="text"></div>
+                    <div class="field"><label class="label">Calendriers vendus</label><input class="input" id="new_tournee_vendus" type="text"></div>
+                  </div>
+                  <div class="field"><label class="label">Somme restituée</label><input class="input" id="new_tournee_somme" type="text"></div>
+                  <div class="toolbar"><button class="btn2 btnPrimary" type="button" onclick="createTournee(this)">Ajouter une tournée active</button></div>
+                </div>
+              </div>
             </div>
 
-            <div class="accordion" id="admin-tournees-archives" style="margin-top:12px;">
-              <div class="accordionHeader archiveHeader" onclick="toggleAccordion('admin-tournees-archives')">
-                <div class="accordionTitle"><span class="emoji">🗄️</span><span>Admin Archives tournées</span></div>
-                <span class="accordionArrow">▾</span>
+            <div class="subAccordion" id="admin-tournees-archives-wrap">
+              <div class="subHeader archiveHeader" onclick="toggleSubAccordion(event, 'admin-tournees-archives-wrap')">
+                <span>Archives</span>
+                <span class="subArrow">▾</span>
               </div>
-              <div class="accordionContent">
+              <div class="subContent">
                 <div id="adminTourneesArchivesList"></div>
               </div>
             </div>
@@ -1039,29 +730,63 @@ function renderAdminList(containerId, items, type){
     `).join("");
     return;
   }
+}
 
-  if (type === "tournees_active" || type === "tournees_archive") {
-    const source = type === "tournees_archive" ? "archive" : "active";
-    const withArchive = source === "active";
-    zone.innerHTML = items.map(item => `
-      <div class="card">
-        <div class="cardTitle">${escapeHtml(item.annee || "")} — ${escapeHtml(item.secteur || "")}</div>
-        <div class="field"><label class="label">Année</label><input class="input" type="text" id="edit_tournee_annee_${source}_${item.id}" value="${escapeHtml(item.annee || "")}"></div>
-        <div class="field"><label class="label">Secteur / commune</label><input class="input" type="text" id="edit_tournee_secteur_${source}_${item.id}" value="${escapeHtml(item.secteur || "")}"></div>
-        <div class="field"><label class="label">Agents</label><textarea class="textarea" id="edit_tournee_agents_${source}_${item.id}">${escapeHtml(item.agents || "")}</textarea></div>
-        <div class="grid2">
-          <div class="field"><label class="label">Attribués</label><input class="input" type="text" id="edit_tournee_attribues_${source}_${item.id}" value="${escapeHtml(item.attribues || "")}"></div>
-          <div class="field"><label class="label">Vendus</label><input class="input" type="text" id="edit_tournee_vendus_${source}_${item.id}" value="${escapeHtml(item.vendus || "")}"></div>
+function renderAdminTournees(containerId, items, source){
+  const zone = document.getElementById(containerId);
+  if (!zone) return;
+
+  const groups = groupByYear(items);
+  if (!groups.length) {
+    zone.innerHTML = `<div class="empty">Aucune donnée.</div>`;
+    return;
+  }
+
+  const yearClass = source === "archive" ? "archiveYearHeader" : "yearHeader";
+  const sectorClass = source === "archive" ? "archiveSectorHeader" : "sectorHeader";
+
+  zone.innerHTML = groups.map((g, gi) => {
+    const yearId = `admin_${source}_year_${gi}`;
+    return `
+      <div class="subAccordion" id="${yearId}">
+        <div class="subHeader ${yearClass}" onclick="toggleSubAccordion(event, '${yearId}')">
+          <span>Année ${escapeHtml(g.annee)}</span>
+          <span class="subArrow">▾</span>
         </div>
-        <div class="field"><label class="label">Somme</label><input class="input" type="text" id="edit_tournee_somme_${source}_${item.id}" value="${escapeHtml(item.somme || "")}"></div>
-        <div class="toolbar">
-          <button class="btn2 btnPrimary btnMini" onclick="updateTournee('${source}', '${item.id}', this)">Enregistrer</button>
-          <button class="btn2 btnDanger btnMini" onclick="deleteTournee('${source}', '${item.id}', this)">Supprimer</button>
-          ${withArchive ? `<button class="btn2 btnSecondary btnMini" onclick="archiveTournee('${item.id}', this)">Archiver</button>` : ``}
+        <div class="subContent">
+          ${g.rows.map((item, ri) => {
+            const sectorId = `admin_${source}_sector_${gi}_${ri}`;
+            return `
+              <div class="subAccordion" id="${sectorId}">
+                <div class="subHeader ${sectorClass}" onclick="toggleSubAccordion(event, '${sectorId}')">
+                  <span>${escapeHtml(item.secteur || "Secteur")}</span>
+                  <span class="subArrow">▾</span>
+                </div>
+                <div class="subContent">
+                  <div class="card">
+                    <div class="cardTitle">${escapeHtml(item.annee || "")} — ${escapeHtml(item.secteur || "")}</div>
+                    <div class="field"><label class="label">Année</label><input class="input" type="text" id="edit_tournee_annee_${source}_${item.id}" value="${escapeHtml(item.annee || "")}"></div>
+                    <div class="field"><label class="label">Secteur / commune</label><input class="input" type="text" id="edit_tournee_secteur_${source}_${item.id}" value="${escapeHtml(item.secteur || "")}"></div>
+                    <div class="field"><label class="label">Agents</label><textarea class="textarea" id="edit_tournee_agents_${source}_${item.id}">${escapeHtml(item.agents || "")}</textarea></div>
+                    <div class="grid2">
+                      <div class="field"><label class="label">Attribués</label><input class="input" type="text" id="edit_tournee_attribues_${source}_${item.id}" value="${escapeHtml(item.attribues || "")}"></div>
+                      <div class="field"><label class="label">Vendus</label><input class="input" type="text" id="edit_tournee_vendus_${source}_${item.id}" value="${escapeHtml(item.vendus || "")}"></div>
+                    </div>
+                    <div class="field"><label class="label">Somme</label><input class="input" type="text" id="edit_tournee_somme_${source}_${item.id}" value="${escapeHtml(item.somme || "")}"></div>
+                    <div class="toolbar">
+                      <button class="btn2 btnPrimary btnMini" onclick="updateTournee('${source}', '${item.id}', this)">Enregistrer</button>
+                      <button class="btn2 btnDanger btnMini" onclick="deleteTournee('${source}', '${item.id}', this)">Supprimer</button>
+                      ${source === "active" ? `<button class="btn2 btnSecondary btnMini" onclick="archiveTournee('${item.id}', this)">Archiver</button>` : ``}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join("")}
         </div>
       </div>
-    `).join("");
-  }
+    `;
+  }).join("");
 }
 
 function renderAdminView(){
@@ -1069,8 +794,8 @@ function renderAdminView(){
   renderAdminList("adminCRList", state.comptesRendus, "cr");
   renderAdminList("adminProjetsList", state.projets, "projets");
   renderAdminList("adminEvenementsList", state.evenements, "evenements");
-  renderAdminList("adminTourneesActivesList", state.tourneesActives, "tournees_active");
-  renderAdminList("adminTourneesArchivesList", state.tourneesArchives, "tournees_archive");
+  renderAdminTournees("adminTourneesActivesList", state.tourneesActives, "active");
+  renderAdminTournees("adminTourneesArchivesList", state.tourneesArchives, "archive");
 }
 
 async function loadAll(){
