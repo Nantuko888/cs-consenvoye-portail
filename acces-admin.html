@@ -134,13 +134,33 @@
       border-radius:18px;
       overflow:hidden;
       border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.05);
       margin-bottom:12px;
       box-shadow:0 8px 20px rgba(0,0,0,.12);
+      background:rgba(255,255,255,.05);
+    }
+
+    .level-admin{
+      background:linear-gradient(180deg, rgba(220,70,70,.32), rgba(220,70,70,.14));
+    }
+
+    .level-admin-amical{
+      background:linear-gradient(180deg, rgba(230,140,40,.34), rgba(230,140,40,.14));
+    }
+
+    .level-amical{
+      background:linear-gradient(180deg, rgba(60,170,100,.30), rgba(60,170,100,.14));
+    }
+
+    .level-portail{
+      background:linear-gradient(180deg, rgba(70,120,220,.30), rgba(70,120,220,.14));
+    }
+
+    .level-neutre{
+      background:linear-gradient(180deg, rgba(150,150,150,.22), rgba(150,150,150,.10));
     }
 
     .collapsibleHeader{
-      padding:14px;
+      padding:12px 14px;
       cursor:pointer;
       user-select:none;
       -webkit-tap-highlight-color:transparent;
@@ -152,19 +172,19 @@
 
     .cardHeaderGrid{
       display:grid;
-      grid-template-columns:20px 1fr;
+      grid-template-columns:18px 1fr;
       gap:10px 12px;
-      align-items:start;
+      align-items:center;
     }
 
     .chevron{
       width:18px;
       text-align:center;
-      font-size:16px;
-      color:rgba(255,255,255,.85);
+      font-size:15px;
+      color:rgba(255,255,255,.90);
       transition:transform .18s ease;
-      line-height:1.2;
-      margin-top:2px;
+      line-height:1;
+      margin-top:1px;
     }
 
     .collapsible.open .chevron{
@@ -173,41 +193,52 @@
 
     .headerMain{
       min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap:7px;
     }
 
     .agentName{
-      font-size:17px;
+      font-size:16px;
       font-weight:900;
-      color:rgba(255,255,255,.97);
-      line-height:1.2;
+      color:rgba(255,255,255,.98);
+      line-height:1.15;
       word-break:break-word;
-      margin-bottom:8px;
     }
 
     .summarySwitches{
       display:flex;
-      gap:8px;
-      flex-wrap:wrap;
+      gap:6px;
+      flex-wrap:nowrap;
+      overflow:hidden;
     }
 
     .miniSwitch{
       display:flex;
       align-items:center;
-      gap:6px;
-      min-height:34px;
-      padding:6px 10px;
+      gap:4px;
+      min-height:28px;
+      padding:4px 8px;
       border-radius:999px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.12);
-      font-size:12px;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.14);
+      font-size:11px;
       font-weight:900;
       color:#fff;
       white-space:nowrap;
+      flex:1 1 0;
+      justify-content:center;
+      min-width:0;
+    }
+
+    .miniSwitch span{
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
     .miniSwitch input{
-      width:18px;
-      height:18px;
+      width:15px;
+      height:15px;
       accent-color:#ff8c00;
       margin:0;
       flex:0 0 auto;
@@ -216,6 +247,7 @@
     .collapsibleContent{
       display:none;
       padding:0 14px 14px;
+      background:rgba(0,0,0,.08);
     }
 
     .collapsible.open .collapsibleContent{
@@ -363,6 +395,10 @@
       .switchGrid{
         grid-template-columns:1fr 1fr 1fr;
       }
+
+      .miniSwitch{
+        font-size:12px;
+      }
     }
   </style>
 </head>
@@ -386,7 +422,7 @@
       <div class="dashboard">
         <div class="dashboardTitle">Accès global</div>
         <div class="dashboardSmall">
-          Une seule liste d’agents. Les accès Portail, Amical et Admin amical sont visibles directement sur la ligne, avec un affichage mobile propre.
+          Tri hiérarchique du plus important au moins important : Admin, Admin amical, Amical, Portail.
         </div>
       </div>
 
@@ -405,14 +441,14 @@
       <div class="card">
         <div class="cardTitle">Ajouter un agent</div>
 
-        <div class="collapsible" id="addAgentBox">
+        <div class="collapsible level-neutre" id="addAgentBox">
           <div class="collapsibleHeader" onclick="toggleCollapseById('addAgentBox')">
             <div class="cardHeaderGrid">
               <div class="chevron">▶</div>
               <div class="headerMain">
                 <div class="agentName">Nouvel agent</div>
                 <div class="summarySwitches">
-                  <div class="miniSwitch">Ajouter</div>
+                  <div class="miniSwitch"><span>Ajouter</span></div>
                 </div>
               </div>
             </div>
@@ -582,6 +618,12 @@ function toggleCollapseById(id){
   box.classList.toggle("open");
 }
 
+function toggleCard(id){
+  const box = document.getElementById(id);
+  if (!box) return;
+  box.classList.toggle("open");
+}
+
 function bindSummarySync(card){
   const summaryPortail = card.querySelector(".summary-portail");
   const summaryAmical = card.querySelector(".summary-amical");
@@ -619,6 +661,27 @@ function bindSummarySync(card){
   }
 }
 
+function getAccessLevel(item){
+  const role = String(item.role || "").toLowerCase();
+  const portail = Number(item.portail || 0) === 1;
+  const amical = Number(item.amical || 0) === 1;
+  const adminAmical = Number(item.adminAmical || 0) === 1;
+
+  if (role === "admin") {
+    return { rank: 4, cls: "level-admin", label: "admin" };
+  }
+  if (portail && amical && adminAmical) {
+    return { rank: 3, cls: "level-admin-amical", label: "admin amical" };
+  }
+  if (portail && amical) {
+    return { rank: 2, cls: "level-amical", label: "amical" };
+  }
+  if (portail) {
+    return { rank: 1, cls: "level-portail", label: "portail" };
+  }
+  return { rank: 0, cls: "level-neutre", label: "neutre" };
+}
+
 function renderList(){
   const zone = document.getElementById("accessList");
   const items = Array.isArray(state.items) ? state.items : [];
@@ -636,9 +699,10 @@ function renderList(){
     const portail = Number(item.portail || 0) === 1;
     const amical = Number(item.amical || 0) === 1;
     const adminAmical = Number(item.adminAmical || 0) === 1;
+    const level = getAccessLevel(item);
 
     html += `
-      <div class="collapsible access-card" id="accessCard_${index}" data-original-email="${escapeHtml(item.email || "")}">
+      <div class="collapsible access-card ${level.cls}" id="accessCard_${index}" data-original-email="${escapeHtml(item.email || "")}">
         <div class="collapsibleHeader" onclick="toggleCard('accessCard_${index}')">
           <div class="cardHeaderGrid">
             <div class="chevron">▶</div>
@@ -648,18 +712,18 @@ function renderList(){
 
               <div class="summarySwitches">
                 <label class="miniSwitch" onclick="event.stopPropagation()">
-                  <span>Portail</span>
                   <input class="summary-portail" type="checkbox" ${portail ? "checked" : ""}>
+                  <span>Portail</span>
                 </label>
 
                 <label class="miniSwitch" onclick="event.stopPropagation()">
-                  <span>Amical</span>
                   <input class="summary-amical" type="checkbox" ${amical ? "checked" : ""}>
+                  <span>Amical</span>
                 </label>
 
                 <label class="miniSwitch" onclick="event.stopPropagation()">
-                  <span>Adm. amical</span>
                   <input class="summary-admin-amical" type="checkbox" ${adminAmical ? "checked" : ""}>
+                  <span>Adm. amical</span>
                 </label>
               </div>
             </div>
@@ -710,7 +774,7 @@ function renderList(){
             </div>
           </div>
 
-          <div class="hint">Adresse mail et rôle restent visibles uniquement une fois la fiche ouverte.</div>
+          <div class="hint">Tri automatique par niveau d’accès. Les cartes les plus importantes remontent en haut.</div>
 
           <div class="agentActions">
             <button class="btn2 btnPrimary" type="button" onclick="saveCard(this)">Enregistrer</button>
@@ -723,12 +787,6 @@ function renderList(){
 
   zone.innerHTML = html;
   document.querySelectorAll(".access-card").forEach(bindSummarySync);
-}
-
-function toggleCard(id){
-  const box = document.getElementById(id);
-  if (!box) return;
-  box.classList.toggle("open");
 }
 
 async function loadData(){
@@ -758,6 +816,11 @@ async function loadData(){
         adminAmical: Number(it.adminAmical ?? it.admin_amical ?? 0)
       }))
       .sort((a, b) => {
+        const la = getAccessLevel(a);
+        const lb = getAccessLevel(b);
+
+        if (lb.rank !== la.rank) return lb.rank - la.rank;
+
         const an = (a.nom || a.email || "").toLowerCase();
         const bn = (b.nom || b.email || "").toLowerCase();
         return an.localeCompare(bn, "fr", { sensitivity: "base" });
