@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
   <title>Amicale — CS Consenvoye</title>
   <link rel="stylesheet" href="cs-theme.css">
 
@@ -16,7 +16,6 @@
       font-weight:900;cursor:pointer;border:1px solid rgba(255,255,255,.12);
       box-shadow:0 10px 24px rgba(0,0,0,.18)
     }
-    .lockBtn:active{transform:translateY(1px)}
 
     .hero{
       padding:16px 18px;margin-bottom:16px;border-radius:20px;
@@ -62,30 +61,17 @@
     }
     .accordionHeader{
       display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;
-      color:rgba(255,255,255,.96)
+      cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent
     }
     .accordionTitle{
       display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto;
-      font-size:18px;font-weight:900
+      color:rgba(255,255,255,.96);font-size:18px;font-weight:900
     }
     .emoji{font-size:22px;line-height:1;flex:0 0 auto}
     .accordionArrow{font-size:18px;color:rgba(255,255,255,.88);transition:transform .18s ease;flex:0 0 auto}
     .accordion.open .accordionArrow{transform:rotate(180deg)}
     .accordionContent{display:none;padding:12px;background:rgba(0,0,0,.10)}
     .accordion.open .accordionContent{display:block}
-
-    .subAccordion{
-      border-radius:16px;overflow:hidden;margin-bottom:10px;border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.05)
-    }
-    .subHeader{
-      display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;
-      font-weight:900;color:rgba(255,255,255,.95);background:rgba(255,255,255,.06)
-    }
-    .subArrow{transition:transform .18s ease;color:rgba(255,255,255,.82)}
-    .subAccordion.open .subArrow{transform:rotate(180deg)}
-    .subContent{display:none;padding:12px;background:rgba(0,0,0,.14)}
-    .subAccordion.open .subContent{display:block}
 
     .toggleBtn{
       display:flex;align-items:center;justify-content:space-between;gap:10px;
@@ -99,34 +85,15 @@
     .hdr-evenements{background:linear-gradient(180deg, rgba(220,90,170,.28), rgba(220,90,170,.14))}
     .hdr-cal{background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15))}
 
-    .activeHeader{background:linear-gradient(180deg, rgba(255,190,60,.20), rgba(255,190,60,.08))}
-    .yearHeader{background:linear-gradient(180deg, rgba(47,111,212,.22), rgba(47,111,212,.10))}
-    .sectorHeader{background:linear-gradient(180deg, rgba(47,158,91,.22), rgba(47,158,91,.10))}
-    .archiveHeader{background:linear-gradient(180deg, rgba(145,90,220,.24), rgba(145,90,220,.10))}
-    .archiveYearHeader{background:linear-gradient(180deg, rgba(220,90,170,.22), rgba(220,90,170,.10))}
-    .archiveSectorHeader{background:linear-gradient(180deg, rgba(212,106,0,.24), rgba(212,106,0,.10))}
-
     .card{
       border-radius:16px;padding:12px;margin-bottom:10px;background:rgba(255,255,255,.06);
       border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.95)
     }
-    .cardTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
     .cardTitle{font-size:15px;font-weight:900;color:rgba(255,255,255,.98)}
     .line{font-size:14px;line-height:1.45;color:rgba(255,255,255,.86);margin-bottom:4px;white-space:pre-wrap}
     .dateLine{display:flex;align-items:center;gap:8px;font-size:14px;line-height:1.45;color:rgba(255,255,255,.90);margin-bottom:6px;font-weight:900}
     .muted{color:rgba(255,255,255,.68);font-weight:800;font-size:13px}
     .grid2{display:grid;gap:10px;grid-template-columns:1fr}
-
-    .summaryBox{border-radius:16px;padding:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);margin-bottom:10px}
-    .summaryTitle{font-size:15px;font-weight:900;color:rgba(255,255,255,.97);margin-bottom:8px}
-    .summaryRow{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:14px;color:rgba(255,255,255,.88);border-bottom:1px dashed rgba(255,255,255,.08)}
-    .summaryRow:last-child{border-bottom:none}
-
-    .pill{
-      display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:6px 10px;
-      border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);
-      color:#fff;font-size:12px;font-weight:900;margin-right:6px;margin-bottom:6px
-    }
 
     .field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
     .label{font-size:13px;font-weight:900;color:rgba(255,255,255,.82)}
@@ -143,6 +110,17 @@
       padding:14px;border-radius:14px;background:rgba(255,255,255,.05);
       border:1px dashed rgba(255,255,255,.10);color:rgba(255,255,255,.76);font-weight:800
     }
+
+    .pill{
+      display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:6px 10px;
+      border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);
+      color:#fff;font-size:12px;font-weight:900;margin-right:6px;margin-bottom:6px
+    }
+
+    .summaryBox{border-radius:16px;padding:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);margin-bottom:10px}
+    .summaryTitle{font-size:15px;font-weight:900;color:rgba(255,255,255,.97);margin-bottom:8px}
+    .summaryRow{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:14px;color:rgba(255,255,255,.88);border-bottom:1px dashed rgba(255,255,255,.08)}
+    .summaryRow:last-child{border-bottom:none}
 
     .deny{
       max-width:680px;margin:24px auto;padding:16px;border-radius:20px;background:rgba(0,0,0,.45);
@@ -166,11 +144,54 @@
       animation:spin .8s linear infinite
     }
 
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    @media (min-width:900px){
-      .grid2{grid-template-columns:1fr 1fr}
+    /* ===== TOURNÉES EN DETAILS / SUMMARY ===== */
+    .tdetails{
+      border-radius:16px;
+      margin-bottom:10px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      overflow:hidden
     }
+
+    .tdetails summary{
+      list-style:none;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:13px 14px;
+      cursor:pointer;
+      font-weight:900;
+      color:rgba(255,255,255,.95);
+      user-select:none
+    }
+
+    .tdetails summary::-webkit-details-marker{display:none}
+
+    .tdetails summary::after{
+      content:"▾";
+      color:rgba(255,255,255,.82);
+      transition:transform .18s ease
+    }
+
+    .tdetails[open] > summary::after{
+      transform:rotate(180deg)
+    }
+
+    .tdetailsBody{
+      padding:12px;
+      background:rgba(0,0,0,.14)
+    }
+
+    .t-root-active > summary{background:linear-gradient(180deg, rgba(255,190,60,.20), rgba(255,190,60,.08))}
+    .t-root-archive > summary{background:linear-gradient(180deg, rgba(145,90,220,.24), rgba(145,90,220,.10))}
+    .t-year-active > summary{background:linear-gradient(180deg, rgba(47,111,212,.22), rgba(47,111,212,.10))}
+    .t-year-archive > summary{background:linear-gradient(180deg, rgba(220,90,170,.22), rgba(220,90,170,.10))}
+    .t-sector-active > summary{background:linear-gradient(180deg, rgba(47,158,91,.22), rgba(47,158,91,.10))}
+    .t-sector-archive > summary{background:linear-gradient(180deg, rgba(212,106,0,.24), rgba(212,106,0,.10))}
+
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @media (min-width:900px){ .grid2{grid-template-columns:1fr 1fr} }
   </style>
 </head>
 
@@ -284,25 +305,7 @@
             </button>
           </div>
           <div class="accordionContent">
-            <div class="subAccordion" id="admin-tournees-actives-wrap">
-              <div class="subHeader activeHeader">
-                <button class="toggleBtn" type="button" onclick="toggleAdminTourneeRoot('active')">
-                  <span>Tournées actives</span>
-                  <span class="subArrow">▾</span>
-                </button>
-              </div>
-              <div class="subContent" id="adminTourneesActivesRoot"></div>
-            </div>
-
-            <div class="subAccordion" id="admin-tournees-archives-wrap">
-              <div class="subHeader archiveHeader">
-                <button class="toggleBtn" type="button" onclick="toggleAdminTourneeRoot('archive')">
-                  <span>Archives</span>
-                  <span class="subArrow">▾</span>
-                </button>
-              </div>
-              <div class="subContent" id="adminTourneesArchivesRoot"></div>
-            </div>
+            <div id="adminTourneesWrap"></div>
           </div>
         </div>
       </div>
@@ -406,17 +409,13 @@ function jsonp(params){
   });
 }
 
-function toggleBoxById(id){
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.classList.toggle("open");
-}
-
 document.addEventListener("click", (e) => {
   const btn = e.target.closest("[data-box]");
   if (!btn) return;
   const id = btn.getAttribute("data-box");
-  if (id) toggleBoxById(id);
+  if (!id) return;
+  const box = document.getElementById(id);
+  if (box) box.classList.toggle("open");
 });
 
 function parseAnyDate(value){
@@ -527,7 +526,7 @@ function groupByYear(items){
   return Array.from(map.entries()).map(([annee, rows]) => ({ annee, rows }));
 }
 
-/* ================= MEMBRE ================= */
+/* ===== VISU MEMBRE ===== */
 
 function renderReunions(){
   if (!state.reunions.length) return `<div class="empty">Aucune réunion enregistrée.</div>`;
@@ -568,14 +567,14 @@ function renderSimpleBlocks(items, label, prefix){
   if (!items.length) return `<div class="empty">Aucun ${label.toLowerCase()} enregistré.</div>`;
 
   return items.map((r, i) => `
-    <div class="subAccordion" id="${prefix}_${i}">
-      <div class="subHeader">
+    <div class="accordion" id="${prefix}_${i}">
+      <div class="accordionHeader">
         <button class="toggleBtn" type="button" data-box="${prefix}_${i}">
           <span>${escapeHtml(r.titre || `${label} ${i + 1}`)}</span>
-          <span class="subArrow">▾</span>
+          <span class="accordionArrow">▾</span>
         </button>
       </div>
-      <div class="subContent">
+      <div class="accordionContent">
         <div class="card">
           <div class="cardTitle">${escapeHtml(r.titre || `${label} ${i + 1}`)}</div>
           <div class="line">${escapeHtml(r.contenu || "—")}</div>
@@ -585,145 +584,63 @@ function renderSimpleBlocks(items, label, prefix){
   `).join("");
 }
 
-function renderTourneesMemberRoots(){
-  return `
-    <div class="subAccordion" id="tournees_active_block">
-      <div class="subHeader activeHeader">
-        <button class="toggleBtn" type="button" onclick="toggleMemberTourneeRoot('active')">
-          <span>Tournées actives</span>
-          <span class="subArrow">▾</span>
-        </button>
-      </div>
-      <div class="subContent" id="tournees_active_content"></div>
-    </div>
-
-    <div class="subAccordion" id="tournees_archive_block">
-      <div class="subHeader archiveHeader">
-        <button class="toggleBtn" type="button" onclick="toggleMemberTourneeRoot('archive')">
-          <span>Archives</span>
-          <span class="subArrow">▾</span>
-        </button>
-      </div>
-      <div class="subContent" id="tournees_archive_content"></div>
-    </div>
-  `;
-}
-
-function memberRootData(source){
-  return source === "archive" ? state.tourneesArchives : state.tourneesActives;
-}
-
-function renderMemberYears(source){
-  const groups = groupByYear(memberRootData(source));
+function renderTourneesDetails(items, source){
+  const groups = groupByYear(items);
   if (!groups.length) return `<div class="empty">Aucune donnée.</div>`;
 
-  const yearClass = source === "archive" ? "archiveYearHeader" : "yearHeader";
-
-  return groups.map((g, gi) => `
-    <div class="subAccordion" id="member_${source}_year_${gi}">
-      <div class="subHeader ${yearClass}">
-        <button class="toggleBtn" type="button" onclick="toggleMemberYear('${source}', ${gi})">
-          <span>Année ${escapeHtml(g.annee)}</span>
-          <span class="subArrow">▾</span>
-        </button>
-      </div>
-      <div class="subContent" id="member_${source}_year_content_${gi}"></div>
-    </div>
-  `).join("");
-}
-
-function renderMemberSectors(source, yearIndex){
-  const groups = groupByYear(memberRootData(source));
-  const g = groups[yearIndex];
-  if (!g) return `<div class="empty">Aucune donnée.</div>`;
-
-  const totals = totalRows(g.rows);
-  const sectorClass = source === "archive" ? "archiveSectorHeader" : "sectorHeader";
+  const rootClass = source === "archive" ? "t-root-archive" : "t-root-active";
+  const yearClass = source === "archive" ? "t-year-archive" : "t-year-active";
+  const sectorClass = source === "archive" ? "t-sector-archive" : "t-sector-active";
+  const rootTitle = source === "archive" ? "Archives" : "Tournées actives";
 
   return `
-    <div class="summaryBox">
-      <div class="summaryTitle">Somme totale</div>
-      <div class="summaryRow"><span>Calendriers attribués</span><strong>${totals.attribues}</strong></div>
-      <div class="summaryRow"><span>Calendriers vendus</span><strong>${totals.vendus}</strong></div>
-      <div class="summaryRow"><span>Somme restituée</span><strong>${totals.somme} €</strong></div>
-    </div>
+    <details class="tdetails ${rootClass}">
+      <summary>${rootTitle}</summary>
+      <div class="tdetailsBody">
+        ${groups.map(g => {
+          const totals = totalRows(g.rows);
+          return `
+            <details class="tdetails ${yearClass}">
+              <summary>Année ${escapeHtml(g.annee)}</summary>
+              <div class="tdetailsBody">
+                <div class="summaryBox">
+                  <div class="summaryTitle">Somme totale</div>
+                  <div class="summaryRow"><span>Calendriers attribués</span><strong>${totals.attribues}</strong></div>
+                  <div class="summaryRow"><span>Calendriers vendus</span><strong>${totals.vendus}</strong></div>
+                  <div class="summaryRow"><span>Somme restituée</span><strong>${totals.somme} €</strong></div>
+                </div>
 
-    ${g.rows.map((r, ri) => `
-      <div class="subAccordion" id="member_${source}_year_${yearIndex}_sector_${ri}">
-        <div class="subHeader ${sectorClass}">
-          <button class="toggleBtn" type="button" onclick="toggleMemberSector('${source}', ${yearIndex}, ${ri})">
-            <span>${escapeHtml(r.secteur || "Secteur")}</span>
-            <span class="subArrow">▾</span>
-          </button>
-        </div>
-        <div class="subContent" id="member_${source}_year_${yearIndex}_sector_content_${ri}"></div>
+                ${g.rows.map(r => {
+                  const agents = String(r.agents || "").split(",").map(x => x.trim()).filter(Boolean);
+                  return `
+                    <details class="tdetails ${sectorClass}">
+                      <summary>${escapeHtml(r.secteur || "Secteur")}</summary>
+                      <div class="tdetailsBody">
+                        <div class="card">
+                          <div class="cardTitle">${escapeHtml(r.secteur || "Secteur")}</div>
+                          ${agents.length ? agents.map(a => `<div class="pill">${escapeHtml(a)}</div>`).join("") : `<div class="muted">Aucun agent</div>`}
+                          <div class="line" style="margin-top:8px;"><strong>Calendriers attribués :</strong> ${escapeHtml(r.attribues || "0")}</div>
+                          <div class="line"><strong>Calendriers vendus :</strong> ${escapeHtml(r.vendus || "0")}</div>
+                          <div class="line"><strong>Somme restituée :</strong> ${escapeHtml(r.somme || "0")} €</div>
+                        </div>
+                      </div>
+                    </details>
+                  `;
+                }).join("")}
+              </div>
+            </details>
+          `;
+        }).join("")}
       </div>
-    `).join("")}
+    </details>
   `;
 }
 
-function renderMemberSectorDetail(source, yearIndex, sectorIndex){
-  const groups = groupByYear(memberRootData(source));
-  const g = groups[yearIndex];
-  if (!g || !g.rows[sectorIndex]) return `<div class="empty">Aucune donnée.</div>`;
-
-  const r = g.rows[sectorIndex];
-  const agents = String(r.agents || "").split(",").map(x => x.trim()).filter(Boolean);
-
+function renderTourneesMember(){
   return `
-    <div class="card">
-      <div class="cardTitle">${escapeHtml(r.secteur || "Secteur")}</div>
-      ${agents.length ? agents.map(a => `<div class="pill">${escapeHtml(a)}</div>`).join("") : `<div class="muted">Aucun agent</div>`}
-      <div class="line" style="margin-top:8px;"><strong>Calendriers attribués :</strong> ${escapeHtml(r.attribues || "0")}</div>
-      <div class="line"><strong>Calendriers vendus :</strong> ${escapeHtml(r.vendus || "0")}</div>
-      <div class="line"><strong>Somme restituée :</strong> ${escapeHtml(r.somme || "0")} €</div>
-    </div>
+    ${renderTourneesDetails(state.tourneesActives, "active")}
+    ${renderTourneesDetails(state.tourneesArchives, "archive")}
   `;
-}
-
-function toggleMemberTourneeRoot(source){
-  const boxId = source === "archive" ? "tournees_archive_block" : "tournees_active_block";
-  const contentId = source === "archive" ? "tournees_archive_content" : "tournees_active_content";
-  const box = document.getElementById(boxId);
-  const content = document.getElementById(contentId);
-  if (!box || !content) return;
-
-  if (!content.dataset.loaded) {
-    content.innerHTML = renderMemberYears(source);
-    content.dataset.loaded = "1";
-  }
-
-  box.classList.toggle("open");
-}
-
-function toggleMemberYear(source, yearIndex){
-  const boxId = `member_${source}_year_${yearIndex}`;
-  const contentId = `member_${source}_year_content_${yearIndex}`;
-  const box = document.getElementById(boxId);
-  const content = document.getElementById(contentId);
-  if (!box || !content) return;
-
-  if (!content.dataset.loaded) {
-    content.innerHTML = renderMemberSectors(source, yearIndex);
-    content.dataset.loaded = "1";
-  }
-
-  box.classList.toggle("open");
-}
-
-function toggleMemberSector(source, yearIndex, sectorIndex){
-  const boxId = `member_${source}_year_${yearIndex}_sector_${sectorIndex}`;
-  const contentId = `member_${source}_year_${yearIndex}_sector_content_${sectorIndex}`;
-  const box = document.getElementById(boxId);
-  const content = document.getElementById(contentId);
-  if (!box || !content) return;
-
-  if (!content.dataset.loaded) {
-    content.innerHTML = renderMemberSectorDetail(source, yearIndex, sectorIndex);
-    content.dataset.loaded = "1";
-  }
-
-  box.classList.toggle("open");
 }
 
 function renderMemberView(){
@@ -732,13 +649,13 @@ function renderMemberView(){
     sectionShell("acc_cr", "hdr-cr", "📝", "Comptes-rendus de réunion", renderCR()),
     sectionShell("acc_projets", "hdr-projets", "🧩", "Projets", renderSimpleBlocks(state.projets, "Projet", "projet")),
     sectionShell("acc_evenements", "hdr-evenements", "🎉", "Événements", renderSimpleBlocks(state.evenements, "Événement", "evenement")),
-    sectionShell("acc_tournees", "hdr-cal", "📘", "Tournées calendriers", renderTourneesMemberRoots())
+    sectionShell("acc_tournees", "hdr-cal", "📘", "Tournées calendriers", renderTourneesMember())
   ].join("");
 
   document.getElementById("sections").innerHTML = html;
 }
 
-/* ================= ADMIN ================= */
+/* ===== ADMIN ===== */
 
 function renderAdminList(containerId, items, type){
   const zone = document.getElementById(containerId);
@@ -752,9 +669,7 @@ function renderAdminList(containerId, items, type){
   if (type === "reunions") {
     zone.innerHTML = items.map(item => `
       <div class="card">
-        <div class="cardTop">
-          <div class="cardTitle">📅 ${escapeHtml(formatDateDisplayFR(item.date))}${item.lieu ? " — " + escapeHtml(item.lieu) : ""}</div>
-        </div>
+        <div class="cardTitle">📅 ${escapeHtml(formatDateDisplayFR(item.date))}${item.lieu ? " — " + escapeHtml(item.lieu) : ""}</div>
         <div class="field"><label class="label">Date</label><input class="input" type="date" id="edit_reunion_date_${item.id}" value="${escapeHtml(formatDateInput(item.date))}"></div>
         <div class="field"><label class="label">Lieu</label><input class="input" type="text" id="edit_reunion_lieu_${item.id}" value="${escapeHtml(item.lieu || "")}"></div>
         <div class="field"><label class="label">Notes</label><textarea class="textarea" id="edit_reunion_notes_${item.id}">${escapeHtml(item.notes || "")}</textarea></div>
@@ -797,147 +712,98 @@ function renderAdminList(containerId, items, type){
         </div>
       </div>
     `).join("");
-    return;
   }
 }
 
-function adminRootData(source){
-  return source === "archive" ? state.tourneesArchives : state.tourneesActives;
-}
+function renderAdminTournees(){
+  const groupsActive = groupByYear(state.tourneesActives);
+  const groupsArchive = groupByYear(state.tourneesArchives);
 
-function renderAdminRootContent(source){
-  const yearZoneId = source === "archive" ? "admin_archive_years_zone" : "admin_active_years_zone";
   return `
-    <div id="${yearZoneId}"></div>
-    ${source === "active" ? `
-      <div class="card">
-        <div class="cardTitle">Ajouter une tournée active</div>
-        <div class="field"><label class="label">Année</label><input class="input" id="new_tournee_annee" type="text"></div>
-        <div class="field"><label class="label">Secteur / commune</label><input class="input" id="new_tournee_secteur" type="text"></div>
-        <div class="field"><label class="label">Agents (séparés par virgules)</label><textarea class="textarea" id="new_tournee_agents"></textarea></div>
-        <div class="grid2">
-          <div class="field"><label class="label">Calendriers attribués</label><input class="input" id="new_tournee_attribues" type="text"></div>
-          <div class="field"><label class="label">Calendriers vendus</label><input class="input" id="new_tournee_vendus" type="text"></div>
+    <details class="tdetails t-root-active">
+      <summary>Tournées actives</summary>
+      <div class="tdetailsBody">
+        ${groupsActive.length ? groupsActive.map(g => `
+          <details class="tdetails t-year-active">
+            <summary>Année ${escapeHtml(g.annee)}</summary>
+            <div class="tdetailsBody">
+              ${g.rows.map(item => `
+                <details class="tdetails t-sector-active">
+                  <summary>${escapeHtml(item.secteur || "Secteur")}</summary>
+                  <div class="tdetailsBody">
+                    <div class="card">
+                      <div class="cardTitle">${escapeHtml(item.annee || "")} — ${escapeHtml(item.secteur || "")}</div>
+                      <div class="field"><label class="label">Année</label><input class="input" type="text" id="edit_tournee_annee_active_${item.id}" value="${escapeHtml(item.annee || "")}"></div>
+                      <div class="field"><label class="label">Secteur / commune</label><input class="input" type="text" id="edit_tournee_secteur_active_${item.id}" value="${escapeHtml(item.secteur || "")}"></div>
+                      <div class="field"><label class="label">Agents</label><textarea class="textarea" id="edit_tournee_agents_active_${item.id}">${escapeHtml(item.agents || "")}</textarea></div>
+                      <div class="grid2">
+                        <div class="field"><label class="label">Attribués</label><input class="input" type="text" id="edit_tournee_attribues_active_${item.id}" value="${escapeHtml(item.attribues || "")}"></div>
+                        <div class="field"><label class="label">Vendus</label><input class="input" type="text" id="edit_tournee_vendus_active_${item.id}" value="${escapeHtml(item.vendus || "")}"></div>
+                      </div>
+                      <div class="field"><label class="label">Somme</label><input class="input" type="text" id="edit_tournee_somme_active_${item.id}" value="${escapeHtml(item.somme || "")}"></div>
+                      <div class="toolbar">
+                        <button class="btn2 btnPrimary btnMini" onclick="updateTournee('active','${item.id}',this)">Enregistrer</button>
+                        <button class="btn2 btnDanger btnMini" onclick="deleteTournee('active','${item.id}',this)">Supprimer</button>
+                        <button class="btn2 btnSecondary btnMini" onclick="archiveTournee('${item.id}',this)">Archiver</button>
+                      </div>
+                    </div>
+                  </div>
+                </details>
+              `).join("")}
+            </div>
+          </details>
+        `).join("") : `<div class="empty">Aucune donnée.</div>`}
+
+        <div class="card">
+          <div class="cardTitle">Ajouter une tournée active</div>
+          <div class="field"><label class="label">Année</label><input class="input" id="new_tournee_annee" type="text"></div>
+          <div class="field"><label class="label">Secteur / commune</label><input class="input" id="new_tournee_secteur" type="text"></div>
+          <div class="field"><label class="label">Agents (séparés par virgules)</label><textarea class="textarea" id="new_tournee_agents"></textarea></div>
+          <div class="grid2">
+            <div class="field"><label class="label">Calendriers attribués</label><input class="input" id="new_tournee_attribues" type="text"></div>
+            <div class="field"><label class="label">Calendriers vendus</label><input class="input" id="new_tournee_vendus" type="text"></div>
+          </div>
+          <div class="field"><label class="label">Somme restituée</label><input class="input" id="new_tournee_somme" type="text"></div>
+          <div class="toolbar"><button class="btn2 btnPrimary" type="button" onclick="createTournee(this)">Ajouter une tournée active</button></div>
         </div>
-        <div class="field"><label class="label">Somme restituée</label><input class="input" id="new_tournee_somme" type="text"></div>
-        <div class="toolbar"><button class="btn2 btnPrimary" type="button" onclick="createTournee(this)">Ajouter une tournée active</button></div>
       </div>
-    ` : ``}
+    </details>
+
+    <details class="tdetails t-root-archive">
+      <summary>Archives</summary>
+      <div class="tdetailsBody">
+        ${groupsArchive.length ? groupsArchive.map(g => `
+          <details class="tdetails t-year-archive">
+            <summary>Année ${escapeHtml(g.annee)}</summary>
+            <div class="tdetailsBody">
+              ${g.rows.map(item => `
+                <details class="tdetails t-sector-archive">
+                  <summary>${escapeHtml(item.secteur || "Secteur")}</summary>
+                  <div class="tdetailsBody">
+                    <div class="card">
+                      <div class="cardTitle">${escapeHtml(item.annee || "")} — ${escapeHtml(item.secteur || "")}</div>
+                      <div class="field"><label class="label">Année</label><input class="input" type="text" id="edit_tournee_annee_archive_${item.id}" value="${escapeHtml(item.annee || "")}"></div>
+                      <div class="field"><label class="label">Secteur / commune</label><input class="input" type="text" id="edit_tournee_secteur_archive_${item.id}" value="${escapeHtml(item.secteur || "")}"></div>
+                      <div class="field"><label class="label">Agents</label><textarea class="textarea" id="edit_tournee_agents_archive_${item.id}">${escapeHtml(item.agents || "")}</textarea></div>
+                      <div class="grid2">
+                        <div class="field"><label class="label">Attribués</label><input class="input" type="text" id="edit_tournee_attribues_archive_${item.id}" value="${escapeHtml(item.attribues || "")}"></div>
+                        <div class="field"><label class="label">Vendus</label><input class="input" type="text" id="edit_tournee_vendus_archive_${item.id}" value="${escapeHtml(item.vendus || "")}"></div>
+                      </div>
+                      <div class="field"><label class="label">Somme</label><input class="input" type="text" id="edit_tournee_somme_archive_${item.id}" value="${escapeHtml(item.somme || "")}"></div>
+                      <div class="toolbar">
+                        <button class="btn2 btnPrimary btnMini" onclick="updateTournee('archive','${item.id}',this)">Enregistrer</button>
+                        <button class="btn2 btnDanger btnMini" onclick="deleteTournee('archive','${item.id}',this)">Supprimer</button>
+                      </div>
+                    </div>
+                  </div>
+                </details>
+              `).join("")}
+            </div>
+          </details>
+        `).join("") : `<div class="empty">Aucune donnée.</div>`}
+      </div>
+    </details>
   `;
-}
-
-function renderAdminYears(source){
-  const groups = groupByYear(adminRootData(source));
-  if (!groups.length) return `<div class="empty">Aucune donnée.</div>`;
-
-  const yearClass = source === "archive" ? "archiveYearHeader" : "yearHeader";
-
-  return groups.map((g, gi) => `
-    <div class="subAccordion" id="admin_${source}_year_${gi}">
-      <div class="subHeader ${yearClass}">
-        <button class="toggleBtn" type="button" onclick="toggleAdminYear('${source}', ${gi})">
-          <span>Année ${escapeHtml(g.annee)}</span>
-          <span class="subArrow">▾</span>
-        </button>
-      </div>
-      <div class="subContent" id="admin_${source}_year_content_${gi}"></div>
-    </div>
-  `).join("");
-}
-
-function renderAdminSectors(source, yearIndex){
-  const groups = groupByYear(adminRootData(source));
-  const g = groups[yearIndex];
-  if (!g) return `<div class="empty">Aucune donnée.</div>`;
-
-  const sectorClass = source === "archive" ? "archiveSectorHeader" : "sectorHeader";
-
-  return g.rows.map((item, ri) => `
-    <div class="subAccordion" id="admin_${source}_year_${yearIndex}_sector_${ri}">
-      <div class="subHeader ${sectorClass}">
-        <button class="toggleBtn" type="button" onclick="toggleAdminSector('${source}', ${yearIndex}, ${ri})">
-          <span>${escapeHtml(item.secteur || "Secteur")}</span>
-          <span class="subArrow">▾</span>
-        </button>
-      </div>
-      <div class="subContent" id="admin_${source}_year_${yearIndex}_sector_content_${ri}"></div>
-    </div>
-  `).join("");
-}
-
-function renderAdminSectorDetail(source, yearIndex, sectorIndex){
-  const groups = groupByYear(adminRootData(source));
-  const g = groups[yearIndex];
-  if (!g || !g.rows[sectorIndex]) return `<div class="empty">Aucune donnée.</div>`;
-
-  const item = g.rows[sectorIndex];
-
-  return `
-    <div class="card">
-      <div class="cardTitle">${escapeHtml(item.annee || "")} — ${escapeHtml(item.secteur || "")}</div>
-      <div class="field"><label class="label">Année</label><input class="input" type="text" id="edit_tournee_annee_${source}_${item.id}" value="${escapeHtml(item.annee || "")}"></div>
-      <div class="field"><label class="label">Secteur / commune</label><input class="input" type="text" id="edit_tournee_secteur_${source}_${item.id}" value="${escapeHtml(item.secteur || "")}"></div>
-      <div class="field"><label class="label">Agents</label><textarea class="textarea" id="edit_tournee_agents_${source}_${item.id}">${escapeHtml(item.agents || "")}</textarea></div>
-      <div class="grid2">
-        <div class="field"><label class="label">Attribués</label><input class="input" type="text" id="edit_tournee_attribues_${source}_${item.id}" value="${escapeHtml(item.attribues || "")}"></div>
-        <div class="field"><label class="label">Vendus</label><input class="input" type="text" id="edit_tournee_vendus_${source}_${item.id}" value="${escapeHtml(item.vendus || "")}"></div>
-      </div>
-      <div class="field"><label class="label">Somme</label><input class="input" type="text" id="edit_tournee_somme_${source}_${item.id}" value="${escapeHtml(item.somme || "")}"></div>
-      <div class="toolbar">
-        <button class="btn2 btnPrimary btnMini" onclick="updateTournee('${source}', '${item.id}', this)">Enregistrer</button>
-        <button class="btn2 btnDanger btnMini" onclick="deleteTournee('${source}', '${item.id}', this)">Supprimer</button>
-        ${source === "active" ? `<button class="btn2 btnSecondary btnMini" onclick="archiveTournee('${item.id}', this)">Archiver</button>` : ``}
-      </div>
-    </div>
-  `;
-}
-
-function toggleAdminTourneeRoot(source){
-  const boxId = source === "archive" ? "admin-tournees-archives-wrap" : "admin-tournees-actives-wrap";
-  const contentId = source === "archive" ? "adminTourneesArchivesRoot" : "adminTourneesActivesRoot";
-  const box = document.getElementById(boxId);
-  const content = document.getElementById(contentId);
-  if (!box || !content) return;
-
-  if (!content.dataset.loaded) {
-    content.innerHTML = renderAdminRootContent(source);
-    const yearZoneId = source === "archive" ? "admin_archive_years_zone" : "admin_active_years_zone";
-    const yearZone = document.getElementById(yearZoneId);
-    if (yearZone) yearZone.innerHTML = renderAdminYears(source);
-    content.dataset.loaded = "1";
-  }
-
-  box.classList.toggle("open");
-}
-
-function toggleAdminYear(source, yearIndex){
-  const boxId = `admin_${source}_year_${yearIndex}`;
-  const contentId = `admin_${source}_year_content_${yearIndex}`;
-  const box = document.getElementById(boxId);
-  const content = document.getElementById(contentId);
-  if (!box || !content) return;
-
-  if (!content.dataset.loaded) {
-    content.innerHTML = renderAdminSectors(source, yearIndex);
-    content.dataset.loaded = "1";
-  }
-
-  box.classList.toggle("open");
-}
-
-function toggleAdminSector(source, yearIndex, sectorIndex){
-  const boxId = `admin_${source}_year_${yearIndex}_sector_${sectorIndex}`;
-  const contentId = `admin_${source}_year_${yearIndex}_sector_content_${sectorIndex}`;
-  const box = document.getElementById(boxId);
-  const content = document.getElementById(contentId);
-  if (!box || !content) return;
-
-  if (!content.dataset.loaded) {
-    content.innerHTML = renderAdminSectorDetail(source, yearIndex, sectorIndex);
-    content.dataset.loaded = "1";
-  }
-
-  box.classList.toggle("open");
 }
 
 function renderAdminView(){
@@ -945,25 +811,11 @@ function renderAdminView(){
   renderAdminList("adminCRList", state.comptesRendus, "cr");
   renderAdminList("adminProjetsList", state.projets, "projets");
   renderAdminList("adminEvenementsList", state.evenements, "evenements");
-
-  const activeRoot = document.getElementById("adminTourneesActivesRoot");
-  const archiveRoot = document.getElementById("adminTourneesArchivesRoot");
-  if (activeRoot) {
-    activeRoot.innerHTML = "";
-    delete activeRoot.dataset.loaded;
-  }
-  if (archiveRoot) {
-    archiveRoot.innerHTML = "";
-    delete archiveRoot.dataset.loaded;
-  }
-
-  const activeWrap = document.getElementById("admin-tournees-actives-wrap");
-  const archiveWrap = document.getElementById("admin-tournees-archives-wrap");
-  if (activeWrap) activeWrap.classList.remove("open");
-  if (archiveWrap) archiveWrap.classList.remove("open");
+  const wrap = document.getElementById("adminTourneesWrap");
+  if (wrap) wrap.innerHTML = renderAdminTournees();
 }
 
-/* ================= LOAD ================= */
+/* ===== LOAD ===== */
 
 async function loadAll(){
   try{
@@ -997,7 +849,7 @@ async function loadAll(){
   }
 }
 
-/* ================= ACTIONS ================= */
+/* ===== ACTIONS ===== */
 
 async function createReunion(btn){
   try{
