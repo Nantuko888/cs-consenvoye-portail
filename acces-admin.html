@@ -188,6 +188,8 @@
       align-items:center;
       gap:10px;
       flex:0 0 auto;
+      flex-wrap:wrap;
+      justify-content:flex-end;
     }
 
     .miniSwitch{
@@ -201,6 +203,7 @@
       font-size:12px;
       font-weight:900;
       color:#fff;
+      white-space:nowrap;
     }
 
     .miniSwitch input{
@@ -258,7 +261,7 @@
     .switchGrid{
       display:grid;
       gap:10px;
-      grid-template-columns:1fr 1fr;
+      grid-template-columns:1fr;
       margin-bottom:10px;
     }
 
@@ -355,6 +358,10 @@
       .detailsGrid{
         grid-template-columns:1fr 1fr;
       }
+
+      .switchGrid{
+        grid-template-columns:1fr 1fr 1fr;
+      }
     }
   </style>
 </head>
@@ -378,7 +385,7 @@
       <div class="dashboard">
         <div class="dashboardTitle">Accès global</div>
         <div class="dashboardSmall">
-          Une seule liste d’agents. Les accès Portail et Amical sont visibles directement sur la ligne. Les détails restent repliés au départ.
+          Une seule liste d’agents. Les accès Portail, Amical et Admin amical sont visibles directement sur la ligne. Les détails restent repliés au départ.
         </div>
       </div>
 
@@ -441,6 +448,13 @@
                 <label class="switchLabel">
                   <span>Accès Amical</span>
                   <input id="new_amical" type="checkbox">
+                </label>
+              </div>
+
+              <div class="switchBox">
+                <label class="switchLabel">
+                  <span>Accès Admin amical</span>
+                  <input id="new_admin_amical" type="checkbox">
                 </label>
               </div>
             </div>
@@ -568,8 +582,11 @@ function toggleCollapseById(id){
 function bindSummarySync(card){
   const summaryPortail = card.querySelector(".summary-portail");
   const summaryAmical = card.querySelector(".summary-amical");
+  const summaryAdminAmical = card.querySelector(".summary-admin-amical");
+
   const detailPortail = card.querySelector(".field-portail");
   const detailAmical = card.querySelector(".field-amical");
+  const detailAdminAmical = card.querySelector(".field-admin-amical");
 
   if (summaryPortail && detailPortail) {
     summaryPortail.addEventListener("change", () => {
@@ -586,6 +603,15 @@ function bindSummarySync(card){
     });
     detailAmical.addEventListener("change", () => {
       summaryAmical.checked = detailAmical.checked;
+    });
+  }
+
+  if (summaryAdminAmical && detailAdminAmical) {
+    summaryAdminAmical.addEventListener("change", () => {
+      detailAdminAmical.checked = summaryAdminAmical.checked;
+    });
+    detailAdminAmical.addEventListener("change", () => {
+      summaryAdminAmical.checked = detailAdminAmical.checked;
     });
   }
 }
@@ -606,6 +632,7 @@ function renderList(){
     const role = (item.role || "agent").toLowerCase();
     const portail = Number(item.portail || 0) === 1;
     const amical = Number(item.amical || 0) === 1;
+    const adminAmical = Number(item.adminAmical || 0) === 1;
 
     html += `
       <div class="collapsible access-card" id="accessCard_${index}" data-original-email="${escapeHtml(item.email || "")}">
@@ -624,6 +651,11 @@ function renderList(){
             <label class="miniSwitch" onclick="event.stopPropagation()">
               <span>Amical</span>
               <input class="summary-amical" type="checkbox" ${amical ? "checked" : ""}>
+            </label>
+
+            <label class="miniSwitch" onclick="event.stopPropagation()">
+              <span>Admin amical</span>
+              <input class="summary-admin-amical" type="checkbox" ${adminAmical ? "checked" : ""}>
             </label>
           </div>
         </div>
@@ -661,6 +693,13 @@ function renderList(){
               <label class="switchLabel">
                 <span>Accès Amical</span>
                 <input class="field-amical" type="checkbox" ${amical ? "checked" : ""}>
+              </label>
+            </div>
+
+            <div class="switchBox">
+              <label class="switchLabel">
+                <span>Accès Admin amical</span>
+                <input class="field-admin-amical" type="checkbox" ${adminAmical ? "checked" : ""}>
               </label>
             </div>
           </div>
@@ -710,7 +749,8 @@ async function loadData(){
         role: (it.role || "agent").toLowerCase(),
         nom: it.nom || "",
         portail: Number(it.portail || 0),
-        amical: Number(it.amical || 0)
+        amical: Number(it.amical || 0),
+        adminAmical: Number(it.adminAmical ?? it.admin_amical ?? 0)
       }))
       .sort((a, b) => {
         const an = (a.nom || a.email || "").toLowerCase();
@@ -738,6 +778,7 @@ async function saveCard(btn){
   const role = (card.querySelector(".field-role")?.value || "agent").trim().toLowerCase();
   const portail = card.querySelector(".field-portail")?.checked ? 1 : 0;
   const amical = card.querySelector(".field-amical")?.checked ? 1 : 0;
+  const adminAmical = card.querySelector(".field-admin-amical")?.checked ? 1 : 0;
 
   try{
     setButtonSaving(btn, true);
@@ -751,7 +792,8 @@ async function saveCard(btn){
       nom,
       role,
       portail,
-      amical
+      amical,
+      adminAmical
     });
 
     if (!r || !r.ok) {
@@ -805,6 +847,7 @@ async function createAgent(btn){
   const role = (document.getElementById("new_role")?.value || "agent").trim().toLowerCase();
   const portail = document.getElementById("new_portail")?.checked ? 1 : 0;
   const amical = document.getElementById("new_amical")?.checked ? 1 : 0;
+  const adminAmical = document.getElementById("new_admin_amical")?.checked ? 1 : 0;
 
   try{
     setButtonSaving(btn, true, "Création...");
@@ -818,7 +861,8 @@ async function createAgent(btn){
       nom,
       role,
       portail,
-      amical
+      amical,
+      adminAmical
     });
 
     if (!r || !r.ok) {
@@ -832,6 +876,7 @@ async function createAgent(btn){
     document.getElementById("new_role").value = "agent";
     document.getElementById("new_portail").checked = true;
     document.getElementById("new_amical").checked = false;
+    document.getElementById("new_admin_amical").checked = false;
 
     showStatus("ok", "Agent créé.");
     await loadData();
