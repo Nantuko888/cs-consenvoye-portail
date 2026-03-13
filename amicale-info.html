@@ -154,9 +154,9 @@ function load(){
  const url=API+"?view=amicale_tournees_actives";
 
  fetch(url)
- .then(r=>r.json())
- .then(data=>{
-
+.then(r=>r.text())
+.then(txt=>{
+const data = JSON.parse(txt.replace(/^callback\(|\)$/g,''));
  const items=data.items||[];
 
  const years={};
