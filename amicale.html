@@ -7,82 +7,485 @@
   <link rel="stylesheet" href="cs-theme.css">
 
   <style>
-    .pageWrap{max-width:1100px;margin:0 auto;padding:14px}
-    .topTitleWrap{display:flex;align-items:center;gap:10px}
-    .lockBtn{display:none;border:none;border-radius:12px;min-height:36px;min-width:42px;padding:8px 10px;background:rgba(255,255,255,.14);color:#fff;font-size:18px;font-weight:900;cursor:pointer;border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 24px rgba(0,0,0,.18)}
-    .lockBtn:active{transform:translateY(1px)}
-    .hero{padding:16px 18px;margin-bottom:16px;border-radius:20px;background:linear-gradient(180deg, rgba(212,106,0,.34), rgba(212,106,0,.16));border:1px solid rgba(255,255,255,.12);box-shadow:var(--shadow);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:rgba(255,255,255,.96)}
-    .heroTitle{font-size:22px;font-weight:900;line-height:1.2}
-    .heroSmall{margin-top:8px;font-size:13px;font-weight:800;color:rgba(255,255,255,.78);line-height:1.4}
-    .status{display:none;margin-bottom:14px;padding:12px 14px;border-radius:14px;font-weight:800;line-height:1.4;border:1px solid rgba(255,255,255,.12)}
-    .status.show{display:block}
-    .status.ok{background:rgba(47,158,91,.18);color:#d9ffe7}
-    .status.err{background:rgba(220,70,70,.18);color:#ffe1e1}
-    .status.info{background:rgba(47,111,212,.18);color:#dde9ff}
-    .toolbar{display:flex;gap:10px;flex-wrap:wrap}
-    .btn2{border:none;border-radius:14px;min-height:42px;padding:10px 14px;font-weight:900;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.18);transition:background .22s ease, transform .12s ease, opacity .18s ease}
-    .btn2:active{transform:translateY(1px)}
-    .btnPrimary{background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));color:#fff}
-    .btnPrimary.saving{background:linear-gradient(180deg, rgba(47,158,91,.95), rgba(34,128,73,.95));color:#fff}
-    .btnSecondary{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.12)}
-    .btnDanger{background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));color:#fff}
-    .btnMini{min-height:34px;padding:7px 10px;font-size:12px;border-radius:12px}
-    .btn2[disabled]{opacity:.7;cursor:default}
-    .adminPanel{display:none;margin-bottom:16px}
-    body.adminMode .adminPanel{display:block}
-    .accordion{border-radius:20px;overflow:hidden;margin-bottom:14px;border:1px solid rgba(255,255,255,.10);box-shadow:var(--shadow);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:rgba(255,255,255,.06)}
-    .accordionHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
-    .accordionHeader:active{transform:translateY(1px)}
-    .accordionTitle{display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto;color:rgba(255,255,255,.96);font-size:18px;font-weight:900}
-    .emoji{font-size:22px;line-height:1;flex:0 0 auto}
-    .accordionArrow{font-size:18px;color:rgba(255,255,255,.88);transition:transform .18s ease;flex:0 0 auto}
-    .accordion.open .accordionArrow{transform:rotate(180deg)}
-    .accordionContent{display:none;padding:12px;background:rgba(0,0,0,.10)}
-    .accordion.open .accordionContent{display:block}
-    .subAccordion{border-radius:16px;overflow:hidden;margin-bottom:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.05)}
-    .subHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;cursor:pointer;font-weight:900;color:rgba(255,255,255,.95);background:rgba(255,255,255,.06);-webkit-tap-highlight-color:transparent}
-    .subHeader:active{transform:translateY(1px)}
-    .subArrow{transition:transform .18s ease;color:rgba(255,255,255,.82)}
-    .subAccordion.open .subArrow{transform:rotate(180deg)}
-    .subContent{display:none;padding:12px;background:rgba(0,0,0,.14)}
-    .subAccordion.open .subContent{display:block}
-    .hdr-reunions{background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18))}
-    .hdr-cr{background:linear-gradient(180deg, rgba(145,90,220,.30), rgba(145,90,220,.15))}
-    .hdr-projets{background:linear-gradient(180deg, rgba(47,158,91,.30), rgba(47,158,91,.15))}
-    .hdr-evenements{background:linear-gradient(180deg, rgba(220,90,170,.28), rgba(220,90,170,.14))}
-    .hdr-cal{background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15))}
-    .activeHeader{background:linear-gradient(180deg, rgba(255,190,60,.20), rgba(255,190,60,.08))}
-    .yearHeader{background:linear-gradient(180deg, rgba(47,111,212,.22), rgba(47,111,212,.10))}
-    .sectorHeader{background:linear-gradient(180deg, rgba(47,158,91,.22), rgba(47,158,91,.10))}
-    .archiveHeader{background:linear-gradient(180deg, rgba(145,90,220,.24), rgba(145,90,220,.10))}
-    .archiveYearHeader{background:linear-gradient(180deg, rgba(220,90,170,.22), rgba(220,90,170,.10))}
-    .archiveSectorHeader{background:linear-gradient(180deg, rgba(212,106,0,.24), rgba(212,106,0,.10))}
-    .card{border-radius:16px;padding:12px;margin-bottom:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.95)}
-    .cardTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
-    .cardTitle{font-size:15px;font-weight:900;color:rgba(255,255,255,.98)}
-    .line{font-size:14px;line-height:1.45;color:rgba(255,255,255,.86);margin-bottom:4px;white-space:pre-wrap}
-    .muted{color:rgba(255,255,255,.68);font-weight:800;font-size:13px}
-    .grid2{display:grid;gap:10px;grid-template-columns:1fr}
-    .summaryBox{border-radius:16px;padding:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);margin-bottom:10px}
-    .summaryTitle{font-size:15px;font-weight:900;color:rgba(255,255,255,.97);margin-bottom:8px}
-    .summaryRow{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:14px;color:rgba(255,255,255,.88);border-bottom:1px dashed rgba(255,255,255,.08)}
-    .summaryRow:last-child{border-bottom:none}
-    .pill{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);color:#fff;font-size:12px;font-weight:900;margin-right:6px;margin-bottom:6px}
-    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
-    .label{font-size:13px;font-weight:900;color:rgba(255,255,255,.82)}
-    .input,.textarea{width:100%;border:none;outline:none;border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.12);font-size:15px;font-family:inherit}
-    .input{min-height:44px}
-    .textarea{min-height:100px;resize:vertical}
-    input[type="date"]{color-scheme:dark}
-    .empty{padding:14px;border-radius:14px;background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.10);color:rgba(255,255,255,.76);font-weight:800}
-    .deny{max-width:680px;margin:24px auto;padding:16px;border-radius:20px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.12);box-shadow:var(--shadow);color:#fff;text-align:center}
-    .denyTitle{font-size:22px;font-weight:950;margin-bottom:10px}
-    .loaderOverlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.35);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:99999}
-    .loaderOverlay.show{display:flex}
-    .loaderBox{width:52px;height:52px;border-radius:999px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;box-shadow:0 14px 34px rgba(0,0,0,.40)}
-    .loaderSpinner{width:24px;height:24px;border-radius:50%;border:3px solid rgba(255,255,255,.25);border-top-color:#ff8c00;animation:spin .8s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    @media (min-width:900px){.grid2{grid-template-columns:1fr 1fr}}
+    .pageWrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px;
+    }
+
+    .topTitleWrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .lockBtn{
+      display:none;
+      border:none;
+      border-radius:12px;
+      min-height:36px;
+      min-width:42px;
+      padding:8px 10px;
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      font-size:18px;
+      font-weight:900;
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+
+    .lockBtn:active{ transform:translateY(1px); }
+
+    .hero{
+      padding:16px 18px;
+      margin-bottom:16px;
+      border-radius:20px;
+      background:linear-gradient(180deg, rgba(212,106,0,.34), rgba(212,106,0,.16));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      color:rgba(255,255,255,.96);
+    }
+
+    .heroTitle{
+      font-size:22px;
+      font-weight:900;
+      line-height:1.2;
+    }
+
+    .heroSmall{
+      margin-top:8px;
+      font-size:13px;
+      font-weight:800;
+      color:rgba(255,255,255,.78);
+      line-height:1.4;
+    }
+
+    .status{
+      display:none;
+      margin-bottom:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:800;
+      line-height:1.4;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .status.show{ display:block; }
+    .status.ok{
+      background:rgba(47,158,91,.18);
+      color:#d9ffe7;
+    }
+    .status.err{
+      background:rgba(220,70,70,.18);
+      color:#ffe1e1;
+    }
+    .status.info{
+      background:rgba(47,111,212,.18);
+      color:#dde9ff;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn2{
+      border:none;
+      border-radius:14px;
+      min-height:42px;
+      padding:10px 14px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+      transition:background .22s ease, transform .12s ease, opacity .18s ease;
+    }
+
+    .btn2:active{ transform:translateY(1px); }
+
+    .btnPrimary{
+      background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
+      color:#fff;
+    }
+
+    .btnPrimary.saving{
+      background:linear-gradient(180deg, rgba(47,158,91,.95), rgba(34,128,73,.95));
+      color:#fff;
+    }
+
+    .btnSecondary{
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .btnDanger{
+      background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
+      color:#fff;
+    }
+
+    .btnMini{
+      min-height:34px;
+      padding:7px 10px;
+      font-size:12px;
+      border-radius:12px;
+    }
+
+    .btn2[disabled]{
+      opacity:.7;
+      cursor:default;
+    }
+
+    .memberView{
+      display:block;
+    }
+
+    .adminPanel{
+      display:none;
+      margin-bottom:16px;
+    }
+
+    body.adminMode .adminPanel{
+      display:block;
+    }
+
+    body.adminMode .memberView{
+      display:none;
+    }
+
+    .accordion{
+      border-radius:20px;
+      overflow:hidden;
+      margin-bottom:14px;
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      background:rgba(255,255,255,.06);
+    }
+
+    .accordionHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .accordionHeader:active{
+      transform:translateY(1px);
+    }
+
+    .accordionTitle{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+      flex:1 1 auto;
+      color:rgba(255,255,255,.96);
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .emoji{
+      font-size:22px;
+      line-height:1;
+      flex:0 0 auto;
+    }
+
+    .accordionArrow{
+      font-size:18px;
+      color:rgba(255,255,255,.88);
+      transition:transform .18s ease;
+      flex:0 0 auto;
+    }
+
+    .accordion.open .accordionArrow{
+      transform:rotate(180deg);
+    }
+
+    .accordionContent{
+      display:none;
+      padding:12px;
+      background:rgba(0,0,0,.10);
+    }
+
+    .accordion.open .accordionContent{
+      display:block;
+    }
+
+    .subAccordion{
+      border-radius:16px;
+      overflow:hidden;
+      margin-bottom:10px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.05);
+    }
+
+    .subHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:13px 14px;
+      cursor:pointer;
+      font-weight:900;
+      color:rgba(255,255,255,.95);
+      background:rgba(255,255,255,.06);
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .subHeader:active{
+      transform:translateY(1px);
+    }
+
+    .subArrow{
+      transition:transform .18s ease;
+      color:rgba(255,255,255,.82);
+    }
+
+    .subAccordion.open .subArrow{
+      transform:rotate(180deg);
+    }
+
+    .subContent{
+      display:none;
+      padding:12px;
+      background:rgba(0,0,0,.14);
+    }
+
+    .subAccordion.open .subContent{
+      display:block;
+    }
+
+    .hdr-reunions{ background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18)); }
+    .hdr-cr{ background:linear-gradient(180deg, rgba(145,90,220,.30), rgba(145,90,220,.15)); }
+    .hdr-projets{ background:linear-gradient(180deg, rgba(47,158,91,.30), rgba(47,158,91,.15)); }
+    .hdr-evenements{ background:linear-gradient(180deg, rgba(220,90,170,.28), rgba(220,90,170,.14)); }
+    .hdr-cal{ background:linear-gradient(180deg, rgba(255,190,60,.30), rgba(255,190,60,.15)); }
+
+    .activeHeader{ background:linear-gradient(180deg, rgba(255,190,60,.20), rgba(255,190,60,.08)); }
+    .yearHeader{ background:linear-gradient(180deg, rgba(47,111,212,.22), rgba(47,111,212,.10)); }
+    .sectorHeader{ background:linear-gradient(180deg, rgba(47,158,91,.22), rgba(47,158,91,.10)); }
+    .archiveHeader{ background:linear-gradient(180deg, rgba(145,90,220,.24), rgba(145,90,220,.10)); }
+    .archiveYearHeader{ background:linear-gradient(180deg, rgba(220,90,170,.22), rgba(220,90,170,.10)); }
+    .archiveSectorHeader{ background:linear-gradient(180deg, rgba(212,106,0,.24), rgba(212,106,0,.10)); }
+
+    .card{
+      border-radius:16px;
+      padding:12px;
+      margin-bottom:10px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      color:rgba(255,255,255,.95);
+    }
+
+    .cardTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+    }
+
+    .cardTitle{
+      font-size:15px;
+      font-weight:900;
+      color:rgba(255,255,255,.98);
+    }
+
+    .line{
+      font-size:14px;
+      line-height:1.45;
+      color:rgba(255,255,255,.86);
+      margin-bottom:4px;
+      white-space:pre-wrap;
+    }
+
+    .dateLine{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:14px;
+      line-height:1.45;
+      color:rgba(255,255,255,.90);
+      margin-bottom:6px;
+      font-weight:900;
+    }
+
+    .muted{
+      color:rgba(255,255,255,.68);
+      font-weight:800;
+      font-size:13px;
+    }
+
+    .grid2{
+      display:grid;
+      gap:10px;
+      grid-template-columns:1fr;
+    }
+
+    .summaryBox{
+      border-radius:16px;
+      padding:12px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.10);
+      margin-bottom:10px;
+    }
+
+    .summaryTitle{
+      font-size:15px;
+      font-weight:900;
+      color:rgba(255,255,255,.97);
+      margin-bottom:8px;
+    }
+
+    .summaryRow{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:6px 0;
+      font-size:14px;
+      color:rgba(255,255,255,.88);
+      border-bottom:1px dashed rgba(255,255,255,.08);
+    }
+
+    .summaryRow:last-child{ border-bottom:none; }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      min-height:32px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
+      color:#fff;
+      font-size:12px;
+      font-weight:900;
+      margin-right:6px;
+      margin-bottom:6px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:10px;
+    }
+
+    .label{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.82);
+    }
+
+    .input,.textarea{
+      width:100%;
+      border:none;
+      outline:none;
+      border-radius:12px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+      font-size:15px;
+      font-family:inherit;
+    }
+
+    .input{
+      min-height:44px;
+    }
+
+    .textarea{
+      min-height:100px;
+      resize:vertical;
+    }
+
+    input[type="date"]{
+      color-scheme:dark;
+    }
+
+    .empty{
+      padding:14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      border:1px dashed rgba(255,255,255,.10);
+      color:rgba(255,255,255,.76);
+      font-weight:800;
+    }
+
+    .deny{
+      max-width:680px;
+      margin:24px auto;
+      padding:16px;
+      border-radius:20px;
+      background:rgba(0,0,0,.45);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      color:#fff;
+      text-align:center;
+    }
+
+    .denyTitle{
+      font-size:22px;
+      font-weight:950;
+      margin-bottom:10px;
+    }
+
+    .loaderOverlay{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.35);
+      backdrop-filter:blur(4px);
+      -webkit-backdrop-filter:blur(4px);
+      z-index:99999;
+    }
+
+    .loaderOverlay.show{
+      display:flex;
+    }
+
+    .loaderBox{
+      width:52px;
+      height:52px;
+      border-radius:999px;
+      background:rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.15);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 14px 34px rgba(0,0,0,.40);
+    }
+
+    .loaderSpinner{
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      border:3px solid rgba(255,255,255,.25);
+      border-top-color:#ff8c00;
+      animation:spin .8s linear infinite;
+    }
+
+    @keyframes spin{
+      to{ transform:rotate(360deg); }
+    }
+
+    @media (min-width:900px){
+      .grid2{
+        grid-template-columns:1fr 1fr;
+      }
+    }
   </style>
 </head>
 
@@ -213,7 +616,9 @@
         </div>
       </div>
 
-      <div id="sections"></div>
+      <div class="memberView" id="memberView">
+        <div id="sections"></div>
+      </div>
     </div>
   </div>
 
@@ -331,6 +736,62 @@ function setAdminMode(on){
   showStatus("ok", state.adminMode ? "Mode administration Amicale activé." : "Mode consultation.");
 }
 
+function parseAnyDate(value){
+  if (!value) return null;
+
+  if (value instanceof Date && !isNaN(value.getTime())) {
+    return value;
+  }
+
+  const str = String(value).trim();
+  if (!str) return null;
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+    const [y,m,d] = str.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  }
+
+  if (/^\d{4}-\d{2}-\d{2}t/i.test(str)) {
+    const dt = new Date(str);
+    if (!isNaN(dt.getTime())) {
+      return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
+    }
+  }
+
+  const dt = new Date(str);
+  if (!isNaN(dt.getTime())) {
+    return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
+  }
+
+  return null;
+}
+
+function formatDateDisplayFR(value){
+  const d = parseAnyDate(value);
+  if (!d) return String(value || "—");
+
+  const jours = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+  const mois = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+
+  return `${jours[d.getDay()]} ${d.getDate()} ${mois[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function formatDateInput(value){
+  const d = parseAnyDate(value);
+  if (!d) return "";
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function clearForm(ids){
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
+}
+
 async function checkAmicaleAccess(){
   const email = getCurrentEmail();
   if (!email) return { ok:false };
@@ -362,12 +823,13 @@ function sectionShell(id, headerClass, emoji, title, bodyHtml){
 
 function renderReunions(){
   if (!state.reunions.length) return `<div class="empty">Aucune réunion enregistrée.</div>`;
+
   return `
     <div class="grid2">
       ${state.reunions.map((r, i) => `
         <div class="card">
           <div class="cardTitle">Réunion ${i + 1}</div>
-          <div class="line"><strong>Date :</strong> ${escapeHtml(r.date || "—")}</div>
+          <div class="dateLine">📅 <span>${escapeHtml(formatDateDisplayFR(r.date))}</span></div>
           <div class="line"><strong>Lieu :</strong> ${escapeHtml(r.lieu || "—")}</div>
           <div class="line"><strong>Notes :</strong> ${escapeHtml(r.notes || "—")}</div>
         </div>
@@ -378,12 +840,13 @@ function renderReunions(){
 
 function renderCR(){
   if (!state.comptesRendus.length) return `<div class="empty">Aucun compte-rendu enregistré.</div>`;
+
   return state.comptesRendus.map((r, i) => {
     const docs = String(r.documents || "").split(/\n+/).map(x => x.trim()).filter(Boolean);
     return `
       <div class="card">
         <div class="cardTitle">${escapeHtml(r.titre || `Compte-rendu ${i + 1}`)}</div>
-        <div class="line"><strong>Date :</strong> ${escapeHtml(r.date || "—")}</div>
+        <div class="dateLine">📅 <span>${escapeHtml(formatDateDisplayFR(r.date))}</span></div>
         <div class="line"><strong>Texte :</strong></div>
         <div class="line">${escapeHtml(r.texte || "—")}</div>
         <div class="line" style="margin-top:8px;"><strong>Documents :</strong></div>
@@ -395,6 +858,7 @@ function renderCR(){
 
 function renderSimpleBlocks(items, label, prefix){
   if (!items.length) return `<div class="empty">Aucun ${label.toLowerCase()} enregistré.</div>`;
+
   return items.map((r, i) => `
     <div class="subAccordion" id="${prefix}_${i}">
       <div class="subHeader" onclick="toggleSubAccordion(event, '${prefix}_${i}')">
@@ -512,6 +976,7 @@ function renderMemberView(){
     sectionShell("acc_evenements", "hdr-evenements", "🎉", "Événements", renderSimpleBlocks(state.evenements, "Événement", "evenement")),
     sectionShell("acc_tournees", "hdr-cal", "📘", "Tournées calendriers", renderTournees())
   ].join("");
+
   document.getElementById("sections").innerHTML = html;
 }
 
@@ -528,9 +993,9 @@ function renderAdminList(containerId, items, type){
     zone.innerHTML = items.map(item => `
       <div class="card">
         <div class="cardTop">
-          <div class="cardTitle">${escapeHtml(item.date || "Sans date")} — ${escapeHtml(item.lieu || "")}</div>
+          <div class="cardTitle">📅 ${escapeHtml(formatDateDisplayFR(item.date))}${item.lieu ? " — " + escapeHtml(item.lieu) : ""}</div>
         </div>
-        <div class="field"><label class="label">Date</label><input class="input" type="date" id="edit_reunion_date_${item.id}" value="${escapeHtml(item.date || "")}"></div>
+        <div class="field"><label class="label">Date</label><input class="input" type="date" id="edit_reunion_date_${item.id}" value="${escapeHtml(formatDateInput(item.date))}"></div>
         <div class="field"><label class="label">Lieu</label><input class="input" type="text" id="edit_reunion_lieu_${item.id}" value="${escapeHtml(item.lieu || "")}"></div>
         <div class="field"><label class="label">Notes</label><textarea class="textarea" id="edit_reunion_notes_${item.id}">${escapeHtml(item.notes || "")}</textarea></div>
         <div class="toolbar">
@@ -545,8 +1010,8 @@ function renderAdminList(containerId, items, type){
   if (type === "cr") {
     zone.innerHTML = items.map(item => `
       <div class="card">
-        <div class="cardTitle">${escapeHtml(item.titre || "Sans titre")}</div>
-        <div class="field"><label class="label">Date</label><input class="input" type="date" id="edit_cr_date_${item.id}" value="${escapeHtml(item.date || "")}"></div>
+        <div class="cardTitle">📅 ${escapeHtml(formatDateDisplayFR(item.date))} — ${escapeHtml(item.titre || "Sans titre")}</div>
+        <div class="field"><label class="label">Date</label><input class="input" type="date" id="edit_cr_date_${item.id}" value="${escapeHtml(formatDateInput(item.date))}"></div>
         <div class="field"><label class="label">Titre</label><input class="input" type="text" id="edit_cr_titre_${item.id}" value="${escapeHtml(item.titre || "")}"></div>
         <div class="field"><label class="label">Texte</label><textarea class="textarea" id="edit_cr_texte_${item.id}">${escapeHtml(item.texte || "")}</textarea></div>
         <div class="field"><label class="label">Documents</label><textarea class="textarea" id="edit_cr_docs_${item.id}">${escapeHtml(item.documents || "")}</textarea></div>
@@ -631,6 +1096,7 @@ async function loadAll(){
 
     renderMemberView();
     renderAdminView();
+
     showStatus("ok", state.adminMode ? "Mode administration activé." : "Mode consultation.");
     showLoader(false);
 
@@ -651,6 +1117,8 @@ async function createReunion(btn){
       notes:document.getElementById("new_reunion_notes").value.trim()
     });
     if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de création.");
+
+    clearForm(["new_reunion_date","new_reunion_lieu","new_reunion_notes"]);
     await loadAll();
   } finally {
     setButtonSaving(btn, false, "Ajouter une réunion");
@@ -698,6 +1166,8 @@ async function createCR(btn){
       documents:document.getElementById("new_cr_docs").value.trim()
     });
     if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de création.");
+
+    clearForm(["new_cr_date","new_cr_titre","new_cr_texte","new_cr_docs"]);
     await loadAll();
   } finally {
     setButtonSaving(btn, false, "Ajouter un compte-rendu");
@@ -744,6 +1214,8 @@ async function createProjet(btn){
       contenu:document.getElementById("new_projet_contenu").value.trim()
     });
     if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de création.");
+
+    clearForm(["new_projet_titre","new_projet_contenu"]);
     await loadAll();
   } finally {
     setButtonSaving(btn, false, "Ajouter un projet");
@@ -760,6 +1232,8 @@ async function createEvenement(btn){
       contenu:document.getElementById("new_evenement_contenu").value.trim()
     });
     if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de création.");
+
+    clearForm(["new_evenement_titre","new_evenement_contenu"]);
     await loadAll();
   } finally {
     setButtonSaving(btn, false, "Ajouter un événement");
@@ -814,6 +1288,8 @@ async function createTournee(btn){
       somme:document.getElementById("new_tournee_somme").value.trim()
     });
     if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de création.");
+
+    clearForm(["new_tournee_annee","new_tournee_secteur","new_tournee_agents","new_tournee_attribues","new_tournee_vendus","new_tournee_somme"]);
     await loadAll();
   } finally {
     setButtonSaving(btn, false, "Ajouter une tournée active");
