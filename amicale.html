@@ -419,12 +419,22 @@ function toggleSubAccordion(ev, id){
   el.classList.toggle("open");
 }
 
+function forceCollapseAll(){
+  document.querySelectorAll(".accordion.open, .subAccordion.open").forEach(el => {
+    el.classList.remove("open");
+  });
+}
+
 function setAdminMode(on){
   state.adminMode = !!on;
   document.body.classList.toggle("adminMode", state.adminMode);
   const lock = document.getElementById("amicaleLock");
   if (lock) lock.textContent = state.adminMode ? "🔓" : "🔒";
   showStatus("ok", state.adminMode ? "Mode administration Amicale activé." : "Mode consultation.");
+
+  requestAnimationFrame(() => {
+    forceCollapseAll();
+  });
 }
 
 function parseAnyDate(value){
@@ -814,6 +824,10 @@ async function loadAll(){
 
     renderMemberView();
     renderAdminView();
+
+    requestAnimationFrame(() => {
+      forceCollapseAll();
+    });
 
     showStatus("ok", state.adminMode ? "Mode administration activé." : "Mode consultation.");
     showLoader(false);
