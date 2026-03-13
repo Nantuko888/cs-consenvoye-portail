@@ -429,10 +429,7 @@ function setAdminMode(on){
 
 function parseAnyDate(value){
   if (!value) return null;
-
-  if (value instanceof Date && !isNaN(value.getTime())) {
-    return value;
-  }
+  if (value instanceof Date && !isNaN(value.getTime())) return value;
 
   const str = String(value).trim();
   if (!str) return null;
@@ -444,15 +441,11 @@ function parseAnyDate(value){
 
   if (/^\d{4}-\d{2}-\d{2}t/i.test(str)) {
     const dt = new Date(str);
-    if (!isNaN(dt.getTime())) {
-      return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
-    }
+    if (!isNaN(dt.getTime())) return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
   }
 
   const dt = new Date(str);
-  if (!isNaN(dt.getTime())) {
-    return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
-  }
+  if (!isNaN(dt.getTime())) return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
 
   return null;
 }
@@ -842,7 +835,6 @@ async function createReunion(btn){
       notes:document.getElementById("new_reunion_notes").value.trim()
     });
     if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de création.");
-
     clearForm(["new_reunion_date","new_reunion_lieu","new_reunion_notes"]);
     await loadAll();
   } finally {
@@ -891,7 +883,6 @@ async function createCR(btn){
       documents:document.getElementById("new_cr_docs").value.trim()
     });
     if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de création.");
-
     clearForm(["new_cr_date","new_cr_titre","new_cr_texte","new_cr_docs"]);
     await loadAll();
   } finally {
@@ -939,7 +930,6 @@ async function createProjet(btn){
       contenu:document.getElementById("new_projet_contenu").value.trim()
     });
     if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de création.");
-
     clearForm(["new_projet_titre","new_projet_contenu"]);
     await loadAll();
   } finally {
@@ -957,7 +947,6 @@ async function createEvenement(btn){
       contenu:document.getElementById("new_evenement_contenu").value.trim()
     });
     if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de création.");
-
     clearForm(["new_evenement_titre","new_evenement_contenu"]);
     await loadAll();
   } finally {
@@ -1013,7 +1002,6 @@ async function createTournee(btn){
       somme:document.getElementById("new_tournee_somme").value.trim()
     });
     if (!r || !r.ok) return showStatus("err", r?.error || "Erreur de création.");
-
     clearForm(["new_tournee_annee","new_tournee_secteur","new_tournee_agents","new_tournee_attribues","new_tournee_vendus","new_tournee_somme"]);
     await loadAll();
   } finally {
