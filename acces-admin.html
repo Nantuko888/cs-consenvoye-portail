@@ -140,10 +140,6 @@
     }
 
     .collapsibleHeader{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
       padding:14px;
       cursor:pointer;
       user-select:none;
@@ -154,12 +150,11 @@
       transform:translateY(1px);
     }
 
-    .collapsibleLeft{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width:0;
-      flex:1 1 auto;
+    .cardHeaderGrid{
+      display:grid;
+      grid-template-columns:20px 1fr;
+      gap:10px 12px;
+      align-items:start;
     }
 
     .chevron{
@@ -168,34 +163,38 @@
       font-size:16px;
       color:rgba(255,255,255,.85);
       transition:transform .18s ease;
-      flex:0 0 auto;
+      line-height:1.2;
+      margin-top:2px;
     }
 
     .collapsible.open .chevron{
       transform:rotate(90deg);
     }
 
+    .headerMain{
+      min-width:0;
+    }
+
     .agentName{
-      font-size:16px;
+      font-size:17px;
       font-weight:900;
       color:rgba(255,255,255,.97);
       line-height:1.2;
       word-break:break-word;
+      margin-bottom:8px;
     }
 
     .summarySwitches{
       display:flex;
-      align-items:center;
-      gap:10px;
-      flex:0 0 auto;
+      gap:8px;
       flex-wrap:wrap;
-      justify-content:flex-end;
     }
 
     .miniSwitch{
       display:flex;
       align-items:center;
       gap:6px;
+      min-height:34px;
       padding:6px 10px;
       border-radius:999px;
       background:rgba(255,255,255,.08);
@@ -211,6 +210,7 @@
       height:18px;
       accent-color:#ff8c00;
       margin:0;
+      flex:0 0 auto;
     }
 
     .collapsibleContent{
@@ -287,6 +287,7 @@
       height:20px;
       accent-color:#ff8c00;
       margin:0;
+      flex:0 0 auto;
     }
 
     .agentActions{
@@ -385,7 +386,7 @@
       <div class="dashboard">
         <div class="dashboardTitle">Accès global</div>
         <div class="dashboardSmall">
-          Une seule liste d’agents. Les accès Portail, Amical et Admin amical sont visibles directement sur la ligne. Les détails restent repliés au départ.
+          Une seule liste d’agents. Les accès Portail, Amical et Admin amical sont visibles directement sur la ligne, avec un affichage mobile propre.
         </div>
       </div>
 
@@ -406,12 +407,14 @@
 
         <div class="collapsible" id="addAgentBox">
           <div class="collapsibleHeader" onclick="toggleCollapseById('addAgentBox')">
-            <div class="collapsibleLeft">
+            <div class="cardHeaderGrid">
               <div class="chevron">▶</div>
-              <div class="agentName">Nouvel agent</div>
-            </div>
-            <div class="summarySwitches">
-              <div class="miniSwitch">Ajouter</div>
+              <div class="headerMain">
+                <div class="agentName">Nouvel agent</div>
+                <div class="summarySwitches">
+                  <div class="miniSwitch">Ajouter</div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -636,27 +639,30 @@ function renderList(){
 
     html += `
       <div class="collapsible access-card" id="accessCard_${index}" data-original-email="${escapeHtml(item.email || "")}">
-        <div class="collapsibleHeader cardHeader" onclick="toggleCard(event, 'accessCard_${index}')">
-          <div class="collapsibleLeft">
+        <div class="collapsibleHeader" onclick="toggleCard('accessCard_${index}')">
+          <div class="cardHeaderGrid">
             <div class="chevron">▶</div>
-            <div class="agentName">${escapeHtml(name)}</div>
-          </div>
 
-          <div class="summarySwitches">
-            <label class="miniSwitch" onclick="event.stopPropagation()">
-              <span>Portail</span>
-              <input class="summary-portail" type="checkbox" ${portail ? "checked" : ""}>
-            </label>
+            <div class="headerMain">
+              <div class="agentName">${escapeHtml(name)}</div>
 
-            <label class="miniSwitch" onclick="event.stopPropagation()">
-              <span>Amical</span>
-              <input class="summary-amical" type="checkbox" ${amical ? "checked" : ""}>
-            </label>
+              <div class="summarySwitches">
+                <label class="miniSwitch" onclick="event.stopPropagation()">
+                  <span>Portail</span>
+                  <input class="summary-portail" type="checkbox" ${portail ? "checked" : ""}>
+                </label>
 
-            <label class="miniSwitch" onclick="event.stopPropagation()">
-              <span>Admin amical</span>
-              <input class="summary-admin-amical" type="checkbox" ${adminAmical ? "checked" : ""}>
-            </label>
+                <label class="miniSwitch" onclick="event.stopPropagation()">
+                  <span>Amical</span>
+                  <input class="summary-amical" type="checkbox" ${amical ? "checked" : ""}>
+                </label>
+
+                <label class="miniSwitch" onclick="event.stopPropagation()">
+                  <span>Adm. amical</span>
+                  <input class="summary-admin-amical" type="checkbox" ${adminAmical ? "checked" : ""}>
+                </label>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -704,7 +710,7 @@ function renderList(){
             </div>
           </div>
 
-          <div class="hint">Adresse mail et rôle restent masqués tant que la ligne n’est pas dépliée.</div>
+          <div class="hint">Adresse mail et rôle restent visibles uniquement une fois la fiche ouverte.</div>
 
           <div class="agentActions">
             <button class="btn2 btnPrimary" type="button" onclick="saveCard(this)">Enregistrer</button>
@@ -716,11 +722,10 @@ function renderList(){
   });
 
   zone.innerHTML = html;
-
   document.querySelectorAll(".access-card").forEach(bindSummarySync);
 }
 
-function toggleCard(event, id){
+function toggleCard(id){
   const box = document.getElementById(id);
   if (!box) return;
   box.classList.toggle("open");
