@@ -6,221 +6,414 @@
 <title>Amicale — Tournées calendriers</title>
 
 <style>
-
 :root{
- --txt:#f4f4f4;
- --shadow:0 14px 34px rgba(0,0,0,.40);
- --header1: rgba(212,106,0,.75);
- --header2: rgba(185,88,0,.58);
+  --txt:#f4f4f4;
+  --shadow:0 14px 34px rgba(0,0,0,.40);
+  --header1: rgba(212,106,0,.75);
+  --header2: rgba(185,88,0,.58);
 }
 
 *{box-sizing:border-box}
+html,body{height:100%}
 
 body{
- margin:0;
- font-family:system-ui;
- background:#0b0b0b;
- color:var(--txt);
- overflow:hidden;
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:#0b0b0b;
+  color:var(--txt);
+  overflow:hidden;
 }
 
 .bg{
- position:fixed;
- inset:0;
- background:
- linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.6)),
- url("background.png") center/cover no-repeat;
- z-index:-1;
+  position:fixed;
+  inset:0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.60)),
+    url("background.png") center/cover no-repeat;
+  z-index:-1;
 }
 
 .wrap{
- height:100vh;
- max-width:980px;
- margin:auto;
- padding:12px;
- display:grid;
- grid-template-rows:auto 1fr;
- gap:10px;
+  height:100vh;
+  max-width:980px;
+  margin:auto;
+  padding:12px;
+  display:grid;
+  grid-template-rows:auto 1fr;
+  gap:10px;
 }
 
 .topbar{
- display:flex;
- justify-content:space-between;
- align-items:center;
- padding:10px 14px;
- border-radius:18px;
- background:linear-gradient(180deg,var(--header1),var(--header2));
- border:1px solid rgba(255,255,255,.12);
- box-shadow:var(--shadow);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:10px 14px;
+  border-radius:18px;
+  background:linear-gradient(180deg,var(--header1),var(--header2));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--shadow);
 }
 
 .title{
- font-weight:900;
- letter-spacing:.5px;
- text-transform:uppercase;
+  font-weight:900;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 .btn{
- border:none;
- background:rgba(0,0,0,.2);
- color:#fff;
- padding:8px 12px;
- border-radius:12px;
- font-weight:700;
- cursor:pointer;
+  border:none;
+  background:rgba(0,0,0,.2);
+  color:#fff;
+  padding:8px 12px;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer;
 }
 
 .content{
- overflow:auto;
- display:flex;
- flex-direction:column;
- gap:8px;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding-right:2px;
 }
 
-.year{
- border-radius:16px;
- background:linear-gradient(180deg,rgba(200,120,40,.45),rgba(200,120,40,.15));
- border:1px solid rgba(255,255,255,.12);
+.status{
+  display:none;
+  padding:12px 14px;
+  border-radius:14px;
+  font-weight:800;
+  border:1px solid rgba(255,255,255,.12);
 }
 
-.yearHeader{
- padding:14px;
- font-weight:900;
- font-size:18px;
- cursor:pointer;
- display:flex;
- justify-content:space-between;
+.status.show{display:block}
+.status.info{background:rgba(47,111,212,.18);color:#dde9ff}
+.status.err{background:rgba(220,70,70,.18);color:#ffe1e1}
+
+.yearBlock{
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(180deg,rgba(200,120,40,.34),rgba(200,120,40,.14));
+  box-shadow:var(--shadow);
 }
 
-.yearContent{
- display:none;
- padding:10px;
+.yearBlock > summary{
+  list-style:none;
+  cursor:pointer;
+  padding:14px 16px;
+  font-weight:900;
+  font-size:18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
 }
 
-.secteur{
- border-radius:14px;
- margin-bottom:8px;
- background:rgba(0,0,0,.35);
- border:1px solid rgba(255,255,255,.08);
+.yearBlock > summary::-webkit-details-marker{
+  display:none;
 }
 
-.secteurHeader{
- padding:12px;
- font-weight:800;
- cursor:pointer;
- display:flex;
- justify-content:space-between;
+.yearBlock > summary::after{
+  content:"▾";
+  opacity:.88;
+  transition:transform .18s ease;
 }
 
-.secteurContent{
- display:none;
- padding:10px 14px 14px 14px;
- font-size:14px;
+.yearBlock[open] > summary::after{
+  transform:rotate(180deg);
 }
+
+.yearBody{
+  padding:10px;
+  background:rgba(0,0,0,.16);
+}
+
+.secteurBlock{
+  border-radius:14px;
+  overflow:hidden;
+  margin-bottom:8px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(0,0,0,.30);
+}
+
+.secteurBlock:last-child{
+  margin-bottom:0;
+}
+
+.secteurBlock > summary{
+  list-style:none;
+  cursor:pointer;
+  padding:12px 14px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.secteurBlock > summary::-webkit-details-marker{
+  display:none;
+}
+
+.secteurBlock > summary::after{
+  content:"▾";
+  opacity:.85;
+  transition:transform .18s ease;
+}
+
+.secteurBlock[open] > summary::after{
+  transform:rotate(180deg);
+}
+
+.secteurBody{
+  padding:0 14px 14px 14px;
+  font-size:14px;
+}
+
+.card{
+  border-radius:14px;
+  padding:12px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.line{
+  margin-bottom:8px;
+  line-height:1.45;
+}
+.line:last-child{margin-bottom:0}
 
 .label{
- opacity:.7;
+  opacity:.72;
+  font-weight:800;
 }
 
+.agentsWrap{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:6px;
+}
+
+.agentPill{
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:5px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.10);
+  font-size:12px;
+  font-weight:800;
+}
+
+.empty{
+  padding:14px;
+  border-radius:14px;
+  background:rgba(255,255,255,.05);
+  border:1px dashed rgba(255,255,255,.10);
+  color:rgba(255,255,255,.76);
+  font-weight:800;
+}
+
+.loader{
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.loader.show{display:flex}
+
+.spinner{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  border:3px solid rgba(255,255,255,.22);
+  border-top-color:#ff8c00;
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
 </style>
 </head>
 
 <body>
-
 <div class="bg"></div>
 
 <div class="wrap">
+  <div class="topbar">
+    <div class="title">Tournées calendriers</div>
+    <button class="btn" onclick="location.href='informations.html'">Retour</button>
+  </div>
 
-<div class="topbar">
-<div class="title">Tournées calendriers</div>
-<button class="btn" onclick="history.back()">Retour</button>
-</div>
-
-<div id="container" class="content"></div>
-
+  <div class="content">
+    <div id="status" class="status info">Chargement…</div>
+    <div id="loader" class="loader show"><div class="spinner"></div></div>
+    <div id="container"></div>
+  </div>
 </div>
 
 <script>
+const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-const API="https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
-
-function toggle(el){
- const c=el.nextElementSibling;
- c.style.display = c.style.display==="block" ? "none" : "block";
+function showStatus(message, type="info"){
+  const el = document.getElementById("status");
+  el.className = "status show " + type;
+  el.textContent = message || "";
 }
 
-function load(){
+function hideStatus(){
+  const el = document.getElementById("status");
+  el.className = "status";
+  el.textContent = "";
+}
 
- const url=API+"?view=amicale_tournees_actives";
+function setLoading(v){
+  document.getElementById("loader").classList.toggle("show", !!v);
+}
 
- fetch(url)
-.then(r=>r.text())
-.then(txt=>{
-const data = JSON.parse(txt.replace(/^callback\(|\)$/g,''));
- const items=data.items||[];
+function jsonp(params){
+  return new Promise((resolve, reject) => {
+    const cbName = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+    const script = document.createElement("script");
+    const url = new URL(API);
 
- const years={};
+    function cleanup(){
+      try{ delete window[cbName]; }catch(e){}
+      if(script.parentNode) script.parentNode.removeChild(script);
+    }
 
- items.forEach(i=>{
-  if(!years[i.annee]) years[i.annee]=[];
-  years[i.annee].push(i);
- });
+    window[cbName] = function(data){
+      cleanup();
+      resolve(data);
+    };
 
- const container=document.getElementById("container");
- container.innerHTML="";
+    script.onerror = function(){
+      cleanup();
+      reject(new Error("Erreur de chargement des tournées."));
+    };
 
- Object.keys(years).sort().reverse().forEach(year=>{
+    url.searchParams.set("callback", cbName);
+    url.searchParams.set("_ts", Date.now());
 
-  const yearDiv=document.createElement("div");
-  yearDiv.className="year";
+    Object.keys(params || {}).forEach(k => {
+      url.searchParams.set(k, params[k]);
+    });
 
-  const header=document.createElement("div");
-  header.className="yearHeader";
-  header.innerHTML=year+" <span>▾</span>";
-  header.onclick=()=>toggle(header);
+    script.src = url.toString();
+    document.body.appendChild(script);
+  });
+}
 
-  const content=document.createElement("div");
-  content.className="yearContent";
+function groupByYear(items){
+  const map = new Map();
 
-  years[year].forEach(s=>{
-
-   const sec=document.createElement("div");
-   sec.className="secteur";
-
-   const secHead=document.createElement("div");
-   secHead.className="secteurHeader";
-   secHead.innerHTML=s.secteur+" <span>▾</span>";
-   secHead.onclick=()=>toggle(secHead);
-
-   const secCont=document.createElement("div");
-   secCont.className="secteurContent";
-
-   secCont.innerHTML=
-   "<div><span class='label'>Agents :</span> "+s.agents+"</div>"+
-   "<div><span class='label'>Calendriers attribués :</span> "+s.attribues+"</div>";
-
-   sec.appendChild(secHead);
-   sec.appendChild(secCont);
-
-   content.appendChild(sec);
-
+  items.forEach(item => {
+    const year = String(item.annee || "").trim() || "Sans année";
+    if(!map.has(year)) map.set(year, []);
+    map.get(year).push(item);
   });
 
-  yearDiv.appendChild(header);
-  yearDiv.appendChild(content);
+  return Array.from(map.entries())
+    .sort((a,b) => String(b[0]).localeCompare(String(a[0]), "fr"))
+    .map(([annee, rows]) => ({ annee, rows }));
+}
 
-  container.appendChild(yearDiv);
+function renderAgents(value){
+  const agents = String(value || "")
+    .split(",")
+    .map(x => x.trim())
+    .filter(Boolean);
 
- });
+  if(!agents.length){
+    return `<div class="line"><span class="label">Agents :</span> Aucun agent</div>`;
+  }
 
- });
+  return `
+    <div class="line">
+      <span class="label">Agents :</span>
+      <div class="agentsWrap">
+        ${agents.map(a => `<span class="agentPill">${escapeHtml(a)}</span>`).join("")}
+      </div>
+    </div>
+  `;
+}
 
+function escapeHtml(v){
+  return String(v == null ? "" : v)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function render(items){
+  const container = document.getElementById("container");
+  container.innerHTML = "";
+
+  if(!items.length){
+    container.innerHTML = `<div class="empty">Aucune tournée active disponible.</div>`;
+    return;
+  }
+
+  const groups = groupByYear(items);
+
+  container.innerHTML = groups.map(group => `
+    <details class="yearBlock">
+      <summary>Année ${escapeHtml(group.annee)}</summary>
+      <div class="yearBody">
+        ${group.rows.map(row => `
+          <details class="secteurBlock">
+            <summary>${escapeHtml(row.secteur || "Secteur")}</summary>
+            <div class="secteurBody">
+              <div class="card">
+                ${renderAgents(row.agents)}
+                <div class="line">
+                  <span class="label">Calendriers attribués :</span>
+                  ${escapeHtml(row.attribues || "0")}
+                </div>
+              </div>
+            </div>
+          </details>
+        `).join("")}
+      </div>
+    </details>
+  `).join("");
+}
+
+async function load(){
+  try{
+    setLoading(true);
+    showStatus("Chargement des tournées calendriers…", "info");
+
+    const data = await jsonp({
+      view: "amicale_tournees_actives"
+    });
+
+    if(!data || !data.ok){
+      throw new Error((data && data.error) ? data.error : "Impossible de charger les tournées.");
+    }
+
+    render(Array.isArray(data.items) ? data.items : []);
+    hideStatus();
+    setLoading(false);
+
+  }catch(err){
+    setLoading(false);
+    showStatus(err && err.message ? err.message : "Erreur de chargement.", "err");
+  }
 }
 
 load();
-
 </script>
-
 </body>
 </html>
-
