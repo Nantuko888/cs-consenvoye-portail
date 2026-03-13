@@ -62,12 +62,11 @@
     }
     .accordionHeader{
       display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;
-      cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent
+      color:rgba(255,255,255,.96)
     }
-    .accordionHeader:active{transform:translateY(1px)}
     .accordionTitle{
       display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto;
-      color:rgba(255,255,255,.96);font-size:18px;font-weight:900
+      font-size:18px;font-weight:900
     }
     .emoji{font-size:22px;line-height:1;flex:0 0 auto}
     .accordionArrow{font-size:18px;color:rgba(255,255,255,.88);transition:transform .18s ease;flex:0 0 auto}
@@ -81,14 +80,18 @@
     }
     .subHeader{
       display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;
-      cursor:pointer;font-weight:900;color:rgba(255,255,255,.95);background:rgba(255,255,255,.06);
-      -webkit-tap-highlight-color:transparent
+      font-weight:900;color:rgba(255,255,255,.95);background:rgba(255,255,255,.06)
     }
-    .subHeader:active{transform:translateY(1px)}
     .subArrow{transition:transform .18s ease;color:rgba(255,255,255,.82)}
     .subAccordion.open .subArrow{transform:rotate(180deg)}
     .subContent{display:none;padding:12px;background:rgba(0,0,0,.14)}
     .subAccordion.open .subContent{display:block}
+
+    .toggleBtn{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      width:100%;background:transparent;border:none;color:inherit;padding:0;margin:0;
+      font:inherit;cursor:pointer;text-align:left
+    }
 
     .hdr-reunions{background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18))}
     .hdr-cr{background:linear-gradient(180deg, rgba(145,90,220,.30), rgba(145,90,220,.15))}
@@ -199,9 +202,11 @@
 
       <div class="adminPanel" id="adminPanel">
         <div class="accordion" id="admin-reunions">
-          <div class="accordionHeader hdr-reunions" onclick="toggleBox('admin-reunions')">
-            <div class="accordionTitle"><span class="emoji">📅</span><span>Admin Réunions</span></div>
-            <span class="accordionArrow">▾</span>
+          <div class="accordionHeader hdr-reunions">
+            <button class="toggleBtn" type="button" data-box="admin-reunions">
+              <span class="accordionTitle"><span class="emoji">📅</span><span>Admin Réunions</span></span>
+              <span class="accordionArrow">▾</span>
+            </button>
           </div>
           <div class="accordionContent">
             <div id="adminReunionsList"></div>
@@ -216,9 +221,11 @@
         </div>
 
         <div class="accordion" id="admin-cr">
-          <div class="accordionHeader hdr-cr" onclick="toggleBox('admin-cr')">
-            <div class="accordionTitle"><span class="emoji">📝</span><span>Admin Comptes-rendus</span></div>
-            <span class="accordionArrow">▾</span>
+          <div class="accordionHeader hdr-cr">
+            <button class="toggleBtn" type="button" data-box="admin-cr">
+              <span class="accordionTitle"><span class="emoji">📝</span><span>Admin Comptes-rendus</span></span>
+              <span class="accordionArrow">▾</span>
+            </button>
           </div>
           <div class="accordionContent">
             <div id="adminCRList"></div>
@@ -234,9 +241,11 @@
         </div>
 
         <div class="accordion" id="admin-projets">
-          <div class="accordionHeader hdr-projets" onclick="toggleBox('admin-projets')">
-            <div class="accordionTitle"><span class="emoji">🧩</span><span>Admin Projets</span></div>
-            <span class="accordionArrow">▾</span>
+          <div class="accordionHeader hdr-projets">
+            <button class="toggleBtn" type="button" data-box="admin-projets">
+              <span class="accordionTitle"><span class="emoji">🧩</span><span>Admin Projets</span></span>
+              <span class="accordionArrow">▾</span>
+            </button>
           </div>
           <div class="accordionContent">
             <div id="adminProjetsList"></div>
@@ -250,9 +259,11 @@
         </div>
 
         <div class="accordion" id="admin-evenements">
-          <div class="accordionHeader hdr-evenements" onclick="toggleBox('admin-evenements')">
-            <div class="accordionTitle"><span class="emoji">🎉</span><span>Admin Événements</span></div>
-            <span class="accordionArrow">▾</span>
+          <div class="accordionHeader hdr-evenements">
+            <button class="toggleBtn" type="button" data-box="admin-evenements">
+              <span class="accordionTitle"><span class="emoji">🎉</span><span>Admin Événements</span></span>
+              <span class="accordionArrow">▾</span>
+            </button>
           </div>
           <div class="accordionContent">
             <div id="adminEvenementsList"></div>
@@ -266,23 +277,29 @@
         </div>
 
         <div class="accordion" id="admin-tournees">
-          <div class="accordionHeader hdr-cal" onclick="toggleBox('admin-tournees')">
-            <div class="accordionTitle"><span class="emoji">📘</span><span>Admin Tournées calendriers</span></div>
-            <span class="accordionArrow">▾</span>
+          <div class="accordionHeader hdr-cal">
+            <button class="toggleBtn" type="button" data-box="admin-tournees">
+              <span class="accordionTitle"><span class="emoji">📘</span><span>Admin Tournées calendriers</span></span>
+              <span class="accordionArrow">▾</span>
+            </button>
           </div>
           <div class="accordionContent">
             <div class="subAccordion" id="admin-tournees-actives-wrap">
-              <div class="subHeader activeHeader" onclick="toggleAdminTourneeRoot('active')">
-                <span>Tournées actives</span>
-                <span class="subArrow">▾</span>
+              <div class="subHeader activeHeader">
+                <button class="toggleBtn" type="button" onclick="toggleAdminTourneeRoot('active')">
+                  <span>Tournées actives</span>
+                  <span class="subArrow">▾</span>
+                </button>
               </div>
               <div class="subContent" id="adminTourneesActivesRoot"></div>
             </div>
 
             <div class="subAccordion" id="admin-tournees-archives-wrap">
-              <div class="subHeader archiveHeader" onclick="toggleAdminTourneeRoot('archive')">
-                <span>Archives</span>
-                <span class="subArrow">▾</span>
+              <div class="subHeader archiveHeader">
+                <button class="toggleBtn" type="button" onclick="toggleAdminTourneeRoot('archive')">
+                  <span>Archives</span>
+                  <span class="subArrow">▾</span>
+                </button>
               </div>
               <div class="subContent" id="adminTourneesArchivesRoot"></div>
             </div>
@@ -318,8 +335,6 @@ const state = {
   tourneesActives: [],
   tourneesArchives: []
 };
-
-/* ================= UTIL ================= */
 
 function showLoader(v){
   document.getElementById("loader").classList.toggle("show", !!v);
@@ -391,23 +406,18 @@ function jsonp(params){
   });
 }
 
-function toggleBox(id){
+function toggleBoxById(id){
   const el = document.getElementById(id);
   if (!el) return;
   el.classList.toggle("open");
 }
 
-function openBox(id){
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.classList.add("open");
-}
-
-function closeBox(id){
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.classList.remove("open");
-}
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-box]");
+  if (!btn) return;
+  const id = btn.getAttribute("data-box");
+  if (id) toggleBoxById(id);
+});
 
 function parseAnyDate(value){
   if (!value) return null;
@@ -480,17 +490,17 @@ function setAdminMode(on){
   showStatus("ok", state.adminMode ? "Mode administration Amicale activé." : "Mode consultation.");
 }
 
-/* ================= STRUCTURE GENERALE ================= */
-
 function sectionShell(id, headerClass, emoji, title, bodyHtml){
   return `
     <div class="accordion" id="${id}">
-      <div class="accordionHeader ${headerClass}" onclick="toggleBox('${id}')">
-        <div class="accordionTitle">
-          <span class="emoji">${emoji}</span>
-          <span>${title}</span>
-        </div>
-        <span class="accordionArrow">▾</span>
+      <div class="accordionHeader ${headerClass}">
+        <button class="toggleBtn" type="button" data-box="${id}">
+          <span class="accordionTitle">
+            <span class="emoji">${emoji}</span>
+            <span>${title}</span>
+          </span>
+          <span class="accordionArrow">▾</span>
+        </button>
       </div>
       <div class="accordionContent">${bodyHtml}</div>
     </div>
@@ -559,9 +569,11 @@ function renderSimpleBlocks(items, label, prefix){
 
   return items.map((r, i) => `
     <div class="subAccordion" id="${prefix}_${i}">
-      <div class="subHeader" onclick="toggleBox('${prefix}_${i}')">
-        <span>${escapeHtml(r.titre || `${label} ${i + 1}`)}</span>
-        <span class="subArrow">▾</span>
+      <div class="subHeader">
+        <button class="toggleBtn" type="button" data-box="${prefix}_${i}">
+          <span>${escapeHtml(r.titre || `${label} ${i + 1}`)}</span>
+          <span class="subArrow">▾</span>
+        </button>
       </div>
       <div class="subContent">
         <div class="card">
@@ -576,17 +588,21 @@ function renderSimpleBlocks(items, label, prefix){
 function renderTourneesMemberRoots(){
   return `
     <div class="subAccordion" id="tournees_active_block">
-      <div class="subHeader activeHeader" onclick="toggleMemberTourneeRoot('active')">
-        <span>Tournées actives</span>
-        <span class="subArrow">▾</span>
+      <div class="subHeader activeHeader">
+        <button class="toggleBtn" type="button" onclick="toggleMemberTourneeRoot('active')">
+          <span>Tournées actives</span>
+          <span class="subArrow">▾</span>
+        </button>
       </div>
       <div class="subContent" id="tournees_active_content"></div>
     </div>
 
     <div class="subAccordion" id="tournees_archive_block">
-      <div class="subHeader archiveHeader" onclick="toggleMemberTourneeRoot('archive')">
-        <span>Archives</span>
-        <span class="subArrow">▾</span>
+      <div class="subHeader archiveHeader">
+        <button class="toggleBtn" type="button" onclick="toggleMemberTourneeRoot('archive')">
+          <span>Archives</span>
+          <span class="subArrow">▾</span>
+        </button>
       </div>
       <div class="subContent" id="tournees_archive_content"></div>
     </div>
@@ -605,9 +621,11 @@ function renderMemberYears(source){
 
   return groups.map((g, gi) => `
     <div class="subAccordion" id="member_${source}_year_${gi}">
-      <div class="subHeader ${yearClass}" onclick="toggleMemberYear('${source}', ${gi})">
-        <span>Année ${escapeHtml(g.annee)}</span>
-        <span class="subArrow">▾</span>
+      <div class="subHeader ${yearClass}">
+        <button class="toggleBtn" type="button" onclick="toggleMemberYear('${source}', ${gi})">
+          <span>Année ${escapeHtml(g.annee)}</span>
+          <span class="subArrow">▾</span>
+        </button>
       </div>
       <div class="subContent" id="member_${source}_year_content_${gi}"></div>
     </div>
@@ -632,9 +650,11 @@ function renderMemberSectors(source, yearIndex){
 
     ${g.rows.map((r, ri) => `
       <div class="subAccordion" id="member_${source}_year_${yearIndex}_sector_${ri}">
-        <div class="subHeader ${sectorClass}" onclick="toggleMemberSector('${source}', ${yearIndex}, ${ri})">
-          <span>${escapeHtml(r.secteur || "Secteur")}</span>
-          <span class="subArrow">▾</span>
+        <div class="subHeader ${sectorClass}">
+          <button class="toggleBtn" type="button" onclick="toggleMemberSector('${source}', ${yearIndex}, ${ri})">
+            <span>${escapeHtml(r.secteur || "Secteur")}</span>
+            <span class="subArrow">▾</span>
+          </button>
         </div>
         <div class="subContent" id="member_${source}_year_${yearIndex}_sector_content_${ri}"></div>
       </div>
@@ -668,17 +688,12 @@ function toggleMemberTourneeRoot(source){
   const content = document.getElementById(contentId);
   if (!box || !content) return;
 
-  const isOpen = box.classList.contains("open");
-  if (isOpen) {
-    closeBox(boxId);
-    return;
-  }
-
   if (!content.dataset.loaded) {
     content.innerHTML = renderMemberYears(source);
     content.dataset.loaded = "1";
   }
-  openBox(boxId);
+
+  box.classList.toggle("open");
 }
 
 function toggleMemberYear(source, yearIndex){
@@ -688,17 +703,12 @@ function toggleMemberYear(source, yearIndex){
   const content = document.getElementById(contentId);
   if (!box || !content) return;
 
-  const isOpen = box.classList.contains("open");
-  if (isOpen) {
-    closeBox(boxId);
-    return;
-  }
-
   if (!content.dataset.loaded) {
     content.innerHTML = renderMemberSectors(source, yearIndex);
     content.dataset.loaded = "1";
   }
-  openBox(boxId);
+
+  box.classList.toggle("open");
 }
 
 function toggleMemberSector(source, yearIndex, sectorIndex){
@@ -708,17 +718,12 @@ function toggleMemberSector(source, yearIndex, sectorIndex){
   const content = document.getElementById(contentId);
   if (!box || !content) return;
 
-  const isOpen = box.classList.contains("open");
-  if (isOpen) {
-    closeBox(boxId);
-    return;
-  }
-
   if (!content.dataset.loaded) {
     content.innerHTML = renderMemberSectorDetail(source, yearIndex, sectorIndex);
     content.dataset.loaded = "1";
   }
-  openBox(boxId);
+
+  box.classList.toggle("open");
 }
 
 function renderMemberView(){
@@ -829,9 +834,11 @@ function renderAdminYears(source){
 
   return groups.map((g, gi) => `
     <div class="subAccordion" id="admin_${source}_year_${gi}">
-      <div class="subHeader ${yearClass}" onclick="toggleAdminYear('${source}', ${gi})">
-        <span>Année ${escapeHtml(g.annee)}</span>
-        <span class="subArrow">▾</span>
+      <div class="subHeader ${yearClass}">
+        <button class="toggleBtn" type="button" onclick="toggleAdminYear('${source}', ${gi})">
+          <span>Année ${escapeHtml(g.annee)}</span>
+          <span class="subArrow">▾</span>
+        </button>
       </div>
       <div class="subContent" id="admin_${source}_year_content_${gi}"></div>
     </div>
@@ -847,9 +854,11 @@ function renderAdminSectors(source, yearIndex){
 
   return g.rows.map((item, ri) => `
     <div class="subAccordion" id="admin_${source}_year_${yearIndex}_sector_${ri}">
-      <div class="subHeader ${sectorClass}" onclick="toggleAdminSector('${source}', ${yearIndex}, ${ri})">
-        <span>${escapeHtml(item.secteur || "Secteur")}</span>
-        <span class="subArrow">▾</span>
+      <div class="subHeader ${sectorClass}">
+        <button class="toggleBtn" type="button" onclick="toggleAdminSector('${source}', ${yearIndex}, ${ri})">
+          <span>${escapeHtml(item.secteur || "Secteur")}</span>
+          <span class="subArrow">▾</span>
+        </button>
       </div>
       <div class="subContent" id="admin_${source}_year_${yearIndex}_sector_content_${ri}"></div>
     </div>
@@ -890,23 +899,15 @@ function toggleAdminTourneeRoot(source){
   const content = document.getElementById(contentId);
   if (!box || !content) return;
 
-  const isOpen = box.classList.contains("open");
-  if (isOpen) {
-    closeBox(boxId);
-    return;
-  }
-
   if (!content.dataset.loaded) {
     content.innerHTML = renderAdminRootContent(source);
     const yearZoneId = source === "archive" ? "admin_archive_years_zone" : "admin_active_years_zone";
     const yearZone = document.getElementById(yearZoneId);
-    if (yearZone) {
-      yearZone.innerHTML = renderAdminYears(source);
-    }
+    if (yearZone) yearZone.innerHTML = renderAdminYears(source);
     content.dataset.loaded = "1";
   }
 
-  openBox(boxId);
+  box.classList.toggle("open");
 }
 
 function toggleAdminYear(source, yearIndex){
@@ -916,18 +917,12 @@ function toggleAdminYear(source, yearIndex){
   const content = document.getElementById(contentId);
   if (!box || !content) return;
 
-  const isOpen = box.classList.contains("open");
-  if (isOpen) {
-    closeBox(boxId);
-    return;
-  }
-
   if (!content.dataset.loaded) {
     content.innerHTML = renderAdminSectors(source, yearIndex);
     content.dataset.loaded = "1";
   }
 
-  openBox(boxId);
+  box.classList.toggle("open");
 }
 
 function toggleAdminSector(source, yearIndex, sectorIndex){
@@ -937,18 +932,12 @@ function toggleAdminSector(source, yearIndex, sectorIndex){
   const content = document.getElementById(contentId);
   if (!box || !content) return;
 
-  const isOpen = box.classList.contains("open");
-  if (isOpen) {
-    closeBox(boxId);
-    return;
-  }
-
   if (!content.dataset.loaded) {
     content.innerHTML = renderAdminSectorDetail(source, yearIndex, sectorIndex);
     content.dataset.loaded = "1";
   }
 
-  openBox(boxId);
+  box.classList.toggle("open");
 }
 
 function renderAdminView(){
@@ -956,10 +945,18 @@ function renderAdminView(){
   renderAdminList("adminCRList", state.comptesRendus, "cr");
   renderAdminList("adminProjetsList", state.projets, "projets");
   renderAdminList("adminEvenementsList", state.evenements, "evenements");
+
   const activeRoot = document.getElementById("adminTourneesActivesRoot");
   const archiveRoot = document.getElementById("adminTourneesArchivesRoot");
-  if (activeRoot) activeRoot.innerHTML = "";
-  if (archiveRoot) archiveRoot.innerHTML = "";
+  if (activeRoot) {
+    activeRoot.innerHTML = "";
+    delete activeRoot.dataset.loaded;
+  }
+  if (archiveRoot) {
+    archiveRoot.innerHTML = "";
+    delete archiveRoot.dataset.loaded;
+  }
+
   const activeWrap = document.getElementById("admin-tournees-actives-wrap");
   const archiveWrap = document.getElementById("admin-tournees-archives-wrap");
   if (activeWrap) activeWrap.classList.remove("open");
@@ -1239,8 +1236,6 @@ async function archiveTournee(id, btn){
     setButtonSaving(btn, false, "Archiver");
   }
 }
-
-/* ================= INIT ================= */
 
 (async function init(){
   showLoader(true);
