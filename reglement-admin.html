@@ -109,12 +109,17 @@
       color:#fff;
     }
 
+    .regList{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
     .regItem{
       border-radius:18px;
       overflow:hidden;
       border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.05);
-      margin-bottom:12px;
       box-shadow:0 8px 20px rgba(0,0,0,.12);
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
@@ -156,7 +161,7 @@
       color:#fff;
       box-shadow:0 8px 18px rgba(0,0,0,.18);
       flex:0 0 auto;
-      max-width:200px;
+      max-width:180px;
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -227,8 +232,9 @@
     }
 
     .input{min-height:44px}
+
     .textarea{
-      min-height:240px;
+      min-height:260px;
       resize:vertical;
       white-space:pre-wrap;
       line-height:1.5;
@@ -379,7 +385,7 @@
       <div class="dashboard">
         <div class="dashboardTitle">Règlement</div>
         <div class="dashboardSmall">
-          Clique sur un onglet pour le modifier. Tu peux aussi en ajouter un nouveau.
+          Sélectionne un onglet, modifie son texte, puis enregistre.
         </div>
       </div>
 
@@ -393,7 +399,7 @@
           <button class="btn2 btnSecondary" type="button" onclick="loadData()">Actualiser</button>
         </div>
 
-        <div id="reglementList"></div>
+        <div id="reglementList" class="regList"></div>
       </div>
     </div>
   </div>
@@ -413,13 +419,7 @@ const PRESET_COLORS = [
 ];
 
 const FALLBACK_ITEMS = [
-  {
-    key:"vehicules",
-    label:"Véhicules",
-    color:"rgba(75,130,220,.42)",
-    ordre:1,
-    actif:1,
-    contenu:`Utilisation des véhicules
+  { key:"vehicules", label:"Véhicules", color:"rgba(75,130,220,.42)", ordre:1, actif:1, contenu:`Utilisation des véhicules
 
 Les véhicules doivent être maintenus en permanence prêts à partir en intervention.
 
@@ -429,15 +429,8 @@ Si la jauge est proche des 3/4, le complément doit être effectué. Si nécessa
 
 Si le véhicule est sale au retour d’intervention, il doit être nettoyé. En cas d’impossibilité immédiate, prévenir et revenir le lendemain pour effectuer le lavage.
 
-En cas d’anomalie ou de dysfonctionnement, prévenir le responsable du pôle concerné.`
-  },
-  {
-    key:"vsav",
-    label:"VSAV",
-    color:"rgba(145,105,220,.42)",
-    ordre:2,
-    actif:1,
-    contenu:`Inventaire et désinfection VSAV
+En cas d’anomalie ou de dysfonctionnement, prévenir le responsable du pôle concerné.` },
+  { key:"vsav", label:"VSAV", color:"rgba(145,105,220,.42)", ordre:2, actif:1, contenu:`Inventaire et désinfection VSAV
 
 Les personnels peuvent participer à la désinfection mensuelle du VSAV, organisée avec un référent.
 
@@ -447,15 +440,8 @@ Cette participation permet également de se remettre à jour sur l’emplacement
 
 La prise de garde mensuelle est également un moment permettant de réaliser l’inventaire du véhicule et de maintenir la connaissance du matériel.
 
-Les référents VSAV ont mis en place une page dédiée accessible via un QR code présent dans le VSAV, permettant d’accéder directement à la partie “Désinfection VSAV / Inventaire” de la page web du centre.`
-  },
-  {
-    key:"centre",
-    label:"Vie centre",
-    color:"rgba(215,125,60,.42)",
-    ordre:3,
-    actif:1,
-    contenu:`Investissement dans la vie du centre
+Les référents VSAV ont mis en place une page dédiée accessible via un QR code présent dans le VSAV, permettant d’accéder directement à la partie “Désinfection VSAV / Inventaire” de la page web du centre.` },
+  { key:"centre", label:"Vie centre", color:"rgba(215,125,60,.42)", ordre:3, actif:1, contenu:`Investissement dans la vie du centre
 
 Le bon fonctionnement du centre repose sur l’implication de chacun.
 
@@ -464,15 +450,8 @@ Le bon fonctionnement du centre repose sur l’implication de chacun.
 - La prise de responsabilité dans un pôle
 - La participation aux cérémonies officielles
 
-Ces engagements contribuent au bon fonctionnement du centre et au maintien du niveau opérationnel.`
-  },
-  {
-    key:"communication",
-    label:"Com / Manœuvres",
-    color:"rgba(70,170,170,.42)",
-    ordre:4,
-    actif:1,
-    contenu:`Communication / Manœuvres
+Ces engagements contribuent au bon fonctionnement du centre et au maintien du niveau opérationnel.` },
+  { key:"communication", label:"Com / Manœuvres", color:"rgba(70,170,170,.42)", ordre:4, actif:1, contenu:`Communication / Manœuvres
 
 La communication interne est essentielle au bon fonctionnement du centre.
 
@@ -488,15 +467,8 @@ Les personnels doivent arriver prêts au minimum dix minutes avant le début de 
 
 En cas d’impossibilité de présence, il est demandé de prévenir le responsable de la manœuvre dans les meilleurs délais.
 
-Lors des manœuvres, le matériel doit être remis correctement en place et reconditionné afin d’éviter toute mauvaise surprise lors d’une intervention.`
-  },
-  {
-    key:"gardes",
-    label:"Gardes",
-    color:"rgba(210,70,70,.42)",
-    ordre:5,
-    actif:1,
-    contenu:`Gardes et gardes postées hors secteur / Prise de garde
+Lors des manœuvres, le matériel doit être remis correctement en place et reconditionné afin d’éviter toute mauvaise surprise lors d’une intervention.` },
+  { key:"gardes", label:"Gardes", color:"rgba(210,70,70,.42)", ordre:5, actif:1, contenu:`Gardes et gardes postées hors secteur / Prise de garde
 
 Toute prise de garde hors secteur doit être signalée au chef de centre ou à ses adjoints.
 
@@ -514,15 +486,8 @@ Un onglet dédié sur la page web du centre a été créé afin de faciliter la 
 
 Il est demandé de l’utiliser pour le suivi des missions.
 
-La propreté du centre est l’affaire de tous.`
-  },
-  {
-    key:"collectivite",
-    label:"Collectivité",
-    color:"rgba(90,170,105,.42)",
-    ordre:6,
-    actif:1,
-    contenu:`Vie en collectivité
+La propreté du centre est l’affaire de tous.` },
+  { key:"collectivite", label:"Collectivité", color:"rgba(90,170,105,.42)", ordre:6, actif:1, contenu:`Vie en collectivité
 
 Les sapeurs-pompiers ont vocation à aider les personnes, aussi bien les victimes que leurs collègues.
 
@@ -534,15 +499,8 @@ Les espaces communs doivent être respectés : après utilisation de la cuisine 
 
 Les nouveaux arrivants doivent être accueillis et accompagnés afin de faciliter leur intégration.
 
-Le centre doit rester un lieu où l’on vient avec plaisir, dans un esprit de camaraderie et de solidarité.`
-  },
-  {
-    key:"tenue",
-    label:"Tenue / Tabac",
-    color:"rgba(210,170,60,.42)",
-    ordre:7,
-    actif:1,
-    contenu:`Tenue et image du centre / Interdiction de fumer et vapoter
+Le centre doit rester un lieu où l’on vient avec plaisir, dans un esprit de camaraderie et de solidarité.` },
+  { key:"tenue", label:"Tenue / Tabac", color:"rgba(210,170,60,.42)", ordre:7, actif:1, contenu:`Tenue et image du centre / Interdiction de fumer et vapoter
 
 La tenue portée lors des manœuvres, cérémonies ou représentations doit être propre et conforme.
 
@@ -558,8 +516,7 @@ Il est strictement interdit de fumer ou de vapoter dans les locaux du centre de 
 
 Cette règle s’applique à l’ensemble des personnels et des visiteurs.
 
-Des espaces extérieurs peuvent être utilisés pour fumer, dans le respect des lieux et du voisinage.`
-  }
+Des espaces extérieurs peuvent être utilisés pour fumer, dans le respect des lieux et du voisinage.` }
 ];
 
 const state = {
@@ -657,6 +614,25 @@ async function checkAdmin(){
     showStatus("err", "Accès refusé : admin uniquement.");
     return false;
   }
+
+  return true;
+}
+
+function isValidReglementItem(x){
+  if (!x || typeof x !== "object") return false;
+
+  const key = String(x.key || "").trim();
+  const label = String(x.label || "").trim();
+  const color = String(x.color || "").trim();
+  const contenu = String(x.contenu || "").trim();
+
+  if (!key) return false;
+  if (!label) return false;
+  if (!color.startsWith("rgba(")) return false;
+  if (!contenu) return false;
+  if (key.includes(" ")) return false;
+  if (label.includes("rgba(")) return false;
+  if (contenu.startsWith("rgba(")) return false;
 
   return true;
 }
@@ -812,8 +788,11 @@ async function loadData(){
       actorEmail: state.actorEmail
     });
 
-    if (r && r.ok && Array.isArray(r.items) && r.items.length) {
-      state.items = normalizeItems(r.items);
+    const items = (r && r.ok && Array.isArray(r.items)) ? r.items : [];
+    const validItems = items.filter(isValidReglementItem);
+
+    if (validItems.length) {
+      state.items = normalizeItems(validItems);
       renderList();
       showStatus("ok", "Règlement chargé.");
       showLoader(false);
@@ -822,14 +801,14 @@ async function loadData(){
 
     state.items = normalizeItems(FALLBACK_ITEMS);
     renderList();
-    showStatus("info", "Affichage des textes existants. Ils seront enregistrés dans Sheets lors de la première sauvegarde.");
+    showStatus("info", "Affichage des textes existants.");
     showLoader(false);
 
   }catch(err){
     state.items = normalizeItems(FALLBACK_ITEMS);
     renderList();
     showLoader(false);
-    showStatus("info", "Affichage des textes existants. Ils seront enregistrés dans Sheets lors de la première sauvegarde.");
+    showStatus("info", "Affichage des textes existants.");
   }
 }
 
@@ -881,7 +860,7 @@ async function deleteCard(btn){
   const card = btn.closest(".regItem");
   if (!card) return;
 
-  const key = (card.dataset.original-key || card.dataset.originalKey || "").trim();
+  const key = (card.dataset.originalKey || "").trim();
   if (!key) {
     card.remove();
     return;
