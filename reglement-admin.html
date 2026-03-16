@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Admin Règlement — CS Consenvoye</title>
+  <link rel="stylesheet" href="cs-theme.css">
+
+  <style>
+    .adminWrap{
+      max-width:980px;
+      margin:0 auto;
+      padding:14px;
+    }
+
+    .dashboard{
+      padding:14px 16px;
+      margin-bottom:16px;
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(210,70,70,.30), rgba(210,70,70,.16));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      color:rgba(255,255,255,.96);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+
+    .dashboardTitle{
+      font-size:20px;
+      font-weight:900;
+      line-height:1.2;
+    }
+
+    .dashboardSmall{
+      margin-top:8px;
+      font-size:13px;
+      font-weight:800;
+      color:rgba(255,255,255,.78);
+      line-height:1.35;
+    }
+
+    .status{
+      display:none;
+      margin-bottom:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:800;
+      line-height:1.4;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .status.show{display:block}
+    .status.ok{background:rgba(47,158,91,.18);color:#d9ffe7}
+    .status.err{background:rgba(220,70,70,.18);color:#ffe1e1}
+    .status.info{background:rgba(47,111,212,.18);color:#dde9ff}
+
+    .card{
+      border-radius:20px;
+      padding:14px;
+      margin-bottom:14px;
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.95);
+    }
+
+    .cardTitle{
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:12px;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    .btn2{
+      border:none;
+      border-radius:14px;
+      min-height:44px;
+      padding:12px 16px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+
+    .btnPrimary{
+      background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
+      color:#fff;
+    }
+
+    .btnSecondary{
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .btnDanger{
+      background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
+      color:#fff;
+    }
+
+    .btn2[disabled]{opacity:.7;cursor:default}
+
+    .collapsible{
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      margin-bottom:12px;
+      box-shadow:0 8px 20px rgba(0,0,0,.12);
+    }
+
+    .collapsibleHeader{
+      padding:14px;
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .cardHeaderGrid{
+      display:grid;
+      grid-template-columns:18px 1fr;
+      gap:10px 12px;
+      align-items:center;
+    }
+
+    .chevron{
+      width:18px;
+      text-align:center;
+      font-size:15px;
+      color:rgba(255,255,255,.90);
+      transition:transform .18s ease;
+      line-height:1;
+    }
+
+    .collapsible.open .chevron{
+      transform:rotate(90deg);
+    }
+
+    .headerMain{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .tabPreview{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:34px;
+      padding:6px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      font-size:12px;
+      font-weight:900;
+      color:#fff;
+      width:max-content;
+      max-width:100%;
+      box-shadow:0 8px 18px rgba(0,0,0,.18);
+    }
+
+    .tabTitle{
+      font-size:16px;
+      font-weight:900;
+      color:rgba(255,255,255,.98);
+      line-height:1.15;
+      word-break:break-word;
+    }
+
+    .meta{
+      font-size:12px;
+      font-weight:800;
+      color:rgba(255,255,255,.74);
+    }
+
+    .collapsibleContent{
+      display:none;
+      padding:0 14px 14px;
+      background:rgba(0,0,0,.08);
+    }
+
+    .collapsible.open .collapsibleContent{
+      display:block;
+    }
+
+    .detailsGrid{
+      display:grid;
+      gap:10px;
+      grid-template-columns:1fr;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:10px;
+    }
+
+    .label{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.80);
+    }
+
+    .input,.textarea{
+      width:100%;
+      border:none;
+      outline:none;
+      border-radius:12px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+      font-size:15px;
+      font-family:inherit;
+    }
+
+    .input{min-height:44px}
+    .textarea{min-height:140px;resize:vertical}
+
+    .switchBox{
+      border-radius:12px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      margin-bottom:10px;
+    }
+
+    .switchLabel{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      font-size:14px;
+      font-weight:900;
+      color:rgba(255,255,255,.92);
+    }
+
+    .switchLabel input{
+      width:20px;
+      height:20px;
+      accent-color:#ff8c00;
+      margin:0;
+    }
+
+    .actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    .empty{
+      padding:14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      border:1px dashed rgba(255,255,255,.10);
+      color:rgba(255,255,255,.76);
+      font-weight:800;
+    }
+
+    .loaderOverlay{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.35);
+      backdrop-filter:blur(4px);
+      -webkit-backdrop-filter:blur(4px);
+      z-index:99999;
+    }
+
+    .loaderOverlay.show{display:flex}
+
+    .loaderBox{
+      width:52px;
+      height:52px;
+      border-radius:999px;
+      background:rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.15);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 14px 34px rgba(0,0,0,.40);
+    }
+
+    .loaderSpinner{
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      border:3px solid rgba(255,255,255,.25);
+      border-top-color:#ff8c00;
+      animation:spin .8s linear infinite;
+    }
+
+    @keyframes spin{
+      to{transform:rotate(360deg)}
+    }
+
+    @media (min-width:800px){
+      .detailsGrid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg"></div>
+
+  <div id="loader" class="loaderOverlay">
+    <div class="loaderBox"><div class="loaderSpinner"></div></div>
+  </div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="title">📘 Admin règlement</div>
+      <button class="btn" onclick="window.location.href='admin.html'">Retour</button>
+    </div>
+
+    <div class="adminWrap">
+      <div class="dashboard">
+        <div class="dashboardTitle">Onglets du règlement</div>
+        <div class="dashboardSmall">
+          Tu peux ajouter, modifier, masquer ou réordonner les onglets colorés du carnet.
+        </div>
+      </div>
+
+      <div id="statusBox" class="status info"></div>
+
+      <div class="card">
+        <div class="cardTitle">Onglets existants</div>
+
+        <div class="toolbar">
+          <button class="btn2 btnSecondary" type="button" onclick="loadData()">Actualiser</button>
+        </div>
+
+        <div id="reglementList"></div>
+      </div>
+
+      <div class="card">
+        <div class="cardTitle">Ajouter un onglet</div>
+
+        <div class="collapsible" id="addTabBox">
+          <div class="collapsibleHeader" onclick="toggleCollapseById('addTabBox')">
+            <div class="cardHeaderGrid">
+              <div class="chevron">▶</div>
+              <div class="headerMain">
+                <div class="tabTitle">Nouvel onglet</div>
+                <div class="meta">Ajouter un onglet coloré au carnet</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="collapsibleContent">
+            <div class="detailsGrid">
+              <div class="field">
+                <label class="label">Key</label>
+                <input class="input" id="new_key" type="text" placeholder="ex: tabac">
+              </div>
+
+              <div class="field">
+                <label class="label">Libellé</label>
+                <input class="input" id="new_label" type="text" placeholder="ex: Tabac">
+              </div>
+
+              <div class="field">
+                <label class="label">Couleur</label>
+                <input class="input" id="new_color" type="text" placeholder="rgba(210,170,60,.35)">
+              </div>
+
+              <div class="field">
+                <label class="label">Ordre</label>
+                <input class="input" id="new_ordre" type="number" placeholder="8">
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Contenu</label>
+              <textarea class="textarea" id="new_contenu"></textarea>
+            </div>
+
+            <div class="switchBox">
+              <label class="switchLabel">
+                <span>Onglet actif</span>
+                <input id="new_actif" type="checkbox" checked>
+              </label>
+            </div>
+
+            <div class="actions">
+              <button class="btn2 btnPrimary" type="button" onclick="createTab(this)">Créer l’onglet</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+const EMAIL_KEY = "cs_portail_email_v1";
+
+const state = {
+  actorEmail: "",
+  items: []
+};
+
+function showLoader(v){
+  document.getElementById("loader").classList.toggle("show", !!v);
+}
+
+function showStatus(type, message){
+  const box = document.getElementById("statusBox");
+  box.className = "status show " + type;
+  box.textContent = message || "";
+}
+
+function setButtonSaving(btn, saving, savingText = "Enregistrement..."){
+  if (!btn) return;
+  if (saving) {
+    btn.dataset.originalText = btn.textContent;
+    btn.textContent = savingText;
+    btn.disabled = true;
+  } else {
+    btn.textContent = btn.dataset.originalText || btn.textContent;
+    btn.disabled = false;
+  }
+}
+
+function escapeHtml(v){
+  return String(v == null ? "" : v)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function getCurrentEmail(){
+  return (localStorage.getItem(EMAIL_KEY) || "").trim().toLowerCase();
+}
+
+function jsonp(params){
+  return new Promise((resolve, reject) => {
+    const callbackName = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+    const script = document.createElement("script");
+    const url = new URL(SCRIPT_URL);
+
+    window[callbackName] = function(data){
+      cleanup();
+      resolve(data);
+    };
+
+    function cleanup(){
+      try { delete window[callbackName]; } catch(e){}
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    script.onerror = function(){
+      cleanup();
+      reject(new Error("Erreur de chargement JSONP"));
+    };
+
+    url.searchParams.set("callback", callbackName);
+    url.searchParams.set("_ts", Date.now());
+
+    Object.keys(params || {}).forEach(k => {
+      url.searchParams.set(k, params[k]);
+    });
+
+    script.src = url.toString();
+    document.body.appendChild(script);
+  });
+}
+
+async function checkAdmin(){
+  state.actorEmail = getCurrentEmail();
+
+  if (!state.actorEmail) {
+    showStatus("err", "Aucun email admin détecté.");
+    return false;
+  }
+
+  const r = await jsonp({
+    view: "auth_check",
+    email: state.actorEmail
+  });
+
+  if (!r || !r.ok) {
+    showStatus("err", "Utilisateur non autorisé.");
+    return false;
+  }
+
+  if (String(r.role || "").toLowerCase() !== "admin") {
+    showStatus("err", "Accès refusé : admin uniquement.");
+    return false;
+  }
+
+  return true;
+}
+
+function toggleCollapseById(id){
+  const box = document.getElementById(id);
+  if (!box) return;
+  box.classList.toggle("open");
+}
+
+function toggleCard(id){
+  const box = document.getElementById(id);
+  if (!box) return;
+  box.classList.toggle("open");
+}
+
+function renderList(){
+  const zone = document.getElementById("reglementList");
+  const items = Array.isArray(state.items) ? state.items : [];
+
+  if (!items.length) {
+    zone.innerHTML = '<div class="empty">Aucun onglet trouvé.</div>';
+    return;
+  }
+
+  let html = "";
+
+  items.forEach((item, index) => {
+    html += `
+      <div class="collapsible" id="regCard_${index}" data-original-key="${escapeHtml(item.key || "")}">
+        <div class="collapsibleHeader" onclick="toggleCard('regCard_${index}')">
+          <div class="cardHeaderGrid">
+            <div class="chevron">▶</div>
+            <div class="headerMain">
+              <div class="tabPreview" style="background:${escapeHtml(item.color || "rgba(75,130,220,.35)")};">
+                ${escapeHtml(item.label || item.key || "Sans titre")}
+              </div>
+              <div class="meta">key : ${escapeHtml(item.key || "")} • ordre : ${escapeHtml(item.ordre || 0)} • ${item.actif ? "actif" : "masqué"}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="collapsibleContent">
+          <div class="detailsGrid">
+            <div class="field">
+              <label class="label">Key</label>
+              <input class="input field-key" type="text" value="${escapeHtml(item.key || "")}">
+            </div>
+
+            <div class="field">
+              <label class="label">Libellé</label>
+              <input class="input field-label" type="text" value="${escapeHtml(item.label || "")}">
+            </div>
+
+            <div class="field">
+              <label class="label">Couleur</label>
+              <input class="input field-color" type="text" value="${escapeHtml(item.color || "")}">
+            </div>
+
+            <div class="field">
+              <label class="label">Ordre</label>
+              <input class="input field-ordre" type="number" value="${escapeHtml(item.ordre || 0)}">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Contenu</label>
+            <textarea class="textarea field-contenu">${escapeHtml(item.contenu || "")}</textarea>
+          </div>
+
+          <div class="switchBox">
+            <label class="switchLabel">
+              <span>Onglet actif</span>
+              <input class="field-actif" type="checkbox" ${item.actif ? "checked" : ""}>
+            </label>
+          </div>
+
+          <div class="actions">
+            <button class="btn2 btnPrimary" type="button" onclick="saveCard(this)">Enregistrer</button>
+            <button class="btn2 btnDanger" type="button" onclick="deleteCard(this)">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  zone.innerHTML = html;
+}
+
+async function loadData(){
+  try{
+    showLoader(true);
+    showStatus("info", "Chargement du règlement...");
+
+    const r = await jsonp({
+      view: "reglement_admin_data",
+      actorEmail: state.actorEmail
+    });
+
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de chargement.");
+      showLoader(false);
+      return;
+    }
+
+    state.items = Array.isArray(r.items) ? r.items : [];
+    renderList();
+    showStatus("ok", "Règlement chargé.");
+    showLoader(false);
+
+  }catch(err){
+    showLoader(false);
+    showStatus("err", err?.message || String(err));
+  }
+}
+
+async function saveCard(btn){
+  const card = btn.closest(".collapsible");
+  if (!card) return;
+
+  const originalKey = (card.dataset.originalKey || "").trim();
+  const key = (card.querySelector(".field-key")?.value || "").trim();
+  const label = (card.querySelector(".field-label")?.value || "").trim();
+  const color = (card.querySelector(".field-color")?.value || "").trim();
+  const ordre = (card.querySelector(".field-ordre")?.value || "").trim();
+  const contenu = (card.querySelector(".field-contenu")?.value || "").trim();
+  const actif = card.querySelector(".field-actif")?.checked ? 1 : 0;
+
+  try{
+    setButtonSaving(btn, true);
+    showStatus("info", "Enregistrement...");
+
+    const r = await jsonp({
+      view: "reglement_save",
+      actorEmail: state.actorEmail,
+      originalKey,
+      key,
+      label,
+      color,
+      ordre,
+      contenu,
+      actif
+    });
+
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
+      setButtonSaving(btn, false);
+      return;
+    }
+
+    showStatus("ok", "Onglet enregistré.");
+    await loadData();
+
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false);
+  }
+}
+
+async function deleteCard(btn){
+  const card = btn.closest(".collapsible");
+  if (!card) return;
+
+  const key = (card.dataset.originalKey || "").trim();
+  if (!key) return;
+
+  try{
+    showStatus("info", "Suppression...");
+
+    const r = await jsonp({
+      view: "reglement_delete",
+      actorEmail: state.actorEmail,
+      key
+    });
+
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de suppression.");
+      return;
+    }
+
+    showStatus("ok", "Onglet supprimé.");
+    await loadData();
+
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  }
+}
+
+async function createTab(btn){
+  const key = (document.getElementById("new_key")?.value || "").trim();
+  const label = (document.getElementById("new_label")?.value || "").trim();
+  const color = (document.getElementById("new_color")?.value || "").trim();
+  const ordre = (document.getElementById("new_ordre")?.value || "").trim();
+  const contenu = (document.getElementById("new_contenu")?.value || "").trim();
+  const actif = document.getElementById("new_actif")?.checked ? 1 : 0;
+
+  try{
+    setButtonSaving(btn, true, "Création...");
+    showStatus("info", "Création de l’onglet...");
+
+    const r = await jsonp({
+      view: "reglement_save",
+      actorEmail: state.actorEmail,
+      originalKey: "",
+      key,
+      label,
+      color,
+      ordre,
+      contenu,
+      actif
+    });
+
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de création.");
+      setButtonSaving(btn, false);
+      return;
+    }
+
+    document.getElementById("new_key").value = "";
+    document.getElementById("new_label").value = "";
+    document.getElementById("new_color").value = "";
+    document.getElementById("new_ordre").value = "";
+    document.getElementById("new_contenu").value = "";
+    document.getElementById("new_actif").checked = true;
+
+    showStatus("ok", "Onglet créé.");
+    await loadData();
+
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false, "Créer l’onglet");
+  }
+}
+
+(async function init(){
+  const ok = await checkAdmin();
+  if (!ok) return;
+  await loadData();
+})();
+</script>
+</body>
+</html>
