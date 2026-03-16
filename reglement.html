@@ -312,20 +312,22 @@
   </div>
 
   <script>
-    const TAB_COLORS = {
-      vehicules: "rgba(75,130,220,.35)",
-      vsav: "rgba(145,105,220,.35)",
-      centre: "rgba(215,125,60,.35)",
-      communication: "rgba(70,170,170,.35)",
-      gardes: "rgba(210,70,70,.35)",
-      collectivite: "rgba(90,170,105,.35)",
-      tenue: "rgba(210,170,60,.35)"
-    };
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-    const REGLEMENT_DATA = {
-      vehicules: `
-        <h2>Utilisation des véhicules</h2>
-        <p>Les véhicules doivent être maintenus en permanence prêts à partir en intervention.
+  const TAB_COLORS = {
+    vehicules: "rgba(75,130,220,.35)",
+    vsav: "rgba(145,105,220,.35)",
+    centre: "rgba(215,125,60,.35)",
+    communication: "rgba(70,170,170,.35)",
+    gardes: "rgba(210,70,70,.35)",
+    collectivite: "rgba(90,170,105,.35)",
+    tenue: "rgba(210,170,60,.35)"
+  };
+
+  const REGLEMENT_DATA = {
+    vehicules: `
+      <h2>Utilisation des véhicules</h2>
+      <p>Les véhicules doivent être maintenus en permanence prêts à partir en intervention.
 
 Après chaque intervention ou manœuvre, l’équipage veille à remettre le matériel en place, remplir le carnet de bord et vérifier le niveau de carburant.
 
@@ -334,11 +336,11 @@ Si la jauge est proche des 3/4, le complément doit être effectué. Si nécessa
 Si le véhicule est sale au retour d’intervention, il doit être nettoyé. En cas d’impossibilité immédiate, prévenir et revenir le lendemain pour effectuer le lavage.
 
 En cas d’anomalie ou de dysfonctionnement, prévenir le responsable du pôle concerné.</p>
-      `,
+    `,
 
-      vsav: `
-        <h2>Inventaire et désinfection VSAV</h2>
-        <p>Les personnels peuvent participer à la désinfection mensuelle du VSAV, organisée avec un référent.
+    vsav: `
+      <h2>Inventaire et désinfection VSAV</h2>
+      <p>Les personnels peuvent participer à la désinfection mensuelle du VSAV, organisée avec un référent.
 
 L’inscription peut se faire via la page web du centre ou sur la feuille d’inscription disponible au centre.
 
@@ -347,25 +349,25 @@ Cette participation permet également de se remettre à jour sur l’emplacement
 La prise de garde mensuelle est également un moment permettant de réaliser l’inventaire du véhicule et de maintenir la connaissance du matériel.
 
 Les référents VSAV ont mis en place une page dédiée accessible via un QR code présent dans le VSAV, permettant d’accéder directement à la partie “Désinfection VSAV / Inventaire” de la page web du centre.</p>
-      `,
+    `,
 
-      centre: `
-        <h2>Investissement dans la vie du centre</h2>
-        <p>Le bon fonctionnement du centre repose sur l’implication de chacun.</p>
+    centre: `
+      <h2>Investissement dans la vie du centre</h2>
+      <p>Le bon fonctionnement du centre repose sur l’implication de chacun.</p>
 
-        <ul>
-          <li>L’encadrement ou l’accompagnement des JSP</li>
-          <li>La préparation des manœuvres</li>
-          <li>La prise de responsabilité dans un pôle</li>
-          <li>La participation aux cérémonies officielles</li>
-        </ul>
+      <ul>
+        <li>L’encadrement ou l’accompagnement des JSP</li>
+        <li>La préparation des manœuvres</li>
+        <li>La prise de responsabilité dans un pôle</li>
+        <li>La participation aux cérémonies officielles</li>
+      </ul>
 
-        <p>Ces engagements contribuent au bon fonctionnement du centre et au maintien du niveau opérationnel.</p>
-      `,
+      <p>Ces engagements contribuent au bon fonctionnement du centre et au maintien du niveau opérationnel.</p>
+    `,
 
-      communication: `
-        <h2>Communication / Manœuvres</h2>
-        <p>La communication interne est essentielle au bon fonctionnement du centre.
+    communication: `
+      <h2>Communication / Manœuvres</h2>
+      <p>La communication interne est essentielle au bon fonctionnement du centre.
 
 Les personnels sont invités à consulter régulièrement les moyens de communication du centre et à répondre aux sondages et aux questions posées.
 
@@ -373,26 +375,26 @@ Il est recommandé de répondre dans les plus brefs délais, ou dans les délais
 
 Répondre aux sollicitations est également une marque de respect pour les personnes qui prennent du temps pour organiser les activités du centre.</p>
 
-        <p>Les manœuvres sont indispensables au maintien des compétences opérationnelles.
+      <p>Les manœuvres sont indispensables au maintien des compétences opérationnelles.
 
 Les personnels doivent arriver prêts au minimum dix minutes avant le début de la manœuvre, par respect pour les organisateurs.
 
 En cas d’impossibilité de présence, il est demandé de prévenir le responsable de la manœuvre dans les meilleurs délais.
 
 Lors des manœuvres, le matériel doit être remis correctement en place et reconditionné afin d’éviter toute mauvaise surprise lors d’une intervention.</p>
-      `,
+    `,
 
-      gardes: `
-        <h2>Gardes et gardes postées hors secteur / Prise de garde</h2>
-        <p>Toute prise de garde hors secteur doit être signalée au chef de centre ou à ses adjoints.</p>
+    gardes: `
+      <h2>Gardes et gardes postées hors secteur / Prise de garde</h2>
+      <p>Toute prise de garde hors secteur doit être signalée au chef de centre ou à ses adjoints.</p>
 
-        <ul>
-          <li>78 heures de disponibilité mensuelle : 1 garde</li>
-          <li>108 heures de disponibilité mensuelle : 2 gardes</li>
-          <li>Une troisième garde peut être accordée en cas d’investissement particulier dans la vie du centre (JSP, responsable de pôle, implication dans celui-ci)</li>
-        </ul>
+      <ul>
+        <li>78 heures de disponibilité mensuelle : 1 garde</li>
+        <li>108 heures de disponibilité mensuelle : 2 gardes</li>
+        <li>Une troisième garde peut être accordée en cas d’investissement particulier dans la vie du centre (JSP, responsable de pôle, implication dans celui-ci)</li>
+      </ul>
 
-        <p>La prise de garde est organisée mensuellement.
+      <p>La prise de garde est organisée mensuellement.
 
 Un responsable est désigné chaque mois afin d’organiser cette prise de garde avec les agents également désignés pour le mois.
 
@@ -403,11 +405,11 @@ Un onglet dédié sur la page web du centre a été créé afin de faciliter la 
 Il est demandé de l’utiliser pour le suivi des missions.
 
 La propreté du centre est l’affaire de tous.</p>
-      `,
+    `,
 
-      collectivite: `
-        <h2>Vie en collectivité</h2>
-        <p>Les sapeurs-pompiers ont vocation à aider les personnes, aussi bien les victimes que leurs collègues.
+    collectivite: `
+      <h2>Vie en collectivité</h2>
+      <p>Les sapeurs-pompiers ont vocation à aider les personnes, aussi bien les victimes que leurs collègues.
 
 Il est attendu de chacun une attitude respectueuse, contribuant à maintenir une bonne ambiance au centre et lors des manœuvres.
 
@@ -418,11 +420,11 @@ Les espaces communs doivent être respectés : après utilisation de la cuisine 
 Les nouveaux arrivants doivent être accueillis et accompagnés afin de faciliter leur intégration.
 
 Le centre doit rester un lieu où l’on vient avec plaisir, dans un esprit de camaraderie et de solidarité.</p>
-      `,
+    `,
 
-      tenue: `
-        <h2>Tenue et image du centre / Interdiction de fumer et vapoter</h2>
-        <p>La tenue portée lors des manœuvres, cérémonies ou représentations doit être propre et conforme.
+    tenue: `
+      <h2>Tenue et image du centre / Interdiction de fumer et vapoter</h2>
+      <p>La tenue portée lors des manœuvres, cérémonies ou représentations doit être propre et conforme.
 
 Chaque sapeur-pompier représente le centre de secours et le SDIS, que ce soit en intervention ou lors de déplacements en tenue.
 
@@ -432,38 +434,150 @@ Lors des cérémonies et événements officiels, une tenue soignée et une attit
 
 Le respect de l’uniforme et de l’image du centre contribue à la crédibilité et à la reconnaissance du service auprès de la population.</p>
 
-        <p>Il est strictement interdit de fumer ou de vapoter dans les locaux du centre de secours, ainsi que dans les véhicules de service.
+      <p>Il est strictement interdit de fumer ou de vapoter dans les locaux du centre de secours, ainsi que dans les véhicules de service.
 
 Cette règle s’applique à l’ensemble des personnels et des visiteurs.
 
 Des espaces extérieurs peuvent être utilisés pour fumer, dans le respect des lieux et du voisinage.</p>
-      `
-    };
+    `
+  };
 
-    const regContent = document.getElementById("regContent");
-    const tabs = document.querySelectorAll(".tab");
+  const regContent = document.getElementById("regContent");
+  const tabsWrap = document.querySelector(".tabs");
 
-    function renderReglement(key){
-      document.documentElement.style.setProperty("--activeTitleBg", TAB_COLORS[key]);
+  let liveItems = [];
+
+  function jsonp(params){
+    return new Promise((resolve, reject) => {
+      const callbackName = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+      const script = document.createElement("script");
+      const url = new URL(SCRIPT_URL);
+
+      window[callbackName] = function(data){
+        cleanup();
+        resolve(data);
+      };
+
+      function cleanup(){
+        try{ delete window[callbackName]; }catch(e){}
+        if (script.parentNode) script.parentNode.removeChild(script);
+      }
+
+      script.onerror = function(){
+        cleanup();
+        reject(new Error("Erreur de chargement"));
+      };
+
+      url.searchParams.set("callback", callbackName);
+      url.searchParams.set("_ts", Date.now());
+
+      Object.keys(params || {}).forEach(k => {
+        url.searchParams.set(k, params[k]);
+      });
+
+      script.src = url.toString();
+      document.body.appendChild(script);
+    });
+  }
+
+  function escapeHtml(v){
+    return String(v == null ? "" : v)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function buildHtmlFromSheet(item){
+    const contenu = String(item.contenu || "");
+    return `
+      <h2>${escapeHtml(item.label || "")}</h2>
+      <p>${escapeHtml(contenu).replace(/\\n/g, "<br>").replace(/\n/g, "<br>")}</p>
+    `;
+  }
+
+  function renderReglement(key){
+    const liveItem = liveItems.find(x => x.key === key);
+
+    if (liveItem) {
+      document.documentElement.style.setProperty("--activeTitleBg", liveItem.color || "rgba(75,130,220,.35)");
       regContent.classList.remove("switching");
       void regContent.offsetWidth;
-      regContent.innerHTML = REGLEMENT_DATA[key];
+      regContent.innerHTML = buildHtmlFromSheet(liveItem);
       regContent.classList.add("switching");
+      return;
     }
 
+    document.documentElement.style.setProperty("--activeTitleBg", TAB_COLORS[key] || "rgba(75,130,220,.35)");
+    regContent.classList.remove("switching");
+    void regContent.offsetWidth;
+    regContent.innerHTML = REGLEMENT_DATA[key] || `<h2>Règlement</h2><p>Contenu introuvable.</p>`;
+    regContent.classList.add("switching");
+  }
+
+  function bindTabs(){
+    const tabs = document.querySelectorAll(".tab");
     tabs.forEach(tab => {
       tab.addEventListener("click", () => {
-        tabs.forEach(t => t.classList.remove("active"));
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
         tab.classList.add("active");
         renderReglement(tab.dataset.key);
       });
     });
+  }
 
+  function renderFallbackTabs(){
+    tabsWrap.innerHTML = `
+      <div class="tab active" data-key="vehicules">Véhicules</div>
+      <div class="tab" data-key="vsav">VSAV</div>
+      <div class="tab" data-key="centre">Vie centre</div>
+      <div class="tab" data-key="communication">Com / Manœuvres</div>
+      <div class="tab" data-key="gardes">Gardes</div>
+      <div class="tab" data-key="collectivite">Collectivité</div>
+      <div class="tab" data-key="tenue">Tenue / Tabac</div>
+    `;
+    bindTabs();
     renderReglement("vehicules");
+  }
 
-    document.getElementById("btnBack").addEventListener("click", () => {
-      location.replace("informations.html");
-    });
-  </script>
+  function renderLiveTabs(items){
+    tabsWrap.innerHTML = items.map((item, index) => `
+      <div
+        class="tab ${index === 0 ? "active" : ""}"
+        data-key="${escapeHtml(item.key)}"
+        style="background:linear-gradient(180deg, ${item.color || "rgba(75,130,220,.42)"}, rgba(255,255,255,.10));"
+      >
+        ${escapeHtml(item.label)}
+      </div>
+    `).join("");
+
+    bindTabs();
+    renderReglement(items[0].key);
+  }
+
+  async function initReglement(){
+    try{
+      const r = await jsonp({ view: "reglement_tabs" });
+
+      if (r && r.ok && Array.isArray(r.items) && r.items.length) {
+        liveItems = r.items;
+        renderLiveTabs(liveItems);
+        return;
+      }
+
+      renderFallbackTabs();
+
+    }catch(err){
+      renderFallbackTabs();
+    }
+  }
+
+  document.getElementById("btnBack").addEventListener("click", () => {
+    location.replace("informations.html");
+  });
+
+  initReglement();
+</script>
 </body>
 </html>
