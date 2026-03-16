@@ -91,6 +91,7 @@
     }
 
     .btn2:active{transform:translateY(1px)}
+    .btn2[disabled]{opacity:.7;cursor:default}
 
     .btnPrimary{
       background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
@@ -107,8 +108,6 @@
       background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
       color:#fff;
     }
-
-    .btn2[disabled]{opacity:.7;cursor:default}
 
     .regItem{
       border-radius:18px;
@@ -128,6 +127,7 @@
       padding:14px;
       cursor:pointer;
       user-select:none;
+      -webkit-tap-highlight-color:transparent;
     }
 
     .chevron{
@@ -156,7 +156,7 @@
       color:#fff;
       box-shadow:0 8px 18px rgba(0,0,0,.18);
       flex:0 0 auto;
-      max-width:220px;
+      max-width:200px;
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -195,7 +195,7 @@
 
     .detailsGrid{
       display:grid;
-      gap:10px;
+      gap:12px;
       grid-template-columns:1fr;
     }
 
@@ -204,6 +204,7 @@
       flex-direction:column;
       gap:6px;
       margin-bottom:10px;
+      min-width:0;
     }
 
     .label{
@@ -226,7 +227,12 @@
     }
 
     .input{min-height:44px}
-    .textarea{min-height:220px;resize:vertical}
+    .textarea{
+      min-height:240px;
+      resize:vertical;
+      white-space:pre-wrap;
+      line-height:1.5;
+    }
 
     .switchBox{
       border-radius:12px;
@@ -267,6 +273,7 @@
       border:2px solid rgba(255,255,255,.20);
       cursor:pointer;
       box-shadow:0 8px 18px rgba(0,0,0,.18);
+      flex:0 0 auto;
     }
 
     .colorBtn.selected{
@@ -283,6 +290,7 @@
       border-radius:12px;
       background:rgba(255,255,255,.05);
       border:1px solid rgba(255,255,255,.08);
+      flex-wrap:wrap;
     }
 
     .previewLabel{
@@ -371,7 +379,7 @@
       <div class="dashboard">
         <div class="dashboardTitle">Règlement</div>
         <div class="dashboardSmall">
-          Clique sur un onglet pour le modifier. Les couleurs se choisissent avec les pastilles.
+          Clique sur un onglet pour le modifier. Tu peux aussi en ajouter un nouveau.
         </div>
       </div>
 
@@ -379,10 +387,12 @@
 
       <div class="card">
         <div class="cardTitle">Onglets</div>
+
         <div class="toolbar">
           <button class="btn2 btnPrimary" type="button" onclick="createNewItem()">Ajouter un onglet</button>
           <button class="btn2 btnSecondary" type="button" onclick="loadData()">Actualiser</button>
         </div>
+
         <div id="reglementList"></div>
       </div>
     </div>
@@ -400,6 +410,156 @@ const PRESET_COLORS = [
   "rgba(210,70,70,.42)",
   "rgba(90,170,105,.42)",
   "rgba(210,170,60,.42)"
+];
+
+const FALLBACK_ITEMS = [
+  {
+    key:"vehicules",
+    label:"Véhicules",
+    color:"rgba(75,130,220,.42)",
+    ordre:1,
+    actif:1,
+    contenu:`Utilisation des véhicules
+
+Les véhicules doivent être maintenus en permanence prêts à partir en intervention.
+
+Après chaque intervention ou manœuvre, l’équipage veille à remettre le matériel en place, remplir le carnet de bord et vérifier le niveau de carburant.
+
+Si la jauge est proche des 3/4, le complément doit être effectué. Si nécessaire, il est possible d’utiliser une autre station-service.
+
+Si le véhicule est sale au retour d’intervention, il doit être nettoyé. En cas d’impossibilité immédiate, prévenir et revenir le lendemain pour effectuer le lavage.
+
+En cas d’anomalie ou de dysfonctionnement, prévenir le responsable du pôle concerné.`
+  },
+  {
+    key:"vsav",
+    label:"VSAV",
+    color:"rgba(145,105,220,.42)",
+    ordre:2,
+    actif:1,
+    contenu:`Inventaire et désinfection VSAV
+
+Les personnels peuvent participer à la désinfection mensuelle du VSAV, organisée avec un référent.
+
+L’inscription peut se faire via la page web du centre ou sur la feuille d’inscription disponible au centre.
+
+Cette participation permet également de se remettre à jour sur l’emplacement du matériel dans le VSAV.
+
+La prise de garde mensuelle est également un moment permettant de réaliser l’inventaire du véhicule et de maintenir la connaissance du matériel.
+
+Les référents VSAV ont mis en place une page dédiée accessible via un QR code présent dans le VSAV, permettant d’accéder directement à la partie “Désinfection VSAV / Inventaire” de la page web du centre.`
+  },
+  {
+    key:"centre",
+    label:"Vie centre",
+    color:"rgba(215,125,60,.42)",
+    ordre:3,
+    actif:1,
+    contenu:`Investissement dans la vie du centre
+
+Le bon fonctionnement du centre repose sur l’implication de chacun.
+
+- L’encadrement ou l’accompagnement des JSP
+- La préparation des manœuvres
+- La prise de responsabilité dans un pôle
+- La participation aux cérémonies officielles
+
+Ces engagements contribuent au bon fonctionnement du centre et au maintien du niveau opérationnel.`
+  },
+  {
+    key:"communication",
+    label:"Com / Manœuvres",
+    color:"rgba(70,170,170,.42)",
+    ordre:4,
+    actif:1,
+    contenu:`Communication / Manœuvres
+
+La communication interne est essentielle au bon fonctionnement du centre.
+
+Les personnels sont invités à consulter régulièrement les moyens de communication du centre et à répondre aux sondages et aux questions posées.
+
+Il est recommandé de répondre dans les plus brefs délais, ou dans les délais demandés, aux sondages concernant les manœuvres, afin de permettre aux organisateurs de préparer au mieux les exercices.
+
+Répondre aux sollicitations est également une marque de respect pour les personnes qui prennent du temps pour organiser les activités du centre.
+
+Les manœuvres sont indispensables au maintien des compétences opérationnelles.
+
+Les personnels doivent arriver prêts au minimum dix minutes avant le début de la manœuvre, par respect pour les organisateurs.
+
+En cas d’impossibilité de présence, il est demandé de prévenir le responsable de la manœuvre dans les meilleurs délais.
+
+Lors des manœuvres, le matériel doit être remis correctement en place et reconditionné afin d’éviter toute mauvaise surprise lors d’une intervention.`
+  },
+  {
+    key:"gardes",
+    label:"Gardes",
+    color:"rgba(210,70,70,.42)",
+    ordre:5,
+    actif:1,
+    contenu:`Gardes et gardes postées hors secteur / Prise de garde
+
+Toute prise de garde hors secteur doit être signalée au chef de centre ou à ses adjoints.
+
+- 78 heures de disponibilité mensuelle : 1 garde
+- 108 heures de disponibilité mensuelle : 2 gardes
+- Une troisième garde peut être accordée en cas d’investissement particulier dans la vie du centre (JSP, responsable de pôle, implication dans celui-ci)
+
+La prise de garde est organisée mensuellement.
+
+Un responsable est désigné chaque mois afin d’organiser cette prise de garde avec les agents également désignés pour le mois.
+
+Il veille à ce que les missions prévues soient réalisées au cours du mois.
+
+Un onglet dédié sur la page web du centre a été créé afin de faciliter la gestion de cette prise de garde.
+
+Il est demandé de l’utiliser pour le suivi des missions.
+
+La propreté du centre est l’affaire de tous.`
+  },
+  {
+    key:"collectivite",
+    label:"Collectivité",
+    color:"rgba(90,170,105,.42)",
+    ordre:6,
+    actif:1,
+    contenu:`Vie en collectivité
+
+Les sapeurs-pompiers ont vocation à aider les personnes, aussi bien les victimes que leurs collègues.
+
+Il est attendu de chacun une attitude respectueuse, contribuant à maintenir une bonne ambiance au centre et lors des manœuvres.
+
+Lors des retours d’intervention, chacun veille à respecter le voisinage.
+
+Les espaces communs doivent être respectés : après utilisation de la cuisine ou du matériel (café, tasses, etc.), chacun range et nettoie ce qu’il a utilisé.
+
+Les nouveaux arrivants doivent être accueillis et accompagnés afin de faciliter leur intégration.
+
+Le centre doit rester un lieu où l’on vient avec plaisir, dans un esprit de camaraderie et de solidarité.`
+  },
+  {
+    key:"tenue",
+    label:"Tenue / Tabac",
+    color:"rgba(210,170,60,.42)",
+    ordre:7,
+    actif:1,
+    contenu:`Tenue et image du centre / Interdiction de fumer et vapoter
+
+La tenue portée lors des manœuvres, cérémonies ou représentations doit être propre et conforme.
+
+Chaque sapeur-pompier représente le centre de secours et le SDIS, que ce soit en intervention ou lors de déplacements en tenue.
+
+Il est attendu de chacun un comportement respectueux et exemplaire vis-à-vis de la population.
+
+Lors des cérémonies et événements officiels, une tenue soignée et une attitude appropriée sont demandées.
+
+Le respect de l’uniforme et de l’image du centre contribue à la crédibilité et à la reconnaissance du service auprès de la population.
+
+Il est strictement interdit de fumer ou de vapoter dans les locaux du centre de secours, ainsi que dans les véhicules de service.
+
+Cette règle s’applique à l’ensemble des personnels et des visiteurs.
+
+Des espaces extérieurs peuvent être utilisés pour fumer, dans le respect des lieux et du voisinage.`
+  }
 ];
 
 const state = {
@@ -501,6 +661,19 @@ async function checkAdmin(){
   return true;
 }
 
+function normalizeItems(items){
+  return [...items]
+    .map(x => ({
+      key: x.key || "",
+      label: x.label || "",
+      color: x.color || PRESET_COLORS[0],
+      contenu: x.contenu || "",
+      ordre: Number(x.ordre || 0),
+      actif: Number(x.actif || 0) === 1 ? 1 : 0
+    }))
+    .sort((a,b) => a.ordre - b.ordre);
+}
+
 function toggleCard(id){
   const box = document.getElementById(id);
   if (!box) return;
@@ -565,7 +738,7 @@ function renderList(){
             <label class="label">Aperçu onglet</label>
             <div class="previewWrap">
               <span class="previewLabel">Aperçu :</span>
-              <div class="tabChip preview-chip" style="background:${escapeHtml(item.color || PRESET_COLORS[0])};">
+              <div class="tabChip" style="background:${escapeHtml(item.color || PRESET_COLORS[0])};">
                 ${escapeHtml(item.label || item.key || "Sans titre")}
               </div>
             </div>
@@ -639,20 +812,24 @@ async function loadData(){
       actorEmail: state.actorEmail
     });
 
-    if (!r || !r.ok) {
-      showStatus("err", (r && r.error) ? r.error : "Erreur de chargement.");
+    if (r && r.ok && Array.isArray(r.items) && r.items.length) {
+      state.items = normalizeItems(r.items);
+      renderList();
+      showStatus("ok", "Règlement chargé.");
       showLoader(false);
       return;
     }
 
-    state.items = Array.isArray(r.items) ? r.items : [];
+    state.items = normalizeItems(FALLBACK_ITEMS);
     renderList();
-    showStatus("ok", "Règlement chargé.");
+    showStatus("info", "Affichage des textes existants. Ils seront enregistrés dans Sheets lors de la première sauvegarde.");
     showLoader(false);
 
   }catch(err){
+    state.items = normalizeItems(FALLBACK_ITEMS);
+    renderList();
     showLoader(false);
-    showStatus("err", err?.message || String(err));
+    showStatus("info", "Affichage des textes existants. Ils seront enregistrés dans Sheets lors de la première sauvegarde.");
   }
 }
 
@@ -704,7 +881,7 @@ async function deleteCard(btn){
   const card = btn.closest(".regItem");
   if (!card) return;
 
-  const key = (card.dataset.originalKey || "").trim();
+  const key = (card.dataset.original-key || card.dataset.originalKey || "").trim();
   if (!key) {
     card.remove();
     return;
