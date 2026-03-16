@@ -1,309 +1,742 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Admin règlement — CS Consenvoye</title>
+  <link rel="stylesheet" href="cs-theme.css">
 
-<title>Admin Règlement</title>
+  <style>
+    .adminWrap{
+      max-width:980px;
+      margin:0 auto;
+      padding:14px;
+    }
 
-<style>
+    .dashboard{
+      padding:14px 16px;
+      margin-bottom:16px;
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(210,70,70,.30), rgba(210,70,70,.16));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      color:rgba(255,255,255,.96);
+    }
 
-body{
-font-family:system-ui;
-background:#0b0b0b;
-color:#fff;
-margin:0;
-padding:20px;
-}
+    .dashboardTitle{
+      font-size:20px;
+      font-weight:900;
+      line-height:1.2;
+    }
 
-h1{
-margin:0 0 20px 0;
-}
+    .dashboardSmall{
+      margin-top:8px;
+      font-size:13px;
+      font-weight:800;
+      color:rgba(255,255,255,.78);
+      line-height:1.35;
+    }
 
-button{
-padding:10px 14px;
-border:none;
-border-radius:10px;
-font-weight:700;
-cursor:pointer;
-}
+    .status{
+      display:none;
+      margin-bottom:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:800;
+      line-height:1.4;
+      border:1px solid rgba(255,255,255,.12);
+    }
 
-.btnAdd{
-background:#ff8c00;
-color:#fff;
-margin-bottom:20px;
-}
+    .status.show{display:block}
+    .status.ok{background:rgba(47,158,91,.18);color:#d9ffe7}
+    .status.err{background:rgba(220,70,70,.18);color:#ffe1e1}
+    .status.info{background:rgba(47,111,212,.18);color:#dde9ff}
 
-.tabsList{
-display:flex;
-flex-direction:column;
-gap:8px;
-margin-bottom:20px;
-}
+    .card{
+      border-radius:20px;
+      padding:14px;
+      margin-bottom:14px;
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.95);
+    }
 
-.tabItem{
-display:flex;
-align-items:center;
-gap:10px;
-padding:10px;
-background:#1a1a1a;
-border-radius:10px;
-cursor:pointer;
-}
+    .cardTitle{
+      font-size:18px;
+      font-weight:900;
+      margin-bottom:12px;
+    }
 
-.colorDot{
-width:16px;
-height:16px;
-border-radius:50%;
-}
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
 
-.editor{
-background:#111;
-padding:20px;
-border-radius:12px;
-}
+    .btn2{
+      border:none;
+      border-radius:14px;
+      min-height:44px;
+      padding:12px 16px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+      transition:background .22s ease, transform .12s ease, opacity .18s ease;
+    }
 
-input, textarea{
-width:100%;
-padding:10px;
-border-radius:8px;
-border:none;
-margin-bottom:10px;
-}
+    .btn2:active{transform:translateY(1px)}
 
-textarea{
-height:200px;
-resize:vertical;
-}
+    .btnPrimary{
+      background:linear-gradient(180deg, rgba(255,140,40,.95), rgba(212,106,0,.95));
+      color:#fff;
+    }
 
-.colorPicker{
-display:flex;
-gap:10px;
-margin-bottom:15px;
-}
+    .btnSecondary{
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+    }
 
-.colorBtn{
-width:26px;
-height:26px;
-border-radius:50%;
-cursor:pointer;
-border:2px solid transparent;
-}
+    .btnDanger{
+      background:linear-gradient(180deg, rgba(220,70,70,.95), rgba(180,45,45,.95));
+      color:#fff;
+    }
 
-.colorBtn.selected{
-border:2px solid white;
-}
+    .btn2[disabled]{opacity:.7;cursor:default}
 
-.actions{
-display:flex;
-gap:10px;
-margin-top:10px;
-}
+    .regItem{
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      margin-bottom:12px;
+      box-shadow:0 8px 20px rgba(0,0,0,.12);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
 
-.save{
-background:#2f9e5b;
-color:white;
-}
+    .regHeader{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:14px;
+      cursor:pointer;
+      user-select:none;
+    }
 
-.delete{
-background:#c0392b;
-color:white;
-}
+    .chevron{
+      width:18px;
+      text-align:center;
+      font-size:15px;
+      color:rgba(255,255,255,.90);
+      transition:transform .18s ease;
+      flex:0 0 auto;
+    }
 
-</style>
+    .regItem.open .chevron{
+      transform:rotate(90deg);
+    }
+
+    .tabChip{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:34px;
+      padding:6px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      font-size:12px;
+      font-weight:900;
+      color:#fff;
+      box-shadow:0 8px 18px rgba(0,0,0,.18);
+      flex:0 0 auto;
+      max-width:220px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .regMeta{
+      min-width:0;
+      flex:1 1 auto;
+    }
+
+    .regTitle{
+      font-size:16px;
+      font-weight:900;
+      color:rgba(255,255,255,.98);
+      line-height:1.15;
+      word-break:break-word;
+    }
+
+    .regSub{
+      margin-top:4px;
+      font-size:12px;
+      font-weight:800;
+      color:rgba(255,255,255,.72);
+      line-height:1.35;
+    }
+
+    .regBody{
+      display:none;
+      padding:0 14px 14px;
+      background:rgba(0,0,0,.08);
+    }
+
+    .regItem.open .regBody{
+      display:block;
+    }
+
+    .detailsGrid{
+      display:grid;
+      gap:10px;
+      grid-template-columns:1fr;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:10px;
+    }
+
+    .label{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.80);
+    }
+
+    .input,.textarea{
+      width:100%;
+      border:none;
+      outline:none;
+      border-radius:12px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.12);
+      font-size:15px;
+      font-family:inherit;
+    }
+
+    .input{min-height:44px}
+    .textarea{min-height:220px;resize:vertical}
+
+    .switchBox{
+      border-radius:12px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      margin-bottom:10px;
+    }
+
+    .switchLabel{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      font-size:14px;
+      font-weight:900;
+      color:rgba(255,255,255,.92);
+    }
+
+    .switchLabel input{
+      width:20px;
+      height:20px;
+      accent-color:#ff8c00;
+      margin:0;
+    }
+
+    .palette{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+
+    .colorBtn{
+      width:34px;
+      height:34px;
+      border-radius:999px;
+      border:2px solid rgba(255,255,255,.20);
+      cursor:pointer;
+      box-shadow:0 8px 18px rgba(0,0,0,.18);
+    }
+
+    .colorBtn.selected{
+      border:3px solid #fff;
+      transform:scale(1.08);
+    }
+
+    .previewWrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .previewLabel{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.78);
+    }
+
+    .actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    .empty{
+      padding:14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      border:1px dashed rgba(255,255,255,.10);
+      color:rgba(255,255,255,.76);
+      font-weight:800;
+    }
+
+    .loaderOverlay{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.35);
+      backdrop-filter:blur(4px);
+      -webkit-backdrop-filter:blur(4px);
+      z-index:99999;
+    }
+
+    .loaderOverlay.show{display:flex}
+
+    .loaderBox{
+      width:52px;
+      height:52px;
+      border-radius:999px;
+      background:rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.15);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 14px 34px rgba(0,0,0,.40);
+    }
+
+    .loaderSpinner{
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      border:3px solid rgba(255,255,255,.25);
+      border-top-color:#ff8c00;
+      animation:spin .8s linear infinite;
+    }
+
+    @keyframes spin{
+      to{transform:rotate(360deg)}
+    }
+
+    @media (min-width:800px){
+      .detailsGrid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="bg"></div>
 
-<h1>Règlement</h1>
+  <div id="loader" class="loaderOverlay">
+    <div class="loaderBox"><div class="loaderSpinner"></div></div>
+  </div>
 
-<button class="btnAdd" onclick="addTab()">+ Ajouter un onglet</button>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="title">📘 Admin règlement</div>
+      <button class="btn" onclick="window.location.href='admin.html'">Retour</button>
+    </div>
 
-<div id="tabsList" class="tabsList"></div>
+    <div class="adminWrap">
+      <div class="dashboard">
+        <div class="dashboardTitle">Règlement</div>
+        <div class="dashboardSmall">
+          Clique sur un onglet pour le modifier. Les couleurs se choisissent avec les pastilles.
+        </div>
+      </div>
 
-<div class="editor">
+      <div id="statusBox" class="status info"></div>
 
-<input id="label" placeholder="Nom de l’onglet">
-
-<div class="colorPicker" id="colors"></div>
-
-<textarea id="contenu" placeholder="Écrire le texte du règlement..."></textarea>
-
-<div class="actions">
-<button class="save" onclick="saveTab()">Enregistrer</button>
-<button class="delete" onclick="deleteTab()">Supprimer</button>
-</div>
-
-</div>
+      <div class="card">
+        <div class="cardTitle">Onglets</div>
+        <div class="toolbar">
+          <button class="btn2 btnPrimary" type="button" onclick="createNewItem()">Ajouter un onglet</button>
+          <button class="btn2 btnSecondary" type="button" onclick="loadData()">Actualiser</button>
+        </div>
+        <div id="reglementList"></div>
+      </div>
+    </div>
+  </div>
 
 <script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+const EMAIL_KEY = "cs_portail_email_v1";
 
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
-
-const COLORS=[
-"rgba(75,130,220,.6)",
-"rgba(145,105,220,.6)",
-"rgba(215,125,60,.6)",
-"rgba(70,170,170,.6)",
-"rgba(210,70,70,.6)",
-"rgba(90,170,105,.6)",
-"rgba(210,170,60,.6)"
+const PRESET_COLORS = [
+  "rgba(75,130,220,.42)",
+  "rgba(145,105,220,.42)",
+  "rgba(215,125,60,.42)",
+  "rgba(70,170,170,.42)",
+  "rgba(210,70,70,.42)",
+  "rgba(90,170,105,.42)",
+  "rgba(210,170,60,.42)"
 ];
 
-let tabs=[];
-let selectedIndex=null;
-let selectedColor=COLORS[0];
+const state = {
+  actorEmail: "",
+  items: []
+};
+
+function showLoader(v){
+  document.getElementById("loader").classList.toggle("show", !!v);
+}
+
+function showStatus(type, message){
+  const box = document.getElementById("statusBox");
+  box.className = "status show " + type;
+  box.textContent = message || "";
+}
+
+function setButtonSaving(btn, saving, savingText = "Enregistrement..."){
+  if (!btn) return;
+  if (saving) {
+    btn.dataset.originalText = btn.textContent;
+    btn.textContent = savingText;
+    btn.disabled = true;
+  } else {
+    btn.textContent = btn.dataset.originalText || btn.textContent;
+    btn.disabled = false;
+  }
+}
+
+function escapeHtml(v){
+  return String(v == null ? "" : v)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function getCurrentEmail(){
+  return (localStorage.getItem(EMAIL_KEY) || "").trim().toLowerCase();
+}
 
 function jsonp(params){
+  return new Promise((resolve, reject) => {
+    const callbackName = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+    const script = document.createElement("script");
+    const url = new URL(SCRIPT_URL);
 
-return new Promise((resolve,reject)=>{
+    window[callbackName] = function(data){
+      cleanup();
+      resolve(data);
+    };
 
-const cb="cb_"+Date.now();
+    function cleanup(){
+      try { delete window[callbackName]; } catch(e){}
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
 
-window[cb]=function(data){
-delete window[cb];
-script.remove();
-resolve(data);
+    script.onerror = function(){
+      cleanup();
+      reject(new Error("Erreur de chargement JSONP"));
+    };
+
+    url.searchParams.set("callback", callbackName);
+    url.searchParams.set("_ts", Date.now());
+
+    Object.keys(params || {}).forEach(k => {
+      url.searchParams.set(k, params[k]);
+    });
+
+    script.src = url.toString();
+    document.body.appendChild(script);
+  });
 }
 
-const script=document.createElement("script");
-const url=new URL(SCRIPT_URL);
+async function checkAdmin(){
+  state.actorEmail = getCurrentEmail();
 
-url.searchParams.set("callback",cb);
+  if (!state.actorEmail) {
+    showStatus("err", "Aucun email admin détecté.");
+    return false;
+  }
 
-for(const k in params){
-url.searchParams.set(k,params[k]);
+  const r = await jsonp({
+    view: "auth_check",
+    email: state.actorEmail
+  });
+
+  if (!r || !r.ok) {
+    showStatus("err", "Utilisateur non autorisé.");
+    return false;
+  }
+
+  if (String(r.role || "").toLowerCase() !== "admin") {
+    showStatus("err", "Accès refusé : admin uniquement.");
+    return false;
+  }
+
+  return true;
 }
 
-script.src=url;
-document.body.appendChild(script);
-
-});
-
+function toggleCard(id){
+  const box = document.getElementById(id);
+  if (!box) return;
+  document.querySelectorAll(".regItem").forEach(x => {
+    if (x.id !== id) x.classList.remove("open");
+  });
+  box.classList.toggle("open");
 }
 
-function renderColors(){
-
-const c=document.getElementById("colors");
-
-c.innerHTML="";
-
-COLORS.forEach(col=>{
-
-const b=document.createElement("div");
-b.className="colorBtn";
-b.style.background=col;
-
-if(col===selectedColor){
-b.classList.add("selected");
+function buildColorPalette(selectedColor, idx){
+  return PRESET_COLORS.map((color, i) => `
+    <button
+      type="button"
+      class="colorBtn ${color === selectedColor ? "selected" : ""}"
+      style="background:${escapeHtml(color)};"
+      onclick="pickColor(${idx}, '${escapeHtml(color)}')"
+      aria-label="Couleur ${i+1}"
+    ></button>
+  `).join("");
 }
 
-b.onclick=()=>{
-selectedColor=col;
-renderColors();
+function renderList(){
+  const zone = document.getElementById("reglementList");
+  const items = Array.isArray(state.items) ? state.items : [];
+
+  if (!items.length) {
+    zone.innerHTML = '<div class="empty">Aucun onglet trouvé.</div>';
+    return;
+  }
+
+  zone.innerHTML = items.map((item, index) => `
+    <div class="regItem" id="regCard_${index}" data-original-key="${escapeHtml(item.key || "")}">
+      <div class="regHeader" onclick="toggleCard('regCard_${index}')">
+        <div class="chevron">▶</div>
+        <div class="tabChip" style="background:${escapeHtml(item.color || PRESET_COLORS[0])};">
+          ${escapeHtml(item.label || item.key || "Sans titre")}
+        </div>
+        <div class="regMeta">
+          <div class="regTitle">${escapeHtml(item.label || item.key || "Sans titre")}</div>
+          <div class="regSub">ordre ${escapeHtml(item.ordre || 0)} • ${item.actif ? "actif" : "masqué"}</div>
+        </div>
+      </div>
+
+      <div class="regBody">
+        <div class="detailsGrid">
+          <div class="field">
+            <label class="label">Nom technique</label>
+            <input class="input field-key" type="text" value="${escapeHtml(item.key || "")}" placeholder="ex: vehicules">
+          </div>
+
+          <div class="field">
+            <label class="label">Libellé affiché</label>
+            <input class="input field-label" type="text" value="${escapeHtml(item.label || "")}" placeholder="ex: Véhicules">
+          </div>
+
+          <div class="field">
+            <label class="label">Ordre</label>
+            <input class="input field-ordre" type="number" value="${escapeHtml(item.ordre || 0)}">
+          </div>
+
+          <div class="field">
+            <label class="label">Aperçu onglet</label>
+            <div class="previewWrap">
+              <span class="previewLabel">Aperçu :</span>
+              <div class="tabChip preview-chip" style="background:${escapeHtml(item.color || PRESET_COLORS[0])};">
+                ${escapeHtml(item.label || item.key || "Sans titre")}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Couleur</label>
+          <div class="palette">${buildColorPalette(item.color || PRESET_COLORS[0], index)}</div>
+          <input class="input field-color" type="hidden" value="${escapeHtml(item.color || PRESET_COLORS[0])}">
+        </div>
+
+        <div class="field">
+          <label class="label">Texte de l’onglet</label>
+          <textarea class="textarea field-contenu" placeholder="Écris le texte du règlement ici...">${escapeHtml(item.contenu || "")}</textarea>
+        </div>
+
+        <div class="switchBox">
+          <label class="switchLabel">
+            <span>Onglet actif</span>
+            <input class="field-actif" type="checkbox" ${item.actif ? "checked" : ""}>
+          </label>
+        </div>
+
+        <div class="actions">
+          <button class="btn2 btnPrimary" type="button" onclick="saveCard(this)">Enregistrer</button>
+          <button class="btn2 btnDanger" type="button" onclick="deleteCard(this)">Supprimer</button>
+        </div>
+      </div>
+    </div>
+  `).join("");
 }
 
-c.appendChild(b);
-
-});
-
+function pickColor(index, color){
+  const item = state.items[index];
+  if (!item) return;
+  item.color = color;
+  renderList();
+  const card = document.getElementById(`regCard_${index}`);
+  if (card) card.classList.add("open");
 }
 
-function renderTabs(){
+function createNewItem(){
+  const nextOrder = (state.items.reduce((m, x) => Math.max(m, Number(x.ordre || 0)), 0) || 0) + 1;
 
-const list=document.getElementById("tabsList");
+  state.items.push({
+    key: "",
+    label: "Nouvel onglet",
+    color: PRESET_COLORS[0],
+    contenu: "",
+    ordre: nextOrder,
+    actif: 1
+  });
 
-list.innerHTML="";
-
-tabs.forEach((t,i)=>{
-
-const div=document.createElement("div");
-div.className="tabItem";
-
-div.innerHTML=`
-<div class="colorDot" style="background:${t.color}"></div>
-<div>${t.label}</div>
-`;
-
-div.onclick=()=>{
-selectTab(i);
+  renderList();
+  const idx = state.items.length - 1;
+  const card = document.getElementById(`regCard_${idx}`);
+  if (card) {
+    card.classList.add("open");
+    card.scrollIntoView({ behavior:"smooth", block:"nearest" });
+  }
 }
 
-list.appendChild(div);
+async function loadData(){
+  try{
+    showLoader(true);
+    showStatus("info", "Chargement du règlement...");
 
-});
+    const r = await jsonp({
+      view: "reglement_admin_data",
+      actorEmail: state.actorEmail
+    });
 
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de chargement.");
+      showLoader(false);
+      return;
+    }
+
+    state.items = Array.isArray(r.items) ? r.items : [];
+    renderList();
+    showStatus("ok", "Règlement chargé.");
+    showLoader(false);
+
+  }catch(err){
+    showLoader(false);
+    showStatus("err", err?.message || String(err));
+  }
 }
 
-function selectTab(i){
+async function saveCard(btn){
+  const card = btn.closest(".regItem");
+  if (!card) return;
 
-selectedIndex=i;
+  const originalKey = (card.dataset.originalKey || "").trim();
+  const key = (card.querySelector(".field-key")?.value || "").trim();
+  const label = (card.querySelector(".field-label")?.value || "").trim();
+  const color = (card.querySelector(".field-color")?.value || "").trim();
+  const ordre = (card.querySelector(".field-ordre")?.value || "").trim();
+  const contenu = (card.querySelector(".field-contenu")?.value || "").trim();
+  const actif = card.querySelector(".field-actif")?.checked ? 1 : 0;
 
-const t=tabs[i];
+  try{
+    setButtonSaving(btn, true);
+    showStatus("info", "Enregistrement...");
 
-document.getElementById("label").value=t.label;
-document.getElementById("contenu").value=t.contenu;
+    const r = await jsonp({
+      view: "reglement_save",
+      actorEmail: state.actorEmail,
+      originalKey,
+      key,
+      label,
+      color,
+      ordre,
+      contenu,
+      actif
+    });
 
-selectedColor=t.color;
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur d'enregistrement.");
+      setButtonSaving(btn, false);
+      return;
+    }
 
-renderColors();
+    showStatus("ok", "Onglet enregistré.");
+    await loadData();
 
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  } finally {
+    setButtonSaving(btn, false);
+  }
 }
 
-function addTab(){
+async function deleteCard(btn){
+  const card = btn.closest(".regItem");
+  if (!card) return;
 
-selectedIndex=null;
+  const key = (card.dataset.originalKey || "").trim();
+  if (!key) {
+    card.remove();
+    return;
+  }
 
-document.getElementById("label").value="";
-document.getElementById("contenu").value="";
+  try{
+    showStatus("info", "Suppression...");
 
+    const r = await jsonp({
+      view: "reglement_delete",
+      actorEmail: state.actorEmail,
+      key
+    });
+
+    if (!r || !r.ok) {
+      showStatus("err", (r && r.error) ? r.error : "Erreur de suppression.");
+      return;
+    }
+
+    showStatus("ok", "Onglet supprimé.");
+    await loadData();
+
+  }catch(err){
+    showStatus("err", err?.message || String(err));
+  }
 }
 
-async function saveTab(){
-
-const label=document.getElementById("label").value;
-const contenu=document.getElementById("contenu").value;
-
-await jsonp({
-view:"reglement_save",
-label,
-contenu,
-color:selectedColor
-});
-
-load();
-
-}
-
-async function deleteTab(){
-
-if(selectedIndex===null)return;
-
-const t=tabs[selectedIndex];
-
-await jsonp({
-view:"reglement_delete",
-key:t.key
-});
-
-load();
-
-}
-
-async function load(){
-
-const r=await jsonp({view:"reglement_tabs"});
-
-tabs=r.items||[];
-
-renderTabs();
-
-}
-
-renderColors();
-load();
-
+(async function init(){
+  const ok = await checkAdmin();
+  if (!ok) return;
+  await loadData();
+})();
 </script>
-
 </body>
 </html>
