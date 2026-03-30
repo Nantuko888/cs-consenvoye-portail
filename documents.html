@@ -128,7 +128,6 @@
       padding-right: 2px;
     }
 
-    /* ✅ NOUVELLE CARTE PROPRE (2 lignes) */
     .doc{
       padding: 12px 12px;
       border-radius: 18px;
@@ -149,11 +148,8 @@
       font-size: 17px;
       line-height:1.15;
       margin:0;
-
-      /* ✅ autorise 2 lignes (pas d'ellipsis forcé) */
       white-space: normal;
       overflow: hidden;
-
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -185,7 +181,6 @@
       flex:0 0 auto;
     }
 
-    /* ✅ boutons icônes */
     .iconbtn{
       width: 44px;
       height: 44px;
@@ -213,7 +208,6 @@
       padding: 18px 10px;
     }
 
-    /* status */
     .status{
       position:fixed;
       left:12px; right:12px;
@@ -338,23 +332,7 @@
     });
   }
 
-  /** Drive helper: tente de créer un lien download **/
-  function extractDriveId(url){
-    const s = String(url||"");
-    let m = s.match(/\/file\/d\/([^\/\?]+)/);
-    if(m) return m[1];
-    m = s.match(/[?&]id=([^&]+)/);
-    if(m) return m[1];
-    return "";
-  }
-  function getDownloadUrl(url){
-    const id = extractDriveId(url);
-    if(!id) return url; // fallback
-    return `https://drive.google.com/uc?export=download&id=${encodeURIComponent(id)}`;
-  }
-
   function fillCategories(){
-    // Toujours afficher tes 4 catégories même si vides
     const base = ["GTO","GDO","Secourisme","Autre"];
     const set = new Set(base);
     for(const c of categories){ if(c) set.add(c); }
@@ -395,7 +373,6 @@
     for(const d of filtered){
       const cat = d.category || "Autre";
       const openUrl = d.url;
-      const dlUrl = getDownloadUrl(d.url);
 
       const row = document.createElement("div");
       row.className = "doc";
@@ -409,19 +386,14 @@
 
           <div class="doc-actions">
             <button class="iconbtn primary" title="Lire" aria-label="Lire" data-open="${escapeHtml(openUrl)}">👁</button>
-            <button class="iconbtn" title="Télécharger" aria-label="Télécharger" data-dl="${escapeHtml(dlUrl)}">⬇</button>
           </div>
         </div>
       `;
       $list.appendChild(row);
     }
 
-    // actions
     $list.querySelectorAll("[data-open]").forEach(btn=>{
       btn.addEventListener("click", ()=> window.open(btn.getAttribute("data-open"), "_blank", "noopener"));
-    });
-    $list.querySelectorAll("[data-dl]").forEach(btn=>{
-      btn.addEventListener("click", ()=> window.open(btn.getAttribute("data-dl"), "_blank", "noopener"));
     });
   }
 
