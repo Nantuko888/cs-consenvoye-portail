@@ -71,31 +71,22 @@ body.mode-portal{
   top:14px;
   left:14px;
   z-index:9999;
-
   width:44px;
   height:44px;
-
   border-radius:50%;
   border:1px solid rgba(255,255,255,.25);
-
   background:linear-gradient(180deg,#ff8c00,#d86f00);
-
   color:white;
   font-size:20px;
   font-weight:900;
-
   box-shadow:0 8px 20px rgba(0,0,0,.35);
   cursor:pointer;
-
   display:none;
   -webkit-tap-highlight-color:transparent;
-
   transition:background .25s ease, transform .25s ease;
 }
 .refreshBtn.loading{
   background:linear-gradient(180deg,#3ccf4e,#2ca63b);
-}
-.refreshBtn.loading{
   animation:spin .9s linear infinite;
 }
 
@@ -117,12 +108,12 @@ body.mode-portal{
   text-decoration:none;
   -webkit-tap-highlight-color:transparent;
 }
-
 .btn img{
   max-width:100%;
   max-height:100%;
   object-fit:contain;
 }
+
 @media (min-width:768px){
   :root{
     --btn: clamp(110px, 16vw, 180px);
@@ -143,20 +134,17 @@ body.mode-portal{
   text-align: center;
   box-shadow: 0 10px 40px rgba(0,0,0,0.6);
 }
-
 #loginTitle{
   margin: 0 0 30px 0;
   font-size: 24px;
   letter-spacing: 2px;
   color: #ffffff;
 }
-
 .g_id_signin{
   display: flex;
   justify-content: center;
   margin-bottom: 15px;
 }
-
 #loginMsg{
   margin-top: 10px;
   font-size: 14px;
@@ -201,13 +189,12 @@ body.mode-portal{
   border:0;
 }
 
-/* Badge agents en ligne */
+/* BADGE */
 .onlineBadge{
   position: fixed;
   top: 14px;
   left: 66px;
   z-index: 9998;
-
   min-height: 44px;
   padding: 0 12px;
   border-radius: 999px;
@@ -227,7 +214,10 @@ body.mode-portal{
   -webkit-tap-highlight-color: transparent;
   user-select: none;
 }
-
+.onlineBadge.isOpen{
+  background: rgba(25,25,25,.62);
+  border-color: rgba(255,255,255,.22);
+}
 .onlineDot{
   width: 8px;
   height: 8px;
@@ -236,105 +226,93 @@ body.mode-portal{
   box-shadow: 0 0 10px rgba(65,214,93,.65);
 }
 
-.onlineBadge.isOpen{
-  background: rgba(25,25,25,.62);
-  border-color: rgba(255,255,255,.22);
-}
-
-/* Tableau dépliable */
+/* PANEL */
 .onlinePanel{
   position: fixed;
   top: 62px;
   left: 14px;
   z-index: 9997;
-
-  width: min(calc(100vw - 28px), 380px);
-  max-height: min(45vh, 360px);
+  width: min(calc(100vw - 28px), 320px);
+  max-height: min(50vh, 340px);
   overflow: auto;
-
   padding: 10px 12px;
   border-radius: 18px;
   border: 1px solid rgba(255,255,255,.12);
-  background: rgba(20,20,20,.72);
+  background: rgba(20,20,20,.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 10px 28px rgba(0,0,0,.35);
 }
-
 .onlinePanelHead{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
   gap:10px;
-  margin-bottom:8px;
-  color:#fff;
   font-size:12px;
   font-weight:800;
+  margin-bottom:8px;
+  color:#fff;
 }
-
 .onlinePanelCount{
-  min-width:22px;
-  height:22px;
-  padding:0 8px;
+  background:rgba(65,214,93,.20);
+  border:1px solid rgba(65,214,93,.30);
+  padding:2px 8px;
   border-radius:999px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  background:rgba(65,214,93,.18);
-  border:1px solid rgba(65,214,93,.32);
+  min-width:24px;
+  text-align:center;
 }
-
 .onlinePanelTable{
   width:100%;
   border-collapse:collapse;
   font-size:12px;
   color:#fff;
 }
-
-.onlinePanelTable th,
 .onlinePanelTable td{
-  padding:8px 6px;
-  text-align:left;
-  vertical-align:middle;
-}
-
-.onlinePanelTable thead tr{
-  background:rgba(255,255,255,.08);
-}
-
-.onlinePanelTable tbody tr{
+  padding:8px 0;
   border-top:1px solid rgba(255,255,255,.08);
 }
-
-.onlinePanelTable th{
-  position: sticky;
-  top: 0;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+.onlinePanelTable tbody tr:first-child td{
+  border-top:none;
 }
-
-.onlineStatus{
-  display:inline-flex;
+.onlineRow{
+  display:flex;
+  justify-content:space-between;
   align-items:center;
-  gap:6px;
+  gap:10px;
+}
+.onlineLeft{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.onlineName{
+  font-weight:700;
+  color:#fff;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.onlineRight{
+  font-size:11px;
+  color:rgba(255,255,255,.72);
   white-space:nowrap;
 }
-
 .onlineStatusDot{
   width:7px;
   height:7px;
   border-radius:50%;
   background:#41d65d;
   box-shadow:0 0 8px rgba(65,214,93,.65);
+  flex:0 0 auto;
 }
-
-.onlineMuted{
-  color: rgba(255,255,255,.70);
+.onlineStatusDot.offline{
+  background:rgba(255,255,255,.35);
+  box-shadow:none;
 }
-
 .onlineEmpty{
   text-align:center;
-  color: rgba(255,255,255,.70);
+  color:rgba(255,255,255,.70);
 }
 
 @media (max-width:420px){
@@ -343,15 +321,10 @@ body.mode-portal{
     padding: 0 10px;
     font-size: 11px;
   }
-
   .onlinePanel{
     top: 60px;
     left: 10px;
     width: calc(100vw - 20px);
-  }
-
-  .onlinePanelTable{
-    font-size:11px;
   }
 }
 </style>
@@ -399,21 +372,14 @@ body.mode-portal{
 
   <div id="onlinePanel" class="onlinePanel" hidden>
     <div class="onlinePanelHead">
-      <span>Agents en ligne</span>
+      <span>Connexions</span>
       <span id="onlinePanelCount" class="onlinePanelCount">0</span>
     </div>
 
     <table class="onlinePanelTable">
-      <thead>
-        <tr>
-          <th>Agent</th>
-          <th>Statut</th>
-          <th>Dernière connexion</th>
-        </tr>
-      </thead>
       <tbody id="onlinePanelBody">
         <tr>
-          <td colspan="3" class="onlineEmpty">Aucun agent en ligne</td>
+          <td class="onlineEmpty">Aucune connexion</td>
         </tr>
       </tbody>
     </table>
@@ -452,23 +418,15 @@ const $refreshBtn = document.getElementById("refreshBtn");
 function showMsg(t){
   $msg.textContent = t || "";
 }
-
 function showSync(){
-  if($refreshBtn){
-    $refreshBtn.classList.add("loading");
-  }
+  if($refreshBtn) $refreshBtn.classList.add("loading");
 }
-
 function hideSync(){
-  if($refreshBtn){
-    $refreshBtn.classList.remove("loading");
-  }
+  if($refreshBtn) $refreshBtn.classList.remove("loading");
 }
-
 function showRefreshBtn(){
   if($refreshBtn) $refreshBtn.style.display = "block";
 }
-
 function hideRefreshBtn(){
   if($refreshBtn) $refreshBtn.style.display = "none";
 }
@@ -481,7 +439,6 @@ function markPortalUrl_(){
     history.replaceState({page:"portal"}, "", location.pathname + location.search);
   }
 }
-
 function clearPortalUrl_(){
   history.replaceState({page:"login"}, "", location.pathname);
 }
@@ -494,7 +451,6 @@ function showPortal(){
   showRefreshBtn();
   markPortalUrl_();
 }
-
 function showLogin(){
   document.body.classList.remove("mode-portal");
   document.body.classList.add("mode-login");
@@ -520,7 +476,6 @@ function b64urlToUtf8(b64url){
   }
   return decodeURIComponent(out);
 }
-
 function parseJwtEmail(credential){
   const parts = String(credential || "").split(".");
   if (parts.length < 2) return "";
@@ -599,7 +554,6 @@ function ensureChecking(){
   `;
   document.body.appendChild($checking);
 }
-
 function showChecking(){
   ensureChecking();
   $loginBox.style.display = "none";
@@ -607,7 +561,6 @@ function showChecking(){
   hideRefreshBtn();
   $checking.style.display = "flex";
 }
-
 function hideChecking(){
   ensureChecking();
   $checking.style.display = "none";
@@ -821,8 +774,6 @@ document.addEventListener("click", (e) => {
 
   if (!badge || !text || !panel || !panelBody || !panelCount) return;
 
-  let currentOnline = [];
-
   function escapeHtml(v){
     return String(v || "")
       .replace(/&/g, "&amp;")
@@ -838,6 +789,11 @@ document.addEventListener("click", (e) => {
     if(isNaN(d.getTime())) return "—";
 
     const now = new Date();
+    const diffMin = Math.floor((now - d) / 60000);
+
+    if(diffMin < 1) return "à l'instant";
+    if(diffMin < 60) return diffMin + " min";
+
     const sameDay =
       d.getDate() === now.getDate() &&
       d.getMonth() === now.getMonth() &&
@@ -859,24 +815,30 @@ document.addEventListener("click", (e) => {
     if(!items.length){
       panelBody.innerHTML = `
         <tr>
-          <td colspan="3" class="onlineEmpty">Aucun agent en ligne</td>
+          <td class="onlineEmpty">Aucune connexion</td>
         </tr>
       `;
       return;
     }
 
-    panelBody.innerHTML = items.map(a => `
-      <tr>
-        <td>${escapeHtml(a.nom || a.email || "—")}</td>
-        <td>
-          <span class="onlineStatus">
-            <span class="onlineStatusDot"></span>
-            <span>En ligne</span>
-          </span>
-        </td>
-        <td class="onlineMuted">${escapeHtml(formatLastSeen(a.derniere_connexion || a.maj_session))}</td>
-      </tr>
-    `).join("");
+    panelBody.innerHTML = items.map(a => {
+      const isOnline = Number(a.en_ligne) === 1;
+      return `
+        <tr>
+          <td>
+            <div class="onlineRow">
+              <div class="onlineLeft">
+                <span class="onlineStatusDot ${isOnline ? "" : "offline"}"></span>
+                <span class="onlineName">${escapeHtml(a.nom || a.email || "—")}</span>
+              </div>
+              <div class="onlineRight">
+                ${isOnline ? "en ligne" : escapeHtml(formatLastSeen(a.derniere_connexion || a.maj_session))}
+              </div>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join("");
   }
 
   function closePanel(){
@@ -885,7 +847,7 @@ document.addEventListener("click", (e) => {
   }
 
   function togglePanel(){
-    if (badge.hidden || currentOnline.length <= 0) return;
+    if (badge.hidden) return;
     panel.hidden = !panel.hidden;
     badge.classList.toggle("isOpen", !panel.hidden);
   }
@@ -900,35 +862,42 @@ document.addEventListener("click", (e) => {
         if(!res || !res.ok || !Array.isArray(res.items)){
           badge.hidden = true;
           closePanel();
-          currentOnline = [];
+          renderPanel([]);
           return;
         }
 
-        currentOnline = res.items
-          .filter(x => Number(x.en_ligne) === 1)
+        const allWithHistory = res.items
+          .filter(x => String(x.derniere_connexion || x.maj_session || "").trim() !== "")
           .sort((a,b) => {
-            const an = (a.nom || a.email || "").toLowerCase();
-            const bn = (b.nom || b.email || "").toLowerCase();
-            return an.localeCompare(bn, "fr");
+            const aOnline = Number(a.en_ligne) === 1 ? 1 : 0;
+            const bOnline = Number(b.en_ligne) === 1 ? 1 : 0;
+            if (bOnline !== aOnline) return bOnline - aOnline;
+
+            const ad = String(a.derniere_connexion || a.maj_session || "");
+            const bd = String(b.derniere_connexion || b.maj_session || "");
+            return bd.localeCompare(ad);
           });
 
-        const count = currentOnline.length;
+        const onlineCount = res.items.filter(x => Number(x.en_ligne) === 1).length;
 
-        if(count <= 0){
+        if(onlineCount <= 0 && allWithHistory.length <= 0){
           badge.hidden = true;
           closePanel();
           renderPanel([]);
           return;
         }
 
-        text.textContent = count + (count > 1 ? " agents en ligne" : " agent en ligne");
+        text.textContent = onlineCount > 0
+          ? onlineCount + (onlineCount > 1 ? " agents en ligne" : " agent en ligne")
+          : "Historique connexions";
+
         badge.hidden = false;
-        renderPanel(currentOnline);
+        renderPanel(allWithHistory);
 
       }catch(err){
         badge.hidden = true;
         closePanel();
-        currentOnline = [];
+        renderPanel([]);
       }
     };
 
@@ -939,7 +908,7 @@ document.addEventListener("click", (e) => {
       try{ delete window[cb]; }catch(e){}
       badge.hidden = true;
       closePanel();
-      currentOnline = [];
+      renderPanel([]);
     };
 
     document.body.appendChild(s);
