@@ -667,6 +667,54 @@ document.addEventListener("click", (e) => {
   }
 });
 </script>
+<script>
+(function(){
+  const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec"; // remplace par ton URL Web App Apps Script
+  const badge = document.getElementById("onlineBadge");
+  const text = document.getElementById("onlineBadgeText");
+
+  if (!badge || !text) return;
+
+  function loadOnlineBadge(){
+    const cb = "cb_agents_" + Date.now() + "_" + Math.floor(Math.random()*10000);
+
+    window[cb] = function(res){
+      try{
+        delete window[cb];
+
+        if(!res || !res.ok || !Array.isArray(res.items)){
+          badge.hidden = true;
+          return;
+        }
+
+        const count = res.items.filter(x => Number(x.en_ligne) === 1).length;
+
+        if(count <= 0){
+          badge.hidden = true;
+          return;
+        }
+
+        text.textContent = count + (count > 1 ? " agents en ligne" : " agent en ligne");
+        badge.hidden = false;
+
+      }catch(err){
+        badge.hidden = true;
+      }
+    };
+
+    const s = document.createElement("script");
+    s.src = API + "?view=agents_status&callback=" + encodeURIComponent(cb) + "&nocache=1";
+    s.onerror = function(){
+      try{ delete window[cb]; }catch(e){}
+      badge.hidden = true;
+    };
+    document.body.appendChild(s);
+  }
+
+  loadOnlineBadge();
+  setInterval(loadOnlineBadge, 30000);
+})();
+</script>
 
 </body>
 </html>
