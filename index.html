@@ -66,28 +66,89 @@ body.mode-portal{
   transform-origin: center top;
 }
 
+/* FLAMME / REFRESH */
 .refreshBtn{
   position:fixed;
   top:14px;
   left:14px;
   z-index:9999;
+
   width:44px;
   height:44px;
+
   border-radius:50%;
-  border:1px solid rgba(255,255,255,.25);
-  background:linear-gradient(180deg,#ff8c00,#d86f00);
-  color:white;
-  font-size:20px;
-  font-weight:900;
+  border:1px solid rgba(255,255,255,.18);
+
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
   box-shadow:0 8px 20px rgba(0,0,0,.35);
   cursor:pointer;
+
   display:none;
+  align-items:center;
+  justify-content:center;
+
   -webkit-tap-highlight-color:transparent;
-  transition:background .25s ease, transform .25s ease;
+  overflow:hidden;
+  padding:0;
 }
-.refreshBtn.loading{
-  background:linear-gradient(180deg,#3ccf4e,#2ca63b);
-  animation:spin .9s linear infinite;
+
+.flameIcon{
+  width:20px;
+  height:20px;
+  display:block;
+  transform-origin:50% 85%;
+  opacity:.82;
+  filter: drop-shadow(0 0 4px rgba(255,122,0,.18));
+}
+
+.flameIcon path{
+  fill:url(#flameGrad);
+}
+
+/* état repos */
+.refreshBtn:not(.loading) .flameIcon{
+  animation:none;
+  opacity:.72;
+  transform:scale(1);
+  filter: drop-shadow(0 0 3px rgba(255,122,0,.12));
+}
+
+/* état chargement = flamme vivante */
+.refreshBtn.loading .flameIcon{
+  animation: flameAlive 0.95s ease-in-out infinite;
+  filter:
+    drop-shadow(0 0 4px rgba(255,122,0,.30))
+    drop-shadow(0 0 8px rgba(255,90,0,.18));
+}
+
+@keyframes flameAlive{
+  0%{
+    transform: scale(1) rotate(-2deg) translateY(0);
+    opacity:.92;
+  }
+  20%{
+    transform: scale(1.06,.96) rotate(1deg) translateY(-1px);
+    opacity:1;
+  }
+  40%{
+    transform: scale(.97,1.06) rotate(-1deg) translateY(0);
+    opacity:.88;
+  }
+  60%{
+    transform: scale(1.08,.94) rotate(2deg) translateY(-1px);
+    opacity:1;
+  }
+  80%{
+    transform: scale(.98,1.04) rotate(-1deg) translateY(0);
+    opacity:.9;
+  }
+  100%{
+    transform: scale(1) rotate(-2deg) translateY(0);
+    opacity:.92;
+  }
 }
 
 .grid{
@@ -108,12 +169,12 @@ body.mode-portal{
   text-decoration:none;
   -webkit-tap-highlight-color:transparent;
 }
+
 .btn img{
   max-width:100%;
   max-height:100%;
   object-fit:contain;
 }
-
 @media (min-width:768px){
   :root{
     --btn: clamp(110px, 16vw, 180px);
@@ -134,17 +195,20 @@ body.mode-portal{
   text-align: center;
   box-shadow: 0 10px 40px rgba(0,0,0,0.6);
 }
+
 #loginTitle{
   margin: 0 0 30px 0;
   font-size: 24px;
   letter-spacing: 2px;
   color: #ffffff;
 }
+
 .g_id_signin{
   display: flex;
   justify-content: center;
   margin-bottom: 15px;
 }
+
 #loginMsg{
   margin-top: 10px;
   font-size: 14px;
@@ -171,10 +235,6 @@ body.mode-portal{
 }
 .logoutTopBtn:active{
   transform: scale(0.96);
-}
-
-@keyframes spin{
-  to{ transform: rotate(360deg); }
 }
 
 .srOnly{
@@ -334,7 +394,18 @@ body.mode-portal{
 
 <body class="mode-login">
 
-<button class="refreshBtn" id="refreshBtn" onclick="refreshPage()" aria-label="Rafraîchir">⟳</button>
+<button class="refreshBtn" id="refreshBtn" onclick="refreshPage()" aria-label="Rafraîchir">
+  <svg class="flameIcon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <defs>
+      <linearGradient id="flameGrad" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0%" stop-color="#ff3c00"/>
+        <stop offset="55%" stop-color="#ff7a00"/>
+        <stop offset="100%" stop-color="#ffd000"/>
+      </linearGradient>
+    </defs>
+    <path d="M13.5 2s.5 3-2 5-3 4-3 6a5.5 5.5 0 0 0 11 0c0-4-3-6-3-8 0-1.5.5-3 .5-3s-2 1-3.5 3c0-2-.5-3-3-3z"/>
+  </svg>
+</button>
 
 <!-- LOGIN -->
 <div id="loginBox">
@@ -419,13 +490,18 @@ function showMsg(t){
   $msg.textContent = t || "";
 }
 function showSync(){
-  if($refreshBtn) $refreshBtn.classList.add("loading");
+  if($refreshBtn){
+    $refreshBtn.classList.add("loading");
+    $refreshBtn.style.display = "flex";
+  }
 }
 function hideSync(){
-  if($refreshBtn) $refreshBtn.classList.remove("loading");
+  if($refreshBtn){
+    $refreshBtn.classList.remove("loading");
+  }
 }
 function showRefreshBtn(){
-  if($refreshBtn) $refreshBtn.style.display = "block";
+  if($refreshBtn) $refreshBtn.style.display = "flex";
 }
 function hideRefreshBtn(){
   if($refreshBtn) $refreshBtn.style.display = "none";
