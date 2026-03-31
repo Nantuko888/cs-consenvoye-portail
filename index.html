@@ -204,6 +204,34 @@ body.mode-portal{
   white-space:nowrap;
   border:0;
 }
+  .onlineBadge{
+  margin-top: 6px;
+  margin-bottom: 10px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.28);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba(255,255,255,.92);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: center;
+  box-shadow: 0 8px 22px rgba(0,0,0,.18);
+}
+
+.onlineDot{
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #41d65d;
+  box-shadow: 0 0 10px rgba(65,214,93,.65);
+}
+
 </style>
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -241,6 +269,11 @@ body.mode-portal{
   </button>
 
   <img class="title" src="titre.png" alt="Bienvenue sur CS Consenvoye">
+  <div id="onlineBadge" class="onlineBadge" hidden>
+  <span class="onlineDot"></span>
+  <span id="onlineBadgeText">0 agent en ligne</span>
+</div>
+
 
   <section class="grid" aria-label="Menu">
     <a class="btn" href="organigramme.html"><img src="organigramme.png" alt="Organigramme"></a>
