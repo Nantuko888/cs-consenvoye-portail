@@ -134,17 +134,17 @@ body.mode-portal{
 }
 
 .refreshBtn.loading .lightbarIcon{
-  animation: barBodyPulse 0.9s linear infinite;
+  animation: barBodyPulse .9s linear infinite;
 }
 
 .refreshBtn.loading .modLeftBlue{
-  animation: flashLeft 0.9s linear infinite;
+  animation: flashLeft .9s linear infinite;
 }
 .refreshBtn.loading .modMidWhite{
-  animation: flashCenter 0.9s linear infinite;
+  animation: flashCenter .9s linear infinite;
 }
 .refreshBtn.loading .modRightBlue{
-  animation: flashRight 0.9s linear infinite;
+  animation: flashRight .9s linear infinite;
 }
 
 @keyframes barBodyPulse{
@@ -712,6 +712,7 @@ function hideChecking(){
 function doLogout(){
   localStorage.removeItem(LS_KEY);
   localStorage.removeItem("cs_role_v1");
+  localStorage.removeItem("cs_online_badge_cache_v1");
   showLogin();
   showMsg("Déconnecté.");
 }
@@ -737,6 +738,7 @@ async function checkAndShow_(email){
 
     localStorage.removeItem(LS_KEY);
     localStorage.removeItem("cs_role_v1");
+    localStorage.removeItem("cs_online_badge_cache_v1");
     hideChecking();
     showLogin();
     showMsg("Accès refusé.");
@@ -745,6 +747,7 @@ async function checkAndShow_(email){
   }catch(err){
     localStorage.removeItem(LS_KEY);
     localStorage.removeItem("cs_role_v1");
+    localStorage.removeItem("cs_online_badge_cache_v1");
     hideChecking();
     showLogin();
     showMsg("Erreur réseau / serveur.");
@@ -760,6 +763,7 @@ async function handleCredentialResponse(response){
   if(!email){
     localStorage.removeItem(LS_KEY);
     localStorage.removeItem("cs_role_v1");
+    localStorage.removeItem("cs_online_badge_cache_v1");
     showLogin();
     showMsg("Erreur : email introuvable.");
     return;
@@ -788,6 +792,7 @@ async function handleCredentialResponse(response){
       hideSync();
       localStorage.removeItem(LS_KEY);
       localStorage.removeItem("cs_role_v1");
+      localStorage.removeItem("cs_online_badge_cache_v1");
       showLogin();
       showMsg("Accès refusé.");
       return;
@@ -916,6 +921,9 @@ document.addEventListener("click", (e) => {
 
   if (!badge || !text || !panel || !panelBody || !panelCount) return;
 
+  const ONLINE_CACHE_KEY = "cs_online_badge_cache_v1";
+  const ONLINE_CACHE_TTL = 10000; // 10 secondes
+
   function escapeHtml(v){
     return String(v || "")
       .replace(/&/g, "&amp;")
@@ -994,48 +1002,72 @@ document.addEventListener("click", (e) => {
     badge.classList.toggle("isOpen", !panel.hidden);
   }
 
-  function loadOnlineBadge(){
+  function saveCache(data){
+    try{
+      localStorage.setItem(ONLINE_CACHE_KEY, JSON.stringify({
+        ts: Date.now(),
+        data: data
+      }));
+    }catch(e){}
+  }
+
+  function readCache(){
+    try{
+      const raw = localStorage.getItem(ONLINE_CACHE_KEY);
+      if(!raw) return null;
+      const parsed = JSON.parse(raw);
+      if(!parsed || !parsed.ts || !parsed.data) return null;
+      return parsed;
+    }catch(e){
+      return null;
+    }
+  }
+
+  function applyData(res){
+    if(!res || !res.ok || !Array.isArray(res.items)){
+      badge.hidden = true;
+      closePanel();
+      renderPanel([]);
+      return;
+    }
+
+    const allWithHistory = res.items
+      .filter(x => String(x.derniere_connexion || x.maj_session || "").trim() !== "")
+      .sort((a,b) => {
+        const aOnline = Number(a.en_ligne) === 1 ? 1 : 0;
+        const bOnline = Number(b.en_ligne) === 1 ? 1 : 0;
+        if (bOnline !== aOnline) return bOnline - aOnline;
+
+        const ad = String(a.derniere_connexion || a.maj_session || "");
+        const bd = String(b.derniere_connexion || b.maj_session || "");
+        return bd.localeCompare(ad);
+      });
+
+    const onlineCount = res.items.filter(x => Number(x.en_ligne) === 1).length;
+
+    if(onlineCount <= 0 && allWithHistory.length <= 0){
+      badge.hidden = true;
+      closePanel();
+      renderPanel([]);
+      return;
+    }
+
+    text.textContent = onlineCount > 0
+      ? onlineCount + (onlineCount > 1 ? " agents en ligne" : " agent en ligne")
+      : "Historique connexions";
+
+    badge.hidden = false;
+    renderPanel(allWithHistory);
+  }
+
+  function fetchOnlineBadge(){
     const cb = "cb_agents_" + Date.now() + "_" + Math.floor(Math.random()*10000);
 
     window[cb] = function(res){
       try{
         delete window[cb];
-
-        if(!res || !res.ok || !Array.isArray(res.items)){
-          badge.hidden = true;
-          closePanel();
-          renderPanel([]);
-          return;
-        }
-
-        const allWithHistory = res.items
-          .filter(x => String(x.derniere_connexion || x.maj_session || "").trim() !== "")
-          .sort((a,b) => {
-            const aOnline = Number(a.en_ligne) === 1 ? 1 : 0;
-            const bOnline = Number(b.en_ligne) === 1 ? 1 : 0;
-            if (bOnline !== aOnline) return bOnline - aOnline;
-
-            const ad = String(a.derniere_connexion || a.maj_session || "");
-            const bd = String(b.derniere_connexion || b.maj_session || "");
-            return bd.localeCompare(ad);
-          });
-
-        const onlineCount = res.items.filter(x => Number(x.en_ligne) === 1).length;
-
-        if(onlineCount <= 0 && allWithHistory.length <= 0){
-          badge.hidden = true;
-          closePanel();
-          renderPanel([]);
-          return;
-        }
-
-        text.textContent = onlineCount > 0
-          ? onlineCount + (onlineCount > 1 ? " agents en ligne" : " agent en ligne")
-          : "Historique connexions";
-
-        badge.hidden = false;
-        renderPanel(allWithHistory);
-
+        saveCache(res);
+        applyData(res);
       }catch(err){
         badge.hidden = true;
         closePanel();
@@ -1048,12 +1080,21 @@ document.addEventListener("click", (e) => {
 
     s.onerror = function(){
       try{ delete window[cb]; }catch(e){}
-      badge.hidden = true;
-      closePanel();
-      renderPanel([]);
     };
 
     document.body.appendChild(s);
+  }
+
+  function loadOnlineBadge(force){
+    const cached = readCache();
+    const now = Date.now();
+
+    if (!force && cached && (now - cached.ts) < ONLINE_CACHE_TTL){
+      applyData(cached.data);
+      return;
+    }
+
+    fetchOnlineBadge();
   }
 
   badge.addEventListener("click", function(e){
@@ -1072,19 +1113,12 @@ document.addEventListener("click", (e) => {
     }
   });
 
-  loadOnlineBadge();
-  setInterval(loadOnlineBadge, 10000);
+  loadOnlineBadge(false);
+  setInterval(function(){
+    loadOnlineBadge(true);
+  }, ONLINE_CACHE_TTL);
 })();
 </script>
-  
-  <script>
-window.addEventListener("pageshow", function(event) {
-  if (event.persisted) {
-    window.location.reload();
-  }
-});
-</script>
-
 
 </body>
 </html>
