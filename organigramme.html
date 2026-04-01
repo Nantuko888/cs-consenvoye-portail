@@ -343,38 +343,6 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
-
-    .syncToast{
-      position: fixed;
-      left: 12px;
-      right: 12px;
-      bottom: calc(env(safe-area-inset-bottom) + 12px);
-      z-index: 9999;
-      display: none;
-      max-width: 980px;
-      margin: 0 auto;
-    }
-
-    .syncToast .pill{
-      display:inline-flex;
-      gap:10px;
-      align-items:center;
-      padding:10px 12px;
-      border-radius: 16px;
-      background: rgba(0,0,0,.62);
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow: 0 14px 34px rgba(0,0,0,.40);
-      color: rgba(255,255,255,.90);
-      font-weight:900;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    .syncToast .small{
-      font-weight:800;
-      opacity:.85;
-      font-size:13px;
-    }
   </style>
 </head>
 
@@ -426,22 +394,12 @@
     </div>
   </div>
 
-  <div class="syncToast" id="syncToast">
-    <div class="pill">
-      <span>🔄</span>
-      <div>
-        <div id="syncTxt">Synchronisation…</div>
-        <div class="small" id="syncSub">Mise à jour des données</div>
-      </div>
-    </div>
-  </div>
-
   <script>
     const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-    const CACHE_KEY = "CS_ORGA_CACHE_V1";
-    const CACHE_TS_KEY = "CS_ORGA_CACHE_TS_V1";
-    const CACHE_MAX_AGE_MS = 6 * 60 * 60 * 1000;
+    const CACHE_KEY = "CS_ORGA_CACHE_V2";
+    const CACHE_TS_KEY = "CS_ORGA_CACHE_TS_V2";
+    const CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
     const $chefName = document.getElementById("chefName");
     const $adj1Name = document.getElementById("adj1Name");
@@ -643,8 +601,8 @@
 
     function loadCache(){
       try{
-        const ts = Number(sessionStorage.getItem(CACHE_TS_KEY) || "0");
-        const raw = sessionStorage.getItem(CACHE_KEY);
+        const ts = Number(localStorage.getItem(CACHE_TS_KEY) || "0");
+        const raw = localStorage.getItem(CACHE_KEY);
         if(!raw) return null;
         if(!ts) return null;
         if(Date.now() - ts > CACHE_MAX_AGE_MS) return null;
@@ -656,14 +614,14 @@
 
     function saveCache(payload){
       try{
-        sessionStorage.setItem(CACHE_KEY, JSON.stringify(payload));
-        sessionStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+        localStorage.setItem(CACHE_KEY, JSON.stringify(payload));
+        localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
       }catch(e){}
     }
 
     window.forceReloadOrg = async function(){
-      sessionStorage.removeItem(CACHE_KEY);
-      sessionStorage.removeItem(CACHE_TS_KEY);
+      localStorage.removeItem(CACHE_KEY);
+      localStorage.removeItem(CACHE_TS_KEY);
       await loadFromSheets();
     };
 
@@ -678,27 +636,13 @@
       }
     }
 
-    function showSync(msg="Synchronisation…", sub=""){
-      const t = document.getElementById("syncToast");
-      document.getElementById("syncTxt").textContent = msg;
-      document.getElementById("syncSub").textContent = sub || "Mise à jour des données";
-      t.style.display = "block";
-    }
-
-    function hideSync(){
-      const t = document.getElementById("syncToast");
-      if(t) t.style.display = "none";
-    }
-
     async function loadFromSheets(){
       hideErr();
 
-      let hadCache = false;
       const cached = loadCache();
       if(cached && cached.direction && Array.isArray(cached.poles)){
         DATA = cached;
         render();
-        hadCache = true;
         setSync(true, "Synchronisation…");
       }else{
         setSync(true, "Chargement…");
@@ -706,7 +650,7 @@
 
       try{
         const cb = "cb_org_" + Math.random().toString(36).slice(2);
-        const url = `${API}?view=org&callback=${cb}&nocache=1&_=${Date.now()}`;
+        const url = `${API}?view=org&callback=${cb}`;
         const apiData = await jsonp(url, cb);
 
         if(!apiData || apiData.ok === false){
@@ -723,7 +667,7 @@
       }catch(err){
         console.error(err);
 
-        if(hadCache){
+        if(cached && cached.direction && Array.isArray(cached.poles)){
           setSync(false);
           return;
         }
