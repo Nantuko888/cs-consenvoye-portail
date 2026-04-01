@@ -92,6 +92,7 @@
     display:flex;
     gap:10px;
     flex: 0 0 auto;
+    align-items:center;
   }
 
   .btn{
@@ -109,6 +110,24 @@
 
   .btn:active{transform: translateY(1px)}
   .btn.secondary{ border-color: rgba(255,170,60,.35); }
+
+  .syncPill{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding: 8px 10px;
+    border-radius: 999px;
+    background: rgba(0,0,0,.28);
+    border: 1px solid rgba(255,255,255,.14);
+    color: rgba(255,255,255,.92);
+    font-weight: 950;
+    font-size: 12px;
+    letter-spacing: .2px;
+    box-shadow: 0 10px 26px rgba(0,0,0,.35);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display:none;
+  }
 
   /* ===== CARTE GENERALE ===== */
   .card{
@@ -235,7 +254,6 @@
   }
 
   /* ===== OVERLAY ===== */
-  /* on laisse le bandeau orange du haut visible */
   .overlay{
     position: fixed;
     inset: 0;
@@ -261,8 +279,6 @@
     gap: 10px;
   }
 
-  /* ===== BANDEAUX EQUIPE 1 / EQUIPE 2 ===== */
-  /* translucides, pas en couleur pleine */
   .panel-head{
     display:flex;
     align-items:center;
@@ -306,7 +322,6 @@
 
   .close:active{transform: translateY(1px)}
 
-  /* ===== CORPS DU PANNEAU ===== */
   .panel-body{
     flex:1;
     overflow:auto;
@@ -363,7 +378,6 @@
     display:none;
   }
 
-  /* ===== BANDEAUX COULEUR DES OVERLAYS ===== */
   .panel.team1 .panel-head{
     background: linear-gradient(180deg, rgba(47,123,211,.52), rgba(47,123,211,.30));
   }
@@ -372,7 +386,6 @@
     background: linear-gradient(180deg, rgba(217,137,16,.52), rgba(217,137,16,.30));
   }
 
-  /* ===== RESPONSIVE ===== */
   @media (max-width: 360px){
     .team-pick .title{ font-size:18px; }
     .team-pick{ padding: 14px 14px 12px; }
@@ -388,18 +401,16 @@
     <header>
       <h1>Équipes</h1>
       <div class="actions">
-                <button class="btn secondary" id="btnBack">Retour</button>
-                       
+        <span class="syncPill" id="syncPill">Synchronisation…</span>
+        <button class="btn secondary" id="btnBack">Retour</button>
       </div>
     </header>
 
-    <!-- ✅ Chef de centre centré -->
     <section class="card chief">
       <div class="label">Chef de centre</div>
       <div class="name" id="chiefName">—</div>
     </section>
 
-    <!-- ✅ Équipe 1 gauche / Équipe 2 droite (même ligne) -->
     <div class="team-row">
       <section class="card team-pick team1-pick" id="pickTeam1" role="button" aria-label="Ouvrir Équipe 1">
         <div class="title">Équipe 1 <span class="pill" id="count1">0</span></div>
@@ -417,7 +428,6 @@
     <div class="status" id="status"></div>
   </div>
 
-  <!-- ✅ Overlay pleine page -->
   <div class="overlay" id="overlay" aria-hidden="true">
     <div class="panel card" id="panel">
       <div class="panel-head" id="panelHead">
@@ -436,14 +446,17 @@
   </div>
 
 <script>
-  /** ✅ Mets ici TON URL /exec */
   const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
-  const BACK_URL = "index.html"; // ajuste si besoin
+  const BACK_URL = "index.html";
+
+  const CACHE_KEY = "cs_equipes_cache_v2";
+  const CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
   const $status = document.getElementById("status");
   const $chiefName = document.getElementById("chiefName");
   const $count1 = document.getElementById("count1");
   const $count2 = document.getElementById("count2");
+  const $syncPill = document.getElementById("syncPill");
 
   const $overlay = document.getElementById("overlay");
   const $panel = document.getElementById("panel");
@@ -452,9 +465,6 @@
   const $panelEmpty = document.getElementById("panelEmpty");
 
   document.getElementById("btnBack").addEventListener("click", () => location.href = BACK_URL);
-  const btnRefresh = document.getElementById("btnRefresh");
-if (btnRefresh) btnRefresh.addEventListener("click", () => loadAll(true));
-
   document.getElementById("btnClose").addEventListener("click", closeOverlay);
   $overlay.addEventListener("click", (e) => { if(e.target === $overlay) closeOverlay(); });
 
@@ -468,7 +478,61 @@ if (btnRefresh) btnRefresh.addEventListener("click", () => loadAll(true));
     $status.style.display = show ? "block" : "none";
   }
 
-  /** JSONP */
+  function setSync(on, text){
+    if(!$syncPill) return;
+    if(on){
+      $syncPill.textContent = text || "Synchronisation…";
+      $syncPill.style.display = "inline-flex";
+    }else{
+      $syncPill.style.display = "none";
+    }
+  }
+
+  function saveCache(payload){
+    try{
+      localStorage.setItem(CACHE_KEY, JSON.stringify({
+        savedAt: Date.now(),
+        payload
+      }));
+    }catch(e){}
+  }
+
+  function loadCache(){
+    try{
+      const raw = localStorage.getItem(CACHE_KEY);
+      if(!raw) return null;
+      const obj = JSON.parse(raw);
+      if(!obj || !obj.payload) return null;
+      if(obj.savedAt && (Date.now() - obj.savedAt) > CACHE_MAX_AGE_MS) return null;
+      return obj.payload;
+    }catch(e){
+      return null;
+    }
+  }
+
+  function applyEquipesData_(data){
+    const chef = data?.chef || "—";
+    const teams = data?.teams || { "1": [], "2": [] };
+
+    TEAMS_CACHE = {
+      "1": Array.isArray(teams["1"]) ? teams["1"] : [],
+      "2": Array.isArray(teams["2"]) ? teams["2"] : []
+    };
+
+    $chiefName.textContent = chef;
+    $count1.textContent = String(TEAMS_CACHE["1"].length);
+    $count2.textContent = String(TEAMS_CACHE["2"].length);
+  }
+
+  function escapeHtml(s){
+    return (s==null ? "" : String(s))
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
   function jsonp(url, cbName){
     return new Promise((resolve, reject) => {
       const script = document.createElement("script");
@@ -484,52 +548,57 @@ if (btnRefresh) btnRefresh.addEventListener("click", () => loadAll(true));
     });
   }
 
-  function escapeHtml(s){
-    return (s==null ? "" : String(s))
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-
-  async function loadChef(){
+  async function fetchChef_(){
     const cb = "cb_org_" + Math.random().toString(36).slice(2);
     const url = `${API}?view=org&callback=${cb}`;
     const data = await jsonp(url, cb);
     if(!data || data.ok === false) throw new Error(data?.error || "Réponse org invalide");
-
-    const chef = data?.direction?.chef || "—";
-    $chiefName.textContent = chef;
+    return data?.direction?.chef || "—";
   }
 
-  async function loadEquipes(){
+  async function fetchEquipes_(){
     const cb = "cb_eq_" + Math.random().toString(36).slice(2);
     const url = `${API}?view=equipes&callback=${cb}`;
     const data = await jsonp(url, cb);
     if(!data || data.ok === false) throw new Error(data?.error || "Réponse équipes invalide");
 
     const teams = data.teams || data.equipes || {};
-    const t1 = teams["1"] || teams[1] || [];
-    const t2 = teams["2"] || teams[2] || [];
-    TEAMS_CACHE["1"] = Array.isArray(t1) ? t1 : [];
-    TEAMS_CACHE["2"] = Array.isArray(t2) ? t2 : [];
-
-    $count1.textContent = String(TEAMS_CACHE["1"].length);
-    $count2.textContent = String(TEAMS_CACHE["2"].length);
+    return {
+      "1": Array.isArray(teams["1"] || teams[1]) ? (teams["1"] || teams[1]) : [],
+      "2": Array.isArray(teams["2"] || teams[2]) ? (teams["2"] || teams[2]) : []
+    };
   }
 
-  async function loadAll(showToast){
-    try{
+  async function loadAll(){
+    const cached = loadCache();
+
+    if(cached?.chef || cached?.teams){
+      applyEquipesData_(cached);
+      setSync(true, "Synchronisation…");
+    }else{
+      setSync(true, "Chargement…");
       setStatus("Chargement…", true);
-      await Promise.all([loadChef(), loadEquipes()]);
+    }
+
+    try{
+      const [chef, teams] = await Promise.all([fetchChef_(), fetchEquipes_()]);
+
+      const fresh = { chef, teams };
+      applyEquipesData_(fresh);
+      saveCache(fresh);
+
       setStatus("", false);
-      if(showToast){
-        setStatus("Mis à jour ✅", true);
-        setTimeout(()=>setStatus("", false), 1200);
-      }
+      setSync(false);
     }catch(err){
       console.error(err);
+
+      if(cached?.chef || cached?.teams){
+        setSync(false);
+        setStatus("", false);
+        return;
+      }
+
+      setSync(false);
       setStatus("Erreur de chargement (API).", true);
     }
   }
@@ -538,13 +607,11 @@ if (btnRefresh) btnRefresh.addEventListener("click", () => loadAll(true));
     const teamKey = String(n);
     const title = (n === 1) ? "Équipe 1" : "Équipe 2";
 
-    // style bandeau + classe
     $panel.classList.remove("team1","team2");
     $panel.classList.add(n === 1 ? "team1" : "team2");
 
     $panelTitle.textContent = title;
 
-    // remplir
     const arr = TEAMS_CACHE[teamKey] || [];
     $panelRows.innerHTML = "";
     if(!arr.length){
@@ -563,11 +630,8 @@ if (btnRefresh) btnRefresh.addEventListener("click", () => loadAll(true));
       }
     }
 
-    // ouvrir plein écran
     $overlay.classList.add("is-open");
     $overlay.setAttribute("aria-hidden", "false");
-
-    // empêche le scroll derrière
     document.body.style.overflow = "hidden";
   }
 
@@ -577,41 +641,7 @@ if (btnRefresh) btnRefresh.addEventListener("click", () => loadAll(true));
     document.body.style.overflow = "";
   }
 
-  /** GO AVEC CACHE */
-
-const CACHE_KEY = "cs_equipes_cache";
-const CACHE_TIME = 5 * 60 * 1000; // 5 minutes
-
-function loadWithCache(){
-  const raw = localStorage.getItem(CACHE_KEY);
-  if(raw){
-    try{
-      const cache = JSON.parse(raw);
-      const age = Date.now() - cache.time;
-
-      if(age < CACHE_TIME){
-        // On recharge depuis le cache
-        TEAMS_CACHE = cache.teams;
-        $count1.textContent = String(TEAMS_CACHE["1"].length);
-        $count2.textContent = String(TEAMS_CACHE["2"].length);
-        $chiefName.textContent = cache.chef || "—";
-        return; // STOP ici
-      }
-    }catch(e){}
-  }
-
-  // Sinon on recharge depuis l’API
-  loadAll(false).then(() => {
-    localStorage.setItem(CACHE_KEY, JSON.stringify({
-      time: Date.now(),
-      teams: TEAMS_CACHE,
-      chef: $chiefName.textContent
-    }));
-  });
-}
-
-loadWithCache();
-
+  loadAll();
 </script>
 </body>
 </html>
