@@ -642,7 +642,6 @@
   const CACHE_KEY = `cs_planning_cache_v1_${YEAR}`;
   const CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 7; // 7 jours
 
-
   const LS_EMAIL = "cs_portail_email_v1"; // même clé que index.html
   let IS_ADMIN = false;
   let EDIT_MODE = false;
@@ -690,9 +689,8 @@
   const dowsFR = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
 
   const $catOverlay = $("catOverlay");
-const $catBody = $("catBody");
-const $catClose = $("catClose");
-
+  const $catBody = $("catBody");
+  const $catClose = $("catClose");
 
   function norm(s){
     return String(s||"").trim().toLowerCase()
@@ -901,7 +899,6 @@ const $catClose = $("catClose");
       $btnLock.textContent = EDIT_MODE ? "🔓" : "🔒";
       $btnLock.setAttribute("aria-pressed", EDIT_MODE ? "true" : "false");
     }
-    // si on coupe l'édition, on ferme la feuille edit si ouverte
     if(!EDIT_MODE) closeEdit();
   }
 
@@ -971,7 +968,6 @@ const $catClose = $("catClose");
 
   function renderEditList(dateStr){
     const arr = (eventsByDate.get(dateStr) || []).slice();
-    // tri : start puis title
     arr.sort((a,b)=> String(a.start||"").localeCompare(String(b.start||"")) || String(a.title||"").localeCompare(String(b.title||"")));
 
     $editBody.innerHTML = "";
@@ -1029,14 +1025,12 @@ const $catClose = $("catClose");
             const ok = confirm(`Supprimer l’événement :\n\n${name}\n${time || ""}\n\nConfirmer ?`);
             if(!ok) return;
             await apiDeleteEvent_(dateStr, ev);
-            await loadApi(); // refresh
-            // re-render list after refresh
+            await loadApi();
             renderEditList(dateStr);
             return;
           }
 
           if(act === "edit"){
-            // "modifier" = delete + add (car pas d’endpoint update)
             const newTitle = prompt("Titre", name);
             if(newTitle == null) return;
 
@@ -1119,9 +1113,6 @@ const $catClose = $("catClose");
     if(!email) { alert("Email introuvable (localStorage). Reconnecte-toi sur le portail."); return; }
 
     const cb = "cb_del_" + Math.random().toString(36).slice(2);
-
-    // IMPORTANT : ton Apps Script delete actuel supprime par date+title(+start).
-    // On envoie donc au minimum date+title, et start si présent.
     const url =
       `${API}?view=planning_delete` +
       `&email=${encodeURIComponent(email)}` +
@@ -1138,86 +1129,78 @@ const $catClose = $("catClose");
   }
 
   function openCatPicker_(){
-  return new Promise((resolve)=>{
-    // construit la liste (Aucune + catégories)
-    $catBody.innerHTML = "";
+    return new Promise((resolve)=>{
+      $catBody.innerHTML = "";
 
-    // Bouton "Aucune"
-    const b0 = document.createElement("button");
-    b0.className = "catBtn none";
-    b0.type = "button";
-    b0.innerHTML = `<span class="catDot"></span><span>Aucune (pas de couleur)</span>`;
-    b0.onclick = ()=>{ closeCatPicker_(); resolve(""); };
-    $catBody.appendChild(b0);
+      const b0 = document.createElement("button");
+      b0.className = "catBtn none";
+      b0.type = "button";
+      b0.innerHTML = `<span class="catDot"></span><span>Aucune (pas de couleur)</span>`;
+      b0.onclick = ()=>{ closeCatPicker_(); resolve(""); };
+      $catBody.appendChild(b0);
 
-    // Tri par ordre puis libellé
-    const items = [...catLabel.entries()].map(([k,label])=>({
-      k, label,
-      order: catOrder.has(k) ? catOrder.get(k) : 9999,
-      color: getColorForCategory(k)
-    }));
-    items.sort((a,b)=> (a.order-b.order) || a.label.localeCompare(b.label));
+      const items = [...catLabel.entries()].map(([k,label])=>({
+        k, label,
+        order: catOrder.has(k) ? catOrder.get(k) : 9999,
+        color: getColorForCategory(k)
+      }));
+      items.sort((a,b)=> (a.order-b.order) || a.label.localeCompare(b.label));
 
-    for(const it of items){
-      const btn = document.createElement("button");
-      btn.className = "catBtn";
-      btn.type = "button";
-      btn.innerHTML = `
-        <span class="catDot" style="background:${escapeHtml(it.color)}"></span>
-        <span>${escapeHtml(it.label)}</span>
-      `;
-      btn.onclick = ()=>{ closeCatPicker_(); resolve(it.label); };
-      $catBody.appendChild(btn);
-    }
+      for(const it of items){
+        const btn = document.createElement("button");
+        btn.className = "catBtn";
+        btn.type = "button";
+        btn.innerHTML = `
+          <span class="catDot" style="background:${escapeHtml(it.color)}"></span>
+          <span>${escapeHtml(it.label)}</span>
+        `;
+        btn.onclick = ()=>{ closeCatPicker_(); resolve(it.label); };
+        $catBody.appendChild(btn);
+      }
 
-    // ouvre
-    $catOverlay.classList.add("show");
-    $catOverlay.setAttribute("aria-hidden","false");
+      $catOverlay.classList.add("show");
+      $catOverlay.setAttribute("aria-hidden","false");
 
-    // cancel si on clique le fond
-    const onBg = (e)=>{ if(e.target === $catOverlay){ cleanup(); closeCatPicker_(); resolve(null); } };
-    const onEsc = (e)=>{ if(e.key==="Escape"){ cleanup(); closeCatPicker_(); resolve(null); } };
-    const cleanup = ()=>{
-      $catOverlay.removeEventListener("click", onBg);
-      document.removeEventListener("keydown", onEsc);
-    };
+      const onBg = (e)=>{ if(e.target === $catOverlay){ cleanup(); closeCatPicker_(); resolve(null); } };
+      const onEsc = (e)=>{ if(e.key==="Escape"){ cleanup(); closeCatPicker_(); resolve(null); } };
+      const cleanup = ()=>{
+        $catOverlay.removeEventListener("click", onBg);
+        document.removeEventListener("keydown", onEsc);
+      };
 
-    $catOverlay.addEventListener("click", onBg);
-    document.addEventListener("keydown", onEsc);
+      $catOverlay.addEventListener("click", onBg);
+      document.addEventListener("keydown", onEsc);
 
-    // bouton X
-    $catClose.onclick = ()=>{ cleanup(); closeCatPicker_(); resolve(null); };
-  });
-}
-
-function closeCatPicker_(){
-  $catOverlay.classList.remove("show");
-  $catOverlay.setAttribute("aria-hidden","true");
-  $catBody.innerHTML = "";
-}
-
- async function openAddEventPrompt_(dateStr){
-  // ✅ choix catégorie via légende (clic)
-  const picked = await openCatPicker_();
-  if(picked === null) return; // annulé
-  const category = picked || ""; // "" = aucune
-
-  const title = prompt("Titre de l’événement", "");
-  if(!title) return;
-
-  const start = prompt("Heure début (HH:MM) (optionnel)", "") || "";
-  const end = prompt("Heure fin (HH:MM) (optionnel)", "") || "";
-  const location = prompt("Lieu (optionnel)", "") || "";
-  const details = prompt("Détails / note (optionnel)", "") || "";
-
-  try{
-    await apiAddEvent_(dateStr, { title, start, end, category, location, details });
-    alert("Ajouté ✔");
-  }catch(err){
-    alert("Erreur : " + String(err && err.message ? err.message : err));
+      $catClose.onclick = ()=>{ cleanup(); closeCatPicker_(); resolve(null); };
+    });
   }
-}
 
+  function closeCatPicker_(){
+    $catOverlay.classList.remove("show");
+    $catOverlay.setAttribute("aria-hidden","true");
+    $catBody.innerHTML = "";
+  }
+
+  async function openAddEventPrompt_(dateStr){
+    const picked = await openCatPicker_();
+    if(picked === null) return;
+    const category = picked || "";
+
+    const title = prompt("Titre de l’événement", "");
+    if(!title) return;
+
+    const start = prompt("Heure début (HH:MM) (optionnel)", "") || "";
+    const end = prompt("Heure fin (HH:MM) (optionnel)", "") || "";
+    const location = prompt("Lieu (optionnel)", "") || "";
+    const details = prompt("Détails / note (optionnel)", "") || "";
+
+    try{
+      await apiAddEvent_(dateStr, { title, start, end, category, location, details });
+      alert("Ajouté ✔");
+    }catch(err){
+      alert("Erreur : " + String(err && err.message ? err.message : err));
+    }
+  }
 
   /********** CLICK calendar **********/
   $grid.addEventListener("click", (e)=>{
@@ -1228,13 +1211,11 @@ function closeCatPicker_(){
     const dateStr = day.dataset.date;
     if(!dateStr) return;
 
-    // MODE ÉDITION admin : ouvre gestion événements du jour
     if(EDIT_MODE && IS_ADMIN){
       openEdit(dateStr);
       return;
     }
 
-    // MODE lecture : notes uniquement
     if(day.classList.contains("has-note")){
       openNote(dateStr);
     }
@@ -1250,88 +1231,82 @@ function closeCatPicker_(){
   });
 
   function saveCache_(payload){
-  try{
-    localStorage.setItem(CACHE_KEY, JSON.stringify({
-      savedAt: Date.now(),
-      payload
-    }));
-  }catch(e){}
-}
-
-function loadCache_(){
-  try{
-    const raw = localStorage.getItem(CACHE_KEY);
-    if(!raw) return null;
-    const obj = JSON.parse(raw);
-    if(!obj || !obj.payload) return null;
-    if(obj.savedAt && (Date.now() - obj.savedAt) > CACHE_MAX_AGE_MS) return null;
-    return obj.payload;
-  }catch(e){
-    return null;
-  }
-}
-
-function applyPlanningData_(py, pc){
-  events = Array.isArray(py?.events) ? py.events : [];
-  categoriesRaw = Array.isArray(pc?.categories) && pc.categories.length ? pc.categories : DEFAULT_CATEGORIES.slice();
-
-  rebuildMaps();
-  renderLegend();
-  renderMonth();
-}
-
-
-  /********** LOAD API **********/
-  async function loadApi(){
-  if(!API || API.includes("COLLE_ICI")){
-    showStatus("API manquante", "Mets ton URL exec dans const API.");
-    return;
+    try{
+      localStorage.setItem(CACHE_KEY, JSON.stringify({
+        savedAt: Date.now(),
+        payload
+      }));
+    }catch(e){}
   }
 
-  // ✅ 1) Affiche le cache instantanément si dispo
-  const cached = loadCache_();
-  if(cached?.py && cached?.pc){
-    applyPlanningData_(cached.py, cached.pc);
-    showStatus("Synchronisation…", "Mise à jour en cours.");
-  }else{
-    showStatus("Chargement…", "Récupération des événements et catégories.");
-  }
-
-  const cb1 = "cb_py_" + Math.random().toString(36).slice(2);
-  const cb2 = "cb_pc_" + Math.random().toString(36).slice(2);
-
-  try{
-    const [py, pc] = await Promise.all([
-      jsonp(`${API}?view=planning_year&year=${YEAR}&nocache=1&callback=${cb1}`, cb1),
-      jsonp(`${API}?view=planning_categories&nocache=1&callback=${cb2}`, cb2)
-    ]);
-
-    if(py?.ok===false) throw new Error(py?.error || "planning_year invalide");
-    if(pc?.ok===false) throw new Error(pc?.error || "planning_categories invalide");
-
-    applyPlanningData_(py, pc);
-
-    // ✅ 2) Sauvegarde cache
-    saveCache_({ py, pc });
-
-    hideStatus();
-  }catch(e){
-    // ✅ si on avait un cache, on le laisse affiché + message discret
-    if(cached?.py && cached?.pc){
-      showStatus("Hors ligne / lent", "Les données affichées sont en cache.");
-      setTimeout(hideStatus, 2500);
-      return;
+  function loadCache_(){
+    try{
+      const raw = localStorage.getItem(CACHE_KEY);
+      if(!raw) return null;
+      const obj = JSON.parse(raw);
+      if(!obj || !obj.payload) return null;
+      if(obj.savedAt && (Date.now() - obj.savedAt) > CACHE_MAX_AGE_MS) return null;
+      return obj.payload;
+    }catch(e){
+      return null;
     }
+  }
 
-    // sinon fallback (comme avant)
-    categoriesRaw = DEFAULT_CATEGORIES.slice();
-    events = [];
+  function applyPlanningData_(py, pc){
+    events = Array.isArray(py?.events) ? py.events : [];
+    categoriesRaw = Array.isArray(pc?.categories) && pc.categories.length ? pc.categories : DEFAULT_CATEGORIES.slice();
+
     rebuildMaps();
     renderLegend();
     renderMonth();
-    showStatus("API HS / lente", "La légende reste, mais pas d’événements.");
   }
-}
+
+  /********** LOAD API **********/
+  async function loadApi(){
+    if(!API || API.includes("COLLE_ICI")){
+      showStatus("API manquante", "Mets ton URL exec dans const API.");
+      return;
+    }
+
+    const cached = loadCache_();
+    if(cached?.py && cached?.pc){
+      applyPlanningData_(cached.py, cached.pc);
+      showStatus("Synchronisation…", "Mise à jour en cours.");
+    }else{
+      showStatus("Chargement…", "Récupération des événements et catégories.");
+    }
+
+    const cb1 = "cb_py_" + Math.random().toString(36).slice(2);
+    const cb2 = "cb_pc_" + Math.random().toString(36).slice(2);
+
+    try{
+      const [py, pc] = await Promise.all([
+        jsonp(`${API}?view=planning_year&year=${YEAR}&callback=${cb1}`, cb1),
+        jsonp(`${API}?view=planning_categories&callback=${cb2}`, cb2)
+      ]);
+
+      if(py?.ok===false) throw new Error(py?.error || "planning_year invalide");
+      if(pc?.ok===false) throw new Error(pc?.error || "planning_categories invalide");
+
+      applyPlanningData_(py, pc);
+      saveCache_({ py, pc });
+
+      hideStatus();
+    }catch(e){
+      if(cached?.py && cached?.pc){
+        showStatus("Hors ligne / lent", "Les données affichées sont en cache.");
+        setTimeout(hideStatus, 2500);
+        return;
+      }
+
+      categoriesRaw = DEFAULT_CATEGORIES.slice();
+      events = [];
+      rebuildMaps();
+      renderLegend();
+      renderMonth();
+      showStatus("API HS / lente", "La légende reste, mais pas d’événements.");
+    }
+  }
 
   /********** UI **********/
   $("btnBack").addEventListener("click", ()=>location.href=BACK_URL);
@@ -1353,7 +1328,10 @@ function applyPlanningData_(py, pc){
     currentMonth = (now.getFullYear()===YEAR) ? now.getMonth() : 0;
     renderMonth();
 
-    // rôle -> affiche le cadenas uniquement si admin
+    // ✅ on lance le planning tout de suite
+    loadApi();
+
+    // ✅ rôle admin en parallèle (ne bloque pas l'affichage)
     try{
       await loadMyRole_();
     }catch(e){
@@ -1366,8 +1344,6 @@ function applyPlanningData_(py, pc){
       $btnLock.style.display = "none";
       setEditMode(false);
     }
-
-    await loadApi();
   })();
 </script>
 </body>
