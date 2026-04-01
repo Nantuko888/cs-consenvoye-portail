@@ -20,7 +20,6 @@ body{
   overflow:hidden;
 }
 
-/* Background */
 .bg{
   position:fixed; inset:0;
   background:
@@ -29,7 +28,6 @@ body{
   z-index:-1;
 }
 
-/* Layout */
 .wrap{
   height:100vh;
   max-width:980px;
@@ -40,7 +38,6 @@ body{
   gap:12px;
 }
 
-/* Header */
 .topbar{
   display:flex;
   align-items:center;
@@ -68,19 +65,18 @@ body{
   font-weight:900;
 }
 
-/* Grid */
+/* 👇 ICI on force vertical */
 .grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
+  display:flex;
+  flex-direction:column;
   gap:14px;
-  align-content:start;
 }
 
-/* Cards style ÉQUIPES */
+/* Cards */
 .card{
   position:relative;
   border-radius:22px;
-  padding:18px;
+  padding:20px;
   min-height:140px;
   display:flex;
   flex-direction:column;
@@ -93,16 +89,13 @@ body{
   border:1px solid rgba(255,255,255,.18);
   box-shadow:var(--shadow);
   backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
 }
 
-/* Gauche bleu */
+/* Couleurs */
 .card.op{
   background:linear-gradient(180deg, rgba(80,140,255,.25), rgba(0,0,0,.35));
   border-color:rgba(120,180,255,.4);
 }
-
-/* Droite orange */
 .card.note{
   background:linear-gradient(180deg, rgba(255,140,40,.25), rgba(0,0,0,.35));
   border-color:rgba(255,180,100,.4);
@@ -112,7 +105,6 @@ body{
   margin:0;
   font-size:22px;
   font-weight:950;
-  line-height:1.05;
 }
 
 .cardSub{
@@ -126,7 +118,6 @@ body{
   height:6px;
   border-radius:999px;
   margin-top:auto;
-  opacity:.8;
 }
 
 .op .bar{
