@@ -8,10 +8,11 @@
     :root{
       --txt:#f4f4f4;
       --muted:rgba(255,255,255,.72);
-      --shadow:0 14px 34px rgba(0,0,0,.40);
-      --stroke:rgba(255,255,255,.10);
-      --headerColor1: rgba(212,106,0,.75);
-      --headerColor2: rgba(185,88,0,.58);
+      --shadow: 0 14px 34px rgba(0,0,0,.40);
+      --radius: 22px;
+      --stroke: rgba(255,255,255,.10);
+      --orange:#d46a00;
+      --orange2:#b95800;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -25,61 +26,63 @@
     .bg{
       position:fixed; inset:0;
       background:
-        linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.56)),
+        linear-gradient(180deg, rgba(0,0,0,.52), rgba(0,0,0,.52)),
         url("background.png") center top/cover no-repeat;
+      z-index:-2;
+      transform: translateZ(0);
+    }
+    .bg::after{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.64) 62%);
       z-index:-1;
     }
 
-    .page{
-      min-height:100dvh;
-      padding:
-        calc(env(safe-area-inset-top) + 12px)
-        14px
-        calc(env(safe-area-inset-bottom) + 14px);
-      display:flex;
-      flex-direction:column;
-      gap:14px;
+    .wrap{
+      height:100vh;
+      max-width:980px;
+      margin:0 auto;
+      padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
+      display:grid;
+      grid-template-rows:auto auto 1fr;
+      gap:10px;
     }
 
     .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:12px 14px;
-      border-radius:20px;
-      background:linear-gradient(180deg,var(--headerColor1),var(--headerColor2));
-      border:1px solid rgba(255,255,255,.10);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:10px 12px;
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
+      border:1px solid rgba(255,255,255,.12);
       box-shadow:var(--shadow);
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
+      min-height:46px;
     }
-    .title{
-      margin:0;
-      font-size:18px;
-      font-weight:950;
-      letter-spacing:.5px;
-      text-transform:uppercase;
+    .topbar .title{
+      font-weight:950; letter-spacing:.8px; text-transform:uppercase;
+      font-size:18px; margin:0; white-space:nowrap;
     }
-    .backBtn{
-      border:none;
+    .btn{
+      border:1px solid rgba(255,255,255,.18);
       background:rgba(0,0,0,.18);
-      color:#fff;
-      padding:10px 14px;
+      color:var(--txt);
+      padding:9px 12px;
       border-radius:14px;
       font-weight:900;
       cursor:pointer;
       -webkit-tap-highlight-color:transparent;
     }
+    .btn:active{transform:translateY(1px)}
 
     .hero{
-      padding:14px 16px;
-      border-radius:22px;
-      background:rgba(0,0,0,.26);
-      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.30));
+      border:1px solid var(--stroke);
       box-shadow:var(--shadow);
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
+      padding:16px 14px;
     }
     .heroTitle{
       margin:0 0 6px 0;
@@ -91,127 +94,127 @@
       margin:0;
       color:var(--muted);
       font-size:14px;
-      font-weight:700;
+      font-weight:800;
       line-height:1.3;
     }
 
     .grid{
-      flex:1;
       display:grid;
       grid-template-columns:1fr;
-      gap:14px;
+      gap:12px;
+      min-height:0;
       align-content:start;
     }
 
-    .card{
+    .cell{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 16px;
+      min-height:118px;
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.30));
+      border:1px solid var(--stroke);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      text-decoration:none;
+      color:var(--txt);
+      -webkit-tap-highlight-color:transparent;
+    }
+    .cell:active{transform:translateY(1px)}
+
+    .cellLeft{
+      min-width:0;
       display:flex;
       align-items:center;
       gap:14px;
-      min-height:112px;
-      padding:18px 18px;
-      border-radius:24px;
-      text-decoration:none;
-      color:#fff;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(12px);
-      -webkit-backdrop-filter:blur(12px);
-      -webkit-tap-highlight-color:transparent;
-      transition:transform .12s ease, background .12s ease;
     }
-    .card:active{
-      transform:translateY(1px) scale(.995);
-      background:rgba(255,255,255,.12);
-    }
-
-    .iconWrap{
-      width:58px;
-      height:58px;
-      border-radius:18px;
-      flex:0 0 auto;
+    .cellIcon{
+      width:54px;
+      height:54px;
+      border-radius:16px;
       display:flex;
       align-items:center;
       justify-content:center;
       background:rgba(0,0,0,.18);
       border:1px solid rgba(255,255,255,.10);
-      font-size:28px;
+      font-size:26px;
+      flex:0 0 auto;
     }
-
-    .cardBody{
+    .cellText{
       min-width:0;
-      flex:1;
     }
-    .cardTitle{
+    .cellTitle{
       margin:0 0 6px 0;
       font-size:20px;
       font-weight:950;
       line-height:1.05;
     }
-    .cardText{
+    .cellSub{
       margin:0;
-      color:rgba(255,255,255,.80);
+      color:var(--muted);
       font-size:14px;
-      font-weight:700;
+      font-weight:800;
       line-height:1.28;
     }
-
-    .arrow{
+    .cellArrow{
+      font-size:28px;
+      font-weight:950;
+      opacity:.9;
       flex:0 0 auto;
-      font-size:24px;
-      font-weight:900;
-      opacity:.92;
     }
 
     @media (min-width:700px){
       .grid{
         grid-template-columns:1fr 1fr;
       }
-      .card{
-        min-height:136px;
-      }
     }
   </style>
 </head>
+
 <body>
   <div class="bg"></div>
 
-  <main class="page">
+  <div class="wrap">
     <div class="topbar">
-      <h1 class="title">Documents</h1>
-      <button class="backBtn" onclick="location.href='index.html'">Retour</button>
+      <h1 class="title">DOCUMENTS</h1>
+      <button class="btn" id="btnBack">Retour</button>
     </div>
 
     <section class="hero">
-      <h2 class="heroTitle">Choisis une rubrique</h2>
-      <p class="heroSub">
-        Accès rapide aux documents opérationnels et aux notes de service.
-      </p>
+      <h2 class="heroTitle">Choisir une rubrique</h2>
+      <p class="heroSub">Accès rapide aux documents opérationnels et aux notes de service.</p>
     </section>
 
     <section class="grid">
-      <a class="card" href="documents-operationnels.html">
-        <div class="iconWrap">📁</div>
-        <div class="cardBody">
-          <h3 class="cardTitle">Documents opérationnels</h3>
-          <p class="cardText">
-            Accéder à la page documents actuelle.
-          </p>
+      <a class="cell" href="documents-operationnels.html">
+        <div class="cellLeft">
+          <div class="cellIcon">📁</div>
+          <div class="cellText">
+            <h3 class="cellTitle">Documents opérationnels</h3>
+            <p class="cellSub">Accéder aux documents opérationnels.</p>
+          </div>
         </div>
-        <div class="arrow">›</div>
+        <div class="cellArrow">›</div>
       </a>
 
-      <a class="card" href="notes-service.html">
-        <div class="iconWrap">📝</div>
-        <div class="cardBody">
-          <h3 class="cardTitle">Notes de service</h3>
-          <p class="cardText">
-            Ouvrir l’espace dédié aux notes de service.
-          </p>
+      <a class="cell" href="notes-service.html">
+        <div class="cellLeft">
+          <div class="cellIcon">📝</div>
+          <div class="cellText">
+            <h3 class="cellTitle">Notes de service</h3>
+            <p class="cellSub">Accéder à la page dédiée aux notes de service.</p>
+          </div>
         </div>
-        <div class="arrow">›</div>
+        <div class="cellArrow">›</div>
       </a>
     </section>
-  </main>
+  </div>
+
+<script>
+  document.getElementById("btnBack").addEventListener("click", ()=>location.href="index.html");
+</script>
 </body>
 </html>
