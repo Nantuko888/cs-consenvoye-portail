@@ -1076,6 +1076,15 @@ document.addEventListener("click", (e) => {
   setInterval(loadOnlineBadge, 10000);
 })();
 </script>
+  
+  <script>
+window.addEventListener("pageshow", function(event) {
+  if (event.persisted) {
+    window.location.reload();
+  }
+});
+</script>
+
 
 </body>
 </html>
