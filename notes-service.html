@@ -8,10 +8,11 @@
     :root{
       --txt:#f4f4f4;
       --muted:rgba(255,255,255,.72);
-      --shadow:0 14px 34px rgba(0,0,0,.40);
-      --stroke:rgba(255,255,255,.10);
-      --headerColor1: rgba(212,106,0,.75);
-      --headerColor2: rgba(185,88,0,.58);
+      --shadow: 0 14px 34px rgba(0,0,0,.40);
+      --radius: 22px;
+      --stroke: rgba(255,255,255,.10);
+      --orange:#d46a00;
+      --orange2:#b95800;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -25,93 +26,102 @@
     .bg{
       position:fixed; inset:0;
       background:
-        linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.56)),
+        linear-gradient(180deg, rgba(0,0,0,.52), rgba(0,0,0,.52)),
         url("background.png") center top/cover no-repeat;
+      z-index:-2;
+      transform: translateZ(0);
+    }
+    .bg::after{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.64) 62%);
       z-index:-1;
     }
 
-    .page{
-      min-height:100dvh;
-      padding:
-        calc(env(safe-area-inset-top) + 12px)
-        14px
-        calc(env(safe-area-inset-bottom) + 14px);
-      display:flex;
-      flex-direction:column;
-      gap:14px;
+    .wrap{
+      height:100vh;
+      max-width:980px;
+      margin:0 auto;
+      padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
+      display:grid;
+      grid-template-rows:auto 1fr;
+      gap:10px;
     }
 
     .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:12px 14px;
-      border-radius:20px;
-      background:linear-gradient(180deg,var(--headerColor1),var(--headerColor2));
-      border:1px solid rgba(255,255,255,.10);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:10px 12px;
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
+      border:1px solid rgba(255,255,255,.12);
       box-shadow:var(--shadow);
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
+      min-height:46px;
     }
-    .title{
-      margin:0;
-      font-size:18px;
-      font-weight:950;
-      letter-spacing:.5px;
-      text-transform:uppercase;
+    .topbar .title{
+      font-weight:950; letter-spacing:.8px; text-transform:uppercase;
+      font-size:18px; margin:0; white-space:nowrap;
     }
-    .backBtn{
-      border:none;
-      background:rgba(0,0,0,.18);
-      color:#fff;
-      padding:10px 14px;
-      border-radius:14px;
+    .btn{
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      color:var(--txt);
+      padding: 9px 12px;
+      border-radius: 14px;
       font-weight:900;
       cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .card{
-      margin-top:4px;
-      padding:18px;
-      border-radius:24px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(12px);
-      -webkit-backdrop-filter:blur(12px);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.30));
+      border:1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overflow:hidden;
+      padding: 18px 16px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap: 8px;
+      min-height: 0;
     }
     .cardTitle{
-      margin:0 0 8px 0;
+      margin:0;
       font-size:22px;
       font-weight:950;
       line-height:1.05;
     }
-    .cardText{
+    .cardSub{
       margin:0;
       color:var(--muted);
       font-size:15px;
-      font-weight:700;
-      line-height:1.35;
+      font-weight:800;
+      line-height:1.3;
     }
   </style>
 </head>
+
 <body>
   <div class="bg"></div>
 
-  <main class="page">
+  <div class="wrap">
     <div class="topbar">
-      <h1 class="title">Notes de service</h1>
-      <button class="backBtn" onclick="location.href='documents.html'">Retour</button>
+      <h1 class="title">NOTES DE SERVICE</h1>
+      <button class="btn" id="btnBack">Retour</button>
     </div>
 
     <section class="card">
-      <h2 class="cardTitle">Espace en préparation</h2>
-      <p class="cardText">
-        Cette page est prête. On branchera ensuite les notes de service depuis Drive.
-      </p>
+      <h2 class="cardTitle">Page prête</h2>
+      <p class="cardSub">On branchera ensuite cette partie sur Drive pour afficher uniquement les notes de service.</p>
     </section>
-  </main>
+  </div>
+
+<script>
+  document.getElementById("btnBack").addEventListener("click", ()=>location.href="documents.html");
+</script>
 </body>
 </html>
