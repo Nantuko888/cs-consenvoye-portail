@@ -16,7 +16,7 @@
       --orange2:#b95800;
 
       --today:#fff200;
-      --note:#fff200; /* fluo */
+      --note:#fff200;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -265,7 +265,6 @@
     }
     .status .small{font-weight:800; opacity:.85; font-size:13px}
 
-    /* ======= NOTE MODAL ======= */
     .noteOverlay{
       position:fixed; inset:0;
       background: rgba(0,0,0,.55);
@@ -381,7 +380,6 @@
       white-space:pre-wrap;
     }
 
-    /* ======= EDIT MODAL (admin) ======= */
     .editOverlay{
       position:fixed; inset:0;
       background: rgba(0,0,0,.62);
@@ -484,75 +482,73 @@
       .editSheet{height: min(68vh, 680px);}
     }
 
-    /* ======= CATEGORY PICKER ======= */
-.catOverlay{
-  position:fixed; inset:0;
-  background: rgba(0,0,0,.62);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index:160;
-  display:none;
-}
-.catOverlay.show{display:block;}
-.catSheet{
-  position:absolute;
-  left:12px; right:12px;
-  bottom: calc(env(safe-area-inset-bottom) + 12px);
-  max-width: 980px;
-  margin: 0 auto;
-  height: min(56vh, 520px);
-  border-radius: 22px;
-  background: linear-gradient(180deg, rgba(0,0,0,.78), rgba(0,0,0,.62));
-  border:1px solid rgba(255,255,255,.14);
-  box-shadow: var(--shadow);
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-}
-.catHead{
-  display:flex; align-items:center; justify-content:space-between; gap:10px;
-  padding: 12px 12px;
-  border-bottom:1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.22);
-}
-.catTitle{
-  font-weight:950;
-  font-size: 16px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.catBody{
-  padding: 12px;
-  overflow:auto;
-  -webkit-overflow-scrolling: touch;
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:10px;
-}
-.catBtn{
-  display:flex; align-items:center; gap:10px;
-  padding: 12px 12px;
-  border-radius: 18px;
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(0,0,0,.22);
-  color: rgba(255,255,255,.92);
-  font-weight: 950;
-  cursor:pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.catBtn:active{transform: translateY(1px)}
-.catDot{
-  width:18px; height:18px;
-  border-radius: 6px;
-  border:1px solid rgba(255,255,255,.22);
-  background: rgba(255,255,255,.25);
-  flex:0 0 auto;
-}
-.catBtn.none .catDot{
-  background: transparent;
-}
-
+    .catOverlay{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index:160;
+      display:none;
+    }
+    .catOverlay.show{display:block;}
+    .catSheet{
+      position:absolute;
+      left:12px; right:12px;
+      bottom: calc(env(safe-area-inset-bottom) + 12px);
+      max-width: 980px;
+      margin: 0 auto;
+      height: min(56vh, 520px);
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(0,0,0,.78), rgba(0,0,0,.62));
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+    .catHead{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding: 12px 12px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+    }
+    .catTitle{
+      font-weight:950;
+      font-size: 16px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .catBody{
+      padding: 12px;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .catBtn{
+      display:flex; align-items:center; gap:10px;
+      padding: 12px 12px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+      color: rgba(255,255,255,.92);
+      font-weight: 950;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .catBtn:active{transform: translateY(1px)}
+    .catDot{
+      width:18px; height:18px;
+      border-radius: 6px;
+      border:1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.25);
+      flex:0 0 auto;
+    }
+    .catBtn.none .catDot{
+      background: transparent;
+    }
   </style>
 </head>
 
@@ -597,7 +593,6 @@
     </div>
   </div>
 
-  <!-- NOTE MODAL -->
   <div class="noteOverlay" id="noteOverlay" aria-hidden="true">
     <div class="noteSheet" role="dialog" aria-modal="true" aria-label="Note du jour">
       <div class="noteHead">
@@ -608,7 +603,6 @@
     </div>
   </div>
 
-  <!-- EDIT MODAL (admin) -->
   <div class="editOverlay" id="editOverlay" aria-hidden="true">
     <div class="editSheet" role="dialog" aria-modal="true" aria-label="Gestion des événements">
       <div class="editHead">
@@ -622,31 +616,27 @@
     </div>
   </div>
 
-  <!-- CATEGORY PICKER (admin) -->
-<div class="catOverlay" id="catOverlay" aria-hidden="true">
-  <div class="catSheet" role="dialog" aria-modal="true" aria-label="Choix catégorie">
-    <div class="catHead">
-      <div class="catTitle">Choisir une catégorie</div>
-      <button class="iconBtn" id="catClose" title="Fermer">✕</button>
+  <div class="catOverlay" id="catOverlay" aria-hidden="true">
+    <div class="catSheet" role="dialog" aria-modal="true" aria-label="Choix catégorie">
+      <div class="catHead">
+        <div class="catTitle">Choisir une catégorie</div>
+        <button class="iconBtn" id="catClose" title="Fermer">✕</button>
+      </div>
+      <div class="catBody" id="catBody"></div>
     </div>
-    <div class="catBody" id="catBody"></div>
   </div>
-</div>
-
 
 <script>
-  /********** CONFIG **********/
   const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
   const BACK_URL = "index.html";
   const YEAR = 2026;
   const CACHE_KEY = `cs_planning_cache_v1_${YEAR}`;
-  const CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 7; // 7 jours
+  const CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 7;
 
-  const LS_EMAIL = "cs_portail_email_v1"; // même clé que index.html
+  const LS_EMAIL = "cs_portail_email_v1";
   let IS_ADMIN = false;
   let EDIT_MODE = false;
 
-  /********** DEFAULT CATEGORIES **********/
   const DEFAULT_CATEGORIES = [
     { category:"FMA centre", color:"#ff2d2d", order:1 },
     { category:"FMA équipe 1", color:"#24d36a", order:2 },
@@ -661,7 +651,6 @@
     "fma centre": "#ff2d2d",
   };
 
-  /********** DOM **********/
   const $ = (id)=>document.getElementById(id);
   const $grid = $("grid");
   const $monthName = $("monthName");
@@ -736,7 +725,6 @@
     return (localStorage.getItem(LS_EMAIL) || "").trim().toLowerCase();
   }
 
-  /********** JSONP **********/
   function jsonp(url, cbName, timeoutMs=15000){
     return new Promise((resolve, reject) => {
       const script = document.createElement("script");
@@ -766,7 +754,6 @@
     return { ok:true, email, isAdmin: IS_ADMIN, res };
   }
 
-  /********** DATA **********/
   let events = [];
   let categoriesRaw = DEFAULT_CATEGORIES.slice();
   let eventsByDate = new Map();
@@ -891,7 +878,6 @@
     }
   }
 
-  /********** MODE EDIT **********/
   function setEditMode(on){
     EDIT_MODE = !!on;
     $editLabel.style.display = EDIT_MODE ? "inline-block" : "none";
@@ -902,7 +888,6 @@
     if(!EDIT_MODE) closeEdit();
   }
 
-  /********** NOTE MODAL **********/
   function openNote(dateStr){
     const arr = eventsByDate.get(dateStr) || [];
     const withDetails = arr.filter(ev => String(ev.details||"").trim());
@@ -949,7 +934,6 @@
     $noteOverlay.setAttribute("aria-hidden","true");
   }
 
-  /********** EDIT SHEET **********/
   let _editDate = "";
 
   function openEdit(dateStr){
@@ -1025,7 +1009,7 @@
             const ok = confirm(`Supprimer l’événement :\n\n${name}\n${time || ""}\n\nConfirmer ?`);
             if(!ok) return;
             await apiDeleteEvent_(dateStr, ev);
-            await loadApi();
+            await loadApi(true);
             renderEditList(dateStr);
             return;
           }
@@ -1062,7 +1046,7 @@
               details:newDetails
             });
 
-            await loadApi();
+            await loadApi(true);
             renderEditList(dateStr);
             return;
           }
@@ -1076,14 +1060,13 @@
   $btnAddEvent.addEventListener("click", async ()=>{
     if(!_editDate) return;
     await openAddEventPrompt_(_editDate);
-    await loadApi();
+    await loadApi(true);
     renderEditList(_editDate);
   });
 
   $btnCloseEdit.addEventListener("click", closeEdit);
   $editOverlay.addEventListener("click", (e)=>{ if(e.target === $editOverlay) closeEdit(); });
 
-  /********** API actions **********/
   async function apiAddEvent_(dateStr, payload){
     const email = getEmailLocal();
     if(!email) { alert("Email introuvable (localStorage). Reconnecte-toi sur le portail."); return; }
@@ -1202,7 +1185,6 @@
     }
   }
 
-  /********** CLICK calendar **********/
   $grid.addEventListener("click", (e)=>{
     const day = e.target.closest(".day");
     if(!day) return;
@@ -1261,15 +1243,15 @@
     renderMonth();
   }
 
-  /********** LOAD API **********/
-  async function loadApi(){
+  async function loadApi(forceFresh = false){
     if(!API || API.includes("COLLE_ICI")){
       showStatus("API manquante", "Mets ton URL exec dans const API.");
       return;
     }
 
     const cached = loadCache_();
-    if(cached?.py && cached?.pc){
+
+    if(!forceFresh && cached?.py && cached?.pc){
       applyPlanningData_(cached.py, cached.pc);
       showStatus("Synchronisation…", "Mise à jour en cours.");
     }else{
@@ -1280,9 +1262,19 @@
     const cb2 = "cb_pc_" + Math.random().toString(36).slice(2);
 
     try{
+      const planningUrl =
+        `${API}?view=planning_year&year=${YEAR}` +
+        `${forceFresh ? "&nocache=1" : ""}` +
+        `&callback=${cb1}`;
+
+      const catsUrl =
+        `${API}?view=planning_categories` +
+        `${forceFresh ? "&nocache=1" : ""}` +
+        `&callback=${cb2}`;
+
       const [py, pc] = await Promise.all([
-        jsonp(`${API}?view=planning_year&year=${YEAR}&callback=${cb1}`, cb1),
-        jsonp(`${API}?view=planning_categories&callback=${cb2}`, cb2)
+        jsonp(planningUrl, cb1),
+        jsonp(catsUrl, cb2)
       ]);
 
       if(py?.ok===false) throw new Error(py?.error || "planning_year invalide");
@@ -1293,7 +1285,7 @@
 
       hideStatus();
     }catch(e){
-      if(cached?.py && cached?.pc){
+      if(!forceFresh && cached?.py && cached?.pc){
         showStatus("Hors ligne / lent", "Les données affichées sont en cache.");
         setTimeout(hideStatus, 2500);
         return;
@@ -1308,7 +1300,6 @@
     }
   }
 
-  /********** UI **********/
   $("btnBack").addEventListener("click", ()=>location.href=BACK_URL);
   $btnPrev.addEventListener("click", ()=>{ if(currentMonth>0){ currentMonth--; renderMonth(); }});
   $btnNext.addEventListener("click", ()=>{ if(currentMonth<11){ currentMonth++; renderMonth(); }});
@@ -1318,7 +1309,6 @@
     setEditMode(!EDIT_MODE);
   });
 
-  /********** BOOT **********/
   (async function(){
     $("titleYear").textContent = `PLANNING ${YEAR}`;
     rebuildMaps();
@@ -1328,10 +1318,8 @@
     currentMonth = (now.getFullYear()===YEAR) ? now.getMonth() : 0;
     renderMonth();
 
-    // ✅ on lance le planning tout de suite
     loadApi();
 
-    // ✅ rôle admin en parallèle (ne bloque pas l'affichage)
     try{
       await loadMyRole_();
     }catch(e){
