@@ -265,46 +265,55 @@
     }
     .status .small{font-weight:800; opacity:.85; font-size:13px}
 
-    .noteOverlay{
+    .noteOverlay, .editOverlay, .catOverlay, .formOverlay{
       position:fixed; inset:0;
-      background: rgba(0,0,0,.55);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      z-index:120;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       display:none;
     }
-    .noteOverlay.show{display:block;}
-    .noteSheet{
+    .noteOverlay{ z-index:120; background: rgba(0,0,0,.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+    .editOverlay{ z-index:140; }
+    .catOverlay{ z-index:160; }
+    .formOverlay{ z-index:180; }
+    .noteOverlay.show, .editOverlay.show, .catOverlay.show, .formOverlay.show{ display:block; }
+
+    .noteSheet, .editSheet, .catSheet, .formSheet{
       position:absolute;
       left:12px; right:12px;
       bottom: calc(env(safe-area-inset-bottom) + 12px);
       max-width: 980px;
       margin: 0 auto;
-      height: min(52vh, 520px);
       border-radius: 22px;
-      background: linear-gradient(180deg, rgba(0,0,0,.72), rgba(0,0,0,.58));
+      background: linear-gradient(180deg, rgba(0,0,0,.78), rgba(0,0,0,.62));
       border:1px solid rgba(255,255,255,.14);
       box-shadow: var(--shadow);
       overflow:hidden;
       display:flex;
       flex-direction:column;
     }
-    .noteHead{
+    .noteSheet{ height:min(52vh,520px); }
+    .editSheet{ height:min(62vh,620px); }
+    .catSheet{ height:min(56vh,520px); }
+    .formSheet{ height:min(72vh,700px); }
+
+    .noteHead, .editHead, .catHead, .formHead{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       padding: 12px 12px;
       border-bottom:1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.22);
     }
-    .noteTitle{
+
+    .noteTitle, .editTitle, .catTitle, .formTitle{
       font-weight:950;
-      letter-spacing:.2px;
       font-size: 16px;
       color: rgba(255,255,255,.92);
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
     }
-    .noteClose{
+
+    .noteClose, .iconBtn{
       border:1px solid rgba(255,255,255,.18);
       background: rgba(0,0,0,.18);
       color:var(--txt);
@@ -313,9 +322,12 @@
       font-weight:950;
       cursor:pointer;
       -webkit-tap-highlight-color: transparent;
+      min-width: 42px;
     }
-    .noteClose:active{transform: translateY(1px)}
-    .noteBody{
+    .noteClose:active, .iconBtn:active{transform: translateY(1px)}
+    .iconBtn.danger{ border-color: rgba(255,80,80,.35); }
+
+    .noteBody, .editBody{
       padding: 12px;
       overflow:auto;
       -webkit-overflow-scrolling: touch;
@@ -323,17 +335,38 @@
       flex-direction:column;
       gap:10px;
     }
-    .evCard{
+
+    .catBody{
+      padding: 12px;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+
+    .formBody{
+      padding: 12px;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+
+    .evCard, .row, .formBlock{
       border-radius: 18px;
       background: rgba(0,0,0,.22);
       border:1px solid rgba(255,255,255,.10);
       padding: 10px 12px;
     }
-    .evTop{
+
+    .evTop, .rowTop{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       margin-bottom: 6px;
     }
-    .evName{
+
+    .evName, .rowName{
       font-weight: 950;
       font-size: 16px;
       line-height:1.1;
@@ -341,6 +374,7 @@
       text-overflow:ellipsis;
       white-space:nowrap;
     }
+
     .evTime{
       font-weight: 900;
       font-size: 13px;
@@ -348,7 +382,8 @@
       white-space:nowrap;
       flex:0 0 auto;
     }
-    .evMeta{
+
+    .evMeta, .rowSub{
       font-weight: 850;
       font-size: 13px;
       color: rgba(255,255,255,.78);
@@ -357,6 +392,7 @@
       flex-wrap:wrap;
       margin-bottom: 8px;
     }
+
     .chip{
       display:inline-flex;
       align-items:center;
@@ -380,153 +416,10 @@
       white-space:pre-wrap;
     }
 
-    .editOverlay{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.62);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index:140;
-      display:none;
-    }
-    .editOverlay.show{display:block;}
-    .editSheet{
-      position:absolute;
-      left:12px; right:12px;
-      bottom: calc(env(safe-area-inset-bottom) + 12px);
-      max-width: 980px;
-      margin: 0 auto;
-      height: min(62vh, 620px);
-      border-radius: 22px;
-      background: linear-gradient(180deg, rgba(0,0,0,.78), rgba(0,0,0,.62));
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-    }
-    .editHead{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding: 12px 12px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.22);
-    }
-    .editTitle{
-      font-weight:950;
-      font-size: 16px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .editActions{
-      display:flex; gap:8px; align-items:center;
-    }
-    .iconBtn{
-      border:1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.18);
-      color:var(--txt);
-      padding: 8px 10px;
-      border-radius: 14px;
-      font-weight:950;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-      min-width: 42px;
-    }
-    .iconBtn:active{transform: translateY(1px)}
-    .iconBtn.danger{ border-color: rgba(255,80,80,.35); }
-
-    .editBody{
-      padding: 12px;
-      overflow:auto;
-      -webkit-overflow-scrolling: touch;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .row{
-      border-radius: 18px;
-      background: rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.10);
-      padding: 10px 12px;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-    .rowTop{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-    }
-    .rowName{
-      font-weight: 950;
-      font-size: 16px;
-      overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-    }
-    .rowSub{
-      font-weight: 850;
-      font-size: 13px;
-      color: rgba(255,255,255,.78);
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .rowBtns{
-      display:flex; gap:8px; flex-wrap:wrap;
+    .rowBtns, .editActions, .formActions{
+      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
     }
 
-    @media (max-width: 360px){
-      .monthname{font-size:20px}
-      .day{font-size:20px; border-radius:16px}
-      .day.has-color::before{border-radius:16px}
-      .grid{grid-auto-rows: minmax(50px, 1fr);}
-      .legTxt{font-size:16px}
-      .sq{width:18px;height:18px}
-      .noteSheet{height: min(56vh, 520px);}
-      .editSheet{height: min(68vh, 680px);}
-    }
-
-    .catOverlay{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.62);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index:160;
-      display:none;
-    }
-    .catOverlay.show{display:block;}
-    .catSheet{
-      position:absolute;
-      left:12px; right:12px;
-      bottom: calc(env(safe-area-inset-bottom) + 12px);
-      max-width: 980px;
-      margin: 0 auto;
-      height: min(56vh, 520px);
-      border-radius: 22px;
-      background: linear-gradient(180deg, rgba(0,0,0,.78), rgba(0,0,0,.62));
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-    }
-    .catHead{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding: 12px 12px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.22);
-    }
-    .catTitle{
-      font-weight:950;
-      font-size: 16px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .catBody{
-      padding: 12px;
-      overflow:auto;
-      -webkit-overflow-scrolling: touch;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
     .catBtn{
       display:flex; align-items:center; gap:10px;
       padding: 12px 12px;
@@ -546,8 +439,56 @@
       background: rgba(255,255,255,.25);
       flex:0 0 auto;
     }
-    .catBtn.none .catDot{
-      background: transparent;
+    .catBtn.none .catDot{ background: transparent; }
+
+    .formGrid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .formLabel{
+      display:block;
+      margin:0 0 6px 0;
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.82);
+      text-transform:uppercase;
+      letter-spacing:.4px;
+    }
+    .field, .fieldText, .fieldArea{
+      width:100%;
+      border:none;
+      outline:none;
+      background: rgba(0,0,0,.18);
+      color: var(--txt);
+      padding: 12px 12px;
+      border-radius: 14px;
+      font-weight:900;
+      border:1px solid rgba(255,255,255,.10);
+      font-family: inherit;
+      font-size:14px;
+    }
+    .fieldArea{
+      min-height: 110px;
+      resize: vertical;
+      font-weight: 800;
+    }
+
+    @media (max-width: 520px){
+      .catBody{ grid-template-columns: 1fr; }
+      .formGrid2{ grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 360px){
+      .monthname{font-size:20px}
+      .day{font-size:20px; border-radius:16px}
+      .day.has-color::before{border-radius:16px}
+      .grid{grid-auto-rows: minmax(50px, 1fr);}
+      .legTxt{font-size:16px}
+      .sq{width:18px;height:18px}
+      .noteSheet{height: min(56vh, 520px);}
+      .editSheet{height: min(68vh, 680px);}
+      .formSheet{height:min(78vh,760px);}
     }
   </style>
 </head>
@@ -626,6 +567,54 @@
     </div>
   </div>
 
+  <div class="formOverlay" id="formOverlay" aria-hidden="true">
+    <div class="formSheet" role="dialog" aria-modal="true" aria-label="Formulaire événement">
+      <div class="formHead">
+        <div class="formTitle" id="formTitle">Événement</div>
+        <div class="formActions">
+          <button class="iconBtn" id="btnFormCancel">✕</button>
+        </div>
+      </div>
+      <div class="formBody">
+        <div class="formBlock">
+          <label class="formLabel" for="fTitle">Titre</label>
+          <input class="fieldText" id="fTitle" type="text" placeholder="Titre de l’événement" />
+        </div>
+
+        <div class="formGrid2">
+          <div class="formBlock">
+            <label class="formLabel" for="fStart">Heure début</label>
+            <select class="field" id="fStart"></select>
+          </div>
+          <div class="formBlock">
+            <label class="formLabel" for="fEnd">Heure fin</label>
+            <select class="field" id="fEnd"></select>
+          </div>
+        </div>
+
+        <div class="formBlock">
+          <label class="formLabel" for="fCategory">Catégorie</label>
+          <select class="field" id="fCategory"></select>
+        </div>
+
+        <div class="formBlock">
+          <label class="formLabel" for="fLocation">Lieu</label>
+          <input class="fieldText" id="fLocation" type="text" placeholder="Lieu (optionnel)" />
+        </div>
+
+        <div class="formBlock">
+          <label class="formLabel" for="fDetails">Détails / note</label>
+          <textarea class="fieldArea" id="fDetails" placeholder="Détails (optionnel)"></textarea>
+        </div>
+
+        <div class="formActions" style="justify-content:flex-end;padding-bottom:4px;">
+          <button class="btn" id="btnFormClose">Annuler</button>
+          <button class="btn" id="btnFormSave">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script>
   const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
   const BACK_URL = "index.html";
@@ -674,12 +663,41 @@
   const $btnAddEvent = $("btnAddEvent");
   const $btnCloseEdit = $("btnCloseEdit");
 
-  const monthsFR = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-  const dowsFR = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
-
   const $catOverlay = $("catOverlay");
   const $catBody = $("catBody");
   const $catClose = $("catClose");
+
+  const $formOverlay = $("formOverlay");
+  const $formTitle = $("formTitle");
+  const $fTitle = $("fTitle");
+  const $fStart = $("fStart");
+  const $fEnd = $("fEnd");
+  const $fCategory = $("fCategory");
+  const $fLocation = $("fLocation");
+  const $fDetails = $("fDetails");
+  const $btnFormCancel = $("btnFormCancel");
+  const $btnFormClose = $("btnFormClose");
+  const $btnFormSave = $("btnFormSave");
+
+  const monthsFR = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  const dowsFR = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
+
+  let events = [];
+  let categoriesRaw = DEFAULT_CATEGORIES.slice();
+  let eventsByDate = new Map();
+  let catColor = new Map();
+  let catLabel = new Map();
+  let catOrder = new Map();
+  let firstCatByDate = new Map();
+  let hasNoteByDate = new Map();
+  let currentMonth = 0;
+  let _editDate = "";
+
+  let FORM_STATE = {
+    mode: "add",
+    dateStr: "",
+    originalEvent: null
+  };
 
   function norm(s){
     return String(s||"").trim().toLowerCase()
@@ -690,7 +708,9 @@
   function escapeHtml(s){
     return (s==null ? "" : String(s))
       .replaceAll("&","&amp;").replaceAll("<","&lt;")
-      .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
   }
   function ymd(d){
     const y = d.getFullYear();
@@ -725,6 +745,15 @@
     return (localStorage.getItem(LS_EMAIL) || "").trim().toLowerCase();
   }
 
+  function showStatus(txt, sub){
+    $statusTxt.textContent = txt || "";
+    $statusSub.textContent = sub || "";
+    $status.style.display = "block";
+  }
+  function hideStatus(){
+    $status.style.display = "none";
+  }
+
   function jsonp(url, cbName, timeoutMs=15000){
     return new Promise((resolve, reject) => {
       const script = document.createElement("script");
@@ -752,25 +781,6 @@
     const res = await jsonp(url, cb, 20000);
     IS_ADMIN = !!(res && res.ok === true && String(res.role||"").toLowerCase() === "admin");
     return { ok:true, email, isAdmin: IS_ADMIN, res };
-  }
-
-  let events = [];
-  let categoriesRaw = DEFAULT_CATEGORIES.slice();
-  let eventsByDate = new Map();
-  let catColor = new Map();
-  let catLabel = new Map();
-  let catOrder = new Map();
-  let firstCatByDate = new Map();
-  let hasNoteByDate = new Map();
-  let currentMonth = 0;
-
-  function showStatus(txt, sub){
-    $statusTxt.textContent = txt || "";
-    $statusSub.textContent = sub || "";
-    $status.style.display = "block";
-  }
-  function hideStatus(){
-    $status.style.display = "none";
   }
 
   function rebuildMaps(){
@@ -934,8 +944,6 @@
     $noteOverlay.setAttribute("aria-hidden","true");
   }
 
-  let _editDate = "";
-
   function openEdit(dateStr){
     _editDate = dateStr;
     $editTitle.textContent = `Événements — ${toFRDate(dateStr)}`;
@@ -993,6 +1001,7 @@
       row.querySelectorAll("button").forEach(b=>{
         b.addEventListener("click", async ()=>{
           const act = b.dataset.act;
+
           if(act === "view"){
             alert(
               `📅 ${toFRDate(dateStr)}\n` +
@@ -1015,39 +1024,7 @@
           }
 
           if(act === "edit"){
-            const newTitle = prompt("Titre", name);
-            if(newTitle == null) return;
-
-            const newStart = prompt("Heure début (HH:MM) (optionnel)", String(ev.start||""));
-            if(newStart == null) return;
-
-            const newEnd = prompt("Heure fin (HH:MM) (optionnel)", String(ev.end||""));
-            if(newEnd == null) return;
-
-            const newCat = prompt("Catégorie (optionnel)", String(ev.category||""));
-            if(newCat == null) return;
-
-            const newLoc = prompt("Lieu (optionnel)", String(ev.location||""));
-            if(newLoc == null) return;
-
-            const newDetails = prompt("Détails / note (optionnel)", String(ev.details||""));
-            if(newDetails == null) return;
-
-            const ok = confirm("Appliquer la modification ?\n(Technique : suppression + recréation)");
-            if(!ok) return;
-
-            await apiDeleteEvent_(dateStr, ev);
-            await apiAddEvent_(dateStr, {
-              title:newTitle,
-              start:newStart,
-              end:newEnd,
-              category:newCat,
-              location:newLoc,
-              details:newDetails
-            });
-
-            await loadApi(true);
-            renderEditList(dateStr);
+            openEventForm("edit", dateStr, ev);
             return;
           }
         });
@@ -1056,16 +1033,6 @@
       $editBody.appendChild(row);
     }
   }
-
-  $btnAddEvent.addEventListener("click", async ()=>{
-    if(!_editDate) return;
-    await openAddEventPrompt_(_editDate);
-    await loadApi(true);
-    renderEditList(_editDate);
-  });
-
-  $btnCloseEdit.addEventListener("click", closeEdit);
-  $editOverlay.addEventListener("click", (e)=>{ if(e.target === $editOverlay) closeEdit(); });
 
   async function apiAddEvent_(dateStr, payload){
     const email = getEmailLocal();
@@ -1111,79 +1078,138 @@
     return res;
   }
 
-  function openCatPicker_(){
-    return new Promise((resolve)=>{
-      $catBody.innerHTML = "";
-
-      const b0 = document.createElement("button");
-      b0.className = "catBtn none";
-      b0.type = "button";
-      b0.innerHTML = `<span class="catDot"></span><span>Aucune (pas de couleur)</span>`;
-      b0.onclick = ()=>{ closeCatPicker_(); resolve(""); };
-      $catBody.appendChild(b0);
-
-      const items = [...catLabel.entries()].map(([k,label])=>({
-        k, label,
-        order: catOrder.has(k) ? catOrder.get(k) : 9999,
-        color: getColorForCategory(k)
-      }));
-      items.sort((a,b)=> (a.order-b.order) || a.label.localeCompare(b.label));
-
-      for(const it of items){
-        const btn = document.createElement("button");
-        btn.className = "catBtn";
-        btn.type = "button";
-        btn.innerHTML = `
-          <span class="catDot" style="background:${escapeHtml(it.color)}"></span>
-          <span>${escapeHtml(it.label)}</span>
-        `;
-        btn.onclick = ()=>{ closeCatPicker_(); resolve(it.label); };
-        $catBody.appendChild(btn);
-      }
-
-      $catOverlay.classList.add("show");
-      $catOverlay.setAttribute("aria-hidden","false");
-
-      const onBg = (e)=>{ if(e.target === $catOverlay){ cleanup(); closeCatPicker_(); resolve(null); } };
-      const onEsc = (e)=>{ if(e.key==="Escape"){ cleanup(); closeCatPicker_(); resolve(null); } };
-      const cleanup = ()=>{
-        $catOverlay.removeEventListener("click", onBg);
-        document.removeEventListener("keydown", onEsc);
-      };
-
-      $catOverlay.addEventListener("click", onBg);
-      document.addEventListener("keydown", onEsc);
-
-      $catClose.onclick = ()=>{ cleanup(); closeCatPicker_(); resolve(null); };
-    });
-  }
-
   function closeCatPicker_(){
     $catOverlay.classList.remove("show");
     $catOverlay.setAttribute("aria-hidden","true");
     $catBody.innerHTML = "";
   }
 
-  async function openAddEventPrompt_(dateStr){
-    const picked = await openCatPicker_();
-    if(picked === null) return;
-    const category = picked || "";
+  function buildTimeOptions(selectEl, allowEmpty = true){
+    selectEl.innerHTML = "";
+    if(allowEmpty){
+      const opt = document.createElement("option");
+      opt.value = "";
+      opt.textContent = "Aucune";
+      selectEl.appendChild(opt);
+    }
+    for(let h=0; h<24; h++){
+      for(let m=0; m<60; m+=30){
+        const v = `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+        const opt = document.createElement("option");
+        opt.value = v;
+        opt.textContent = v;
+        selectEl.appendChild(opt);
+      }
+    }
+  }
 
-    const title = prompt("Titre de l’événement", "");
-    if(!title) return;
+  function buildCategoryOptions(selectedValue){
+    $fCategory.innerHTML = "";
+    const none = document.createElement("option");
+    none.value = "";
+    none.textContent = "Aucune";
+    $fCategory.appendChild(none);
 
-    const start = prompt("Heure début (HH:MM) (optionnel)", "") || "";
-    const end = prompt("Heure fin (HH:MM) (optionnel)", "") || "";
-    const location = prompt("Lieu (optionnel)", "") || "";
-    const details = prompt("Détails / note (optionnel)", "") || "";
+    const items = [...catLabel.entries()].map(([k,label])=>({
+      k, label,
+      order: catOrder.has(k) ? catOrder.get(k) : 9999
+    }));
+    items.sort((a,b)=> (a.order-b.order) || a.label.localeCompare(b.label));
+
+    for(const it of items){
+      const opt = document.createElement("option");
+      opt.value = it.label;
+      opt.textContent = it.label;
+      $fCategory.appendChild(opt);
+    }
+    $fCategory.value = selectedValue || "";
+  }
+
+  function openEventForm(mode, dateStr, ev){
+    FORM_STATE.mode = mode;
+    FORM_STATE.dateStr = dateStr;
+    FORM_STATE.originalEvent = ev || null;
+
+    buildTimeOptions($fStart, true);
+    buildTimeOptions($fEnd, true);
+    buildCategoryOptions(ev?.category || "");
+
+    if(mode === "edit"){
+      $formTitle.textContent = `Modifier — ${toFRDate(dateStr)}`;
+      $fTitle.value = ev?.title || "";
+      $fStart.value = ev?.start || "";
+      $fEnd.value = ev?.end || "";
+      $fLocation.value = ev?.location || "";
+      $fDetails.value = ev?.details || "";
+    }else{
+      $formTitle.textContent = `Ajouter — ${toFRDate(dateStr)}`;
+      $fTitle.value = "";
+      $fStart.value = "";
+      $fEnd.value = "";
+      $fLocation.value = "";
+      $fDetails.value = "";
+      $fCategory.value = "";
+    }
+
+    $formOverlay.classList.add("show");
+    $formOverlay.setAttribute("aria-hidden","false");
+  }
+
+  function closeEventForm(){
+    $formOverlay.classList.remove("show");
+    $formOverlay.setAttribute("aria-hidden","true");
+  }
+
+  async function saveEventForm(){
+    const title = String($fTitle.value || "").trim();
+    const start = String($fStart.value || "").trim();
+    const end = String($fEnd.value || "").trim();
+    const category = String($fCategory.value || "").trim();
+    const location = String($fLocation.value || "").trim();
+    const details = String($fDetails.value || "").trim();
+
+    if(!title){
+      alert("Titre obligatoire.");
+      return;
+    }
+
+    if(start && end && end < start){
+      alert("Heure fin incorrecte.");
+      return;
+    }
 
     try{
-      await apiAddEvent_(dateStr, { title, start, end, category, location, details });
-      alert("Ajouté ✔");
+      if(FORM_STATE.mode === "edit" && FORM_STATE.originalEvent){
+        await apiDeleteEvent_(FORM_STATE.dateStr, FORM_STATE.originalEvent);
+      }
+
+      await apiAddEvent_(FORM_STATE.dateStr, {
+        title, start, end, category, location, details
+      });
+
+      closeEventForm();
+      await loadApi(true);
+
+      if(_editDate){
+        renderEditList(_editDate);
+      }
     }catch(err){
       alert("Erreur : " + String(err && err.message ? err.message : err));
     }
   }
+
+  $btnAddEvent.addEventListener("click", async ()=>{
+    if(!_editDate) return;
+    openEventForm("add", _editDate, null);
+  });
+
+  $btnCloseEdit.addEventListener("click", closeEdit);
+  $editOverlay.addEventListener("click", (e)=>{ if(e.target === $editOverlay) closeEdit(); });
+
+  $btnFormCancel.addEventListener("click", closeEventForm);
+  $btnFormClose.addEventListener("click", closeEventForm);
+  $btnFormSave.addEventListener("click", saveEventForm);
+  $formOverlay.addEventListener("click", (e)=>{ if(e.target === $formOverlay) closeEventForm(); });
 
   $grid.addEventListener("click", (e)=>{
     const day = e.target.closest(".day");
@@ -1209,6 +1235,8 @@
     if(e.key === "Escape"){
       closeNote();
       closeEdit();
+      closeCatPicker_();
+      closeEventForm();
     }
   });
 
@@ -1282,7 +1310,6 @@
 
       applyPlanningData_(py, pc);
       saveCache_({ py, pc });
-
       hideStatus();
     }catch(e){
       if(!forceFresh && cached?.py && cached?.pc){
