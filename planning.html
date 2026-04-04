@@ -11,10 +11,8 @@
       --shadow: 0 14px 34px rgba(0,0,0,.40);
       --radius: 22px;
       --stroke: rgba(255,255,255,.10);
-
       --orange:#d46a00;
       --orange2:#b95800;
-
       --today:#fff200;
       --note:#fff200;
     }
@@ -22,7 +20,7 @@
     html,body{height:100%}
     body{
       margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--txt);
       background:#0b0b0b;
       overflow:hidden;
@@ -33,219 +31,216 @@
         linear-gradient(180deg, rgba(0,0,0,.52), rgba(0,0,0,.52)),
         url("background.png") center top/cover no-repeat;
       z-index:-2;
-      transform: translateZ(0);
+      transform:translateZ(0);
     }
     .bg::after{
       content:"";
       position:absolute; inset:0;
-      background: radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.64) 62%);
+      background:radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.64) 62%);
       z-index:-1;
     }
 
     .wrap{
       height:100vh;
-      max-width: 980px;
-      margin: 0 auto;
-      padding: calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
+      max-width:980px;
+      margin:0 auto;
+      padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
       display:grid;
-      grid-template-rows: auto auto 1fr auto;
-      gap: 10px;
+      grid-template-rows:auto auto 1fr auto;
+      gap:10px;
     }
 
     .topbar{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding: 10px 12px;
-      border-radius: 18px;
-      background: linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      min-height: 46px;
+      padding:10px 12px;
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      min-height:46px;
     }
     .topbar .title{
-      font-weight:950; letter-spacing:.8px; text-transform: uppercase;
-      font-size: 18px; margin:0; white-space:nowrap;
+      font-weight:950; letter-spacing:.8px; text-transform:uppercase;
+      font-size:18px; margin:0; white-space:nowrap;
     }
     .btn{
       border:1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.18);
+      background:rgba(0,0,0,.18);
       color:var(--txt);
-      padding: 9px 12px;
-      border-radius: 14px;
+      padding:9px 12px;
+      border-radius:14px;
       font-weight:900;
       cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
+      -webkit-tap-highlight-color:transparent;
     }
-    .btn:active{transform: translateY(1px)}
+    .btn:active{transform:translateY(1px)}
 
     .monthbar{
       display:grid;
-      grid-template-columns: 52px 1fr 52px;
+      grid-template-columns:52px 1fr 52px;
       align-items:center;
       gap:10px;
-      padding: 8px 10px;
-      border-radius: 18px;
-      background: linear-gradient(180deg, rgba(212,106,0,.62), rgba(185,88,0,.45));
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      min-height: 50px;
+      padding:8px 10px;
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(212,106,0,.62), rgba(185,88,0,.45));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      min-height:50px;
     }
     .navbtn{
-      height: 42px;
-      border-radius: 16px;
-      font-size: 22px;
-      font-weight: 950;
+      height:42px;
+      border-radius:16px;
+      font-size:22px;
+      font-weight:950;
       display:flex; align-items:center; justify-content:center;
       border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.18);
+      background:rgba(0,0,0,.18);
       color:var(--txt);
       cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
+      -webkit-tap-highlight-color:transparent;
     }
-    .navbtn:active{transform: translateY(1px)}
+    .navbtn:active{transform:translateY(1px)}
     .navbtn:disabled{opacity:.35; cursor:default}
 
     .monthname{
       text-align:center;
-      font-weight: 950;
-      font-size: 22px;
+      font-weight:950;
+      font-size:22px;
       letter-spacing:.4px;
       margin:0;
       white-space:nowrap;
     }
 
     .calCard{
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.30));
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.30));
       border:1px solid var(--stroke);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
       overflow:hidden;
-      padding: 12px;
+      padding:12px;
       display:flex;
       flex-direction:column;
-      gap: 10px;
-      min-height: 0;
+      gap:10px;
+      min-height:0;
     }
 
     .dow{
       display:grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
-      padding: 0 2px;
-      color: rgba(255,255,255,.72);
-      font-weight: 900;
+      grid-template-columns:repeat(7, 1fr);
+      gap:8px;
+      padding:0 2px;
+      color:rgba(255,255,255,.72);
+      font-weight:900;
       letter-spacing:.5px;
-      font-size: 14px;
+      font-size:14px;
       user-select:none;
     }
-    .dow div{ text-align:center; }
+    .dow div{text-align:center}
 
     .grid{
       flex:1;
       display:grid;
-      grid-template-columns: repeat(7, 1fr);
-      grid-auto-rows: minmax(54px, 1fr);
-      gap: 8px;
-      min-height: 0;
+      grid-template-columns:repeat(7, 1fr);
+      grid-auto-rows:minmax(54px, 1fr);
+      gap:8px;
+      min-height:0;
     }
 
     .day{
       position:relative;
-      border-radius: 18px;
-      background: rgba(0,0,0,.26);
-      border: 1px solid rgba(255,255,255,.06);
+      border-radius:18px;
+      background:rgba(0,0,0,.26);
+      border:1px solid rgba(255,255,255,.06);
       display:flex;
       align-items:center;
       justify-content:center;
-      font-weight: 950;
-      font-size: 22px;
-      color: rgba(255,255,255,.92);
+      font-weight:950;
+      font-size:22px;
+      color:rgba(255,255,255,.92);
       user-select:none;
-      -webkit-tap-highlight-color: transparent;
+      -webkit-tap-highlight-color:transparent;
     }
-    .day.is-empty{ opacity:.12; pointer-events:none; }
-
+    .day.is-empty{opacity:.12; pointer-events:none}
     .day.has-color::before{
       content:"";
       position:absolute; inset:0;
-      border-radius: 18px;
-      background: var(--dayColor, transparent);
-      opacity: .78;
+      border-radius:18px;
+      background:var(--dayColor, transparent);
+      opacity:.78;
       z-index:0;
     }
-    .day span{ position:relative; z-index:1; }
-
+    .day span{position:relative; z-index:1}
     .day.is-today{
-      box-shadow: inset 0 0 0 4px #ffffff, 0 0 8px rgba(0,0,0,.6);
-      border-color: #ffffff;
+      box-shadow:inset 0 0 0 4px #ffffff, 0 0 8px rgba(0,0,0,.6);
+      border-color:#ffffff;
     }
-
-    .day.has-note{ cursor:pointer; }
+    .day.has-note{cursor:pointer}
     .day.has-note::after{
       content:"";
       position:absolute;
       top:8px; right:8px;
       width:8px; height:8px;
       border-radius:999px;
-      background: rgba(255,242,0,.95);
-      box-shadow: 0 0 8px rgba(255,242,0,.45);
+      background:rgba(255,242,0,.95);
+      box-shadow:0 0 8px rgba(255,242,0,.45);
       z-index:2;
     }
 
     .legend{
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(0,0,0,.40), rgba(0,0,0,.28));
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(0,0,0,.40), rgba(0,0,0,.28));
       border:1px solid var(--stroke);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      padding: 10px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      padding:10px;
       overflow:hidden;
-      min-height: 92px;
+      min-height:92px;
     }
     .legendGrid{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px 10px;
+      grid-template-columns:1fr 1fr;
+      gap:8px 10px;
       align-items:center;
     }
     .legItem{
       display:flex; align-items:center; gap:10px;
-      padding: 8px 10px;
-      border-radius: 16px;
-      background: rgba(0,0,0,.18);
+      padding:8px 10px;
+      border-radius:16px;
+      background:rgba(0,0,0,.18);
       border:1px solid rgba(255,255,255,.08);
-      min-height: 44px;
+      min-height:44px;
     }
     .sq{
-      width: 20px; height: 20px;
-      border-radius: 5px;
+      width:20px; height:20px;
+      border-radius:5px;
       border:1px solid rgba(255,255,255,.18);
-      flex: 0 0 auto;
-      background: rgba(255,255,255,.25);
+      flex:0 0 auto;
+      background:rgba(255,255,255,.25);
     }
     .legTxt{
-      font-weight: 900;
-      font-size: 18px;
+      font-weight:900;
+      font-size:18px;
       line-height:1.05;
-      white-space: nowrap;
+      white-space:nowrap;
       overflow:hidden;
-      text-overflow: ellipsis;
+      text-overflow:ellipsis;
     }
 
     .status{
       position:fixed;
       left:12px; right:12px;
-      bottom: calc(env(safe-area-inset-bottom) + 12px);
+      bottom:calc(env(safe-area-inset-bottom) + 12px);
       z-index:80;
       display:none;
-      max-width: 980px;
-      margin: 0 auto;
+      max-width:980px;
+      margin:0 auto;
       pointer-events:none;
     }
     .status .pill{
@@ -254,60 +249,65 @@
       gap:10px;
       align-items:center;
       padding:10px 12px;
-      border-radius: 16px;
-      background: rgba(0,0,0,.62);
+      border-radius:16px;
+      background:rgba(0,0,0,.62);
       border:1px solid rgba(255,255,255,.14);
-      box-shadow: var(--shadow);
-      color: rgba(255,255,255,.90);
+      box-shadow:var(--shadow);
+      color:rgba(255,255,255,.90);
       font-weight:900;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
     }
     .status .small{font-weight:800; opacity:.85; font-size:13px}
 
-    .noteOverlay, .editOverlay, .catOverlay, .formOverlay{
+    .noteOverlay, .editOverlay, .formOverlay{
       position:fixed; inset:0;
-      background: rgba(0,0,0,.62);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
       display:none;
     }
-    .noteOverlay{ z-index:120; background: rgba(0,0,0,.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-    .editOverlay{ z-index:140; }
-    .catOverlay{ z-index:160; }
-    .formOverlay{ z-index:180; }
-    .noteOverlay.show, .editOverlay.show, .catOverlay.show, .formOverlay.show{ display:block; }
+    .noteOverlay{
+      background:rgba(0,0,0,.55);
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+      z-index:120;
+    }
+    .editOverlay, .formOverlay{
+      background:rgba(0,0,0,.62);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+    }
+    .editOverlay{z-index:140}
+    .formOverlay{z-index:180}
+    .noteOverlay.show, .editOverlay.show, .formOverlay.show{display:block}
 
-    .noteSheet, .editSheet, .catSheet, .formSheet{
+    .noteSheet, .editSheet, .formSheet{
       position:absolute;
       left:12px; right:12px;
-      bottom: calc(env(safe-area-inset-bottom) + 12px);
-      max-width: 980px;
-      margin: 0 auto;
-      border-radius: 22px;
-      background: linear-gradient(180deg, rgba(0,0,0,.78), rgba(0,0,0,.62));
+      bottom:calc(env(safe-area-inset-bottom) + 12px);
+      max-width:980px;
+      margin:0 auto;
+      border-radius:22px;
+      background:linear-gradient(180deg, rgba(0,0,0,.78), rgba(0,0,0,.62));
       border:1px solid rgba(255,255,255,.14);
-      box-shadow: var(--shadow);
+      box-shadow:var(--shadow);
       overflow:hidden;
       display:flex;
       flex-direction:column;
     }
-    .noteSheet{ height:min(52vh,520px); }
-    .editSheet{ height:min(62vh,620px); }
-    .catSheet{ height:min(56vh,520px); }
-    .formSheet{ height:min(72vh,700px); }
+    .noteSheet{height:min(52vh, 520px)}
+    .editSheet{height:min(62vh, 620px)}
+    .formSheet{height:min(82vh, 760px)}
 
-    .noteHead, .editHead, .catHead, .formHead{
+    .noteHead, .editHead, .formHead{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding: 12px 12px;
+      padding:12px 12px;
       border-bottom:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.22);
+      background:rgba(0,0,0,.22);
     }
 
-    .noteTitle, .editTitle, .catTitle, .formTitle{
+    .noteTitle, .editTitle, .formTitle{
       font-weight:950;
-      font-size: 16px;
-      color: rgba(255,255,255,.92);
+      font-size:16px;
+      color:rgba(255,255,255,.92);
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -315,103 +315,92 @@
 
     .noteClose, .iconBtn{
       border:1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.18);
+      background:rgba(0,0,0,.18);
       color:var(--txt);
-      padding: 8px 10px;
-      border-radius: 14px;
+      padding:8px 10px;
+      border-radius:14px;
       font-weight:950;
       cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-      min-width: 42px;
+      -webkit-tap-highlight-color:transparent;
+      min-width:42px;
     }
-    .noteClose:active, .iconBtn:active{transform: translateY(1px)}
-    .iconBtn.danger{ border-color: rgba(255,80,80,.35); }
+    .noteClose:active, .iconBtn:active{transform:translateY(1px)}
+    .iconBtn.danger{border-color:rgba(255,80,80,.35)}
 
     .noteBody, .editBody{
-      padding: 12px;
+      padding:12px;
       overflow:auto;
-      -webkit-overflow-scrolling: touch;
+      -webkit-overflow-scrolling:touch;
       display:flex;
       flex-direction:column;
       gap:10px;
     }
 
-    .catBody{
-      padding: 12px;
-      overflow:auto;
-      -webkit-overflow-scrolling: touch;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-
     .formBody{
-      padding: 12px;
+      padding:12px;
       overflow:auto;
-      -webkit-overflow-scrolling: touch;
-      display:grid;
-      grid-template-columns: 1fr;
+      -webkit-overflow-scrolling:touch;
+      display:flex;
+      flex-direction:column;
       gap:10px;
     }
 
     .evCard, .row, .formBlock{
-      border-radius: 18px;
-      background: rgba(0,0,0,.22);
+      border-radius:18px;
+      background:rgba(0,0,0,.22);
       border:1px solid rgba(255,255,255,.10);
-      padding: 10px 12px;
+      padding:10px 12px;
     }
 
     .evTop, .rowTop{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
-      margin-bottom: 6px;
+      margin-bottom:6px;
     }
-
     .evName, .rowName{
-      font-weight: 950;
-      font-size: 16px;
+      font-weight:950;
+      font-size:16px;
       line-height:1.1;
       overflow:hidden;
       text-overflow:ellipsis;
       white-space:nowrap;
     }
-
     .evTime{
-      font-weight: 900;
-      font-size: 13px;
-      color: rgba(255,255,255,.78);
+      font-weight:900;
+      font-size:13px;
+      color:rgba(255,255,255,.78);
       white-space:nowrap;
       flex:0 0 auto;
     }
 
     .evMeta, .rowSub{
-      font-weight: 850;
-      font-size: 13px;
-      color: rgba(255,255,255,.78);
+      font-weight:850;
+      font-size:13px;
+      color:rgba(255,255,255,.78);
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-      margin-bottom: 8px;
+      margin-bottom:8px;
     }
 
     .chip{
       display:inline-flex;
       align-items:center;
       gap:8px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.06);
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
       border:1px solid rgba(255,255,255,.10);
     }
     .chipDot{
       width:10px; height:10px;
-      border-radius: 3px;
+      border-radius:3px;
       border:1px solid rgba(255,255,255,.20);
-      background: rgba(255,255,255,.25);
+      background:rgba(255,255,255,.25);
     }
     .evDetails{
-      font-size: 15px;
-      font-weight: 850;
-      color: rgba(255,255,255,.92);
+      font-size:15px;
+      font-weight:850;
+      color:rgba(255,255,255,.92);
       line-height:1.25;
       white-space:pre-wrap;
     }
@@ -420,32 +409,6 @@
       display:flex; gap:8px; flex-wrap:wrap; align-items:center;
     }
 
-    .catBtn{
-      display:flex; align-items:center; gap:10px;
-      padding: 12px 12px;
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.22);
-      color: rgba(255,255,255,.92);
-      font-weight: 950;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .catBtn:active{transform: translateY(1px)}
-    .catDot{
-      width:18px; height:18px;
-      border-radius: 6px;
-      border:1px solid rgba(255,255,255,.22);
-      background: rgba(255,255,255,.25);
-      flex:0 0 auto;
-    }
-    .catBtn.none .catDot{ background: transparent; }
-
-    .formGrid2{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
     .formLabel{
       display:block;
       margin:0 0 6px 0;
@@ -455,40 +418,151 @@
       text-transform:uppercase;
       letter-spacing:.4px;
     }
-    .field, .fieldText, .fieldArea{
+    .fieldText, .fieldArea, .fieldSelect{
       width:100%;
       border:none;
       outline:none;
-      background: rgba(0,0,0,.18);
-      color: var(--txt);
-      padding: 12px 12px;
-      border-radius: 14px;
+      background:rgba(0,0,0,.18);
+      color:var(--txt);
+      padding:12px 12px;
+      border-radius:14px;
       font-weight:900;
       border:1px solid rgba(255,255,255,.10);
-      font-family: inherit;
+      font-family:inherit;
       font-size:14px;
     }
     .fieldArea{
-      min-height: 110px;
-      resize: vertical;
-      font-weight: 800;
+      min-height:110px;
+      resize:vertical;
+      font-weight:800;
+    }
+
+    .timeSection{
+      border-radius:18px;
+      background:rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.10);
+      padding:12px;
+    }
+
+    .timeLabel{
+      display:block;
+      margin:0 0 8px 0;
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.82);
+      text-transform:uppercase;
+      letter-spacing:.4px;
+    }
+
+    .timePickerRow{
+      display:grid;
+      grid-template-columns:1fr 26px 1fr;
+      gap:10px;
+      align-items:center;
+    }
+    .timeColon{
+      text-align:center;
+      font-size:34px;
+      font-weight:950;
+      color:rgba(255,255,255,.92);
+      transform:translateY(-2px);
+      user-select:none;
+    }
+
+    .wheel{
+      position:relative;
+      height:196px;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      overflow-y:auto;
+      scroll-snap-type:y mandatory;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+    }
+    .wheel::-webkit-scrollbar{display:none}
+
+    .wheelPad{
+      height:72px;
+      flex:0 0 auto;
+    }
+
+    .wheelInner{
+      display:flex;
+      flex-direction:column;
+    }
+
+    .wheelItem{
+      height:52px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:26px;
+      font-weight:900;
+      color:rgba(255,255,255,.40);
+      scroll-snap-align:center;
+      transition:transform .12s ease, color .12s ease, opacity .12s ease;
+      opacity:.65;
+      user-select:none;
+    }
+    .wheelItem.active{
+      color:rgba(255,255,255,.98);
+      opacity:1;
+      transform:scale(1.02);
+    }
+
+    .wheelFocus{
+      position:absolute;
+      left:8px; right:8px;
+      top:72px;
+      height:52px;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.08);
+      pointer-events:none;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+    }
+
+    .wheelFadeTop, .wheelFadeBottom{
+      position:absolute;
+      left:0; right:0;
+      height:44px;
+      pointer-events:none;
+      z-index:2;
+    }
+    .wheelFadeTop{
+      top:0;
+      background:linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,0));
+    }
+    .wheelFadeBottom{
+      bottom:0;
+      background:linear-gradient(0deg, rgba(0,0,0,.46), rgba(0,0,0,0));
+    }
+
+    .timePickerGroup{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
     }
 
     @media (max-width: 520px){
-      .catBody{ grid-template-columns: 1fr; }
-      .formGrid2{ grid-template-columns: 1fr; }
+      .timePickerGroup{ grid-template-columns:1fr; }
     }
 
     @media (max-width: 360px){
       .monthname{font-size:20px}
       .day{font-size:20px; border-radius:16px}
       .day.has-color::before{border-radius:16px}
-      .grid{grid-auto-rows: minmax(50px, 1fr);}
+      .grid{grid-auto-rows:minmax(50px, 1fr);}
       .legTxt{font-size:16px}
       .sq{width:18px;height:18px}
-      .noteSheet{height: min(56vh, 520px);}
-      .editSheet{height: min(68vh, 680px);}
-      .formSheet{height:min(78vh,760px);}
+      .noteSheet{height:min(56vh, 520px)}
+      .editSheet{height:min(68vh, 680px)}
+      .formSheet{height:min(86vh, 780px)}
+      .wheel{height:182px}
+      .wheelPad{height:65px}
+      .wheelFocus{top:65px; height:52px}
+      .wheelItem{font-size:24px}
     }
   </style>
 </head>
@@ -557,16 +631,6 @@
     </div>
   </div>
 
-  <div class="catOverlay" id="catOverlay" aria-hidden="true">
-    <div class="catSheet" role="dialog" aria-modal="true" aria-label="Choix catégorie">
-      <div class="catHead">
-        <div class="catTitle">Choisir une catégorie</div>
-        <button class="iconBtn" id="catClose" title="Fermer">✕</button>
-      </div>
-      <div class="catBody" id="catBody"></div>
-    </div>
-  </div>
-
   <div class="formOverlay" id="formOverlay" aria-hidden="true">
     <div class="formSheet" role="dialog" aria-modal="true" aria-label="Formulaire événement">
       <div class="formHead">
@@ -575,26 +639,56 @@
           <button class="iconBtn" id="btnFormCancel">✕</button>
         </div>
       </div>
+
       <div class="formBody">
         <div class="formBlock">
           <label class="formLabel" for="fTitle">Titre</label>
           <input class="fieldText" id="fTitle" type="text" placeholder="Titre de l’événement" />
         </div>
 
-        <div class="formGrid2">
-          <div class="formBlock">
-            <label class="formLabel" for="fStart">Heure début</label>
-            <select class="field" id="fStart"></select>
-          </div>
-          <div class="formBlock">
-            <label class="formLabel" for="fEnd">Heure fin</label>
-            <select class="field" id="fEnd"></select>
-          </div>
-        </div>
-
         <div class="formBlock">
           <label class="formLabel" for="fCategory">Catégorie</label>
-          <select class="field" id="fCategory"></select>
+          <select class="fieldSelect" id="fCategory"></select>
+        </div>
+
+        <div class="timePickerGroup">
+          <div class="timeSection">
+            <label class="timeLabel">Heure début</label>
+            <div class="timePickerRow">
+              <div class="wheel" id="startHourWheel">
+                <div class="wheelFadeTop"></div>
+                <div class="wheelFadeBottom"></div>
+                <div class="wheelFocus"></div>
+                <div class="wheelInner" id="startHourInner"></div>
+              </div>
+              <div class="timeColon">:</div>
+              <div class="wheel" id="startMinuteWheel">
+                <div class="wheelFadeTop"></div>
+                <div class="wheelFadeBottom"></div>
+                <div class="wheelFocus"></div>
+                <div class="wheelInner" id="startMinuteInner"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeSection">
+            <label class="timeLabel">Heure fin</label>
+            <div class="timePickerRow">
+              <div class="wheel" id="endHourWheel">
+                <div class="wheelFadeTop"></div>
+                <div class="wheelFadeBottom"></div>
+                <div class="wheelFocus"></div>
+                <div class="wheelInner" id="endHourInner"></div>
+              </div>
+              <div class="timeColon">:</div>
+              <div class="wheel" id="endMinuteWheel">
+                <div class="wheelFadeTop"></div>
+                <div class="wheelFadeBottom"></div>
+                <div class="wheelFocus"></div>
+                <div class="wheelInner" id="endMinuteInner"></div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="formBlock">
@@ -621,10 +715,7 @@
   const YEAR = 2026;
   const CACHE_KEY = `cs_planning_cache_v1_${YEAR}`;
   const CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 7;
-
   const LS_EMAIL = "cs_portail_email_v1";
-  let IS_ADMIN = false;
-  let EDIT_MODE = false;
 
   const DEFAULT_CATEGORIES = [
     { category:"FMA centre", color:"#ff2d2d", order:1 },
@@ -633,14 +724,15 @@
     { category:"JSP", color:"#4aa8ff", order:4 },
     { category:"Navette", color:"#2f79ff", order:5 },
     { category:"RECSEC", color:"#a081ff", order:6 },
-    { category:"Sainte Barbe", color:"#ff5a5a", order:7 },
+    { category:"Sainte Barbe", color:"#ff5a5a", order:7 }
   ];
 
   const OVERRIDE_COLORS = {
-    "fma centre": "#ff2d2d",
+    "fma centre": "#ff2d2d"
   };
 
   const $ = (id)=>document.getElementById(id);
+
   const $grid = $("grid");
   const $monthName = $("monthName");
   const $legendGrid = $("legendGrid");
@@ -663,15 +755,9 @@
   const $btnAddEvent = $("btnAddEvent");
   const $btnCloseEdit = $("btnCloseEdit");
 
-  const $catOverlay = $("catOverlay");
-  const $catBody = $("catBody");
-  const $catClose = $("catClose");
-
   const $formOverlay = $("formOverlay");
   const $formTitle = $("formTitle");
   const $fTitle = $("fTitle");
-  const $fStart = $("fStart");
-  const $fEnd = $("fEnd");
   const $fCategory = $("fCategory");
   const $fLocation = $("fLocation");
   const $fDetails = $("fDetails");
@@ -682,6 +768,8 @@
   const monthsFR = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
   const dowsFR = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
 
+  let IS_ADMIN = false;
+  let EDIT_MODE = false;
   let events = [];
   let categoriesRaw = DEFAULT_CATEGORIES.slice();
   let eventsByDate = new Map();
@@ -693,10 +781,20 @@
   let currentMonth = 0;
   let _editDate = "";
 
+  const HOURS = Array.from({length:24}, (_,i)=>String(i).padStart(2,"0"));
+  const MINUTES = ["00","15","30","45"];
+
   let FORM_STATE = {
     mode: "add",
     dateStr: "",
     originalEvent: null
+  };
+
+  const TIME_PICKERS = {
+    startHour: { wheel: $("startHourWheel"), inner: $("startHourInner"), values: HOURS, value: "08", timer: null },
+    startMinute: { wheel: $("startMinuteWheel"), inner: $("startMinuteInner"), values: MINUTES, value: "00", timer: null },
+    endHour: { wheel: $("endHourWheel"), inner: $("endHourInner"), values: HOURS, value: "09", timer: null },
+    endMinute: { wheel: $("endMinuteWheel"), inner: $("endMinuteInner"), values: MINUTES, value: "00", timer: null }
   };
 
   function norm(s){
@@ -705,19 +803,23 @@
       .replace(/['’]/g,"")
       .replace(/\s+/g," ");
   }
+
   function escapeHtml(s){
     return (s==null ? "" : String(s))
-      .replaceAll("&","&amp;").replaceAll("<","&lt;")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
       .replaceAll(">","&gt;")
       .replaceAll('"',"&quot;")
       .replaceAll("'","&#039;");
   }
+
   function ymd(d){
     const y = d.getFullYear();
     const m = String(d.getMonth()+1).padStart(2,"0");
     const dd = String(d.getDate()).padStart(2,"0");
     return `${y}-${m}-${dd}`;
   }
+
   function firstMondayGrid(year, monthIndex){
     const d = new Date(year, monthIndex, 1);
     const js = d.getDay();
@@ -726,6 +828,7 @@
     d.setHours(12,0,0,0);
     return d;
   }
+
   function toFRDate(ymdStr){
     const [y,m,d] = String(ymdStr||"").split("-");
     if(!y||!m||!d) return ymdStr;
@@ -733,6 +836,7 @@
     const dow = dowsFR[dt.getDay()];
     return `${dow} ${String(d).padStart(2,"0")}/${String(m).padStart(2,"0")}/${y}`;
   }
+
   function formatTimeRange(start,end){
     const s = String(start||"").trim();
     const e = String(end||"").trim();
@@ -741,6 +845,7 @@
     if(e) return e;
     return "";
   }
+
   function getEmailLocal(){
     return (localStorage.getItem(LS_EMAIL) || "").trim().toLowerCase();
   }
@@ -750,6 +855,7 @@
     $statusSub.textContent = sub || "";
     $status.style.display = "block";
   }
+
   function hideStatus(){
     $status.style.display = "none";
   }
@@ -774,13 +880,12 @@
     const email = getEmailLocal();
     if(!email){
       IS_ADMIN = false;
-      return { ok:false, error:"email manquant (localStorage)" };
+      return;
     }
     const cb = "cb_auth_" + Math.random().toString(36).slice(2);
     const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
     const res = await jsonp(url, cb, 20000);
     IS_ADMIN = !!(res && res.ok === true && String(res.role||"").toLowerCase() === "admin");
-    return { ok:true, email, isAdmin: IS_ADMIN, res };
   }
 
   function rebuildMaps(){
@@ -873,7 +978,6 @@
 
       if(inMonth){
         cell.dataset.date = dateStr;
-
         const catKey = firstCatByDate.get(dateStr);
         if(catKey){
           cell.classList.add("has-color");
@@ -923,12 +1027,7 @@
           <div class="evTime">${escapeHtml(time)}</div>
         </div>
         <div class="evMeta">
-          ${catLabelTxt ? `
-            <div class="chip">
-              <span class="chipDot" style="background:${escapeHtml(dotCol)}"></span>
-              <span>${escapeHtml(catLabelTxt)}</span>
-            </div>` : ""
-          }
+          ${catLabelTxt ? `<div class="chip"><span class="chipDot" style="background:${escapeHtml(dotCol)}"></span><span>${escapeHtml(catLabelTxt)}</span></div>` : ""}
           ${loc ? `<div class="chip">📍 <span>${escapeHtml(loc)}</span></div>` : ""}
         </div>
         <div class="evDetails">${escapeHtml(details)}</div>
@@ -939,6 +1038,7 @@
     $noteOverlay.classList.add("show");
     $noteOverlay.setAttribute("aria-hidden","false");
   }
+
   function closeNote(){
     $noteOverlay.classList.remove("show");
     $noteOverlay.setAttribute("aria-hidden","true");
@@ -951,6 +1051,7 @@
     $editOverlay.classList.add("show");
     $editOverlay.setAttribute("aria-hidden","false");
   }
+
   function closeEdit(){
     $editOverlay.classList.remove("show");
     $editOverlay.setAttribute("aria-hidden","true");
@@ -1025,7 +1126,6 @@
 
           if(act === "edit"){
             openEventForm("edit", dateStr, ev);
-            return;
           }
         });
       });
@@ -1036,7 +1136,10 @@
 
   async function apiAddEvent_(dateStr, payload){
     const email = getEmailLocal();
-    if(!email) { alert("Email introuvable (localStorage). Reconnecte-toi sur le portail."); return; }
+    if(!email){
+      alert("Email introuvable (localStorage). Reconnecte-toi sur le portail.");
+      return;
+    }
 
     const cb = "cb_add_" + Math.random().toString(36).slice(2);
     const url =
@@ -1060,7 +1163,10 @@
 
   async function apiDeleteEvent_(dateStr, ev){
     const email = getEmailLocal();
-    if(!email) { alert("Email introuvable (localStorage). Reconnecte-toi sur le portail."); return; }
+    if(!email){
+      alert("Email introuvable (localStorage). Reconnecte-toi sur le portail.");
+      return;
+    }
 
     const cb = "cb_del_" + Math.random().toString(36).slice(2);
     const url =
@@ -1076,31 +1182,6 @@
       throw new Error(res?.error || "Erreur suppression");
     }
     return res;
-  }
-
-  function closeCatPicker_(){
-    $catOverlay.classList.remove("show");
-    $catOverlay.setAttribute("aria-hidden","true");
-    $catBody.innerHTML = "";
-  }
-
-  function buildTimeOptions(selectEl, allowEmpty = true){
-    selectEl.innerHTML = "";
-    if(allowEmpty){
-      const opt = document.createElement("option");
-      opt.value = "";
-      opt.textContent = "Aucune";
-      selectEl.appendChild(opt);
-    }
-    for(let h=0; h<24; h++){
-      for(let m=0; m<60; m+=30){
-        const v = `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
-        const opt = document.createElement("option");
-        opt.value = v;
-        opt.textContent = v;
-        selectEl.appendChild(opt);
-      }
-    }
   }
 
   function buildCategoryOptions(selectedValue){
@@ -1122,7 +1203,100 @@
       opt.textContent = it.label;
       $fCategory.appendChild(opt);
     }
+
     $fCategory.value = selectedValue || "";
+  }
+
+  function buildWheel(pickerKey){
+    const picker = TIME_PICKERS[pickerKey];
+    picker.inner.innerHTML = "";
+
+    const padTop = document.createElement("div");
+    padTop.className = "wheelPad";
+    picker.inner.appendChild(padTop);
+
+    picker.values.forEach(v=>{
+      const item = document.createElement("div");
+      item.className = "wheelItem";
+      item.dataset.value = v;
+      item.textContent = v;
+      item.addEventListener("click", ()=> setWheelValue(pickerKey, v, true));
+      picker.inner.appendChild(item);
+    });
+
+    const padBottom = document.createElement("div");
+    padBottom.className = "wheelPad";
+    picker.inner.appendChild(padBottom);
+
+    picker.wheel.addEventListener("scroll", ()=>{
+      updateWheelActive(pickerKey);
+      clearTimeout(picker.timer);
+      picker.timer = setTimeout(()=> snapWheel(pickerKey), 90);
+    });
+  }
+
+  function updateWheelActive(pickerKey){
+    const picker = TIME_PICKERS[pickerKey];
+    const center = picker.wheel.scrollTop + (picker.wheel.clientHeight / 2);
+    let bestItem = null;
+    let bestDist = Infinity;
+
+    picker.inner.querySelectorAll(".wheelItem").forEach(item=>{
+      const itemCenter = item.offsetTop + (item.offsetHeight / 2);
+      const dist = Math.abs(center - itemCenter);
+      if(dist < bestDist){
+        bestDist = dist;
+        bestItem = item;
+      }
+    });
+
+    picker.inner.querySelectorAll(".wheelItem").forEach(i=>i.classList.remove("active"));
+    if(bestItem){
+      bestItem.classList.add("active");
+      picker.value = bestItem.dataset.value;
+    }
+  }
+
+  function setWheelValue(pickerKey, value, smooth){
+    const picker = TIME_PICKERS[pickerKey];
+    const item = picker.inner.querySelector(`.wheelItem[data-value="${CSS.escape(value)}"]`);
+    if(!item) return;
+    const target = item.offsetTop - ((picker.wheel.clientHeight - item.offsetHeight) / 2);
+    picker.wheel.scrollTo({ top: target, behavior: smooth ? "smooth" : "auto" });
+    picker.value = value;
+    setTimeout(()=> updateWheelActive(pickerKey), smooth ? 160 : 0);
+  }
+
+  function snapWheel(pickerKey){
+    const picker = TIME_PICKERS[pickerKey];
+    setWheelValue(pickerKey, picker.value, true);
+  }
+
+  function getTimeValue(prefix){
+    return `${TIME_PICKERS[prefix + "Hour"].value}:${TIME_PICKERS[prefix + "Minute"].value}`;
+  }
+
+  function setTimeValue(prefix, hhmm){
+    const val = String(hhmm || "").trim();
+    if(!val || !val.includes(":")){
+      setWheelValue(prefix + "Hour", "00", false);
+      setWheelValue(prefix + "Minute", "00", false);
+      return;
+    }
+    const [hh, mm] = val.split(":");
+    setWheelValue(prefix + "Hour", HOURS.includes(hh) ? hh : "00", false);
+    setWheelValue(prefix + "Minute", MINUTES.includes(mm) ? mm : "00", false);
+  }
+
+  function initWheels(){
+    buildWheel("startHour");
+    buildWheel("startMinute");
+    buildWheel("endHour");
+    buildWheel("endMinute");
+    setTimeout(()=>{
+      setTimeValue("start", "08:00");
+      setTimeValue("end", "09:00");
+    }, 0);
   }
 
   function openEventForm(mode, dateStr, ev){
@@ -1130,25 +1304,23 @@
     FORM_STATE.dateStr = dateStr;
     FORM_STATE.originalEvent = ev || null;
 
-    buildTimeOptions($fStart, true);
-    buildTimeOptions($fEnd, true);
     buildCategoryOptions(ev?.category || "");
 
     if(mode === "edit"){
       $formTitle.textContent = `Modifier — ${toFRDate(dateStr)}`;
       $fTitle.value = ev?.title || "";
-      $fStart.value = ev?.start || "";
-      $fEnd.value = ev?.end || "";
       $fLocation.value = ev?.location || "";
       $fDetails.value = ev?.details || "";
+      setTimeValue("start", ev?.start || "08:00");
+      setTimeValue("end", ev?.end || "09:00");
     }else{
       $formTitle.textContent = `Ajouter — ${toFRDate(dateStr)}`;
       $fTitle.value = "";
-      $fStart.value = "";
-      $fEnd.value = "";
       $fLocation.value = "";
       $fDetails.value = "";
       $fCategory.value = "";
+      setTimeValue("start", "08:00");
+      setTimeValue("end", "09:00");
     }
 
     $formOverlay.classList.add("show");
@@ -1162,18 +1334,18 @@
 
   async function saveEventForm(){
     const title = String($fTitle.value || "").trim();
-    const start = String($fStart.value || "").trim();
-    const end = String($fEnd.value || "").trim();
     const category = String($fCategory.value || "").trim();
     const location = String($fLocation.value || "").trim();
     const details = String($fDetails.value || "").trim();
+    const start = getTimeValue("start");
+    const end = getTimeValue("end");
 
     if(!title){
       alert("Titre obligatoire.");
       return;
     }
 
-    if(start && end && end < start){
+    if(end < start){
       alert("Heure fin incorrecte.");
       return;
     }
@@ -1189,7 +1361,6 @@
 
       closeEventForm();
       await loadApi(true);
-
       if(_editDate){
         renderEditList(_editDate);
       }
@@ -1198,7 +1369,7 @@
     }
   }
 
-  $btnAddEvent.addEventListener("click", async ()=>{
+  $btnAddEvent.addEventListener("click", ()=>{
     if(!_editDate) return;
     openEventForm("add", _editDate, null);
   });
@@ -1235,7 +1406,6 @@
     if(e.key === "Escape"){
       closeNote();
       closeEdit();
-      closeCatPicker_();
       closeEventForm();
     }
   });
@@ -1340,6 +1510,8 @@
     $("titleYear").textContent = `PLANNING ${YEAR}`;
     rebuildMaps();
     renderLegend();
+
+    initWheels();
 
     const now = new Date();
     currentMonth = (now.getFullYear()===YEAR) ? now.getMonth() : 0;
