@@ -295,7 +295,7 @@
     }
     .noteSheet{height:min(52vh, 520px)}
     .editSheet{height:min(62vh, 620px)}
-    .formSheet{height:min(82vh, 760px)}
+    .formSheet{height:min(76vh, 700px)}
 
     .noteHead, .editHead, .formHead{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
@@ -337,15 +337,15 @@
     }
 
     .formBody{
-      padding:12px;
+      padding:10px;
       overflow:auto;
       -webkit-overflow-scrolling:touch;
       display:flex;
       flex-direction:column;
-      gap:10px;
+      gap:8px;
     }
 
-    .evCard, .row, .formBlock{
+    .evCard, .row, .formBlock, .timeSection{
       border-radius:18px;
       background:rgba(0,0,0,.22);
       border:1px solid rgba(255,255,255,.10);
@@ -411,8 +411,8 @@
 
     .formLabel{
       display:block;
-      margin:0 0 6px 0;
-      font-size:13px;
+      margin:0 0 5px 0;
+      font-size:12px;
       font-weight:900;
       color:rgba(255,255,255,.82);
       text-transform:uppercase;
@@ -424,7 +424,7 @@
       outline:none;
       background:rgba(0,0,0,.18);
       color:var(--txt);
-      padding:12px 12px;
+      padding:10px 12px;
       border-radius:14px;
       font-weight:900;
       border:1px solid rgba(255,255,255,.10);
@@ -432,47 +432,49 @@
       font-size:14px;
     }
     .fieldArea{
-      min-height:110px;
+      min-height:88px;
       resize:vertical;
       font-weight:800;
     }
 
     .timeSection{
-      border-radius:18px;
-      background:rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.10);
-      padding:12px;
+      padding:10px;
     }
-
     .timeLabel{
       display:block;
-      margin:0 0 8px 0;
-      font-size:13px;
+      margin:0 0 6px 0;
+      font-size:12px;
       font-weight:900;
       color:rgba(255,255,255,.82);
       text-transform:uppercase;
       letter-spacing:.4px;
     }
 
+    .timePickerGroup{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+
     .timePickerRow{
       display:grid;
-      grid-template-columns:1fr 26px 1fr;
-      gap:10px;
+      grid-template-columns:1fr 18px 1fr;
+      gap:8px;
       align-items:center;
     }
     .timeColon{
       text-align:center;
-      font-size:34px;
+      font-size:24px;
       font-weight:950;
       color:rgba(255,255,255,.92);
-      transform:translateY(-2px);
+      transform:translateY(-1px);
       user-select:none;
     }
 
     .wheel{
       position:relative;
-      height:196px;
-      border-radius:22px;
+      height:128px;
+      border-radius:18px;
       border:1px solid rgba(255,255,255,.12);
       background:rgba(255,255,255,.05);
       overflow-y:auto;
@@ -483,21 +485,20 @@
     .wheel::-webkit-scrollbar{display:none}
 
     .wheelPad{
-      height:72px;
+      height:42px;
       flex:0 0 auto;
     }
-
     .wheelInner{
       display:flex;
       flex-direction:column;
     }
 
     .wheelItem{
-      height:52px;
+      height:42px;
       display:flex;
       align-items:center;
       justify-content:center;
-      font-size:26px;
+      font-size:18px;
       font-weight:900;
       color:rgba(255,255,255,.40);
       scroll-snap-align:center;
@@ -508,15 +509,15 @@
     .wheelItem.active{
       color:rgba(255,255,255,.98);
       opacity:1;
-      transform:scale(1.02);
+      transform:scale(1.01);
     }
 
     .wheelFocus{
       position:absolute;
-      left:8px; right:8px;
-      top:72px;
-      height:52px;
-      border-radius:20px;
+      left:6px; right:6px;
+      top:42px;
+      height:42px;
+      border-radius:16px;
       border:1px solid rgba(255,255,255,.18);
       background:rgba(255,255,255,.08);
       pointer-events:none;
@@ -526,7 +527,7 @@
     .wheelFadeTop, .wheelFadeBottom{
       position:absolute;
       left:0; right:0;
-      height:44px;
+      height:26px;
       pointer-events:none;
       z-index:2;
     }
@@ -539,14 +540,8 @@
       background:linear-gradient(0deg, rgba(0,0,0,.46), rgba(0,0,0,0));
     }
 
-    .timePickerGroup{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-    }
-
     @media (max-width: 520px){
-      .timePickerGroup{ grid-template-columns:1fr; }
+      .timePickerGroup{grid-template-columns:1fr}
     }
 
     @media (max-width: 360px){
@@ -558,11 +553,11 @@
       .sq{width:18px;height:18px}
       .noteSheet{height:min(56vh, 520px)}
       .editSheet{height:min(68vh, 680px)}
-      .formSheet{height:min(86vh, 780px)}
-      .wheel{height:182px}
-      .wheelPad{height:65px}
-      .wheelFocus{top:65px; height:52px}
-      .wheelItem{font-size:24px}
+      .formSheet{height:min(80vh, 730px)}
+      .wheel{height:118px}
+      .wheelPad{height:38px}
+      .wheelFocus{top:38px; height:42px}
+      .wheelItem{font-size:17px}
     }
   </style>
 </head>
@@ -701,7 +696,7 @@
           <textarea class="fieldArea" id="fDetails" placeholder="Détails (optionnel)"></textarea>
         </div>
 
-        <div class="formActions" style="justify-content:flex-end;padding-bottom:4px;">
+        <div class="formActions" style="justify-content:flex-end;padding-bottom:2px;">
           <button class="btn" id="btnFormClose">Annuler</button>
           <button class="btn" id="btnFormSave">Enregistrer</button>
         </div>
@@ -732,7 +727,6 @@
   };
 
   const $ = (id)=>document.getElementById(id);
-
   const $grid = $("grid");
   const $monthName = $("monthName");
   const $legendGrid = $("legendGrid");
@@ -1435,7 +1429,6 @@
   function applyPlanningData_(py, pc){
     events = Array.isArray(py?.events) ? py.events : [];
     categoriesRaw = Array.isArray(pc?.categories) && pc.categories.length ? pc.categories : DEFAULT_CATEGORIES.slice();
-
     rebuildMaps();
     renderLegend();
     renderMonth();
