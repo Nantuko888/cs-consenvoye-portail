@@ -777,6 +777,7 @@
 
   const HOURS = Array.from({length:24}, (_,i)=>String(i).padStart(2,"0"));
   const MINUTES = ["00","15","30","45"];
+  const LOOP_DUPLICATES = 15;
 
   let FORM_STATE = {
     mode: "add",
@@ -785,10 +786,10 @@
   };
 
   const TIME_PICKERS = {
-    startHour: { wheel: $("startHourWheel"), inner: $("startHourInner"), values: HOURS, value: "08", timer: null },
-    startMinute: { wheel: $("startMinuteWheel"), inner: $("startMinuteInner"), values: MINUTES, value: "00", timer: null },
-    endHour: { wheel: $("endHourWheel"), inner: $("endHourInner"), values: HOURS, value: "09", timer: null },
-    endMinute: { wheel: $("endMinuteWheel"), inner: $("endMinuteInner"), values: MINUTES, value: "00", timer: null }
+    startHour: { wheel: $("startHourWheel"), inner: $("startHourInner"), values: HOURS, value: "08", timer: null, looping: true },
+    startMinute: { wheel: $("startMinuteWheel"), inner: $("startMinuteInner"), values: MINUTES, value: "00", timer: null, looping: true },
+    endHour: { wheel: $("endHourWheel"), inner: $("endHourInner"), values: HOURS, value: "09", timer: null, looping: true },
+    endMinute: { wheel: $("endMinuteWheel"), inner: $("endMinuteInner"), values: MINUTES, value: "00", timer: null, looping: true }
   };
 
   function norm(s){
@@ -1201,18 +1202,29 @@
     $fCategory.value = selectedValue || "";
   }
 
+  function getLoopValues(values){
+    const arr = [];
+    for(let i=0;i<LOOP_DUPLICATES;i++){
+      arr.push(...values);
+    }
+    return arr;
+  }
+
   function buildWheel(pickerKey){
     const picker = TIME_PICKERS[pickerKey];
+    const allValues = getLoopValues(picker.values);
     picker.inner.innerHTML = "";
+    picker.loopValues = allValues;
 
     const padTop = document.createElement("div");
     padTop.className = "wheelPad";
     picker.inner.appendChild(padTop);
 
-    picker.values.forEach(v=>{
+    allValues.forEach((v, idx)=>{
       const item = document.createElement("div");
       item.className = "wheelItem";
       item.dataset.value = v;
+      item.dataset.index = String(idx);
       item.textContent = v;
       item.addEventListener("click", ()=> setWheelValue(pickerKey, v, true));
       picker.inner.appendChild(item);
@@ -1224,18 +1236,23 @@
 
     picker.wheel.addEventListener("scroll", ()=>{
       updateWheelActive(pickerKey);
+      keepWheelLooped(pickerKey);
       clearTimeout(picker.timer);
-      picker.timer = setTimeout(()=> snapWheel(pickerKey), 90);
+      picker.timer = setTimeout(()=> snapWheel(pickerKey), 80);
     });
   }
 
-  function updateWheelActive(pickerKey){
+  function getWheelItems(pickerKey){
+    return [...TIME_PICKERS[pickerKey].inner.querySelectorAll(".wheelItem")];
+  }
+
+  function getNearestWheelItem(pickerKey){
     const picker = TIME_PICKERS[pickerKey];
     const center = picker.wheel.scrollTop + (picker.wheel.clientHeight / 2);
     let bestItem = null;
     let bestDist = Infinity;
 
-    picker.inner.querySelectorAll(".wheelItem").forEach(item=>{
+    getWheelItems(pickerKey).forEach(item=>{
       const itemCenter = item.offsetTop + (item.offsetHeight / 2);
       const dist = Math.abs(center - itemCenter);
       if(dist < bestDist){
@@ -1244,26 +1261,81 @@
       }
     });
 
-    picker.inner.querySelectorAll(".wheelItem").forEach(i=>i.classList.remove("active"));
+    return bestItem;
+  }
+
+  function updateWheelActive(pickerKey){
+    const picker = TIME_PICKERS[pickerKey];
+    const bestItem = getNearestWheelItem(pickerKey);
+    getWheelItems(pickerKey).forEach(i=>i.classList.remove("active"));
     if(bestItem){
       bestItem.classList.add("active");
       picker.value = bestItem.dataset.value;
     }
   }
 
+  function keepWheelLooped(pickerKey){
+    const picker = TIME_PICKERS[pickerKey];
+    if(!picker.looping) return;
+
+    const valuesLen = picker.values.length;
+    const itemHeight = 42;
+    const cycleHeight = valuesLen * itemHeight;
+    const minScroll = cycleHeight * 4;
+    const maxScroll = cycleHeight * (LOOP_DUPLICATES - 5);
+
+    if(picker.wheel.scrollTop < minScroll){
+      picker.wheel.scrollTop += cycleHeight * 6;
+    } else if(picker.wheel.scrollTop > maxScroll){
+      picker.wheel.scrollTop -= cycleHeight * 6;
+    }
+  }
+
+  function findBestItemForValueNearCenter(pickerKey, value){
+    const picker = TIME_PICKERS[pickerKey];
+    const items = getWheelItems(pickerKey).filter(i => i.dataset.value === value);
+    if(!items.length) return null;
+
+    const currentCenter = picker.wheel.scrollTop + (picker.wheel.clientHeight / 2);
+    let best = items[0];
+    let bestDist = Infinity;
+
+    items.forEach(item=>{
+      const c = item.offsetTop + (item.offsetHeight / 2);
+      const dist = Math.abs(c - currentCenter);
+      if(dist < bestDist){
+        bestDist = dist;
+        best = item;
+      }
+    });
+
+    return best;
+  }
+
   function setWheelValue(pickerKey, value, smooth){
     const picker = TIME_PICKERS[pickerKey];
-    const item = picker.inner.querySelector(`.wheelItem[data-value="${CSS.escape(value)}"]`);
+    const item = findBestItemForValueNearCenter(pickerKey, value);
     if(!item) return;
     const target = item.offsetTop - ((picker.wheel.clientHeight - item.offsetHeight) / 2);
     picker.wheel.scrollTo({ top: target, behavior: smooth ? "smooth" : "auto" });
     picker.value = value;
-    setTimeout(()=> updateWheelActive(pickerKey), smooth ? 160 : 0);
+    setTimeout(()=>{
+      keepWheelLooped(pickerKey);
+      updateWheelActive(pickerKey);
+    }, smooth ? 160 : 0);
   }
 
   function snapWheel(pickerKey){
     const picker = TIME_PICKERS[pickerKey];
-    setWheelValue(pickerKey, picker.value, true);
+    const bestItem = getNearestWheelItem(pickerKey);
+    if(!bestItem) return;
+    const target = bestItem.offsetTop - ((picker.wheel.clientHeight - bestItem.offsetHeight) / 2);
+    picker.wheel.scrollTo({ top: target, behavior: "smooth" });
+    picker.value = bestItem.dataset.value;
+    setTimeout(()=>{
+      keepWheelLooped(pickerKey);
+      updateWheelActive(pickerKey);
+    }, 160);
   }
 
   function getTimeValue(prefix){
@@ -1272,14 +1344,11 @@
 
   function setTimeValue(prefix, hhmm){
     const val = String(hhmm || "").trim();
-    if(!val || !val.includes(":")){
-      setWheelValue(prefix + "Hour", "00", false);
-      setWheelValue(prefix + "Minute", "00", false);
-      return;
-    }
-    const [hh, mm] = val.split(":");
-    setWheelValue(prefix + "Hour", HOURS.includes(hh) ? hh : "00", false);
-    setWheelValue(prefix + "Minute", MINUTES.includes(mm) ? mm : "00", false);
+    const [hh, mm] = val && val.includes(":") ? val.split(":") : ["00","00"];
+    const hour = HOURS.includes(hh) ? hh : "00";
+    const minute = MINUTES.includes(mm) ? mm : "00";
+    setWheelValue(prefix + "Hour", hour, false);
+    setWheelValue(prefix + "Minute", minute, false);
   }
 
   function initWheels(){
@@ -1287,9 +1356,14 @@
     buildWheel("startMinute");
     buildWheel("endHour");
     buildWheel("endMinute");
+
     setTimeout(()=>{
       setTimeValue("start", "08:00");
       setTimeValue("end", "09:00");
+      ["startHour","startMinute","endHour","endMinute"].forEach(k=>{
+        keepWheelLooped(k);
+        updateWheelActive(k);
+      });
     }, 0);
   }
 
