@@ -10,7 +10,7 @@
   --txt:#f4f4f4;
   --shadow:0 14px 34px rgba(0,0,0,.40);
   --stroke:rgba(255,255,255,.10);
-  --radius:22px;
+  --radius:16px;
 }
 
 *{box-sizing:border-box}
@@ -36,18 +36,19 @@ body{
   height:100vh;
   max-width:980px;
   margin:0 auto;
-  padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
+  padding:calc(env(safe-area-inset-top) + 8px) 10px calc(env(safe-area-inset-bottom) + 10px);
   display:grid;
   grid-template-rows:auto 1fr;
-  gap:10px;
+  gap:8px;
 }
 
+/* HEADER */
 .topbar{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:10px 12px;
-  border-radius:18px;
+  padding:8px 10px;
+  border-radius:14px;
   background:linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
   border:1px solid rgba(255,255,255,.12);
   box-shadow:var(--shadow);
@@ -55,52 +56,63 @@ body{
 
 .title{
   font-weight:950;
+  font-size:15px;
   text-transform:uppercase;
-  font-size:18px;
 }
 
 .btn{
+  padding:6px 10px;
+  font-size:12px;
+  border-radius:10px;
   border:1px solid rgba(255,255,255,.18);
   background:rgba(0,0,0,.18);
   color:var(--txt);
-  padding:9px 12px;
-  border-radius:14px;
   font-weight:900;
 }
 
+/* LIST */
 .content{
   overflow:auto;
-  display:grid;
-  gap:12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
 }
 
+/* BUTTONS */
 .navBtn{
-  border:none;
-  padding:16px;
+  padding:10px 12px;
   border-radius:var(--radius);
   border:1px solid var(--stroke);
   box-shadow:var(--shadow);
   display:flex;
   justify-content:space-between;
   align-items:center;
-  color:var(--txt);
+  font-size:15px;
   font-weight:900;
-  font-size:20px;
+  color:var(--txt);
 }
 
-.contacts{background:linear-gradient(180deg, rgba(75,130,220,.34), rgba(75,130,220,.16));}
-.reglement{background:linear-gradient(180deg, rgba(210,70,70,.34), rgba(210,70,70,.16));}
-.amicale{background:linear-gradient(180deg, rgba(200,120,40,.34), rgba(200,120,40,.16));}
-.evenements{background:linear-gradient(180deg, rgba(90,170,105,.34), rgba(90,170,105,.16));}
-.statistiques{background:linear-gradient(180deg, rgba(140,90,210,.34), rgba(140,90,210,.16));}
+/* COLORS */
+.contacts{background:linear-gradient(180deg, rgba(75,130,220,.30), rgba(75,130,220,.12));}
+.reglement{background:linear-gradient(180deg, rgba(210,70,70,.30), rgba(210,70,70,.12));}
+.amicale{background:linear-gradient(180deg, rgba(200,120,40,.30), rgba(200,120,40,.12));}
+.evenements{background:linear-gradient(180deg, rgba(90,170,105,.30), rgba(90,170,105,.12));}
+.statistiques{background:linear-gradient(180deg, rgba(140,90,210,.30), rgba(140,90,210,.12));}
 
+/* MOBILE EXTRA COMPACT */
+@media (max-width:360px){
+  .navBtn{font-size:14px; padding:9px 10px;}
+  .title{font-size:14px;}
+}
 </style>
 </head>
 
 <body>
+
 <div class="bg"></div>
 
 <div class="wrap">
+
   <div class="topbar">
     <div class="title">Informations</div>
     <button class="btn" onclick="location.href='index.html?portal=1'">Retour</button>
@@ -108,17 +120,29 @@ body{
 
   <div class="content">
 
-    <button class="navBtn contacts" onclick="location.href='contacts.html'">📞 Contacts ›</button>
+    <button class="navBtn contacts" onclick="location.href='contacts.html'">
+      📞 Contacts ›
+    </button>
 
-    <button class="navBtn reglement" onclick="location.href='reglement.html'">📘 Règlement ›</button>
+    <button class="navBtn reglement" onclick="location.href='reglement.html'">
+      📘 Règlement ›
+    </button>
 
-    <button class="navBtn amicale" onclick="location.href='amicale-info.html'">🤝 Amicale ›</button>
+    <button class="navBtn amicale" onclick="location.href='amicale-info.html'">
+      🤝 Amicale ›
+    </button>
 
-    <button class="navBtn evenements" onclick="location.href='evenements.html'">📅 Événements ›</button>
+    <button class="navBtn evenements" onclick="location.href='evenements.html'">
+      📅 Événements ›
+    </button>
 
-    <button class="navBtn statistiques" onclick="location.href='statistiques.html'">📊 Statistiques ›</button>
+    <button class="navBtn statistiques" onclick="location.href='statistiques.html'">
+      📊 Statistiques ›
+    </button>
 
   </div>
+
 </div>
+
 </body>
 </html>
