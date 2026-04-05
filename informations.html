@@ -8,9 +8,10 @@
 <style>
 :root{
   --txt:#f4f4f4;
-  --shadow:0 14px 34px rgba(0,0,0,.40);
+  --muted:rgba(255,255,255,.75);
+  --shadow:0 12px 28px rgba(0,0,0,.40);
   --stroke:rgba(255,255,255,.10);
-  --radius:16px;
+  --radius:20px;
 }
 
 *{box-sizing:border-box}
@@ -24,22 +25,24 @@ body{
   overflow:hidden;
 }
 
+/* BACKGROUND */
 .bg{
   position:fixed; inset:0;
   background:
-    linear-gradient(180deg, rgba(0,0,0,.52), rgba(0,0,0,.62)),
-    url("background.png") center top/cover no-repeat;
+    linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.65)),
+    url("background.png") center/cover no-repeat;
   z-index:-1;
 }
 
+/* LAYOUT */
 .wrap{
   height:100vh;
-  max-width:980px;
+  max-width:900px;
   margin:0 auto;
-  padding:calc(env(safe-area-inset-top) + 8px) 10px calc(env(safe-area-inset-bottom) + 10px);
-  display:grid;
-  grid-template-rows:auto 1fr;
-  gap:8px;
+  padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 10px);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 
 /* HEADER */
@@ -47,27 +50,28 @@ body{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:8px 10px;
-  border-radius:14px;
-  background:linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
+  padding:10px 14px;
+  border-radius:18px;
+  background:linear-gradient(180deg, rgba(212,106,0,.80), rgba(185,88,0,.60));
   border:1px solid rgba(255,255,255,.12);
   box-shadow:var(--shadow);
 }
 
 .title{
   font-weight:950;
-  font-size:15px;
+  letter-spacing:.6px;
+  font-size:16px;
   text-transform:uppercase;
 }
 
 .btn{
-  padding:6px 10px;
-  font-size:12px;
-  border-radius:10px;
   border:1px solid rgba(255,255,255,.18);
-  background:rgba(0,0,0,.18);
+  background:rgba(0,0,0,.20);
   color:var(--txt);
+  padding:7px 12px;
+  border-radius:12px;
   font-weight:900;
+  font-size:13px;
 }
 
 /* LIST */
@@ -75,34 +79,63 @@ body{
   overflow:auto;
   display:flex;
   flex-direction:column;
-  gap:8px;
+  gap:10px;
+  padding-right:2px;
 }
 
 /* BUTTONS */
 .navBtn{
-  padding:10px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 14px;
   border-radius:var(--radius);
   border:1px solid var(--stroke);
   box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  cursor:pointer;
+}
+
+.navLeft{
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  font-size:15px;
+  gap:12px;
+}
+
+.emoji{
+  font-size:22px;
+}
+
+.label{
+  font-size:17px;
   font-weight:900;
-  color:var(--txt);
+}
+
+.arrow{
+  font-size:18px;
+  opacity:.8;
 }
 
 /* COLORS */
-.contacts{background:linear-gradient(180deg, rgba(75,130,220,.30), rgba(75,130,220,.12));}
-.reglement{background:linear-gradient(180deg, rgba(210,70,70,.30), rgba(210,70,70,.12));}
-.amicale{background:linear-gradient(180deg, rgba(200,120,40,.30), rgba(200,120,40,.12));}
-.evenements{background:linear-gradient(180deg, rgba(90,170,105,.30), rgba(90,170,105,.12));}
-.statistiques{background:linear-gradient(180deg, rgba(140,90,210,.30), rgba(140,90,210,.12));}
+.contacts{
+  background:linear-gradient(180deg, rgba(75,130,220,.28), rgba(75,130,220,.12));
+}
 
-/* MOBILE EXTRA COMPACT */
-@media (max-width:360px){
-  .navBtn{font-size:14px; padding:9px 10px;}
-  .title{font-size:14px;}
+.reglement{
+  background:linear-gradient(180deg, rgba(210,70,70,.28), rgba(210,70,70,.12));
+}
+
+.amicale{
+  background:linear-gradient(180deg, rgba(200,120,40,.28), rgba(200,120,40,.12));
+}
+
+.evenements{
+  background:linear-gradient(180deg, rgba(90,170,105,.28), rgba(90,170,105,.12));
+}
+
+.statistiques{
+  background:linear-gradient(180deg, rgba(140,90,210,.28), rgba(140,90,210,.12));
 }
 </style>
 </head>
@@ -113,32 +146,54 @@ body{
 
 <div class="wrap">
 
+  <!-- HEADER -->
   <div class="topbar">
     <div class="title">Informations</div>
     <button class="btn" onclick="location.href='index.html?portal=1'">Retour</button>
   </div>
 
+  <!-- CONTENT -->
   <div class="content">
 
-    <button class="navBtn contacts" onclick="location.href='contacts.html'">
-      📞 Contacts ›
-    </button>
+    <div class="navBtn contacts" onclick="location.href='contacts.html'">
+      <div class="navLeft">
+        <span class="emoji">📞</span>
+        <span class="label">Contacts</span>
+      </div>
+      <span class="arrow">›</span>
+    </div>
 
-    <button class="navBtn reglement" onclick="location.href='reglement.html'">
-      📘 Règlement ›
-    </button>
+    <div class="navBtn reglement" onclick="location.href='reglement.html'">
+      <div class="navLeft">
+        <span class="emoji">📘</span>
+        <span class="label">Règlement</span>
+      </div>
+      <span class="arrow">›</span>
+    </div>
 
-    <button class="navBtn amicale" onclick="location.href='amicale-info.html'">
-      🤝 Amicale ›
-    </button>
+    <div class="navBtn amicale" onclick="location.href='amicale-info.html'">
+      <div class="navLeft">
+        <span class="emoji">🤝</span>
+        <span class="label">Amicale</span>
+      </div>
+      <span class="arrow">›</span>
+    </div>
 
-    <button class="navBtn evenements" onclick="location.href='evenements.html'">
-      📅 Événements ›
-    </button>
+    <div class="navBtn evenements" onclick="location.href='evenements.html'">
+      <div class="navLeft">
+        <span class="emoji">📅</span>
+        <span class="label">Événements</span>
+      </div>
+      <span class="arrow">›</span>
+    </div>
 
-    <button class="navBtn statistiques" onclick="location.href='statistiques.html'">
-      📊 Statistiques ›
-    </button>
+    <div class="navBtn statistiques" onclick="location.href='statistiques.html'">
+      <div class="navLeft">
+        <span class="emoji">📊</span>
+        <span class="label">Statistiques</span>
+      </div>
+      <span class="arrow">›</span>
+    </div>
 
   </div>
 
