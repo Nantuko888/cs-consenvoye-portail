@@ -14,20 +14,43 @@ body{
   text-align:center;
 }
 
-/* faux camembert */
+/* HEADER */
+.top{
+  padding:15px;
+  font-weight:900;
+  font-size:22px;
+}
+
+/* PIE */
 .pie{
   width:180px;
   height:180px;
   border-radius:50%;
-  margin:40px auto;
-  background:conic-gradient(
-    red 0% 60%,
-    blue 60% 100%
-  );
+  margin:20px auto;
 }
 
-.legend{
-  margin-top:20px;
+/* LIST */
+.list{
+  width:90%;
+  margin:20px auto;
+  text-align:left;
+}
+
+.block{
+  margin-bottom:15px;
+  padding:10px;
+  border-radius:10px;
+  background:#111;
+}
+
+.title{
+  font-weight:900;
+  margin-bottom:5px;
+}
+
+.line{
+  display:flex;
+  justify-content:space-between;
   font-size:14px;
 }
 </style>
@@ -35,14 +58,74 @@ body{
 
 <body>
 
-<h1>Statistiques</h1>
+<div class="top">Statistiques</div>
 
-<div class="pie"></div>
+<div id="pie" class="pie"></div>
 
-<div class="legend">
-VSAV : 60%<br>
-FPT : 40%
-</div>
+<div id="list" class="list"></div>
+
+<script>
+
+/* ===== DONNÉES TEST ===== */
+const interventions = [
+  {vehicules:["VSAV"], type:"Malaise"},
+  {vehicules:["VSAV"], type:"Chute"},
+  {vehicules:["FPT"], type:"Feu"},
+  {vehicules:["VSAV","FPT"], type:"AVP"},
+  {vehicules:["VSAV"], type:"Malaise"}
+];
+
+const vehicules = {
+  VSAV:"#ff3b3b",
+  FPT:"#3b8bff"
+};
+
+/* ===== CALCUL ===== */
+let stats = {};
+
+interventions.forEach(i=>{
+  i.vehicules.forEach(v=>{
+    if(!stats[v]) stats[v]={total:0,types:{},color:vehicules[v]};
+    stats[v].total++;
+    stats[v].types[i.type]=(stats[v].types[i.type]||0)+1;
+  });
+});
+
+/* ===== CAMEMBERT ===== */
+let total = Object.values(stats).reduce((s,v)=>s+v.total,0);
+
+let current = 0;
+let gradient = "conic-gradient(";
+
+Object.values(stats).forEach((v,i)=>{
+  let percent = (v.total/total)*100;
+  gradient += `${v.color} ${current}% ${current+percent}%`;
+  current += percent;
+  if(i < Object.keys(stats).length-1) gradient += ",";
+});
+
+gradient += ")";
+
+document.getElementById("pie").style.background = gradient;
+
+/* ===== DETAILS ===== */
+const list = document.getElementById("list");
+
+Object.keys(stats).forEach(v=>{
+  let div = document.createElement("div");
+  div.className = "block";
+
+  let html = `<div class="title" style="color:${stats[v].color}">${v}</div>`;
+
+  Object.keys(stats[v].types).forEach(t=>{
+    html += `<div class="line"><span>${t}</span><span>${stats[v].types[t]}</span></div>`;
+  });
+
+  div.innerHTML = html;
+  list.appendChild(div);
+});
+
+</script>
 
 </body>
 </html>
