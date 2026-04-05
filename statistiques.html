@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Statistiques</title>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <style>
 body{
   margin:0;
@@ -15,9 +13,22 @@ body{
   font-family:Arial;
   text-align:center;
 }
-canvas{
-  max-width:250px;
-  margin-top:30px;
+
+/* faux camembert */
+.pie{
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  margin:40px auto;
+  background:conic-gradient(
+    red 0% 60%,
+    blue 60% 100%
+  );
+}
+
+.legend{
+  margin-top:20px;
+  font-size:14px;
 }
 </style>
 </head>
@@ -26,22 +37,12 @@ canvas{
 
 <h1>Statistiques</h1>
 
-<canvas id="chart"></canvas>
+<div class="pie"></div>
 
-<script>
-const ctx = document.getElementById("chart");
-
-new Chart(ctx,{
-  type:"pie",
-  data:{
-    labels:["VSAV","FPT"],
-    datasets:[{
-      data:[5,3],
-      backgroundColor:["red","blue"]
-    }]
-  }
-});
-</script>
+<div class="legend">
+VSAV : 60%<br>
+FPT : 40%
+</div>
 
 </body>
 </html>
