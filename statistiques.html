@@ -2,23 +2,72 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Statistiques</title>
 
 <style>
+:root{
+  --txt:#f4f4f4;
+  --shadow:0 14px 34px rgba(0,0,0,.40);
+  --radius:22px;
+}
+
+/* BASE */
+*{box-sizing:border-box}
+html,body{height:100%}
+
 body{
   margin:0;
-  background:#000;
-  color:#fff;
-  font-family:Arial;
-  text-align:center;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--txt);
+  background:#0b0b0b;
+  overflow:hidden;
+}
+
+/* BG */
+.bg{
+  position:fixed; inset:0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.65)),
+    url("background.png") center/cover no-repeat;
+  z-index:-1;
+}
+
+/* LAYOUT */
+.wrap{
+  height:100vh;
+  max-width:980px;
+  margin:0 auto;
+  padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 10px);
+  display:grid;
+  grid-template-rows:auto auto 1fr;
+  gap:10px;
 }
 
 /* HEADER */
-.top{
-  padding:15px;
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 14px;
+  border-radius:20px;
+  background:linear-gradient(180deg, rgba(140,90,210,.80), rgba(110,60,180,.60));
+  box-shadow:var(--shadow);
+}
+
+.title{
   font-weight:900;
-  font-size:22px;
+  font-size:18px;
+  text-transform:uppercase;
+}
+
+.btn{
+  border:none;
+  padding:10px 14px;
+  border-radius:16px;
+  background:rgba(0,0,0,.25);
+  color:#fff;
+  font-weight:900;
 }
 
 /* PIE */
@@ -26,26 +75,26 @@ body{
   width:180px;
   height:180px;
   border-radius:50%;
-  margin:20px auto;
+  margin:auto;
 }
 
 /* LIST */
 .list{
-  width:90%;
-  margin:20px auto;
-  text-align:left;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 
 .block{
-  margin-bottom:15px;
-  padding:10px;
-  border-radius:10px;
-  background:#111;
+  padding:12px;
+  border-radius:16px;
+  background:rgba(0,0,0,.35);
 }
 
-.title{
+.blockTitle{
   font-weight:900;
-  margin-bottom:5px;
+  margin-bottom:6px;
 }
 
 .line{
@@ -58,21 +107,32 @@ body{
 
 <body>
 
-<div class="top">Statistiques</div>
+<div class="bg"></div>
 
-<div id="pie" class="pie"></div>
+<div class="wrap">
 
-<div id="list" class="list"></div>
+  <!-- HEADER -->
+  <div class="topbar">
+    <div class="title">Statistiques</div>
+    <button class="btn" onclick="location.href='informations.html'">Retour</button>
+  </div>
+
+  <!-- PIE -->
+  <div id="pie" class="pie"></div>
+
+  <!-- LIST -->
+  <div id="list" class="list"></div>
+
+</div>
 
 <script>
 
-/* ===== DONNÉES TEST ===== */
+/* ===== DATA TEST ===== */
 const interventions = [
   {vehicules:["VSAV"], type:"Malaise"},
   {vehicules:["VSAV"], type:"Chute"},
   {vehicules:["FPT"], type:"Feu"},
-  {vehicules:["VSAV","FPT"], type:"AVP"},
-  {vehicules:["VSAV"], type:"Malaise"}
+  {vehicules:["VSAV","FPT"], type:"AVP"}
 ];
 
 const vehicules = {
@@ -91,9 +151,8 @@ interventions.forEach(i=>{
   });
 });
 
-/* ===== CAMEMBERT ===== */
+/* ===== PIE ===== */
 let total = Object.values(stats).reduce((s,v)=>s+v.total,0);
-
 let current = 0;
 let gradient = "conic-gradient(";
 
@@ -105,7 +164,6 @@ Object.values(stats).forEach((v,i)=>{
 });
 
 gradient += ")";
-
 document.getElementById("pie").style.background = gradient;
 
 /* ===== DETAILS ===== */
@@ -115,7 +173,7 @@ Object.keys(stats).forEach(v=>{
   let div = document.createElement("div");
   div.className = "block";
 
-  let html = `<div class="title" style="color:${stats[v].color}">${v}</div>`;
+  let html = `<div class="blockTitle" style="color:${stats[v].color}">${v}</div>`;
 
   Object.keys(stats[v].types).forEach(t=>{
     html += `<div class="line"><span>${t}</span><span>${stats[v].types[t]}</span></div>`;
