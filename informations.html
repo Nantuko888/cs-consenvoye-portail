@@ -8,10 +8,12 @@
   <style>
     :root{
       --txt:#f4f4f4;
+      --muted:rgba(255,255,255,.78);
       --shadow:0 14px 34px rgba(0,0,0,.40);
       --stroke:rgba(255,255,255,.10);
-      --headerColor1: rgba(212,106,0,.75);
-      --headerColor2: rgba(185,88,0,.58);
+      --header1:rgba(212,106,0,.75);
+      --header2:rgba(185,88,0,.58);
+      --radius:22px;
     }
 
     *{box-sizing:border-box}
@@ -28,7 +30,7 @@
     .bg{
       position:fixed; inset:0;
       background:
-        linear-gradient(180deg, rgba(0,0,0,.54), rgba(0,0,0,.58)),
+        linear-gradient(180deg, rgba(0,0,0,.52), rgba(0,0,0,.62)),
         url("background.png") center top/cover no-repeat;
       z-index:-2;
       transform:translateZ(0);
@@ -37,8 +39,7 @@
     .bg::after{
       content:"";
       position:absolute; inset:0;
-      background:
-        radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.66) 62%);
+      background:radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.64) 62%);
       z-index:-1;
     }
 
@@ -59,7 +60,7 @@
       gap:10px;
       padding:10px 12px;
       border-radius:18px;
-      background:linear-gradient(180deg,var(--headerColor1),var(--headerColor2));
+      background:linear-gradient(180deg, var(--header1), var(--header2));
       border:1px solid rgba(255,255,255,.12);
       box-shadow:var(--shadow);
       backdrop-filter:blur(10px);
@@ -67,12 +68,11 @@
       min-height:46px;
     }
 
-    .topbar .title{
+    .title{
       font-weight:950;
       letter-spacing:.8px;
       text-transform:uppercase;
       font-size:18px;
-      margin:0;
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -94,51 +94,52 @@
     .content{
       min-height:0;
       overflow:auto;
-      -webkit-overflow-scrolling:touch;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
       padding-right:2px;
     }
 
     .navBtn{
       width:100%;
       border:none;
-      border-radius:20px;
-      padding:16px 16px;
-      min-height:62px;
-      cursor:pointer;
-      color:#fff;
-      font-weight:950;
-      font-size:18px;
-      letter-spacing:.3px;
+      color:var(--txt);
       text-align:left;
+      padding:16px 16px;
+      border-radius:var(--radius);
+      border:1px solid var(--stroke);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
+      cursor:pointer;
       -webkit-tap-highlight-color:transparent;
     }
 
-    .navBtn:active{transform:translateY(1px)}
+    .navBtn:active{
+      transform:translateY(1px);
+    }
 
     .navLeft{
       display:flex;
       align-items:center;
-      gap:12px;
+      gap:14px;
       min-width:0;
     }
 
     .emoji{
-      font-size:22px;
+      font-size:26px;
+      line-height:1;
       flex:0 0 auto;
     }
 
     .label{
+      font-size:20px;
+      font-weight:950;
+      line-height:1.05;
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -164,6 +165,15 @@
 
     .evenements{
       background:linear-gradient(180deg, rgba(90,170,105,.34), rgba(90,170,105,.16));
+    }
+
+    .statistiques{
+      background:linear-gradient(180deg, rgba(145,90,210,.34), rgba(145,90,210,.16));
+    }
+
+    @media (max-width:360px){
+      .label{font-size:18px}
+      .emoji{font-size:24px}
     }
   </style>
 </head>
@@ -205,6 +215,14 @@
         <div class="navLeft">
           <span class="emoji">📅</span>
           <span class="label">Événements</span>
+        </div>
+        <span class="arrow">›</span>
+      </button>
+
+      <button class="navBtn statistiques" onclick="location.href='statistiques.html'">
+        <div class="navLeft">
+          <span class="emoji">📊</span>
+          <span class="label">Statistiques</span>
         </div>
         <span class="arrow">›</span>
       </button>
