@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Statistiques</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#0b0b0b;
+  color:#fff;
+}
+
+.wrap{
+  padding:20px;
+}
+
+h1{
+  text-align:center;
+}
+
+canvas{
+  max-width:300px;
+  margin:auto;
+  display:block;
+}
+
+.block{
+  margin-top:20px;
+  padding:15px;
+  border-radius:15px;
+  background:rgba(255,255,255,0.05);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<h1>Statistiques</h1>
+
+<canvas id="chart"></canvas>
+
+<div id="details"></div>
+
+</div>
+
+<script>
+const data = [
+  {vehicule:"VSAV", couleur:"#ff3b3b", type:"Malaise"},
+  {vehicule:"VSAV", couleur:"#ff3b3b", type:"Chute"},
+  {vehicule:"FPT", couleur:"#3b8bff", type:"Feu"},
+  {vehicule:"VSAV", couleur:"#ff3b3b", type:"AVP"},
+  {vehicule:"FPT", couleur:"#3b8bff", type:"Feu"}
+];
+
+let stats = {};
+
+data.forEach(d=>{
+  if(!stats[d.vehicule]) stats[d.vehicule]={total:0,types:{},color:d.couleur};
+  stats[d.vehicule].total++;
+  if(!stats[d.vehicule].types[d.type]) stats[d.vehicule].types[d.type]=0;
+  stats[d.vehicule].types[d.type]++;
+});
+
+const ctx = document.getElementById("chart").getContext("2d");
+
+new Chart(ctx,{
+  type:"pie",
+  data:{
+    labels:Object.keys(stats),
+    datasets:[{
+      data:Object.values(stats).map(v=>v.total),
+      backgroundColor:Object.values(stats).map(v=>v.color)
+    }]
+  }
+});
+
+const details = document.getElementById("details");
+
+Object.keys(stats).forEach(v=>{
+  let div=document.createElement("div");
+  div.className="block";
+
+  let html = `<h3 style="color:${stats[v].color}">${v}</h3>`;
+
+  Object.keys(stats[v].types).forEach(t=>{
+    html += `${t} : ${stats[v].types[t]}<br>`;
+  });
+
+  div.innerHTML = html;
+  details.appendChild(div);
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+</html>
