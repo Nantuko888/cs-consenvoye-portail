@@ -9,7 +9,6 @@
 :root{
   --txt:#f4f4f4;
   --shadow:0 14px 34px rgba(0,0,0,.40);
-  --radius:18px;
 }
 
 *{box-sizing:border-box}
@@ -23,7 +22,6 @@ body{
   overflow:hidden;
 }
 
-/* BG */
 .bg{
   position:fixed; inset:0;
   background:
@@ -32,14 +30,13 @@ body{
   z-index:-1;
 }
 
-/* LAYOUT */
 .wrap{
   height:100vh;
   max-width:980px;
   margin:0 auto;
   padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 10px);
   display:grid;
-  grid-template-rows:auto auto auto 1fr;
+  grid-template-rows:auto auto auto auto 1fr;
   gap:10px;
 }
 
@@ -68,7 +65,7 @@ body{
   font-weight:900;
 }
 
-/* SELECT BAR */
+/* FILTERS */
 .filters{
   display:flex;
   gap:10px;
@@ -91,6 +88,14 @@ body{
   height:180px;
   border-radius:50%;
   margin:auto;
+}
+
+/* HORS SECTEUR */
+.hs{
+  text-align:center;
+  font-weight:900;
+  font-size:14px;
+  opacity:.9;
 }
 
 /* LIST */
@@ -141,6 +146,9 @@ body{
   <!-- PIE -->
   <div id="pie" class="pie"></div>
 
+  <!-- HORS SECTEUR -->
+  <div class="hs" id="hs"></div>
+
   <!-- LIST -->
   <div id="list" class="list"></div>
 
@@ -149,32 +157,26 @@ body{
 <script>
 
 /* ===== MOIS ===== */
-const months = [
-  "Janvier","Février","Mars","Avril","Mai","Juin",
-  "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
-];
-
+const months = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
 const monthSelect = document.getElementById("month");
 
 months.forEach((m,i)=>{
-  let opt = document.createElement("option");
-  opt.value = i;
-  opt.textContent = m;
+  let opt=document.createElement("option");
+  opt.value=i;
+  opt.textContent=m;
   monthSelect.appendChild(opt);
 });
 
-const now = new Date();
-monthSelect.value = now.getMonth();
-
-/* ===== ANNEE ===== */
-document.getElementById("year").textContent = now.getFullYear();
+const now=new Date();
+monthSelect.value=now.getMonth();
+document.getElementById("year").textContent=now.getFullYear();
 
 /* ===== DATA TEST ===== */
 const interventions = [
-  {vehicules:["VSAV"], type:"Malaise"},
-  {vehicules:["VSAV"], type:"Chute"},
-  {vehicules:["FPT"], type:"Feu"},
-  {vehicules:["VSAV","FPT"], type:"AVP"}
+  {vehicules:["VSAV"], type:"Malaise", hs:false},
+  {vehicules:["VSAV"], type:"Chute", hs:true},
+  {vehicules:["FPT"], type:"Feu", hs:false},
+  {vehicules:["VSAV","FPT"], type:"AVP", hs:true}
 ];
 
 const vehicules = {
@@ -184,8 +186,12 @@ const vehicules = {
 
 /* ===== CALCUL ===== */
 let stats = {};
+let secteur=0;
+let hors=0;
 
 interventions.forEach(i=>{
+  i.hs ? hors++ : secteur++;
+
   i.vehicules.forEach(v=>{
     if(!stats[v]) stats[v]={total:0,types:{},color:vehicules[v]};
     stats[v].total++;
@@ -195,33 +201,37 @@ interventions.forEach(i=>{
 
 /* ===== PIE ===== */
 let total = Object.values(stats).reduce((s,v)=>s+v.total,0);
-let current = 0;
-let gradient = "conic-gradient(";
+let current=0;
+let gradient="conic-gradient(";
 
 Object.values(stats).forEach((v,i)=>{
-  let percent = (v.total/total)*100;
-  gradient += `${v.color} ${current}% ${current+percent}%`;
-  current += percent;
-  if(i < Object.keys(stats).length-1) gradient += ",";
+  let p=(v.total/total)*100;
+  gradient+=`${v.color} ${current}% ${current+p}%`;
+  current+=p;
+  if(i<Object.keys(stats).length-1) gradient+=",";
 });
 
-gradient += ")";
-document.getElementById("pie").style.background = gradient;
+gradient+=")";
+document.getElementById("pie").style.background=gradient;
 
-/* ===== DETAILS ===== */
-const list = document.getElementById("list");
+/* ===== HS ===== */
+document.getElementById("hs").textContent =
+  `Secteur : ${secteur} | Hors secteur : ${hors}`;
+
+/* ===== LIST ===== */
+const list=document.getElementById("list");
 
 Object.keys(stats).forEach(v=>{
-  let div = document.createElement("div");
-  div.className = "block";
+  let div=document.createElement("div");
+  div.className="block";
 
-  let html = `<div class="blockTitle" style="color:${stats[v].color}">${v}</div>`;
+  let html=`<div class="blockTitle" style="color:${stats[v].color}">${v}</div>`;
 
   Object.keys(stats[v].types).forEach(t=>{
-    html += `<div class="line"><span>${t}</span><span>${stats[v].types[t]}</span></div>`;
+    html+=`<div class="line"><span>${t}</span><span>${stats[v].types[t]}</span></div>`;
   });
 
-  div.innerHTML = html;
+  div.innerHTML=html;
   list.appendChild(div);
 });
 
