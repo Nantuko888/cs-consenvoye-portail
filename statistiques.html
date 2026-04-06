@@ -3,14 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Statistiques — CS Consenvoye</title>
+<title>Statistiques</title>
 
 <style>
 :root{
   --txt:#f4f4f4;
   --shadow:0 14px 34px rgba(0,0,0,.40);
-  --radius:22px;
-  --stroke:rgba(255,255,255,.10);
+  --radius:18px;
 }
 
 *{box-sizing:border-box}
@@ -38,54 +37,52 @@ body{
   height:100vh;
   max-width:980px;
   margin:0 auto;
-  padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
+  padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 10px);
   display:grid;
-  grid-template-rows:auto auto 1fr;
+  grid-template-rows:auto auto auto 1fr;
   gap:10px;
 }
 
-/* HEADER IDENTIQUE AUX AUTRES */
+/* HEADER */
 .topbar{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  gap:10px;
+  align-items:center;
   padding:10px 12px;
   border-radius:18px;
   background:linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
-  border:1px solid rgba(255,255,255,.12);
   box-shadow:var(--shadow);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  min-height:46px;
 }
 
 .title{
-  font-weight:950;
-  letter-spacing:.8px;
-  text-transform:uppercase;
+  font-weight:900;
   font-size:18px;
-}
-
-.topRight{
-  display:flex;
-  align-items:center;
-  gap:8px;
 }
 
 .btn{
-  border:1px solid rgba(255,255,255,.18);
-  background:rgba(0,0,0,.18);
-  color:var(--txt);
-  padding:9px 12px;
-  border-radius:14px;
+  padding:8px 12px;
+  border-radius:12px;
+  background:rgba(0,0,0,.2);
+  border:none;
+  color:#fff;
   font-weight:900;
 }
 
-/* CADENAS */
-.lock{
-  font-size:18px;
-  cursor:pointer;
+/* SELECT BAR */
+.filters{
+  display:flex;
+  gap:10px;
+}
+
+.select, .year{
+  flex:1;
+  padding:10px;
+  border-radius:14px;
+  background:rgba(0,0,0,.35);
+  border:none;
+  color:#fff;
+  font-weight:900;
+  text-align:center;
 }
 
 /* PIE */
@@ -106,9 +103,8 @@ body{
 
 .block{
   padding:12px;
-  border-radius:18px;
+  border-radius:16px;
   background:rgba(0,0,0,.35);
-  border:1px solid var(--stroke);
 }
 
 .blockTitle{
@@ -120,15 +116,6 @@ body{
   display:flex;
   justify-content:space-between;
   font-size:14px;
-}
-
-/* ADMIN */
-.admin{
-  display:none;
-  padding:12px;
-  border-radius:18px;
-  background:rgba(255,120,0,.15);
-  border:1px solid rgba(255,255,255,.1);
 }
 </style>
 </head>
@@ -142,27 +129,45 @@ body{
   <!-- HEADER -->
   <div class="topbar">
     <div class="title">Statistiques</div>
-
-    <div class="topRight">
-      <div id="lock" class="lock">🔒</div>
-      <button class="btn" onclick="location.href='informations.html'">Retour</button>
-    </div>
+    <button class="btn" onclick="location.href='informations.html'">Retour</button>
   </div>
 
-  <!-- CAMEMBERT -->
+  <!-- FILTRES -->
+  <div class="filters">
+    <select class="select" id="month"></select>
+    <div class="year" id="year"></div>
+  </div>
+
+  <!-- PIE -->
   <div id="pie" class="pie"></div>
 
-  <!-- DETAILS -->
+  <!-- LIST -->
   <div id="list" class="list"></div>
-
-  <!-- ADMIN -->
-  <div id="admin" class="admin">
-    Mode admin activé (zone future)
-  </div>
 
 </div>
 
 <script>
+
+/* ===== MOIS ===== */
+const months = [
+  "Janvier","Février","Mars","Avril","Mai","Juin",
+  "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
+];
+
+const monthSelect = document.getElementById("month");
+
+months.forEach((m,i)=>{
+  let opt = document.createElement("option");
+  opt.value = i;
+  opt.textContent = m;
+  monthSelect.appendChild(opt);
+});
+
+const now = new Date();
+monthSelect.value = now.getMonth();
+
+/* ===== ANNEE ===== */
+document.getElementById("year").textContent = now.getFullYear();
 
 /* ===== DATA TEST ===== */
 const interventions = [
@@ -188,7 +193,7 @@ interventions.forEach(i=>{
   });
 });
 
-/* ===== CAMEMBERT ===== */
+/* ===== PIE ===== */
 let total = Object.values(stats).reduce((s,v)=>s+v.total,0);
 let current = 0;
 let gradient = "conic-gradient(";
@@ -219,15 +224,6 @@ Object.keys(stats).forEach(v=>{
   div.innerHTML = html;
   list.appendChild(div);
 });
-
-/* ===== CADENAS ===== */
-let admin = false;
-
-document.getElementById("lock").onclick = ()=>{
-  admin = !admin;
-  document.getElementById("lock").textContent = admin ? "🔓" : "🔒";
-  document.getElementById("admin").style.display = admin ? "block" : "none";
-};
 
 </script>
 
