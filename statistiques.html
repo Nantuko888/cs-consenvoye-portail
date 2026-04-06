@@ -3,17 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Statistiques</title>
+<title>Statistiques — CS Consenvoye</title>
 
 <style>
 :root{
   --txt:#f4f4f4;
   --shadow:0 14px 34px rgba(0,0,0,.40);
+  --stroke:rgba(255,255,255,.10);
 }
-
 *{box-sizing:border-box}
 html,body{height:100%}
-
 body{
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
@@ -21,7 +20,6 @@ body{
   background:#0b0b0b;
   overflow:hidden;
 }
-
 .bg{
   position:fixed; inset:0;
   background:
@@ -29,7 +27,6 @@ body{
     url("background.png") center/cover no-repeat;
   z-index:-1;
 }
-
 .wrap{
   height:100vh;
   max-width:980px;
@@ -43,236 +40,346 @@ body{
 /* HEADER */
 .topbar{
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
+  gap:10px;
   padding:10px 12px;
   border-radius:18px;
   background:linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
+  border:1px solid rgba(255,255,255,.12);
   box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  min-height:46px;
 }
-
 .title{
-  font-weight:900;
+  font-weight:950;
+  letter-spacing:.8px;
+  text-transform:uppercase;
   font-size:18px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
-
 .btn{
-  padding:8px 12px;
-  border-radius:12px;
-  background:rgba(0,0,0,.2);
-  border:none;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(0,0,0,.18);
   color:#fff;
+  padding:9px 12px;
+  border-radius:14px;
   font-weight:900;
+  cursor:pointer;
 }
 
 /* FILTERS */
 .filters{
-  display:flex;
+  display:grid;
+  grid-template-columns:1fr 1fr;
   gap:10px;
 }
-
-.select, .year{
-  flex:1;
-  padding:10px;
-  border-radius:14px;
+.filterBox{
+  border-radius:18px;
   background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  min-height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.selectMonth{
+  width:100%;
+  height:100%;
   border:none;
+  outline:none;
+  background:transparent;
   color:#fff;
   font-weight:900;
+  font-size:16px;
   text-align:center;
+  text-align-last:center;
+  padding:0 14px;
+  appearance:none;
+  -webkit-appearance:none;
+}
+.yearBox{
+  font-weight:950;
+  font-size:18px;
+  letter-spacing:.5px;
 }
 
 /* PIE */
+.pieWrap{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:8px 0 2px;
+}
 .pie{
   width:180px;
   height:180px;
   border-radius:50%;
-  margin:auto;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.08);
 }
 
 /* LIST */
 .list{
+  min-height:0;
   overflow:auto;
   display:flex;
   flex-direction:column;
   gap:10px;
+  padding-right:2px;
 }
-
 .block{
-  padding:12px;
-  border-radius:16px;
+  border-radius:18px;
   background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  padding:12px;
 }
-
 .blockTitle{
-  font-weight:900;
-  margin-bottom:6px;
+  font-weight:950;
+  font-size:18px;
+  margin-bottom:8px;
 }
-
-/* TABLE */
 .table{
-  width:100%;
-  font-size:14px;
-}
-
-.row{
   display:flex;
-  justify-content:space-between;
-  padding:2px 0;
+  flex-direction:column;
+  gap:4px;
 }
-
-.headerRow{
+.row{
+  display:grid;
+  grid-template-columns:1fr 84px 84px;
+  gap:8px;
+  align-items:center;
+}
+.row.header{
+  padding-bottom:4px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  margin-bottom:2px;
+}
+.cellType{
+  font-weight:850;
+  font-size:15px;
+  color:#fff;
+}
+.cellHead{
+  font-weight:900;
   font-size:12px;
-  opacity:.7;
-}
-
-.col{
-  width:33%;
-  text-align:left;
-}
-
-.colRight{
-  width:33%;
   text-align:right;
+  color:rgba(255,255,255,.72);
+  text-transform:uppercase;
+}
+.cellVal{
+  font-weight:950;
+  font-size:16px;
+  text-align:right;
+  color:#fff;
+}
+
+@media (max-width:420px){
+  .row{grid-template-columns:1fr 72px 72px}
+  .cellType{font-size:14px}
+  .cellVal{font-size:15px}
 }
 </style>
 </head>
 
 <body>
-
 <div class="bg"></div>
 
 <div class="wrap">
 
-  <!-- HEADER -->
   <div class="topbar">
     <div class="title">Statistiques</div>
     <button class="btn" onclick="location.href='informations.html'">Retour</button>
   </div>
 
-  <!-- FILTRES -->
   <div class="filters">
-    <select class="select" id="month"></select>
-    <div class="year" id="year"></div>
+    <div class="filterBox">
+      <select id="monthSelect" class="selectMonth"></select>
+    </div>
+    <div class="filterBox yearBox" id="yearBox">2026</div>
   </div>
 
-  <!-- PIE -->
-  <div id="pie" class="pie"></div>
+  <div class="pieWrap">
+    <div id="pie" class="pie"></div>
+  </div>
 
-  <!-- LIST -->
   <div id="list" class="list"></div>
 
 </div>
 
 <script>
+/* ===== Données de test temporaires ===== */
+const interventions = [
+  { date:"2026-04-01", type:"Malaise", vehicules:["VSAV"], horsSecteur:false },
+  { date:"2026-04-03", type:"Chute", vehicules:["VSAV"], horsSecteur:true },
+  { date:"2026-04-05", type:"Feu", vehicules:["FPT"], horsSecteur:false },
+  { date:"2026-04-07", type:"AVP", vehicules:["VSAV","FPT"], horsSecteur:true },
+  { date:"2026-04-09", type:"Malaise", vehicules:["VSAV"], horsSecteur:false }
+];
 
-/* MOIS */
-const months = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-const monthSelect = document.getElementById("month");
+const vehiculesConfig = {
+  "VSAV":"#ff3b3b",
+  "FPT":"#3b8bff"
+};
 
-months.forEach((m,i)=>{
-  let opt=document.createElement("option");
-  opt.value=i;
-  opt.textContent=m;
+/* ===== Mois / année ===== */
+const months = [
+  "Janvier","Février","Mars","Avril","Mai","Juin",
+  "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
+];
+
+const monthSelect = document.getElementById("monthSelect");
+const yearBox = document.getElementById("yearBox");
+const now = new Date();
+const currentYear = now.getFullYear();
+
+months.forEach((m, i) => {
+  const opt = document.createElement("option");
+  opt.value = String(i + 1).padStart(2, "0");
+  opt.textContent = m;
   monthSelect.appendChild(opt);
 });
 
-const now=new Date();
-monthSelect.value=now.getMonth();
-document.getElementById("year").textContent=now.getFullYear();
+monthSelect.value = String(now.getMonth() + 1).padStart(2, "0");
+yearBox.textContent = String(currentYear);
 
-/* DATA TEST */
-const interventions = [
-  {vehicules:["VSAV"], type:"Malaise", hs:false},
-  {vehicules:["VSAV"], type:"Chute", hs:true},
-  {vehicules:["FPT"], type:"Feu", hs:false},
-  {vehicules:["VSAV","FPT"], type:"AVP", hs:true}
-];
+/* ===== Helpers ===== */
+function getSelectedYear(){
+  return yearBox.textContent.trim();
+}
+function getSelectedMonth(){
+  return monthSelect.value;
+}
+function matchSelectedMonth(dateStr){
+  const parts = String(dateStr || "").split("-");
+  if(parts.length !== 3) return false;
+  const [y,m] = parts;
+  return y === getSelectedYear() && m === getSelectedMonth();
+}
 
-const vehicules = {
-  VSAV:"#ff3b3b",
-  FPT:"#3b8bff"
-};
+/* ===== Render ===== */
+function buildStats(filtered){
+  const stats = {};
+  const pieTotals = {};
 
-/* CALCUL */
-let stats = {};
+  filtered.forEach(inter => {
+    inter.vehicules.forEach(v => {
+      if(!stats[v]){
+        stats[v] = {
+          color: vehiculesConfig[v] || "#999999",
+          types: {}
+        };
+      }
+      if(!stats[v].types[inter.type]){
+        stats[v].types[inter.type] = { secteur:0, hors:0 };
+      }
 
-interventions.forEach(i=>{
-  i.vehicules.forEach(v=>{
-    if(!stats[v]) stats[v]={types:{},color:vehicules[v]};
+      if(inter.horsSecteur){
+        stats[v].types[inter.type].hors += 1;
+      }else{
+        stats[v].types[inter.type].secteur += 1;
+      }
 
-    if(!stats[v].types[i.type]){
-      stats[v].types[i.type]={secteur:0,hors:0};
-    }
-
-    if(i.hs){
-      stats[v].types[i.type].hors++;
-    }else{
-      stats[v].types[i.type].secteur++;
-    }
+      pieTotals[v] = (pieTotals[v] || 0) + 1;
+    });
   });
-});
 
-/* PIE */
-let totalVeh = {};
-interventions.forEach(i=>{
-  i.vehicules.forEach(v=>{
-    totalVeh[v]=(totalVeh[v]||0)+1;
+  return { stats, pieTotals };
+}
+
+function renderPie(pieTotals){
+  const pie = document.getElementById("pie");
+  const keys = Object.keys(pieTotals);
+
+  if(!keys.length){
+    pie.style.background = "rgba(255,255,255,.08)";
+    return;
+  }
+
+  const total = keys.reduce((sum, k) => sum + pieTotals[k], 0);
+  let current = 0;
+  const parts = [];
+
+  keys.forEach(k => {
+    const pct = (pieTotals[k] / total) * 100;
+    const color = vehiculesConfig[k] || "#999999";
+    parts.push(`${color} ${current}% ${current + pct}%`);
+    current += pct;
   });
-});
 
-let total = Object.values(totalVeh).reduce((s,v)=>s+v,0);
-let current=0;
-let gradient="conic-gradient(";
+  pie.style.background = `conic-gradient(${parts.join(",")})`;
+}
 
-Object.keys(totalVeh).forEach((v,i)=>{
-  let p=(totalVeh[v]/total)*100;
-  gradient+=`${vehicules[v]} ${current}% ${current+p}%`;
-  current+=p;
-  if(i<Object.keys(totalVeh).length-1) gradient+=",";
-});
+function renderList(stats){
+  const list = document.getElementById("list");
+  list.innerHTML = "";
 
-gradient+=")";
-document.getElementById("pie").style.background=gradient;
+  const vehKeys = Object.keys(stats);
 
-/* LIST */
-const list=document.getElementById("list");
-
-Object.keys(stats).forEach(v=>{
-  let div=document.createElement("div");
-  div.className="block";
-
-  let html=`<div class="blockTitle" style="color:${stats[v].color}">${v}</div>`;
-
-  html+=`
-  <div class="table">
-    <div class="row headerRow">
-      <div class="col">Type</div>
-      <div class="colRight">Secteur</div>
-      <div class="colRight">Hors</div>
-    </div>
-  `;
-
-  Object.keys(stats[v].types).forEach(t=>{
-    let s = stats[v].types[t].secteur;
-    let h = stats[v].types[t].hors;
-
-    html+=`
-    <div class="row">
-      <div class="col">${t}</div>
-      <div class="colRight">${s}</div>
-      <div class="colRight">${h}</div>
-    </div>
+  if(!vehKeys.length){
+    list.innerHTML = `
+      <div class="block">
+        <div class="blockTitle">Aucune donnée pour cette période</div>
+      </div>
     `;
+    return;
+  }
+
+  vehKeys.forEach(v => {
+    const block = document.createElement("div");
+    block.className = "block";
+
+    let html = `<div class="blockTitle" style="color:${stats[v].color}">${v}</div>`;
+    html += `
+      <div class="table">
+        <div class="row header">
+          <div class="cellHead" style="text-align:left">Type</div>
+          <div class="cellHead">Secteur</div>
+          <div class="cellHead">Hors secteur</div>
+        </div>
+    `;
+
+    Object.keys(stats[v].types).forEach(type => {
+      const s = stats[v].types[type].secteur;
+      const h = stats[v].types[type].hors;
+      html += `
+        <div class="row">
+          <div class="cellType">${type}</div>
+          <div class="cellVal">${s}</div>
+          <div class="cellVal">${h}</div>
+        </div>
+      `;
+    });
+
+    html += `</div>`;
+    block.innerHTML = html;
+    list.appendChild(block);
   });
+}
 
-  html+=`</div>`;
+function renderAll(){
+  const filtered = interventions.filter(i => matchSelectedMonth(i.date));
+  const { stats, pieTotals } = buildStats(filtered);
+  renderPie(pieTotals);
+  renderList(stats);
+}
 
-  div.innerHTML=html;
-  list.appendChild(div);
-});
+monthSelect.addEventListener("change", renderAll);
 
+/* premier affichage */
+monthSelect.value = "04";
+yearBox.textContent = "2026";
+renderAll();
 </script>
-
 </body>
 </html>
