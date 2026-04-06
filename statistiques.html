@@ -36,7 +36,7 @@ body{
   margin:0 auto;
   padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 10px);
   display:grid;
-  grid-template-rows:auto auto auto auto 1fr;
+  grid-template-rows:auto auto auto 1fr;
   gap:10px;
 }
 
@@ -90,31 +90,6 @@ body{
   margin:auto;
 }
 
-/* DOUBLE COLONNE */
-.hsRow{
-  display:flex;
-  gap:10px;
-}
-
-.hsCol{
-  flex:1;
-  padding:10px;
-  border-radius:14px;
-  background:rgba(0,0,0,.35);
-  text-align:center;
-}
-
-.hsTitle{
-  font-weight:900;
-  margin-bottom:4px;
-  font-size:13px;
-}
-
-.hsValue{
-  font-size:18px;
-  font-weight:900;
-}
-
 /* LIST */
 .list{
   overflow:auto;
@@ -134,10 +109,31 @@ body{
   margin-bottom:6px;
 }
 
-.line{
+/* TABLE */
+.table{
+  width:100%;
+  font-size:14px;
+}
+
+.row{
   display:flex;
   justify-content:space-between;
-  font-size:14px;
+  padding:2px 0;
+}
+
+.headerRow{
+  font-size:12px;
+  opacity:.7;
+}
+
+.col{
+  width:33%;
+  text-align:left;
+}
+
+.colRight{
+  width:33%;
+  text-align:right;
 }
 </style>
 </head>
@@ -162,18 +158,6 @@ body{
 
   <!-- PIE -->
   <div id="pie" class="pie"></div>
-
-  <!-- SECTEUR / HORS SECTEUR -->
-  <div class="hsRow">
-    <div class="hsCol">
-      <div class="hsTitle">Secteur 1er appel</div>
-      <div class="hsValue" id="secteur"></div>
-    </div>
-    <div class="hsCol">
-      <div class="hsTitle">Hors secteur</div>
-      <div class="hsValue" id="hors"></div>
-    </div>
-  </div>
 
   <!-- LIST -->
   <div id="list" class="list"></div>
@@ -212,37 +196,44 @@ const vehicules = {
 
 /* CALCUL */
 let stats = {};
-let secteur=0;
-let hors=0;
 
 interventions.forEach(i=>{
-  i.hs ? hors++ : secteur++;
-
   i.vehicules.forEach(v=>{
-    if(!stats[v]) stats[v]={total:0,types:{},color:vehicules[v]};
-    stats[v].total++;
-    stats[v].types[i.type]=(stats[v].types[i.type]||0)+1;
+    if(!stats[v]) stats[v]={types:{},color:vehicules[v]};
+
+    if(!stats[v].types[i.type]){
+      stats[v].types[i.type]={secteur:0,hors:0};
+    }
+
+    if(i.hs){
+      stats[v].types[i.type].hors++;
+    }else{
+      stats[v].types[i.type].secteur++;
+    }
   });
 });
 
 /* PIE */
-let total = Object.values(stats).reduce((s,v)=>s+v.total,0);
+let totalVeh = {};
+interventions.forEach(i=>{
+  i.vehicules.forEach(v=>{
+    totalVeh[v]=(totalVeh[v]||0)+1;
+  });
+});
+
+let total = Object.values(totalVeh).reduce((s,v)=>s+v,0);
 let current=0;
 let gradient="conic-gradient(";
 
-Object.values(stats).forEach((v,i)=>{
-  let p=(v.total/total)*100;
-  gradient+=`${v.color} ${current}% ${current+p}%`;
+Object.keys(totalVeh).forEach((v,i)=>{
+  let p=(totalVeh[v]/total)*100;
+  gradient+=`${vehicules[v]} ${current}% ${current+p}%`;
   current+=p;
-  if(i<Object.keys(stats).length-1) gradient+=",";
+  if(i<Object.keys(totalVeh).length-1) gradient+=",";
 });
 
 gradient+=")";
 document.getElementById("pie").style.background=gradient;
-
-/* AFFICHAGE HS */
-document.getElementById("secteur").textContent = secteur;
-document.getElementById("hors").textContent = hors;
 
 /* LIST */
 const list=document.getElementById("list");
@@ -253,9 +244,29 @@ Object.keys(stats).forEach(v=>{
 
   let html=`<div class="blockTitle" style="color:${stats[v].color}">${v}</div>`;
 
+  html+=`
+  <div class="table">
+    <div class="row headerRow">
+      <div class="col">Type</div>
+      <div class="colRight">Secteur</div>
+      <div class="colRight">Hors</div>
+    </div>
+  `;
+
   Object.keys(stats[v].types).forEach(t=>{
-    html+=`<div class="line"><span>${t}</span><span>${stats[v].types[t]}</span></div>`;
+    let s = stats[v].types[t].secteur;
+    let h = stats[v].types[t].hors;
+
+    html+=`
+    <div class="row">
+      <div class="col">${t}</div>
+      <div class="colRight">${s}</div>
+      <div class="colRight">${h}</div>
+    </div>
+    `;
   });
+
+  html+=`</div>`;
 
   div.innerHTML=html;
   list.appendChild(div);
