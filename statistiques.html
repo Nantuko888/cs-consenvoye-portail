@@ -90,12 +90,29 @@ body{
   margin:auto;
 }
 
-/* HORS SECTEUR */
-.hs{
+/* DOUBLE COLONNE */
+.hsRow{
+  display:flex;
+  gap:10px;
+}
+
+.hsCol{
+  flex:1;
+  padding:10px;
+  border-radius:14px;
+  background:rgba(0,0,0,.35);
   text-align:center;
+}
+
+.hsTitle{
   font-weight:900;
-  font-size:14px;
-  opacity:.9;
+  margin-bottom:4px;
+  font-size:13px;
+}
+
+.hsValue{
+  font-size:18px;
+  font-weight:900;
 }
 
 /* LIST */
@@ -146,8 +163,17 @@ body{
   <!-- PIE -->
   <div id="pie" class="pie"></div>
 
-  <!-- HORS SECTEUR -->
-  <div class="hs" id="hs"></div>
+  <!-- SECTEUR / HORS SECTEUR -->
+  <div class="hsRow">
+    <div class="hsCol">
+      <div class="hsTitle">Secteur 1er appel</div>
+      <div class="hsValue" id="secteur"></div>
+    </div>
+    <div class="hsCol">
+      <div class="hsTitle">Hors secteur</div>
+      <div class="hsValue" id="hors"></div>
+    </div>
+  </div>
 
   <!-- LIST -->
   <div id="list" class="list"></div>
@@ -156,7 +182,7 @@ body{
 
 <script>
 
-/* ===== MOIS ===== */
+/* MOIS */
 const months = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
 const monthSelect = document.getElementById("month");
 
@@ -171,7 +197,7 @@ const now=new Date();
 monthSelect.value=now.getMonth();
 document.getElementById("year").textContent=now.getFullYear();
 
-/* ===== DATA TEST ===== */
+/* DATA TEST */
 const interventions = [
   {vehicules:["VSAV"], type:"Malaise", hs:false},
   {vehicules:["VSAV"], type:"Chute", hs:true},
@@ -184,7 +210,7 @@ const vehicules = {
   FPT:"#3b8bff"
 };
 
-/* ===== CALCUL ===== */
+/* CALCUL */
 let stats = {};
 let secteur=0;
 let hors=0;
@@ -199,7 +225,7 @@ interventions.forEach(i=>{
   });
 });
 
-/* ===== PIE ===== */
+/* PIE */
 let total = Object.values(stats).reduce((s,v)=>s+v.total,0);
 let current=0;
 let gradient="conic-gradient(";
@@ -214,11 +240,11 @@ Object.values(stats).forEach((v,i)=>{
 gradient+=")";
 document.getElementById("pie").style.background=gradient;
 
-/* ===== HS ===== */
-document.getElementById("hs").textContent =
-  `Secteur : ${secteur} | Hors secteur : ${hors}`;
+/* AFFICHAGE HS */
+document.getElementById("secteur").textContent = secteur;
+document.getElementById("hors").textContent = hors;
 
-/* ===== LIST ===== */
+/* LIST */
 const list=document.getElementById("list");
 
 Object.keys(stats).forEach(v=>{
