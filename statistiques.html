@@ -8,6 +8,7 @@
 <style>
 :root{
   --txt:#f4f4f4;
+  --muted:rgba(255,255,255,.72);
   --shadow:0 14px 34px rgba(0,0,0,.40);
   --stroke:rgba(255,255,255,.10);
 }
@@ -60,6 +61,20 @@ body{
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
+}
+.topRight{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.lockBtn{
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(0,0,0,.18);
+  color:#fff;
+  padding:9px 11px;
+  border-radius:14px;
+  font-weight:900;
+  cursor:pointer;
 }
 .btn{
   border:1px solid rgba(255,255,255,.18);
@@ -124,16 +139,24 @@ body{
   border-radius:50%;
   box-shadow:var(--shadow);
   border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.08);
 }
 
-/* LIST */
-.list{
+/* CONTENT */
+.content{
   min-height:0;
   overflow:auto;
   display:flex;
   flex-direction:column;
   gap:10px;
   padding-right:2px;
+}
+
+/* AGENT LIST */
+.agentView{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 .block{
   border-radius:18px;
@@ -184,10 +207,174 @@ body{
   color:#fff;
 }
 
-@media (max-width:420px){
-  .row{grid-template-columns:1fr 72px 72px}
-  .cellType{font-size:14px}
-  .cellVal{font-size:15px}
+/* ADMIN */
+.adminView{
+  display:none;
+  flex-direction:column;
+  gap:10px;
+}
+.adminView.show{display:flex}
+
+.adminSection{
+  border-radius:18px;
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  padding:12px;
+}
+.adminTitle{
+  font-weight:950;
+  font-size:17px;
+  margin-bottom:10px;
+}
+.formRow{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+  margin-bottom:10px;
+}
+.field, .select, .textarea{
+  width:100%;
+  border:none;
+  outline:none;
+  background:rgba(0,0,0,.25);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:14px;
+  padding:11px 12px;
+  font:inherit;
+  font-weight:800;
+}
+.textarea{
+  min-height:84px;
+  resize:vertical;
+}
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.grid3{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+}
+.checkRow{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:4px 2px;
+  font-weight:800;
+}
+.actionRow{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.smallBtn{
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(0,0,0,.20);
+  color:#fff;
+  padding:9px 12px;
+  border-radius:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+.smallBtn.danger{
+  border-color:rgba(255,90,90,.28);
+}
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.tag{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10);
+  font-weight:850;
+}
+.dot{
+  width:12px;
+  height:12px;
+  border-radius:4px;
+  border:1px solid rgba(255,255,255,.20);
+}
+.adminList{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.adminItem{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+}
+.adminItemLeft{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.adminItemText{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  min-width:0;
+}
+.adminMain{
+  font-weight:900;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.adminSub{
+  font-size:12px;
+  color:var(--muted);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.vehicleChecks{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.checkCard{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  font-weight:850;
+}
+.modeHint{
+  font-size:12px;
+  color:rgba(255,255,255,.72);
+  margin-top:-2px;
+  margin-bottom:6px;
+}
+
+@media (max-width:520px){
+  .grid2,.grid3,.vehicleChecks,.filters{
+    grid-template-columns:1fr;
+  }
+  .row{
+    grid-template-columns:1fr 68px 68px;
+  }
 }
 </style>
 </head>
@@ -199,7 +386,10 @@ body{
 
   <div class="topbar">
     <div class="title">Statistiques</div>
-    <button class="btn" onclick="location.href='informations.html'">Retour</button>
+    <div class="topRight">
+      <button id="lockBtn" class="lockBtn" type="button">🔒</button>
+      <button class="btn" onclick="location.href='informations.html'">Retour</button>
+    </div>
   </div>
 
   <div class="filters">
@@ -213,61 +403,145 @@ body{
     <div id="pie" class="pie"></div>
   </div>
 
-  <div id="list" class="list"></div>
+  <div class="content">
 
+    <div id="agentView" class="agentView"></div>
+
+    <div id="adminView" class="adminView">
+      <div class="adminSection">
+        <div class="adminTitle">Catalogue véhicules</div>
+        <div class="modeHint">Nom + couleur du véhicule.</div>
+        <div class="grid2">
+          <input id="vehiculeName" class="field" type="text" placeholder="Nom véhicule (ex : VSAV)">
+          <input id="vehiculeColor" class="field" type="text" placeholder="Couleur HEX (ex : #ff3b3b)">
+        </div>
+        <div class="actionRow" style="margin-top:8px;">
+          <button id="addVehiculeBtn" class="smallBtn" type="button">Ajouter véhicule</button>
+        </div>
+        <div id="vehiculesList" class="adminList" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="adminSection">
+        <div class="adminTitle">Catalogue types d’intervention</div>
+        <div class="modeHint">Liste des intitulés disponibles.</div>
+        <div class="grid2">
+          <input id="typeName" class="field" type="text" placeholder="Type (ex : Malaise)">
+          <div></div>
+        </div>
+        <div class="actionRow" style="margin-top:8px;">
+          <button id="addTypeBtn" class="smallBtn" type="button">Ajouter type</button>
+        </div>
+        <div id="typesList" class="adminList" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="adminSection">
+        <div class="adminTitle">Saisie intervention</div>
+        <div class="modeHint">Date, type, véhicules, lieu, hors secteur.</div>
+
+        <div class="grid2">
+          <input id="interDate" class="field" type="date">
+          <select id="interType" class="select"></select>
+        </div>
+
+        <div class="field" style="padding:10px 12px;">
+          <div style="font-weight:900; margin-bottom:8px;">Véhicules déclenchés</div>
+          <div id="vehicleChecks" class="vehicleChecks"></div>
+        </div>
+
+        <div class="grid2" style="margin-top:8px;">
+          <input id="interLieu" class="field" type="text" placeholder="Lieu">
+          <label class="checkCard">
+            <input id="interHs" type="checkbox">
+            <span>Hors secteur</span>
+          </label>
+        </div>
+
+        <div class="actionRow" style="margin-top:10px;">
+          <button id="addInterBtn" class="smallBtn" type="button">Ajouter intervention</button>
+        </div>
+
+        <div id="interventionsList" class="adminList" style="margin-top:10px;"></div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <script>
-/* ===== Données de test temporaires ===== */
-const interventions = [
-  { date:"2026-04-01", type:"Malaise", vehicules:["VSAV"], horsSecteur:false },
-  { date:"2026-04-03", type:"Chute", vehicules:["VSAV"], horsSecteur:true },
-  { date:"2026-04-05", type:"Feu", vehicules:["FPT"], horsSecteur:false },
-  { date:"2026-04-07", type:"AVP", vehicules:["VSAV","FPT"], horsSecteur:true },
-  { date:"2026-04-09", type:"Malaise", vehicules:["VSAV"], horsSecteur:false }
-];
-
-const vehiculesConfig = {
+/* ===== Données temporaires interface ===== */
+let vehiculesConfig = {
   "VSAV":"#ff3b3b",
   "FPT":"#3b8bff"
 };
 
-/* ===== Mois / année ===== */
+let statsTypes = [
+  "Malaise",
+  "Chute",
+  "AVP",
+  "Feu"
+];
+
+let interventions = [
+  { id:1, date:"2026-04-01", type:"Malaise", vehicules:["VSAV"], horsSecteur:false, lieu:"Consenvoye" },
+  { id:2, date:"2026-04-03", type:"Chute", vehicules:["VSAV"], horsSecteur:true, lieu:"Extérieur" },
+  { id:3, date:"2026-04-05", type:"Feu", vehicules:["FPT"], horsSecteur:false, lieu:"Centre" },
+  { id:4, date:"2026-04-07", type:"AVP", vehicules:["VSAV","FPT"], horsSecteur:true, lieu:"RD" },
+  { id:5, date:"2026-04-09", type:"Malaise", vehicules:["VSAV"], horsSecteur:false, lieu:"Consenvoye" }
+];
+
+let adminMode = false;
+
+/* ===== DOM ===== */
+const monthSelect = document.getElementById("monthSelect");
+const yearBox = document.getElementById("yearBox");
+const pie = document.getElementById("pie");
+const agentView = document.getElementById("agentView");
+const adminView = document.getElementById("adminView");
+const lockBtn = document.getElementById("lockBtn");
+
+const vehiculeName = document.getElementById("vehiculeName");
+const vehiculeColor = document.getElementById("vehiculeColor");
+const vehiculesList = document.getElementById("vehiculesList");
+const addVehiculeBtn = document.getElementById("addVehiculeBtn");
+
+const typeName = document.getElementById("typeName");
+const typesList = document.getElementById("typesList");
+const addTypeBtn = document.getElementById("addTypeBtn");
+
+const interDate = document.getElementById("interDate");
+const interType = document.getElementById("interType");
+const vehicleChecks = document.getElementById("vehicleChecks");
+const interLieu = document.getElementById("interLieu");
+const interHs = document.getElementById("interHs");
+const addInterBtn = document.getElementById("addInterBtn");
+const interventionsList = document.getElementById("interventionsList");
+
+/* ===== Setup mois/année ===== */
 const months = [
   "Janvier","Février","Mars","Avril","Mai","Juin",
   "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
 ];
-
-const monthSelect = document.getElementById("monthSelect");
-const yearBox = document.getElementById("yearBox");
-const now = new Date();
-const currentYear = now.getFullYear();
-
 months.forEach((m, i) => {
   const opt = document.createElement("option");
   opt.value = String(i + 1).padStart(2, "0");
   opt.textContent = m;
   monthSelect.appendChild(opt);
 });
-
-monthSelect.value = String(now.getMonth() + 1).padStart(2, "0");
-yearBox.textContent = String(currentYear);
+monthSelect.value = "04";
+yearBox.textContent = "2026";
 
 /* ===== Helpers ===== */
-function getSelectedYear(){
-  return yearBox.textContent.trim();
-}
-function getSelectedMonth(){
-  return monthSelect.value;
-}
-function matchSelectedMonth(dateStr){
-  const parts = String(dateStr || "").split("-");
-  if(parts.length !== 3) return false;
-  const [y,m] = parts;
-  return y === getSelectedYear() && m === getSelectedMonth();
+function selectedYear(){ return String(yearBox.textContent || "").trim(); }
+function selectedMonth(){ return String(monthSelect.value || "").trim(); }
+
+function filteredInterventions(){
+  return interventions.filter(i => {
+    const parts = String(i.date || "").split("-");
+    if(parts.length !== 3) return false;
+    return parts[0] === selectedYear() && parts[1] === selectedMonth();
+  });
 }
 
-/* ===== Render ===== */
 function buildStats(filtered){
   const stats = {};
   const pieTotals = {};
@@ -283,13 +557,11 @@ function buildStats(filtered){
       if(!stats[v].types[inter.type]){
         stats[v].types[inter.type] = { secteur:0, hors:0 };
       }
-
       if(inter.horsSecteur){
         stats[v].types[inter.type].hors += 1;
       }else{
         stats[v].types[inter.type].secteur += 1;
       }
-
       pieTotals[v] = (pieTotals[v] || 0) + 1;
     });
   });
@@ -298,36 +570,29 @@ function buildStats(filtered){
 }
 
 function renderPie(pieTotals){
-  const pie = document.getElementById("pie");
   const keys = Object.keys(pieTotals);
-
   if(!keys.length){
     pie.style.background = "rgba(255,255,255,.08)";
     return;
   }
-
-  const total = keys.reduce((sum, k) => sum + pieTotals[k], 0);
+  const total = keys.reduce((s,k)=>s + pieTotals[k], 0);
   let current = 0;
   const parts = [];
-
   keys.forEach(k => {
     const pct = (pieTotals[k] / total) * 100;
     const color = vehiculesConfig[k] || "#999999";
     parts.push(`${color} ${current}% ${current + pct}%`);
     current += pct;
   });
-
   pie.style.background = `conic-gradient(${parts.join(",")})`;
 }
 
-function renderList(stats){
-  const list = document.getElementById("list");
-  list.innerHTML = "";
-
+function renderAgent(stats){
+  agentView.innerHTML = "";
   const vehKeys = Object.keys(stats);
 
   if(!vehKeys.length){
-    list.innerHTML = `
+    agentView.innerHTML = `
       <div class="block">
         <div class="blockTitle">Aucune donnée pour cette période</div>
       </div>
@@ -363,22 +628,181 @@ function renderList(stats){
 
     html += `</div>`;
     block.innerHTML = html;
-    list.appendChild(block);
+    agentView.appendChild(block);
   });
 }
 
-function renderAll(){
-  const filtered = interventions.filter(i => matchSelectedMonth(i.date));
-  const { stats, pieTotals } = buildStats(filtered);
-  renderPie(pieTotals);
-  renderList(stats);
+function renderVehiculesAdmin(){
+  vehiculesList.innerHTML = "";
+  Object.keys(vehiculesConfig).forEach(v => {
+    const item = document.createElement("div");
+    item.className = "adminItem";
+    item.innerHTML = `
+      <div class="adminItemLeft">
+        <span class="dot" style="background:${vehiculesConfig[v]}"></span>
+        <div class="adminItemText">
+          <div class="adminMain">${v}</div>
+          <div class="adminSub">${vehiculesConfig[v]}</div>
+        </div>
+      </div>
+      <button class="smallBtn danger" type="button" data-v="${v}">Supprimer</button>
+    `;
+    item.querySelector("button").onclick = () => {
+      delete vehiculesConfig[v];
+      interventions = interventions.map(it => ({
+        ...it,
+        vehicules: it.vehicules.filter(x => x !== v)
+      })).filter(it => it.vehicules.length > 0);
+      renderAdmin();
+      renderAll();
+    };
+    vehiculesList.appendChild(item);
+  });
 }
 
+function renderTypesAdmin(){
+  typesList.innerHTML = "";
+  statsTypes.forEach(t => {
+    const item = document.createElement("div");
+    item.className = "adminItem";
+    item.innerHTML = `
+      <div class="adminItemLeft">
+        <div class="adminItemText">
+          <div class="adminMain">${t}</div>
+        </div>
+      </div>
+      <button class="smallBtn danger" type="button">Supprimer</button>
+    `;
+    item.querySelector("button").onclick = () => {
+      statsTypes = statsTypes.filter(x => x !== t);
+      interventions = interventions.filter(it => it.type !== t);
+      renderAdmin();
+      renderAll();
+    };
+    typesList.appendChild(item);
+  });
+}
+
+function renderTypeSelect(){
+  interType.innerHTML = "";
+  statsTypes.forEach(t => {
+    const opt = document.createElement("option");
+    opt.value = t;
+    opt.textContent = t;
+    interType.appendChild(opt);
+  });
+}
+
+function renderVehicleChecks(){
+  vehicleChecks.innerHTML = "";
+  Object.keys(vehiculesConfig).forEach(v => {
+    const label = document.createElement("label");
+    label.className = "checkCard";
+    label.innerHTML = `
+      <input type="checkbox" value="${v}">
+      <span class="dot" style="background:${vehiculesConfig[v]}"></span>
+      <span>${v}</span>
+    `;
+    vehicleChecks.appendChild(label);
+  });
+}
+
+function renderInterventionsAdmin(){
+  interventionsList.innerHTML = "";
+  const sorted = [...interventions].sort((a,b)=> String(b.date).localeCompare(String(a.date)));
+
+  sorted.forEach(it => {
+    const item = document.createElement("div");
+    item.className = "adminItem";
+    item.innerHTML = `
+      <div class="adminItemText">
+        <div class="adminMain">${it.date} — ${it.type}</div>
+        <div class="adminSub">${it.vehicules.join(", ")} • ${it.lieu || "—"} • ${it.horsSecteur ? "Hors secteur" : "Secteur"}</div>
+      </div>
+      <button class="smallBtn danger" type="button">Supprimer</button>
+    `;
+    item.querySelector("button").onclick = () => {
+      interventions = interventions.filter(x => x.id !== it.id);
+      renderAdmin();
+      renderAll();
+    };
+    interventionsList.appendChild(item);
+  });
+}
+
+function renderAdmin(){
+  renderVehiculesAdmin();
+  renderTypesAdmin();
+  renderTypeSelect();
+  renderVehicleChecks();
+  renderInterventionsAdmin();
+}
+
+function renderAll(){
+  const filtered = filteredInterventions();
+  const { stats, pieTotals } = buildStats(filtered);
+  renderPie(pieTotals);
+  renderAgent(stats);
+}
+
+function toggleAdmin(){
+  adminMode = !adminMode;
+  lockBtn.textContent = adminMode ? "🔓" : "🔒";
+  adminView.classList.toggle("show", adminMode);
+}
+
+/* ===== Actions admin interface ===== */
+addVehiculeBtn.onclick = () => {
+  const name = String(vehiculeName.value || "").trim().toUpperCase();
+  const color = String(vehiculeColor.value || "").trim();
+  if(!name || !color) return;
+  vehiculesConfig[name] = color;
+  vehiculeName.value = "";
+  vehiculeColor.value = "";
+  renderAdmin();
+  renderAll();
+};
+
+addTypeBtn.onclick = () => {
+  const t = String(typeName.value || "").trim();
+  if(!t) return;
+  if(!statsTypes.includes(t)) statsTypes.push(t);
+  typeName.value = "";
+  renderAdmin();
+};
+
+addInterBtn.onclick = () => {
+  const date = String(interDate.value || "").trim();
+  const type = String(interType.value || "").trim();
+  const lieu = String(interLieu.value || "").trim();
+  const horsSecteur = !!interHs.checked;
+  const vehs = [...vehicleChecks.querySelectorAll('input[type="checkbox"]:checked')].map(x => x.value);
+
+  if(!date || !type || !vehs.length) return;
+
+  interventions.push({
+    id: Date.now(),
+    date,
+    type,
+    vehicules: vehs,
+    horsSecteur,
+    lieu
+  });
+
+  interDate.value = "";
+  interLieu.value = "";
+  interHs.checked = false;
+  vehicleChecks.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+
+  renderAdmin();
+  renderAll();
+};
+
+lockBtn.onclick = toggleAdmin;
 monthSelect.addEventListener("change", renderAll);
 
-/* premier affichage */
-monthSelect.value = "04";
-yearBox.textContent = "2026";
+/* ===== Init ===== */
+renderAdmin();
 renderAll();
 </script>
 </body>
