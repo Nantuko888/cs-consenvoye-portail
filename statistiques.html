@@ -12,8 +12,10 @@
   --shadow:0 14px 34px rgba(0,0,0,.40);
   --stroke:rgba(255,255,255,.10);
 }
+
 *{box-sizing:border-box}
 html,body{height:100%}
+
 body{
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
@@ -21,6 +23,7 @@ body{
   background:#0b0b0b;
   overflow:hidden;
 }
+
 .bg{
   position:fixed; inset:0;
   background:
@@ -28,13 +31,14 @@ body{
     url("background.png") center/cover no-repeat;
   z-index:-1;
 }
+
 .wrap{
   height:100vh;
   max-width:980px;
   margin:0 auto;
   padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 10px);
   display:grid;
-  grid-template-rows:auto auto auto 1fr;
+  grid-template-rows:auto auto auto auto 1fr;
   gap:10px;
 }
 
@@ -67,16 +71,9 @@ body{
   align-items:center;
   gap:8px;
 }
-.lockBtn{
-  border:1px solid rgba(255,255,255,.18);
-  background:rgba(0,0,0,.18);
-  color:#fff;
-  padding:9px 11px;
-  border-radius:14px;
-  font-weight:900;
-  cursor:pointer;
-}
-.btn{
+.lockBtn,
+.btn,
+.smallBtn{
   border:1px solid rgba(255,255,255,.18);
   background:rgba(0,0,0,.18);
   color:#fff;
@@ -84,6 +81,10 @@ body{
   border-radius:14px;
   font-weight:900;
   cursor:pointer;
+}
+.lockBtn{
+  min-width:44px;
+  padding:9px 11px;
 }
 
 /* FILTERS */
@@ -126,6 +127,32 @@ body{
   letter-spacing:.5px;
 }
 
+/* ADMIN SHORTCUTS */
+.adminTabs{
+  display:none;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+}
+.adminTabs.show{display:grid;}
+.adminTab{
+  border-radius:18px;
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  cursor:pointer;
+}
+.adminTab.active{
+  border-color:rgba(255,255,255,.24);
+  background:rgba(255,255,255,.08);
+}
+
 /* PIE */
 .pieWrap{
   display:flex;
@@ -142,21 +169,14 @@ body{
   background:rgba(255,255,255,.08);
 }
 
-/* CONTENT */
-.content{
+/* AGENT VIEW */
+.agentView{
   min-height:0;
   overflow:auto;
   display:flex;
   flex-direction:column;
   gap:10px;
   padding-right:2px;
-}
-
-/* AGENT LIST */
-.agentView{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
 }
 .block{
   border-radius:18px;
@@ -207,49 +227,64 @@ body{
   color:#fff;
 }
 
-/* ADMIN */
-.adminView{
+/* PANEL */
+.panelOverlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.58);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
   display:none;
+  z-index:150;
+}
+.panelOverlay.show{display:block;}
+
+.panel{
+  position:absolute;
+  left:12px; right:12px;
+  bottom:calc(env(safe-area-inset-bottom) + 12px);
+  max-width:980px;
+  margin:0 auto;
+  height:min(74vh, 760px);
+  border-radius:22px;
+  background:linear-gradient(180deg, rgba(0,0,0,.82), rgba(0,0,0,.70));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.panelHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  background:rgba(0,0,0,.18);
+}
+.panelTitle{
+  font-weight:950;
+  font-size:16px;
+}
+.panelBody{
+  padding:12px;
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+  display:flex;
   flex-direction:column;
   gap:10px;
 }
-.adminView.show{display:flex}
-
-.adminSection{
+.section{
   border-radius:18px;
-  background:rgba(0,0,0,.35);
-  border:1px solid rgba(255,255,255,.10);
-  box-shadow:var(--shadow);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
   padding:12px;
 }
-.adminTitle{
+.sectionTitle{
   font-weight:950;
-  font-size:17px;
+  font-size:15px;
   margin-bottom:10px;
-}
-.formRow{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:8px;
-  margin-bottom:10px;
-}
-.field, .select, .textarea{
-  width:100%;
-  border:none;
-  outline:none;
-  background:rgba(0,0,0,.25);
-  color:#fff;
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:14px;
-  padding:11px 12px;
-  font:inherit;
-  font-weight:800;
-}
-.textarea{
-  min-height:84px;
-  resize:vertical;
 }
 .grid2{
   display:grid;
@@ -261,85 +296,65 @@ body{
   grid-template-columns:1fr 1fr 1fr;
   gap:8px;
 }
-.checkRow{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:4px 2px;
+.field, .select, .textarea{
+  width:100%;
+  border:none;
+  outline:none;
+  background:rgba(0,0,0,.24);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:14px;
+  padding:11px 12px;
+  font:inherit;
   font-weight:800;
+}
+.textarea{
+  min-height:84px;
+  resize:vertical;
 }
 .actionRow{
   display:flex;
   gap:8px;
   flex-wrap:wrap;
 }
-.smallBtn{
-  border:1px solid rgba(255,255,255,.16);
-  background:rgba(0,0,0,.20);
-  color:#fff;
-  padding:9px 12px;
-  border-radius:12px;
-  font-weight:900;
-  cursor:pointer;
-}
 .smallBtn.danger{
   border-color:rgba(255,90,90,.28);
 }
-.tags{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
-.tag{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 10px;
-  border-radius:999px;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.10);
-  font-weight:850;
-}
-.dot{
-  width:12px;
-  height:12px;
-  border-radius:4px;
-  border:1px solid rgba(255,255,255,.20);
-}
-.adminList{
+.listAdmin{
   display:flex;
   flex-direction:column;
   gap:8px;
 }
-.adminItem{
+.item{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:10px;
   padding:10px 12px;
   border-radius:14px;
-  background:rgba(255,255,255,.05);
+  background:rgba(255,255,255,.04);
   border:1px solid rgba(255,255,255,.08);
 }
-.adminItemLeft{
+.itemLeft{
   min-width:0;
   display:flex;
   align-items:center;
   gap:10px;
 }
-.adminItemText{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-  min-width:0;
+.dot{
+  width:12px;
+  height:12px;
+  border-radius:4px;
+  border:1px solid rgba(255,255,255,.20);
+  flex:0 0 auto;
 }
-.adminMain{
+.itemMain{
   font-weight:900;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
 }
-.adminSub{
+.itemSub{
   font-size:12px;
   color:var(--muted);
   white-space:nowrap;
@@ -357,19 +372,23 @@ body{
   gap:8px;
   padding:10px 12px;
   border-radius:14px;
-  background:rgba(255,255,255,.05);
+  background:rgba(255,255,255,.04);
   border:1px solid rgba(255,255,255,.08);
   font-weight:850;
 }
-.modeHint{
+.hint{
   font-size:12px;
-  color:rgba(255,255,255,.72);
-  margin-top:-2px;
+  color:var(--muted);
+  margin-top:-4px;
   margin-bottom:6px;
 }
 
 @media (max-width:520px){
-  .grid2,.grid3,.vehicleChecks,.filters{
+  .filters,
+  .adminTabs,
+  .grid2,
+  .grid3,
+  .vehicleChecks{
     grid-template-columns:1fr;
   }
   .row{
@@ -399,71 +418,28 @@ body{
     <div class="filterBox yearBox" id="yearBox">2026</div>
   </div>
 
+  <div id="adminTabs" class="adminTabs">
+    <div class="adminTab" data-panel="vehicules">Véhicules</div>
+    <div class="adminTab" data-panel="types">Types</div>
+    <div class="adminTab" data-panel="interventions">Interventions</div>
+  </div>
+
   <div class="pieWrap">
     <div id="pie" class="pie"></div>
   </div>
 
-  <div class="content">
+  <div id="agentView" class="agentView"></div>
 
-    <div id="agentView" class="agentView"></div>
+</div>
 
-    <div id="adminView" class="adminView">
-      <div class="adminSection">
-        <div class="adminTitle">Catalogue véhicules</div>
-        <div class="modeHint">Nom + couleur du véhicule.</div>
-        <div class="grid2">
-          <input id="vehiculeName" class="field" type="text" placeholder="Nom véhicule (ex : VSAV)">
-          <input id="vehiculeColor" class="field" type="text" placeholder="Couleur HEX (ex : #ff3b3b)">
-        </div>
-        <div class="actionRow" style="margin-top:8px;">
-          <button id="addVehiculeBtn" class="smallBtn" type="button">Ajouter véhicule</button>
-        </div>
-        <div id="vehiculesList" class="adminList" style="margin-top:10px;"></div>
-      </div>
-
-      <div class="adminSection">
-        <div class="adminTitle">Catalogue types d’intervention</div>
-        <div class="modeHint">Liste des intitulés disponibles.</div>
-        <div class="grid2">
-          <input id="typeName" class="field" type="text" placeholder="Type (ex : Malaise)">
-          <div></div>
-        </div>
-        <div class="actionRow" style="margin-top:8px;">
-          <button id="addTypeBtn" class="smallBtn" type="button">Ajouter type</button>
-        </div>
-        <div id="typesList" class="adminList" style="margin-top:10px;"></div>
-      </div>
-
-      <div class="adminSection">
-        <div class="adminTitle">Saisie intervention</div>
-        <div class="modeHint">Date, type, véhicules, lieu, hors secteur.</div>
-
-        <div class="grid2">
-          <input id="interDate" class="field" type="date">
-          <select id="interType" class="select"></select>
-        </div>
-
-        <div class="field" style="padding:10px 12px;">
-          <div style="font-weight:900; margin-bottom:8px;">Véhicules déclenchés</div>
-          <div id="vehicleChecks" class="vehicleChecks"></div>
-        </div>
-
-        <div class="grid2" style="margin-top:8px;">
-          <input id="interLieu" class="field" type="text" placeholder="Lieu">
-          <label class="checkCard">
-            <input id="interHs" type="checkbox">
-            <span>Hors secteur</span>
-          </label>
-        </div>
-
-        <div class="actionRow" style="margin-top:10px;">
-          <button id="addInterBtn" class="smallBtn" type="button">Ajouter intervention</button>
-        </div>
-
-        <div id="interventionsList" class="adminList" style="margin-top:10px;"></div>
-      </div>
+<!-- PANEL -->
+<div id="panelOverlay" class="panelOverlay">
+  <div class="panel">
+    <div class="panelHead">
+      <div id="panelTitle" class="panelTitle">Admin</div>
+      <button id="panelClose" class="smallBtn" type="button">Fermer</button>
     </div>
-
+    <div id="panelBody" class="panelBody"></div>
   </div>
 </div>
 
@@ -490,31 +466,20 @@ let interventions = [
 ];
 
 let adminMode = false;
+let activePanel = "";
 
 /* ===== DOM ===== */
 const monthSelect = document.getElementById("monthSelect");
 const yearBox = document.getElementById("yearBox");
 const pie = document.getElementById("pie");
 const agentView = document.getElementById("agentView");
-const adminView = document.getElementById("adminView");
 const lockBtn = document.getElementById("lockBtn");
-
-const vehiculeName = document.getElementById("vehiculeName");
-const vehiculeColor = document.getElementById("vehiculeColor");
-const vehiculesList = document.getElementById("vehiculesList");
-const addVehiculeBtn = document.getElementById("addVehiculeBtn");
-
-const typeName = document.getElementById("typeName");
-const typesList = document.getElementById("typesList");
-const addTypeBtn = document.getElementById("addTypeBtn");
-
-const interDate = document.getElementById("interDate");
-const interType = document.getElementById("interType");
-const vehicleChecks = document.getElementById("vehicleChecks");
-const interLieu = document.getElementById("interLieu");
-const interHs = document.getElementById("interHs");
-const addInterBtn = document.getElementById("addInterBtn");
-const interventionsList = document.getElementById("interventionsList");
+const adminTabs = document.getElementById("adminTabs");
+const tabs = [...document.querySelectorAll(".adminTab")];
+const panelOverlay = document.getElementById("panelOverlay");
+const panelTitle = document.getElementById("panelTitle");
+const panelBody = document.getElementById("panelBody");
+const panelClose = document.getElementById("panelClose");
 
 /* ===== Setup mois/année ===== */
 const months = [
@@ -632,69 +597,203 @@ function renderAgent(stats){
   });
 }
 
-function renderVehiculesAdmin(){
-  vehiculesList.innerHTML = "";
-  Object.keys(vehiculesConfig).forEach(v => {
-    const item = document.createElement("div");
-    item.className = "adminItem";
-    item.innerHTML = `
-      <div class="adminItemLeft">
-        <span class="dot" style="background:${vehiculesConfig[v]}"></span>
-        <div class="adminItemText">
-          <div class="adminMain">${v}</div>
-          <div class="adminSub">${vehiculesConfig[v]}</div>
-        </div>
-      </div>
-      <button class="smallBtn danger" type="button" data-v="${v}">Supprimer</button>
-    `;
-    item.querySelector("button").onclick = () => {
-      delete vehiculesConfig[v];
-      interventions = interventions.map(it => ({
-        ...it,
-        vehicules: it.vehicules.filter(x => x !== v)
-      })).filter(it => it.vehicules.length > 0);
-      renderAdmin();
-      renderAll();
-    };
-    vehiculesList.appendChild(item);
-  });
+function renderAll(){
+  const filtered = filteredInterventions();
+  const { stats, pieTotals } = buildStats(filtered);
+  renderPie(pieTotals);
+  renderAgent(stats);
 }
 
-function renderTypesAdmin(){
-  typesList.innerHTML = "";
-  statsTypes.forEach(t => {
-    const item = document.createElement("div");
-    item.className = "adminItem";
-    item.innerHTML = `
-      <div class="adminItemLeft">
-        <div class="adminItemText">
-          <div class="adminMain">${t}</div>
+/* ===== Admin mode ===== */
+function toggleAdmin(){
+  adminMode = !adminMode;
+  lockBtn.textContent = adminMode ? "🔓" : "🔒";
+  adminTabs.classList.toggle("show", adminMode);
+
+  if(!adminMode){
+    closePanel();
+  }
+}
+
+function setActiveTab(panelName){
+  tabs.forEach(t => t.classList.toggle("active", t.dataset.panel === panelName));
+}
+
+function openPanel(name){
+  activePanel = name;
+  setActiveTab(name);
+  panelOverlay.classList.add("show");
+
+  if(name === "vehicules"){
+    panelTitle.textContent = "Catalogue véhicules";
+    renderVehiculesPanel();
+  } else if(name === "types"){
+    panelTitle.textContent = "Catalogue types";
+    renderTypesPanel();
+  } else if(name === "interventions"){
+    panelTitle.textContent = "Interventions";
+    renderInterventionsPanel();
+  }
+}
+
+function closePanel(){
+  activePanel = "";
+  setActiveTab("");
+  panelOverlay.classList.remove("show");
+  panelBody.innerHTML = "";
+}
+
+/* ===== Panels ===== */
+function renderVehiculesPanel(){
+  panelBody.innerHTML = `
+    <div class="section">
+      <div class="sectionTitle">Ajouter un véhicule</div>
+      <div class="hint">Nom + couleur.</div>
+      <div class="grid2">
+        <input id="pv_name" class="field" type="text" placeholder="Nom véhicule (ex : VSAV)">
+        <input id="pv_color" class="field" type="text" placeholder="Couleur HEX (ex : #ff3b3b)">
+      </div>
+      <div class="actionRow" style="margin-top:10px;">
+        <button id="pv_add" class="smallBtn" type="button">Ajouter</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sectionTitle">Liste véhicules</div>
+      <div id="pv_list" class="listAdmin"></div>
+    </div>
+  `;
+
+  document.getElementById("pv_add").onclick = () => {
+    const name = String(document.getElementById("pv_name").value || "").trim().toUpperCase();
+    const color = String(document.getElementById("pv_color").value || "").trim();
+    if(!name || !color) return;
+    vehiculesConfig[name] = color;
+    renderVehiculesPanel();
+    renderAll();
+  };
+
+  const list = document.getElementById("pv_list");
+  Object.keys(vehiculesConfig).forEach(v => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.innerHTML = `
+      <div class="itemLeft">
+        <span class="dot" style="background:${vehiculesConfig[v]}"></span>
+        <div>
+          <div class="itemMain">${v}</div>
+          <div class="itemSub">${vehiculesConfig[v]}</div>
         </div>
       </div>
       <button class="smallBtn danger" type="button">Supprimer</button>
     `;
-    item.querySelector("button").onclick = () => {
-      statsTypes = statsTypes.filter(x => x !== t);
-      interventions = interventions.filter(it => it.type !== t);
-      renderAdmin();
+    div.querySelector("button").onclick = () => {
+      delete vehiculesConfig[v];
+      interventions = interventions
+        .map(it => ({ ...it, vehicules: it.vehicules.filter(x => x !== v) }))
+        .filter(it => it.vehicules.length > 0);
+      renderVehiculesPanel();
       renderAll();
     };
-    typesList.appendChild(item);
+    list.appendChild(div);
   });
 }
 
-function renderTypeSelect(){
-  interType.innerHTML = "";
+function renderTypesPanel(){
+  panelBody.innerHTML = `
+    <div class="section">
+      <div class="sectionTitle">Ajouter un type</div>
+      <div class="hint">Ex : Malaise, AVP, Feu…</div>
+      <div class="grid2">
+        <input id="pt_name" class="field" type="text" placeholder="Nom du type">
+        <div></div>
+      </div>
+      <div class="actionRow" style="margin-top:10px;">
+        <button id="pt_add" class="smallBtn" type="button">Ajouter</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sectionTitle">Liste types</div>
+      <div id="pt_list" class="listAdmin"></div>
+    </div>
+  `;
+
+  document.getElementById("pt_add").onclick = () => {
+    const t = String(document.getElementById("pt_name").value || "").trim();
+    if(!t) return;
+    if(!statsTypes.includes(t)) statsTypes.push(t);
+    renderTypesPanel();
+    if(activePanel === "interventions") renderInterventionsPanel();
+    renderAll();
+  };
+
+  const list = document.getElementById("pt_list");
+  statsTypes.forEach(t => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.innerHTML = `
+      <div class="itemLeft">
+        <div>
+          <div class="itemMain">${t}</div>
+        </div>
+      </div>
+      <button class="smallBtn danger" type="button">Supprimer</button>
+    `;
+    div.querySelector("button").onclick = () => {
+      statsTypes = statsTypes.filter(x => x !== t);
+      interventions = interventions.filter(it => it.type !== t);
+      renderTypesPanel();
+      renderAll();
+    };
+    list.appendChild(div);
+  });
+}
+
+function renderInterventionsPanel(){
+  panelBody.innerHTML = `
+    <div class="section">
+      <div class="sectionTitle">Ajouter une intervention</div>
+      <div class="hint">Date, type, véhicules, lieu, hors secteur.</div>
+
+      <div class="grid2">
+        <input id="pi_date" class="field" type="date">
+        <select id="pi_type" class="select"></select>
+      </div>
+
+      <div class="section" style="margin-top:10px; padding:10px 12px;">
+        <div class="sectionTitle" style="margin-bottom:8px; font-size:14px;">Véhicules déclenchés</div>
+        <div id="pi_vehs" class="vehicleChecks"></div>
+      </div>
+
+      <div class="grid2" style="margin-top:10px;">
+        <input id="pi_lieu" class="field" type="text" placeholder="Lieu">
+        <label class="checkCard">
+          <input id="pi_hs" type="checkbox">
+          <span>Hors secteur</span>
+        </label>
+      </div>
+
+      <div class="actionRow" style="margin-top:10px;">
+        <button id="pi_add" class="smallBtn" type="button">Ajouter intervention</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sectionTitle">Liste interventions</div>
+      <div id="pi_list" class="listAdmin"></div>
+    </div>
+  `;
+
+  const typeSel = document.getElementById("pi_type");
   statsTypes.forEach(t => {
     const opt = document.createElement("option");
     opt.value = t;
     opt.textContent = t;
-    interType.appendChild(opt);
+    typeSel.appendChild(opt);
   });
-}
 
-function renderVehicleChecks(){
-  vehicleChecks.innerHTML = "";
+  const vehs = document.getElementById("pi_vehs");
   Object.keys(vehiculesConfig).forEach(v => {
     const label = document.createElement("label");
     label.className = "checkCard";
@@ -703,106 +802,67 @@ function renderVehicleChecks(){
       <span class="dot" style="background:${vehiculesConfig[v]}"></span>
       <span>${v}</span>
     `;
-    vehicleChecks.appendChild(label);
-  });
-}
-
-function renderInterventionsAdmin(){
-  interventionsList.innerHTML = "";
-  const sorted = [...interventions].sort((a,b)=> String(b.date).localeCompare(String(a.date)));
-
-  sorted.forEach(it => {
-    const item = document.createElement("div");
-    item.className = "adminItem";
-    item.innerHTML = `
-      <div class="adminItemText">
-        <div class="adminMain">${it.date} — ${it.type}</div>
-        <div class="adminSub">${it.vehicules.join(", ")} • ${it.lieu || "—"} • ${it.horsSecteur ? "Hors secteur" : "Secteur"}</div>
-      </div>
-      <button class="smallBtn danger" type="button">Supprimer</button>
-    `;
-    item.querySelector("button").onclick = () => {
-      interventions = interventions.filter(x => x.id !== it.id);
-      renderAdmin();
-      renderAll();
-    };
-    interventionsList.appendChild(item);
-  });
-}
-
-function renderAdmin(){
-  renderVehiculesAdmin();
-  renderTypesAdmin();
-  renderTypeSelect();
-  renderVehicleChecks();
-  renderInterventionsAdmin();
-}
-
-function renderAll(){
-  const filtered = filteredInterventions();
-  const { stats, pieTotals } = buildStats(filtered);
-  renderPie(pieTotals);
-  renderAgent(stats);
-}
-
-function toggleAdmin(){
-  adminMode = !adminMode;
-  lockBtn.textContent = adminMode ? "🔓" : "🔒";
-  adminView.classList.toggle("show", adminMode);
-}
-
-/* ===== Actions admin interface ===== */
-addVehiculeBtn.onclick = () => {
-  const name = String(vehiculeName.value || "").trim().toUpperCase();
-  const color = String(vehiculeColor.value || "").trim();
-  if(!name || !color) return;
-  vehiculesConfig[name] = color;
-  vehiculeName.value = "";
-  vehiculeColor.value = "";
-  renderAdmin();
-  renderAll();
-};
-
-addTypeBtn.onclick = () => {
-  const t = String(typeName.value || "").trim();
-  if(!t) return;
-  if(!statsTypes.includes(t)) statsTypes.push(t);
-  typeName.value = "";
-  renderAdmin();
-};
-
-addInterBtn.onclick = () => {
-  const date = String(interDate.value || "").trim();
-  const type = String(interType.value || "").trim();
-  const lieu = String(interLieu.value || "").trim();
-  const horsSecteur = !!interHs.checked;
-  const vehs = [...vehicleChecks.querySelectorAll('input[type="checkbox"]:checked')].map(x => x.value);
-
-  if(!date || !type || !vehs.length) return;
-
-  interventions.push({
-    id: Date.now(),
-    date,
-    type,
-    vehicules: vehs,
-    horsSecteur,
-    lieu
+    vehs.appendChild(label);
   });
 
-  interDate.value = "";
-  interLieu.value = "";
-  interHs.checked = false;
-  vehicleChecks.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+  document.getElementById("pi_add").onclick = () => {
+    const date = String(document.getElementById("pi_date").value || "").trim();
+    const type = String(document.getElementById("pi_type").value || "").trim();
+    const lieu = String(document.getElementById("pi_lieu").value || "").trim();
+    const hs = !!document.getElementById("pi_hs").checked;
+    const checked = [...vehs.querySelectorAll('input[type="checkbox"]:checked')].map(x => x.value);
 
-  renderAdmin();
-  renderAll();
-};
+    if(!date || !type || !checked.length) return;
 
+    interventions.push({
+      id: Date.now(),
+      date,
+      type,
+      vehicules: checked,
+      horsSecteur: hs,
+      lieu
+    });
+
+    renderInterventionsPanel();
+    renderAll();
+  };
+
+  const list = document.getElementById("pi_list");
+  [...interventions]
+    .sort((a,b) => String(b.date).localeCompare(String(a.date)))
+    .forEach(it => {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.innerHTML = `
+        <div class="itemLeft">
+          <div>
+            <div class="itemMain">${it.date} — ${it.type}</div>
+            <div class="itemSub">${it.vehicules.join(", ")} • ${it.lieu || "—"} • ${it.horsSecteur ? "Hors secteur" : "Secteur"}</div>
+          </div>
+        </div>
+        <button class="smallBtn danger" type="button">Supprimer</button>
+      `;
+      div.querySelector("button").onclick = () => {
+        interventions = interventions.filter(x => x.id !== it.id);
+        renderInterventionsPanel();
+        renderAll();
+      };
+      list.appendChild(div);
+    });
+}
+
+/* ===== Events ===== */
 lockBtn.onclick = toggleAdmin;
 monthSelect.addEventListener("change", renderAll);
+tabs.forEach(t => {
+  t.onclick = () => openPanel(t.dataset.panel);
+});
+panelClose.onclick = closePanel;
+panelOverlay.addEventListener("click", (e) => {
+  if(e.target === panelOverlay) closePanel();
+});
 
 /* ===== Init ===== */
-renderAdmin();
 renderAll();
 </script>
 </body>
