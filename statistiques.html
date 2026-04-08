@@ -15,8 +15,10 @@
   --orange2:rgba(185,88,0,.58);
   --radius:18px;
 }
+
 *{box-sizing:border-box}
 html,body{height:100%}
+
 body{
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
@@ -24,13 +26,16 @@ body{
   background:#0b0b0b;
   overflow:hidden;
 }
+
 .bg{
-  position:fixed; inset:0;
+  position:fixed;
+  inset:0;
   background:
     linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.65)),
     url("background.png") center/cover no-repeat;
   z-index:-1;
 }
+
 .wrap{
   height:100vh;
   max-width:980px;
@@ -41,20 +46,20 @@ body{
   gap:10px;
 }
 
-/* header */
+/* HEADER */
 .topbar{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:10px;
   padding:10px 12px;
+  min-height:46px;
   border-radius:18px;
   background:linear-gradient(180deg, var(--orange1), var(--orange2));
   border:1px solid rgba(255,255,255,.12);
   box-shadow:var(--shadow);
   backdrop-filter:blur(10px);
   -webkit-backdrop-filter:blur(10px);
-  min-height:46px;
 }
 .title{
   font-weight:950;
@@ -70,7 +75,9 @@ body{
   align-items:center;
   gap:8px;
 }
-.btn, .lockBtn, .smallBtn{
+.btn,
+.lockBtn,
+.smallBtn{
   border:1px solid rgba(255,255,255,.18);
   background:rgba(0,0,0,.18);
   color:#fff;
@@ -80,14 +87,18 @@ body{
   cursor:pointer;
   -webkit-tap-highlight-color:transparent;
 }
-.btn:active, .lockBtn:active, .smallBtn:active{ transform:translateY(1px) }
+.btn:active,
+.lockBtn:active,
+.smallBtn:active{
+  transform:translateY(1px);
+}
 .lockBtn{
   min-width:44px;
   padding:9px 11px;
   display:none;
 }
 
-/* filters */
+/* FILTERS */
 .filters{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -127,7 +138,7 @@ body{
   letter-spacing:.5px;
 }
 
-/* pie */
+/* PIE */
 .pieWrap{
   display:flex;
   justify-content:center;
@@ -143,7 +154,7 @@ body{
   background:rgba(255,255,255,.08);
 }
 
-/* agent */
+/* AGENT VIEW */
 .agentView{
   min-height:0;
   overflow:auto;
@@ -209,9 +220,12 @@ body{
   text-align:center;
   font-weight:900;
 }
+
+/* STATUS */
 .statusPill{
   position:fixed;
-  left:12px; right:12px;
+  left:12px;
+  right:12px;
   bottom:calc(env(safe-area-inset-bottom) + 12px);
   max-width:980px;
   margin:0 auto;
@@ -237,7 +251,7 @@ body{
   margin-top:2px;
 }
 
-/* overlays */
+/* OVERLAYS */
 .overlay{
   position:fixed;
   inset:0;
@@ -251,7 +265,8 @@ body{
 
 .sheet{
   position:absolute;
-  left:12px; right:12px;
+  left:12px;
+  right:12px;
   bottom:calc(env(safe-area-inset-bottom) + 12px);
   max-width:980px;
   margin:0 auto;
@@ -263,8 +278,8 @@ body{
   display:flex;
   flex-direction:column;
 }
-.menuSheet{ height:min(44vh, 420px); }
-.panelSheet{ height:min(76vh, 780px); }
+.menuSheet{ height:min(42vh, 420px); }
+.panelSheet{ height:min(78vh, 800px); }
 
 .sheetHead{
   display:flex;
@@ -288,7 +303,7 @@ body{
   gap:10px;
 }
 
-/* admin menu */
+/* ADMIN MENU */
 .menuGrid{
   display:grid;
   grid-template-columns:1fr;
@@ -306,6 +321,7 @@ body{
   gap:10px;
   cursor:pointer;
 }
+.menuCard:active{transform:translateY(1px)}
 .menuLeft{
   display:flex;
   align-items:center;
@@ -336,7 +352,7 @@ body{
   opacity:.8;
 }
 
-/* panel content */
+/* PANELS */
 .section{
   border-radius:18px;
   background:rgba(255,255,255,.04);
@@ -359,7 +375,7 @@ body{
   grid-template-columns:1fr 1fr;
   gap:8px;
 }
-.field, .select, .textarea{
+.field, .select{
   width:100%;
   border:none;
   outline:none;
@@ -371,17 +387,14 @@ body{
   font:inherit;
   font-weight:800;
 }
-.textarea{
-  min-height:84px;
-  resize:vertical;
-}
 .actionRow{
   display:flex;
   gap:8px;
   flex-wrap:wrap;
 }
-.smallBtn.danger{ border-color:rgba(255,90,90,.28); }
-
+.smallBtn.danger{
+  border-color:rgba(255,90,90,.28);
+}
 .listAdmin{
   display:flex;
   flex-direction:column;
@@ -438,11 +451,42 @@ body{
   border:1px solid rgba(255,255,255,.08);
   font-weight:850;
 }
+.catalogLayout{
+  display:grid;
+  grid-template-columns:1.1fr 1fr;
+  gap:10px;
+}
+.vehicleListSelectable{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.vehicleSelectable{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  cursor:pointer;
+}
+.vehicleSelectable.active{
+  background:rgba(255,255,255,.10);
+  border-color:rgba(255,255,255,.22);
+}
+.vehicleSelectable:active{transform:translateY(1px)}
+.emptyMini{
+  font-size:13px;
+  color:var(--muted);
+  padding:8px 2px;
+}
 
-@media (max-width:520px){
+@media (max-width:640px){
   .filters,
   .grid2,
-  .vehicleChecks{
+  .vehicleChecks,
+  .catalogLayout{
     grid-template-columns:1fr;
   }
   .row{
@@ -490,7 +534,7 @@ body{
   </div>
 </div>
 
-<!-- menu admin -->
+<!-- MENU ADMIN -->
 <div id="menuOverlay" class="overlay">
   <div class="sheet menuSheet">
     <div class="sheetHead">
@@ -499,34 +543,23 @@ body{
     </div>
     <div class="sheetBody">
       <div class="menuGrid">
-        <div class="menuCard" data-open-panel="vehicules">
+        <div class="menuCard" data-open-panel="catalogue">
           <div class="menuLeft">
-            <div class="menuEmoji">🚒</div>
+            <div class="menuEmoji">📁</div>
             <div class="menuText">
-              <div class="menuMain">Catalogue véhicules</div>
-              <div class="menuSub">Nom du véhicule + couleur</div>
+              <div class="menuMain">Catalogue</div>
+              <div class="menuSub">Véhicules + descriptifs liés à chaque véhicule</div>
             </div>
           </div>
           <div class="menuArrow">›</div>
         </div>
 
-        <div class="menuCard" data-open-panel="types">
-          <div class="menuLeft">
-            <div class="menuEmoji">🏷️</div>
-            <div class="menuText">
-              <div class="menuMain">Catalogue types</div>
-              <div class="menuSub">Malaise, AVP, feu…</div>
-            </div>
-          </div>
-          <div class="menuArrow">›</div>
-        </div>
-
-        <div class="menuCard" data-open-panel="interventions">
+        <div class="menuCard" data-open-panel="remplissage">
           <div class="menuLeft">
             <div class="menuEmoji">📝</div>
             <div class="menuText">
-              <div class="menuMain">Remplissage interventions</div>
-              <div class="menuSub">Date, type, véhicules, lieu, hors secteur</div>
+              <div class="menuMain">Remplissage</div>
+              <div class="menuSub">Choix véhicule, descriptif, date, lieu, hors secteur</div>
             </div>
           </div>
           <div class="menuArrow">›</div>
@@ -536,7 +569,7 @@ body{
   </div>
 </div>
 
-<!-- panneau detail -->
+<!-- PANNEAU DETAIL -->
 <div id="panelOverlay" class="overlay">
   <div class="sheet panelSheet">
     <div class="sheetHead">
@@ -552,28 +585,28 @@ body{
 const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 const LS_EMAIL = "cs_portail_email_v1";
 
-/* ========= ETAT TEMPORAIRE INTERFACE ========= */
-let vehiculesConfig = {
-  "VSAV":"#ff3b3b",
-  "FPT":"#3b8bff"
+/* ========= DONNEES TEMPORAIRES UI ========= */
+let vehicleCatalog = {
+  "VSAV": {
+    color: "#ff3b3b",
+    descriptors: ["Malaise", "AVP", "Chute"]
+  },
+  "FPT": {
+    color: "#3b8bff",
+    descriptors: ["Feu habitation", "Feu VL"]
+  }
 };
 
-let statsTypes = [
-  "Malaise",
-  "Chute",
-  "AVP",
-  "Feu"
-];
-
 let interventions = [
-  { id:1, date:"2026-04-01", type:"Malaise", vehicules:["VSAV"], horsSecteur:false, lieu:"Consenvoye" },
-  { id:2, date:"2026-04-03", type:"Chute", vehicules:["VSAV"], horsSecteur:true, lieu:"Extérieur" },
-  { id:3, date:"2026-04-05", type:"Feu", vehicules:["FPT"], horsSecteur:false, lieu:"Centre" },
-  { id:4, date:"2026-04-07", type:"AVP", vehicules:["VSAV","FPT"], horsSecteur:true, lieu:"RD" },
-  { id:5, date:"2026-04-09", type:"Malaise", vehicules:["VSAV"], horsSecteur:false, lieu:"Consenvoye" }
+  { id:1, date:"2026-04-01", vehicle:"VSAV", descriptor:"Malaise", horsSecteur:false, lieu:"Consenvoye" },
+  { id:2, date:"2026-04-03", vehicle:"VSAV", descriptor:"Chute", horsSecteur:true, lieu:"Extérieur" },
+  { id:3, date:"2026-04-05", vehicle:"FPT", descriptor:"Feu habitation", horsSecteur:false, lieu:"Centre" },
+  { id:4, date:"2026-04-07", vehicle:"VSAV", descriptor:"AVP", horsSecteur:true, lieu:"RD" },
+  { id:5, date:"2026-04-09", vehicle:"VSAV", descriptor:"Malaise", horsSecteur:false, lieu:"Consenvoye" }
 ];
 
 let isAdmin = false;
+let selectedCatalogVehicle = Object.keys(vehicleCatalog)[0] || "";
 
 /* ========= DOM ========= */
 const monthSelect = document.getElementById("monthSelect");
@@ -640,6 +673,7 @@ async function loadMyRole(){
   }
   const cb = "cb_auth_" + Math.random().toString(36).slice(2);
   const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
+
   try{
     const res = await jsonp(url, cb, 20000);
     isAdmin = !!(res && res.ok === true && String(res.role || "").toLowerCase() === "admin");
@@ -648,6 +682,14 @@ async function loadMyRole(){
     isAdmin = false;
     lockBtn.style.display = "none";
   }
+}
+function escapeHtml(s){
+  return String(s == null ? "" : s)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
 /* ========= MOIS / ANNEE ========= */
@@ -681,23 +723,24 @@ function buildStats(filtered){
   const pieTotals = {};
 
   filtered.forEach(inter => {
-    inter.vehicules.forEach(v => {
-      if(!stats[v]){
-        stats[v] = {
-          color: vehiculesConfig[v] || "#999999",
-          types: {}
-        };
-      }
-      if(!stats[v].types[inter.type]){
-        stats[v].types[inter.type] = { secteur:0, hors:0 };
-      }
-      if(inter.horsSecteur){
-        stats[v].types[inter.type].hors += 1;
-      }else{
-        stats[v].types[inter.type].secteur += 1;
-      }
-      pieTotals[v] = (pieTotals[v] || 0) + 1;
-    });
+    const v = inter.vehicle;
+    if(!stats[v]){
+      stats[v] = {
+        color: (vehicleCatalog[v] && vehicleCatalog[v].color) || "#999999",
+        descriptors: {}
+      };
+    }
+    if(!stats[v].descriptors[inter.descriptor]){
+      stats[v].descriptors[inter.descriptor] = { secteur:0, hors:0 };
+    }
+
+    if(inter.horsSecteur){
+      stats[v].descriptors[inter.descriptor].hors += 1;
+    }else{
+      stats[v].descriptors[inter.descriptor].secteur += 1;
+    }
+
+    pieTotals[v] = (pieTotals[v] || 0) + 1;
   });
 
   return { stats, pieTotals };
@@ -709,15 +752,18 @@ function renderPie(pieTotals){
     pie.style.background = "rgba(255,255,255,.08)";
     return;
   }
-  const total = keys.reduce((s,k)=>s + pieTotals[k], 0);
+
+  const total = keys.reduce((s,k) => s + pieTotals[k], 0);
   let current = 0;
   const parts = [];
+
   keys.forEach(k => {
     const pct = (pieTotals[k] / total) * 100;
-    const color = vehiculesConfig[k] || "#999999";
+    const color = (vehicleCatalog[k] && vehicleCatalog[k].color) || "#999999";
     parts.push(`${color} ${current}% ${current + pct}%`);
     current += pct;
   });
+
   pie.style.background = `conic-gradient(${parts.join(",")})`;
 }
 
@@ -734,22 +780,22 @@ function renderAgent(stats){
     const block = document.createElement("div");
     block.className = "block";
 
-    let html = `<div class="blockTitle" style="color:${stats[v].color}">${v}</div>`;
+    let html = `<div class="blockTitle" style="color:${escapeHtml(stats[v].color)}">${escapeHtml(v)}</div>`;
     html += `
       <div class="table">
         <div class="row header">
-          <div class="cellHead" style="text-align:left">Type</div>
+          <div class="cellHead" style="text-align:left">Descriptif</div>
           <div class="cellHead">Secteur</div>
           <div class="cellHead">Hors secteur</div>
         </div>
     `;
 
-    Object.keys(stats[v].types).forEach(type => {
-      const s = stats[v].types[type].secteur;
-      const h = stats[v].types[type].hors;
+    Object.keys(stats[v].descriptors).forEach(desc => {
+      const s = stats[v].descriptors[desc].secteur;
+      const h = stats[v].descriptors[desc].hors;
       html += `
         <div class="row">
-          <div class="cellType">${type}</div>
+          <div class="cellType">${escapeHtml(desc)}</div>
           <div class="cellVal">${s}</div>
           <div class="cellVal">${h}</div>
         </div>
@@ -780,15 +826,13 @@ function closeMenu(){
 function openPanel(name){
   closeMenu();
   panelOverlay.classList.add("show");
-  if(name === "vehicules"){
-    panelTitle.textContent = "Catalogue véhicules";
-    renderVehiculesPanel();
-  }else if(name === "types"){
-    panelTitle.textContent = "Catalogue types";
-    renderTypesPanel();
-  }else if(name === "interventions"){
-    panelTitle.textContent = "Remplissage interventions";
-    renderInterventionsPanel();
+
+  if(name === "catalogue"){
+    panelTitle.textContent = "Catalogue";
+    renderCataloguePanel();
+  }else if(name === "remplissage"){
+    panelTitle.textContent = "Remplissage";
+    renderRemplissagePanel();
   }
 }
 function closePanel(){
@@ -796,207 +840,264 @@ function closePanel(){
   panelBody.innerHTML = "";
 }
 
-/* ========= PANELS ========= */
-function renderVehiculesPanel(){
+/* ========= PANEL CATALOGUE ========= */
+function renderCataloguePanel(){
+  if(!selectedCatalogVehicle || !vehicleCatalog[selectedCatalogVehicle]){
+    selectedCatalogVehicle = Object.keys(vehicleCatalog)[0] || "";
+  }
+
   panelBody.innerHTML = `
     <div class="section">
       <div class="sectionTitle">Ajouter un véhicule</div>
       <div class="hint">Nom du véhicule + couleur.</div>
       <div class="grid2">
-        <input id="pv_name" class="field" type="text" placeholder="Nom véhicule (ex : VSAV)">
-        <input id="pv_color" class="field" type="text" placeholder="Couleur HEX (ex : #ff3b3b)">
+        <input id="pc_vehicle_name" class="field" type="text" placeholder="Nom véhicule (ex : VSAV)">
+        <input id="pc_vehicle_color" class="field" type="text" placeholder="Couleur HEX (ex : #ff3b3b)">
       </div>
       <div class="actionRow" style="margin-top:10px;">
-        <button id="pv_add" class="smallBtn" type="button">Ajouter</button>
+        <button id="pc_add_vehicle" class="smallBtn" type="button">Ajouter véhicule</button>
       </div>
     </div>
 
-    <div class="section">
-      <div class="sectionTitle">Véhicules enregistrés</div>
-      <div id="pv_list" class="listAdmin"></div>
+    <div class="catalogLayout">
+      <div class="section">
+        <div class="sectionTitle">Véhicules</div>
+        <div id="pc_vehicle_list" class="vehicleListSelectable"></div>
+      </div>
+
+      <div class="section">
+        <div class="sectionTitle">Descriptifs liés</div>
+        <div class="hint">Tu sélectionnes un véhicule, puis tu ajoutes ses descriptifs.</div>
+        <div id="pc_desc_zone"></div>
+      </div>
     </div>
   `;
 
-  document.getElementById("pv_add").onclick = () => {
-    const name = String(document.getElementById("pv_name").value || "").trim().toUpperCase();
-    const color = String(document.getElementById("pv_color").value || "").trim();
+  document.getElementById("pc_add_vehicle").onclick = () => {
+    const name = String(document.getElementById("pc_vehicle_name").value || "").trim().toUpperCase();
+    const color = String(document.getElementById("pc_vehicle_color").value || "").trim();
     if(!name || !color) return;
-    vehiculesConfig[name] = color;
-    renderVehiculesPanel();
+    if(!vehicleCatalog[name]){
+      vehicleCatalog[name] = { color, descriptors: [] };
+    }else{
+      vehicleCatalog[name].color = color;
+    }
+    selectedCatalogVehicle = name;
+    renderCataloguePanel();
     renderAll();
   };
 
-  const list = document.getElementById("pv_list");
-  Object.keys(vehiculesConfig).forEach(v => {
-    const div = document.createElement("div");
-    div.className = "item";
-    div.innerHTML = `
-      <div class="itemLeft">
-        <span class="dot" style="background:${vehiculesConfig[v]}"></span>
-        <div>
-          <div class="itemMain">${v}</div>
-          <div class="itemSub">${vehiculesConfig[v]}</div>
+  const list = document.getElementById("pc_vehicle_list");
+  const keys = Object.keys(vehicleCatalog);
+
+  if(!keys.length){
+    list.innerHTML = `<div class="emptyMini">Aucun véhicule.</div>`;
+  }else{
+    keys.forEach(v => {
+      const el = document.createElement("div");
+      el.className = "vehicleSelectable" + (v === selectedCatalogVehicle ? " active" : "");
+      el.innerHTML = `
+        <span class="dot" style="background:${escapeHtml(vehicleCatalog[v].color)}"></span>
+        <div style="min-width:0;">
+          <div class="itemMain">${escapeHtml(v)}</div>
+          <div class="itemSub">${escapeHtml(vehicleCatalog[v].color)}</div>
         </div>
-      </div>
-      <button class="smallBtn danger" type="button">Supprimer</button>
-    `;
-    div.querySelector("button").onclick = () => {
-      delete vehiculesConfig[v];
-      interventions = interventions
-        .map(it => ({ ...it, vehicules: it.vehicules.filter(x => x !== v) }))
-        .filter(it => it.vehicules.length > 0);
-      renderVehiculesPanel();
-      renderAll();
-    };
-    list.appendChild(div);
-  });
+      `;
+      el.onclick = () => {
+        selectedCatalogVehicle = v;
+        renderCataloguePanel();
+      };
+      list.appendChild(el);
+    });
+  }
+
+  renderDescriptorsZone();
 }
 
-function renderTypesPanel(){
-  panelBody.innerHTML = `
-    <div class="section">
-      <div class="sectionTitle">Ajouter un type</div>
-      <div class="hint">Ex : Malaise, AVP, Feu…</div>
-      <div class="grid2">
-        <input id="pt_name" class="field" type="text" placeholder="Nom du type">
-        <div></div>
-      </div>
-      <div class="actionRow" style="margin-top:10px;">
-        <button id="pt_add" class="smallBtn" type="button">Ajouter</button>
-      </div>
+function renderDescriptorsZone(){
+  const zone = document.getElementById("pc_desc_zone");
+  if(!zone) return;
+
+  if(!selectedCatalogVehicle || !vehicleCatalog[selectedCatalogVehicle]){
+    zone.innerHTML = `<div class="emptyMini">Sélectionne un véhicule.</div>`;
+    return;
+  }
+
+  const vehicle = vehicleCatalog[selectedCatalogVehicle];
+  zone.innerHTML = `
+    <div style="margin-bottom:10px;">
+      <div class="itemMain" style="margin-bottom:4px;">${escapeHtml(selectedCatalogVehicle)}</div>
+      <div class="itemSub">${escapeHtml(vehicle.color)}</div>
     </div>
 
-    <div class="section">
-      <div class="sectionTitle">Types enregistrés</div>
-      <div id="pt_list" class="listAdmin"></div>
+    <div class="grid2">
+      <input id="pc_desc_name" class="field" type="text" placeholder="Descriptif (ex : Malaise)">
+      <div></div>
     </div>
+
+    <div class="actionRow" style="margin-top:10px; margin-bottom:10px;">
+      <button id="pc_add_desc" class="smallBtn" type="button">Ajouter descriptif</button>
+      <button id="pc_delete_vehicle" class="smallBtn danger" type="button">Supprimer véhicule</button>
+    </div>
+
+    <div id="pc_desc_list" class="listAdmin"></div>
   `;
 
-  document.getElementById("pt_add").onclick = () => {
-    const t = String(document.getElementById("pt_name").value || "").trim();
-    if(!t) return;
-    if(!statsTypes.includes(t)) statsTypes.push(t);
-    renderTypesPanel();
+  document.getElementById("pc_add_desc").onclick = () => {
+    const name = String(document.getElementById("pc_desc_name").value || "").trim();
+    if(!name) return;
+    if(!vehicle.descriptors.includes(name)){
+      vehicle.descriptors.push(name);
+    }
+    renderDescriptorsZone();
     renderAll();
   };
 
-  const list = document.getElementById("pt_list");
-  statsTypes.forEach(t => {
+  document.getElementById("pc_delete_vehicle").onclick = () => {
+    delete vehicleCatalog[selectedCatalogVehicle];
+    interventions = interventions.filter(it => it.vehicle !== selectedCatalogVehicle);
+    selectedCatalogVehicle = Object.keys(vehicleCatalog)[0] || "";
+    renderCataloguePanel();
+    renderAll();
+  };
+
+  const list = document.getElementById("pc_desc_list");
+  if(!vehicle.descriptors.length){
+    list.innerHTML = `<div class="emptyMini">Aucun descriptif pour ce véhicule.</div>`;
+    return;
+  }
+
+  vehicle.descriptors.forEach(desc => {
     const div = document.createElement("div");
     div.className = "item";
     div.innerHTML = `
       <div class="itemLeft">
         <div>
-          <div class="itemMain">${t}</div>
+          <div class="itemMain">${escapeHtml(desc)}</div>
+          <div class="itemSub">${escapeHtml(selectedCatalogVehicle)}</div>
         </div>
       </div>
       <button class="smallBtn danger" type="button">Supprimer</button>
     `;
     div.querySelector("button").onclick = () => {
-      statsTypes = statsTypes.filter(x => x !== t);
-      interventions = interventions.filter(it => it.type !== t);
-      renderTypesPanel();
+      vehicle.descriptors = vehicle.descriptors.filter(x => x !== desc);
+      interventions = interventions.filter(it => !(it.vehicle === selectedCatalogVehicle && it.descriptor === desc));
+      renderDescriptorsZone();
       renderAll();
     };
     list.appendChild(div);
   });
 }
 
-function renderInterventionsPanel(){
+/* ========= PANEL REMPLISSAGE ========= */
+function renderRemplissagePanel(){
   panelBody.innerHTML = `
     <div class="section">
       <div class="sectionTitle">Nouvelle intervention</div>
-      <div class="hint">Date, type, véhicules, lieu, hors secteur.</div>
+      <div class="hint">Choisis un véhicule, puis un descriptif lié à ce véhicule.</div>
 
       <div class="grid2">
-        <input id="pi_date" class="field" type="date">
-        <select id="pi_type" class="select"></select>
-      </div>
-
-      <div class="section" style="margin-top:10px; padding:10px 12px;">
-        <div class="sectionTitle" style="margin-bottom:8px; font-size:14px;">Véhicules déclenchés</div>
-        <div id="pi_vehs" class="vehicleChecks"></div>
+        <select id="pr_vehicle" class="select"></select>
+        <select id="pr_descriptor" class="select"></select>
       </div>
 
       <div class="grid2" style="margin-top:10px;">
-        <input id="pi_lieu" class="field" type="text" placeholder="Lieu">
+        <input id="pr_date" class="field" type="date">
+        <input id="pr_lieu" class="field" type="text" placeholder="Lieu">
+      </div>
+
+      <div class="grid2" style="margin-top:10px;">
         <label class="checkCard">
-          <input id="pi_hs" type="checkbox">
+          <input id="pr_hs" type="checkbox">
           <span>Hors secteur</span>
         </label>
+        <div></div>
       </div>
 
       <div class="actionRow" style="margin-top:10px;">
-        <button id="pi_add" class="smallBtn" type="button">Ajouter intervention</button>
+        <button id="pr_add" class="smallBtn" type="button">Ajouter intervention</button>
       </div>
     </div>
 
     <div class="section">
       <div class="sectionTitle">Interventions enregistrées</div>
-      <div id="pi_list" class="listAdmin"></div>
+      <div id="pr_list" class="listAdmin"></div>
     </div>
   `;
 
-  const typeSel = document.getElementById("pi_type");
-  statsTypes.forEach(t => {
+  const vehicleSel = document.getElementById("pr_vehicle");
+  const descSel = document.getElementById("pr_descriptor");
+
+  const vehKeys = Object.keys(vehicleCatalog);
+  vehKeys.forEach(v => {
     const opt = document.createElement("option");
-    opt.value = t;
-    opt.textContent = t;
-    typeSel.appendChild(opt);
+    opt.value = v;
+    opt.textContent = v;
+    vehicleSel.appendChild(opt);
   });
 
-  const vehs = document.getElementById("pi_vehs");
-  Object.keys(vehiculesConfig).forEach(v => {
-    const label = document.createElement("label");
-    label.className = "checkCard";
-    label.innerHTML = `
-      <input type="checkbox" value="${v}">
-      <span class="dot" style="background:${vehiculesConfig[v]}"></span>
-      <span>${v}</span>
-    `;
-    vehs.appendChild(label);
-  });
+  function refreshDescriptors(){
+    const v = vehicleSel.value;
+    descSel.innerHTML = "";
+    const descs = (vehicleCatalog[v] && vehicleCatalog[v].descriptors) ? vehicleCatalog[v].descriptors : [];
+    descs.forEach(d => {
+      const opt = document.createElement("option");
+      opt.value = d;
+      opt.textContent = d;
+      descSel.appendChild(opt);
+    });
+  }
 
-  document.getElementById("pi_add").onclick = () => {
-    const date = String(document.getElementById("pi_date").value || "").trim();
-    const type = String(document.getElementById("pi_type").value || "").trim();
-    const lieu = String(document.getElementById("pi_lieu").value || "").trim();
-    const hs = !!document.getElementById("pi_hs").checked;
-    const checked = [...vehs.querySelectorAll('input[type="checkbox"]:checked')].map(x => x.value);
+  refreshDescriptors();
+  vehicleSel.onchange = refreshDescriptors;
 
-    if(!date || !type || !checked.length) return;
+  document.getElementById("pr_add").onclick = () => {
+    const vehicle = String(vehicleSel.value || "").trim();
+    const descriptor = String(descSel.value || "").trim();
+    const date = String(document.getElementById("pr_date").value || "").trim();
+    const lieu = String(document.getElementById("pr_lieu").value || "").trim();
+    const horsSecteur = !!document.getElementById("pr_hs").checked;
+
+    if(!vehicle || !descriptor || !date) return;
 
     interventions.push({
       id: Date.now(),
       date,
-      type,
-      vehicules: checked,
-      horsSecteur: hs,
+      vehicle,
+      descriptor,
+      horsSecteur,
       lieu
     });
 
-    renderInterventionsPanel();
+    renderRemplissagePanel();
     renderAll();
   };
 
-  const list = document.getElementById("pi_list");
+  const list = document.getElementById("pr_list");
+  if(!interventions.length){
+    list.innerHTML = `<div class="emptyMini">Aucune intervention enregistrée.</div>`;
+    return;
+  }
+
   [...interventions]
     .sort((a,b) => String(b.date).localeCompare(String(a.date)))
     .forEach(it => {
+      const color = vehicleCatalog[it.vehicle] ? vehicleCatalog[it.vehicle].color : "#999999";
       const div = document.createElement("div");
       div.className = "item";
       div.innerHTML = `
         <div class="itemLeft">
+          <span class="dot" style="background:${escapeHtml(color)}"></span>
           <div>
-            <div class="itemMain">${it.date} — ${it.type}</div>
-            <div class="itemSub">${it.vehicules.join(", ")} • ${it.lieu || "—"} • ${it.horsSecteur ? "Hors secteur" : "Secteur"}</div>
+            <div class="itemMain">${escapeHtml(it.date)} — ${escapeHtml(it.vehicle)} — ${escapeHtml(it.descriptor)}</div>
+            <div class="itemSub">${escapeHtml(it.lieu || "—")} • ${it.horsSecteur ? "Hors secteur" : "Secteur 1er appel"}</div>
           </div>
         </div>
         <button class="smallBtn danger" type="button">Supprimer</button>
       `;
       div.querySelector("button").onclick = () => {
         interventions = interventions.filter(x => x.id !== it.id);
-        renderInterventionsPanel();
+        renderRemplissagePanel();
         renderAll();
       };
       list.appendChild(div);
@@ -1031,7 +1132,7 @@ document.addEventListener("keydown", (e) => {
 /* ========= INIT ========= */
 (async function init(){
   renderAll();
-  showStatus("Vérification accès admin…", "Le cadenas s’affiche seulement pour un admin.");
+  showStatus("Vérification accès admin…", "Le cadenas s’affiche seulement si l’utilisateur est admin.");
   await loadMyRole();
   hideStatus();
 })();
