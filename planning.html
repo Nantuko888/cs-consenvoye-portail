@@ -1157,27 +1157,40 @@
   }
 
   async function apiDeleteEvent_(dateStr, ev){
-    const email = getEmailLocal();
-    if(!email){
-      alert("Email introuvable (localStorage). Reconnecte-toi sur le portail.");
-      return;
-    }
-
-    const cb = "cb_del_" + Math.random().toString(36).slice(2);
-    const url =
-      `${API}?view=planning_delete` +
-      `&email=${encodeURIComponent(email)}` +
-      `&date=${encodeURIComponent(dateStr)}` +
-      `&title=${encodeURIComponent(String(ev.title||"").trim())}` +
-      `&start=${encodeURIComponent(String(ev.start||"").trim())}` +
-      `&nocache=1&callback=${cb}`;
-
-    const res = await jsonp(url, cb, 20000);
-    if(!res || res.ok !== true){
-      throw new Error(res?.error || "Erreur suppression");
-    }
-    return res;
+  const email = getEmailLocal();
+  if(!email){
+    alert("Email introuvable (localStorage). Reconnecte-toi sur le portail.");
+    return;
   }
+
+  const eventId = String(ev?.event_id || ev?.id || "").trim();
+
+  if(!eventId){
+    alert("Suppression impossible : cet événement n’a pas d’identifiant event_id. Il faut le recréer ou lui ajouter un event_id dans Sheets.");
+    return;
+  }
+
+  const cb = "cb_del_" + Math.random().toString(36).slice(2);
+
+  const url =
+    `${API}?view=planning_delete` +
+    `&email=${encodeURIComponent(email)}` +
+    `&event_id=${encodeURIComponent(eventId)}` +
+    `&nocache=1&callback=${cb}`;
+
+  const res = await jsonp(url, cb, 20000);
+
+  if(!res || res.ok !== true){
+    throw new Error(res?.error || "Erreur suppression");
+  }
+
+  if(Number(res.deleted || 0) < 1){
+    throw new Error("Aucune ligne supprimée. event_id non trouvé dans Sheets.");
+  }
+
+  return res;
+}
+
 
   function buildCategoryOptions(selectedValue){
     $fCategory.innerHTML = "";
