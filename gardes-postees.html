@@ -83,7 +83,7 @@ body{
 
 .mainTabs{
   display:grid;
-  grid-template-columns:1fr 1fr 1fr;
+  grid-template-columns:1fr 1fr;
   gap:10px;
 }
 
@@ -98,7 +98,6 @@ body{
   justify-content:center;
   font-weight:950;
   cursor:pointer;
-  text-align:center;
 }
 
 .mainTab.active{
@@ -298,16 +297,6 @@ body{
   margin-top:8px;
 }
 
-.configVehicleImg{
-  width:96px;
-  height:64px;
-  object-fit:contain;
-  border-radius:14px;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.10);
-  padding:4px;
-}
-
 .previewWrap{
   background:#fff;
   color:#000;
@@ -329,8 +318,14 @@ body{
 .printTitle{
   text-align:center;
   font-weight:900;
-  font-size:23px;
+  font-size:24px;
   margin:4px 0;
+}
+
+.printSub{
+  text-align:center;
+  font-size:16px;
+  margin-bottom:10px;
 }
 
 .printInfo{
@@ -351,7 +346,7 @@ body{
 .printTable{
   width:100%;
   border-collapse:collapse;
-  font-size:10.5px;
+  font-size:11px;
 }
 
 .printTable th,.printTable td{
@@ -368,12 +363,12 @@ body{
 
 .printVeh{
   font-weight:900;
-  font-size:15px;
+  font-size:16px;
 }
 
 .printVehImg{
-  width:78px;
-  height:48px;
+  width:82px;
+  height:54px;
   object-fit:contain;
   display:block;
   margin:0 auto 4px;
@@ -381,7 +376,7 @@ body{
 
 .printBox{
   border:2px solid #000;
-  min-height:62px;
+  min-height:70px;
   padding:8px;
   margin-top:10px;
   white-space:pre-wrap;
@@ -394,8 +389,26 @@ body{
   background:linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.55));
 }
 
+.vehicleImageConfig{
+  display:grid;
+  grid-template-columns:90px 1fr;
+  gap:8px;
+  margin-top:8px;
+  align-items:center;
+}
+
+.configVehImg{
+  width:90px;
+  height:60px;
+  object-fit:contain;
+  border-radius:12px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.10);
+  padding:4px;
+}
+
 @media(max-width:700px){
-  .mainTabs,.grid2,.shiftTabs,.roleGrid,.addAgentGrid,.addVehicleGrid{
+  .grid2,.shiftTabs,.roleGrid,.addAgentGrid,.addVehicleGrid,.vehicleImageConfig{
     grid-template-columns:1fr;
   }
 }
@@ -465,7 +478,6 @@ body{
   <div class="mainTabs">
     <div class="mainTab active" data-page="generate">Générer</div>
     <div class="mainTab" data-page="config">Configuration</div>
-    <div class="mainTab" data-page="print">Impression A4</div>
   </div>
 
   <div class="page show" id="page-generate">
@@ -516,8 +528,7 @@ body{
 
     <section class="card">
       <div class="cardTitle">Véhicules</div>
-      <div class="sub">Ajoute un véhicule, sa couleur et son image. L’image peut être un fichier ou un chemin type vsav.png.</div>
-
+      <div class="sub">Ajoute un véhicule, choisis sa couleur, son image, puis ajoute ses postes un par un</div>
       <div class="addVehicleGrid">
         <input class="field" id="vehicleName" placeholder="Nom véhicule">
         <input class="colorField" id="vehicleColor" type="color" value="#d93030">
@@ -547,9 +558,9 @@ body{
 </div>
 
 <script>
-const LS_AGENTS="cs_gp_agents_v5";
-const LS_VEHICLES="cs_gp_vehicles_v5";
-const LS_STATE="cs_gp_state_v5";
+const LS_AGENTS="cs_gp_agents_v4";
+const LS_VEHICLES="cs_gp_vehicles_v4";
+const LS_STATE="cs_gp_state_v4";
 
 function loadJson(k,f){
   try{
@@ -602,14 +613,10 @@ let state=loadJson(LS_STATE,{
 });
 
 function ensure(){
-  if(!state.affect)state.affect={journee:{},matin:{},aprem:{}};
-
   ["journee","matin","aprem"].forEach(sh=>{
     if(!state.affect[sh])state.affect[sh]={};
-
     vehicles.forEach(v=>{
       if(!state.affect[sh][v.name])state.affect[sh][v.name]={};
-
       v.roles.forEach(r=>{
         if(state.affect[sh][v.name][r]===undefined)state.affect[sh][v.name][r]="";
       });
@@ -629,25 +636,19 @@ function options(selected){
 function setPage(p){
   state.page=p;
   save();
-
   document.querySelectorAll(".mainTab").forEach(t=>t.classList.toggle("active",t.dataset.page===p));
   document.querySelectorAll(".page").forEach(x=>x.classList.remove("show"));
-
-  const page=document.getElementById("page-"+p);
-  if(page)page.classList.add("show");
-
+  document.getElementById("page-"+p).classList.add("show");
   if(p==="print") renderPrint();
 }
 
 function renderTop(){
   document.getElementById("dateGarde").value=state.date||"";
-
   const chef=document.getElementById("chefGarde");
   chef.innerHTML=options(state.chef);
   chef.onchange=()=>{
     state.chef=chef.value;
     save();
-    renderPrint();
   };
 }
 
@@ -657,9 +658,9 @@ function shiftLabel(s){
   return"13h–19h";
 }
 
-function imgHtml(src,cls){
-  if(!src)return "";
-  return `<img class="${cls}" src="${esc(src)}" onerror="this.style.display='none'">`;
+function vehicleImageHtml(v,cls){
+  if(!v.image)return "";
+  return `<img class="${cls}" src="${esc(v.image)}" onerror="this.style.display='none'">`;
 }
 
 function renderVehicles(){
@@ -686,7 +687,7 @@ function renderVehicles(){
     card.innerHTML=`
       <div class="vehicleHead" data-open="${esc(v.name)}">
         <div class="vehicleLeft">
-          ${imgHtml(v.image,"vehicleImg")}
+          ${vehicleImageHtml(v,"vehicleImg")}
           <div>
             <div class="vehicleName">${esc(v.name)}</div>
             <div class="vehicleMeta">${v.roles.length} postes — ${shiftLabel(state.shift)}</div>
@@ -708,7 +709,6 @@ function renderVehicles(){
   deck.querySelectorAll("select[data-v]").forEach(sel=>sel.onchange=()=>{
     state.affect[state.shift][sel.dataset.v][sel.dataset.r]=sel.value;
     save();
-    renderPrint();
   });
 }
 
@@ -725,25 +725,11 @@ function renderAgents(){
         <div class="itemSub">${esc(a.grade)} — ${esc(a.nom)} ${esc(a.prenom)}</div>
       </div>
       <button class="miniBtn red">−</button>`;
-
     d.querySelector("button").onclick=()=>{
-      const oldName=agentName(agents[i]);
       agents.splice(i,1);
-
-      ["journee","matin","aprem"].forEach(sh=>{
-        Object.keys(state.affect[sh]||{}).forEach(v=>{
-          Object.keys(state.affect[sh][v]||{}).forEach(r=>{
-            if(state.affect[sh][v][r]===oldName)state.affect[sh][v][r]="";
-          });
-        });
-      });
-
-      if(state.chef===oldName)state.chef="";
-
       save();
       renderAll();
     };
-
     box.appendChild(d);
   });
 }
@@ -758,17 +744,15 @@ function renderVehicleConfig(){
     d.style.marginBottom="10px";
 
     d.innerHTML=`
-      <div style="display:grid;grid-template-columns:96px 1fr 44px;gap:10px;align-items:center">
-        <div>
-          ${v.image ? `<img class="configVehicleImg" src="${esc(v.image)}" onerror="this.style.display='none'">` : `<div class="configVehicleImg"></div>`}
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+        <div style="display:flex;gap:10px;align-items:center">
+          ${v.image ? `<img class="configVehImg" src="${esc(v.image)}" onerror="this.style.display='none'">` : `<div class="configVehImg"></div>`}
+          <div>
+            <div class="itemMain" style="color:${esc(v.color)}">${esc(v.name)}</div>
+            <div class="itemSub">${esc(v.roles.join(", "))}</div>
+            <div class="itemSub">Image : ${esc(v.image || "aucune")}</div>
+          </div>
         </div>
-
-        <div>
-          <div class="itemMain" style="color:${esc(v.color)}">${esc(v.name)}</div>
-          <div class="itemSub">${esc(v.roles.join(", ") || "Aucun poste")}</div>
-          <div class="itemSub">Image : ${esc(v.image || "aucune")}</div>
-        </div>
-
         <button class="miniBtn red" data-del="${i}">−</button>
       </div>
 
@@ -777,28 +761,21 @@ function renderVehicleConfig(){
         <button class="miniBtn" data-addpost="${i}">＋</button>
       </div>
 
-      <div style="margin-top:8px">
-        <input class="field" placeholder="Modifier chemin image : vsav.png" value="${esc(v.image||"")}" data-imgpath="${i}">
+      <div class="vehicleImageConfig">
+        <div class="sub">Image</div>
+        <input class="field" placeholder="vsav.png ou images/vsav.png" value="${esc(v.image || "")}" data-imgpath="${i}">
       </div>
 
       <div style="margin-top:8px">
         <input class="fileField" type="file" accept="image/*" data-imgfile="${i}">
-      </div>
-
-      <div style="margin-top:8px">
-        <input class="colorField" type="color" value="${esc(v.color)}" data-color="${i}">
       </div>`;
 
     box.appendChild(d);
   });
 
   box.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
-    const v=vehicles[Number(b.dataset.del)];
-    if(!confirm("Supprimer "+v.name+" ?"))return;
-
     vehicles.splice(Number(b.dataset.del),1);
     state.openVehicle="";
-
     save();
     renderAll();
   });
@@ -808,7 +785,6 @@ function renderVehicleConfig(){
     const input=box.querySelector(`[data-post="${i}"]`);
     const val=input.value.trim();
     if(!val)return;
-
     vehicles[i].roles.push(val);
     save();
     renderAll();
@@ -817,13 +793,6 @@ function renderVehicleConfig(){
   box.querySelectorAll("[data-imgpath]").forEach(input=>input.onchange=()=>{
     const i=Number(input.dataset.imgpath);
     vehicles[i].image=input.value.trim();
-    save();
-    renderAll();
-  });
-
-  box.querySelectorAll("[data-color]").forEach(input=>input.onchange=()=>{
-    const i=Number(input.dataset.color);
-    vehicles[i].color=input.value.trim()||"#d93030";
     save();
     renderAll();
   });
@@ -870,18 +839,6 @@ function renderPrint(){
       <tbody>`;
 
   vehicles.forEach(v=>{
-    if(!v.roles.length){
-      h+=`
-        <tr>
-          <td>
-            ${v.image ? `<img class="printVehImg" src="${esc(v.image)}" onerror="this.style.display='none'">` : ""}
-            <div class="printVeh" style="color:${esc(v.color)}">${esc(v.name)}</div>
-          </td>
-          <td colspan="4">Aucun poste configuré</td>
-        </tr>`;
-      return;
-    }
-
     v.roles.forEach((r,idx)=>{
       h+=`
         <tr>
@@ -919,7 +876,6 @@ function renderAll(){
   renderVehicles();
   renderAgents();
   renderVehicleConfig();
-  renderPrint();
 
   save();
 }
@@ -936,13 +892,11 @@ document.querySelectorAll(".shiftTab").forEach(b=>b.onclick=()=>{
 document.getElementById("dateGarde").onchange=e=>{
   state.date=e.target.value;
   save();
-  renderPrint();
 };
 
 document.getElementById("remarks").oninput=e=>{
   state.remarks=e.target.value;
   save();
-  renderPrint();
 };
 
 document.getElementById("goPrint").onclick=()=>setPage("print");
@@ -967,16 +921,16 @@ document.getElementById("addAgentBtn").onclick=()=>{
 document.getElementById("addVehicleBtn").onclick=()=>{
   const name=document.getElementById("vehicleName").value.trim().toUpperCase();
   const color=document.getElementById("vehicleColor").value.trim()||"#d93030";
-  const path=document.getElementById("vehicleImagePath").value.trim();
-  const file=document.getElementById("vehicleImageFile").files[0];
+  const imagePath=document.getElementById("vehicleImagePath").value.trim();
+  const imageFile=document.getElementById("vehicleImageFile").files[0];
 
   if(!name)return;
 
-  function addVehicleWithImage(image){
+  function createVehicle(imageValue){
     vehicles.push({
       name,
       color,
-      image:image || path || name.toLowerCase()+".png",
+      image:imageValue || imagePath || name.toLowerCase()+".png",
       roles:[]
     });
 
@@ -989,12 +943,12 @@ document.getElementById("addVehicleBtn").onclick=()=>{
     renderAll();
   }
 
-  if(file){
+  if(imageFile){
     const reader=new FileReader();
-    reader.onload=()=>addVehicleWithImage(reader.result);
-    reader.readAsDataURL(file);
+    reader.onload=()=>createVehicle(reader.result);
+    reader.readAsDataURL(imageFile);
   }else{
-    addVehicleWithImage("");
+    createVehicle("");
   }
 };
 
@@ -1011,10 +965,6 @@ document.getElementById("btnBack").onclick=()=>{
 
   location.href="index.html?portal=1";
 };
-
-if(!["generate","config","print"].includes(state.page)){
-  state.page="generate";
-}
 
 setPage(state.page||"generate");
 renderAll();
