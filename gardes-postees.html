@@ -1,1076 +1,890 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Gardes postées — CS Consenvoye</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Gardes postées — CS Consenvoye</title>
 
-  <style>
-    :root{
-      --bg:#070707;
-      --glass:rgba(20,20,20,.72);
-      --glass2:rgba(255,255,255,.07);
-      --border:rgba(255,255,255,.14);
-      --text:#f7f7f7;
-      --muted:#b8b8b8;
-      --orange:#d46a00;
-      --orange2:#ff8a1d;
-      --danger:#b82828;
-      --ok:#198754;
-      --shadow:0 18px 45px rgba(0,0,0,.45);
-      --radius:22px;
-    }
+<style>
+@page{
+  size:A4 portrait;
+  margin:10mm;
+}
 
-    *{box-sizing:border-box}
+:root{
+  --txt:#f4f4f4;
+  --muted:rgba(255,255,255,.72);
+  --shadow:0 14px 34px rgba(0,0,0,.40);
+  --stroke:rgba(255,255,255,.10);
+  --orange:#d46a00;
+  --orange2:#b95800;
+}
 
-    html,body{
-      margin:0;
-      min-height:100%;
-      background:
-        radial-gradient(circle at top, rgba(212,106,0,.25), transparent 42%),
-        linear-gradient(160deg,#050505,#111,#050505);
-      color:var(--text);
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    }
+*{box-sizing:border-box}
+html,body{height:100%}
 
-    body{
-      padding:18px;
-      padding-bottom:40px;
-    }
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--txt);
+  background:#0b0b0b;
+  overflow:hidden;
+}
 
-    .app{
-      max-width:1280px;
-      margin:0 auto;
-    }
+.bg{
+  position:fixed;
+  inset:0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.68)),
+    url("background.png") center/cover no-repeat;
+  z-index:-1;
+}
 
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      margin-bottom:16px;
-    }
+.wrap{
+  height:100dvh;
+  max-width:980px;
+  margin:auto;
+  padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 18px);
+  display:grid;
+  grid-template-rows:auto auto minmax(0,1fr);
+  gap:10px;
+  overflow:hidden;
+}
 
-    .back-btn{
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.08);
-      color:white;
-      padding:10px 14px;
-      border-radius:999px;
-      font-weight:800;
-      text-decoration:none;
-      box-shadow:var(--shadow);
-      white-space:nowrap;
-    }
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:18px;
+  background:linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+}
 
-    .title-card{
-      flex:1;
-      padding:18px;
-      border-radius:var(--radius);
-      border:1px solid var(--border);
-      background:linear-gradient(145deg,rgba(255,255,255,.1),rgba(255,255,255,.035));
-      backdrop-filter:blur(18px);
-      box-shadow:var(--shadow);
-    }
+.title{
+  font-weight:950;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+  font-size:18px;
+}
 
-    h1{
-      margin:0;
-      font-size:clamp(1.35rem,4vw,2.2rem);
-      text-transform:uppercase;
-      letter-spacing:.04em;
-    }
+.btn,.miniBtn{
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(0,0,0,.18);
+  color:#fff;
+  padding:9px 12px;
+  border-radius:14px;
+  font-weight:900;
+  cursor:pointer;
+}
 
-    .subtitle{
-      margin-top:5px;
-      color:var(--muted);
-      font-weight:600;
-    }
+.mainTabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
 
-    .tabs{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:10px;
-      margin:16px 0;
-    }
+.mainTab{
+  min-height:48px;
+  border-radius:18px;
+  background:rgba(0,0,0,.34);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:var(--shadow);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:950;
+  cursor:pointer;
+}
 
-    .tab-btn{
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.08);
-      color:white;
-      padding:14px 10px;
-      border-radius:18px;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.04em;
-      cursor:pointer;
-    }
+.mainTab.active{
+  background:linear-gradient(180deg, rgba(212,106,0,.58), rgba(185,88,0,.38));
+}
 
-    .tab-btn.active{
-      background:linear-gradient(135deg,var(--orange),#9f4500);
-      border-color:rgba(255,138,29,.65);
-      box-shadow:0 12px 30px rgba(212,106,0,.28);
-    }
+.page{
+  display:none;
+  min-height:0;
+  height:100%;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  flex-direction:column;
+  gap:10px;
+  padding-bottom:120px;
+}
 
-    .panel{
-      display:none;
-      border:1px solid var(--border);
-      background:var(--glass);
-      border-radius:var(--radius);
-      backdrop-filter:blur(18px);
-      box-shadow:var(--shadow);
-      padding:16px;
-    }
+.page.show{display:flex}
 
-    .panel.active{display:block}
+.card{
+  border-radius:22px;
+  background:linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.26));
+  border:1px solid var(--stroke);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+  padding:12px;
+}
 
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(12,1fr);
-      gap:12px;
-    }
+.cardTitle{
+  font-weight:950;
+  text-transform:uppercase;
+  margin-bottom:10px;
+  font-size:17px;
+}
 
-    .card{
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.065);
-      border-radius:20px;
-      padding:14px;
-      overflow:hidden;
-    }
+.sub{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:800;
+  margin-bottom:8px;
+}
 
-    .col-12{grid-column:span 12}
-    .col-8{grid-column:span 8}
-    .col-6{grid-column:span 6}
-    .col-4{grid-column:span 4}
-    .col-3{grid-column:span 3}
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
 
-    label{
-      display:block;
-      margin-bottom:6px;
-      color:#eee;
-      font-size:.82rem;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.04em;
-    }
+.field,.select,.textarea,.colorField{
+  width:100%;
+  border:none;
+  outline:none;
+  background:rgba(0,0,0,.24);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:14px;
+  padding:11px 12px;
+  font:inherit;
+  font-weight:850;
+}
 
-    input,select,textarea{
-      width:100%;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(0,0,0,.36);
-      color:white;
-      border-radius:14px;
-      padding:12px;
-      outline:none;
-      font-weight:700;
-    }
+.colorField{
+  height:46px;
+  padding:5px;
+}
 
-    textarea{min-height:90px;resize:vertical}
+.textarea{
+  min-height:90px;
+  resize:vertical;
+}
 
-    input[type="color"]{
-      padding:4px;
-      height:45px;
-    }
+.shiftTabs{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+}
 
-    .btn-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:12px;
-    }
+.shiftTab{
+  min-height:54px;
+  border-radius:18px;
+  background:rgba(0,0,0,.34);
+  border:1px solid rgba(255,255,255,.10);
+  color:#fff;
+  font-weight:950;
+  cursor:pointer;
+}
 
-    button{
-      border:0;
-      border-radius:15px;
-      padding:12px 14px;
-      color:white;
-      font-weight:900;
-      cursor:pointer;
-      background:linear-gradient(135deg,var(--orange),#9e4600);
-      box-shadow:0 12px 28px rgba(0,0,0,.25);
-    }
+.shiftTab.active{
+  background:linear-gradient(180deg, rgba(212,106,0,.62), rgba(185,88,0,.38));
+}
 
-    button.secondary{
-      background:rgba(255,255,255,.11);
-      border:1px solid var(--border);
-    }
+.vehicleCard{
+  border-radius:22px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--shadow);
+  margin-bottom:10px;
+}
 
-    button.danger{background:linear-gradient(135deg,#b82828,#721818)}
-    button.ok{background:linear-gradient(135deg,#198754,#0b5c35)}
+.vehicleHead{
+  padding:12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  cursor:pointer;
+}
 
-    .table-wrap{
-      overflow:auto;
-      border-radius:18px;
-      border:1px solid var(--border);
-      max-height:70vh;
-    }
+.vehicleLeft{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
 
-    table{
-      width:100%;
-      border-collapse:collapse;
-      min-width:900px;
-    }
+.vehicleImg{
+  width:78px;
+  height:56px;
+  object-fit:contain;
+  border-radius:12px;
+  background:rgba(255,255,255,.08);
+  padding:4px;
+}
 
-    th,td{
-      border-bottom:1px solid rgba(255,255,255,.1);
-      padding:10px;
-      text-align:left;
-      vertical-align:middle;
-    }
+.vehicleName{
+  font-weight:950;
+  font-size:22px;
+}
 
-    th{
-      position:sticky;
-      top:0;
-      z-index:2;
-      background:rgba(15,15,15,.96);
-      color:#fff;
-      text-transform:uppercase;
-      font-size:.78rem;
-      letter-spacing:.04em;
-    }
+.vehicleMeta{
+  font-size:12px;
+  color:rgba(255,255,255,.75);
+  font-weight:800;
+}
 
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:7px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      font-weight:900;
-      font-size:.78rem;
-      white-space:nowrap;
-    }
+.vehicleBody{
+  display:none;
+  padding:10px;
+  background:rgba(0,0,0,.22);
+  border-top:1px solid rgba(255,255,255,.10);
+}
 
-    .vehicle-preview{
-      width:84px;
-      height:54px;
-      object-fit:cover;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.18);
-      background:#111;
-    }
+.vehicleCard.open .vehicleBody{display:block}
 
-    .small{
-      color:var(--muted);
-      font-size:.85rem;
-      line-height:1.35;
-    }
+.roleGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
 
-    .day-title{
-      margin:18px 0 8px;
-      padding:12px 14px;
-      border-radius:18px;
-      background:linear-gradient(135deg,rgba(212,106,0,.35),rgba(255,255,255,.06));
-      border:1px solid rgba(255,138,29,.28);
-      font-weight:1000;
-      text-transform:uppercase;
-      letter-spacing:.04em;
-    }
+.roleSlot{
+  border-radius:16px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.09);
+  padding:10px;
+}
 
-    .shift-card{
-      display:grid;
-      grid-template-columns:160px 1fr;
-      gap:12px;
-      align-items:start;
-      margin-bottom:10px;
-      padding:12px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(0,0,0,.22);
-    }
+.roleName{
+  font-weight:950;
+  margin-bottom:7px;
+}
 
-    .shift-name{
-      font-weight:1000;
-      color:#fff;
-    }
+.itemRow{
+  display:grid;
+  grid-template-columns:1fr 44px;
+  gap:8px;
+  align-items:center;
+  border-radius:16px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  padding:10px;
+  margin-bottom:8px;
+}
 
-    .assign-grid{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:10px;
-    }
+.itemMain{font-weight:950}
+.itemSub{font-size:12px;color:var(--muted);font-weight:800;margin-top:2px}
+.red{background:rgba(255,80,80,.20)}
 
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:20px;
-      transform:translateX(-50%);
-      background:rgba(20,20,20,.92);
-      color:white;
-      border:1px solid rgba(255,255,255,.16);
-      border-radius:999px;
-      padding:12px 18px;
-      box-shadow:var(--shadow);
-      display:none;
-      z-index:1000;
-      font-weight:800;
-    }
+.addAgentGrid{
+  display:grid;
+  grid-template-columns:80px 1fr 1fr 48px;
+  gap:8px;
+}
 
-    .print-actions{
-      position:sticky;
-      top:8px;
-      z-index:5;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:12px;
-    }
+.addVehicleGrid{
+  display:grid;
+  grid-template-columns:1fr 80px 48px;
+  gap:8px;
+}
 
-    .a4{
-      width:210mm;
-      min-height:297mm;
-      margin:0 auto 18px;
-      background:white;
-      color:#111;
-      padding:10mm;
-      border-radius:8px;
-      box-shadow:0 20px 60px rgba(0,0,0,.45);
-      overflow:hidden;
-    }
+.postRow{
+  display:grid;
+  grid-template-columns:1fr 44px;
+  gap:8px;
+  margin-top:8px;
+}
 
-    .a4-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:10px;
-      border-bottom:3px solid #d46a00;
-      padding-bottom:8px;
-      margin-bottom:8px;
-    }
+.previewWrap{
+  background:#fff;
+  color:#000;
+  border-radius:14px;
+  padding:8px;
+  overflow:auto;
+}
 
-    .a4 h2{
-      margin:0;
-      font-size:20pt;
-      text-transform:uppercase;
-    }
+.printSheet{
+  width:190mm;
+  min-height:277mm;
+  background:#fff;
+  color:#000;
+  font-family:Arial,sans-serif;
+  margin:auto;
+  padding:0;
+}
 
-    .a4 .meta{
-      text-align:right;
-      font-weight:800;
-      font-size:10pt;
-    }
+.printTitle{
+  text-align:center;
+  font-weight:900;
+  font-size:24px;
+  margin:4px 0;
+}
 
-    .print-day{
-      page-break-inside:avoid;
-      margin-top:8px;
-      border:1px solid #ddd;
-      border-radius:10px;
-      overflow:hidden;
-    }
+.printSub{
+  text-align:center;
+  font-size:16px;
+  margin-bottom:10px;
+}
 
-    .print-day-title{
-      background:#111;
-      color:#fff;
-      padding:7px 10px;
-      font-weight:1000;
-      text-transform:uppercase;
-      font-size:10pt;
-    }
+.printInfo{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  border:2px solid #000;
+  margin-bottom:10px;
+}
 
-    .print-shift{
-      display:grid;
-      grid-template-columns:28mm 1fr;
-      border-top:1px solid #ddd;
-      min-height:22mm;
-    }
+.printInfo div{
+  padding:8px;
+  font-weight:700;
+  border-right:1px solid #000;
+}
 
-    .print-shift-label{
-      padding:6px;
-      background:#f1f1f1;
-      font-weight:1000;
-      font-size:9pt;
-      border-right:1px solid #ddd;
-    }
+.printInfo div:last-child{border-right:none}
 
-    .print-vehicles{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:5px;
-      padding:6px;
-    }
+.printTable{
+  width:100%;
+  border-collapse:collapse;
+  font-size:11px;
+}
 
-    .print-vehicle{
-      display:grid;
-      grid-template-columns:18mm 1fr;
-      gap:5px;
-      border:1px solid #ddd;
-      border-radius:8px;
-      padding:4px;
-      min-height:18mm;
-    }
+.printTable th,.printTable td{
+  border:1px solid #000;
+  padding:4px;
+  text-align:center;
+  vertical-align:middle;
+}
 
-    .print-vehicle img{
-      width:18mm;
-      height:13mm;
-      object-fit:cover;
-      border-radius:5px;
-      background:#eee;
-    }
+.printTable th{
+  background:#000;
+  color:#fff;
+}
 
-    .pv-title{
-      font-weight:1000;
-      font-size:8pt;
-    }
+.printVeh{
+  font-weight:900;
+  font-size:16px;
+}
 
-    .pv-agent{
-      font-size:8pt;
-      margin-top:2px;
-    }
+.printVehImg{
+  width:82px;
+  height:54px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 4px;
+}
 
-    .pv-role{
-      font-size:7pt;
-      color:#555;
-    }
+.printBox{
+  border:2px solid #000;
+  min-height:70px;
+  padding:8px;
+  margin-top:10px;
+  white-space:pre-wrap;
+  font-size:12px;
+}
 
-    @media(max-width:850px){
-      body{padding:10px}
-      .topbar{align-items:stretch}
-      .back-btn{display:flex;align-items:center}
-      .tabs{grid-template-columns:1fr}
-      .col-8,.col-6,.col-4,.col-3{grid-column:span 12}
-      .shift-card{grid-template-columns:1fr}
-      .assign-grid{grid-template-columns:1fr}
-      .a4{
-        width:100%;
-        min-height:auto;
-        padding:12px;
-      }
-      .print-vehicles{grid-template-columns:1fr}
-    }
+.printBtn{
+  margin-top:10px;
+  width:100%;
+  background:linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.55));
+}
 
-    @media print{
-      body{
-        background:white;
-        padding:0;
-      }
+@media(max-width:700px){
+  .grid2,.shiftTabs,.roleGrid,.addAgentGrid,.addVehicleGrid{
+    grid-template-columns:1fr;
+  }
+}
 
-      .topbar,.tabs,.panel:not(#tab-print),.print-actions,.no-print{
-        display:none !important;
-      }
+@media print{
+  html,body{
+    width:210mm;
+    height:297mm;
+    margin:0;
+    background:#fff;
+    overflow:visible;
+  }
 
-      #tab-print{
-        display:block !important;
-        padding:0;
-        border:0;
-        background:white;
-        box-shadow:none;
-      }
+  .bg,.topbar,.mainTabs,.page:not(#page-print),.printBtn{
+    display:none!important;
+  }
 
-      .app{max-width:none;margin:0}
+  .wrap{
+    display:block;
+    width:210mm;
+    height:auto;
+    padding:0;
+    margin:0;
+    max-width:none;
+    overflow:visible;
+  }
 
-      .a4{
-        width:210mm;
-        min-height:297mm;
-        margin:0;
-        border-radius:0;
-        box-shadow:none;
-        page-break-after:always;
-      }
+  #page-print{
+    display:block!important;
+    overflow:visible;
+    padding:0;
+  }
 
-      @page{
-        size:A4 portrait;
-        margin:0;
-      }
-    }
-  </style>
+  .card{
+    box-shadow:none;
+    border:none;
+    background:#fff;
+    padding:0;
+    border-radius:0;
+  }
+
+  .previewWrap{
+    border-radius:0;
+    padding:0;
+    overflow:visible;
+  }
+
+  .printSheet{
+    width:190mm;
+    min-height:277mm;
+    padding:0;
+    margin:0 auto;
+  }
+}
+</style>
 </head>
 
 <body>
-  <div class="app">
-    <div class="topbar">
-      <a class="back-btn" href="index.html">← Retour</a>
-      <div class="title-card">
-        <h1>Gardes postées</h1>
-        <div class="subtitle">CS Consenvoye — génération, configuration et impression A4</div>
-      </div>
-    </div>
+<div class="bg"></div>
 
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="generate">Générer</button>
-      <button class="tab-btn" data-tab="config">Configuration</button>
-      <button class="tab-btn" data-tab="print">Impression A4</button>
-    </div>
+<div class="wrap">
+  <div class="topbar">
+    <div class="title">Gardes postées</div>
+    <button class="btn" id="btnBack">Retour</button>
+  </div>
 
-    <section id="tab-generate" class="panel active">
-      <div class="grid">
-        <div class="card col-3">
-          <label>Date début</label>
-          <input type="date" id="dateStart">
+  <div class="mainTabs">
+    <div class="mainTab active" data-page="generate">Générer</div>
+    <div class="mainTab" data-page="config">Configuration</div>
+  </div>
+
+  <div class="page show" id="page-generate">
+    <section class="card">
+      <div class="cardTitle">Feuille de garde</div>
+      <div class="grid2">
+        <div>
+          <div class="sub">Date</div>
+          <input type="date" class="field" id="dateGarde">
         </div>
-
-        <div class="card col-3">
-          <label>Date fin</label>
-          <input type="date" id="dateEnd">
-        </div>
-
-        <div class="card col-3">
-          <label>Type de garde</label>
-          <select id="shiftMode">
-            <option value="half">Demi-journées</option>
-            <option value="full">Garde entière 07h00 / 19h00</option>
-            <option value="both">Demi-journées + garde entière</option>
-          </select>
-        </div>
-
-        <div class="card col-3">
-          <label>Titre impression</label>
-          <input id="printTitle" value="Gardes postées — CS Consenvoye">
-        </div>
-
-        <div class="card col-12">
-          <div class="btn-row">
-            <button onclick="generatePlanning()">Générer le tableau</button>
-            <button class="secondary" onclick="saveAll()">Sauvegarder</button>
-            <button class="secondary" onclick="resetAssignments()">Vider les affectations</button>
-            <button class="ok" onclick="openTab('print')">Voir impression A4</button>
-          </div>
-          <p class="small">
-            Chaque case se règle avec menus déroulants : véhicule, rôle et agent. Les véhicules configurés avec image apparaissent aussi dans l’impression A4.
-          </p>
-        </div>
-
-        <div class="card col-12">
-          <div id="planningArea"></div>
+        <div>
+          <div class="sub">Chef de garde</div>
+          <select class="select" id="chefGarde"></select>
         </div>
       </div>
     </section>
 
-    <section id="tab-config" class="panel">
-      <div class="grid">
-        <div class="card col-4">
-          <h2>Agents</h2>
-          <label>Nom agent</label>
-          <input id="agentName" placeholder="Ex : Dupont Pierre">
-          <label>Fonction / remarque</label>
-          <input id="agentNote" placeholder="Ex : Conducteur / CA / équipier">
-          <div class="btn-row">
-            <button onclick="addAgent()">Ajouter agent</button>
-          </div>
-          <div class="table-wrap" style="margin-top:12px;max-height:360px">
-            <table>
-              <thead><tr><th>Agent</th><th>Info</th><th></th></tr></thead>
-              <tbody id="agentsTable"></tbody>
-            </table>
-          </div>
-        </div>
+    <div class="shiftTabs">
+      <button class="shiftTab active" data-shift="journee">Garde entière<br>07h–19h</button>
+      <button class="shiftTab" data-shift="matin">Matin<br>07h–13h</button>
+      <button class="shiftTab" data-shift="aprem">Après-midi<br>13h–19h</button>
+    </div>
 
-        <div class="card col-4">
-          <h2>Véhicules</h2>
-          <label>Nom véhicule</label>
-          <input id="vehicleName" placeholder="Ex : VSAV">
-          <label>Couleur véhicule</label>
-          <input type="color" id="vehicleColor" value="#d46a00">
-          <label>Image véhicule</label>
-          <input type="file" id="vehicleImageFile" accept="image/*">
-          <label>Ou URL image</label>
-          <input id="vehicleImageUrl" placeholder="https://...">
-          <div class="btn-row">
-            <button onclick="addVehicle()">Ajouter véhicule</button>
-          </div>
-          <div class="table-wrap" style="margin-top:12px;max-height:360px">
-            <table>
-              <thead><tr><th>Image</th><th>Véhicule</th><th></th></tr></thead>
-              <tbody id="vehiclesTable"></tbody>
-            </table>
-          </div>
-        </div>
+    <div id="vehicleDeck"></div>
 
-        <div class="card col-4">
-          <h2>Rôles</h2>
-          <label>Nom du rôle</label>
-          <input id="roleName" placeholder="Ex : Chef d’agrès">
-          <div class="btn-row">
-            <button onclick="addRole()">Ajouter rôle</button>
-          </div>
-          <div class="table-wrap" style="margin-top:12px;max-height:360px">
-            <table>
-              <thead><tr><th>Rôle</th><th></th></tr></thead>
-              <tbody id="rolesTable"></tbody>
-            </table>
-          </div>
-
-          <hr style="border-color:rgba(255,255,255,.12);margin:18px 0">
-
-          <h2>Actions</h2>
-          <div class="btn-row">
-            <button class="secondary" onclick="loadDefaults()">Réinstaller configuration par défaut</button>
-            <button class="danger" onclick="clearAll()">Tout effacer</button>
-          </div>
-        </div>
-      </div>
+    <section class="card">
+      <div class="cardTitle">Remarques / missions</div>
+      <textarea class="textarea" id="remarks" placeholder="Consignes, missions, remarques..."></textarea>
     </section>
 
-    <section id="tab-print" class="panel">
-      <div class="print-actions no-print">
-        <button onclick="buildPrint()">Actualiser l’aperçu</button>
-        <button class="ok" onclick="window.print()">Imprimer A4</button>
-        <button class="secondary" onclick="openTab('generate')">Retour génération</button>
-      </div>
-
-      <div id="printArea"></div>
+    <section class="card">
+      <button class="btn printBtn" id="goPrint">Visualiser / imprimer A4</button>
     </section>
   </div>
 
-  <div id="toast" class="toast"></div>
+  <div class="page" id="page-config">
+    <section class="card">
+      <div class="cardTitle">Agents</div>
+      <div class="sub">Grade, nom et prénom</div>
+      <div class="addAgentGrid">
+        <input class="field" id="agentGrade" placeholder="Grade">
+        <input class="field" id="agentNom" placeholder="Nom">
+        <input class="field" id="agentPrenom" placeholder="Prénom">
+        <button class="miniBtn" id="addAgentBtn">＋</button>
+      </div>
+      <div id="agentList" style="margin-top:10px;"></div>
+    </section>
 
-  <script>
-    const STORAGE_KEY = "cs_consenvoye_gardes_postees_v1";
+    <section class="card">
+      <div class="cardTitle">Véhicules</div>
+      <div class="sub">Ajoute un véhicule, choisis sa couleur, puis ajoute ses postes un par un</div>
+      <div class="addVehicleGrid">
+        <input class="field" id="vehicleName" placeholder="Nom véhicule">
+        <input class="colorField" id="vehicleColor" type="color" value="#d93030">
+        <button class="miniBtn" id="addVehicleBtn">＋</button>
+      </div>
+      <div id="vehicleConfig" style="margin-top:10px;"></div>
+    </section>
+  </div>
 
-    let state = {
-      agents: [],
-      vehicles: [],
-      roles: [],
-      assignments: {},
-      config: {
-        dateStart: "",
-        dateEnd: "",
-        shiftMode: "half",
-        printTitle: "Gardes postées — CS Consenvoye"
-      }
-    };
+  <div class="page" id="page-print">
+    <section class="card">
+      <div class="previewWrap">
+        <div class="printSheet" id="printSheet"></div>
+      </div>
+      <button class="btn printBtn" onclick="window.print()">Imprimer</button>
+    </section>
+  </div>
+</div>
 
-    const defaultData = {
-      agents: [
-        { id: uid(), name: "Agent 1", note: "Équipier" },
-        { id: uid(), name: "Agent 2", note: "Conducteur" },
-        { id: uid(), name: "Agent 3", note: "Chef d’agrès" }
-      ],
-      vehicles: [
-        { id: uid(), name: "VSAV", color: "#d46a00", image: "" },
-        { id: uid(), name: "FPT", color: "#b00000", image: "" },
-        { id: uid(), name: "VL", color: "#444444", image: "" }
-      ],
-      roles: [
-        { id: uid(), name: "Chef d’agrès" },
-        { id: uid(), name: "Conducteur" },
-        { id: uid(), name: "Équipier" },
-        { id: uid(), name: "Stagiaire" }
-      ]
-    };
+<script>
+const LS_AGENTS="cs_gp_agents_v4";
+const LS_VEHICLES="cs_gp_vehicles_v4";
+const LS_STATE="cs_gp_state_v4";
 
-    function uid(){
-      return "id_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
-    }
+function loadJson(k,f){
+  try{
+    const r=localStorage.getItem(k);
+    if(r)return JSON.parse(r);
+  }catch(e){}
+  localStorage.setItem(k,JSON.stringify(f));
+  return f;
+}
 
-    function todayIso(){
-      const d = new Date();
-      return d.toISOString().slice(0,10);
-    }
+function save(){
+  localStorage.setItem(LS_AGENTS,JSON.stringify(agents));
+  localStorage.setItem(LS_VEHICLES,JSON.stringify(vehicles));
+  localStorage.setItem(LS_STATE,JSON.stringify(state));
+}
 
-    function addDaysIso(iso, days){
-      const d = new Date(iso + "T00:00:00");
-      d.setDate(d.getDate() + days);
-      return d.toISOString().slice(0,10);
-    }
+function esc(s){
+  return String(s??"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
 
-    function formatDateFr(iso){
-      const d = new Date(iso + "T00:00:00");
-      return d.toLocaleDateString("fr-FR", {
-        weekday:"long",
-        day:"2-digit",
-        month:"long",
-        year:"numeric"
+function agentName(a){
+  return `${a.grade} ${a.nom} ${a.prenom}`.trim().replace(/\s+/g," ");
+}
+
+let agents=loadJson(LS_AGENTS,[
+  {grade:"ADJ",nom:"DUPONT",prenom:"Pierre"},
+  {grade:"CPL",nom:"LEROY",prenom:"Julien"},
+  {grade:"SAP",nom:"MARTIN",prenom:"Lucas"}
+]);
+
+let vehicles=loadJson(LS_VEHICLES,[
+  {name:"VSAV",color:"#d93030",image:"vsav.png",roles:["Conducteur","Chef d’agrès","Équipier","Apprenant"]},
+  {name:"CCR",color:"#d46a00",image:"ccr.png",roles:["Conducteur","Chef d’agrès","Chef BAT1","Équipier BAT1","Chef BAT2","Équipier BAT2","Chef BAL","Équipier BAL"]},
+  {name:"VTUL",color:"#2f79ff",image:"vtul.png",roles:["Conducteur","Chef d’agrès"]}
+]);
+
+let state=loadJson(LS_STATE,{
+  page:"generate",
+  shift:"journee",
+  date:"",
+  chef:"",
+  remarks:"",
+  openVehicle:"",
+  affect:{journee:{},matin:{},aprem:{}}
+});
+
+function ensure(){
+  ["journee","matin","aprem"].forEach(sh=>{
+    if(!state.affect[sh])state.affect[sh]={};
+    vehicles.forEach(v=>{
+      if(!state.affect[sh][v.name])state.affect[sh][v.name]={};
+      v.roles.forEach(r=>{
+        if(state.affect[sh][v.name][r]===undefined)state.affect[sh][v.name][r]="";
       });
-    }
+    });
+  });
+}
 
-    function shortDateFr(iso){
-      const d = new Date(iso + "T00:00:00");
-      return d.toLocaleDateString("fr-FR", {
-        day:"2-digit",
-        month:"2-digit",
-        year:"numeric"
-      });
-    }
+function options(selected){
+  let h='<option value="">—</option>';
+  agents.forEach(a=>{
+    const n=agentName(a);
+    h+=`<option value="${esc(n)}" ${selected===n?"selected":""}>${esc(n)}</option>`;
+  });
+  return h;
+}
 
-    function showToast(msg){
-      const t = document.getElementById("toast");
-      t.textContent = msg;
-      t.style.display = "block";
-      clearTimeout(window.__toastTimer);
-      window.__toastTimer = setTimeout(() => t.style.display = "none", 2200);
-    }
+function setPage(p){
+  state.page=p;
+  save();
+  document.querySelectorAll(".mainTab").forEach(t=>t.classList.toggle("active",t.dataset.page===p));
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("show"));
+  document.getElementById("page-"+p).classList.add("show");
+  if(p==="print") renderPrint();
+}
 
-    function loadState(){
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if(raw){
-        try{
-          state = JSON.parse(raw);
-        }catch(e){
-          loadDefaults(false);
-        }
-      }else{
-        loadDefaults(false);
-      }
+function renderTop(){
+  document.getElementById("dateGarde").value=state.date||"";
+  const chef=document.getElementById("chefGarde");
+  chef.innerHTML=options(state.chef);
+  chef.onchange=()=>{
+    state.chef=chef.value;
+    save();
+  };
+}
 
-      if(!state.config) state.config = {};
-      if(!state.config.dateStart) state.config.dateStart = todayIso();
-      if(!state.config.dateEnd) state.config.dateEnd = addDaysIso(todayIso(), 6);
-      if(!state.config.shiftMode) state.config.shiftMode = "half";
-      if(!state.config.printTitle) state.config.printTitle = "Gardes postées — CS Consenvoye";
+function shiftLabel(s){
+  if(s==="journee")return"07h–19h";
+  if(s==="matin")return"07h–13h";
+  return"13h–19h";
+}
 
-      syncInputs();
-      renderConfigTables();
-      generatePlanning(false);
-      buildPrint();
-    }
+function renderVehicles(){
+  ensure();
+  const deck=document.getElementById("vehicleDeck");
+  deck.innerHTML="";
 
-    function saveAll(){
-      state.config.dateStart = document.getElementById("dateStart").value;
-      state.config.dateEnd = document.getElementById("dateEnd").value;
-      state.config.shiftMode = document.getElementById("shiftMode").value;
-      state.config.printTitle = document.getElementById("printTitle").value;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      showToast("Sauvegardé");
-    }
+  vehicles.forEach(v=>{
+    const open=state.openVehicle===v.name;
+    const card=document.createElement("section");
+    card.className="vehicleCard"+(open?" open":"");
+    card.style.background=`linear-gradient(180deg, ${v.color}66, rgba(0,0,0,.28))`;
 
-    function syncInputs(){
-      document.getElementById("dateStart").value = state.config.dateStart;
-      document.getElementById("dateEnd").value = state.config.dateEnd;
-      document.getElementById("shiftMode").value = state.config.shiftMode;
-      document.getElementById("printTitle").value = state.config.printTitle;
-    }
-
-    function loadDefaults(withConfirm = true){
-      if(withConfirm && !confirm("Réinstaller la configuration par défaut ?")) return;
-
-      state.agents = JSON.parse(JSON.stringify(defaultData.agents));
-      state.vehicles = JSON.parse(JSON.stringify(defaultData.vehicles));
-      state.roles = JSON.parse(JSON.stringify(defaultData.roles));
-      state.assignments = {};
-      state.config = {
-        dateStart: todayIso(),
-        dateEnd: addDaysIso(todayIso(), 6),
-        shiftMode: "half",
-        printTitle: "Gardes postées — CS Consenvoye"
-      };
-
-      syncInputs();
-      renderConfigTables();
-      saveAll();
-      generatePlanning(false);
-      buildPrint();
-    }
-
-    function clearAll(){
-      if(!confirm("Tout effacer ?")) return;
-      localStorage.removeItem(STORAGE_KEY);
-      loadDefaults(false);
-      showToast("Réinitialisé");
-    }
-
-    function openTab(name){
-      document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === name));
-      document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
-      document.getElementById("tab-" + name).classList.add("active");
-      if(name === "print") buildPrint();
-      window.scrollTo({top:0, behavior:"smooth"});
-    }
-
-    document.querySelectorAll(".tab-btn").forEach(btn => {
-      btn.addEventListener("click", () => openTab(btn.dataset.tab));
+    let body="";
+    v.roles.forEach(role=>{
+      const val=state.affect[state.shift][v.name][role]||"";
+      body+=`
+        <div class="roleSlot">
+          <div class="roleName">${esc(role)}</div>
+          <select class="select" data-v="${esc(v.name)}" data-r="${esc(role)}">${options(val)}</select>
+        </div>`;
     });
 
-    function addAgent(){
-      const name = document.getElementById("agentName").value.trim();
-      const note = document.getElementById("agentNote").value.trim();
-      if(!name) return showToast("Nom agent obligatoire");
-
-      state.agents.push({ id: uid(), name, note });
-      document.getElementById("agentName").value = "";
-      document.getElementById("agentNote").value = "";
-      renderConfigTables();
-      saveAll();
-      generatePlanning(false);
-    }
-
-    function removeAgent(id){
-      state.agents = state.agents.filter(a => a.id !== id);
-      Object.values(state.assignments).forEach(a => {
-        if(a.agentId === id) a.agentId = "";
-      });
-      renderConfigTables();
-      saveAll();
-      generatePlanning(false);
-    }
-
-    function addVehicle(){
-      const name = document.getElementById("vehicleName").value.trim();
-      const color = document.getElementById("vehicleColor").value;
-      const url = document.getElementById("vehicleImageUrl").value.trim();
-      const file = document.getElementById("vehicleImageFile").files[0];
-
-      if(!name) return showToast("Nom véhicule obligatoire");
-
-      const finish = (image) => {
-        state.vehicles.push({ id: uid(), name, color, image });
-        document.getElementById("vehicleName").value = "";
-        document.getElementById("vehicleImageUrl").value = "";
-        document.getElementById("vehicleImageFile").value = "";
-        renderConfigTables();
-        saveAll();
-        generatePlanning(false);
-      };
-
-      if(file){
-        const reader = new FileReader();
-        reader.onload = e => finish(e.target.result);
-        reader.readAsDataURL(file);
-      }else{
-        finish(url);
-      }
-    }
-
-    function removeVehicle(id){
-      state.vehicles = state.vehicles.filter(v => v.id !== id);
-      Object.values(state.assignments).forEach(a => {
-        if(a.vehicleId === id) a.vehicleId = "";
-      });
-      renderConfigTables();
-      saveAll();
-      generatePlanning(false);
-    }
-
-    function addRole(){
-      const name = document.getElementById("roleName").value.trim();
-      if(!name) return showToast("Nom rôle obligatoire");
-
-      state.roles.push({ id: uid(), name });
-      document.getElementById("roleName").value = "";
-      renderConfigTables();
-      saveAll();
-      generatePlanning(false);
-    }
-
-    function removeRole(id){
-      state.roles = state.roles.filter(r => r.id !== id);
-      Object.values(state.assignments).forEach(a => {
-        if(a.roleId === id) a.roleId = "";
-      });
-      renderConfigTables();
-      saveAll();
-      generatePlanning(false);
-    }
-
-    function renderConfigTables(){
-      document.getElementById("agentsTable").innerHTML = state.agents.map(a => `
-        <tr>
-          <td><strong>${escapeHtml(a.name)}</strong></td>
-          <td>${escapeHtml(a.note || "")}</td>
-          <td><button class="danger" onclick="removeAgent('${a.id}')">Suppr.</button></td>
-        </tr>
-      `).join("");
-
-      document.getElementById("vehiclesTable").innerHTML = state.vehicles.map(v => `
-        <tr>
-          <td>${v.image ? `<img class="vehicle-preview" src="${v.image}" alt="">` : `<span class="pill">Aucune</span>`}</td>
-          <td>
-            <span class="pill" style="background:${v.color};border-color:${v.color}">
-              ${escapeHtml(v.name)}
-            </span>
-          </td>
-          <td><button class="danger" onclick="removeVehicle('${v.id}')">Suppr.</button></td>
-        </tr>
-      `).join("");
-
-      document.getElementById("rolesTable").innerHTML = state.roles.map(r => `
-        <tr>
-          <td><strong>${escapeHtml(r.name)}</strong></td>
-          <td><button class="danger" onclick="removeRole('${r.id}')">Suppr.</button></td>
-        </tr>
-      `).join("");
-    }
-
-    function getShifts(){
-      const mode = document.getElementById("shiftMode").value;
-      if(mode === "full"){
-        return [{ id:"full", name:"Garde entière", time:"07h00 / 19h00" }];
-      }
-      if(mode === "both"){
-        return [
-          { id:"full", name:"Garde entière", time:"07h00 / 19h00" },
-          { id:"am", name:"Matin", time:"07h00 / 13h00" },
-          { id:"pm", name:"Après-midi", time:"13h00 / 19h00" }
-        ];
-      }
-      return [
-        { id:"am", name:"Matin", time:"07h00 / 13h00" },
-        { id:"pm", name:"Après-midi", time:"13h00 / 19h00" }
-      ];
-    }
-
-    function generatePlanning(shouldSave = true){
-      if(shouldSave) saveAll();
-
-      const start = document.getElementById("dateStart").value;
-      const end = document.getElementById("dateEnd").value;
-      if(!start || !end) return showToast("Dates obligatoires");
-      if(start > end) return showToast("La date de fin est avant la date de début");
-
-      const shifts = getShifts();
-      const area = document.getElementById("planningArea");
-      let html = "";
-
-      let d = start;
-      while(d <= end){
-        html += `<div class="day-title">${formatDateFr(d)}</div>`;
-
-        shifts.forEach(shift => {
-          html += `
-            <div class="shift-card">
-              <div>
-                <div class="shift-name">${escapeHtml(shift.name)}</div>
-                <div class="small">${escapeHtml(shift.time)}</div>
-              </div>
-              <div class="assign-grid">
-                ${state.vehicles.map(v => assignmentBlock(d, shift, v)).join("")}
-              </div>
-            </div>
-          `;
-        });
-
-        d = addDaysIso(d, 1);
-      }
-
-      area.innerHTML = html || `<p class="small">Aucun jour à afficher.</p>`;
-    }
-
-    function assignmentBlock(date, shift, vehicle){
-      const key = `${date}__${shift.id}__${vehicle.id}`;
-      const current = state.assignments[key] || { agentId:"", roleId:"", note:"" };
-
-      return `
-        <div class="card" style="border-color:${vehicle.color};padding:10px">
-          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
-            ${vehicle.image ? `<img class="vehicle-preview" src="${vehicle.image}" alt="">` : ""}
-            <span class="pill" style="background:${vehicle.color};border-color:${vehicle.color}">
-              ${escapeHtml(vehicle.name)}
-            </span>
-          </div>
-
-          <label>Rôle</label>
-          <select onchange="setAssignment('${key}','roleId',this.value)">
-            <option value="">—</option>
-            ${state.roles.map(r => `<option value="${r.id}" ${current.roleId === r.id ? "selected" : ""}>${escapeHtml(r.name)}</option>`).join("")}
-          </select>
-
-          <label style="margin-top:8px">Agent</label>
-          <select onchange="setAssignment('${key}','agentId',this.value)">
-            <option value="">—</option>
-            ${state.agents.map(a => `<option value="${a.id}" ${current.agentId === a.id ? "selected" : ""}>${escapeHtml(a.name)}</option>`).join("")}
-          </select>
-
-          <label style="margin-top:8px">Note</label>
-          <input value="${escapeAttr(current.note || "")}" onchange="setAssignment('${key}','note',this.value)" placeholder="Observation">
-        </div>
-      `;
-    }
-
-    function setAssignment(key, field, value){
-      if(!state.assignments[key]){
-        state.assignments[key] = { agentId:"", roleId:"", note:"" };
-      }
-      state.assignments[key][field] = value;
-      saveAll();
-    }
-
-    function resetAssignments(){
-      if(!confirm("Vider toutes les affectations ?")) return;
-      state.assignments = {};
-      saveAll();
-      generatePlanning(false);
-      buildPrint();
-    }
-
-    function buildPrint(){
-      saveAll();
-
-      const start = state.config.dateStart;
-      const end = state.config.dateEnd;
-      const shifts = getShifts();
-
-      let html = `
-        <div class="a4">
-          <div class="a4-header">
-            <div>
-              <h2>${escapeHtml(state.config.printTitle)}</h2>
-              <div style="font-weight:800;color:#444;margin-top:3px">Centre de Secours de Consenvoye</div>
-            </div>
-            <div class="meta">
-              Du ${shortDateFr(start)}<br>
-              Au ${shortDateFr(end)}
-            </div>
-          </div>
-      `;
-
-      let d = start;
-      while(d <= end){
-        html += `
-          <div class="print-day">
-            <div class="print-day-title">${formatDateFr(d)}</div>
-        `;
-
-        shifts.forEach(shift => {
-          html += `
-            <div class="print-shift">
-              <div class="print-shift-label">
-                ${escapeHtml(shift.name)}<br>
-                <span style="font-size:8pt;color:#555">${escapeHtml(shift.time)}</span>
-              </div>
-              <div class="print-vehicles">
-                ${state.vehicles.map(v => printVehicleBlock(d, shift, v)).join("")}
-              </div>
-            </div>
-          `;
-        });
-
-        html += `</div>`;
-        d = addDaysIso(d, 1);
-      }
-
-      html += `
-          <div style="margin-top:10px;font-size:8pt;color:#555">
-            Document généré depuis le portail CS Consenvoye.
-          </div>
-        </div>
-      `;
-
-      document.getElementById("printArea").innerHTML = html;
-    }
-
-    function printVehicleBlock(date, shift, vehicle){
-      const key = `${date}__${shift.id}__${vehicle.id}`;
-      const a = state.assignments[key] || {};
-      const agent = state.agents.find(x => x.id === a.agentId);
-      const role = state.roles.find(x => x.id === a.roleId);
-
-      return `
-        <div class="print-vehicle" style="border-left:5px solid ${vehicle.color}">
+    card.innerHTML=`
+      <div class="vehicleHead" data-open="${esc(v.name)}">
+        <div class="vehicleLeft">
+          <img class="vehicleImg" src="${esc(v.image)}" onerror="this.style.display='none'">
           <div>
-            ${vehicle.image ? `<img src="${vehicle.image}" alt="">` : `<div style="width:18mm;height:13mm;border-radius:5px;background:#eee"></div>`}
-          </div>
-          <div>
-            <div class="pv-title">${escapeHtml(vehicle.name)}</div>
-            <div class="pv-role">${escapeHtml(role ? role.name : "Rôle non défini")}</div>
-            <div class="pv-agent">${escapeHtml(agent ? agent.name : "—")}</div>
-            ${a.note ? `<div class="pv-role">${escapeHtml(a.note)}</div>` : ""}
+            <div class="vehicleName">${esc(v.name)}</div>
+            <div class="vehicleMeta">${v.roles.length} postes — ${shiftLabel(state.shift)}</div>
           </div>
         </div>
-      `;
-    }
+        <div style="font-weight:950;font-size:22px">${open?"−":"+"}</div>
+      </div>
+      <div class="vehicleBody"><div class="roleGrid">${body}</div></div>`;
 
-    function escapeHtml(str){
-      return String(str ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
+    deck.appendChild(card);
+  });
 
-    function escapeAttr(str){
-      return escapeHtml(str).replaceAll("\n"," ");
-    }
+  deck.querySelectorAll("[data-open]").forEach(el=>el.onclick=()=>{
+    state.openVehicle = state.openVehicle===el.dataset.open ? "" : el.dataset.open;
+    save();
+    renderVehicles();
+  });
 
-    loadState();
-  </script>
+  deck.querySelectorAll("select[data-v]").forEach(sel=>sel.onchange=()=>{
+    state.affect[state.shift][sel.dataset.v][sel.dataset.r]=sel.value;
+    save();
+  });
+}
+
+function renderAgents(){
+  const box=document.getElementById("agentList");
+  box.innerHTML="";
+
+  agents.forEach((a,i)=>{
+    const d=document.createElement("div");
+    d.className="itemRow";
+    d.innerHTML=`
+      <div>
+        <div class="itemMain">${esc(agentName(a))}</div>
+        <div class="itemSub">${esc(a.grade)} — ${esc(a.nom)} ${esc(a.prenom)}</div>
+      </div>
+      <button class="miniBtn red">−</button>`;
+    d.querySelector("button").onclick=()=>{
+      agents.splice(i,1);
+      save();
+      renderAll();
+    };
+    box.appendChild(d);
+  });
+}
+
+function renderVehicleConfig(){
+  const box=document.getElementById("vehicleConfig");
+  box.innerHTML="";
+
+  vehicles.forEach((v,i)=>{
+    const d=document.createElement("div");
+    d.className="card";
+    d.style.marginBottom="10px";
+
+    d.innerHTML=`
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+        <div>
+          <div class="itemMain" style="color:${esc(v.color)}">${esc(v.name)}</div>
+          <div class="itemSub">${esc(v.roles.join(", "))}</div>
+          <div class="itemSub">Image attendue : ${esc(v.image)}</div>
+        </div>
+        <button class="miniBtn red" data-del="${i}">−</button>
+      </div>
+
+      <div class="postRow">
+        <input class="field" placeholder="Ajouter un poste" data-post="${i}">
+        <button class="miniBtn" data-addpost="${i}">＋</button>
+      </div>`;
+
+    box.appendChild(d);
+  });
+
+  box.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
+    vehicles.splice(Number(b.dataset.del),1);
+    state.openVehicle="";
+    save();
+    renderAll();
+  });
+
+  box.querySelectorAll("[data-addpost]").forEach(b=>b.onclick=()=>{
+    const i=Number(b.dataset.addpost);
+    const input=box.querySelector(`[data-post="${i}"]`);
+    const val=input.value.trim();
+    if(!val)return;
+    vehicles[i].roles.push(val);
+    save();
+    renderAll();
+  });
+}
+
+function renderPrint(){
+  ensure();
+
+  const date=state.date?state.date.split("-").reverse().join("/"):"—";
+
+  let h=`
+    <div class="printTitle">CENTRE DE SECOURS DE CONSENVOYE</div>
+    <div class="printTitle">FEUILLE DE GARDE</div>
+
+    <div class="printInfo">
+      <div>Date : ${esc(date)}</div>
+      <div>Chef de garde : ${esc(state.chef||"—")}</div>
+    </div>
+
+    <table class="printTable">
+      <thead>
+        <tr>
+          <th>Véhicule</th>
+          <th>Poste</th>
+          <th>Garde entière<br>07h-19h</th>
+          <th>Matin<br>07h-13h</th>
+          <th>Après-midi<br>13h-19h</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+  vehicles.forEach(v=>{
+    v.roles.forEach((r,idx)=>{
+      h+=`
+        <tr>
+          ${idx===0?`
+            <td rowspan="${v.roles.length}">
+              <img class="printVehImg" src="${esc(v.image)}" onerror="this.style.display='none'">
+              <div class="printVeh" style="color:${esc(v.color)}">${esc(v.name)}</div>
+            </td>`:""}
+          <td>${esc(r)}</td>
+          <td>${esc(state.affect.journee[v.name]?.[r]||"—")}</td>
+          <td>${esc(state.affect.matin[v.name]?.[r]||"—")}</td>
+          <td>${esc(state.affect.aprem[v.name]?.[r]||"—")}</td>
+        </tr>`;
+    });
+  });
+
+  h+=`
+      </tbody>
+    </table>
+
+    <div class="printBox"><b>REMARQUES / MISSIONS</b><br>${esc(state.remarks||"")}</div>`;
+
+  document.getElementById("printSheet").innerHTML=h;
+}
+
+function renderAll(){
+  ensure();
+
+  document.getElementById("dateGarde").value=state.date||"";
+  document.getElementById("remarks").value=state.remarks||"";
+
+  document.querySelectorAll(".shiftTab").forEach(b=>b.classList.toggle("active",b.dataset.shift===state.shift));
+
+  renderTop();
+  renderVehicles();
+  renderAgents();
+  renderVehicleConfig();
+
+  save();
+}
+
+document.querySelectorAll(".mainTab").forEach(t=>t.onclick=()=>setPage(t.dataset.page));
+
+document.querySelectorAll(".shiftTab").forEach(b=>b.onclick=()=>{
+  state.shift=b.dataset.shift;
+  state.openVehicle="";
+  save();
+  renderAll();
+});
+
+document.getElementById("dateGarde").onchange=e=>{
+  state.date=e.target.value;
+  save();
+};
+
+document.getElementById("remarks").oninput=e=>{
+  state.remarks=e.target.value;
+  save();
+};
+
+document.getElementById("goPrint").onclick=()=>setPage("print");
+
+document.getElementById("addAgentBtn").onclick=()=>{
+  const grade=document.getElementById("agentGrade").value.trim();
+  const nom=document.getElementById("agentNom").value.trim().toUpperCase();
+  const prenom=document.getElementById("agentPrenom").value.trim();
+
+  if(!grade||!nom||!prenom)return;
+
+  agents.push({grade,nom,prenom});
+
+  document.getElementById("agentGrade").value="";
+  document.getElementById("agentNom").value="";
+  document.getElementById("agentPrenom").value="";
+
+  save();
+  renderAll();
+};
+
+document.getElementById("addVehicleBtn").onclick=()=>{
+  const name=document.getElementById("vehicleName").value.trim().toUpperCase();
+  const color=document.getElementById("vehicleColor").value.trim()||"#d93030";
+
+  if(!name)return;
+
+  vehicles.push({
+    name,
+    color,
+    image:name.toLowerCase()+".png",
+    roles:[]
+  });
+
+  document.getElementById("vehicleName").value="";
+  document.getElementById("vehicleColor").value="#d93030";
+
+  save();
+  renderAll();
+};
+
+document.getElementById("btnBack").onclick=()=>{
+  if(state.page==="print"){
+    setPage("generate");
+    return;
+  }
+
+  if(state.page==="config"){
+    setPage("generate");
+    return;
+  }
+
+  location.href="index.html?portal=1";
+};
+
+setPage(state.page||"generate");
+renderAll();
+</script>
 </body>
 </html>
