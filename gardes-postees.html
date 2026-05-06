@@ -2,219 +2,239 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Gardes postées</title>
 
 <style>
+:root{
+  --orange:#d46a00;
+  --orange2:#b95800;
+  --txt:#f4f4f4;
+  --card:rgba(0,0,0,.35);
+  --stroke:rgba(255,255,255,.10);
+}
+
 body{
+  margin:0;
   font-family:system-ui;
   background:#0b0b0b;
-  color:#fff;
-  padding:15px;
+  color:var(--txt);
 }
 
-.section{
-  background:rgba(255,255,255,.05);
+.wrap{
+  max-width:980px;
+  margin:auto;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+/* HEADER */
+.topbar{
+  padding:12px;
+  border-radius:18px;
+  background:linear-gradient(180deg,var(--orange),var(--orange2));
+  font-weight:900;
+  text-align:center;
+}
+
+/* CARDS */
+.card{
+  background:var(--card);
+  border:1px solid var(--stroke);
+  border-radius:18px;
+  padding:14px;
+  backdrop-filter:blur(10px);
+}
+
+/* BUTTON */
+.btn{
+  padding:10px;
+  border-radius:12px;
+  border:none;
+  background:var(--orange);
+  color:#fff;
+  font-weight:900;
+  width:100%;
+}
+
+/* TABS */
+.tabs{
+  display:flex;
+  gap:8px;
+}
+.tab{
+  flex:1;
+  text-align:center;
+  padding:10px;
+  border-radius:14px;
+  background:var(--card);
+  cursor:pointer;
+}
+.tab.active{
+  background:var(--orange);
+}
+
+/* ROLE ROW */
+.role{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
   padding:12px;
   border-radius:14px;
-  margin-bottom:12px;
-}
-
-.title{
-  font-weight:900;
+  background:rgba(255,255,255,.05);
   margin-bottom:8px;
-}
-
-.row{
-  display:grid;
-  grid-template-columns:130px 1fr 1fr;
-  gap:6px;
-  margin-bottom:6px;
-}
-
-select, input, textarea{
-  padding:8px;
-  border-radius:10px;
-  border:none;
-  font-weight:700;
-}
-
-button{
-  padding:8px 12px;
-  border-radius:10px;
-  border:none;
-  font-weight:900;
   cursor:pointer;
 }
 
-.agentRow{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:4px;
+/* POPUP */
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+
+.popup.show{display:flex;}
+
+.popupBox{
+  background:#111;
+  padding:14px;
+  border-radius:16px;
+  width:90%;
+  max-width:300px;
+}
+
+.agent{
+  padding:10px;
+  border-bottom:1px solid #333;
+  cursor:pointer;
 }
 </style>
 </head>
 
 <body>
 
-<!-- INFO -->
-<div class="section">
-  <div class="title">Informations</div>
-  Date : <input type="date" id="date">
-  Chef de garde : <select id="chef"></select>
+<div class="wrap">
+
+<div class="topbar">Gardes postées</div>
+
+<!-- CONFIG -->
+<div id="screen1" class="card">
+  <div>Date</div>
+  <input type="date" id="date" style="width:100%;margin-bottom:10px;">
+
+  <div>Chef de garde</div>
+  <div class="role" onclick="openSelect('chef')">
+    <span id="chefLabel">Choisir</span>
+  </div>
+
+  <button class="btn" onclick="goConfig()">Configurer la garde</button>
 </div>
 
-<!-- AGENTS -->
-<div class="section">
-  <div class="title">Gestion des agents</div>
+<!-- AFFECTATION -->
+<div id="screen2" style="display:none">
 
-  <input id="newAgent" placeholder="Nom Prénom">
-  <button onclick="addAgent()">➕</button>
+  <div class="tabs">
+    <div class="tab active" onclick="setTab('vsav')">VSAV</div>
+    <div class="tab" onclick="setTab('ccr')">CCR</div>
+    <div class="tab" onclick="setTab('vtul')">VTUL</div>
+  </div>
 
-  <div id="agentsList" style="margin-top:10px;"></div>
-</div>
-
-<!-- VSAV -->
-<div class="section">
-  <div class="title">VSAV</div>
-
-  <div class="row"><div>Conducteur</div><select id="vsav_cd_m"></select><select id="vsav_cd_a"></select></div>
-  <div class="row"><div>Chef d’agrès</div><select id="vsav_ca_m"></select><select id="vsav_ca_a"></select></div>
-  <div class="row"><div>Équipier</div><select id="vsav_eq_m"></select><select id="vsav_eq_a"></select></div>
-  <div class="row"><div>Apprenant</div><select id="vsav_ap_m"></select><select id="vsav_ap_a"></select></div>
-
-</div>
-
-<!-- CCR -->
-<div class="section">
-  <div class="title">CCR</div>
-
-  <div class="row"><div>Conducteur</div><select id="ccr_cd_m"></select><select id="ccr_cd_a"></select></div>
-  <div class="row"><div>Chef d’agrès</div><select id="ccr_ca_m"></select><select id="ccr_ca_a"></select></div>
-
-  <div class="row"><div>Chef BAT1</div><select id="ccr_b1c_m"></select><select id="ccr_b1c_a"></select></div>
-  <div class="row"><div>Équipier BAT1</div><select id="ccr_b1e_m"></select><select id="ccr_b1e_a"></select></div>
-
-  <div class="row"><div>Chef BAT2</div><select id="ccr_b2c_m"></select><select id="ccr_b2c_a"></select></div>
-  <div class="row"><div>Équipier BAT2</div><select id="ccr_b2e_m"></select><select id="ccr_b2e_a"></select></div>
-
-  <div class="row"><div>Chef BAL</div><select id="ccr_bal_c_m"></select><select id="ccr_bal_c_a"></select></div>
-  <div class="row"><div>Équipier BAL</div><select id="ccr_bal_e_m"></select><select id="ccr_bal_e_a"></select></div>
+  <div class="card" id="content"></div>
 
 </div>
 
-<!-- VTUL -->
-<div class="section">
-  <div class="title">VTUL</div>
-
-  <div class="row"><div>Conducteur</div><select id="vtul_cd_m"></select><select id="vtul_cd_a"></select></div>
-  <div class="row"><div>Chef d’agrès</div><select id="vtul_ca_m"></select><select id="vtul_ca_a"></select></div>
-
 </div>
 
-<!-- REMARQUE -->
-<div class="section">
-  <div class="title">Remarques</div>
-  <textarea id="rem" style="width:100%;height:80px;"></textarea>
+<!-- POPUP -->
+<div id="popup" class="popup">
+  <div class="popupBox" id="popupList"></div>
 </div>
-
-<button onclick="generate()">GÉNÉRER (démo)</button>
 
 <script>
 
-// ===== STORAGE =====
-const LS_AGENTS = "cs_agents_demo";
+// ===== AGENTS DEMO =====
+let agents = [
+  "DUPONT Pierre",
+  "LEROY Julien",
+  "MARTIN Lucas"
+];
 
-// ===== LOAD =====
-function loadAgents(){
-  let list = JSON.parse(localStorage.getItem(LS_AGENTS) || "[]");
+let affect = {};
+let currentRole = "";
 
-  if(!list.length){
-    list = ["DUPONT Pierre","LEROY Julien","MOREAU Thomas"];
-    localStorage.setItem(LS_AGENTS, JSON.stringify(list));
+// ===== NAV =====
+function goConfig(){
+  screen1.style.display="none";
+  screen2.style.display="block";
+  render();
+}
+
+// ===== TABS =====
+let currentTab="vsav";
+
+function setTab(tab){
+  currentTab=tab;
+
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  event.target.classList.add("active");
+
+  render();
+}
+
+// ===== RENDER =====
+function render(){
+
+  let roles = [];
+
+  if(currentTab==="vsav"){
+    roles=["Conducteur","Chef","Équipier","Apprenant"];
   }
 
-  return list;
-}
-
-function saveAgents(list){
-  localStorage.setItem(LS_AGENTS, JSON.stringify(list));
-}
-
-// ===== UI =====
-function refreshAll(){
-  const list = loadAgents();
-
-  document.querySelectorAll("select").forEach(sel=>{
-    const val = sel.value;
-
-    sel.innerHTML = `<option value="">--</option>` +
-      list.map(a=>`<option>${a}</option>`).join("");
-
-    if(list.includes(val)) sel.value = val;
-  });
-
-  renderAgentsList();
-}
-
-// ===== AGENTS LIST =====
-function renderAgentsList(){
-  const list = loadAgents();
-  const box = document.getElementById("agentsList");
-
-  box.innerHTML = "";
-
-  list.forEach((name,i)=>{
-    const row = document.createElement("div");
-    row.className = "agentRow";
-
-    row.innerHTML = `
-      <div>${name}</div>
-      <button onclick="removeAgent(${i})">➖</button>
-    `;
-
-    box.appendChild(row);
-  });
-}
-
-// ===== ACTIONS =====
-function addAgent(){
-  const input = document.getElementById("newAgent");
-  const name = input.value.trim();
-
-  if(!name) return;
-
-  let list = loadAgents();
-
-  if(!list.includes(name)){
-    list.push(name);
-    saveAgents(list);
+  if(currentTab==="ccr"){
+    roles=["Conducteur","Chef","BAT1","BAT2"];
   }
 
-  input.value="";
-  refreshAll();
+  if(currentTab==="vtul"){
+    roles=["Conducteur","Chef"];
+  }
+
+  content.innerHTML = roles.map(r=>`
+    <div class="role" onclick="openSelect('${currentTab}_${r}')">
+      <span>${r}</span>
+      <span>${affect[currentTab+"_"+r] || "—"}</span>
+    </div>
+  `).join("");
 }
 
-function removeAgent(i){
-  let list = loadAgents();
-  list.splice(i,1);
-  saveAgents(list);
-  refreshAll();
+// ===== POPUP =====
+function openSelect(role){
+  currentRole = role;
+  popup.classList.add("show");
+
+  popupList.innerHTML = agents.map(a=>`
+    <div class="agent" onclick="selectAgent('${a}')">${a}</div>
+  `).join("");
 }
 
-// ===== GENERATE =====
-function generate(){
-  const data = {
-    date: date.value,
-    chef: chef.value,
-    rem: rem.value
-  };
+function selectAgent(name){
+  affect[currentRole]=name;
 
-  console.log(data);
-  alert("OK démo → prochaine étape impression");
+  if(currentRole==="chef"){
+    chefLabel.innerText=name;
+  }
+
+  popup.classList.remove("show");
+  render();
 }
 
-// INIT
-window.onload = refreshAll;
+popup.onclick = e=>{
+  if(e.target.id==="popup") popup.classList.remove("show");
+}
 
 </script>
 
