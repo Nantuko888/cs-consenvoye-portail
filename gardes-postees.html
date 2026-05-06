@@ -11,13 +11,20 @@
   --muted:rgba(255,255,255,.72);
   --shadow:0 14px 34px rgba(0,0,0,.40);
   --stroke:rgba(255,255,255,.10);
+
   --orange:#d46a00;
   --orange2:#b95800;
-  --radius:22px;
+
+  --vsav:#d93030;
+  --ccr:#d46a00;
+  --vtul:#2f79ff;
 }
 
 *{box-sizing:border-box}
-html,body{height:100%}
+
+html,body{
+  height:100%;
+}
 
 body{
   margin:0;
@@ -32,7 +39,7 @@ body{
   inset:0;
   background:
     linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.65)),
-    url("background.png") center top/cover no-repeat;
+    url("background.png") center/cover no-repeat;
   z-index:-2;
 }
 
@@ -41,32 +48,46 @@ body{
   position:absolute;
   inset:0;
   background:radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.64) 62%);
-  z-index:-1;
 }
 
 .wrap{
   height:100vh;
   max-width:980px;
-  margin:0 auto;
-  padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
+  margin:auto;
+  padding:
+    calc(env(safe-area-inset-top) + 10px)
+    12px
+    calc(env(safe-area-inset-bottom) + 12px);
+
   display:grid;
-  grid-template-rows:auto 1fr;
+  grid-template-rows:auto auto 1fr;
   gap:10px;
 }
+
+/* TOPBAR */
 
 .topbar{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:10px;
+
   padding:10px 12px;
+
   border-radius:18px;
-  background:linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(212,106,0,.75),
+      rgba(185,88,0,.58)
+    );
+
   border:1px solid rgba(255,255,255,.12);
+
   box-shadow:var(--shadow);
+
   backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  min-height:46px;
 }
 
 .title{
@@ -74,46 +95,94 @@ body{
   letter-spacing:.8px;
   text-transform:uppercase;
   font-size:18px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 }
 
 .btn{
   border:1px solid rgba(255,255,255,.18);
   background:rgba(0,0,0,.18);
-  color:var(--txt);
+  color:#fff;
   padding:9px 12px;
   border-radius:14px;
   font-weight:900;
   cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
 }
 
-.btn:active,
-.cardBtn:active,
-.tab:active,
-.roleCard:active{
-  transform:translateY(1px);
+/* MAIN TABS */
+
+.mainTabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
 
-.content{
+.mainTab{
+  min-height:48px;
+
+  border-radius:18px;
+
+  background:rgba(0,0,0,.35);
+
+  border:1px solid rgba(255,255,255,.10);
+
+  box-shadow:var(--shadow);
+
+  backdrop-filter:blur(10px);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-weight:950;
+
+  cursor:pointer;
+}
+
+.mainTab.active{
+  background:
+    linear-gradient(
+      180deg,
+      rgba(212,106,0,.60),
+      rgba(185,88,0,.40)
+    );
+
+  border-color:rgba(255,255,255,.22);
+}
+
+/* PAGE */
+
+.page{
   min-height:0;
   overflow:auto;
-  display:flex;
+
+  display:none;
   flex-direction:column;
   gap:10px;
+
   padding-right:2px;
-  -webkit-overflow-scrolling:touch;
 }
 
+.page.show{
+  display:flex;
+}
+
+/* CARD */
+
 .card{
-  border-radius:var(--radius);
-  background:linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.26));
+  border-radius:22px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,.42),
+      rgba(0,0,0,.26)
+    );
+
   border:1px solid var(--stroke);
+
   box-shadow:var(--shadow);
+
   backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
+
   padding:12px;
 }
 
@@ -122,16 +191,16 @@ body{
   font-size:17px;
   margin-bottom:10px;
   text-transform:uppercase;
-  letter-spacing:.4px;
 }
 
 .sub{
+  font-size:12px;
   color:var(--muted);
-  font-size:13px;
+  margin-bottom:8px;
   font-weight:800;
-  margin-top:-4px;
-  margin-bottom:10px;
 }
+
+/* GRID */
 
 .grid2{
   display:grid;
@@ -139,114 +208,162 @@ body{
   gap:10px;
 }
 
-.field{
+.grid3{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+}
+
+/* FIELDS */
+
+.field,
+.select,
+.textarea{
   width:100%;
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(0,0,0,.22);
-  color:#fff;
-  padding:11px 12px;
-  border-radius:16px;
-  font:inherit;
-  font-weight:900;
+
+  border:none;
   outline:none;
+
+  background:rgba(0,0,0,.24);
+
+  color:#fff;
+
+  border:1px solid rgba(255,255,255,.10);
+
+  border-radius:14px;
+
+  padding:11px 12px;
+
+  font:inherit;
+  font-weight:800;
 }
 
 .textarea{
-  width:100%;
-  min-height:86px;
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(0,0,0,.22);
-  color:#fff;
-  padding:11px 12px;
-  border-radius:16px;
-  font:inherit;
-  font-weight:800;
-  outline:none;
+  min-height:90px;
   resize:vertical;
 }
 
-.cardBtn{
-  width:100%;
-  border:1px solid rgba(255,255,255,.12);
-  background:linear-gradient(180deg, rgba(212,106,0,.45), rgba(185,88,0,.25));
-  color:#fff;
-  padding:12px;
-  border-radius:18px;
-  font-weight:950;
-  cursor:pointer;
-  text-align:center;
-}
-
-.agentAdd{
-  display:grid;
-  grid-template-columns:1fr 48px;
-  gap:8px;
-}
+/* AGENTS */
 
 .agentList{
   display:flex;
   flex-direction:column;
   gap:8px;
-  margin-top:10px;
 }
 
 .agentRow{
-  display:flex;
-  justify-content:space-between;
+  display:grid;
+  grid-template-columns:110px 1fr 1fr 52px;
+  gap:8px;
+
   align-items:center;
-  gap:10px;
-  padding:10px 12px;
+
+  padding:10px;
+
   border-radius:16px;
-  background:rgba(255,255,255,.05);
+
+  background:rgba(255,255,255,.04);
+
   border:1px solid rgba(255,255,255,.08);
 }
 
-.agentName{
-  font-weight:900;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
 .miniBtn{
-  border:1px solid rgba(255,255,255,.14);
-  background:rgba(0,0,0,.20);
+  border:none;
+
+  background:rgba(255,255,255,.10);
+
   color:#fff;
+
   border-radius:12px;
+
+  padding:10px;
+
   font-weight:950;
-  padding:8px 10px;
+
   cursor:pointer;
 }
 
-.tabs{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
+.miniBtn.red{
+  background:rgba(255,80,80,.18);
 }
 
-.tab{
-  min-height:46px;
-  border-radius:18px;
-  background:rgba(0,0,0,.30);
-  border:1px solid rgba(255,255,255,.10);
-  box-shadow:var(--shadow);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:950;
-  cursor:pointer;
-}
-
-.tab.active{
-  background:linear-gradient(180deg, rgba(212,106,0,.58), rgba(185,88,0,.35));
-  border-color:rgba(255,255,255,.20);
-}
+/* VEHICLES */
 
 .vehicleTabs{
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
   gap:10px;
 }
+
+.vehicleTab{
+  min-height:48px;
+
+  border-radius:18px;
+
+  border:1px solid rgba(255,255,255,.10);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-weight:950;
+
+  cursor:pointer;
+}
+
+.vehicleTab[data-veh="VSAV"]{
+  background:rgba(217,48,48,.25);
+}
+
+.vehicleTab[data-veh="CCR"]{
+  background:rgba(212,106,0,.25);
+}
+
+.vehicleTab[data-veh="VTUL"]{
+  background:rgba(47,121,255,.25);
+}
+
+.vehicleTab.active{
+  border-color:#fff;
+  box-shadow:0 0 0 2px rgba(255,255,255,.15);
+}
+
+/* SHIFT */
+
+.shiftTabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.shiftTab{
+  min-height:48px;
+
+  border-radius:18px;
+
+  background:rgba(255,255,255,.05);
+
+  border:1px solid rgba(255,255,255,.08);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-weight:950;
+
+  cursor:pointer;
+}
+
+.shiftTab.active{
+  background:
+    linear-gradient(
+      180deg,
+      rgba(212,106,0,.58),
+      rgba(185,88,0,.35)
+    );
+}
+
+/* ROLE */
 
 .roleList{
   display:flex;
@@ -255,130 +372,51 @@ body{
 }
 
 .roleCard{
-  border-radius:18px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.08);
-  padding:11px 12px;
   display:grid;
-  grid-template-columns:1fr auto;
+  grid-template-columns:1fr 1fr;
   gap:10px;
+
   align-items:center;
-  cursor:pointer;
+
+  padding:12px;
+
+  border-radius:18px;
+
+  background:rgba(255,255,255,.05);
+
+  border:1px solid rgba(255,255,255,.08);
 }
 
-.roleLabel{
+.roleName{
   font-weight:950;
-}
-
-.roleAgent{
-  color:rgba(255,255,255,.86);
-  font-weight:900;
-  text-align:right;
-  max-width:160px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.empty{
-  color:rgba(255,255,255,.45);
 }
 
 .previewTable{
   width:100%;
   border-collapse:collapse;
-  overflow:hidden;
-  border-radius:16px;
-  font-size:13px;
 }
 
 .previewTable th,
 .previewTable td{
-  border:1px solid rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.10);
   padding:8px;
-  text-align:left;
 }
 
 .previewTable th{
   background:rgba(212,106,0,.35);
-  font-weight:950;
 }
 
-.previewTable td{
-  background:rgba(0,0,0,.20);
-  font-weight:800;
-}
+/* MOBILE */
 
-/* popup */
-.overlay{
-  position:fixed;
-  inset:0;
-  display:none;
-  background:rgba(0,0,0,.62);
-  backdrop-filter:blur(7px);
-  -webkit-backdrop-filter:blur(7px);
-  z-index:100;
-}
+@media(max-width:700px){
 
-.overlay.show{
-  display:block;
-}
-
-.sheet{
-  position:absolute;
-  left:12px;
-  right:12px;
-  bottom:calc(env(safe-area-inset-bottom) + 12px);
-  max-width:980px;
-  margin:0 auto;
-  max-height:min(72vh, 680px);
-  border-radius:22px;
-  background:linear-gradient(180deg, rgba(0,0,0,.86), rgba(0,0,0,.72));
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-}
-
-.sheetHead{
-  padding:12px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  border-bottom:1px solid rgba(255,255,255,.10);
-}
-
-.sheetTitle{
-  font-weight:950;
-}
-
-.sheetBody{
-  overflow:auto;
-  padding:12px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-.choice{
-  padding:12px;
-  border-radius:16px;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.10);
-  font-weight:900;
-  cursor:pointer;
-}
-
-.choice.none{
-  color:rgba(255,255,255,.65);
-}
-
-@media(max-width:620px){
   .grid2,
-  .tabs,
+  .grid3,
   .vehicleTabs{
+    grid-template-columns:1fr;
+  }
+
+  .agentRow{
     grid-template-columns:1fr;
   }
 
@@ -386,417 +424,499 @@ body{
     grid-template-columns:1fr;
   }
 
-  .roleAgent{
-    text-align:left;
-    max-width:100%;
-  }
 }
 </style>
 </head>
 
 <body>
+
 <div class="bg"></div>
 
 <div class="wrap">
+
+  <!-- TOP -->
   <div class="topbar">
     <div class="title">Gardes postées</div>
     <button class="btn" id="btnBack">Retour</button>
   </div>
 
-  <div class="content">
+  <!-- MAIN TABS -->
+  <div class="mainTabs">
 
-    <section class="card">
-      <div class="cardTitle">Configuration journée</div>
+    <div class="mainTab active" data-page="generate">
+      Générer la feuille
+    </div>
+
+    <div class="mainTab" data-page="config">
+      Configuration
+    </div>
+
+  </div>
+
+  <!-- GENERATE -->
+  <div class="page show" id="page-generate">
+
+    <!-- DATE -->
+    <div class="card">
+
+      <div class="cardTitle">Informations</div>
+
       <div class="grid2">
+
         <div>
-          <div class="sub">Date de garde</div>
-          <input class="field" type="date" id="dateGarde">
+          <div class="sub">Date</div>
+          <input type="date" class="field" id="dateGarde">
         </div>
 
         <div>
           <div class="sub">Chef de garde</div>
-          <button class="cardBtn" id="chefBtn" type="button">Choisir le chef de garde</button>
+          <select class="select" id="chefGarde"></select>
         </div>
-      </div>
-    </section>
 
-    <section class="card">
-      <div class="cardTitle">Agents</div>
-      <div class="sub">Ajoute les agents une fois. Ils seront proposés dans tous les choix.</div>
-
-      <div class="agentAdd">
-        <input class="field" id="newAgent" type="text" placeholder="Nom Prénom">
-        <button class="miniBtn" id="addAgentBtn" type="button">＋</button>
       </div>
 
-      <div class="agentList" id="agentList"></div>
-    </section>
+    </div>
 
-    <section class="card">
-      <div class="cardTitle">Affectations</div>
+    <!-- SHIFTS -->
+    <div class="shiftTabs">
 
-      <div class="tabs" style="margin-bottom:10px;">
-        <div class="tab active" data-shift="matin">Matin<br>07h00–13h00</div>
-        <div class="tab" data-shift="aprem">Après-midi<br>13h00–19h00</div>
+      <div class="shiftTab active" data-shift="matin">
+        Matin<br>07h-13h
       </div>
 
-      <div class="vehicleTabs" style="margin-bottom:10px;">
-        <div class="tab active" data-vehicle="VSAV">VSAV</div>
-        <div class="tab" data-vehicle="CCR">CCR</div>
-        <div class="tab" data-vehicle="VTUL">VTUL</div>
+      <div class="shiftTab" data-shift="aprem">
+        Après-midi<br>13h-19h
+      </div>
+
+    </div>
+
+    <!-- VEHICLES -->
+    <div class="vehicleTabs">
+
+      <div class="vehicleTab active" data-veh="VSAV">
+        VSAV
+      </div>
+
+      <div class="vehicleTab" data-veh="CCR">
+        CCR
+      </div>
+
+      <div class="vehicleTab" data-veh="VTUL">
+        VTUL
+      </div>
+
+    </div>
+
+    <!-- ROLES -->
+    <div class="card">
+
+      <div class="cardTitle" id="rolesTitle">
+        VSAV — Matin
       </div>
 
       <div class="roleList" id="roleList"></div>
-    </section>
 
-    <section class="card">
-      <div class="cardTitle">Missions / remarques</div>
-      <textarea class="textarea" id="remarks" placeholder="Remarque, consignes, missions de la journée..."></textarea>
-    </section>
-
-    <section class="card">
-      <button class="cardBtn" id="previewBtn" type="button">Aperçu feuille de garde</button>
-    </section>
-
-    <section class="card" id="previewCard" style="display:none;">
-      <div class="cardTitle">Aperçu</div>
-      <div id="previewArea"></div>
-    </section>
-
-  </div>
-</div>
-
-<div class="overlay" id="agentOverlay">
-  <div class="sheet">
-    <div class="sheetHead">
-      <div class="sheetTitle" id="sheetTitle">Choisir un agent</div>
-      <button class="miniBtn" id="closeSheet" type="button">Fermer</button>
     </div>
-    <div class="sheetBody" id="choiceList"></div>
+
+    <!-- REM -->
+    <div class="card">
+
+      <div class="cardTitle">Remarques / missions</div>
+
+      <textarea class="textarea" id="remarks"></textarea>
+
+    </div>
+
+    <!-- PREVIEW -->
+    <div class="card">
+
+      <div class="cardTitle">Aperçu</div>
+
+      <div id="preview"></div>
+
+    </div>
+
   </div>
+
+  <!-- CONFIG -->
+  <div class="page" id="page-config">
+
+    <!-- AGENTS -->
+    <div class="card">
+
+      <div class="cardTitle">Agents</div>
+
+      <div class="sub">
+        Grade + nom + prénom
+      </div>
+
+      <div class="agentList" id="agentList"></div>
+
+      <div style="margin-top:10px;">
+        <button class="miniBtn" id="addAgentBtn">
+          Ajouter un agent
+        </button>
+      </div>
+
+    </div>
+
+    <!-- VEHICLES -->
+    <div class="card">
+
+      <div class="cardTitle">Véhicules</div>
+
+      <div class="sub">
+        Ajout / suppression véhicules
+      </div>
+
+      <div id="vehiculeConfig"></div>
+
+    </div>
+
+  </div>
+
 </div>
 
 <script>
-const LS_AGENTS = "cs_gardes_agents_demo_v1";
-const LS_STATE = "cs_gardes_state_demo_v1";
 
 const ROLES = {
-  VSAV: ["Conducteur", "Chef d’agrès", "Équipier", "Apprenant"],
-  CCR: [
+  VSAV:[
     "Conducteur",
     "Chef d’agrès",
-    "Chef BAT 1",
-    "Équipier BAT 1",
-    "Chef BAT 2",
-    "Équipier BAT 2",
+    "Équipier",
+    "Apprenant"
+  ],
+
+  CCR:[
+    "Conducteur",
+    "Chef d’agrès",
+    "Chef BAT1",
+    "Équipier BAT1",
+    "Chef BAT2",
+    "Équipier BAT2",
     "Chef BAL",
     "Équipier BAL"
   ],
-  VTUL: ["Conducteur", "Chef d’agrès"]
+
+  VTUL:[
+    "Conducteur",
+    "Chef d’agrès"
+  ]
 };
 
-let agents = loadAgents();
-let currentShift = "matin";
-let currentVehicle = "VSAV";
-let currentPick = null;
-
-let state = loadState();
-
-const $ = (id)=>document.getElementById(id);
-
-function loadAgents(){
-  try{
-    const arr = JSON.parse(localStorage.getItem(LS_AGENTS) || "[]");
-    if(Array.isArray(arr) && arr.length) return arr;
-  }catch(e){}
-  const starter = ["DUPONT Pierre","LEROY Julien","MARTIN Lucas","MOREAU Thomas"];
-  localStorage.setItem(LS_AGENTS, JSON.stringify(starter));
-  return starter;
-}
-
-function saveAgents(){
-  localStorage.setItem(LS_AGENTS, JSON.stringify(agents));
-}
-
-function defaultState(){
-  const d = {};
-  for(const shift of ["matin","aprem"]){
-    d[shift] = {};
-    for(const veh of Object.keys(ROLES)){
-      d[shift][veh] = {};
-      for(const role of ROLES[veh]) d[shift][veh][role] = "";
-    }
+let agents = [
+  {
+    grade:"ADJ",
+    nom:"DUPONT",
+    prenom:"Pierre"
+  },
+  {
+    grade:"CPL",
+    nom:"LEROY",
+    prenom:"Julien"
   }
-  return {
-    date:"",
-    chef:"",
-    assignments:d,
-    remarks:""
+];
+
+let vehicules = [
+  "VSAV",
+  "CCR",
+  "VTUL"
+];
+
+let currentPage = "generate";
+let currentVeh = "VSAV";
+let currentShift = "matin";
+
+let affect = {
+  matin:{},
+  aprem:{}
+};
+
+function fullName(a){
+  return `${a.grade} ${a.nom} ${a.prenom}`;
+}
+
+function agentOptions(selected=""){
+  return `
+    <option value="">--</option>
+    ${agents.map(a=>{
+      const n = fullName(a);
+      return `
+        <option ${selected===n?"selected":""}>
+          ${n}
+        </option>
+      `;
+    }).join("")}
+  `;
+}
+
+/* MAIN TABS */
+
+document.querySelectorAll(".mainTab").forEach(tab=>{
+
+  tab.onclick = ()=>{
+
+    currentPage = tab.dataset.page;
+
+    document.querySelectorAll(".mainTab")
+      .forEach(t=>t.classList.remove("active"));
+
+    tab.classList.add("active");
+
+    document.querySelectorAll(".page")
+      .forEach(p=>p.classList.remove("show"));
+
+    document
+      .getElementById("page-" + currentPage)
+      .classList.add("show");
+
   };
-}
 
-function loadState(){
-  try{
-    const obj = JSON.parse(localStorage.getItem(LS_STATE) || "null");
-    if(obj && obj.assignments) return obj;
-  }catch(e){}
-  return defaultState();
-}
+});
 
-function saveState(){
-  state.date = $("dateGarde").value || "";
-  state.remarks = $("remarks").value || "";
-  localStorage.setItem(LS_STATE, JSON.stringify(state));
-}
+/* SHIFT */
 
-function escapeHtml(s){
-  return String(s == null ? "" : s)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
+document.querySelectorAll(".shiftTab").forEach(tab=>{
+
+  tab.onclick = ()=>{
+
+    currentShift = tab.dataset.shift;
+
+    document.querySelectorAll(".shiftTab")
+      .forEach(t=>t.classList.remove("active"));
+
+    tab.classList.add("active");
+
+    renderRoles();
+
+  };
+
+});
+
+/* VEH */
+
+document.querySelectorAll(".vehicleTab").forEach(tab=>{
+
+  tab.onclick = ()=>{
+
+    currentVeh = tab.dataset.veh;
+
+    document.querySelectorAll(".vehicleTab")
+      .forEach(t=>t.classList.remove("active"));
+
+    tab.classList.add("active");
+
+    renderRoles();
+
+  };
+
+});
+
+/* AGENTS */
 
 function renderAgents(){
-  const box = $("agentList");
+
+  const box = document.getElementById("agentList");
+
   box.innerHTML = "";
 
-  if(!agents.length){
-    box.innerHTML = `<div class="agentRow"><span class="empty">Aucun agent</span></div>`;
-    return;
-  }
+  agents.forEach((a,idx)=>{
 
-  agents.forEach((name, idx)=>{
     const row = document.createElement("div");
+
     row.className = "agentRow";
+
     row.innerHTML = `
-      <div class="agentName">${escapeHtml(name)}</div>
-      <button class="miniBtn" type="button">−</button>
+
+      <input class="field"
+        value="${a.grade}"
+        onchange="agents[${idx}].grade=this.value">
+
+      <input class="field"
+        value="${a.nom}"
+        onchange="agents[${idx}].nom=this.value">
+
+      <input class="field"
+        value="${a.prenom}"
+        onchange="agents[${idx}].prenom=this.value">
+
+      <button class="miniBtn red"
+        onclick="deleteAgent(${idx})">
+        −
+      </button>
+
     `;
-    row.querySelector("button").onclick = ()=>{
-      agents.splice(idx,1);
-      saveAgents();
 
-      if(state.chef === name) state.chef = "";
-
-      for(const shift of Object.keys(state.assignments)){
-        for(const veh of Object.keys(state.assignments[shift])){
-          for(const role of Object.keys(state.assignments[shift][veh])){
-            if(state.assignments[shift][veh][role] === name){
-              state.assignments[shift][veh][role] = "";
-            }
-          }
-        }
-      }
-
-      saveState();
-      renderAll();
-    };
     box.appendChild(row);
+
   });
+
 }
 
-function renderConfig(){
-  $("dateGarde").value = state.date || "";
-  $("remarks").value = state.remarks || "";
-  $("chefBtn").textContent = state.chef || "Choisir le chef de garde";
+function deleteAgent(idx){
+
+  agents.splice(idx,1);
+
+  renderAgents();
+  renderRoles();
+
 }
 
-function renderTabs(){
-  document.querySelectorAll("[data-shift]").forEach(el=>{
-    el.classList.toggle("active", el.dataset.shift === currentShift);
+document.getElementById("addAgentBtn").onclick = ()=>{
+
+  agents.push({
+    grade:"SAP",
+    nom:"",
+    prenom:""
   });
-  document.querySelectorAll("[data-vehicle]").forEach(el=>{
-    el.classList.toggle("active", el.dataset.vehicle === currentVehicle);
-  });
-}
+
+  renderAgents();
+
+};
+
+/* ROLES */
 
 function renderRoles(){
-  const box = $("roleList");
+
+  document.getElementById("rolesTitle").innerHTML =
+    `${currentVeh} — ${currentShift}`;
+
+  const box = document.getElementById("roleList");
+
   box.innerHTML = "";
 
-  const roles = ROLES[currentVehicle] || [];
+  const roles = ROLES[currentVeh] || [];
 
   roles.forEach(role=>{
-    const val = state.assignments[currentShift][currentVehicle][role] || "";
-    const card = document.createElement("div");
-    card.className = "roleCard";
-    card.innerHTML = `
-      <div class="roleLabel">${escapeHtml(role)}</div>
-      <div class="roleAgent ${val ? "" : "empty"}">${escapeHtml(val || "Non affecté")}</div>
-    `;
-    card.onclick = ()=>{
-      currentPick = {
-        type:"assignment",
-        shift:currentShift,
-        vehicle:currentVehicle,
-        role
-      };
-      openAgentSheet(`Choisir — ${currentVehicle} / ${role}`);
-    };
-    box.appendChild(card);
-  });
-}
 
-function renderAll(){
-  renderConfig();
-  renderAgents();
-  renderTabs();
-  renderRoles();
-}
+    if(!affect[currentShift][currentVeh]){
+      affect[currentShift][currentVeh] = {};
+    }
 
-function addAgent(){
-  const input = $("newAgent");
-  const name = input.value.trim();
-  if(!name) return;
+    const current =
+      affect[currentShift][currentVeh][role] || "";
 
-  if(!agents.includes(name)){
-    agents.push(name);
-    agents.sort((a,b)=>a.localeCompare(b));
-    saveAgents();
-  }
-
-  input.value = "";
-  renderAll();
-}
-
-function openAgentSheet(title){
-  $("sheetTitle").textContent = title || "Choisir un agent";
-  const list = $("choiceList");
-  list.innerHTML = "";
-
-  const none = document.createElement("div");
-  none.className = "choice none";
-  none.textContent = "— Aucun / Effacer";
-  none.onclick = ()=>selectAgent("");
-  list.appendChild(none);
-
-  agents.forEach(name=>{
     const div = document.createElement("div");
-    div.className = "choice";
-    div.textContent = name;
-    div.onclick = ()=>selectAgent(name);
-    list.appendChild(div);
+
+    div.className = "roleCard";
+
+    div.innerHTML = `
+
+      <div class="roleName">
+        ${role}
+      </div>
+
+      <select class="select"
+        onchange="
+          affect['${currentShift}']['${currentVeh}']['${role}']=this.value;
+          renderPreview();
+        ">
+        ${agentOptions(current)}
+      </select>
+
+    `;
+
+    box.appendChild(div);
+
   });
 
-  $("agentOverlay").classList.add("show");
+  renderPreview();
+
 }
 
-function closeAgentSheet(){
-  $("agentOverlay").classList.remove("show");
-  currentPick = null;
-}
+/* PREVIEW */
 
-function selectAgent(name){
-  if(!currentPick) return;
+function renderPreview(){
 
-  if(currentPick.type === "chef"){
-    state.chef = name;
-  }
-
-  if(currentPick.type === "assignment"){
-    state.assignments[currentPick.shift][currentPick.vehicle][currentPick.role] = name;
-  }
-
-  saveState();
-  closeAgentSheet();
-  renderAll();
-}
-
-function makePreview(){
-  saveState();
-
-  const date = state.date ? state.date.split("-").reverse().join("/") : "—";
-  const chef = state.chef || "—";
+  const box = document.getElementById("preview");
 
   let html = `
-    <div style="font-weight:950;margin-bottom:10px;">
-      Date : ${escapeHtml(date)}<br>
-      Chef de garde : ${escapeHtml(chef)}
-    </div>
 
     <table class="previewTable">
+
       <thead>
         <tr>
-          <th>Engin</th>
           <th>Poste</th>
-          <th>Matin<br>07h–13h</th>
-          <th>Après-midi<br>13h–19h</th>
+          <th>Agent</th>
         </tr>
       </thead>
+
       <tbody>
+
   `;
 
-  for(const veh of Object.keys(ROLES)){
-    const roles = ROLES[veh];
-    roles.forEach((role, idx)=>{
-      const m = state.assignments.matin[veh][role] || "—";
-      const a = state.assignments.aprem[veh][role] || "—";
+  const roles = ROLES[currentVeh] || [];
 
-      html += `
-        <tr>
-          ${idx === 0 ? `<td rowspan="${roles.length}"><b>${escapeHtml(veh)}</b></td>` : ""}
-          <td>${escapeHtml(role)}</td>
-          <td>${escapeHtml(m)}</td>
-          <td>${escapeHtml(a)}</td>
-        </tr>
-      `;
-    });
-  }
+  roles.forEach(role=>{
+
+    const val =
+      affect[currentShift][currentVeh]?.[role] || "—";
+
+    html += `
+
+      <tr>
+        <td>${role}</td>
+        <td>${val}</td>
+      </tr>
+
+    `;
+
+  });
 
   html += `
       </tbody>
     </table>
-
-    <div style="margin-top:12px;font-weight:950;">Remarques / missions</div>
-    <div style="margin-top:6px;padding:10px;border-radius:14px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.10);white-space:pre-wrap;">
-      ${escapeHtml(state.remarks || "—")}
-    </div>
   `;
 
-  $("previewArea").innerHTML = html;
-  $("previewCard").style.display = "block";
-  $("previewCard").scrollIntoView({behavior:"smooth", block:"start"});
+  box.innerHTML = html;
+
 }
 
-$("btnBack").onclick = ()=>location.href = "index.html?portal=1";
+/* CHEF */
 
-$("addAgentBtn").onclick = addAgent;
-$("newAgent").addEventListener("keydown", e=>{
-  if(e.key === "Enter") addAgent();
-});
+function renderChef(){
 
-$("dateGarde").addEventListener("change", saveState);
-$("remarks").addEventListener("input", saveState);
+  const sel = document.getElementById("chefGarde");
 
-$("chefBtn").onclick = ()=>{
-  currentPick = {type:"chef"};
-  openAgentSheet("Choisir le chef de garde");
+  sel.innerHTML = agentOptions();
+
+}
+
+/* BACK */
+
+document.getElementById("btnBack").onclick = ()=>{
+
+  if(currentPage !== "generate"){
+
+    currentPage = "generate";
+
+    document.querySelectorAll(".mainTab")
+      .forEach(t=>t.classList.remove("active"));
+
+    document.querySelector(`[data-page="generate"]`)
+      .classList.add("active");
+
+    document.querySelectorAll(".page")
+      .forEach(p=>p.classList.remove("show"));
+
+    document.getElementById("page-generate")
+      .classList.add("show");
+
+    return;
+
+  }
+
+  location.href = "index.html?portal=1";
+
 };
 
-document.querySelectorAll("[data-shift]").forEach(el=>{
-  el.onclick = ()=>{
-    currentShift = el.dataset.shift;
-    renderAll();
-  };
-});
+/* INIT */
 
-document.querySelectorAll("[data-vehicle]").forEach(el=>{
-  el.onclick = ()=>{
-    currentVehicle = el.dataset.vehicle;
-    renderAll();
-  };
-});
+renderAgents();
+renderRoles();
+renderChef();
 
-$("previewBtn").onclick = makePreview;
-
-$("closeSheet").onclick = closeAgentSheet;
-$("agentOverlay").addEventListener("click", e=>{
-  if(e.target.id === "agentOverlay") closeAgentSheet();
-});
-
-renderAll();
 </script>
+
 </body>
 </html>
