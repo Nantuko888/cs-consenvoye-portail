@@ -1,242 +1,802 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Gardes postées</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Gardes postées — CS Consenvoye</title>
 
 <style>
 :root{
+  --txt:#f4f4f4;
+  --muted:rgba(255,255,255,.72);
+  --shadow:0 14px 34px rgba(0,0,0,.40);
+  --stroke:rgba(255,255,255,.10);
   --orange:#d46a00;
   --orange2:#b95800;
-  --txt:#f4f4f4;
-  --card:rgba(0,0,0,.35);
-  --stroke:rgba(255,255,255,.10);
+  --radius:22px;
 }
+
+*{box-sizing:border-box}
+html,body{height:100%}
 
 body{
   margin:0;
-  font-family:system-ui;
-  background:#0b0b0b;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   color:var(--txt);
+  background:#0b0b0b;
+  overflow:hidden;
+}
+
+.bg{
+  position:fixed;
+  inset:0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.65)),
+    url("background.png") center top/cover no-repeat;
+  z-index:-2;
+}
+
+.bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.64) 62%);
+  z-index:-1;
 }
 
 .wrap{
+  height:100vh;
   max-width:980px;
-  margin:auto;
-  padding:14px;
+  margin:0 auto;
+  padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
+  display:grid;
+  grid-template-rows:auto 1fr;
+  gap:10px;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:18px;
+  background:linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  min-height:46px;
+}
+
+.title{
+  font-weight:950;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+  font-size:18px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.btn{
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(0,0,0,.18);
+  color:var(--txt);
+  padding:9px 12px;
+  border-radius:14px;
+  font-weight:900;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.btn:active,
+.cardBtn:active,
+.tab:active,
+.roleCard:active{
+  transform:translateY(1px);
+}
+
+.content{
+  min-height:0;
+  overflow:auto;
   display:flex;
   flex-direction:column;
-  gap:12px;
+  gap:10px;
+  padding-right:2px;
+  -webkit-overflow-scrolling:touch;
 }
 
-/* HEADER */
-.topbar{
+.card{
+  border-radius:var(--radius);
+  background:linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.26));
+  border:1px solid var(--stroke);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  padding:12px;
+}
+
+.cardTitle{
+  font-weight:950;
+  font-size:17px;
+  margin-bottom:10px;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+}
+
+.sub{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:800;
+  margin-top:-4px;
+  margin-bottom:10px;
+}
+
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.field{
+  width:100%;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.22);
+  color:#fff;
+  padding:11px 12px;
+  border-radius:16px;
+  font:inherit;
+  font-weight:900;
+  outline:none;
+}
+
+.textarea{
+  width:100%;
+  min-height:86px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.22);
+  color:#fff;
+  padding:11px 12px;
+  border-radius:16px;
+  font:inherit;
+  font-weight:800;
+  outline:none;
+  resize:vertical;
+}
+
+.cardBtn{
+  width:100%;
+  border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(180deg, rgba(212,106,0,.45), rgba(185,88,0,.25));
+  color:#fff;
   padding:12px;
   border-radius:18px;
-  background:linear-gradient(180deg,var(--orange),var(--orange2));
-  font-weight:900;
+  font-weight:950;
+  cursor:pointer;
   text-align:center;
 }
 
-/* CARDS */
-.card{
-  background:var(--card);
-  border:1px solid var(--stroke);
-  border-radius:18px;
-  padding:14px;
-  backdrop-filter:blur(10px);
-}
-
-/* BUTTON */
-.btn{
-  padding:10px;
-  border-radius:12px;
-  border:none;
-  background:var(--orange);
-  color:#fff;
-  font-weight:900;
-  width:100%;
-}
-
-/* TABS */
-.tabs{
-  display:flex;
+.agentAdd{
+  display:grid;
+  grid-template-columns:1fr 48px;
   gap:8px;
 }
-.tab{
-  flex:1;
-  text-align:center;
-  padding:10px;
-  border-radius:14px;
-  background:var(--card);
-  cursor:pointer;
-}
-.tab.active{
-  background:var(--orange);
+
+.agentList{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-top:10px;
 }
 
-/* ROLE ROW */
-.role{
+.agentRow{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:12px;
-  border-radius:14px;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:16px;
   background:rgba(255,255,255,.05);
-  margin-bottom:8px;
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.agentName{
+  font-weight:900;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.miniBtn{
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(0,0,0,.20);
+  color:#fff;
+  border-radius:12px;
+  font-weight:950;
+  padding:8px 10px;
   cursor:pointer;
 }
 
-/* POPUP */
-.popup{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.7);
-  display:none;
+.tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.tab{
+  min-height:46px;
+  border-radius:18px;
+  background:rgba(0,0,0,.30);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:var(--shadow);
+  display:flex;
   align-items:center;
   justify-content:center;
-}
-
-.popup.show{display:flex;}
-
-.popupBox{
-  background:#111;
-  padding:14px;
-  border-radius:16px;
-  width:90%;
-  max-width:300px;
-}
-
-.agent{
-  padding:10px;
-  border-bottom:1px solid #333;
+  font-weight:950;
   cursor:pointer;
+}
+
+.tab.active{
+  background:linear-gradient(180deg, rgba(212,106,0,.58), rgba(185,88,0,.35));
+  border-color:rgba(255,255,255,.20);
+}
+
+.vehicleTabs{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+}
+
+.roleList{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.roleCard{
+  border-radius:18px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  padding:11px 12px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  align-items:center;
+  cursor:pointer;
+}
+
+.roleLabel{
+  font-weight:950;
+}
+
+.roleAgent{
+  color:rgba(255,255,255,.86);
+  font-weight:900;
+  text-align:right;
+  max-width:160px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.empty{
+  color:rgba(255,255,255,.45);
+}
+
+.previewTable{
+  width:100%;
+  border-collapse:collapse;
+  overflow:hidden;
+  border-radius:16px;
+  font-size:13px;
+}
+
+.previewTable th,
+.previewTable td{
+  border:1px solid rgba(255,255,255,.14);
+  padding:8px;
+  text-align:left;
+}
+
+.previewTable th{
+  background:rgba(212,106,0,.35);
+  font-weight:950;
+}
+
+.previewTable td{
+  background:rgba(0,0,0,.20);
+  font-weight:800;
+}
+
+/* popup */
+.overlay{
+  position:fixed;
+  inset:0;
+  display:none;
+  background:rgba(0,0,0,.62);
+  backdrop-filter:blur(7px);
+  -webkit-backdrop-filter:blur(7px);
+  z-index:100;
+}
+
+.overlay.show{
+  display:block;
+}
+
+.sheet{
+  position:absolute;
+  left:12px;
+  right:12px;
+  bottom:calc(env(safe-area-inset-bottom) + 12px);
+  max-width:980px;
+  margin:0 auto;
+  max-height:min(72vh, 680px);
+  border-radius:22px;
+  background:linear-gradient(180deg, rgba(0,0,0,.86), rgba(0,0,0,.72));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.sheetHead{
+  padding:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+
+.sheetTitle{
+  font-weight:950;
+}
+
+.sheetBody{
+  overflow:auto;
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.choice{
+  padding:12px;
+  border-radius:16px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10);
+  font-weight:900;
+  cursor:pointer;
+}
+
+.choice.none{
+  color:rgba(255,255,255,.65);
+}
+
+@media(max-width:620px){
+  .grid2,
+  .tabs,
+  .vehicleTabs{
+    grid-template-columns:1fr;
+  }
+
+  .roleCard{
+    grid-template-columns:1fr;
+  }
+
+  .roleAgent{
+    text-align:left;
+    max-width:100%;
+  }
 }
 </style>
 </head>
 
 <body>
+<div class="bg"></div>
 
 <div class="wrap">
-
-<div class="topbar">Gardes postées</div>
-
-<!-- CONFIG -->
-<div id="screen1" class="card">
-  <div>Date</div>
-  <input type="date" id="date" style="width:100%;margin-bottom:10px;">
-
-  <div>Chef de garde</div>
-  <div class="role" onclick="openSelect('chef')">
-    <span id="chefLabel">Choisir</span>
+  <div class="topbar">
+    <div class="title">Gardes postées</div>
+    <button class="btn" id="btnBack">Retour</button>
   </div>
 
-  <button class="btn" onclick="goConfig()">Configurer la garde</button>
-</div>
+  <div class="content">
 
-<!-- AFFECTATION -->
-<div id="screen2" style="display:none">
+    <section class="card">
+      <div class="cardTitle">Configuration journée</div>
+      <div class="grid2">
+        <div>
+          <div class="sub">Date de garde</div>
+          <input class="field" type="date" id="dateGarde">
+        </div>
 
-  <div class="tabs">
-    <div class="tab active" onclick="setTab('vsav')">VSAV</div>
-    <div class="tab" onclick="setTab('ccr')">CCR</div>
-    <div class="tab" onclick="setTab('vtul')">VTUL</div>
+        <div>
+          <div class="sub">Chef de garde</div>
+          <button class="cardBtn" id="chefBtn" type="button">Choisir le chef de garde</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="cardTitle">Agents</div>
+      <div class="sub">Ajoute les agents une fois. Ils seront proposés dans tous les choix.</div>
+
+      <div class="agentAdd">
+        <input class="field" id="newAgent" type="text" placeholder="Nom Prénom">
+        <button class="miniBtn" id="addAgentBtn" type="button">＋</button>
+      </div>
+
+      <div class="agentList" id="agentList"></div>
+    </section>
+
+    <section class="card">
+      <div class="cardTitle">Affectations</div>
+
+      <div class="tabs" style="margin-bottom:10px;">
+        <div class="tab active" data-shift="matin">Matin<br>07h00–13h00</div>
+        <div class="tab" data-shift="aprem">Après-midi<br>13h00–19h00</div>
+      </div>
+
+      <div class="vehicleTabs" style="margin-bottom:10px;">
+        <div class="tab active" data-vehicle="VSAV">VSAV</div>
+        <div class="tab" data-vehicle="CCR">CCR</div>
+        <div class="tab" data-vehicle="VTUL">VTUL</div>
+      </div>
+
+      <div class="roleList" id="roleList"></div>
+    </section>
+
+    <section class="card">
+      <div class="cardTitle">Missions / remarques</div>
+      <textarea class="textarea" id="remarks" placeholder="Remarque, consignes, missions de la journée..."></textarea>
+    </section>
+
+    <section class="card">
+      <button class="cardBtn" id="previewBtn" type="button">Aperçu feuille de garde</button>
+    </section>
+
+    <section class="card" id="previewCard" style="display:none;">
+      <div class="cardTitle">Aperçu</div>
+      <div id="previewArea"></div>
+    </section>
+
   </div>
-
-  <div class="card" id="content"></div>
-
 </div>
 
-</div>
-
-<!-- POPUP -->
-<div id="popup" class="popup">
-  <div class="popupBox" id="popupList"></div>
+<div class="overlay" id="agentOverlay">
+  <div class="sheet">
+    <div class="sheetHead">
+      <div class="sheetTitle" id="sheetTitle">Choisir un agent</div>
+      <button class="miniBtn" id="closeSheet" type="button">Fermer</button>
+    </div>
+    <div class="sheetBody" id="choiceList"></div>
+  </div>
 </div>
 
 <script>
+const LS_AGENTS = "cs_gardes_agents_demo_v1";
+const LS_STATE = "cs_gardes_state_demo_v1";
 
-// ===== AGENTS DEMO =====
-let agents = [
-  "DUPONT Pierre",
-  "LEROY Julien",
-  "MARTIN Lucas"
-];
+const ROLES = {
+  VSAV: ["Conducteur", "Chef d’agrès", "Équipier", "Apprenant"],
+  CCR: [
+    "Conducteur",
+    "Chef d’agrès",
+    "Chef BAT 1",
+    "Équipier BAT 1",
+    "Chef BAT 2",
+    "Équipier BAT 2",
+    "Chef BAL",
+    "Équipier BAL"
+  ],
+  VTUL: ["Conducteur", "Chef d’agrès"]
+};
 
-let affect = {};
-let currentRole = "";
+let agents = loadAgents();
+let currentShift = "matin";
+let currentVehicle = "VSAV";
+let currentPick = null;
 
-// ===== NAV =====
-function goConfig(){
-  screen1.style.display="none";
-  screen2.style.display="block";
-  render();
+let state = loadState();
+
+const $ = (id)=>document.getElementById(id);
+
+function loadAgents(){
+  try{
+    const arr = JSON.parse(localStorage.getItem(LS_AGENTS) || "[]");
+    if(Array.isArray(arr) && arr.length) return arr;
+  }catch(e){}
+  const starter = ["DUPONT Pierre","LEROY Julien","MARTIN Lucas","MOREAU Thomas"];
+  localStorage.setItem(LS_AGENTS, JSON.stringify(starter));
+  return starter;
 }
 
-// ===== TABS =====
-let currentTab="vsav";
-
-function setTab(tab){
-  currentTab=tab;
-
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  event.target.classList.add("active");
-
-  render();
+function saveAgents(){
+  localStorage.setItem(LS_AGENTS, JSON.stringify(agents));
 }
 
-// ===== RENDER =====
-function render(){
-
-  let roles = [];
-
-  if(currentTab==="vsav"){
-    roles=["Conducteur","Chef","Équipier","Apprenant"];
+function defaultState(){
+  const d = {};
+  for(const shift of ["matin","aprem"]){
+    d[shift] = {};
+    for(const veh of Object.keys(ROLES)){
+      d[shift][veh] = {};
+      for(const role of ROLES[veh]) d[shift][veh][role] = "";
+    }
   }
-
-  if(currentTab==="ccr"){
-    roles=["Conducteur","Chef","BAT1","BAT2"];
-  }
-
-  if(currentTab==="vtul"){
-    roles=["Conducteur","Chef"];
-  }
-
-  content.innerHTML = roles.map(r=>`
-    <div class="role" onclick="openSelect('${currentTab}_${r}')">
-      <span>${r}</span>
-      <span>${affect[currentTab+"_"+r] || "—"}</span>
-    </div>
-  `).join("");
+  return {
+    date:"",
+    chef:"",
+    assignments:d,
+    remarks:""
+  };
 }
 
-// ===== POPUP =====
-function openSelect(role){
-  currentRole = role;
-  popup.classList.add("show");
+function loadState(){
+  try{
+    const obj = JSON.parse(localStorage.getItem(LS_STATE) || "null");
+    if(obj && obj.assignments) return obj;
+  }catch(e){}
+  return defaultState();
+}
 
-  popupList.innerHTML = agents.map(a=>`
-    <div class="agent" onclick="selectAgent('${a}')">${a}</div>
-  `).join("");
+function saveState(){
+  state.date = $("dateGarde").value || "";
+  state.remarks = $("remarks").value || "";
+  localStorage.setItem(LS_STATE, JSON.stringify(state));
+}
+
+function escapeHtml(s){
+  return String(s == null ? "" : s)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function renderAgents(){
+  const box = $("agentList");
+  box.innerHTML = "";
+
+  if(!agents.length){
+    box.innerHTML = `<div class="agentRow"><span class="empty">Aucun agent</span></div>`;
+    return;
+  }
+
+  agents.forEach((name, idx)=>{
+    const row = document.createElement("div");
+    row.className = "agentRow";
+    row.innerHTML = `
+      <div class="agentName">${escapeHtml(name)}</div>
+      <button class="miniBtn" type="button">−</button>
+    `;
+    row.querySelector("button").onclick = ()=>{
+      agents.splice(idx,1);
+      saveAgents();
+
+      if(state.chef === name) state.chef = "";
+
+      for(const shift of Object.keys(state.assignments)){
+        for(const veh of Object.keys(state.assignments[shift])){
+          for(const role of Object.keys(state.assignments[shift][veh])){
+            if(state.assignments[shift][veh][role] === name){
+              state.assignments[shift][veh][role] = "";
+            }
+          }
+        }
+      }
+
+      saveState();
+      renderAll();
+    };
+    box.appendChild(row);
+  });
+}
+
+function renderConfig(){
+  $("dateGarde").value = state.date || "";
+  $("remarks").value = state.remarks || "";
+  $("chefBtn").textContent = state.chef || "Choisir le chef de garde";
+}
+
+function renderTabs(){
+  document.querySelectorAll("[data-shift]").forEach(el=>{
+    el.classList.toggle("active", el.dataset.shift === currentShift);
+  });
+  document.querySelectorAll("[data-vehicle]").forEach(el=>{
+    el.classList.toggle("active", el.dataset.vehicle === currentVehicle);
+  });
+}
+
+function renderRoles(){
+  const box = $("roleList");
+  box.innerHTML = "";
+
+  const roles = ROLES[currentVehicle] || [];
+
+  roles.forEach(role=>{
+    const val = state.assignments[currentShift][currentVehicle][role] || "";
+    const card = document.createElement("div");
+    card.className = "roleCard";
+    card.innerHTML = `
+      <div class="roleLabel">${escapeHtml(role)}</div>
+      <div class="roleAgent ${val ? "" : "empty"}">${escapeHtml(val || "Non affecté")}</div>
+    `;
+    card.onclick = ()=>{
+      currentPick = {
+        type:"assignment",
+        shift:currentShift,
+        vehicle:currentVehicle,
+        role
+      };
+      openAgentSheet(`Choisir — ${currentVehicle} / ${role}`);
+    };
+    box.appendChild(card);
+  });
+}
+
+function renderAll(){
+  renderConfig();
+  renderAgents();
+  renderTabs();
+  renderRoles();
+}
+
+function addAgent(){
+  const input = $("newAgent");
+  const name = input.value.trim();
+  if(!name) return;
+
+  if(!agents.includes(name)){
+    agents.push(name);
+    agents.sort((a,b)=>a.localeCompare(b));
+    saveAgents();
+  }
+
+  input.value = "";
+  renderAll();
+}
+
+function openAgentSheet(title){
+  $("sheetTitle").textContent = title || "Choisir un agent";
+  const list = $("choiceList");
+  list.innerHTML = "";
+
+  const none = document.createElement("div");
+  none.className = "choice none";
+  none.textContent = "— Aucun / Effacer";
+  none.onclick = ()=>selectAgent("");
+  list.appendChild(none);
+
+  agents.forEach(name=>{
+    const div = document.createElement("div");
+    div.className = "choice";
+    div.textContent = name;
+    div.onclick = ()=>selectAgent(name);
+    list.appendChild(div);
+  });
+
+  $("agentOverlay").classList.add("show");
+}
+
+function closeAgentSheet(){
+  $("agentOverlay").classList.remove("show");
+  currentPick = null;
 }
 
 function selectAgent(name){
-  affect[currentRole]=name;
+  if(!currentPick) return;
 
-  if(currentRole==="chef"){
-    chefLabel.innerText=name;
+  if(currentPick.type === "chef"){
+    state.chef = name;
   }
 
-  popup.classList.remove("show");
-  render();
+  if(currentPick.type === "assignment"){
+    state.assignments[currentPick.shift][currentPick.vehicle][currentPick.role] = name;
+  }
+
+  saveState();
+  closeAgentSheet();
+  renderAll();
 }
 
-popup.onclick = e=>{
-  if(e.target.id==="popup") popup.classList.remove("show");
+function makePreview(){
+  saveState();
+
+  const date = state.date ? state.date.split("-").reverse().join("/") : "—";
+  const chef = state.chef || "—";
+
+  let html = `
+    <div style="font-weight:950;margin-bottom:10px;">
+      Date : ${escapeHtml(date)}<br>
+      Chef de garde : ${escapeHtml(chef)}
+    </div>
+
+    <table class="previewTable">
+      <thead>
+        <tr>
+          <th>Engin</th>
+          <th>Poste</th>
+          <th>Matin<br>07h–13h</th>
+          <th>Après-midi<br>13h–19h</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  for(const veh of Object.keys(ROLES)){
+    const roles = ROLES[veh];
+    roles.forEach((role, idx)=>{
+      const m = state.assignments.matin[veh][role] || "—";
+      const a = state.assignments.aprem[veh][role] || "—";
+
+      html += `
+        <tr>
+          ${idx === 0 ? `<td rowspan="${roles.length}"><b>${escapeHtml(veh)}</b></td>` : ""}
+          <td>${escapeHtml(role)}</td>
+          <td>${escapeHtml(m)}</td>
+          <td>${escapeHtml(a)}</td>
+        </tr>
+      `;
+    });
+  }
+
+  html += `
+      </tbody>
+    </table>
+
+    <div style="margin-top:12px;font-weight:950;">Remarques / missions</div>
+    <div style="margin-top:6px;padding:10px;border-radius:14px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.10);white-space:pre-wrap;">
+      ${escapeHtml(state.remarks || "—")}
+    </div>
+  `;
+
+  $("previewArea").innerHTML = html;
+  $("previewCard").style.display = "block";
+  $("previewCard").scrollIntoView({behavior:"smooth", block:"start"});
 }
 
+$("btnBack").onclick = ()=>location.href = "index.html?portal=1";
+
+$("addAgentBtn").onclick = addAgent;
+$("newAgent").addEventListener("keydown", e=>{
+  if(e.key === "Enter") addAgent();
+});
+
+$("dateGarde").addEventListener("change", saveState);
+$("remarks").addEventListener("input", saveState);
+
+$("chefBtn").onclick = ()=>{
+  currentPick = {type:"chef"};
+  openAgentSheet("Choisir le chef de garde");
+};
+
+document.querySelectorAll("[data-shift]").forEach(el=>{
+  el.onclick = ()=>{
+    currentShift = el.dataset.shift;
+    renderAll();
+  };
+});
+
+document.querySelectorAll("[data-vehicle]").forEach(el=>{
+  el.onclick = ()=>{
+    currentVehicle = el.dataset.vehicle;
+    renderAll();
+  };
+});
+
+$("previewBtn").onclick = makePreview;
+
+$("closeSheet").onclick = closeAgentSheet;
+$("agentOverlay").addEventListener("click", e=>{
+  if(e.target.id === "agentOverlay") closeAgentSheet();
+});
+
+renderAll();
 </script>
-
 </body>
 </html>
