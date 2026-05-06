@@ -11,20 +11,12 @@
   --muted:rgba(255,255,255,.72);
   --shadow:0 14px 34px rgba(0,0,0,.40);
   --stroke:rgba(255,255,255,.10);
-
   --orange:#d46a00;
   --orange2:#b95800;
-
-  --vsav:#d93030;
-  --ccr:#d46a00;
-  --vtul:#2f79ff;
 }
 
 *{box-sizing:border-box}
-
-html,body{
-  height:100%;
-}
+html,body{height:100%}
 
 body{
   margin:0;
@@ -38,8 +30,8 @@ body{
   position:fixed;
   inset:0;
   background:
-    linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.65)),
-    url("background.png") center/cover no-repeat;
+    linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.68)),
+    url("background.png") center top/cover no-repeat;
   z-index:-2;
 }
 
@@ -47,47 +39,32 @@ body{
   content:"";
   position:absolute;
   inset:0;
-  background:radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.64) 62%);
+  background:radial-gradient(circle at 50% 8%, rgba(255,150,40,.18), rgba(0,0,0,.68) 62%);
 }
 
 .wrap{
   height:100vh;
   max-width:980px;
-  margin:auto;
-  padding:
-    calc(env(safe-area-inset-top) + 10px)
-    12px
-    calc(env(safe-area-inset-bottom) + 12px);
-
+  margin:0 auto;
+  padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
   display:grid;
   grid-template-rows:auto auto 1fr;
   gap:10px;
 }
-
-/* TOPBAR */
 
 .topbar{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:10px;
-
   padding:10px 12px;
-
   border-radius:18px;
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(212,106,0,.75),
-      rgba(185,88,0,.58)
-    );
-
+  background:linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
   border:1px solid rgba(255,255,255,.12);
-
   box-shadow:var(--shadow);
-
   backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  min-height:46px;
 }
 
 .title{
@@ -107,8 +84,6 @@ body{
   cursor:pointer;
 }
 
-/* MAIN TABS */
-
 .mainTabs{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -116,170 +91,284 @@ body{
 }
 
 .mainTab{
-  min-height:48px;
-
+  min-height:50px;
   border-radius:18px;
-
-  background:rgba(0,0,0,.35);
-
+  background:rgba(0,0,0,.34);
   border:1px solid rgba(255,255,255,.10);
-
   box-shadow:var(--shadow);
-
-  backdrop-filter:blur(10px);
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   font-weight:950;
-
   cursor:pointer;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
 }
 
 .mainTab.active{
-  background:
-    linear-gradient(
-      180deg,
-      rgba(212,106,0,.60),
-      rgba(185,88,0,.40)
-    );
-
+  background:linear-gradient(180deg, rgba(212,106,0,.58), rgba(185,88,0,.38));
   border-color:rgba(255,255,255,.22);
 }
 
-/* PAGE */
-
 .page{
+  display:none;
   min-height:0;
   overflow:auto;
-
-  display:none;
+  -webkit-overflow-scrolling:touch;
   flex-direction:column;
   gap:10px;
-
   padding-right:2px;
 }
 
-.page.show{
-  display:flex;
-}
+.page.show{display:flex}
 
-/* CARD */
-
-.card{
-  border-radius:22px;
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(0,0,0,.42),
-      rgba(0,0,0,.26)
-    );
-
+.hero{
+  border-radius:24px;
+  background:linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.28));
   border:1px solid var(--stroke);
-
   box-shadow:var(--shadow);
-
   backdrop-filter:blur(10px);
-
-  padding:12px;
+  -webkit-backdrop-filter:blur(10px);
+  padding:14px;
 }
 
-.cardTitle{
+.heroTitle{
   font-weight:950;
-  font-size:17px;
-  margin-bottom:10px;
+  font-size:19px;
   text-transform:uppercase;
+  margin-bottom:10px;
 }
 
-.sub{
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:8px;
-  font-weight:800;
-}
-
-/* GRID */
-
-.grid2{
+.heroGrid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
 }
 
-.grid3{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:10px;
+.inputBox{
+  border-radius:18px;
+  background:rgba(0,0,0,.25);
+  border:1px solid rgba(255,255,255,.10);
+  padding:10px;
 }
 
-/* FIELDS */
+.label{
+  font-size:12px;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-weight:900;
+  margin-bottom:6px;
+}
 
 .field,
 .select,
 .textarea{
   width:100%;
-
   border:none;
   outline:none;
-
-  background:rgba(0,0,0,.24);
-
+  background:rgba(0,0,0,.18);
   color:#fff;
-
   border:1px solid rgba(255,255,255,.10);
-
   border-radius:14px;
-
-  padding:11px 12px;
-
+  padding:10px 12px;
   font:inherit;
-  font-weight:800;
+  font-weight:850;
 }
 
 .textarea{
-  min-height:90px;
+  min-height:82px;
   resize:vertical;
 }
 
-/* AGENTS */
+.shiftSwitch{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
 
-.agentList{
+.shiftBtn{
+  min-height:48px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(0,0,0,.34);
+  color:#fff;
+  font-weight:950;
+  cursor:pointer;
+}
+
+.shiftBtn.active{
+  background:linear-gradient(180deg, rgba(212,106,0,.62), rgba(185,88,0,.38));
+  border-color:rgba(255,255,255,.22);
+}
+
+.vehicleDeck{
   display:flex;
   flex-direction:column;
+  gap:10px;
+}
+
+.vehicleCard{
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  overflow:hidden;
+}
+
+.vehicleHead{
+  padding:12px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  cursor:pointer;
+}
+
+.vehicleName{
+  font-size:20px;
+  font-weight:950;
+  letter-spacing:.5px;
+}
+
+.vehicleMeta{
+  font-size:12px;
+  color:rgba(255,255,255,.78);
+  font-weight:900;
+}
+
+.vehicleBody{
+  display:none;
+  padding:10px;
+  background:rgba(0,0,0,.18);
+  border-top:1px solid rgba(255,255,255,.10);
+}
+
+.vehicleCard.open .vehicleBody{
+  display:block;
+}
+
+.roleGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
   gap:8px;
 }
 
-.agentRow{
-  display:grid;
-  grid-template-columns:110px 1fr 1fr 52px;
-  gap:8px;
-
-  align-items:center;
-
+.roleSlot{
+  border-radius:18px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.09);
   padding:10px;
+}
 
+.roleName{
+  font-weight:950;
+  font-size:14px;
+  margin-bottom:7px;
+}
+
+.previewBox{
+  border-radius:22px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10);
+  overflow:hidden;
+}
+
+.previewTitle{
+  background:rgba(212,106,0,.38);
+  padding:10px 12px;
+  font-weight:950;
+  text-transform:uppercase;
+}
+
+.previewBody{
+  padding:10px;
+  overflow:auto;
+}
+
+.previewTable{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+
+.previewTable th,
+.previewTable td{
+  border:1px solid rgba(255,255,255,.14);
+  padding:8px;
+}
+
+.previewTable th{
+  background:rgba(0,0,0,.30);
+  text-align:left;
+}
+
+.configGrid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+
+.configCard{
+  border-radius:22px;
+  background:linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.26));
+  border:1px solid var(--stroke);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  padding:12px;
+}
+
+.cardTitle{
+  font-weight:950;
+  text-transform:uppercase;
+  margin-bottom:10px;
+  font-size:17px;
+}
+
+.addRow{
+  display:grid;
+  grid-template-columns:86px 1fr 1fr 48px;
+  gap:8px;
+}
+
+.agentList,
+.vehicleList{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-top:10px;
+}
+
+.itemRow{
+  display:grid;
+  grid-template-columns:1fr 44px;
+  gap:8px;
+  align-items:center;
   border-radius:16px;
-
-  background:rgba(255,255,255,.04);
-
+  background:rgba(255,255,255,.05);
   border:1px solid rgba(255,255,255,.08);
+  padding:10px;
+}
+
+.itemMain{
+  font-weight:950;
+}
+
+.itemSub{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:800;
+  margin-top:2px;
 }
 
 .miniBtn{
   border:none;
-
   background:rgba(255,255,255,.10);
-
   color:#fff;
-
   border-radius:12px;
-
-  padding:10px;
-
   font-weight:950;
-
+  padding:10px;
   cursor:pointer;
 }
 
@@ -287,635 +376,434 @@ body{
   background:rgba(255,80,80,.18);
 }
 
-/* VEHICLES */
-
-.vehicleTabs{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:10px;
-}
-
-.vehicleTab{
-  min-height:48px;
-
-  border-radius:18px;
-
-  border:1px solid rgba(255,255,255,.10);
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  font-weight:950;
-
-  cursor:pointer;
-}
-
-.vehicleTab[data-veh="VSAV"]{
-  background:rgba(217,48,48,.25);
-}
-
-.vehicleTab[data-veh="CCR"]{
-  background:rgba(212,106,0,.25);
-}
-
-.vehicleTab[data-veh="VTUL"]{
-  background:rgba(47,121,255,.25);
-}
-
-.vehicleTab.active{
-  border-color:#fff;
-  box-shadow:0 0 0 2px rgba(255,255,255,.15);
-}
-
-/* SHIFT */
-
-.shiftTabs{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.shiftTab{
-  min-height:48px;
-
-  border-radius:18px;
-
-  background:rgba(255,255,255,.05);
-
-  border:1px solid rgba(255,255,255,.08);
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  font-weight:950;
-
-  cursor:pointer;
-}
-
-.shiftTab.active{
-  background:
-    linear-gradient(
-      180deg,
-      rgba(212,106,0,.58),
-      rgba(185,88,0,.35)
-    );
-}
-
-/* ROLE */
-
-.roleList{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-.roleCard{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-
-  align-items:center;
-
-  padding:12px;
-
-  border-radius:18px;
-
-  background:rgba(255,255,255,.05);
-
-  border:1px solid rgba(255,255,255,.08);
-}
-
-.roleName{
-  font-weight:950;
-}
-
-.previewTable{
+.actionBtn{
   width:100%;
-  border-collapse:collapse;
+  border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(180deg, rgba(212,106,0,.56), rgba(185,88,0,.34));
+  color:#fff;
+  padding:12px;
+  border-radius:18px;
+  font-weight:950;
+  cursor:pointer;
 }
-
-.previewTable th,
-.previewTable td{
-  border:1px solid rgba(255,255,255,.10);
-  padding:8px;
-}
-
-.previewTable th{
-  background:rgba(212,106,0,.35);
-}
-
-/* MOBILE */
 
 @media(max-width:700px){
-
-  .grid2,
-  .grid3,
-  .vehicleTabs{
+  .heroGrid,
+  .roleGrid,
+  .addRow{
     grid-template-columns:1fr;
   }
-
-  .agentRow{
-    grid-template-columns:1fr;
-  }
-
-  .roleCard{
-    grid-template-columns:1fr;
-  }
-
 }
 </style>
 </head>
 
 <body>
-
 <div class="bg"></div>
 
 <div class="wrap">
 
-  <!-- TOP -->
   <div class="topbar">
     <div class="title">Gardes postées</div>
     <button class="btn" id="btnBack">Retour</button>
   </div>
 
-  <!-- MAIN TABS -->
   <div class="mainTabs">
-
-    <div class="mainTab active" data-page="generate">
-      Générer la feuille
-    </div>
-
-    <div class="mainTab" data-page="config">
-      Configuration
-    </div>
-
+    <div class="mainTab active" data-page="generate">Générer la feuille</div>
+    <div class="mainTab" data-page="config">Configuration</div>
   </div>
 
-  <!-- GENERATE -->
   <div class="page show" id="page-generate">
 
-    <!-- DATE -->
-    <div class="card">
+    <section class="hero">
+      <div class="heroTitle">Feuille de garde</div>
 
-      <div class="cardTitle">Informations</div>
-
-      <div class="grid2">
-
-        <div>
-          <div class="sub">Date</div>
-          <input type="date" class="field" id="dateGarde">
+      <div class="heroGrid">
+        <div class="inputBox">
+          <div class="label">Date</div>
+          <input class="field" type="date" id="dateGarde">
         </div>
 
-        <div>
-          <div class="sub">Chef de garde</div>
+        <div class="inputBox">
+          <div class="label">Chef de garde</div>
           <select class="select" id="chefGarde"></select>
         </div>
-
       </div>
+    </section>
 
+    <div class="shiftSwitch">
+      <button class="shiftBtn active" data-shift="matin">Matin<br>07h00–13h00</button>
+      <button class="shiftBtn" data-shift="aprem">Après-midi<br>13h00–19h00</button>
     </div>
 
-    <!-- SHIFTS -->
-    <div class="shiftTabs">
+    <section class="vehicleDeck" id="vehicleDeck"></section>
 
-      <div class="shiftTab active" data-shift="matin">
-        Matin<br>07h-13h
-      </div>
+    <section class="hero">
+      <div class="heroTitle">Missions / remarques</div>
+      <textarea class="textarea" id="remarks" placeholder="Consignes, missions, remarques..."></textarea>
+    </section>
 
-      <div class="shiftTab" data-shift="aprem">
-        Après-midi<br>13h-19h
-      </div>
-
-    </div>
-
-    <!-- VEHICLES -->
-    <div class="vehicleTabs">
-
-      <div class="vehicleTab active" data-veh="VSAV">
-        VSAV
-      </div>
-
-      <div class="vehicleTab" data-veh="CCR">
-        CCR
-      </div>
-
-      <div class="vehicleTab" data-veh="VTUL">
-        VTUL
-      </div>
-
-    </div>
-
-    <!-- ROLES -->
-    <div class="card">
-
-      <div class="cardTitle" id="rolesTitle">
-        VSAV — Matin
-      </div>
-
-      <div class="roleList" id="roleList"></div>
-
-    </div>
-
-    <!-- REM -->
-    <div class="card">
-
-      <div class="cardTitle">Remarques / missions</div>
-
-      <textarea class="textarea" id="remarks"></textarea>
-
-    </div>
-
-    <!-- PREVIEW -->
-    <div class="card">
-
-      <div class="cardTitle">Aperçu</div>
-
-      <div id="preview"></div>
-
-    </div>
+    <section class="previewBox">
+      <div class="previewTitle">Aperçu feuille de garde</div>
+      <div class="previewBody" id="preview"></div>
+    </section>
 
   </div>
 
-  <!-- CONFIG -->
   <div class="page" id="page-config">
 
-    <!-- AGENTS -->
-    <div class="card">
-
+    <section class="configCard">
       <div class="cardTitle">Agents</div>
 
-      <div class="sub">
-        Grade + nom + prénom
+      <div class="addRow">
+        <input class="field" id="agentGrade" placeholder="Grade">
+        <input class="field" id="agentNom" placeholder="Nom">
+        <input class="field" id="agentPrenom" placeholder="Prénom">
+        <button class="miniBtn" id="addAgentBtn">＋</button>
       </div>
 
       <div class="agentList" id="agentList"></div>
+    </section>
 
-      <div style="margin-top:10px;">
-        <button class="miniBtn" id="addAgentBtn">
-          Ajouter un agent
-        </button>
-      </div>
-
-    </div>
-
-    <!-- VEHICLES -->
-    <div class="card">
-
+    <section class="configCard">
       <div class="cardTitle">Véhicules</div>
 
-      <div class="sub">
-        Ajout / suppression véhicules
+      <div class="addRow">
+        <input class="field" id="vehicleName" placeholder="Engin">
+        <input class="field" id="vehicleColor" placeholder="#d93030">
+        <input class="field" id="vehicleRoles" placeholder="Postes séparés par virgule">
+        <button class="miniBtn" id="addVehicleBtn">＋</button>
       </div>
 
-      <div id="vehiculeConfig"></div>
-
-    </div>
+      <div class="vehicleList" id="vehicleList"></div>
+    </section>
 
   </div>
 
 </div>
 
 <script>
-
-const ROLES = {
-  VSAV:[
-    "Conducteur",
-    "Chef d’agrès",
-    "Équipier",
-    "Apprenant"
-  ],
-
-  CCR:[
-    "Conducteur",
-    "Chef d’agrès",
-    "Chef BAT1",
-    "Équipier BAT1",
-    "Chef BAT2",
-    "Équipier BAT2",
-    "Chef BAL",
-    "Équipier BAL"
-  ],
-
-  VTUL:[
-    "Conducteur",
-    "Chef d’agrès"
-  ]
-};
-
-let agents = [
-  {
-    grade:"ADJ",
-    nom:"DUPONT",
-    prenom:"Pierre"
-  },
-  {
-    grade:"CPL",
-    nom:"LEROY",
-    prenom:"Julien"
-  }
-];
-
-let vehicules = [
-  "VSAV",
-  "CCR",
-  "VTUL"
-];
+const LS_AGENTS = "cs_gp_agents_v2";
+const LS_VEHICLES = "cs_gp_vehicles_v2";
+const LS_STATE = "cs_gp_state_v2";
 
 let currentPage = "generate";
-let currentVeh = "VSAV";
 let currentShift = "matin";
 
-let affect = {
-  matin:{},
-  aprem:{}
-};
-
-function fullName(a){
-  return `${a.grade} ${a.nom} ${a.prenom}`;
+function defaultAgents(){
+  return [
+    {grade:"ADJ", nom:"DUPONT", prenom:"Pierre"},
+    {grade:"CPL", nom:"LEROY", prenom:"Julien"},
+    {grade:"SAP", nom:"MARTIN", prenom:"Lucas"}
+  ];
 }
 
-function agentOptions(selected=""){
-  return `
-    <option value="">--</option>
-    ${agents.map(a=>{
-      const n = fullName(a);
-      return `
-        <option ${selected===n?"selected":""}>
-          ${n}
-        </option>
+function defaultVehicles(){
+  return [
+    {name:"VSAV", color:"#d93030", roles:["Conducteur","Chef d’agrès","Équipier","Apprenant"]},
+    {name:"CCR", color:"#d46a00", roles:["Conducteur","Chef d’agrès","Chef BAT1","Équipier BAT1","Chef BAT2","Équipier BAT2","Chef BAL","Équipier BAL"]},
+    {name:"VTUL", color:"#2f79ff", roles:["Conducteur","Chef d’agrès"]}
+  ];
+}
+
+let agents = loadJson(LS_AGENTS, defaultAgents());
+let vehicles = loadJson(LS_VEHICLES, defaultVehicles());
+let state = loadJson(LS_STATE, {
+  date:"",
+  chef:"",
+  remarks:"",
+  affect:{matin:{}, aprem:{}},
+  openVehicle:"VSAV"
+});
+
+function loadJson(key, fallback){
+  try{
+    const raw = localStorage.getItem(key);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  localStorage.setItem(key, JSON.stringify(fallback));
+  return fallback;
+}
+
+function saveAll(){
+  localStorage.setItem(LS_AGENTS, JSON.stringify(agents));
+  localStorage.setItem(LS_VEHICLES, JSON.stringify(vehicles));
+  localStorage.setItem(LS_STATE, JSON.stringify(state));
+}
+
+function fullAgent(a){
+  return `${a.grade} ${a.nom} ${a.prenom}`.trim().replace(/\s+/g," ");
+}
+
+function esc(s){
+  return String(s ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function agentOptions(selected){
+  let html = `<option value="">—</option>`;
+  agents.forEach(a=>{
+    const n = fullAgent(a);
+    html += `<option value="${esc(n)}" ${selected===n ? "selected" : ""}>${esc(n)}</option>`;
+  });
+  return html;
+}
+
+function ensureAffect(){
+  for(const shift of ["matin","aprem"]){
+    if(!state.affect[shift]) state.affect[shift] = {};
+    vehicles.forEach(v=>{
+      if(!state.affect[shift][v.name]) state.affect[shift][v.name] = {};
+      v.roles.forEach(r=>{
+        if(state.affect[shift][v.name][r] === undefined) state.affect[shift][v.name][r] = "";
+      });
+    });
+  }
+}
+
+function setPage(page){
+  currentPage = page;
+  document.querySelectorAll(".mainTab").forEach(t=>t.classList.toggle("active", t.dataset.page===page));
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
+  document.getElementById("page-"+page).classList.add("show");
+}
+
+function renderChef(){
+  const chef = document.getElementById("chefGarde");
+  chef.innerHTML = agentOptions(state.chef);
+  chef.onchange = ()=>{
+    state.chef = chef.value;
+    saveAll();
+    renderPreview();
+  };
+}
+
+function renderVehicles(){
+  ensureAffect();
+  const deck = document.getElementById("vehicleDeck");
+  deck.innerHTML = "";
+
+  vehicles.forEach(v=>{
+    const isOpen = state.openVehicle === v.name;
+    const card = document.createElement("section");
+    card.className = "vehicleCard" + (isOpen ? " open" : "");
+    card.style.background = `linear-gradient(180deg, ${v.color}55, rgba(0,0,0,.28))`;
+
+    let body = "";
+    v.roles.forEach(role=>{
+      const val = state.affect[currentShift][v.name][role] || "";
+      body += `
+        <div class="roleSlot">
+          <div class="roleName">${esc(role)}</div>
+          <select class="select" data-vehicle="${esc(v.name)}" data-role="${esc(role)}">
+            ${agentOptions(val)}
+          </select>
+        </div>
       `;
-    }).join("")}
-  `;
-}
-
-/* MAIN TABS */
-
-document.querySelectorAll(".mainTab").forEach(tab=>{
-
-  tab.onclick = ()=>{
-
-    currentPage = tab.dataset.page;
-
-    document.querySelectorAll(".mainTab")
-      .forEach(t=>t.classList.remove("active"));
-
-    tab.classList.add("active");
-
-    document.querySelectorAll(".page")
-      .forEach(p=>p.classList.remove("show"));
-
-    document
-      .getElementById("page-" + currentPage)
-      .classList.add("show");
-
-  };
-
-});
-
-/* SHIFT */
-
-document.querySelectorAll(".shiftTab").forEach(tab=>{
-
-  tab.onclick = ()=>{
-
-    currentShift = tab.dataset.shift;
-
-    document.querySelectorAll(".shiftTab")
-      .forEach(t=>t.classList.remove("active"));
-
-    tab.classList.add("active");
-
-    renderRoles();
-
-  };
-
-});
-
-/* VEH */
-
-document.querySelectorAll(".vehicleTab").forEach(tab=>{
-
-  tab.onclick = ()=>{
-
-    currentVeh = tab.dataset.veh;
-
-    document.querySelectorAll(".vehicleTab")
-      .forEach(t=>t.classList.remove("active"));
-
-    tab.classList.add("active");
-
-    renderRoles();
-
-  };
-
-});
-
-/* AGENTS */
-
-function renderAgents(){
-
-  const box = document.getElementById("agentList");
-
-  box.innerHTML = "";
-
-  agents.forEach((a,idx)=>{
-
-    const row = document.createElement("div");
-
-    row.className = "agentRow";
-
-    row.innerHTML = `
-
-      <input class="field"
-        value="${a.grade}"
-        onchange="agents[${idx}].grade=this.value">
-
-      <input class="field"
-        value="${a.nom}"
-        onchange="agents[${idx}].nom=this.value">
-
-      <input class="field"
-        value="${a.prenom}"
-        onchange="agents[${idx}].prenom=this.value">
-
-      <button class="miniBtn red"
-        onclick="deleteAgent(${idx})">
-        −
-      </button>
-
-    `;
-
-    box.appendChild(row);
-
-  });
-
-}
-
-function deleteAgent(idx){
-
-  agents.splice(idx,1);
-
-  renderAgents();
-  renderRoles();
-
-}
-
-document.getElementById("addAgentBtn").onclick = ()=>{
-
-  agents.push({
-    grade:"SAP",
-    nom:"",
-    prenom:""
-  });
-
-  renderAgents();
-
-};
-
-/* ROLES */
-
-function renderRoles(){
-
-  document.getElementById("rolesTitle").innerHTML =
-    `${currentVeh} — ${currentShift}`;
-
-  const box = document.getElementById("roleList");
-
-  box.innerHTML = "";
-
-  const roles = ROLES[currentVeh] || [];
-
-  roles.forEach(role=>{
-
-    if(!affect[currentShift][currentVeh]){
-      affect[currentShift][currentVeh] = {};
-    }
-
-    const current =
-      affect[currentShift][currentVeh][role] || "";
-
-    const div = document.createElement("div");
-
-    div.className = "roleCard";
-
-    div.innerHTML = `
-
-      <div class="roleName">
-        ${role}
+    });
+
+    card.innerHTML = `
+      <div class="vehicleHead" data-open="${esc(v.name)}">
+        <div>
+          <div class="vehicleName">${esc(v.name)}</div>
+          <div class="vehicleMeta">${v.roles.length} postes — ${currentShift === "matin" ? "07h00–13h00" : "13h00–19h00"}</div>
+        </div>
+        <div style="font-weight:950;">${isOpen ? "−" : "+"}</div>
       </div>
-
-      <select class="select"
-        onchange="
-          affect['${currentShift}']['${currentVeh}']['${role}']=this.value;
-          renderPreview();
-        ">
-        ${agentOptions(current)}
-      </select>
-
+      <div class="vehicleBody">
+        <div class="roleGrid">${body}</div>
+      </div>
     `;
 
-    box.appendChild(div);
-
+    deck.appendChild(card);
   });
 
-  renderPreview();
+  deck.querySelectorAll("[data-open]").forEach(el=>{
+    el.onclick = ()=>{
+      state.openVehicle = el.dataset.open;
+      saveAll();
+      renderVehicles();
+    };
+  });
 
+  deck.querySelectorAll("select[data-vehicle]").forEach(sel=>{
+    sel.onchange = ()=>{
+      const veh = sel.dataset.vehicle;
+      const role = sel.dataset.role;
+      state.affect[currentShift][veh][role] = sel.value;
+      saveAll();
+      renderPreview();
+    };
+  });
 }
-
-/* PREVIEW */
 
 function renderPreview(){
-
-  const box = document.getElementById("preview");
+  const date = state.date ? state.date.split("-").reverse().join("/") : "—";
+  const chef = state.chef || "—";
+  const remarks = state.remarks || "—";
 
   let html = `
-
+    <div style="font-weight:950;margin-bottom:10px;">
+      Date : ${esc(date)}<br>
+      Chef de garde : ${esc(chef)}
+    </div>
     <table class="previewTable">
-
       <thead>
         <tr>
+          <th>Engin</th>
           <th>Poste</th>
-          <th>Agent</th>
+          <th>Matin</th>
+          <th>Après-midi</th>
         </tr>
       </thead>
-
       <tbody>
-
   `;
 
-  const roles = ROLES[currentVeh] || [];
-
-  roles.forEach(role=>{
-
-    const val =
-      affect[currentShift][currentVeh]?.[role] || "—";
-
-    html += `
-
-      <tr>
-        <td>${role}</td>
-        <td>${val}</td>
-      </tr>
-
-    `;
-
+  vehicles.forEach(v=>{
+    v.roles.forEach((role, idx)=>{
+      const m = state.affect.matin?.[v.name]?.[role] || "—";
+      const a = state.affect.aprem?.[v.name]?.[role] || "—";
+      html += `
+        <tr>
+          ${idx===0 ? `<td rowspan="${v.roles.length}"><b>${esc(v.name)}</b></td>` : ""}
+          <td>${esc(role)}</td>
+          <td>${esc(m)}</td>
+          <td>${esc(a)}</td>
+        </tr>
+      `;
+    });
   });
 
   html += `
       </tbody>
     </table>
+    <div style="margin-top:10px;font-weight:950;">Remarques / missions</div>
+    <div style="white-space:pre-wrap;margin-top:6px;">${esc(remarks)}</div>
   `;
 
-  box.innerHTML = html;
-
+  document.getElementById("preview").innerHTML = html;
 }
 
-/* CHEF */
-
-function renderChef(){
-
-  const sel = document.getElementById("chefGarde");
-
-  sel.innerHTML = agentOptions();
-
+function renderAgents(){
+  const list = document.getElementById("agentList");
+  list.innerHTML = "";
+  agents.forEach((a, i)=>{
+    const div = document.createElement("div");
+    div.className = "itemRow";
+    div.innerHTML = `
+      <div>
+        <div class="itemMain">${esc(fullAgent(a))}</div>
+        <div class="itemSub">${esc(a.grade)} — ${esc(a.nom)} ${esc(a.prenom)}</div>
+      </div>
+      <button class="miniBtn red">−</button>
+    `;
+    div.querySelector("button").onclick = ()=>{
+      agents.splice(i,1);
+      saveAll();
+      renderAll();
+    };
+    list.appendChild(div);
+  });
 }
 
-/* BACK */
+function renderVehicleConfig(){
+  const list = document.getElementById("vehicleList");
+  list.innerHTML = "";
+  vehicles.forEach((v,i)=>{
+    const div = document.createElement("div");
+    div.className = "itemRow";
+    div.innerHTML = `
+      <div>
+        <div class="itemMain" style="color:${esc(v.color)}">${esc(v.name)}</div>
+        <div class="itemSub">${esc(v.roles.join(", "))}</div>
+      </div>
+      <button class="miniBtn red">−</button>
+    `;
+    div.querySelector("button").onclick = ()=>{
+      vehicles.splice(i,1);
+      saveAll();
+      renderAll();
+    };
+    list.appendChild(div);
+  });
+}
 
-document.getElementById("btnBack").onclick = ()=>{
+function renderAll(){
+  ensureAffect();
+  document.getElementById("dateGarde").value = state.date || "";
+  document.getElementById("remarks").value = state.remarks || "";
+  renderChef();
+  renderVehicles();
+  renderPreview();
+  renderAgents();
+  renderVehicleConfig();
+}
 
-  if(currentPage !== "generate"){
+document.querySelectorAll(".mainTab").forEach(t=>{
+  t.onclick = ()=>setPage(t.dataset.page);
+});
 
-    currentPage = "generate";
+document.querySelectorAll(".shiftBtn").forEach(b=>{
+  b.onclick = ()=>{
+    currentShift = b.dataset.shift;
+    document.querySelectorAll(".shiftBtn").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    renderVehicles();
+  };
+});
 
-    document.querySelectorAll(".mainTab")
-      .forEach(t=>t.classList.remove("active"));
-
-    document.querySelector(`[data-page="generate"]`)
-      .classList.add("active");
-
-    document.querySelectorAll(".page")
-      .forEach(p=>p.classList.remove("show"));
-
-    document.getElementById("page-generate")
-      .classList.add("show");
-
-    return;
-
-  }
-
-  location.href = "index.html?portal=1";
-
+document.getElementById("dateGarde").onchange = e=>{
+  state.date = e.target.value;
+  saveAll();
+  renderPreview();
 };
 
-/* INIT */
+document.getElementById("remarks").oninput = e=>{
+  state.remarks = e.target.value;
+  saveAll();
+  renderPreview();
+};
 
-renderAgents();
-renderRoles();
-renderChef();
+document.getElementById("addAgentBtn").onclick = ()=>{
+  const grade = document.getElementById("agentGrade").value.trim();
+  const nom = document.getElementById("agentNom").value.trim().toUpperCase();
+  const prenom = document.getElementById("agentPrenom").value.trim();
+  if(!grade || !nom || !prenom) return;
 
+  agents.push({grade, nom, prenom});
+  document.getElementById("agentGrade").value = "";
+  document.getElementById("agentNom").value = "";
+  document.getElementById("agentPrenom").value = "";
+  saveAll();
+  renderAll();
+};
+
+document.getElementById("addVehicleBtn").onclick = ()=>{
+  const name = document.getElementById("vehicleName").value.trim().toUpperCase();
+  const color = document.getElementById("vehicleColor").value.trim() || "#d46a00";
+  const roles = document.getElementById("vehicleRoles").value.split(",").map(x=>x.trim()).filter(Boolean);
+  if(!name || !roles.length) return;
+
+  vehicles.push({name, color, roles});
+  document.getElementById("vehicleName").value = "";
+  document.getElementById("vehicleColor").value = "";
+  document.getElementById("vehicleRoles").value = "";
+  saveAll();
+  renderAll();
+};
+
+document.getElementById("btnBack").onclick = ()=>{
+  if(currentPage !== "generate"){
+    setPage("generate");
+    return;
+  }
+  location.href = "index.html?portal=1";
+};
+
+renderAll();
 </script>
 
 </body>
