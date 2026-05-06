@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Gardes postées — CS Consenvoye</title>
 
 <style>
@@ -31,31 +31,25 @@ body{
   inset:0;
   background:
     linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.68)),
-    url("background.png") center top/cover no-repeat;
-  z-index:-2;
-}
-
-.bg::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:radial-gradient(circle at 50% 8%, rgba(255,150,40,.18), rgba(0,0,0,.68) 62%);
+    url("background.png") center/cover no-repeat;
+  z-index:-1;
 }
 
 .wrap{
-  height:100vh;
+  height:100dvh;
   max-width:980px;
-  margin:0 auto;
-  padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
+  margin:auto;
+  padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 18px);
   display:grid;
-  grid-template-rows:auto auto 1fr;
+  grid-template-rows:auto auto minmax(0,1fr);
   gap:10px;
+  overflow:hidden;
 }
 
 .topbar{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
   gap:10px;
   padding:10px 12px;
   border-radius:18px;
@@ -63,18 +57,16 @@ body{
   border:1px solid rgba(255,255,255,.12);
   box-shadow:var(--shadow);
   backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  min-height:46px;
 }
 
 .title{
   font-weight:950;
-  letter-spacing:.8px;
   text-transform:uppercase;
+  letter-spacing:.8px;
   font-size:18px;
 }
 
-.btn{
+.btn,.miniBtn{
   border:1px solid rgba(255,255,255,.18);
   background:rgba(0,0,0,.18);
   color:#fff;
@@ -91,7 +83,7 @@ body{
 }
 
 .mainTab{
-  min-height:50px;
+  min-height:48px;
   border-radius:18px;
   background:rgba(0,0,0,.34);
   border:1px solid rgba(255,255,255,.10);
@@ -101,221 +93,31 @@ body{
   justify-content:center;
   font-weight:950;
   cursor:pointer;
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
 }
 
 .mainTab.active{
   background:linear-gradient(180deg, rgba(212,106,0,.58), rgba(185,88,0,.38));
-  border-color:rgba(255,255,255,.22);
 }
 
 .page{
   display:none;
   min-height:0;
-  overflow:auto;
+  height:100%;
+  overflow-y:auto;
   -webkit-overflow-scrolling:touch;
   flex-direction:column;
   gap:10px;
-  padding-right:2px;
+  padding-bottom:120px;
 }
 
 .page.show{display:flex}
 
-.hero{
-  border-radius:24px;
-  background:linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.28));
-  border:1px solid var(--stroke);
-  box-shadow:var(--shadow);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  padding:14px;
-}
-
-.heroTitle{
-  font-weight:950;
-  font-size:19px;
-  text-transform:uppercase;
-  margin-bottom:10px;
-}
-
-.heroGrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.inputBox{
-  border-radius:18px;
-  background:rgba(0,0,0,.25);
-  border:1px solid rgba(255,255,255,.10);
-  padding:10px;
-}
-
-.label{
-  font-size:12px;
-  text-transform:uppercase;
-  color:var(--muted);
-  font-weight:900;
-  margin-bottom:6px;
-}
-
-.field,
-.select,
-.textarea{
-  width:100%;
-  border:none;
-  outline:none;
-  background:rgba(0,0,0,.18);
-  color:#fff;
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:14px;
-  padding:10px 12px;
-  font:inherit;
-  font-weight:850;
-}
-
-.textarea{
-  min-height:82px;
-  resize:vertical;
-}
-
-.shiftSwitch{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.shiftBtn{
-  min-height:48px;
-  border-radius:18px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(0,0,0,.34);
-  color:#fff;
-  font-weight:950;
-  cursor:pointer;
-}
-
-.shiftBtn.active{
-  background:linear-gradient(180deg, rgba(212,106,0,.62), rgba(185,88,0,.38));
-  border-color:rgba(255,255,255,.22);
-}
-
-.vehicleDeck{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.vehicleCard{
-  border-radius:24px;
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow:var(--shadow);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  overflow:hidden;
-}
-
-.vehicleHead{
-  padding:12px 14px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  cursor:pointer;
-}
-
-.vehicleName{
-  font-size:20px;
-  font-weight:950;
-  letter-spacing:.5px;
-}
-
-.vehicleMeta{
-  font-size:12px;
-  color:rgba(255,255,255,.78);
-  font-weight:900;
-}
-
-.vehicleBody{
-  display:none;
-  padding:10px;
-  background:rgba(0,0,0,.18);
-  border-top:1px solid rgba(255,255,255,.10);
-}
-
-.vehicleCard.open .vehicleBody{
-  display:block;
-}
-
-.roleGrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-}
-
-.roleSlot{
-  border-radius:18px;
-  background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.09);
-  padding:10px;
-}
-
-.roleName{
-  font-weight:950;
-  font-size:14px;
-  margin-bottom:7px;
-}
-
-.previewBox{
-  border-radius:22px;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.10);
-  overflow:hidden;
-}
-
-.previewTitle{
-  background:rgba(212,106,0,.38);
-  padding:10px 12px;
-  font-weight:950;
-  text-transform:uppercase;
-}
-
-.previewBody{
-  padding:10px;
-  overflow:auto;
-}
-
-.previewTable{
-  width:100%;
-  border-collapse:collapse;
-  font-size:13px;
-}
-
-.previewTable th,
-.previewTable td{
-  border:1px solid rgba(255,255,255,.14);
-  padding:8px;
-}
-
-.previewTable th{
-  background:rgba(0,0,0,.30);
-  text-align:left;
-}
-
-.configGrid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:10px;
-}
-
-.configCard{
+.card{
   border-radius:22px;
   background:linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.26));
   border:1px solid var(--stroke);
   box-shadow:var(--shadow);
   backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
   padding:12px;
 }
 
@@ -326,18 +128,122 @@ body{
   font-size:17px;
 }
 
-.addRow{
+.sub{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:800;
+  margin-bottom:8px;
+}
+
+.grid2{
   display:grid;
-  grid-template-columns:86px 1fr 1fr 48px;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.field,.select,.textarea{
+  width:100%;
+  border:none;
+  outline:none;
+  background:rgba(0,0,0,.24);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:14px;
+  padding:11px 12px;
+  font:inherit;
+  font-weight:850;
+}
+
+.textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.shiftTabs{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+}
+
+.shiftTab{
+  min-height:54px;
+  border-radius:18px;
+  background:rgba(0,0,0,.34);
+  border:1px solid rgba(255,255,255,.10);
+  color:#fff;
+  font-weight:950;
+  cursor:pointer;
+}
+
+.shiftTab.active{
+  background:linear-gradient(180deg, rgba(212,106,0,.62), rgba(185,88,0,.38));
+}
+
+.vehicleCard{
+  border-radius:22px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--shadow);
+}
+
+.vehicleHead{
+  padding:12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  cursor:pointer;
+}
+
+.vehicleLeft{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.vehicleImg{
+  width:74px;
+  height:54px;
+  object-fit:cover;
+  border-radius:12px;
+  background:rgba(0,0,0,.25);
+}
+
+.vehicleName{
+  font-weight:950;
+  font-size:22px;
+}
+
+.vehicleMeta{
+  font-size:12px;
+  color:rgba(255,255,255,.75);
+  font-weight:800;
+}
+
+.vehicleBody{
+  display:none;
+  padding:10px;
+  background:rgba(0,0,0,.22);
+  border-top:1px solid rgba(255,255,255,.10);
+}
+
+.vehicleCard.open .vehicleBody{display:block}
+
+.roleGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
   gap:8px;
 }
 
-.agentList,
-.vehicleList{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  margin-top:10px;
+.roleSlot{
+  border-radius:16px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.09);
+  padding:10px;
+}
+
+.roleName{
+  font-weight:950;
+  margin-bottom:7px;
 }
 
 .itemRow{
@@ -349,50 +255,134 @@ body{
   background:rgba(255,255,255,.05);
   border:1px solid rgba(255,255,255,.08);
   padding:10px;
+  margin-bottom:8px;
 }
 
-.itemMain{
-  font-weight:950;
+.itemMain{font-weight:950}
+.itemSub{font-size:12px;color:var(--muted);font-weight:800;margin-top:2px}
+.red{background:rgba(255,80,80,.20)}
+
+.addAgentGrid{
+  display:grid;
+  grid-template-columns:80px 1fr 1fr 48px;
+  gap:8px;
 }
 
-.itemSub{
-  font-size:12px;
-  color:var(--muted);
-  font-weight:800;
-  margin-top:2px;
+.addVehicleGrid{
+  display:grid;
+  grid-template-columns:1fr 110px 48px;
+  gap:8px;
 }
 
-.miniBtn{
-  border:none;
-  background:rgba(255,255,255,.10);
-  color:#fff;
-  border-radius:12px;
-  font-weight:950;
+.postRow{
+  display:grid;
+  grid-template-columns:1fr 44px;
+  gap:8px;
+  margin-top:8px;
+}
+
+.previewWrap{
+  background:#fff;
+  color:#000;
+  border-radius:14px;
   padding:10px;
-  cursor:pointer;
+  overflow:auto;
 }
 
-.miniBtn.red{
-  background:rgba(255,80,80,.18);
-}
-
-.actionBtn{
+.printSheet{
   width:100%;
-  border:1px solid rgba(255,255,255,.14);
-  background:linear-gradient(180deg, rgba(212,106,0,.56), rgba(185,88,0,.34));
+  background:#fff;
+  color:#000;
+  font-family:Arial,sans-serif;
+}
+
+.printTitle{
+  text-align:center;
+  font-weight:900;
+  font-size:24px;
+  margin:4px 0;
+}
+
+.printSub{
+  text-align:center;
+  font-size:16px;
+  margin-bottom:10px;
+}
+
+.printInfo{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  border:2px solid #000;
+  margin-bottom:10px;
+}
+
+.printInfo div{
+  padding:8px;
+  font-weight:700;
+  border-right:1px solid #000;
+}
+
+.printInfo div:last-child{border-right:none}
+
+.printTable{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+}
+
+.printTable th,.printTable td{
+  border:1px solid #000;
+  padding:5px;
+  text-align:center;
+  vertical-align:middle;
+}
+
+.printTable th{
+  background:#000;
   color:#fff;
-  padding:12px;
-  border-radius:18px;
-  font-weight:950;
-  cursor:pointer;
+}
+
+.printVeh{
+  font-weight:900;
+  font-size:18px;
+}
+
+.printVehImg{
+  width:90px;
+  height:58px;
+  object-fit:contain;
+  display:block;
+  margin:auto;
+}
+
+.printBox{
+  border:2px solid #000;
+  min-height:70px;
+  padding:8px;
+  margin-top:10px;
+  white-space:pre-wrap;
+}
+
+.printBtn{
+  margin-top:10px;
+  width:100%;
+  background:linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.55));
 }
 
 @media(max-width:700px){
-  .heroGrid,
-  .roleGrid,
-  .addRow{
+  .grid2,.shiftTabs,.roleGrid,.addAgentGrid,.addVehicleGrid{
     grid-template-columns:1fr;
   }
+}
+
+@media print{
+  body{background:#fff;overflow:visible}
+  .bg,.topbar,.mainTabs,.page:not(#page-print),.printBtn{display:none!important}
+  .wrap{display:block;height:auto;padding:0;margin:0;max-width:none}
+  #page-print{display:block!important;overflow:visible;padding:0}
+  .card{box-shadow:none;border:none;background:#fff;padding:0}
+  .previewWrap{border-radius:0;padding:0;overflow:visible}
+  .printSheet{width:210mm;min-height:297mm;padding:10mm;margin:0 auto}
 }
 </style>
 </head>
@@ -401,410 +391,316 @@ body{
 <div class="bg"></div>
 
 <div class="wrap">
-
   <div class="topbar">
     <div class="title">Gardes postées</div>
     <button class="btn" id="btnBack">Retour</button>
   </div>
 
   <div class="mainTabs">
-    <div class="mainTab active" data-page="generate">Générer la feuille</div>
+    <div class="mainTab active" data-page="generate">Générer</div>
     <div class="mainTab" data-page="config">Configuration</div>
   </div>
 
   <div class="page show" id="page-generate">
-
-    <section class="hero">
-      <div class="heroTitle">Feuille de garde</div>
-
-      <div class="heroGrid">
-        <div class="inputBox">
-          <div class="label">Date</div>
-          <input class="field" type="date" id="dateGarde">
+    <section class="card">
+      <div class="cardTitle">Feuille de garde</div>
+      <div class="grid2">
+        <div>
+          <div class="sub">Date</div>
+          <input type="date" class="field" id="dateGarde">
         </div>
-
-        <div class="inputBox">
-          <div class="label">Chef de garde</div>
+        <div>
+          <div class="sub">Chef de garde</div>
           <select class="select" id="chefGarde"></select>
         </div>
       </div>
     </section>
 
-    <div class="shiftSwitch">
-      <button class="shiftBtn active" data-shift="matin">Matin<br>07h00–13h00</button>
-      <button class="shiftBtn" data-shift="aprem">Après-midi<br>13h00–19h00</button>
+    <div class="shiftTabs">
+      <button class="shiftTab active" data-shift="journee">Garde entière<br>07h–19h</button>
+      <button class="shiftTab" data-shift="matin">Matin<br>07h–13h</button>
+      <button class="shiftTab" data-shift="aprem">Après-midi<br>13h–19h</button>
     </div>
 
-    <section class="vehicleDeck" id="vehicleDeck"></section>
+    <div id="vehicleDeck"></div>
 
-    <section class="hero">
-      <div class="heroTitle">Missions / remarques</div>
+    <section class="card">
+      <div class="cardTitle">Remarques / missions</div>
       <textarea class="textarea" id="remarks" placeholder="Consignes, missions, remarques..."></textarea>
     </section>
 
-    <section class="previewBox">
-      <div class="previewTitle">Aperçu feuille de garde</div>
-      <div class="previewBody" id="preview"></div>
+    <section class="card">
+      <button class="btn printBtn" id="goPrint">Visualiser / imprimer A4</button>
     </section>
-
   </div>
 
   <div class="page" id="page-config">
-
-    <section class="configCard">
+    <section class="card">
       <div class="cardTitle">Agents</div>
-
-      <div class="addRow">
+      <div class="sub">Grade, nom et prénom</div>
+      <div class="addAgentGrid">
         <input class="field" id="agentGrade" placeholder="Grade">
         <input class="field" id="agentNom" placeholder="Nom">
         <input class="field" id="agentPrenom" placeholder="Prénom">
         <button class="miniBtn" id="addAgentBtn">＋</button>
       </div>
-
-      <div class="agentList" id="agentList"></div>
+      <div id="agentList" style="margin-top:10px;"></div>
     </section>
 
-    <section class="configCard">
+    <section class="card">
       <div class="cardTitle">Véhicules</div>
-
-      <div class="addRow">
-        <input class="field" id="vehicleName" placeholder="Engin">
+      <div class="sub">Ajoute un véhicule, puis ajoute ses postes un par un</div>
+      <div class="addVehicleGrid">
+        <input class="field" id="vehicleName" placeholder="Nom véhicule">
         <input class="field" id="vehicleColor" placeholder="#d93030">
-        <input class="field" id="vehicleRoles" placeholder="Postes séparés par virgule">
         <button class="miniBtn" id="addVehicleBtn">＋</button>
       </div>
-
-      <div class="vehicleList" id="vehicleList"></div>
+      <div id="vehicleConfig" style="margin-top:10px;"></div>
     </section>
-
   </div>
 
+  <div class="page" id="page-print">
+    <section class="card">
+      <div class="previewWrap">
+        <div class="printSheet" id="printSheet"></div>
+      </div>
+      <button class="btn printBtn" onclick="window.print()">Imprimer</button>
+    </section>
+  </div>
 </div>
 
 <script>
-const LS_AGENTS = "cs_gp_agents_v2";
-const LS_VEHICLES = "cs_gp_vehicles_v2";
-const LS_STATE = "cs_gp_state_v2";
+const LS_AGENTS="cs_gp_agents_v3";
+const LS_VEHICLES="cs_gp_vehicles_v3";
+const LS_STATE="cs_gp_state_v3";
 
-let currentPage = "generate";
-let currentShift = "matin";
+function loadJson(k,f){try{const r=localStorage.getItem(k);if(r)return JSON.parse(r)}catch(e){}localStorage.setItem(k,JSON.stringify(f));return f}
+function save(){localStorage.setItem(LS_AGENTS,JSON.stringify(agents));localStorage.setItem(LS_VEHICLES,JSON.stringify(vehicles));localStorage.setItem(LS_STATE,JSON.stringify(state))}
+function esc(s){return String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function agentName(a){return `${a.grade} ${a.nom} ${a.prenom}`.trim().replace(/\s+/g," ")}
 
-function defaultAgents(){
-  return [
-    {grade:"ADJ", nom:"DUPONT", prenom:"Pierre"},
-    {grade:"CPL", nom:"LEROY", prenom:"Julien"},
-    {grade:"SAP", nom:"MARTIN", prenom:"Lucas"}
-  ];
-}
+let agents=loadJson(LS_AGENTS,[
+  {grade:"ADJ",nom:"DUPONT",prenom:"Pierre"},
+  {grade:"CPL",nom:"LEROY",prenom:"Julien"},
+  {grade:"SAP",nom:"MARTIN",prenom:"Lucas"}
+]);
 
-function defaultVehicles(){
-  return [
-    {name:"VSAV", color:"#d93030", roles:["Conducteur","Chef d’agrès","Équipier","Apprenant"]},
-    {name:"CCR", color:"#d46a00", roles:["Conducteur","Chef d’agrès","Chef BAT1","Équipier BAT1","Chef BAT2","Équipier BAT2","Chef BAL","Équipier BAL"]},
-    {name:"VTUL", color:"#2f79ff", roles:["Conducteur","Chef d’agrès"]}
-  ];
-}
+let vehicles=loadJson(LS_VEHICLES,[
+  {name:"VSAV",color:"#d93030",image:"vsav.png",roles:["Conducteur","Chef d’agrès","Équipier","Apprenant"]},
+  {name:"CCR",color:"#d46a00",image:"ccr.png",roles:["Conducteur","Chef d’agrès","Chef BAT1","Équipier BAT1","Chef BAT2","Équipier BAT2","Chef BAL","Équipier BAL"]},
+  {name:"VTUL",color:"#2f79ff",image:"vtul.png",roles:["Conducteur","Chef d’agrès"]}
+]);
 
-let agents = loadJson(LS_AGENTS, defaultAgents());
-let vehicles = loadJson(LS_VEHICLES, defaultVehicles());
-let state = loadJson(LS_STATE, {
-  date:"",
-  chef:"",
-  remarks:"",
-  affect:{matin:{}, aprem:{}},
-  openVehicle:"VSAV"
-});
+let state=loadJson(LS_STATE,{page:"generate",shift:"journee",date:"",chef:"",remarks:"",openVehicle:"",affect:{journee:{},matin:{},aprem:{}}});
 
-function loadJson(key, fallback){
-  try{
-    const raw = localStorage.getItem(key);
-    if(raw) return JSON.parse(raw);
-  }catch(e){}
-  localStorage.setItem(key, JSON.stringify(fallback));
-  return fallback;
-}
-
-function saveAll(){
-  localStorage.setItem(LS_AGENTS, JSON.stringify(agents));
-  localStorage.setItem(LS_VEHICLES, JSON.stringify(vehicles));
-  localStorage.setItem(LS_STATE, JSON.stringify(state));
-}
-
-function fullAgent(a){
-  return `${a.grade} ${a.nom} ${a.prenom}`.trim().replace(/\s+/g," ");
-}
-
-function esc(s){
-  return String(s ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
-function agentOptions(selected){
-  let html = `<option value="">—</option>`;
-  agents.forEach(a=>{
-    const n = fullAgent(a);
-    html += `<option value="${esc(n)}" ${selected===n ? "selected" : ""}>${esc(n)}</option>`;
-  });
-  return html;
-}
-
-function ensureAffect(){
-  for(const shift of ["matin","aprem"]){
-    if(!state.affect[shift]) state.affect[shift] = {};
+function ensure(){
+  ["journee","matin","aprem"].forEach(sh=>{
+    if(!state.affect[sh])state.affect[sh]={};
     vehicles.forEach(v=>{
-      if(!state.affect[shift][v.name]) state.affect[shift][v.name] = {};
-      v.roles.forEach(r=>{
-        if(state.affect[shift][v.name][r] === undefined) state.affect[shift][v.name][r] = "";
-      });
+      if(!state.affect[sh][v.name])state.affect[sh][v.name]={};
+      v.roles.forEach(r=>{if(state.affect[sh][v.name][r]===undefined)state.affect[sh][v.name][r]=""});
     });
-  }
+  });
 }
 
-function setPage(page){
-  currentPage = page;
-  document.querySelectorAll(".mainTab").forEach(t=>t.classList.toggle("active", t.dataset.page===page));
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
-  document.getElementById("page-"+page).classList.add("show");
+function options(selected){
+  let h='<option value="">—</option>';
+  agents.forEach(a=>{
+    const n=agentName(a);
+    h+=`<option value="${esc(n)}" ${selected===n?"selected":""}>${esc(n)}</option>`;
+  });
+  return h;
 }
 
-function renderChef(){
-  const chef = document.getElementById("chefGarde");
-  chef.innerHTML = agentOptions(state.chef);
-  chef.onchange = ()=>{
-    state.chef = chef.value;
-    saveAll();
-    renderPreview();
-  };
+function setPage(p){
+  state.page=p; save();
+  document.querySelectorAll(".mainTab").forEach(t=>t.classList.toggle("active",t.dataset.page===p));
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("show"));
+  document.getElementById("page-"+p).classList.add("show");
+  if(p==="print") renderPrint();
+}
+
+function renderTop(){
+  document.getElementById("dateGarde").value=state.date||"";
+  const chef=document.getElementById("chefGarde");
+  chef.innerHTML=options(state.chef);
+  chef.onchange=()=>{state.chef=chef.value;save()};
 }
 
 function renderVehicles(){
-  ensureAffect();
-  const deck = document.getElementById("vehicleDeck");
-  deck.innerHTML = "";
-
+  ensure();
+  const deck=document.getElementById("vehicleDeck");
+  deck.innerHTML="";
   vehicles.forEach(v=>{
-    const isOpen = state.openVehicle === v.name;
-    const card = document.createElement("section");
-    card.className = "vehicleCard" + (isOpen ? " open" : "");
-    card.style.background = `linear-gradient(180deg, ${v.color}55, rgba(0,0,0,.28))`;
+    const open=state.openVehicle===v.name;
+    const card=document.createElement("section");
+    card.className="vehicleCard"+(open?" open":"");
+    card.style.background=`linear-gradient(180deg, ${v.color}66, rgba(0,0,0,.28))`;
 
-    let body = "";
+    let body="";
     v.roles.forEach(role=>{
-      const val = state.affect[currentShift][v.name][role] || "";
-      body += `
-        <div class="roleSlot">
-          <div class="roleName">${esc(role)}</div>
-          <select class="select" data-vehicle="${esc(v.name)}" data-role="${esc(role)}">
-            ${agentOptions(val)}
-          </select>
-        </div>
-      `;
+      const val=state.affect[state.shift][v.name][role]||"";
+      body+=`
+      <div class="roleSlot">
+        <div class="roleName">${esc(role)}</div>
+        <select class="select" data-v="${esc(v.name)}" data-r="${esc(role)}">${options(val)}</select>
+      </div>`;
     });
 
-    card.innerHTML = `
+    card.innerHTML=`
       <div class="vehicleHead" data-open="${esc(v.name)}">
-        <div>
-          <div class="vehicleName">${esc(v.name)}</div>
-          <div class="vehicleMeta">${v.roles.length} postes — ${currentShift === "matin" ? "07h00–13h00" : "13h00–19h00"}</div>
+        <div class="vehicleLeft">
+          <img class="vehicleImg" src="${esc(v.image)}" onerror="this.style.display='none'">
+          <div>
+            <div class="vehicleName">${esc(v.name)}</div>
+            <div class="vehicleMeta">${v.roles.length} postes — ${shiftLabel(state.shift)}</div>
+          </div>
         </div>
-        <div style="font-weight:950;">${isOpen ? "−" : "+"}</div>
+        <div style="font-weight:950;font-size:22px">${open?"−":"+"}</div>
       </div>
-      <div class="vehicleBody">
-        <div class="roleGrid">${body}</div>
-      </div>
-    `;
-
+      <div class="vehicleBody"><div class="roleGrid">${body}</div></div>`;
     deck.appendChild(card);
   });
 
-  deck.querySelectorAll("[data-open]").forEach(el=>{
-    el.onclick = ()=>{
-      state.openVehicle = el.dataset.open;
-      saveAll();
-      renderVehicles();
-    };
+  deck.querySelectorAll("[data-open]").forEach(el=>el.onclick=()=>{
+    state.openVehicle = state.openVehicle===el.dataset.open ? "" : el.dataset.open;
+    save(); renderVehicles();
   });
 
-  deck.querySelectorAll("select[data-vehicle]").forEach(sel=>{
-    sel.onchange = ()=>{
-      const veh = sel.dataset.vehicle;
-      const role = sel.dataset.role;
-      state.affect[currentShift][veh][role] = sel.value;
-      saveAll();
-      renderPreview();
-    };
+  deck.querySelectorAll("select[data-v]").forEach(sel=>sel.onchange=()=>{
+    state.affect[state.shift][sel.dataset.v][sel.dataset.r]=sel.value;
+    save();
   });
 }
 
-function renderPreview(){
-  const date = state.date ? state.date.split("-").reverse().join("/") : "—";
-  const chef = state.chef || "—";
-  const remarks = state.remarks || "—";
-
-  let html = `
-    <div style="font-weight:950;margin-bottom:10px;">
-      Date : ${esc(date)}<br>
-      Chef de garde : ${esc(chef)}
-    </div>
-    <table class="previewTable">
-      <thead>
-        <tr>
-          <th>Engin</th>
-          <th>Poste</th>
-          <th>Matin</th>
-          <th>Après-midi</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-
-  vehicles.forEach(v=>{
-    v.roles.forEach((role, idx)=>{
-      const m = state.affect.matin?.[v.name]?.[role] || "—";
-      const a = state.affect.aprem?.[v.name]?.[role] || "—";
-      html += `
-        <tr>
-          ${idx===0 ? `<td rowspan="${v.roles.length}"><b>${esc(v.name)}</b></td>` : ""}
-          <td>${esc(role)}</td>
-          <td>${esc(m)}</td>
-          <td>${esc(a)}</td>
-        </tr>
-      `;
-    });
-  });
-
-  html += `
-      </tbody>
-    </table>
-    <div style="margin-top:10px;font-weight:950;">Remarques / missions</div>
-    <div style="white-space:pre-wrap;margin-top:6px;">${esc(remarks)}</div>
-  `;
-
-  document.getElementById("preview").innerHTML = html;
+function shiftLabel(s){
+  if(s==="journee")return"07h–19h";
+  if(s==="matin")return"07h–13h";
+  return"13h–19h";
 }
 
 function renderAgents(){
-  const list = document.getElementById("agentList");
-  list.innerHTML = "";
-  agents.forEach((a, i)=>{
-    const div = document.createElement("div");
-    div.className = "itemRow";
-    div.innerHTML = `
-      <div>
-        <div class="itemMain">${esc(fullAgent(a))}</div>
-        <div class="itemSub">${esc(a.grade)} — ${esc(a.nom)} ${esc(a.prenom)}</div>
-      </div>
-      <button class="miniBtn red">−</button>
-    `;
-    div.querySelector("button").onclick = ()=>{
-      agents.splice(i,1);
-      saveAll();
-      renderAll();
-    };
-    list.appendChild(div);
+  const box=document.getElementById("agentList");
+  box.innerHTML="";
+  agents.forEach((a,i)=>{
+    const d=document.createElement("div");
+    d.className="itemRow";
+    d.innerHTML=`<div><div class="itemMain">${esc(agentName(a))}</div><div class="itemSub">${esc(a.grade)} — ${esc(a.nom)} ${esc(a.prenom)}</div></div><button class="miniBtn red">−</button>`;
+    d.querySelector("button").onclick=()=>{agents.splice(i,1);save();renderAll()};
+    box.appendChild(d);
   });
 }
 
 function renderVehicleConfig(){
-  const list = document.getElementById("vehicleList");
-  list.innerHTML = "";
+  const box=document.getElementById("vehicleConfig");
+  box.innerHTML="";
   vehicles.forEach((v,i)=>{
-    const div = document.createElement("div");
-    div.className = "itemRow";
-    div.innerHTML = `
-      <div>
-        <div class="itemMain" style="color:${esc(v.color)}">${esc(v.name)}</div>
-        <div class="itemSub">${esc(v.roles.join(", "))}</div>
+    const d=document.createElement("div");
+    d.className="card";
+    d.style.marginBottom="10px";
+    d.innerHTML=`
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+        <div>
+          <div class="itemMain" style="color:${esc(v.color)}">${esc(v.name)}</div>
+          <div class="itemSub">${esc(v.roles.join(", "))}</div>
+        </div>
+        <button class="miniBtn red" data-del="${i}">−</button>
       </div>
-      <button class="miniBtn red">−</button>
+      <div class="postRow">
+        <input class="field" placeholder="Ajouter un poste" data-post="${i}">
+        <button class="miniBtn" data-addpost="${i}">＋</button>
+      </div>
     `;
-    div.querySelector("button").onclick = ()=>{
-      vehicles.splice(i,1);
-      saveAll();
-      renderAll();
-    };
-    list.appendChild(div);
+    box.appendChild(d);
+  });
+
+  box.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{vehicles.splice(Number(b.dataset.del),1);save();renderAll()});
+  box.querySelectorAll("[data-addpost]").forEach(b=>b.onclick=()=>{
+    const i=Number(b.dataset.addpost);
+    const input=box.querySelector(`[data-post="${i}"]`);
+    const val=input.value.trim();
+    if(!val)return;
+    vehicles[i].roles.push(val);
+    save();renderAll();
   });
 }
 
-function renderAll(){
-  ensureAffect();
-  document.getElementById("dateGarde").value = state.date || "";
-  document.getElementById("remarks").value = state.remarks || "";
-  renderChef();
-  renderVehicles();
-  renderPreview();
-  renderAgents();
-  renderVehicleConfig();
+function renderPrint(){
+  ensure();
+  const date=state.date?state.date.split("-").reverse().join("/"):"—";
+  let h=`
+    <div class="printTitle">CENTRE DE SECOURS DE CONSENVOYE</div>
+    <div class="printTitle">FEUILLE DE GARDE</div>
+    <div class="printInfo"><div>Date : ${esc(date)}</div><div>Chef de garde : ${esc(state.chef||"—")}</div></div>
+    <table class="printTable">
+      <thead><tr><th>Véhicule</th><th>Poste</th><th>Garde entière<br>07h-19h</th><th>Matin<br>07h-13h</th><th>Après-midi<br>13h-19h</th></tr></thead><tbody>`;
+  vehicles.forEach(v=>{
+    v.roles.forEach((r,idx)=>{
+      h+=`<tr>
+        ${idx===0?`<td rowspan="${v.roles.length}"><img class="printVehImg" src="${esc(v.image)}" onerror="this.style.display='none'"><div class="printVeh" style="color:${esc(v.color)}">${esc(v.name)}</div></td>`:""}
+        <td>${esc(r)}</td>
+        <td>${esc(state.affect.journee[v.name]?.[r]||"—")}</td>
+        <td>${esc(state.affect.matin[v.name]?.[r]||"—")}</td>
+        <td>${esc(state.affect.aprem[v.name]?.[r]||"—")}</td>
+      </tr>`;
+    });
+  });
+  h+=`</tbody></table><div class="printBox"><b>REMARQUES / MISSIONS</b><br>${esc(state.remarks||"")}</div>`;
+  document.getElementById("printSheet").innerHTML=h;
 }
 
-document.querySelectorAll(".mainTab").forEach(t=>{
-  t.onclick = ()=>setPage(t.dataset.page);
+function renderAll(){
+  ensure();
+  renderTop();
+  document.querySelectorAll(".shiftTab").forEach(b=>b.classList.toggle("active",b.dataset.shift===state.shift));
+  renderVehicles();
+  renderAgents();
+  renderVehicleConfig();
+  save();
+}
+
+document.querySelectorAll(".mainTab").forEach(t=>t.onclick=()=>setPage(t.dataset.page));
+
+document.querySelectorAll(".shiftTab").forEach(b=>b.onclick=()=>{
+  state.shift=b.dataset.shift;
+  state.openVehicle="";
+  save();renderAll();
 });
 
-document.querySelectorAll(".shiftBtn").forEach(b=>{
-  b.onclick = ()=>{
-    currentShift = b.dataset.shift;
-    document.querySelectorAll(".shiftBtn").forEach(x=>x.classList.remove("active"));
-    b.classList.add("active");
-    renderVehicles();
-  };
-});
+document.getElementById("dateGarde").onchange=e=>{state.date=e.target.value;save()};
+document.getElementById("remarks").oninput=e=>{state.remarks=e.target.value;save()};
+document.getElementById("goPrint").onclick=()=>setPage("print");
 
-document.getElementById("dateGarde").onchange = e=>{
-  state.date = e.target.value;
-  saveAll();
-  renderPreview();
+document.getElementById("addAgentBtn").onclick=()=>{
+  const grade=document.getElementById("agentGrade").value.trim();
+  const nom=document.getElementById("agentNom").value.trim().toUpperCase();
+  const prenom=document.getElementById("agentPrenom").value.trim();
+  if(!grade||!nom||!prenom)return;
+  agents.push({grade,nom,prenom});
+  document.getElementById("agentGrade").value="";
+  document.getElementById("agentNom").value="";
+  document.getElementById("agentPrenom").value="";
+  save();renderAll();
 };
 
-document.getElementById("remarks").oninput = e=>{
-  state.remarks = e.target.value;
-  saveAll();
-  renderPreview();
+document.getElementById("addVehicleBtn").onclick=()=>{
+  const name=document.getElementById("vehicleName").value.trim().toUpperCase();
+  const color=document.getElementById("vehicleColor").value.trim()||"#d46a00";
+  if(!name)return;
+  vehicles.push({name,color,image:name.toLowerCase()+".png",roles:[]});
+  document.getElementById("vehicleName").value="";
+  document.getElementById("vehicleColor").value="";
+  save();renderAll();
 };
 
-document.getElementById("addAgentBtn").onclick = ()=>{
-  const grade = document.getElementById("agentGrade").value.trim();
-  const nom = document.getElementById("agentNom").value.trim().toUpperCase();
-  const prenom = document.getElementById("agentPrenom").value.trim();
-  if(!grade || !nom || !prenom) return;
-
-  agents.push({grade, nom, prenom});
-  document.getElementById("agentGrade").value = "";
-  document.getElementById("agentNom").value = "";
-  document.getElementById("agentPrenom").value = "";
-  saveAll();
-  renderAll();
+document.getElementById("btnBack").onclick=()=>{
+  if(state.page==="print"){setPage("generate");return}
+  if(state.page==="config"){setPage("generate");return}
+  location.href="index.html?portal=1";
 };
 
-document.getElementById("addVehicleBtn").onclick = ()=>{
-  const name = document.getElementById("vehicleName").value.trim().toUpperCase();
-  const color = document.getElementById("vehicleColor").value.trim() || "#d46a00";
-  const roles = document.getElementById("vehicleRoles").value.split(",").map(x=>x.trim()).filter(Boolean);
-  if(!name || !roles.length) return;
-
-  vehicles.push({name, color, roles});
-  document.getElementById("vehicleName").value = "";
-  document.getElementById("vehicleColor").value = "";
-  document.getElementById("vehicleRoles").value = "";
-  saveAll();
-  renderAll();
-};
-
-document.getElementById("btnBack").onclick = ()=>{
-  if(currentPage !== "generate"){
-    setPage("generate");
-    return;
-  }
-  location.href = "index.html?portal=1";
-};
-
+setPage(state.page||"generate");
 renderAll();
 </script>
-
 </body>
 </html>
