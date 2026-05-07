@@ -6,10 +6,7 @@
 <title>Gardes postées — CS Consenvoye</title>
 
 <style>
-@page{
-  size:A4 portrait;
-  margin:10mm;
-}
+@page{size:A4 portrait;margin:10mm}
 
 :root{
   --txt:#f4f4f4;
@@ -29,7 +26,6 @@ body{
   color:var(--txt);
   background:#0b0b0b;
   overflow:hidden;
-  overflow-x:hidden;
 }
 
 .bg{
@@ -50,7 +46,6 @@ body{
   grid-template-rows:auto auto minmax(0,1fr);
   gap:10px;
   overflow:hidden;
-  overflow-x:hidden;
 }
 
 body.printMode .wrap{
@@ -58,9 +53,7 @@ body.printMode .wrap{
   grid-template-rows:auto minmax(0,1fr);
 }
 
-body.printMode .mainTabs{
-  display:none;
-}
+body.printMode .mainTabs{display:none}
 
 .topbar{
   display:flex;
@@ -365,6 +358,13 @@ body.printMode .mainTabs{
   flex:0 0 auto;
 }
 
+.empty{
+  color:var(--muted);
+  font-weight:800;
+  text-align:center;
+  padding:14px;
+}
+
 .printToolbar{
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
@@ -517,6 +517,56 @@ body.printMode .previewWrap{
   background:linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.55));
 }
 
+.accessGate{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.72), rgba(0,0,0,.86)),
+    url("background.png") center/cover no-repeat;
+  backdrop-filter:blur(10px);
+}
+
+.accessGate.hidden{display:none}
+
+.accessBox{
+  width:min(460px, 100%);
+  border-radius:24px;
+  background:linear-gradient(180deg, rgba(0,0,0,.48), rgba(0,0,0,.30));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--shadow);
+  padding:18px;
+  text-align:center;
+}
+
+.accessImg{
+  width:min(280px, 82vw);
+  max-height:320px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 12px;
+}
+
+.accessTitle{
+  font-weight:950;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+  font-size:20px;
+  margin-bottom:8px;
+}
+
+.accessText{
+  color:var(--muted);
+  font-weight:800;
+  font-size:13px;
+  line-height:1.35;
+  margin-bottom:14px;
+}
+
 @media(max-width:700px){
   .grid2,.shiftTabs,.roleGrid,.addAgentGrid,.addVehicleGrid,.vehicleImageConfig{
     grid-template-columns:1fr;
@@ -541,7 +591,7 @@ body.printMode .previewWrap{
     overflow:visible;
   }
 
-  .bg,.topbar,.mainTabs,.page:not(#page-print),.printToolbar,.printBtn{
+  .bg,.topbar,.mainTabs,.page:not(#page-print),.printToolbar,.printBtn,.accessGate{
     display:none!important;
   }
 
@@ -588,6 +638,15 @@ body.printMode .previewWrap{
 
 <body>
 <div class="bg"></div>
+
+<div class="accessGate hidden" id="accessGate">
+  <div class="accessBox">
+    <img class="accessImg" src="acces_refuse.png" alt="Accès refusé">
+    <div class="accessTitle" id="accessTitle">Accès refusé</div>
+    <div class="accessText" id="accessText">Cette page est réservée aux personnes autorisées.</div>
+    <button class="btn" id="accessBackBtn" type="button">Retour accueil</button>
+  </div>
+</div>
 
 <div class="wrap">
   <div class="topbar">
@@ -683,9 +742,12 @@ body.printMode .previewWrap{
 </div>
 
 <script>
-const LS_AGENTS="cs_gp_agents_v4";
-const LS_VEHICLES="cs_gp_vehicles_v4";
-const LS_STATE="cs_gp_state_v4";
+const API="https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+
+const LS_EMAIL="cs_portail_email_v1";
+const LS_AGENTS="cs_gp_agents_v6";
+const LS_VEHICLES="cs_gp_vehicles_v6";
+const LS_STATE="cs_gp_state_v6";
 
 const PRINT_LOGO="logo-garde.png";
 const PRINT_FIRE_TITLE="cs-consenvoye-feu.png";
@@ -718,17 +780,8 @@ function agentName(a){
   return `${a.grade} ${a.nom} ${a.prenom}`.trim().replace(/\s+/g," ");
 }
 
-let agents=loadJson(LS_AGENTS,[
-  {grade:"ADJ",nom:"DUPONT",prenom:"Pierre"},
-  {grade:"CPL",nom:"LEROY",prenom:"Julien"},
-  {grade:"SAP",nom:"MARTIN",prenom:"Lucas"}
-]);
-
-let vehicles=loadJson(LS_VEHICLES,[
-  {name:"VSAV",color:"#d93030",image:"vsav.png",roles:["Conducteur","Chef d’agrès","Équipier","Apprenant"]},
-  {name:"CCR",color:"#d46a00",image:"ccr.png",roles:["Conducteur","Chef d’agrès","Chef BAT1","Équipier BAT1","Chef BAT2","Équipier BAT2","Chef BAL","Équipier BAL"]},
-  {name:"VTUL",color:"#2f79ff",image:"vtul.png",roles:["Conducteur","Chef d’agrès"]}
-]);
+let agents=loadJson(LS_AGENTS,[]);
+let vehicles=loadJson(LS_VEHICLES,[]);
 
 let state=loadJson(LS_STATE,{
   page:"generate",
@@ -741,12 +794,18 @@ let state=loadJson(LS_STATE,{
 });
 
 function ensure(){
+  if(!state.affect)state.affect={journee:{},matin:{},aprem:{}};
+
   ["journee","matin","aprem"].forEach(sh=>{
     if(!state.affect[sh])state.affect[sh]={};
+
     vehicles.forEach(v=>{
       if(!state.affect[sh][v.name])state.affect[sh][v.name]={};
+
       v.roles.forEach(r=>{
-        if(state.affect[sh][v.name][r]===undefined)state.affect[sh][v.name][r]="";
+        if(state.affect[sh][v.name][r]===undefined){
+          state.affect[sh][v.name][r]="";
+        }
       });
     });
   });
@@ -771,11 +830,12 @@ function setPage(p){
   document.querySelectorAll(".page").forEach(x=>x.classList.remove("show"));
   document.getElementById("page-"+p).classList.add("show");
 
-  if(p==="print") renderPrint();
+  if(p==="print")renderPrint();
 }
 
 function renderTop(){
   document.getElementById("dateGarde").value=state.date||"";
+
   const chef=document.getElementById("chefGarde");
   chef.innerHTML=options(state.chef);
   chef.onchange=()=>{
@@ -797,8 +857,14 @@ function vehicleImageHtml(v,cls){
 
 function renderVehicles(){
   ensure();
+
   const deck=document.getElementById("vehicleDeck");
   deck.innerHTML="";
+
+  if(!vehicles.length){
+    deck.innerHTML=`<section class="card"><div class="empty">Aucun véhicule configuré. Va dans Configuration pour ajouter les véhicules.</div></section>`;
+    return;
+  }
 
   vehicles.forEach(v=>{
     const open=state.openVehicle===v.name;
@@ -807,14 +873,20 @@ function renderVehicles(){
     card.style.background=`linear-gradient(180deg, ${v.color}66, rgba(0,0,0,.28))`;
 
     let body="";
-    v.roles.forEach(role=>{
-      const val=state.affect[state.shift][v.name][role]||"";
-      body+=`
-        <div class="roleSlot">
-          <div class="roleName">${esc(role)}</div>
-          <select class="select" data-v="${esc(v.name)}" data-r="${esc(role)}">${options(val)}</select>
-        </div>`;
-    });
+
+    if(!v.roles.length){
+      body=`<div class="empty">Aucun poste configuré pour ce véhicule.</div>`;
+    }else{
+      v.roles.forEach(role=>{
+        const val=state.affect[state.shift][v.name][role]||"";
+        body+=`
+          <div class="roleSlot">
+            <div class="roleName">${esc(role)}</div>
+            <select class="select" data-v="${esc(v.name)}" data-r="${esc(role)}">${options(val)}</select>
+          </div>`;
+      });
+      body=`<div class="roleGrid">${body}</div>`;
+    }
 
     card.innerHTML=`
       <div class="vehicleHead" data-open="${esc(v.name)}">
@@ -827,13 +899,13 @@ function renderVehicles(){
         </div>
         <div style="font-weight:950;font-size:22px;flex:0 0 auto">${open?"−":"+"}</div>
       </div>
-      <div class="vehicleBody"><div class="roleGrid">${body}</div></div>`;
+      <div class="vehicleBody">${body}</div>`;
 
     deck.appendChild(card);
   });
 
   deck.querySelectorAll("[data-open]").forEach(el=>el.onclick=()=>{
-    state.openVehicle = state.openVehicle===el.dataset.open ? "" : el.dataset.open;
+    state.openVehicle=state.openVehicle===el.dataset.open?"":el.dataset.open;
     save();
     renderVehicles();
   });
@@ -848,6 +920,11 @@ function renderAgents(){
   const box=document.getElementById("agentList");
   box.innerHTML="";
 
+  if(!agents.length){
+    box.innerHTML=`<div class="empty">Aucun agent configuré.</div>`;
+    return;
+  }
+
   agents.forEach((a,i)=>{
     const d=document.createElement("div");
     d.className="itemRow";
@@ -858,7 +935,19 @@ function renderAgents(){
       </div>
       <button class="miniBtn red">−</button>`;
     d.querySelector("button").onclick=()=>{
+      const oldName=agentName(agents[i]);
       agents.splice(i,1);
+
+      ["journee","matin","aprem"].forEach(sh=>{
+        Object.keys(state.affect[sh]||{}).forEach(v=>{
+          Object.keys(state.affect[sh][v]||{}).forEach(r=>{
+            if(state.affect[sh][v][r]===oldName)state.affect[sh][v][r]="";
+          });
+        });
+      });
+
+      if(state.chef===oldName)state.chef="";
+
       save();
       renderAll();
     };
@@ -870,13 +959,18 @@ function renderVehicleConfig(){
   const box=document.getElementById("vehicleConfig");
   box.innerHTML="";
 
+  if(!vehicles.length){
+    box.innerHTML=`<div class="empty">Aucun véhicule configuré.</div>`;
+    return;
+  }
+
   vehicles.forEach((v,i)=>{
     const d=document.createElement("div");
     d.className="card";
     d.style.marginBottom="10px";
 
-    const imageStatus = v.image ? "Image véhicule configurée" : "Aucune image";
-    const rolesText = v.roles.length ? v.roles.join(", ") : "Aucun poste";
+    const imageStatus=v.image ? "Image véhicule configurée" : "Aucune image";
+    const rolesText=v.roles.length ? v.roles.join(", ") : "Aucun poste";
 
     d.innerHTML=`
       <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;min-width:0">
@@ -993,22 +1087,38 @@ function renderPrint(){
       </thead>
       <tbody>`;
 
-  vehicles.forEach(v=>{
-    v.roles.forEach((r,idx)=>{
-      h+=`
-        <tr>
-          ${idx===0?`
-            <td rowspan="${v.roles.length}">
+  if(!vehicles.length){
+    h+=`<tr><td colspan="5">Aucun véhicule configuré</td></tr>`;
+  }else{
+    vehicles.forEach(v=>{
+      if(!v.roles.length){
+        h+=`
+          <tr>
+            <td>
               ${v.image ? `<img class="printVehImg" src="${esc(v.image)}" onerror="this.style.display='none'">` : ""}
               <div class="printVeh" style="color:${esc(v.color)}">${esc(v.name)}</div>
-            </td>`:""}
-          <td>${esc(r)}</td>
-          <td>${esc(state.affect.journee[v.name]?.[r]||"—")}</td>
-          <td>${esc(state.affect.matin[v.name]?.[r]||"—")}</td>
-          <td>${esc(state.affect.aprem[v.name]?.[r]||"—")}</td>
-        </tr>`;
+            </td>
+            <td colspan="4">Aucun poste configuré</td>
+          </tr>`;
+        return;
+      }
+
+      v.roles.forEach((r,idx)=>{
+        h+=`
+          <tr>
+            ${idx===0?`
+              <td rowspan="${v.roles.length}">
+                ${v.image ? `<img class="printVehImg" src="${esc(v.image)}" onerror="this.style.display='none'">` : ""}
+                <div class="printVeh" style="color:${esc(v.color)}">${esc(v.name)}</div>
+              </td>`:""}
+            <td>${esc(r)}</td>
+            <td>${esc(state.affect.journee[v.name]?.[r]||"—")}</td>
+            <td>${esc(state.affect.matin[v.name]?.[r]||"—")}</td>
+            <td>${esc(state.affect.aprem[v.name]?.[r]||"—")}</td>
+          </tr>`;
+      });
     });
-  });
+  }
 
   h+=`
       </tbody>
@@ -1067,6 +1177,62 @@ body{margin:0;background:#fff;color:#000;font-family:Arial,sans-serif}
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
+}
+
+function jsonpAuth_(email){
+  return new Promise((resolve)=>{
+    const cb="gp_auth_"+Date.now()+"_"+Math.floor(Math.random()*100000);
+    const script=document.createElement("script");
+
+    const done=(data)=>{
+      try{delete window[cb]}catch(e){}
+      script.remove();
+      resolve(data || {ok:false});
+    };
+
+    window[cb]=done;
+    script.onerror=()=>done({ok:false,error:"Erreur de connexion"});
+    script.src=API+"?view=auth_check&email="+encodeURIComponent(email)+"&nocache=1&callback="+cb;
+    document.body.appendChild(script);
+  });
+}
+
+function showAccessDenied_(title,text){
+  document.body.classList.remove("printMode");
+  document.querySelector(".wrap").style.display="none";
+  document.getElementById("accessTitle").textContent=title || "Accès refusé";
+  document.getElementById("accessText").textContent=text || "Cette page est réservée aux personnes autorisées.";
+  document.getElementById("accessGate").classList.remove("hidden");
+}
+
+async function checkGardesAccess_(){
+  const email=String(localStorage.getItem(LS_EMAIL) || "").trim().toLowerCase();
+
+  if(!email){
+    showAccessDenied_("Connexion requise","Retourne à l’accueil du portail pour te connecter.");
+    return false;
+  }
+
+  const auth=await jsonpAuth_(email);
+
+  if(!auth || auth.ok !== true || Number(auth.gardes_postees || 0) !== 1){
+    showAccessDenied_("Accès refusé","Cette page est réservée aux personnes autorisées pour les gardes postées.");
+    return false;
+  }
+
+  return true;
+}
+
+async function initPage_(){
+  const ok=await checkGardesAccess_();
+  if(!ok)return;
+
+  if(!["generate","config","print"].includes(state.page)){
+    state.page="generate";
+  }
+
+  setPage(state.page || "generate");
+  renderAll();
 }
 
 function renderAll(){
@@ -1161,6 +1327,10 @@ document.getElementById("addVehicleBtn").onclick=()=>{
   }
 };
 
+document.getElementById("accessBackBtn").onclick=()=>{
+  location.href="index.html?portal=1";
+};
+
 document.getElementById("btnBack").onclick=()=>{
   if(state.page==="print"){
     setPage("generate");
@@ -1175,8 +1345,7 @@ document.getElementById("btnBack").onclick=()=>{
   location.href="index.html?portal=1";
 };
 
-setPage(state.page||"generate");
-renderAll();
+initPage_();
 </script>
 </body>
 </html>
