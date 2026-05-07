@@ -136,7 +136,7 @@ body.printMode .mainTabs{
   box-shadow:var(--shadow);
   backdrop-filter:blur(10px);
   padding:12px;
-  overflow-x:hidden;
+  overflow:visible;
 }
 
 .cardTitle{
@@ -157,11 +157,13 @@ body.printMode .mainTabs{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
+  min-width:0;
 }
 
 .field,.select,.textarea,.colorField,.fileField{
   width:100%;
   min-width:0;
+  max-width:100%;
   border:none;
   outline:none;
   background:rgba(0,0,0,.24);
@@ -173,7 +175,10 @@ body.printMode .mainTabs{
   font-weight:850;
 }
 
-.fileField{font-size:13px}
+.fileField{
+  font-size:13px;
+  overflow:hidden;
+}
 
 .colorField{
   height:46px;
@@ -219,6 +224,7 @@ body.printMode .mainTabs{
   align-items:center;
   justify-content:space-between;
   cursor:pointer;
+  min-width:0;
 }
 
 .vehicleLeft{
@@ -241,12 +247,18 @@ body.printMode .mainTabs{
 .vehicleName{
   font-weight:950;
   font-size:22px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
 .vehicleMeta{
   font-size:12px;
   color:rgba(255,255,255,.75);
   font-weight:800;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
 .vehicleBody{
@@ -315,12 +327,14 @@ body.printMode .mainTabs{
   display:grid;
   grid-template-columns:80px 1fr 1fr 48px;
   gap:8px;
+  min-width:0;
 }
 
 .addVehicleGrid{
   display:grid;
   grid-template-columns:1fr 80px 48px;
   gap:8px;
+  min-width:0;
 }
 
 .postRow{
@@ -328,11 +342,12 @@ body.printMode .mainTabs{
   grid-template-columns:1fr 44px;
   gap:8px;
   margin-top:8px;
+  min-width:0;
 }
 
 .vehicleImageConfig{
   display:grid;
-  grid-template-columns:90px 1fr;
+  grid-template-columns:90px minmax(0,1fr);
   gap:8px;
   margin-top:8px;
   align-items:center;
@@ -810,7 +825,7 @@ function renderVehicles(){
             <div class="vehicleMeta">${v.roles.length} postes — ${shiftLabel(state.shift)}</div>
           </div>
         </div>
-        <div style="font-weight:950;font-size:22px">${open?"−":"+"}</div>
+        <div style="font-weight:950;font-size:22px;flex:0 0 auto">${open?"−":"+"}</div>
       </div>
       <div class="vehicleBody"><div class="roleGrid">${body}</div></div>`;
 
@@ -889,7 +904,7 @@ function renderVehicleConfig(){
 
       <div class="vehicleImageConfig">
         <div class="sub">Image</div>
-        <input class="field" placeholder="vsav.png ou images/vsav.png" value="${esc(v.image || "")}" data-imgpath="${i}">
+        <input class="field" placeholder="vsav.png ou images/vsav.png" value="" data-imgpath="${i}">
       </div>
 
       <div style="margin-top:8px">
@@ -918,7 +933,9 @@ function renderVehicleConfig(){
 
   box.querySelectorAll("[data-imgpath]").forEach(input=>input.onchange=()=>{
     const i=Number(input.dataset.imgpath);
-    vehicles[i].image=input.value.trim();
+    const val=input.value.trim();
+    if(!val)return;
+    vehicles[i].image=val;
     save();
     renderAll();
   });
