@@ -356,9 +356,8 @@ body.printMode .previewWrap{
 }
 
 .printHeader{
-  min-height:28mm;
   display:grid;
-  grid-template-columns:21mm 1fr 10mm;
+  grid-template-columns:23mm 1fr 10mm;
   align-items:center;
   gap:4mm;
   margin-bottom:4mm;
@@ -367,8 +366,8 @@ body.printMode .previewWrap{
 }
 
 .printLogo{
-  width:19mm;
-  height:24mm;
+  width:21mm;
+  height:26mm;
   object-fit:contain;
   display:block;
 }
@@ -379,9 +378,9 @@ body.printMode .previewWrap{
 }
 
 .printFireCrop{
-  width:135mm;
+  width:132mm;
   max-width:100%;
-  height:28mm;
+  height:26mm;
   overflow:visible;
   margin:0 auto 1mm;
   display:flex;
@@ -390,8 +389,8 @@ body.printMode .previewWrap{
 }
 
 .printFireTitle{
-  width:135mm;
-  height:28mm;
+  width:132mm;
+  height:26mm;
   object-fit:contain;
   object-position:center center;
   display:block;
@@ -401,28 +400,33 @@ body.printMode .previewWrap{
 .printMainTitle{
   text-align:center;
   font-weight:900;
-  font-size:13px;
-  letter-spacing:1.1px;
+  font-size:15px;
+  letter-spacing:1.4px;
   text-transform:uppercase;
   margin:0;
-  color:#111;
 }
 
 .printInfo{
   display:grid;
   grid-template-columns:1fr 1fr;
-  border:1.5px solid #000;
+  border:1.6px solid #000;
   margin-bottom:8px;
-  font-size:11px;
 }
 
 .printInfo div{
   padding:5px 7px;
-  font-weight:700;
+  font-size:12px;
+  line-height:1.25;
+  font-weight:800;
   border-right:1px solid #000;
 }
 
 .printInfo div:last-child{border-right:none}
+
+.printInfo b{
+  font-size:12px;
+  font-weight:900;
+}
 
 .printTable{
   width:100%;
@@ -456,12 +460,12 @@ body.printMode .previewWrap{
 }
 
 .printBox{
-  border:1.5px solid #000;
-  min-height:64px;
-  padding:7px;
-  margin-top:8px;
+  border:2px solid #000;
+  min-height:70px;
+  padding:8px;
+  margin-top:10px;
   white-space:pre-wrap;
-  font-size:11px;
+  font-size:12px;
 }
 
 .printBtn{
@@ -919,8 +923,8 @@ function renderPrint(){
     </div>
 
     <div class="printInfo">
-      <div>Date : ${esc(date)}</div>
-      <div>Chef de garde : ${esc(state.chef||"—")}</div>
+      <div><b>Date :</b> ${esc(date)}</div>
+      <div><b>Chef de garde :</b> ${esc(state.chef||"—")}</div>
     </div>
 
     <table class="printTable">
@@ -976,21 +980,22 @@ function downloadPrintHtml(){
 @page{size:A4 portrait;margin:10mm}
 body{margin:0;background:#fff;color:#000;font-family:Arial,sans-serif}
 .printSheet{width:190mm;min-height:277mm;margin:0 auto;background:#fff;color:#000}
-.printHeader{min-height:28mm;display:grid;grid-template-columns:21mm 1fr 10mm;align-items:center;gap:4mm;margin-bottom:4mm;border-bottom:2px solid #111;padding-bottom:3mm}
-.printLogo{width:19mm;height:24mm;object-fit:contain;display:block}
+.printHeader{display:grid;grid-template-columns:23mm 1fr 10mm;align-items:center;gap:4mm;margin-bottom:4mm;border-bottom:2px solid #111;padding-bottom:3mm}
+.printLogo{width:21mm;height:26mm;object-fit:contain;display:block}
 .printHeaderCenter{text-align:center;min-width:0}
-.printFireCrop{width:135mm;max-width:100%;height:28mm;overflow:visible;margin:0 auto 1mm;display:flex;align-items:center;justify-content:center}
-.printFireTitle{width:135mm;height:28mm;object-fit:contain;object-position:center center;display:block;transform:none}
-.printMainTitle{text-align:center;font-weight:900;font-size:13px;letter-spacing:1.1px;text-transform:uppercase;margin:0;color:#111}
-.printInfo{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid #000;margin-bottom:8px;font-size:11px}
-.printInfo div{padding:5px 7px;font-weight:700;border-right:1px solid #000}
+.printFireCrop{width:132mm;max-width:100%;height:26mm;overflow:visible;margin:0 auto 1mm;display:flex;align-items:center;justify-content:center}
+.printFireTitle{width:132mm;height:26mm;object-fit:contain;object-position:center center;display:block;transform:none}
+.printMainTitle{text-align:center;font-weight:900;font-size:15px;letter-spacing:1.4px;text-transform:uppercase;margin:0}
+.printInfo{display:grid;grid-template-columns:1fr 1fr;border:1.6px solid #000;margin-bottom:8px}
+.printInfo div{padding:5px 7px;font-size:12px;line-height:1.25;font-weight:800;border-right:1px solid #000}
 .printInfo div:last-child{border-right:none}
+.printInfo b{font-size:12px;font-weight:900}
 .printTable{width:100%;border-collapse:collapse;font-size:11px}
 .printTable th,.printTable td{border:1px solid #000;padding:4px;text-align:center;vertical-align:middle}
 .printTable th{background:#000;color:#fff}
 .printVeh{font-weight:900;font-size:16px}
 .printVehImg{width:82px;height:54px;object-fit:contain;display:block;margin:0 auto 4px}
-.printBox{border:1.5px solid #000;min-height:64px;padding:7px;margin-top:8px;white-space:pre-wrap;font-size:11px}
+.printBox{border:2px solid #000;min-height:70px;padding:8px;margin-top:10px;white-space:pre-wrap;font-size:12px}
 @media print{body{width:210mm;min-height:297mm}.printSheet{width:190mm;min-height:277mm}}
 </style>
 </head>
