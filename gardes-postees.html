@@ -359,17 +359,17 @@ body.printMode .previewWrap{
   position:relative;
   min-height:30mm;
   display:grid;
-  grid-template-columns:26mm 1fr 26mm;
+  grid-template-columns:22mm 1fr 12mm;
   align-items:center;
-  gap:5mm;
+  gap:4mm;
   margin-bottom:5mm;
   border-bottom:2px solid #111;
   padding-bottom:3mm;
 }
 
 .printLogo{
-  width:22mm;
-  height:28mm;
+  width:20mm;
+  height:25mm;
   object-fit:contain;
   display:block;
 }
@@ -379,26 +379,37 @@ body.printMode .previewWrap{
   min-width:0;
 }
 
-.printFireTitle{
-  width:95mm;
+.printFireCrop{
+  width:118mm;
   max-width:100%;
-  height:auto;
-  object-fit:contain;
-  display:block;
+  height:22mm;
+  overflow:hidden;
   margin:0 auto 1mm;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.printFireTitle{
+  width:118mm;
+  height:22mm;
+  object-fit:cover;
+  object-position:center center;
+  display:block;
+  transform:scale(1.55);
 }
 
 .printMainTitle{
   text-align:center;
   font-weight:900;
-  font-size:15px;
-  letter-spacing:1.4px;
+  font-size:14px;
+  letter-spacing:1.3px;
   text-transform:uppercase;
-  margin:0;
+  margin:1mm 0 0;
 }
 
 .printMiniText{
-  font-size:9px;
+  font-size:8px;
   font-weight:700;
   color:#333;
   text-transform:uppercase;
@@ -897,7 +908,9 @@ function renderPrint(){
       </div>
 
       <div class="printHeaderCenter">
-        <img class="printFireTitle" src="${PRINT_FIRE_TITLE}" onerror="this.style.display='none'">
+        <div class="printFireCrop">
+          <img class="printFireTitle" src="${PRINT_FIRE_TITLE}" onerror="this.style.display='none'">
+        </div>
         <div class="printMainTitle">Feuille de garde</div>
         <div class="printMiniText">Centre de secours</div>
       </div>
@@ -963,12 +976,13 @@ function downloadPrintHtml(){
 @page{size:A4 portrait;margin:10mm}
 body{margin:0;background:#fff;color:#000;font-family:Arial,sans-serif}
 .printSheet{width:190mm;min-height:277mm;margin:0 auto;background:#fff;color:#000}
-.printHeader{position:relative;min-height:30mm;display:grid;grid-template-columns:26mm 1fr 26mm;align-items:center;gap:5mm;margin-bottom:5mm;border-bottom:2px solid #111;padding-bottom:3mm}
-.printLogo{width:22mm;height:28mm;object-fit:contain;display:block}
+.printHeader{position:relative;min-height:30mm;display:grid;grid-template-columns:22mm 1fr 12mm;align-items:center;gap:4mm;margin-bottom:5mm;border-bottom:2px solid #111;padding-bottom:3mm}
+.printLogo{width:20mm;height:25mm;object-fit:contain;display:block}
 .printHeaderCenter{text-align:center;min-width:0}
-.printFireTitle{width:95mm;max-width:100%;height:auto;object-fit:contain;display:block;margin:0 auto 1mm}
-.printMainTitle{text-align:center;font-weight:900;font-size:15px;letter-spacing:1.4px;text-transform:uppercase;margin:0}
-.printMiniText{font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.8px;margin-top:1mm}
+.printFireCrop{width:118mm;max-width:100%;height:22mm;overflow:hidden;margin:0 auto 1mm;display:flex;align-items:center;justify-content:center}
+.printFireTitle{width:118mm;height:22mm;object-fit:cover;object-position:center center;display:block;transform:scale(1.55)}
+.printMainTitle{text-align:center;font-weight:900;font-size:14px;letter-spacing:1.3px;text-transform:uppercase;margin:1mm 0 0}
+.printMiniText{font-size:8px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.8px;margin-top:1mm}
 .printInfo{display:grid;grid-template-columns:1fr 1fr;border:2px solid #000;margin-bottom:10px}
 .printInfo div{padding:8px;font-weight:700;border-right:1px solid #000}
 .printInfo div:last-child{border-right:none}
