@@ -238,216 +238,265 @@ body.mode-portal{
 @media (min-width:768px){
   :root{
     --btn: clamp(110px, 16vw, 180px);
+    --titleMaxH: 26vh;
+    --maxw:900px;
   }
 }
 
 /* LOGIN */
-.loginBox{
-  width:min(92vw,420px);
-  padding:18px;
-  border-radius:24px;
-  background:rgba(0,0,0,.52);
-  border:1px solid rgba(255,255,255,.14);
-  backdrop-filter:blur(10px);
-  box-shadow:0 18px 50px rgba(0,0,0,.42);
-  color:#fff;
-  text-align:center;
-}
-.loginLogo{
-  width:min(88vw,360px);
-  max-height:260px;
-  object-fit:contain;
-  margin-bottom:10px;
-}
-.loginTitle{
-  font-size:18px;
-  font-weight:950;
-  text-transform:uppercase;
-  letter-spacing:.6px;
-  margin-bottom:8px;
-}
-.loginSub{
-  color:rgba(255,255,255,.78);
-  font-size:13px;
-  line-height:1.35;
-  margin-bottom:14px;
-}
-.loginMsg{
-  min-height:20px;
-  margin-top:12px;
-  color:#ffd9b0;
-  font-weight:800;
-  font-size:13px;
+#loginBox{
+  width: 90%;
+  max-width: 380px;
+  padding: 40px 30px;
+  border-radius: 18px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: rgba(0, 0, 0, 0.65);
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
 }
 
-/* LOGOUT PORTAIL */
-.logoutBtn{
-  position:fixed;
-  top:14px;
-  right:14px;
-  z-index:9999;
-  width:46px;
-  height:46px;
+#loginTitle{
+  margin: 0 0 30px 0;
+  font-size: 24px;
+  letter-spacing: 2px;
+  color: #ffffff;
+}
+
+.g_id_signin{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+#loginMsg{
+  margin-top: 10px;
+  font-size: 14px;
+  color: #ff6b6b;
+}
+
+/* bouton déconnexion top-right */
+.logoutTopBtn{
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 10px);
+  right: 12px;
+  z-index: 9999;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.logoutTopBtn img{
+  height: 60px;
+  width: auto;
+  display: block;
+}
+.logoutTopBtn:active{
+  transform: scale(0.96);
+}
+
+.srOnly{
+  position:absolute;
+  width:1px;
+  height:1px;
   padding:0;
-  border:1px solid rgba(255,255,255,.16);
-  background:rgba(0,0,0,.25);
-  border-radius:16px;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  box-shadow:0 12px 26px rgba(0,0,0,.35);
-  cursor:pointer;
-  backdrop-filter:blur(8px);
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
 }
-.logoutBtn img{
-  width:30px;
-  height:30px;
-  object-fit:contain;
-}
-body.mode-portal .logoutBtn{display:flex}
 
-/* Agents en ligne */
+/* BADGE */
 .onlineBadge{
-  margin-top:8px;
-  padding:7px 10px;
-  border-radius:999px;
-  background:rgba(0,0,0,.36);
-  border:1px solid rgba(255,255,255,.13);
-  box-shadow:0 12px 28px rgba(0,0,0,.30);
-  backdrop-filter:blur(10px);
-  display:flex;
-  align-items:center;
-  gap:7px;
-  color:#fff;
-  font-size:12px;
-  font-weight:900;
-  cursor:pointer;
-  user-select:none;
+  position: fixed;
+  top: 14px;
+  left: 74px;
+  z-index: 9998;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.28);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba(255,255,255,.92);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 22px rgba(0,0,0,.18);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
-
+.onlineBadge.isOpen{
+  background: rgba(25,25,25,.62);
+  border-color: rgba(255,255,255,.22);
+}
 .onlineDot{
-  width:8px;
-  height:8px;
-  border-radius:999px;
-  background:#2cff80;
-  box-shadow:0 0 10px rgba(44,255,128,.65);
-  flex:0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #41d65d;
+  box-shadow: 0 0 10px rgba(65,214,93,.65);
 }
 
+/* PANEL */
 .onlinePanel{
-  position:fixed;
-  top:70px;
-  right:12px;
-  z-index:9998;
-  width:min(300px, calc(100vw - 24px));
-  max-height:55vh;
-  overflow:auto;
-  border-radius:18px;
-  background:rgba(0,0,0,.64);
-  border:1px solid rgba(255,255,255,.14);
-  box-shadow:0 18px 40px rgba(0,0,0,.45);
-  backdrop-filter:blur(12px);
-  color:#fff;
+  position: fixed;
+  top: 62px;
+  left: 14px;
+  z-index: 9997;
+  width: min(calc(100vw - 28px), 320px);
+  max-height: min(50vh, 340px);
+  overflow: auto;
+  padding: 10px 12px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(20,20,20,.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 10px 28px rgba(0,0,0,.35);
 }
-
 .onlinePanelHead{
-  position:sticky;
-  top:0;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:10px 12px;
-  background:linear-gradient(180deg, rgba(212,106,0,.78), rgba(185,88,0,.52));
-  font-size:13px;
-  font-weight:950;
-  text-transform:uppercase;
-  letter-spacing:.4px;
+  gap:10px;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:8px;
+  color:#fff;
 }
-
 .onlinePanelCount{
+  background:rgba(65,214,93,.20);
+  border:1px solid rgba(65,214,93,.30);
   padding:2px 8px;
   border-radius:999px;
-  background:rgba(0,0,0,.25);
+  min-width:24px;
+  text-align:center;
 }
-
 .onlinePanelTable{
   width:100%;
   border-collapse:collapse;
   font-size:12px;
+  color:#fff;
 }
-
 .onlinePanelTable td{
-  padding:8px 10px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  vertical-align:top;
+  padding:8px 0;
+  border-top:1px solid rgba(255,255,255,.08);
 }
-
+.onlinePanelTable tbody tr:first-child td{
+  border-top:none;
+}
+.onlineRow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.onlineLeft{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
 .onlineName{
-  font-weight:950;
-}
-
-.onlineLast{
-  margin-top:2px;
-  color:rgba(255,255,255,.68);
-  font-size:11px;
   font-weight:700;
-}
-
-.onlineStatus{
-  text-align:right;
+  color:#fff;
   white-space:nowrap;
-  font-weight:900;
-  color:#2cff80;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
-
-.onlineStatus.off{
-  color:rgba(255,255,255,.55);
+.onlineRight{
+  font-size:11px;
+  color:rgba(255,255,255,.72);
+  white-space:nowrap;
 }
-
+.onlineStatusDot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#41d65d;
+  box-shadow:0 0 8px rgba(65,214,93,.65);
+  flex:0 0 auto;
+}
+.onlineStatusDot.offline{
+  background:rgba(255,255,255,.35);
+  box-shadow:none;
+}
 .onlineEmpty{
   text-align:center;
-  color:rgba(255,255,255,.7);
-  font-weight:800;
-  padding:14px!important;
+  color:rgba(255,255,255,.70);
+}
+
+@media (max-width:420px){
+  .refreshBtn{
+    width:56px;
+    height:42px;
+  }
+  .lightbarIcon{
+    width:52px;
+    height:30px;
+  }
+  .onlineBadge{
+    left: 68px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+  .onlinePanel{
+    top: 60px;
+    left: 10px;
+    width: calc(100vw - 20px);
+  }
 }
 </style>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body class="mode-login">
-<button class="refreshBtn" id="refreshBtn" type="button" onclick="refreshPage()" aria-label="Actualiser">
-  <svg class="lightbarIcon" viewBox="0 0 120 58" aria-hidden="true">
-    <rect class="barShell" x="10" y="16" width="100" height="27" rx="10"></rect>
-    <rect class="barFoot" x="45" y="44" width="30" height="5" rx="2"></rect>
-    <rect class="mod modBlue modLeftBlue" x="18" y="23" width="25" height="13" rx="5"></rect>
-    <rect class="mod modWhite modMidWhite" x="47" y="23" width="26" height="13" rx="5"></rect>
-    <rect class="mod modBlue modRightBlue" x="77" y="23" width="25" height="13" rx="5"></rect>
+
+<button class="refreshBtn" id="refreshBtn" onclick="refreshPage()" aria-label="Rafraîchir">
+  <svg class="lightbarIcon" viewBox="0 0 120 60" aria-hidden="true">
+    <rect class="barShell" x="10" y="14" width="100" height="24" rx="6"/>
+    <rect class="mod modBlue modLeftBlue" x="16" y="18" width="28" height="16" rx="3"/>
+    <rect class="mod modWhite modMidWhite" x="46" y="18" width="28" height="16" rx="3"/>
+    <rect class="mod modBlue modRightBlue" x="76" y="18" width="28" height="16" rx="3"/>
+    <rect class="barFoot" x="22" y="40" width="76" height="4" rx="2"/>
+    <rect class="barFoot" x="54" y="44" width="12" height="5" rx="2.5" opacity=".8"/>
   </svg>
 </button>
 
-<section class="loginBox" id="loginBox">
-  <img class="loginLogo" src="titre.png" alt="CS Consenvoye">
-  <div class="loginTitle">Accès portail</div>
-  <div class="loginSub">Connecte-toi avec ton compte Google autorisé.</div>
+<!-- LOGIN -->
+<div id="loginBox">
+  <h2 id="loginTitle">Accès Portail</h2>
 
   <div id="g_id_onload"
        data-client_id="690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.googleusercontent.com"
        data-callback="handleCredentialResponse"
        data-auto_prompt="false">
   </div>
+
   <div class="g_id_signin"
        data-type="standard"
        data-size="large"
-       data-theme="filled_black"
-       data-text="signin_with"
-       data-shape="pill"
-       data-logo_alignment="left">
+       data-theme="outline"
+       data-text="sign_in_with"
+       data-shape="rectangular">
   </div>
 
-  <div class="loginMsg" id="loginMsg"></div>
-</section>
+  <p id="loginMsg"></p>
+</div>
 
-<main class="wrap" id="portal" style="display:none">
-  <button class="logoutBtn" id="logoutBtnPortal" type="button" aria-label="Déconnexion">
+<!-- PORTAIL -->
+<main class="wrap" id="portal" style="display:none;">
+  <button id="logoutBtnPortal" class="logoutTopBtn" aria-label="Déconnexion">
     <img src="deconnexion.png" alt="Déconnexion">
   </button>
 
@@ -663,7 +712,6 @@ function hideChecking(){
 function doLogout(){
   localStorage.removeItem(LS_KEY);
   localStorage.removeItem("cs_role_v1");
-  localStorage.removeItem("cs_gardes_postees_v1");
   localStorage.removeItem("cs_online_badge_cache_v1");
   showLogin();
   showMsg("Déconnecté.");
@@ -681,7 +729,6 @@ async function checkAndShow_(email){
     if(res && res.ok === true){
       localStorage.setItem(LS_KEY, email);
       localStorage.setItem("cs_role_v1", String(res.role || "").trim().toLowerCase());
-      localStorage.setItem("cs_gardes_postees_v1", String(Number(res.gardes_postees || 0)));
 
       hideChecking();
       showPortal();
@@ -691,7 +738,6 @@ async function checkAndShow_(email){
 
     localStorage.removeItem(LS_KEY);
     localStorage.removeItem("cs_role_v1");
-    localStorage.removeItem("cs_gardes_postees_v1");
     localStorage.removeItem("cs_online_badge_cache_v1");
     hideChecking();
     showLogin();
@@ -701,7 +747,6 @@ async function checkAndShow_(email){
   }catch(err){
     localStorage.removeItem(LS_KEY);
     localStorage.removeItem("cs_role_v1");
-    localStorage.removeItem("cs_gardes_postees_v1");
     localStorage.removeItem("cs_online_badge_cache_v1");
     hideChecking();
     showLogin();
@@ -718,7 +763,6 @@ async function handleCredentialResponse(response){
   if(!email){
     localStorage.removeItem(LS_KEY);
     localStorage.removeItem("cs_role_v1");
-    localStorage.removeItem("cs_gardes_postees_v1");
     localStorage.removeItem("cs_online_badge_cache_v1");
     showLogin();
     showMsg("Erreur : email introuvable.");
@@ -741,7 +785,6 @@ async function handleCredentialResponse(response){
 
       if(res && res.ok === true){
         localStorage.setItem("cs_role_v1", String(res.role || "").trim().toLowerCase());
-        localStorage.setItem("cs_gardes_postees_v1", String(Number(res.gardes_postees || 0)));
         hideSync();
         return;
       }
@@ -749,7 +792,6 @@ async function handleCredentialResponse(response){
       hideSync();
       localStorage.removeItem(LS_KEY);
       localStorage.removeItem("cs_role_v1");
-      localStorage.removeItem("cs_gardes_postees_v1");
       localStorage.removeItem("cs_online_badge_cache_v1");
       showLogin();
       showMsg("Accès refusé.");
@@ -797,251 +839,286 @@ function showDenied(){
   img.src = DENIED_IMG;
   img.alt = "Accès refusé";
   img.style.cssText = `
-    width:100%;
-    height:100%;
+    max-width:100%;
+    max-height: calc(100dvh - 110px);
+    width:auto;
+    height:auto;
     object-fit:contain;
-    max-width:100vw;
-    max-height:100vh;
+    display:block;
   `;
+
+  const btn = document.createElement("button");
+  btn.id = "denyBackBtn";
+  btn.textContent = "← Retour";
+  btn.style.cssText = `
+    position:fixed;
+    left:12px;
+    right:12px;
+    bottom: calc(env(safe-area-inset-bottom) + 14px);
+    padding:14px 16px;
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,.25);
+    background: rgba(0,0,0,.65);
+    color:#fff;
+    font-weight:950;
+    font-size:16px;
+    z-index:1000000;
+    -webkit-tap-highlight-color: transparent;
+  `;
+
+  history.pushState({ deny: 1 }, "", location.href);
+
+  const closeDenied = () => {
+    if(!_denyActive) return;
+    _denyActive = false;
+
+    if(_denyPopHandler){
+      window.removeEventListener("popstate", _denyPopHandler);
+      _denyPopHandler = null;
+    }
+
+    const ov = document.getElementById("denyOverlay");
+    const b = document.getElementById("denyBackBtn");
+    if (ov) ov.remove();
+    if (b) b.remove();
+
+    history.back();
+  };
+
+  _denyPopHandler = () => {
+    if(!_denyActive) return;
+    closeDenied();
+  };
+
+  window.addEventListener("popstate", _denyPopHandler);
+  btn.addEventListener("click", closeDenied);
 
   overlay.appendChild(img);
   document.body.appendChild(overlay);
-
-  try{
-    history.pushState({denied:true}, "", location.href);
-  }catch(e){}
-
-  _denyPopHandler = function(){
-    hideDenied();
-  };
-  window.addEventListener("popstate", _denyPopHandler);
+  document.body.appendChild(btn);
 }
 
-function hideDenied(){
-  const overlay = document.getElementById("denyOverlay");
-  if(overlay) overlay.remove();
-
-  _denyActive = false;
-
-  if(_denyPopHandler){
-    window.removeEventListener("popstate", _denyPopHandler);
-    _denyPopHandler = null;
-  }
-}
-
-document.addEventListener("keydown", (e)=>{
-  if(e.key === "Escape" && _denyActive){
-    hideDenied();
-  }
-});
-
-document.getElementById("btnAdmin").addEventListener("click", (e)=>{
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("#btnAdmin");
+  if(!btn) return;
   e.preventDefault();
+
   if(isAdminLocal()){
     location.href = ADMIN_URL;
   }else{
     showDenied();
   }
 });
+</script>
 
-/* PWA back */
-window.addEventListener("popstate", function(){
-  if(_denyActive){
-    hideDenied();
-    return;
+<script>
+(function(){
+  const badge = document.getElementById("onlineBadge");
+  const text = document.getElementById("onlineBadgeText");
+  const panel = document.getElementById("onlinePanel");
+  const panelBody = document.getElementById("onlinePanelBody");
+  const panelCount = document.getElementById("onlinePanelCount");
+
+  if (!badge || !text || !panel || !panelBody || !panelCount) return;
+
+  const ONLINE_CACHE_KEY = "cs_online_badge_cache_v1";
+  const ONLINE_CACHE_TTL = 10000; // 10 secondes
+
+  function escapeHtml(v){
+    return String(v || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   }
 
-  if(document.body.classList.contains("mode-portal")){
-    history.replaceState({page:"portal"}, "", location.pathname + "?portal=1");
-  }
-});
-
-/* ONLINE USERS */
-const ONLINE_CACHE_KEY = "cs_online_badge_cache_v1";
-const ONLINE_REFRESH_MS = 60000;
-
-const $onlineBadge = document.getElementById("onlineBadge");
-const $onlineBadgeText = document.getElementById("onlineBadgeText");
-const $onlinePanel = document.getElementById("onlinePanel");
-const $onlinePanelCount = document.getElementById("onlinePanelCount");
-const $onlinePanelBody = document.getElementById("onlinePanelBody");
-
-let _onlineTimer = null;
-let _onlineOpen = false;
-
-function fmtLast_(iso){
-  if(!iso) return "—";
-  try{
-    const d = new Date(iso);
+  function formatLastSeen(v){
+    if(!v) return "—";
+    const d = new Date(v);
     if(isNaN(d.getTime())) return "—";
 
     const now = new Date();
-    const diff = Math.round((now - d) / 60000);
+    const diffMin = Math.floor((now - d) / 60000);
 
-    if(diff < 1) return "à l’instant";
-    if(diff < 60) return `il y a ${diff} min`;
+    if(diffMin < 1) return "à l'instant";
+    if(diffMin < 60) return diffMin + " min";
 
-    return d.toLocaleString("fr-FR", {
-      day:"2-digit",
-      month:"2-digit",
-      hour:"2-digit",
-      minute:"2-digit"
-    });
-  }catch(e){
-    return "—";
-  }
-}
+    const sameDay =
+      d.getDate() === now.getDate() &&
+      d.getMonth() === now.getMonth() &&
+      d.getFullYear() === now.getFullYear();
 
-function agentLabel_(it){
-  const n = String(it.nom || "").trim();
-  if(n) return n;
+    const hh = String(d.getHours()).padStart(2, "0");
+    const mm = String(d.getMinutes()).padStart(2, "0");
 
-  const em = String(it.email || "").trim();
-  if(!em) return "Agent";
+    if (sameDay) return `${hh}:${mm}`;
 
-  return em.split("@")[0]
-    .split(/[._-]/)
-    .filter(Boolean)
-    .map(x => x.charAt(0).toUpperCase() + x.slice(1))
-    .join(" ");
-}
-
-function renderOnline_(items){
-  items = Array.isArray(items) ? items : [];
-
-  const online = items.filter(x => Number(x.en_ligne || 0) === 1);
-  const count = online.length;
-
-  if($onlineBadge){
-    $onlineBadge.hidden = false;
+    const dd = String(d.getDate()).padStart(2, "0");
+    const mo = String(d.getMonth() + 1).padStart(2, "0");
+    return `${dd}/${mo} ${hh}:${mm}`;
   }
 
-  if($onlineBadgeText){
-    $onlineBadgeText.textContent = count + (count > 1 ? " agents en ligne" : " agent en ligne");
+  function renderPanel(items){
+    panelCount.textContent = String(items.length);
+
+    if(!items.length){
+      panelBody.innerHTML = `
+        <tr>
+          <td class="onlineEmpty">Aucune connexion</td>
+        </tr>
+      `;
+      return;
+    }
+
+    panelBody.innerHTML = items.map(a => {
+      const isOnline = Number(a.en_ligne) === 1;
+      return `
+        <tr>
+          <td>
+            <div class="onlineRow">
+              <div class="onlineLeft">
+                <span class="onlineStatusDot ${isOnline ? "" : "offline"}"></span>
+                <span class="onlineName">${escapeHtml(a.nom || a.email || "—")}</span>
+              </div>
+              <div class="onlineRight">
+                ${isOnline ? "en ligne" : escapeHtml(formatLastSeen(a.derniere_connexion || a.maj_session))}
+              </div>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join("");
   }
 
-  if($onlinePanelCount){
-    $onlinePanelCount.textContent = String(count);
+  function closePanel(){
+    panel.hidden = true;
+    badge.classList.remove("isOpen");
   }
 
-  if(!$onlinePanelBody) return;
-
-  if(!items.length){
-    $onlinePanelBody.innerHTML = `<tr><td class="onlineEmpty">Aucune connexion</td></tr>`;
-    return;
+  function togglePanel(){
+    if (badge.hidden) return;
+    panel.hidden = !panel.hidden;
+    badge.classList.toggle("isOpen", !panel.hidden);
   }
 
-  $onlinePanelBody.innerHTML = items.map(it=>{
-    const on = Number(it.en_ligne || 0) === 1;
-    return `
-      <tr>
-        <td>
-          <div class="onlineName">${escapeHtml_(agentLabel_(it))}</div>
-          <div class="onlineLast">Dernière connexion : ${escapeHtml_(fmtLast_(it.derniere_connexion || it.maj_session || ""))}</div>
-        </td>
-        <td class="onlineStatus ${on ? "" : "off"}">${on ? "en ligne" : "hors ligne"}</td>
-      </tr>
-    `;
-  }).join("");
-}
-
-function escapeHtml_(s){
-  return String(s ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
-function loadOnlineCache_(){
-  try{
-    const raw = localStorage.getItem(ONLINE_CACHE_KEY);
-    if(!raw) return null;
-    const obj = JSON.parse(raw);
-    if(!obj || !Array.isArray(obj.items)) return null;
-    return obj.items;
-  }catch(e){
-    return null;
+  function saveCache(data){
+    try{
+      localStorage.setItem(ONLINE_CACHE_KEY, JSON.stringify({
+        ts: Date.now(),
+        data: data
+      }));
+    }catch(e){}
   }
-}
 
-function saveOnlineCache_(items){
-  try{
-    localStorage.setItem(ONLINE_CACHE_KEY, JSON.stringify({
-      ts: Date.now(),
-      items
-    }));
-  }catch(e){}
-}
+  function readCache(){
+    try{
+      const raw = localStorage.getItem(ONLINE_CACHE_KEY);
+      if(!raw) return null;
+      const parsed = JSON.parse(raw);
+      if(!parsed || !parsed.ts || !parsed.data) return null;
+      return parsed;
+    }catch(e){
+      return null;
+    }
+  }
 
-function jsonpOnline_(){
-  return new Promise((resolve, reject)=>{
-    const cb = "cb_online_" + Math.random().toString(36).slice(2);
-    const s = document.createElement("script");
+  function applyData(res){
+    if(!res || !res.ok || !Array.isArray(res.items)){
+      badge.hidden = true;
+      closePanel();
+      renderPanel([]);
+      return;
+    }
 
-    window[cb] = function(data){
-      try{ delete window[cb]; }catch(e){}
-      s.remove();
-      resolve(data);
+    const allWithHistory = res.items
+      .filter(x => String(x.derniere_connexion || x.maj_session || "").trim() !== "")
+      .sort((a,b) => {
+        const aOnline = Number(a.en_ligne) === 1 ? 1 : 0;
+        const bOnline = Number(b.en_ligne) === 1 ? 1 : 0;
+        if (bOnline !== aOnline) return bOnline - aOnline;
+
+        const ad = String(a.derniere_connexion || a.maj_session || "");
+        const bd = String(b.derniere_connexion || b.maj_session || "");
+        return bd.localeCompare(ad);
+      });
+
+    const onlineCount = res.items.filter(x => Number(x.en_ligne) === 1).length;
+
+    if(onlineCount <= 0 && allWithHistory.length <= 0){
+      badge.hidden = true;
+      closePanel();
+      renderPanel([]);
+      return;
+    }
+
+    text.textContent = onlineCount > 0
+      ? onlineCount + (onlineCount > 1 ? " agents en ligne" : " agent en ligne")
+      : "Historique connexions";
+
+    badge.hidden = false;
+    renderPanel(allWithHistory);
+  }
+
+  function fetchOnlineBadge(){
+    const cb = "cb_agents_" + Date.now() + "_" + Math.floor(Math.random()*10000);
+
+    window[cb] = function(res){
+      try{
+        delete window[cb];
+        saveCache(res);
+        applyData(res);
+      }catch(err){
+        badge.hidden = true;
+        closePanel();
+        renderPanel([]);
+      }
     };
+
+    const s = document.createElement("script");
+    s.src = API + "?view=agents_status&callback=" + encodeURIComponent(cb) + "&nocache=1";
 
     s.onerror = function(){
       try{ delete window[cb]; }catch(e){}
-      s.remove();
-      reject(new Error("online jsonp error"));
     };
 
-    s.src = API + "?view=agents_status&callback=" + encodeURIComponent(cb) + "&nocache=1";
-    document.head.appendChild(s);
-  });
-}
-
-async function refreshOnline_(){
-  try{
-    const data = await jsonpOnline_();
-    if(data && data.ok){
-      const items = Array.isArray(data.items) ? data.items : [];
-      saveOnlineCache_(items);
-      renderOnline_(items);
-    }
-  }catch(e){
-    const cached = loadOnlineCache_();
-    if(cached) renderOnline_(cached);
+    document.body.appendChild(s);
   }
-}
 
-function startOnline_(){
-  const cached = loadOnlineCache_();
-  if(cached) renderOnline_(cached);
+  function loadOnlineBadge(force){
+    const cached = readCache();
+    const now = Date.now();
 
-  refreshOnline_();
+    if (!force && cached && (now - cached.ts) < ONLINE_CACHE_TTL){
+      applyData(cached.data);
+      return;
+    }
 
-  if(_onlineTimer) clearInterval(_onlineTimer);
-  _onlineTimer = setInterval(refreshOnline_, ONLINE_REFRESH_MS);
-}
+    fetchOnlineBadge();
+  }
 
-if($onlineBadge){
-  $onlineBadge.addEventListener("click", ()=>{
-    _onlineOpen = !_onlineOpen;
-    if($onlinePanel) $onlinePanel.hidden = !_onlineOpen;
-    if(_onlineOpen) refreshOnline_();
+  badge.addEventListener("click", function(e){
+    e.stopPropagation();
+    togglePanel();
   });
-}
 
-document.addEventListener("click", (e)=>{
-  if(!_onlineOpen) return;
-  if(!$onlinePanel || !$onlineBadge) return;
+  panel.addEventListener("click", function(e){
+    e.stopPropagation();
+  });
 
-  if($onlinePanel.contains(e.target) || $onlineBadge.contains(e.target)) return;
+  document.addEventListener("click", function(e){
+    if (panel.hidden) return;
+    if (!panel.contains(e.target) && !badge.contains(e.target)){
+      closePanel();
+    }
+  });
 
-  _onlineOpen = false;
-  $onlinePanel.hidden = true;
-});
-
-startOnline_();
+  loadOnlineBadge(false);
+  setInterval(function(){
+    loadOnlineBadge(true);
+  }, ONLINE_CACHE_TTL);
+})();
 </script>
 
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
 </html>
