@@ -355,11 +355,55 @@ body.printMode .previewWrap{
   padding:0;
 }
 
-.printTitle{
+.printHeader{
+  position:relative;
+  min-height:30mm;
+  display:grid;
+  grid-template-columns:26mm 1fr 26mm;
+  align-items:center;
+  gap:5mm;
+  margin-bottom:5mm;
+  border-bottom:2px solid #111;
+  padding-bottom:3mm;
+}
+
+.printLogo{
+  width:22mm;
+  height:28mm;
+  object-fit:contain;
+  display:block;
+}
+
+.printHeaderCenter{
+  text-align:center;
+  min-width:0;
+}
+
+.printFireTitle{
+  width:95mm;
+  max-width:100%;
+  height:auto;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 1mm;
+}
+
+.printMainTitle{
   text-align:center;
   font-weight:900;
-  font-size:24px;
-  margin:4px 0;
+  font-size:15px;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  margin:0;
+}
+
+.printMiniText{
+  font-size:9px;
+  font-weight:700;
+  color:#333;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+  margin-top:1mm;
 }
 
 .printInfo{
@@ -583,6 +627,9 @@ body.printMode .previewWrap{
 const LS_AGENTS="cs_gp_agents_v4";
 const LS_VEHICLES="cs_gp_vehicles_v4";
 const LS_STATE="cs_gp_state_v4";
+
+const PRINT_LOGO="logo-garde.png";
+const PRINT_FIRE_TITLE="cs-consenvoye-feu.png";
 
 function loadJson(k,f){
   try{
@@ -844,8 +891,19 @@ function renderPrint(){
   const date=state.date?state.date.split("-").reverse().join("/"):"—";
 
   let h=`
-    <div class="printTitle">CENTRE DE SECOURS DE CONSENVOYE</div>
-    <div class="printTitle">FEUILLE DE GARDE</div>
+    <div class="printHeader">
+      <div>
+        <img class="printLogo" src="${PRINT_LOGO}" onerror="this.style.display='none'">
+      </div>
+
+      <div class="printHeaderCenter">
+        <img class="printFireTitle" src="${PRINT_FIRE_TITLE}" onerror="this.style.display='none'">
+        <div class="printMainTitle">Feuille de garde</div>
+        <div class="printMiniText">Centre de secours</div>
+      </div>
+
+      <div></div>
+    </div>
 
     <div class="printInfo">
       <div>Date : ${esc(date)}</div>
@@ -905,7 +963,12 @@ function downloadPrintHtml(){
 @page{size:A4 portrait;margin:10mm}
 body{margin:0;background:#fff;color:#000;font-family:Arial,sans-serif}
 .printSheet{width:190mm;min-height:277mm;margin:0 auto;background:#fff;color:#000}
-.printTitle{text-align:center;font-weight:900;font-size:24px;margin:4px 0}
+.printHeader{position:relative;min-height:30mm;display:grid;grid-template-columns:26mm 1fr 26mm;align-items:center;gap:5mm;margin-bottom:5mm;border-bottom:2px solid #111;padding-bottom:3mm}
+.printLogo{width:22mm;height:28mm;object-fit:contain;display:block}
+.printHeaderCenter{text-align:center;min-width:0}
+.printFireTitle{width:95mm;max-width:100%;height:auto;object-fit:contain;display:block;margin:0 auto 1mm}
+.printMainTitle{text-align:center;font-weight:900;font-size:15px;letter-spacing:1.4px;text-transform:uppercase;margin:0}
+.printMiniText{font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.8px;margin-top:1mm}
 .printInfo{display:grid;grid-template-columns:1fr 1fr;border:2px solid #000;margin-bottom:10px}
 .printInfo div{padding:8px;font-weight:700;border-right:1px solid #000}
 .printInfo div:last-child{border-right:none}
