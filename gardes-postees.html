@@ -28,6 +28,14 @@ body{
   overflow:hidden;
 }
 
+body.auth-pending .wrap{
+  display:none!important;
+}
+
+body.auth-denied .wrap{
+  display:none!important;
+}
+
 .bg{
   position:fixed;
   inset:0;
@@ -521,7 +529,7 @@ body.printMode .previewWrap{
   position:fixed;
   inset:0;
   z-index:50;
-  display:flex;
+  display:none;
   align-items:center;
   justify-content:center;
   padding:22px;
@@ -531,7 +539,9 @@ body.printMode .previewWrap{
   backdrop-filter:blur(10px);
 }
 
-.accessGate.hidden{display:none}
+body.auth-denied .accessGate{
+  display:flex;
+}
 
 .accessBox{
   width:min(460px, 100%);
@@ -544,8 +554,8 @@ body.printMode .previewWrap{
 }
 
 .accessImg{
-  width:min(280px, 82vw);
-  max-height:320px;
+  width:min(300px, 86vw);
+  max-height:340px;
   object-fit:contain;
   display:block;
   margin:0 auto 12px;
@@ -636,10 +646,10 @@ body.printMode .previewWrap{
 </style>
 </head>
 
-<body>
+<body class="auth-pending">
 <div class="bg"></div>
 
-<div class="accessGate hidden" id="accessGate">
+<div class="accessGate" id="accessGate">
   <div class="accessBox">
     <img class="accessImg" src="acces_refuse.png" alt="Accès refusé">
     <div class="accessTitle" id="accessTitle">Accès refusé</div>
@@ -1186,7 +1196,7 @@ function jsonpAuth_(email){
 
     const done=(data)=>{
       try{delete window[cb]}catch(e){}
-      script.remove();
+      try{script.remove()}catch(e){}
       resolve(data || {ok:false});
     };
 
@@ -1198,11 +1208,12 @@ function jsonpAuth_(email){
 }
 
 function showAccessDenied_(title,text){
+  document.body.classList.remove("auth-pending");
+  document.body.classList.add("auth-denied");
   document.body.classList.remove("printMode");
-  document.querySelector(".wrap").style.display="none";
+
   document.getElementById("accessTitle").textContent=title || "Accès refusé";
   document.getElementById("accessText").textContent=text || "Cette page est réservée aux personnes autorisées.";
-  document.getElementById("accessGate").classList.remove("hidden");
 }
 
 async function checkGardesAccess_(){
@@ -1219,6 +1230,9 @@ async function checkGardesAccess_(){
     showAccessDenied_("Accès refusé","Cette page est réservée aux personnes autorisées pour les gardes postées.");
     return false;
   }
+
+  document.body.classList.remove("auth-pending");
+  document.body.classList.remove("auth-denied");
 
   return true;
 }
