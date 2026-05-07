@@ -29,6 +29,7 @@ body{
   color:var(--txt);
   background:#0b0b0b;
   overflow:hidden;
+  overflow-x:hidden;
 }
 
 .bg{
@@ -49,6 +50,7 @@ body{
   grid-template-rows:auto auto minmax(0,1fr);
   gap:10px;
   overflow:hidden;
+  overflow-x:hidden;
 }
 
 body.printMode .wrap{
@@ -118,6 +120,7 @@ body.printMode .mainTabs{
   min-height:0;
   height:100%;
   overflow-y:auto;
+  overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
   flex-direction:column;
   gap:10px;
@@ -133,6 +136,7 @@ body.printMode .mainTabs{
   box-shadow:var(--shadow);
   backdrop-filter:blur(10px);
   padding:12px;
+  overflow-x:hidden;
 }
 
 .cardTitle{
@@ -157,6 +161,7 @@ body.printMode .mainTabs{
 
 .field,.select,.textarea,.colorField,.fileField{
   width:100%;
+  min-width:0;
   border:none;
   outline:none;
   background:rgba(0,0,0,.24);
@@ -220,6 +225,7 @@ body.printMode .mainTabs{
   display:flex;
   align-items:center;
   gap:12px;
+  min-width:0;
 }
 
 .vehicleImg{
@@ -229,6 +235,7 @@ body.printMode .mainTabs{
   border-radius:12px;
   background:rgba(255,255,255,.08);
   padding:4px;
+  flex:0 0 auto;
 }
 
 .vehicleName{
@@ -262,6 +269,7 @@ body.printMode .mainTabs{
   background:rgba(255,255,255,.055);
   border:1px solid rgba(255,255,255,.09);
   padding:10px;
+  min-width:0;
 }
 
 .roleName{
@@ -279,10 +287,28 @@ body.printMode .mainTabs{
   border:1px solid rgba(255,255,255,.08);
   padding:10px;
   margin-bottom:8px;
+  min-width:0;
 }
 
-.itemMain{font-weight:950}
-.itemSub{font-size:12px;color:var(--muted);font-weight:800;margin-top:2px}
+.itemMain{
+  font-weight:950;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  max-width:100%;
+}
+
+.itemSub{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:800;
+  margin-top:2px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  max-width:100%;
+}
+
 .red{background:rgba(255,80,80,.20)}
 
 .addAgentGrid{
@@ -310,6 +336,7 @@ body.printMode .mainTabs{
   gap:8px;
   margin-top:8px;
   align-items:center;
+  min-width:0;
 }
 
 .configVehImg{
@@ -320,6 +347,7 @@ body.printMode .mainTabs{
   background:rgba(255,255,255,.08);
   border:1px solid rgba(255,255,255,.10);
   padding:4px;
+  flex:0 0 auto;
 }
 
 .printToolbar{
@@ -777,7 +805,7 @@ function renderVehicles(){
       <div class="vehicleHead" data-open="${esc(v.name)}">
         <div class="vehicleLeft">
           ${vehicleImageHtml(v,"vehicleImg")}
-          <div>
+          <div style="min-width:0">
             <div class="vehicleName">${esc(v.name)}</div>
             <div class="vehicleMeta">${v.roles.length} postes — ${shiftLabel(state.shift)}</div>
           </div>
@@ -809,7 +837,7 @@ function renderAgents(){
     const d=document.createElement("div");
     d.className="itemRow";
     d.innerHTML=`
-      <div>
+      <div style="min-width:0">
         <div class="itemMain">${esc(agentName(a))}</div>
         <div class="itemSub">${esc(a.grade)} — ${esc(a.nom)} ${esc(a.prenom)}</div>
       </div>
@@ -832,16 +860,25 @@ function renderVehicleConfig(){
     d.className="card";
     d.style.marginBottom="10px";
 
+    const imageStatus = v.image ? "Image véhicule configurée" : "Aucune image";
+    const rolesText = v.roles.length ? v.roles.join(", ") : "Aucun poste";
+
     d.innerHTML=`
-      <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
-        <div style="display:flex;gap:10px;align-items:center">
-          ${v.image ? `<img class="configVehImg" src="${esc(v.image)}" onerror="this.style.display='none'">` : `<div class="configVehImg"></div>`}
-          <div>
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;min-width:0">
+        <div style="display:flex;gap:10px;align-items:center;min-width:0;flex:1">
+          ${
+            v.image
+            ? `<img class="configVehImg" src="${esc(v.image)}" onerror="this.style.display='none'">`
+            : `<div class="configVehImg"></div>`
+          }
+
+          <div style="min-width:0;flex:1">
             <div class="itemMain" style="color:${esc(v.color)}">${esc(v.name)}</div>
-            <div class="itemSub">${esc(v.roles.join(", "))}</div>
-            <div class="itemSub">Image : ${esc(v.image || "aucune")}</div>
+            <div class="itemSub">${esc(rolesText)}</div>
+            <div class="itemSub">${imageStatus}</div>
           </div>
         </div>
+
         <button class="miniBtn red" data-del="${i}">−</button>
       </div>
 
