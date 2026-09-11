@@ -1,920 +1,1166 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Planning — CS Consenvoye</title>
-
-  <style>
-    :root{
-      --txt:#f4f4f4;
-      --muted:rgba(255,255,255,.70);
-      --shadow:0 14px 34px rgba(0,0,0,.40);
-      --radius:22px;
-      --stroke:rgba(255,255,255,.10);
-      --orange:#d46a00;
-      --orange2:#b95800;
-      --today:#fff200;
-      --note:#fff200;
-      --success:#22a447;
-      --danger:#b52121;
-    }
-
-    *{box-sizing:border-box}
-
-    html,body{height:100%}
-
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--txt);
-      background:#0b0b0b;
-      overflow:hidden;
-    }
-
-    .bg{
-      position:fixed;
-      inset:0;
-      background:
-        linear-gradient(180deg,rgba(0,0,0,.52),rgba(0,0,0,.52)),
-        url("background.png") center top/cover no-repeat;
-      z-index:-2;
-      transform:translateZ(0);
-    }
-
-    .bg::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        radial-gradient(
-          circle at 50% 10%,
-          rgba(255,170,60,.16),
-          rgba(0,0,0,.64) 62%
-        );
-      z-index:-1;
-    }
-
-    .wrap{
-      height:100vh;
-      max-width:980px;
-      margin:0 auto;
-      padding:
-        calc(env(safe-area-inset-top) + 10px)
-        12px
-        calc(env(safe-area-inset-bottom) + 12px);
-
-      display:grid;
-      grid-template-rows:auto auto 1fr auto;
-      gap:10px;
-    }
-
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:10px 12px;
-      border-radius:18px;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(212,106,0,.75),
-          rgba(185,88,0,.58)
-        );
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      min-height:46px;
-    }
-
-    .topbar .title{
-      font-weight:950;
-      letter-spacing:.8px;
-      text-transform:uppercase;
-      font-size:18px;
-      margin:0;
-      white-space:nowrap;
-      display:flex;
-      align-items:center;
-      gap:6px;
-    }
-
-    .yearSelect{
-      padding:5px 28px 5px 10px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.22);
-      background:rgba(0,0,0,.20);
-      color:#fff;
-      font-family:inherit;
-      font-size:18px;
-      font-weight:950;
-      outline:none;
-      cursor:pointer;
-    }
-
-    .yearSelect option{
-      color:#111;
-      background:#fff;
-    }
-
-    .btn{
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(0,0,0,.18);
-      color:var(--txt);
-      padding:9px 12px;
-      border-radius:14px;
-      font-weight:900;
-      cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
-      transition:.15s ease;
-    }
-
-    .btn:active{transform:translateY(1px)}
-
-    .btn.saving{
-      background:#177d38;
-      border-color:#39d269;
-      color:#fff;
-    }
-
-    .btn.saved{
-      background:var(--success);
-      border-color:#5be484;
-      color:#fff;
-    }
-
-    .btn:disabled{
-      opacity:1;
-      cursor:default;
-    }
-
-    .monthbar{
-      display:grid;
-      grid-template-columns:52px 1fr 52px;
-      align-items:center;
-      gap:10px;
-      padding:8px 10px;
-      border-radius:18px;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(212,106,0,.62),
-          rgba(185,88,0,.45)
-        );
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      min-height:50px;
-    }
-
-    .navbtn{
-      height:42px;
-      border-radius:16px;
-      font-size:22px;
-      font-weight:950;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.18);
-      color:var(--txt);
-      cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
-    }
-
-    .navbtn:active{transform:translateY(1px)}
-
-    .navbtn:disabled{
-      opacity:.35;
-      cursor:default;
-    }
-
-    .monthname{
-      text-align:center;
-      font-weight:950;
-      font-size:22px;
-      letter-spacing:.4px;
-      margin:0;
-      white-space:nowrap;
-    }
-
-    .calCard{
-      border-radius:var(--radius);
-      background:
-        linear-gradient(
-          180deg,
-          rgba(0,0,0,.46),
-          rgba(0,0,0,.30)
-        );
-      border:1px solid var(--stroke);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      overflow:hidden;
-      padding:12px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      min-height:0;
-    }
-
-    .dow{
-      display:grid;
-      grid-template-columns:repeat(7,1fr);
-      gap:8px;
-      padding:0 2px;
-      color:rgba(255,255,255,.72);
-      font-weight:900;
-      letter-spacing:.5px;
-      font-size:14px;
-      user-select:none;
-    }
-
-    .dow div{text-align:center}
-
-    .grid{
-      flex:1;
-      display:grid;
-      grid-template-columns:repeat(7,1fr);
-      grid-auto-rows:minmax(54px,1fr);
-      gap:8px;
-      min-height:0;
-    }
-
-    .day{
-      position:relative;
-      border-radius:18px;
-      background:rgba(0,0,0,.26);
-      border:1px solid rgba(255,255,255,.06);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:950;
-      font-size:22px;
-      color:rgba(255,255,255,.92);
-      user-select:none;
-      -webkit-tap-highlight-color:transparent;
-    }
-
-    .day.is-empty{
-      opacity:.12;
-      pointer-events:none;
-    }
-
-    .day.has-color::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      border-radius:18px;
-      background:var(--dayColor,transparent);
-      opacity:.78;
-      z-index:0;
-    }
-
-    .day span{
-      position:relative;
-      z-index:1;
-    }
-
-    .day.is-today{
-      box-shadow:
-        inset 0 0 0 4px #ffffff,
-        0 0 8px rgba(0,0,0,.6);
-      border-color:#ffffff;
-    }
-
-    .day.has-note{cursor:pointer}
-
-    .day.has-note::after{
-      content:"";
-      position:absolute;
-      top:8px;
-      right:8px;
-      width:8px;
-      height:8px;
-      border-radius:999px;
-      background:rgba(255,242,0,.95);
-      box-shadow:0 0 8px rgba(255,242,0,.45);
-      z-index:2;
-    }
-
-    .legend{
-      border-radius:var(--radius);
-      background:
-        linear-gradient(
-          180deg,
-          rgba(0,0,0,.40),
-          rgba(0,0,0,.28)
-        );
-      border:1px solid var(--stroke);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      padding:10px;
-      overflow:hidden;
-      min-height:92px;
-    }
-
-    .legendGrid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:8px 10px;
-      align-items:center;
-    }
-
-    .legItem{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding:8px 10px;
-      border-radius:16px;
-      background:rgba(0,0,0,.18);
-      border:1px solid rgba(255,255,255,.08);
-      min-height:44px;
-    }
-
-    .sq{
-      width:20px;
-      height:20px;
-      border-radius:5px;
-      border:1px solid rgba(255,255,255,.18);
-      flex:0 0 auto;
-      background:rgba(255,255,255,.25);
-    }
-
-    .legTxt{
-      font-weight:900;
-      font-size:18px;
-      line-height:1.05;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .status{
-      position:fixed;
-      left:12px;
-      right:12px;
-      bottom:calc(env(safe-area-inset-bottom) + 12px);
-      z-index:260;
-      display:none;
-      max-width:980px;
-      margin:0 auto;
-      pointer-events:none;
-      text-align:center;
-    }
-
-    .status .pill{
-      display:inline-flex;
-      gap:10px;
-      align-items:center;
-      padding:10px 14px;
-      border-radius:16px;
-      background:rgba(0,0,0,.75);
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow:var(--shadow);
-      color:#fff;
-      font-weight:900;
-    }
-
-    .status.success .pill{
-      background:rgba(22,128,57,.94);
-      border-color:rgba(83,226,126,.55);
-    }
-
-    .status.danger .pill{
-      background:rgba(151,24,24,.94);
-      border-color:rgba(255,99,99,.55);
-    }
-
-    .status .small{
-      font-weight:800;
-      opacity:.85;
-      font-size:13px;
-    }
-
-    .noteOverlay,
-    .editOverlay,
-    .formOverlay{
-      position:fixed;
-      inset:0;
-      display:none;
-    }
-
-    .noteOverlay{
-      background:rgba(0,0,0,.55);
-      backdrop-filter:blur(6px);
-      -webkit-backdrop-filter:blur(6px);
-      z-index:120;
-    }
-
-    .editOverlay,
-    .formOverlay{
-      background:rgba(0,0,0,.62);
-      backdrop-filter:blur(8px);
-      -webkit-backdrop-filter:blur(8px);
-    }
-
-    .editOverlay{z-index:140}
-    .formOverlay{z-index:180}
-
-    .noteOverlay.show,
-    .editOverlay.show,
-    .formOverlay.show{
-      display:block;
-    }
-
-    .noteSheet,
-    .editSheet,
-    .formSheet{
-      position:absolute;
-      left:12px;
-      right:12px;
-      bottom:calc(env(safe-area-inset-bottom) + 12px);
-      max-width:980px;
-      margin:0 auto;
-      border-radius:22px;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(0,0,0,.78),
-          rgba(0,0,0,.62)
-        );
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-    }
-
-    .noteSheet{height:min(52vh,520px)}
-    .editSheet{height:min(62vh,620px)}
-    .formSheet{height:min(76vh,700px)}
-
-    .noteHead,
-    .editHead,
-    .formHead{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:12px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-      background:rgba(0,0,0,.22);
-    }
-
-    .noteTitle,
-    .editTitle,
-    .formTitle{
-      font-weight:950;
-      font-size:16px;
-      color:rgba(255,255,255,.92);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .noteClose,
-    .iconBtn{
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(0,0,0,.18);
-      color:var(--txt);
-      padding:8px 10px;
-      border-radius:14px;
-      font-weight:950;
-      cursor:pointer;
-      min-width:42px;
-      transition:.15s ease;
-    }
-
-    .iconBtn.danger{
-      border-color:rgba(255,80,80,.35);
-    }
-
-    .iconBtn.deleting{
-      background:#8d1f1f;
-      border-color:#ff5f5f;
-      color:#fff;
-      min-width:120px;
-    }
-
-    .iconBtn.deleted{
-      background:#a52222;
-      border-color:#ff7575;
-      color:#fff;
-      min-width:110px;
-    }
-
-    .iconBtn:disabled{
-      opacity:1;
-      cursor:default;
-    }
-
-    .noteBody,
-    .editBody{
-      padding:12px;
-      overflow:auto;
-      -webkit-overflow-scrolling:touch;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .formBody{
-      padding:10px;
-      overflow:auto;
-      -webkit-overflow-scrolling:touch;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-
-    .evCard,
-    .row,
-    .formBlock,
-    .timeSection{
-      border-radius:18px;
-      background:rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.10);
-      padding:10px 12px;
-    }
-
-    .evTop,
-    .rowTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:6px;
-    }
-
-    .evName,
-    .rowName{
-      font-weight:950;
-      font-size:16px;
-      line-height:1.1;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-    }
-
-    .evTime{
-      font-weight:900;
-      font-size:13px;
-      color:rgba(255,255,255,.78);
-      white-space:nowrap;
-      flex:0 0 auto;
-    }
-
-    .evMeta,
-    .rowSub{
-      font-weight:850;
-      font-size:13px;
-      color:rgba(255,255,255,.78);
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:8px;
-    }
-
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-    }
-
-    .chipDot{
-      width:10px;
-      height:10px;
-      border-radius:3px;
-      border:1px solid rgba(255,255,255,.20);
-      background:rgba(255,255,255,.25);
-    }
-
-    .evDetails{
-      font-size:15px;
-      font-weight:850;
-      color:rgba(255,255,255,.92);
-      line-height:1.25;
-      white-space:pre-wrap;
-    }
-
-    .rowBtns,
-    .editActions,
-    .formActions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-
-    .formLabel{
-      display:block;
-      margin:0 0 5px 0;
-      font-size:12px;
-      font-weight:900;
-      color:rgba(255,255,255,.82);
-      text-transform:uppercase;
-      letter-spacing:.4px;
-    }
-
-    .fieldText,
-    .fieldArea,
-    .fieldSelect{
-      width:100%;
-      border:none;
-      outline:none;
-      background:rgba(0,0,0,.18);
-      color:var(--txt);
-      padding:10px 12px;
-      border-radius:14px;
-      font-weight:900;
-      border:1px solid rgba(255,255,255,.10);
-      font-family:inherit;
-      font-size:14px;
-    }
-
-    .fieldArea{
-      min-height:88px;
-      resize:vertical;
-      font-weight:800;
-    }
-
-    .timeSection{padding:10px}
-
-    .timeLabel{
-      display:block;
-      margin:0 0 6px 0;
-      font-size:12px;
-      font-weight:900;
-      color:rgba(255,255,255,.82);
-      text-transform:uppercase;
-      letter-spacing:.4px;
-    }
-
-    .timePickerGroup{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:8px;
-    }
-
-    .timePickerRow{
-      display:grid;
-      grid-template-columns:1fr 18px 1fr;
-      gap:8px;
-      align-items:center;
-    }
-
-    .timeColon{
-      text-align:center;
-      font-size:24px;
-      font-weight:950;
-      color:rgba(255,255,255,.92);
-    }
-
-    .wheel{
-      position:relative;
-      height:128px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.05);
-      overflow-y:auto;
-      scroll-snap-type:y mandatory;
-      -webkit-overflow-scrolling:touch;
-      scrollbar-width:none;
-    }
-
-    .wheel::-webkit-scrollbar{display:none}
-
-    .wheelPad{
-      height:42px;
-      flex:0 0 auto;
-    }
-
-    .wheelInner{
-      display:flex;
-      flex-direction:column;
-    }
-
-    .wheelItem{
-      height:42px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:18px;
-      font-weight:900;
-      color:rgba(255,255,255,.40);
-      scroll-snap-align:center;
-      opacity:.65;
-      user-select:none;
-    }
-
-    .wheelItem.active{
-      color:#fff;
-      opacity:1;
-    }
-
-    .wheelFocus{
-      position:absolute;
-      left:6px;
-      right:6px;
-      top:42px;
-      height:42px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(255,255,255,.08);
-      pointer-events:none;
-    }
-
-    .wheelFadeTop,
-    .wheelFadeBottom{
-      position:absolute;
-      left:0;
-      right:0;
-      height:26px;
-      pointer-events:none;
-      z-index:2;
-    }
-
-    .wheelFadeTop{
-      top:0;
-      background:linear-gradient(180deg,rgba(0,0,0,.46),transparent);
-    }
-
-    .wheelFadeBottom{
-      bottom:0;
-      background:linear-gradient(0deg,rgba(0,0,0,.46),transparent);
-    }
-
-    @media (max-width:520px){
-      .timePickerGroup{
-        grid-template-columns:1fr;
-      }
-    }
-  </style>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<title>Planning — CS Consenvoye</title>
+
+<style>
+
+:root{
+  --txt:#f4f4f4;
+  --shadow:0 14px 34px rgba(0,0,0,.40);
+  --radius:22px;
+  --stroke:rgba(255,255,255,.10);
+  --success:#20a447;
+  --danger:#a72525;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  height:100%;
+}
+
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--txt);
+  background:#0b0b0b;
+  overflow:hidden;
+}
+
+.bg{
+  position:fixed;
+  inset:0;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,.52),
+      rgba(0,0,0,.52)
+    ),
+    url("background.png")
+    center top / cover no-repeat;
+
+  z-index:-2;
+}
+
+.wrap{
+  height:100vh;
+  max-width:980px;
+  margin:0 auto;
+
+  padding:
+    calc(env(safe-area-inset-top) + 10px)
+    12px
+    calc(env(safe-area-inset-bottom) + 12px);
+
+  display:grid;
+  grid-template-rows:auto auto 1fr auto;
+  gap:10px;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+
+  padding:10px 12px;
+
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(212,106,0,.75),
+      rgba(185,88,0,.58)
+    );
+
+  border:1px solid rgba(255,255,255,.12);
+
+  box-shadow:var(--shadow);
+
+  min-height:46px;
+}
+
+.title{
+  margin:0;
+
+  display:flex;
+  align-items:center;
+  gap:6px;
+
+  font-size:18px;
+  font-weight:950;
+
+  letter-spacing:.8px;
+
+  white-space:nowrap;
+}
+
+.yearSelect{
+  padding:5px 28px 5px 10px;
+
+  border-radius:12px;
+
+  border:1px solid rgba(255,255,255,.22);
+
+  background:rgba(0,0,0,.20);
+
+  color:#fff;
+
+  font-size:18px;
+  font-weight:950;
+}
+
+.yearSelect option{
+  color:#111;
+  background:#fff;
+}
+
+.btn{
+  border:1px solid rgba(255,255,255,.18);
+
+  background:rgba(0,0,0,.18);
+
+  color:#fff;
+
+  padding:9px 12px;
+
+  border-radius:14px;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+  transition:.12s;
+}
+
+.btn.saving{
+  background:#177d38;
+  border-color:#48db73;
+}
+
+.btn.saved{
+  background:#20a447;
+  border-color:#64eb89;
+}
+
+.btn:disabled{
+  opacity:1;
+}
+
+.monthbar{
+  display:grid;
+
+  grid-template-columns:52px 1fr 52px;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding:8px 10px;
+
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(212,106,0,.62),
+      rgba(185,88,0,.45)
+    );
+
+  border:1px solid rgba(255,255,255,.12);
+
+  box-shadow:var(--shadow);
+}
+
+.navbtn{
+  height:42px;
+
+  border-radius:16px;
+
+  border:1px solid rgba(255,255,255,.14);
+
+  background:rgba(0,0,0,.18);
+
+  color:#fff;
+
+  font-size:22px;
+  font-weight:950;
+
+  cursor:pointer;
+}
+
+.navbtn:disabled{
+  opacity:.35;
+}
+
+.monthname{
+  margin:0;
+
+  text-align:center;
+
+  font-size:22px;
+
+  font-weight:950;
+}
+
+.calCard{
+  min-height:0;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:10px;
+
+  padding:12px;
+
+  border-radius:22px;
+
+  background:rgba(0,0,0,.34);
+
+  border:1px solid var(--stroke);
+
+  box-shadow:var(--shadow);
+}
+
+.dow{
+  display:grid;
+
+  grid-template-columns:repeat(7,1fr);
+
+  gap:8px;
+
+  color:rgba(255,255,255,.72);
+
+  font-size:14px;
+
+  font-weight:900;
+}
+
+.dow div{
+  text-align:center;
+}
+
+.grid{
+  flex:1;
+
+  min-height:0;
+
+  display:grid;
+
+  grid-template-columns:repeat(7,1fr);
+
+  grid-auto-rows:minmax(54px,1fr);
+
+  gap:8px;
+}
+
+.day{
+  position:relative;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border-radius:18px;
+
+  background:rgba(0,0,0,.26);
+
+  border:1px solid rgba(255,255,255,.06);
+
+  font-size:22px;
+
+  font-weight:950;
+
+  color:#fff;
+
+  user-select:none;
+}
+
+.day.is-empty{
+  opacity:.12;
+
+  pointer-events:none;
+}
+
+.day.has-color::before{
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  border-radius:18px;
+
+  background:var(--dayColor);
+
+  opacity:.78;
+}
+
+.day span{
+  position:relative;
+
+  z-index:1;
+}
+
+.day.is-today{
+  box-shadow:
+    inset 0 0 0 4px #fff,
+    0 0 8px rgba(0,0,0,.6);
+}
+
+.day.has-note::after{
+  content:"";
+
+  position:absolute;
+
+  top:8px;
+  right:8px;
+
+  width:8px;
+  height:8px;
+
+  border-radius:100%;
+
+  background:#fff200;
+
+  z-index:2;
+}
+
+.legend{
+  min-height:92px;
+
+  padding:10px;
+
+  border-radius:22px;
+
+  background:rgba(0,0,0,.34);
+
+  border:1px solid var(--stroke);
+
+  box-shadow:var(--shadow);
+}
+
+.legendGrid{
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:8px 10px;
+}
+
+.legItem{
+  min-height:44px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding:8px 10px;
+
+  border-radius:16px;
+
+  background:rgba(0,0,0,.18);
+
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.sq{
+  width:20px;
+  height:20px;
+
+  flex:none;
+
+  border-radius:5px;
+}
+
+.legTxt{
+  font-size:18px;
+
+  font-weight:900;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+
+/* MESSAGES */
+
+.status{
+  position:fixed;
+
+  left:12px;
+  right:12px;
+
+  bottom:calc(env(safe-area-inset-bottom) + 12px);
+
+  z-index:300;
+
+  display:none;
+
+  text-align:center;
+
+  pointer-events:none;
+}
+
+.status .pill{
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  padding:10px 14px;
+
+  border-radius:16px;
+
+  background:rgba(0,0,0,.82);
+
+  border:1px solid rgba(255,255,255,.14);
+
+  box-shadow:var(--shadow);
+
+  font-weight:900;
+}
+
+.status.success .pill{
+  background:rgba(22,128,57,.95);
+}
+
+.status.danger .pill{
+  background:rgba(151,24,24,.95);
+}
+
+
+/* FENÊTRES */
+
+.noteOverlay,
+.editOverlay,
+.formOverlay{
+  position:fixed;
+
+  inset:0;
+
+  display:none;
+
+  background:rgba(0,0,0,.60);
+}
+
+.noteOverlay{
+  z-index:120;
+}
+
+.editOverlay{
+  z-index:140;
+}
+
+.formOverlay{
+  z-index:180;
+}
+
+.noteOverlay.show,
+.editOverlay.show,
+.formOverlay.show{
+  display:block;
+}
+
+.noteSheet,
+.editSheet,
+.formSheet{
+  position:absolute;
+
+  left:12px;
+  right:12px;
+
+  bottom:calc(env(safe-area-inset-bottom) + 12px);
+
+  max-width:980px;
+
+  margin:auto;
+
+  display:flex;
+
+  flex-direction:column;
+
+  overflow:hidden;
+
+  border-radius:22px;
+
+  background:#171717;
+
+  border:1px solid rgba(255,255,255,.14);
+
+  box-shadow:var(--shadow);
+}
+
+.noteSheet{
+  height:min(52vh,520px);
+}
+
+.editSheet{
+  height:min(62vh,620px);
+}
+
+.formSheet{
+  height:min(76vh,700px);
+}
+
+.noteHead,
+.editHead,
+.formHead{
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding:12px;
+
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+
+.noteTitle,
+.editTitle,
+.formTitle{
+  font-size:16px;
+
+  font-weight:950;
+}
+
+.noteBody,
+.editBody,
+.formBody{
+  padding:12px;
+
+  overflow:auto;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:10px;
+}
+
+.iconBtn,
+.noteClose{
+  min-width:42px;
+
+  padding:8px 10px;
+
+  border-radius:14px;
+
+  border:1px solid rgba(255,255,255,.18);
+
+  background:rgba(0,0,0,.18);
+
+  color:#fff;
+
+  font-weight:950;
+
+  cursor:pointer;
+}
+
+.iconBtn.danger{
+  border-color:rgba(255,80,80,.45);
+}
+
+.iconBtn.deleting{
+  min-width:120px;
+
+  background:#8d1f1f;
+
+  border-color:#ff6060;
+}
+
+.iconBtn.deleted{
+  min-width:110px;
+
+  background:#a52222;
+}
+
+.row,
+.evCard,
+.formBlock,
+.timeSection{
+  padding:10px 12px;
+
+  border-radius:18px;
+
+  background:rgba(0,0,0,.22);
+
+  border:1px solid rgba(255,255,255,.10);
+}
+
+.rowTop,
+.evTop{
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  gap:10px;
+
+  margin-bottom:6px;
+}
+
+.rowName,
+.evName{
+  font-weight:950;
+}
+
+.evTime{
+  font-size:13px;
+
+  font-weight:900;
+
+  color:rgba(255,255,255,.75);
+}
+
+.rowSub,
+.evMeta{
+  display:flex;
+
+  gap:10px;
+
+  flex-wrap:wrap;
+
+  margin-bottom:8px;
+
+  font-size:13px;
+
+  font-weight:850;
+
+  color:rgba(255,255,255,.75);
+}
+
+.rowBtns,
+.formActions,
+.editActions{
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  flex-wrap:wrap;
+}
+
+.chip{
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:7px;
+
+  padding:5px 9px;
+
+  border-radius:999px;
+
+  background:rgba(255,255,255,.06);
+}
+
+.chipDot{
+  width:10px;
+  height:10px;
+
+  border-radius:3px;
+}
+
+.evDetails{
+  font-size:15px;
+
+  font-weight:850;
+
+  white-space:pre-wrap;
+}
+
+
+/* FORMULAIRE */
+
+.formLabel,
+.timeLabel{
+  display:block;
+
+  margin-bottom:5px;
+
+  font-size:12px;
+
+  font-weight:900;
+
+  text-transform:uppercase;
+
+  color:rgba(255,255,255,.82);
+}
+
+.fieldText,
+.fieldArea,
+.fieldSelect{
+  width:100%;
+
+  padding:10px 12px;
+
+  border-radius:14px;
+
+  border:1px solid rgba(255,255,255,.10);
+
+  outline:none;
+
+  background:rgba(0,0,0,.20);
+
+  color:#fff;
+
+  font-family:inherit;
+
+  font-size:14px;
+
+  font-weight:900;
+}
+
+.fieldArea{
+  min-height:88px;
+
+  resize:vertical;
+}
+
+
+/* ROULETTES */
+
+.timePickerGroup{
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:8px;
+}
+
+.timePickerRow{
+  display:grid;
+
+  grid-template-columns:1fr 18px 1fr;
+
+  gap:8px;
+
+  align-items:center;
+}
+
+.timeColon{
+  text-align:center;
+
+  font-size:24px;
+
+  font-weight:950;
+}
+
+.wheel{
+  position:relative;
+
+  height:128px;
+
+  overflow-y:auto;
+
+  border-radius:18px;
+
+  border:1px solid rgba(255,255,255,.12);
+
+  background:rgba(255,255,255,.05);
+
+  scrollbar-width:none;
+}
+
+.wheel::-webkit-scrollbar{
+  display:none;
+}
+
+.wheelInner{
+  display:flex;
+
+  flex-direction:column;
+}
+
+.wheelPad{
+  height:42px;
+
+  flex:none;
+}
+
+.wheelItem{
+  height:42px;
+
+  flex:none;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:18px;
+
+  font-weight:900;
+
+  opacity:.45;
+}
+
+.wheelItem.active{
+  opacity:1;
+}
+
+.wheelFocus{
+  position:absolute;
+
+  top:42px;
+
+  left:6px;
+  right:6px;
+
+  height:42px;
+
+  border-radius:16px;
+
+  border:1px solid rgba(255,255,255,.18);
+
+  background:rgba(255,255,255,.08);
+
+  pointer-events:none;
+}
+
+.wheelFadeTop,
+.wheelFadeBottom{
+  position:absolute;
+
+  left:0;
+  right:0;
+
+  height:28px;
+
+  pointer-events:none;
+
+  z-index:2;
+}
+
+.wheelFadeTop{
+  top:0;
+
+  background:linear-gradient(
+    180deg,
+    rgba(0,0,0,.5),
+    transparent
+  );
+}
+
+.wheelFadeBottom{
+  bottom:0;
+
+  background:linear-gradient(
+    0deg,
+    rgba(0,0,0,.5),
+    transparent
+  );
+}
+
+@media(max-width:520px){
+
+  .timePickerGroup{
+    grid-template-columns:1fr;
+  }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
+
 <div class="bg"></div>
+
 
 <div class="wrap">
 
-  <div class="topbar">
 
-    <h1 class="title">
-      <span>PLANNING</span>
-      <span id="yearControl"></span>
-    </h1>
+<div class="topbar">
 
-    <div style="display:flex;gap:10px;align-items:center;">
+  <h1 class="title">
 
-      <span
-        id="editLabel"
-        style="display:none;margin-right:6px;font-weight:700;font-size:12px;color:#fff200;">
-        MODE ÉDITION
-      </span>
+    <span>
+      PLANNING
+    </span>
 
-      <button
-        class="btn"
-        id="btnLock"
-        title="Mode édition"
-        aria-pressed="false"
-        style="display:none;">
-        🔒
-      </button>
+    <span id="yearControl"></span>
 
-      <button class="btn" id="btnBack">
-        Retour
-      </button>
+  </h1>
 
-    </div>
+
+  <div style="display:flex;align-items:center;gap:10px">
+
+    <span
+      id="editLabel"
+      style="
+        display:none;
+        font-size:12px;
+        font-weight:800;
+        color:#fff200
+      ">
+
+      MODE ÉDITION
+
+    </span>
+
+
+    <button
+      class="btn"
+      id="btnLock"
+      style="display:none">
+
+      🔒
+
+    </button>
+
+
+    <button
+      class="btn"
+      id="btnBack">
+
+      Retour
+
+    </button>
 
   </div>
-
-  <div class="monthbar">
-
-    <button class="navbtn" id="btnPrev">‹</button>
-
-    <h2 class="monthname" id="monthName">—</h2>
-
-    <button class="navbtn" id="btnNext">›</button>
-
-  </div>
-
-  <section class="calCard">
-
-    <div class="dow">
-      <div>Lun</div>
-      <div>Mar</div>
-      <div>Mer</div>
-      <div>Jeu</div>
-      <div>Ven</div>
-      <div>Sam</div>
-      <div>Dim</div>
-    </div>
-
-    <div class="grid" id="grid"></div>
-
-  </section>
-
-  <section class="legend">
-    <div class="legendGrid" id="legendGrid"></div>
-  </section>
 
 </div>
 
 
-<div class="status" id="status">
+<div class="monthbar">
+
+  <button
+    class="navbtn"
+    id="btnPrev">
+
+    ‹
+
+  </button>
+
+
+  <h2
+    class="monthname"
+    id="monthName">
+
+    —
+
+  </h2>
+
+
+  <button
+    class="navbtn"
+    id="btnNext">
+
+    ›
+
+  </button>
+
+</div>
+
+
+<section class="calCard">
+
+
+<div class="dow">
+
+  <div>Lun</div>
+  <div>Mar</div>
+  <div>Mer</div>
+  <div>Jeu</div>
+  <div>Ven</div>
+  <div>Sam</div>
+  <div>Dim</div>
+
+</div>
+
+
+<div
+  class="grid"
+  id="grid">
+</div>
+
+
+</section>
+
+
+<section class="legend">
+
+  <div
+    class="legendGrid"
+    id="legendGrid">
+  </div>
+
+</section>
+
+
+</div>
+
+
+<div
+  class="status"
+  id="status">
 
   <div class="pill">
 
-    <span id="statusIcon">⚠️</span>
+    <span id="statusIcon">
+      ⚠️
+    </span>
 
-    <div>
-      <div id="statusTxt"></div>
-      <div class="small" id="statusSub"></div>
-    </div>
+    <span id="statusTxt">
+    </span>
 
   </div>
 
 </div>
 
 
-<div class="noteOverlay" id="noteOverlay">
+<!-- NOTES -->
+
+<div
+  class="noteOverlay"
+  id="noteOverlay">
 
   <div class="noteSheet">
 
     <div class="noteHead">
 
-      <div class="noteTitle" id="noteTitle"></div>
+      <div
+        class="noteTitle"
+        id="noteTitle">
+      </div>
 
-      <button class="noteClose" id="noteClose">
+      <button
+        class="noteClose"
+        id="noteClose">
+
         Fermer
+
       </button>
 
     </div>
 
-    <div class="noteBody" id="noteBody"></div>
+
+    <div
+      class="noteBody"
+      id="noteBody">
+    </div>
 
   </div>
 
 </div>
 
 
-<div class="editOverlay" id="editOverlay">
+<!-- EDITION -->
+
+<div
+  class="editOverlay"
+  id="editOverlay">
 
   <div class="editSheet">
 
     <div class="editHead">
 
-      <div class="editTitle" id="editTitle"></div>
+      <div
+        class="editTitle"
+        id="editTitle">
+      </div>
+
 
       <div class="editActions">
 
-        <button class="iconBtn" id="btnAddEvent">
+        <button
+          class="iconBtn"
+          id="btnAddEvent">
+
           ＋
+
         </button>
 
-        <button class="iconBtn" id="btnCloseEdit">
+
+        <button
+          class="iconBtn"
+          id="btnCloseEdit">
+
           ✕
+
         </button>
 
       </div>
 
     </div>
 
-    <div class="editBody" id="editBody"></div>
+
+    <div
+      class="editBody"
+      id="editBody">
+    </div>
 
   </div>
 
 </div>
 
 
-<div class="formOverlay" id="formOverlay">
+<!-- FORMULAIRE -->
+
+<div
+  class="formOverlay"
+  id="formOverlay">
 
   <div class="formSheet">
 
     <div class="formHead">
 
-      <div class="formTitle" id="formTitle">
+      <div
+        class="formTitle"
+        id="formTitle">
+
         Événement
+
       </div>
 
-      <button class="iconBtn" id="btnFormCancel">
+
+      <button
+        class="iconBtn"
+        id="btnFormCancel">
+
         ✕
+
       </button>
 
     </div>
 
+
     <div class="formBody">
+
 
       <div class="formBlock">
 
@@ -923,12 +1169,12 @@
         </label>
 
         <input
-          class="fieldText"
           id="fTitle"
-          type="text"
-          placeholder="Titre de l’événement">
+          class="fieldText"
+          type="text">
 
       </div>
+
 
       <div class="formBlock">
 
@@ -937,13 +1183,15 @@
         </label>
 
         <select
-          class="fieldSelect"
-          id="fCategory">
+          id="fCategory"
+          class="fieldSelect">
         </select>
 
       </div>
 
+
       <div class="timePickerGroup">
+
 
         <div class="timeSection">
 
@@ -951,27 +1199,49 @@
             Heure début
           </label>
 
+
           <div class="timePickerRow">
 
-            <div class="wheel" id="startHourWheel">
+            <div
+              class="wheel"
+              id="startHourWheel">
+
               <div class="wheelFadeTop"></div>
               <div class="wheelFadeBottom"></div>
               <div class="wheelFocus"></div>
-              <div class="wheelInner" id="startHourInner"></div>
+
+              <div
+                class="wheelInner"
+                id="startHourInner">
+              </div>
+
             </div>
 
-            <div class="timeColon">:</div>
 
-            <div class="wheel" id="startMinuteWheel">
+            <div class="timeColon">
+              :
+            </div>
+
+
+            <div
+              class="wheel"
+              id="startMinuteWheel">
+
               <div class="wheelFadeTop"></div>
               <div class="wheelFadeBottom"></div>
               <div class="wheelFocus"></div>
-              <div class="wheelInner" id="startMinuteInner"></div>
+
+              <div
+                class="wheelInner"
+                id="startMinuteInner">
+              </div>
+
             </div>
 
           </div>
 
         </div>
+
 
         <div class="timeSection">
 
@@ -979,29 +1249,52 @@
             Heure fin
           </label>
 
+
           <div class="timePickerRow">
 
-            <div class="wheel" id="endHourWheel">
+            <div
+              class="wheel"
+              id="endHourWheel">
+
               <div class="wheelFadeTop"></div>
               <div class="wheelFadeBottom"></div>
               <div class="wheelFocus"></div>
-              <div class="wheelInner" id="endHourInner"></div>
+
+              <div
+                class="wheelInner"
+                id="endHourInner">
+              </div>
+
             </div>
 
-            <div class="timeColon">:</div>
 
-            <div class="wheel" id="endMinuteWheel">
+            <div class="timeColon">
+              :
+            </div>
+
+
+            <div
+              class="wheel"
+              id="endMinuteWheel">
+
               <div class="wheelFadeTop"></div>
               <div class="wheelFadeBottom"></div>
               <div class="wheelFocus"></div>
-              <div class="wheelInner" id="endMinuteInner"></div>
+
+              <div
+                class="wheelInner"
+                id="endMinuteInner">
+              </div>
+
             </div>
 
           </div>
 
         </div>
 
+
       </div>
+
 
       <div class="formBlock">
 
@@ -1010,12 +1303,12 @@
         </label>
 
         <input
-          class="fieldText"
           id="fLocation"
-          type="text"
-          placeholder="Lieu (optionnel)">
+          class="fieldText"
+          type="text">
 
       </div>
+
 
       <div class="formBlock">
 
@@ -1024,29 +1317,36 @@
         </label>
 
         <textarea
-          class="fieldArea"
           id="fDetails"
-          placeholder="Détails (optionnel)"></textarea>
+          class="fieldArea">
+        </textarea>
 
       </div>
 
+
       <div
         class="formActions"
-        style="justify-content:flex-end;padding-bottom:2px;">
+        style="justify-content:flex-end">
 
         <button
           class="btn"
           id="btnFormClose">
+
           Annuler
+
         </button>
+
 
         <button
           class="btn"
           id="btnFormSave">
+
           Enregistrer
+
         </button>
 
       </div>
+
 
     </div>
 
@@ -1055,131 +1355,244 @@
 </div>
 
 
+
 <script>
+
+/* =========================================================
+   CONFIGURATION
+========================================================= */
 
 const API =
 "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
+
 const BACK_URL =
 "index.html";
+
 
 const PUBLIC_YEAR =
 2026;
 
-let ACTIVE_YEAR =
-PUBLIC_YEAR;
-
-let ADMIN_YEARS =
-[PUBLIC_YEAR];
-
-let ADMIN_YEARS_LOADED =
-false;
-
-let WHEELS_INITIALIZED =
-false;
-
-let SAVE_IN_PROGRESS =
-false;
-
-let DELETE_IN_PROGRESS =
-false;
-
-const CACHE_MAX_AGE_MS =
-1000 * 60 * 60 * 24 * 7;
 
 const LS_EMAIL =
 "cs_portail_email_v1";
 
 
-function getCacheKey_(){
-
-  return `cs_planning_cache_v1_${ACTIVE_YEAR}`;
-
-}
+const LS_ROLE =
+"cs_role_v1";
 
 
-const DEFAULT_CATEGORIES = [
-  {category:"FMA centre",color:"#ff2d2d",order:1},
-  {category:"FMA équipe 1",color:"#24d36a",order:2},
-  {category:"FMA équipe 2",color:"#f6a000",order:3},
-  {category:"JSP",color:"#4aa8ff",order:4},
-  {category:"Navette",color:"#2f79ff",order:5},
-  {category:"RECSEC",color:"#a081ff",order:6},
-  {category:"Sainte Barbe",color:"#ff5a5a",order:7}
+const CATEGORIES_CACHE_KEY =
+"cs_planning_categories_v2";
+
+
+let ACTIVE_YEAR =
+PUBLIC_YEAR;
+
+
+let ADMIN_YEARS =
+[
+  PUBLIC_YEAR,
+  PUBLIC_YEAR + 1
 ];
 
 
-const OVERRIDE_COLORS = {
-  "fma centre":"#ff2d2d"
-};
+let ADMIN_YEARS_LOADED =
+false;
 
 
-const $ = id =>
+let IS_ADMIN =
+(
+  String(
+    localStorage.getItem(
+      LS_ROLE
+    )
+    ||
+    ""
+  )
+  .trim()
+  .toLowerCase()
+  ===
+  "admin"
+);
+
+
+let EDIT_MODE =
+false;
+
+
+let SAVE_IN_PROGRESS =
+false;
+
+
+let DELETE_IN_PROGRESS =
+false;
+
+
+let WHEELS_INITIALIZED =
+false;
+
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const $ =
+id =>
 document.getElementById(id);
 
 
-const $grid = $("grid");
+const $grid =
+$("grid");
 
-const $monthName = $("monthName");
 
-const $legendGrid = $("legendGrid");
+const $monthName =
+$("monthName");
 
-const $btnPrev = $("btnPrev");
 
-const $btnNext = $("btnNext");
+const $legendGrid =
+$("legendGrid");
 
-const $status = $("status");
 
-const $statusIcon = $("statusIcon");
+const $btnPrev =
+$("btnPrev");
 
-const $statusTxt = $("statusTxt");
 
-const $statusSub = $("statusSub");
+const $btnNext =
+$("btnNext");
 
-const $btnLock = $("btnLock");
 
-const $editLabel = $("editLabel");
+const $btnLock =
+$("btnLock");
 
-const $yearControl = $("yearControl");
 
-const $noteOverlay = $("noteOverlay");
+const $editLabel =
+$("editLabel");
 
-const $noteTitle = $("noteTitle");
 
-const $noteBody = $("noteBody");
+const $yearControl =
+$("yearControl");
 
-const $noteClose = $("noteClose");
 
-const $editOverlay = $("editOverlay");
+const $status =
+$("status");
 
-const $editTitle = $("editTitle");
 
-const $editBody = $("editBody");
+const $statusIcon =
+$("statusIcon");
 
-const $btnAddEvent = $("btnAddEvent");
 
-const $btnCloseEdit = $("btnCloseEdit");
+const $statusTxt =
+$("statusTxt");
 
-const $formOverlay = $("formOverlay");
 
-const $formTitle = $("formTitle");
+const $noteOverlay =
+$("noteOverlay");
 
-const $fTitle = $("fTitle");
 
-const $fCategory = $("fCategory");
+const $noteTitle =
+$("noteTitle");
 
-const $fLocation = $("fLocation");
 
-const $fDetails = $("fDetails");
+const $noteBody =
+$("noteBody");
 
-const $btnFormCancel = $("btnFormCancel");
 
-const $btnFormClose = $("btnFormClose");
+const $editOverlay =
+$("editOverlay");
 
-const $btnFormSave = $("btnFormSave");
+
+const $editTitle =
+$("editTitle");
+
+
+const $editBody =
+$("editBody");
+
+
+const $formOverlay =
+$("formOverlay");
+
+
+const $formTitle =
+$("formTitle");
+
+
+const $fTitle =
+$("fTitle");
+
+
+const $fCategory =
+$("fCategory");
+
+
+const $fLocation =
+$("fLocation");
+
+
+const $fDetails =
+$("fDetails");
+
+
+const $btnFormSave =
+$("btnFormSave");
+
+
+
+/* =========================================================
+   DONNÉES
+========================================================= */
+
+const DEFAULT_CATEGORIES = [
+
+  {
+    category:"FMA centre",
+    color:"#ff2d2d",
+    order:1
+  },
+
+  {
+    category:"FMA équipe 1",
+    color:"#24d36a",
+    order:2
+  },
+
+  {
+    category:"FMA équipe 2",
+    color:"#f6a000",
+    order:3
+  },
+
+  {
+    category:"JSP",
+    color:"#4aa8ff",
+    order:4
+  },
+
+  {
+    category:"Navette",
+    color:"#2f79ff",
+    order:5
+  },
+
+  {
+    category:"RECSEC",
+    color:"#a081ff",
+    order:6
+  },
+
+  {
+    category:"Sainte Barbe",
+    color:"#ff5a5a",
+    order:7
+  }
+
+];
 
 
 const monthsFR = [
+
   "Janvier",
   "Février",
   "Mars",
@@ -1192,10 +1605,12 @@ const monthsFR = [
   "Octobre",
   "Novembre",
   "Décembre"
+
 ];
 
 
 const dowsFR = [
+
   "Dim",
   "Lun",
   "Mar",
@@ -1203,269 +1618,166 @@ const dowsFR = [
   "Jeu",
   "Ven",
   "Sam"
+
 ];
 
 
-let IS_ADMIN = false;
+let events =
+[];
 
-let EDIT_MODE = false;
-
-let events = [];
 
 let categoriesRaw =
 DEFAULT_CATEGORIES.slice();
 
+
 let eventsByDate =
 new Map();
 
-let catColor =
-new Map();
-
-let catLabel =
-new Map();
-
-let catOrder =
-new Map();
 
 let categoryKeysByDate =
 new Map();
 
+
 let hasNoteByDate =
 new Map();
 
+
+let catColor =
+new Map();
+
+
+let catLabel =
+new Map();
+
+
+let catOrder =
+new Map();
+
+
 let currentMonth =
 0;
+
 
 let _editDate =
 "";
 
 
-const HOURS =
-Array.from(
-  {length:24},
-  (_,i)=>String(i).padStart(2,"0")
-);
-
-
-const MINUTES = [
-  "00",
-  "15",
-  "30",
-  "45"
-];
-
-
-const LOOP_DUPLICATES =
-15;
-
-
 let FORM_STATE = {
+
   mode:"add",
+
   dateStr:"",
+
   originalEvent:null
-};
-
-
-const TIME_PICKERS = {
-
-  startHour:{
-    wheel:$("startHourWheel"),
-    inner:$("startHourInner"),
-    values:HOURS,
-    value:"08",
-    timer:null,
-    looping:true
-  },
-
-  startMinute:{
-    wheel:$("startMinuteWheel"),
-    inner:$("startMinuteInner"),
-    values:MINUTES,
-    value:"00",
-    timer:null,
-    looping:true
-  },
-
-  endHour:{
-    wheel:$("endHourWheel"),
-    inner:$("endHourInner"),
-    values:HOURS,
-    value:"09",
-    timer:null,
-    looping:true
-  },
-
-  endMinute:{
-    wheel:$("endMinuteWheel"),
-    inner:$("endMinuteInner"),
-    values:MINUTES,
-    value:"00",
-    timer:null,
-    looping:true
-  }
 
 };
 
 
-function norm(s){
 
-  return String(s || "")
-    .trim()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g,"")
-    .replace(/['’]/g,"")
-    .replace(/\s+/g," ");
+/* =========================================================
+   OUTILS
+========================================================= */
 
-}
-
-
-function escapeHtml(s){
+function norm(
+  value
+){
 
   return String(
-    s == null
-      ? ""
-      : s
+    value || ""
   )
-  .replaceAll("&","&amp;")
-  .replaceAll("<","&lt;")
-  .replaceAll(">","&gt;")
-  .replaceAll('"',"&quot;")
-  .replaceAll("'","&#039;");
+  .trim()
+  .toLowerCase()
+  .normalize("NFD")
+  .replace(
+    /[\u0300-\u036f]/g,
+    ""
+  )
+  .replace(
+    /['’]/g,
+    ""
+  )
+  .replace(
+    /\s+/g,
+    " "
+  );
 
 }
 
 
-function ymd(d){
-
-  const y =
-  d.getFullYear();
-
-  const m =
-  String(
-    d.getMonth()+1
-  ).padStart(2,"0");
-
-  const dd =
-  String(
-    d.getDate()
-  ).padStart(2,"0");
-
-  return `${y}-${m}-${dd}`;
-
-}
-
-
-function firstMondayGrid(
-  year,
-  monthIndex
+function escapeHtml(
+  value
 ){
 
-  const d =
-  new Date(
-    year,
-    monthIndex,
-    1
+  return String(
+    value ?? ""
+  )
+  .replaceAll(
+    "&",
+    "&amp;"
+  )
+  .replaceAll(
+    "<",
+    "&lt;"
+  )
+  .replaceAll(
+    ">",
+    "&gt;"
+  )
+  .replaceAll(
+    '"',
+    "&quot;"
+  )
+  .replaceAll(
+    "'",
+    "&#039;"
   );
-
-  const js =
-  d.getDay();
-
-  const offset =
-  js === 0
-    ? 6
-    : js - 1;
-
-  d.setDate(
-    d.getDate() - offset
-  );
-
-  d.setHours(
-    12,
-    0,
-    0,
-    0
-  );
-
-  return d;
 
 }
 
 
-function toFRDate(
-  ymdStr
+function ymd(
+  date
 ){
-
-  const [y,m,d] =
-  String(
-    ymdStr || ""
-  ).split("-");
-
-  if(!y || !m || !d){
-    return ymdStr;
-  }
-
-  const dt =
-  new Date(
-    Number(y),
-    Number(m)-1,
-    Number(d),
-    12,
-    0,
-    0,
-    0
-  );
-
-  const dow =
-  dowsFR[
-    dt.getDay()
-  ];
 
   return (
-    `${dow} ` +
-    `${String(d).padStart(2,"0")}/` +
-    `${String(m).padStart(2,"0")}/` +
-    `${y}`
+    date.getFullYear()
+    +
+    "-"
+    +
+    String(
+      date.getMonth()+1
+    ).padStart(
+      2,
+      "0"
+    )
+    +
+    "-"
+    +
+    String(
+      date.getDate()
+    ).padStart(
+      2,
+      "0"
+    )
   );
 
 }
 
 
-function formatTimeRange(
-  start,
-  end
-){
+function getCacheKey_(){
 
-  const s =
-  String(
-    start || ""
-  ).trim();
-
-  const e =
-  String(
-    end || ""
-  ).trim();
-
-  if(s && e){
-    return `${s}–${e}`;
-  }
-
-  if(s){
-    return s;
-  }
-
-  if(e){
-    return e;
-  }
-
-  return "";
+  return (
+    "cs_planning_cache_v2_"
+    +
+    ACTIVE_YEAR
+  );
 
 }
 
 
 function getEmailLocal(){
 
-  return (
+  return String(
     localStorage.getItem(
       LS_EMAIL
     )
@@ -1478,47 +1790,176 @@ function getEmailLocal(){
 }
 
 
+function firstMondayGrid(
+  year,
+  month
+){
+
+  const d =
+  new Date(
+    year,
+    month,
+    1
+  );
+
+
+  const offset =
+  d.getDay() === 0
+    ? 6
+    : d.getDay()-1;
+
+
+  d.setDate(
+    d.getDate()-offset
+  );
+
+
+  d.setHours(
+    12,
+    0,
+    0,
+    0
+  );
+
+
+  return d;
+
+}
+
+
+function toFRDate(
+  value
+){
+
+  const [
+    y,
+    m,
+    d
+  ] =
+  String(
+    value
+  )
+  .split("-");
+
+
+  const dt =
+  new Date(
+    Number(y),
+    Number(m)-1,
+    Number(d),
+    12
+  );
+
+
+  return (
+    dowsFR[
+      dt.getDay()
+    ]
+    +
+    " "
+    +
+    d
+    +
+    "/"
+    +
+    m
+    +
+    "/"
+    +
+    y
+  );
+
+}
+
+
+function formatTimeRange(
+  start,
+  end
+){
+
+  if(
+    start
+    &&
+    end
+  ){
+
+    return (
+      start
+      +
+      "–"
+      +
+      end
+    );
+
+  }
+
+
+  return (
+    start
+    ||
+    end
+    ||
+    ""
+  );
+
+}
+
+
+
+/* =========================================================
+   MESSAGES
+========================================================= */
+
 function showStatus(
-  txt,
-  sub="",
+  text,
   type=""
 ){
 
   $statusTxt.textContent =
-  txt || "";
+  text;
 
-  $statusSub.textContent =
-  sub || "";
 
   $status.classList.remove(
     "success",
     "danger"
   );
 
-  if(type === "success"){
+
+  if(
+    type === "success"
+  ){
+
+    $statusIcon.textContent =
+    "✅";
+
 
     $status.classList.add(
       "success"
     );
 
-    $statusIcon.textContent =
-    "✅";
+  }
 
-  }else if(type === "danger"){
+  else if(
+    type === "danger"
+  ){
+
+    $statusIcon.textContent =
+    "🗑️";
+
 
     $status.classList.add(
       "danger"
     );
 
-    $statusIcon.textContent =
-    "🗑️";
+  }
 
-  }else{
+  else{
 
     $statusIcon.textContent =
-    "⚠️";
+    "⏳";
 
   }
+
 
   $status.style.display =
   "block";
@@ -1531,11 +1972,6 @@ function hideStatus(){
   $status.style.display =
   "none";
 
-  $status.classList.remove(
-    "success",
-    "danger"
-  );
-
 }
 
 
@@ -1543,13 +1979,13 @@ function showSavedMessage(){
 
   showStatus(
     "Enregistré",
-    "",
     "success"
   );
 
+
   setTimeout(
     hideStatus,
-    1100
+    1000
   );
 
 }
@@ -1559,101 +1995,135 @@ function showDeletedMessage(){
 
   showStatus(
     "Supprimé",
-    "",
     "danger"
   );
 
+
   setTimeout(
     hideStatus,
-    1100
+    1000
   );
 
 }
 
 
+
+/* =========================================================
+   JSONP
+========================================================= */
+
 function jsonp(
   url,
   cbName,
-  timeoutMs=15000
+  timeout=15000
 ){
 
   return new Promise(
-    (resolve,reject)=>{
+    (
+      resolve,
+      reject
+    )=>{
+
 
       const script =
       document.createElement(
         "script"
       );
 
-      const cleanup = ()=>{
+
+      const clean =
+      ()=>{
 
         script.remove();
 
+
         try{
-          delete window[cbName];
-        }catch(e){
-          window[cbName] = undefined;
-        }
+
+          delete window[
+            cbName
+          ];
+
+        }catch(e){}
 
       };
+
 
       const timer =
       setTimeout(
         ()=>{
 
-          cleanup();
+          clean();
+
 
           reject(
             new Error(
-              "Timeout JSONP"
+              "Timeout"
             )
           );
 
         },
-        timeoutMs
+        timeout
       );
 
-      window[cbName] = data=>{
 
-        clearTimeout(timer);
+      window[
+        cbName
+      ] =
+      data=>{
 
-        cleanup();
+        clearTimeout(
+          timer
+        );
 
-        resolve(data);
+
+        clean();
+
+
+        resolve(
+          data
+        );
 
       };
 
-      const sep =
-      url.includes("?")
-        ? "&"
-        : "?";
 
-      script.src =
-      url
-      +
-      sep
-      +
-      "t="
-      +
-      Date.now();
+      script.onerror =
+      ()=>{
 
-      script.onerror = ()=>{
+        clearTimeout(
+          timer
+        );
 
-        clearTimeout(timer);
 
-        cleanup();
+        clean();
+
 
         reject(
           new Error(
-            "Erreur JSONP"
+            "Erreur réseau"
           )
         );
 
       };
 
-      document.head.appendChild(
-        script
-      );
+
+      script.src =
+      url
+      +
+      (
+        url.includes("?")
+          ? "&"
+          : "?"
+      )
+      +
+      "_="
+      +
+      Date.now();
+
+
+      document.head
+        .appendChild(
+          script
+        );
 
     }
   );
@@ -1661,172 +2131,180 @@ function jsonp(
 }
 
 
-async function loadMyRole_(){
 
-  const email =
-  getEmailLocal();
+/* =========================================================
+   CACHE
+========================================================= */
 
-  if(!email){
-
-    IS_ADMIN =
-    false;
-
-    return;
-
-  }
-
-  const cb =
-  "cb_auth_"
-  +
-  Math.random()
-    .toString(36)
-    .slice(2);
-
-  const url =
-  `${API}?view=auth_check`
-  +
-  `&email=${encodeURIComponent(email)}`
-  +
-  `&nocache=1`
-  +
-  `&callback=${cb}`;
-
-  const res =
-  await jsonp(
-    url,
-    cb,
-    20000
-  );
-
-  IS_ADMIN =
-  !!(
-    res
-    &&
-    res.ok === true
-    &&
-    String(
-      res.role || ""
-    ).toLowerCase()
-    ===
-    "admin"
-  );
-
-}
-
-
-async function loadPlanningYears_(){
-
-  if(
-    ADMIN_YEARS_LOADED
-  ){
-    return;
-  }
-
-  const cb =
-  "cb_years_"
-  +
-  Math.random()
-    .toString(36)
-    .slice(2);
-
-  const url =
-  `${API}?view=planning_years_list`
-  +
-  `&nocache=1`
-  +
-  `&callback=${cb}`;
+function loadPlanningCache_(){
 
   try{
 
-    const res =
-    await jsonp(
-      url,
-      cb,
-      20000
+    const raw =
+    localStorage.getItem(
+      getCacheKey_()
     );
 
-    const rawYears =
-    Array.isArray(
-      res?.years
-    )
-      ? res.years
-      : [];
 
-    const years =
-    rawYears
-      .map(
-        item=>{
+    if(!raw){
+      return null;
+    }
 
-          if(
-            typeof item
-            ===
-            "number"
-          ){
-            return item;
-          }
 
-          if(
-            typeof item
-            ===
-            "string"
-          ){
-            return Number(item);
-          }
-
-          return Number(
-            item?.year
-          );
-
-        }
-      )
-      .filter(
-        year=>
-          Number.isInteger(year)
-          &&
-          year >= 2000
-          &&
-          year <= 2100
-      );
-
-    ADMIN_YEARS =
-    [
-      ...new Set(
-        [
-          PUBLIC_YEAR,
-          PUBLIC_YEAR + 1,
-          ...years
-        ]
-      )
-    ]
-    .sort(
-      (a,b)=>a-b
+    return JSON.parse(
+      raw
     );
 
   }catch(e){
 
-    ADMIN_YEARS = [
-      PUBLIC_YEAR,
-      PUBLIC_YEAR + 1
-    ];
+    return null;
 
   }
 
-  ADMIN_YEARS_LOADED =
-  true;
+}
+
+
+function savePlanningCache_(
+  py
+){
+
+  try{
+
+    localStorage.setItem(
+      getCacheKey_(),
+      JSON.stringify({
+        savedAt:Date.now(),
+        py
+      })
+    );
+
+  }catch(e){}
 
 }
 
+
+function loadCategoriesCache_(){
+
+  try{
+
+    const raw =
+    localStorage.getItem(
+      CATEGORIES_CACHE_KEY
+    );
+
+
+    if(!raw){
+      return null;
+    }
+
+
+    return JSON.parse(
+      raw
+    );
+
+  }catch(e){
+
+    return null;
+
+  }
+
+}
+
+
+function saveCategoriesCache_(
+  pc
+){
+
+  try{
+
+    localStorage.setItem(
+      CATEGORIES_CACHE_KEY,
+      JSON.stringify(
+        pc
+      )
+    );
+
+  }catch(e){}
+
+}
+
+
+
+/* =========================================================
+   MAPS / COULEURS
+========================================================= */
 
 function rebuildMaps(){
 
   eventsByDate =
   new Map();
 
-  hasNoteByDate =
-  new Map();
 
   categoryKeysByDate =
   new Map();
+
+
+  hasNoteByDate =
+  new Map();
+
+
+  catColor =
+  new Map();
+
+
+  catLabel =
+  new Map();
+
+
+  catOrder =
+  new Map();
+
+
+  for(
+    const c
+    of categoriesRaw
+  ){
+
+    const name =
+    String(
+      c.category || ""
+    ).trim();
+
+
+    if(!name){
+      continue;
+    }
+
+
+    const key =
+    norm(
+      name
+    );
+
+
+    catLabel.set(
+      key,
+      name
+    );
+
+
+    catColor.set(
+      key,
+      String(
+        c.color || "#777"
+      )
+    );
+
+
+    catOrder.set(
+      key,
+      Number(
+        c.order || 9999
+      )
+    );
+
+  }
+
 
   for(
     const ev
@@ -1838,12 +2316,16 @@ function rebuildMaps(){
       ev.date || ""
     ).trim();
 
+
     if(!date){
       continue;
     }
 
+
     if(
-      !eventsByDate.has(date)
+      !eventsByDate.has(
+        date
+      )
     ){
 
       eventsByDate.set(
@@ -1853,9 +2335,15 @@ function rebuildMaps(){
 
     }
 
+
     eventsByDate
-      .get(date)
-      .push(ev);
+      .get(
+        date
+      )
+      .push(
+        ev
+      );
+
 
     if(
       String(
@@ -1873,169 +2361,70 @@ function rebuildMaps(){
   }
 
 
-  catColor =
-  new Map();
-
-  catLabel =
-  new Map();
-
-  catOrder =
-  new Map();
-
-
-  const cats =
-  [...categoriesRaw]
-    .map(
-      c=>({
-
-        category:
-        String(
-          c.category || ""
-        ).trim(),
-
-        color:
-        String(
-          c.color || ""
-        ).trim(),
-
-        order:
-        Number(
-          c.order || 9999
-        )
-        ||
-        9999
-
-      })
-    )
-    .filter(
-      c=>c.category
-    );
-
-
-  cats.sort(
-    (a,b)=>
-      (
-        a.order-b.order
-      )
-      ||
-      a.category.localeCompare(
-        b.category
-      )
-  );
-
-
   for(
-    const c
-    of cats
-  ){
-
-    const k =
-    norm(
-      c.category
-    );
-
-    if(
-      catLabel.has(k)
-    ){
-      continue;
-    }
-
-    const forced =
-    OVERRIDE_COLORS[k];
-
-    const col =
-    forced
-    ||
-    c.color
-    ||
-    "rgba(255,255,255,.25)";
-
-    catLabel.set(
-      k,
-      c.category
-    );
-
-    catColor.set(
-      k,
-      col
-    );
-
-    catOrder.set(
-      k,
-      c.order
-    );
-
-  }
-
-
-  for(
-    const [date,arr]
+    const [
+      date,
+      arr
+    ]
     of
     eventsByDate.entries()
   ){
 
-    const uniqueKeys =
-    [];
-
-    const seen =
+    const set =
     new Set();
+
 
     for(
       const ev
       of arr
     ){
 
-      const k =
+      const key =
       norm(
         ev.category || ""
       );
 
-      if(!k){
-        continue;
+
+      if(key){
+
+        set.add(
+          key
+        );
+
       }
-
-      if(
-        seen.has(k)
-      ){
-        continue;
-      }
-
-      seen.add(k);
-
-      uniqueKeys.push(k);
 
     }
 
 
-    uniqueKeys.sort(
-      (a,b)=>{
+    const keys =
+    [
+      ...set
+    ];
 
-        const oa =
-        catOrder.has(a)
-          ? catOrder.get(a)
-          : 9999;
 
-        const ob =
-        catOrder.has(b)
-          ? catOrder.get(b)
-          : 9999;
-
-        return oa-ob;
-
-      }
+    keys.sort(
+      (
+        a,
+        b
+      )=>
+        (
+          catOrder.get(a)
+          ||
+          9999
+        )
+        -
+        (
+          catOrder.get(b)
+          ||
+          9999
+        )
     );
 
 
-    if(
-      uniqueKeys.length
-    ){
-
-      categoryKeysByDate.set(
-        date,
-        uniqueKeys
-      );
-
-    }
+    categoryKeysByDate.set(
+      date,
+      keys
+    );
 
   }
 
@@ -2043,41 +2432,33 @@ function rebuildMaps(){
 
 
 function getColorForCategory(
-  catKey
+  key
 ){
 
-  const k =
-  norm(
-    catKey
-  );
-
-  if(
-    OVERRIDE_COLORS[k]
-  ){
-
-    return OVERRIDE_COLORS[k];
-
-  }
-
   return (
-    catColor.get(k)
+    catColor.get(
+      norm(
+        key
+      )
+    )
     ||
-    "rgba(255,255,255,.25)"
+    "#777"
   );
 
 }
 
 
 function getDayBackground(
-  dateStr
+  date
 ){
 
   const keys =
   categoryKeysByDate.get(
-    dateStr
+    date
   )
   ||
   [];
+
 
   if(
     !keys.length
@@ -2087,11 +2468,12 @@ function getDayBackground(
 
   }
 
+
   const colors =
   keys.map(
-    k=>
-      getColorForCategory(k)
+    getColorForCategory
   );
+
 
   if(
     colors.length === 1
@@ -2101,24 +2483,41 @@ function getDayBackground(
 
   }
 
+
   const step =
-  100 / colors.length;
+  100
+  /
+  colors.length;
+
 
   const parts =
   [];
 
+
   colors.forEach(
-    (color,index)=>{
+    (
+      color,
+      index
+    )=>{
 
       const start =
-      index * step;
+      index
+      *
+      step;
+
 
       const end =
-      (index + 1) * step;
+      (
+        index+1
+      )
+      *
+      step;
+
 
       parts.push(
         `${color} ${start}%`
       );
+
 
       parts.push(
         `${color} ${end}%`
@@ -2127,40 +2526,81 @@ function getDayBackground(
     }
   );
 
+
   return (
-    `linear-gradient(90deg, ${parts.join(", ")})`
+    "linear-gradient(90deg,"
+    +
+    parts.join(",")
+    +
+    ")"
   );
 
 }
 
+
+
+/* =========================================================
+   AFFICHAGE
+========================================================= */
 
 function renderLegend(){
 
   $legendGrid.innerHTML =
   "";
 
-  for(
-    const [k,label]
-    of
-    catLabel.entries()
-  ){
 
-    const col =
-    getColorForCategory(k);
+  const list =
+  [
+    ...catLabel.entries()
+  ];
+
+
+  list.sort(
+    (
+      a,
+      b
+    )=>
+      (
+        catOrder.get(
+          a[0]
+        )
+        ||
+        9999
+      )
+      -
+      (
+        catOrder.get(
+          b[0]
+        )
+        ||
+        9999
+      )
+  );
+
+
+  for(
+    const [
+      key,
+      label
+    ]
+    of list
+  ){
 
     const div =
     document.createElement(
       "div"
     );
 
+
     div.className =
     "legItem";
+
 
     div.innerHTML =
     `
       <div
         class="sq"
-        style="background:${escapeHtml(col)}">
+        style="background:${getColorForCategory(key)}">
       </div>
 
       <div class="legTxt">
@@ -2168,9 +2608,11 @@ function renderLegend(){
       </div>
     `;
 
-    $legendGrid.appendChild(
-      div
-    );
+
+    $legendGrid
+      .appendChild(
+        div
+      );
 
   }
 
@@ -2184,25 +2626,31 @@ function renderMonth(){
     currentMonth
   ];
 
+
   $btnPrev.disabled =
   currentMonth === 0;
+
 
   $btnNext.disabled =
   currentMonth === 11;
 
-  const start =
+
+  const first =
   firstMondayGrid(
     ACTIVE_YEAR,
     currentMonth
   );
 
-  const todayStr =
+
+  const today =
   ymd(
     new Date()
   );
 
+
   $grid.innerHTML =
   "";
+
 
   for(
     let i=0;
@@ -2211,24 +2659,35 @@ function renderMonth(){
   ){
 
     const d =
-    new Date(start);
+    new Date(
+      first
+    );
+
 
     d.setDate(
-      start.getDate()+i
+      first.getDate()
+      +
+      i
     );
+
 
     const inMonth =
     d.getMonth()
     ===
     currentMonth;
 
-    const dateStr =
-    ymd(d);
+
+    const date =
+    ymd(
+      d
+    );
+
 
     const cell =
     document.createElement(
       "div"
     );
+
 
     cell.className =
     "day"
@@ -2239,33 +2698,36 @@ function renderMonth(){
         : " is-empty"
     );
 
+
     if(inMonth){
 
       cell.dataset.date =
-      dateStr;
+      date;
 
-      const dayBackground =
+
+      const bg =
       getDayBackground(
-        dateStr
+        date
       );
 
-      if(
-        dayBackground
-      ){
+
+      if(bg){
 
         cell.classList.add(
           "has-color"
         );
 
+
         cell.style.setProperty(
           "--dayColor",
-          dayBackground
+          bg
         );
 
       }
 
+
       if(
-        dateStr === todayStr
+        date === today
       ){
 
         cell.classList.add(
@@ -2274,12 +2736,11 @@ function renderMonth(){
 
       }
 
+
       if(
         hasNoteByDate.get(
-          dateStr
+          date
         )
-        ===
-        true
       ){
 
         cell.classList.add(
@@ -2290,12 +2751,14 @@ function renderMonth(){
 
     }
 
+
     cell.innerHTML =
     `<span>${
       inMonth
         ? d.getDate()
         : ""
     }</span>`;
+
 
     $grid.appendChild(
       cell
@@ -2306,11 +2769,16 @@ function renderMonth(){
 }
 
 
+
+/* =========================================================
+   ANNÉES
+========================================================= */
+
 function getPublicYears_(){
 
   return [
     PUBLIC_YEAR,
-    PUBLIC_YEAR + 1
+    PUBLIC_YEAR+1
   ];
 
 }
@@ -2321,27 +2789,19 @@ function renderYearControl_(){
   $yearControl.innerHTML =
   "";
 
-  let yearsToShow;
 
-  if(
-    IS_ADMIN
-    &&
-    EDIT_MODE
-  ){
-
-    yearsToShow =
-    ADMIN_YEARS.slice();
-
-  }else{
-
-    yearsToShow =
+  const years =
+  IS_ADMIN
+  &&
+  EDIT_MODE
+    ?
+    ADMIN_YEARS
+    :
     getPublicYears_();
 
-  }
-
 
   if(
-    !yearsToShow.includes(
+    !years.includes(
       ACTIVE_YEAR
     )
   ){
@@ -2357,37 +2817,42 @@ function renderYearControl_(){
     "select"
   );
 
+
   select.className =
   "yearSelect";
 
 
   for(
     const year
-    of yearsToShow
+    of years
   ){
 
-    const opt =
+    const option =
     document.createElement(
       "option"
     );
 
-    opt.value =
-    String(year);
 
-    opt.textContent =
-    String(year);
+    option.value =
+    String(
+      year
+    );
 
-    if(
-      year === ACTIVE_YEAR
-    ){
 
-      opt.selected =
-      true;
+    option.textContent =
+    String(
+      year
+    );
 
-    }
+
+    option.selected =
+    year
+    ===
+    ACTIVE_YEAR;
+
 
     select.appendChild(
-      opt
+      option
     );
 
   }
@@ -2395,218 +2860,649 @@ function renderYearControl_(){
 
   select.addEventListener(
     "change",
-    async ()=>{
+    ()=>{
 
-      const newYear =
+      const year =
       Number(
         select.value
       );
 
-      if(
-        !yearsToShow.includes(
-          newYear
-        )
-      ){
-
-        return;
-
-      }
 
       if(
-        newYear === ACTIVE_YEAR
+        year
+        ===
+        ACTIVE_YEAR
       ){
-
         return;
-
       }
+
 
       ACTIVE_YEAR =
-      newYear;
+      year;
 
-      closeNote();
-      closeEdit();
-      closeEventForm();
 
       events =
       [];
 
-      rebuildMaps();
 
       const now =
       new Date();
+
 
       currentMonth =
       now.getFullYear()
       ===
       ACTIVE_YEAR
-        ? now.getMonth()
-        : 0;
+        ?
+        now.getMonth()
+        :
+        0;
 
-      renderMonth();
 
-      showStatus(
-        `Planning ${ACTIVE_YEAR}`,
-        "Chargement de l'année…"
+      /*
+        CACHE IMMÉDIAT
+      */
+      loadLocalYear_();
+
+
+      /*
+        GOOGLE ENSUITE,
+        SANS BLOQUER LA PAGE
+      */
+      refreshPlanning_(
+        false
+      )
+      .catch(
+        ()=>{}
       );
-
-      try{
-
-        await loadApi(
-          true
-        );
-
-      }finally{
-
-        hideStatus();
-
-      }
 
     }
   );
 
 
-  $yearControl.appendChild(
-    select
-  );
+  $yearControl
+    .appendChild(
+      select
+    );
 
 }
 
 
-async function setEditMode(
-  on
-){
 
-  const oldYear =
-  ACTIVE_YEAR;
+/* =========================================================
+   AUTHENTIFICATION RAPIDE
+========================================================= */
 
-  EDIT_MODE =
-  !!on;
+function showLocalAdminImmediately_(){
 
-  $editLabel.style.display =
-  EDIT_MODE
-    ? "inline-block"
-    : "none";
+  /*
+    Le rôle local est lu AVANT
+    tout appel Google.
+  */
 
-  $btnLock.textContent =
-  EDIT_MODE
-    ? "🔓"
-    : "🔒";
+  $btnLock.style.display =
+  IS_ADMIN
+    ?
+    "inline-block"
+    :
+    "none";
 
-  $btnLock.setAttribute(
-    "aria-pressed",
-    EDIT_MODE
-      ? "true"
-      : "false"
-  );
+}
 
 
-  if(EDIT_MODE){
+async function verifyRoleInBackground_(){
+
+  const email =
+  getEmailLocal();
+
+
+  if(!email){
+    return;
+  }
+
+
+  const cb =
+  "auth_"
+  +
+  Math.random()
+    .toString(36)
+    .slice(2);
+
+
+  try{
+
+    const res =
+    await jsonp(
+
+      `${API}?view=auth_check`
+      +
+      `&email=${encodeURIComponent(email)}`
+      +
+      `&callback=${cb}`,
+
+      cb,
+
+      15000
+
+    );
+
 
     if(
-      !ADMIN_YEARS_LOADED
+      !res
+      ||
+      res.ok !== true
     ){
 
-      showStatus(
-        "Mode édition",
-        "Chargement des années…"
-      );
-
-      await loadPlanningYears_();
-
-      hideStatus();
+      return;
 
     }
 
-    renderYearControl_();
 
+    const role =
+    String(
+      res.role || ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+    localStorage.setItem(
+      LS_ROLE,
+      role
+    );
+
+
+    const newAdmin =
+    role
+    ===
+    "admin";
+
+
+    if(
+      newAdmin
+      !==
+      IS_ADMIN
+    ){
+
+      IS_ADMIN =
+      newAdmin;
+
+
+      $btnLock.style.display =
+      IS_ADMIN
+        ?
+        "inline-block"
+        :
+        "none";
+
+
+      if(
+        !IS_ADMIN
+      ){
+
+        EDIT_MODE =
+        false;
+
+
+        $editLabel.style.display =
+        "none";
+
+
+        $btnLock.textContent =
+        "🔒";
+
+      }
+
+
+      renderYearControl_();
+
+    }
+
+  }catch(e){
+
+    /*
+      PAS DE BLOCAGE.
+
+      En cas de lenteur Google,
+      on garde le rôle local.
+    */
+
+  }
+
+}
+
+
+
+/* =========================================================
+   PLANNING YEARS ADMIN
+========================================================= */
+
+async function loadPlanningYears_(){
+
+  if(
+    ADMIN_YEARS_LOADED
+  ){
     return;
+  }
+
+
+  const cb =
+  "years_"
+  +
+  Math.random()
+    .toString(36)
+    .slice(2);
+
+
+  try{
+
+    const res =
+    await jsonp(
+
+      `${API}?view=planning_years_list`
+      +
+      `&callback=${cb}`,
+
+      cb,
+
+      15000
+
+    );
+
+
+    const years =
+    (
+      Array.isArray(
+        res?.years
+      )
+        ?
+        res.years
+        :
+        []
+    )
+    .map(
+      x=>
+        Number(
+          typeof x
+          ===
+          "object"
+            ?
+            x.year
+            :
+            x
+        )
+    )
+    .filter(
+      Number.isInteger
+    );
+
+
+    ADMIN_YEARS =
+    [
+      ...new Set(
+        [
+          PUBLIC_YEAR,
+          PUBLIC_YEAR+1,
+          ...years
+        ]
+      )
+    ]
+    .sort(
+      (
+        a,
+        b
+      )=>
+        a-b
+    );
+
+  }catch(e){
+
+    ADMIN_YEARS =
+    getPublicYears_();
 
   }
 
 
-  closeEdit();
+  ADMIN_YEARS_LOADED =
+  true;
 
-  closeNote();
-
-  closeEventForm();
+}
 
 
-  const publicYears =
-  getPublicYears_();
+
+/* =========================================================
+   MODE ADMIN
+========================================================= */
+
+async function setEditMode(
+  enabled
+){
+
+  EDIT_MODE =
+  !!enabled;
+
+
+  $btnLock.textContent =
+  EDIT_MODE
+    ?
+    "🔓"
+    :
+    "🔒";
+
+
+  $editLabel.style.display =
+  EDIT_MODE
+    ?
+    "inline-block"
+    :
+    "none";
 
 
   if(
-    !publicYears.includes(
-      ACTIVE_YEAR
-    )
+    EDIT_MODE
+    &&
+    !ADMIN_YEARS_LOADED
+  ){
+
+    /*
+      SEUL MOMENT OÙ
+      PLANNING YEARS EST CHARGÉ.
+    */
+
+    loadPlanningYears_()
+      .then(
+        renderYearControl_
+      );
+
+  }
+
+
+  if(
+    !EDIT_MODE
+    &&
+    !getPublicYears_()
+      .includes(
+        ACTIVE_YEAR
+      )
   ){
 
     ACTIVE_YEAR =
     PUBLIC_YEAR;
+
+
+    currentMonth =
+    new Date()
+      .getMonth();
+
+
+    loadLocalYear_();
+
+
+    refreshPlanning_(
+      false
+    )
+    .catch(
+      ()=>{}
+    );
 
   }
 
 
   renderYearControl_();
 
+}
+
+
+
+/* =========================================================
+   SYNCHRONISATION
+========================================================= */
+
+function applyPlanningResponse_(
+  py
+){
+
+  events =
+  Array.isArray(
+    py?.events
+  )
+    ?
+    py.events
+    :
+    [];
+
+
+  rebuildMaps();
+
+
+  renderMonth();
+
+
+  savePlanningCache_(
+    py
+  );
+
+}
+
+
+function applyCategoriesResponse_(
+  pc
+){
 
   if(
-    ACTIVE_YEAR !== oldYear
+    Array.isArray(
+      pc?.categories
+    )
+    &&
+    pc.categories.length
   ){
 
-    const now =
-    new Date();
+    categoriesRaw =
+    pc.categories;
 
-    currentMonth =
-    now.getFullYear()
-    ===
-    ACTIVE_YEAR
-      ? now.getMonth()
-      : 0;
+
+    saveCategoriesCache_(
+      pc
+    );
+
+
+    rebuildMaps();
+
+
+    renderLegend();
+
 
     renderMonth();
-
-    await loadApi(
-      true
-    );
 
   }
 
 }
 
 
+function loadLocalYear_(){
+
+  /*
+    CETTE FONCTION NE FAIT
+    AUCUN APPEL INTERNET.
+  */
+
+  const planningCache =
+  loadPlanningCache_();
+
+
+  const categoriesCache =
+  loadCategoriesCache_();
+
+
+  if(
+    categoriesCache?.categories
+  ){
+
+    categoriesRaw =
+    categoriesCache.categories;
+
+  }
+
+
+  if(
+    planningCache?.py
+  ){
+
+    events =
+    Array.isArray(
+      planningCache.py.events
+    )
+      ?
+      planningCache.py.events
+      :
+      [];
+
+  }
+
+
+  rebuildMaps();
+
+
+  renderLegend();
+
+
+  renderMonth();
+
+
+  return {
+    planningCache,
+    categoriesCache
+  };
+
+}
+
+
+async function refreshPlanning_(
+  forceFresh=false
+){
+
+  const cb =
+  "planning_"
+  +
+  Math.random()
+    .toString(36)
+    .slice(2);
+
+
+  const url =
+  `${API}?view=planning_year`
+  +
+  `&year=${ACTIVE_YEAR}`
+  +
+  (
+    forceFresh
+      ?
+      "&nocache=1"
+      :
+      ""
+  )
+  +
+  `&callback=${cb}`;
+
+
+  const py =
+  await jsonp(
+    url,
+    cb,
+    20000
+  );
+
+
+  if(
+    py?.ok === false
+  ){
+
+    throw new Error(
+      py.error
+      ||
+      "Erreur planning"
+    );
+
+  }
+
+
+  applyPlanningResponse_(
+    py
+  );
+
+
+  return py;
+
+}
+
+
+async function refreshCategories_(){
+
+  const cb =
+  "categories_"
+  +
+  Math.random()
+    .toString(36)
+    .slice(2);
+
+
+  const pc =
+  await jsonp(
+
+    `${API}?view=planning_categories`
+    +
+    `&callback=${cb}`,
+
+    cb,
+
+    15000
+
+  );
+
+
+  if(
+    pc?.ok === false
+  ){
+
+    return;
+
+  }
+
+
+  applyCategoriesResponse_(
+    pc
+  );
+
+}
+
+
+
+/* =========================================================
+   NOTES
+========================================================= */
+
 function openNote(
-  dateStr
+  date
 ){
 
   const arr =
   eventsByDate.get(
-    dateStr
+    date
   )
   ||
   [];
 
-  const withDetails =
-  arr.filter(
-    ev=>
-      String(
-        ev.details || ""
-      ).trim()
-  );
 
   if(
-    !withDetails.length
+    !arr.length
   ){
     return;
   }
 
+
   $noteTitle.textContent =
-  `Note — ${
-    dateStr
-      .split("-")
-      .reverse()
-      .join("/")
-  }`;
+  `Événements — ${toFRDate(date)}`;
+
 
   $noteBody.innerHTML =
   "";
@@ -2614,65 +3510,40 @@ function openNote(
 
   for(
     const ev
-    of withDetails
+    of arr
   ){
-
-    const name =
-    String(
-      ev.title || ""
-    ).trim()
-    ||
-    "—";
-
-    const time =
-    formatTimeRange(
-      ev.start,
-      ev.end
-    );
-
-    const catK =
-    norm(
-      ev.category || ""
-    );
-
-    const catLabelTxt =
-    String(
-      ev.category || ""
-    ).trim();
-
-    const loc =
-    String(
-      ev.location || ""
-    ).trim();
-
-    const details =
-    String(
-      ev.details || ""
-    ).trim();
-
-    const dotCol =
-    getColorForCategory(
-      catK
-    );
 
     const card =
     document.createElement(
       "div"
     );
 
+
     card.className =
     "evCard";
+
+
+    const cat =
+    String(
+      ev.category || ""
+    );
+
 
     card.innerHTML =
     `
       <div class="evTop">
 
         <div class="evName">
-          ${escapeHtml(name)}
+          ${escapeHtml(ev.title || "—")}
         </div>
 
         <div class="evTime">
-          ${escapeHtml(time)}
+          ${escapeHtml(
+            formatTimeRange(
+              ev.start,
+              ev.end
+            )
+          )}
         </div>
 
       </div>
@@ -2680,45 +3551,51 @@ function openNote(
       <div class="evMeta">
 
         ${
-          catLabelTxt
-          ?
-          `
-            <div class="chip">
-              <span
-                class="chipDot"
-                style="background:${escapeHtml(dotCol)}">
-              </span>
+          cat
+            ?
+            `
+              <div class="chip">
 
-              <span>
-                ${escapeHtml(catLabelTxt)}
-              </span>
-            </div>
-          `
-          :
-          ""
+                <span
+                  class="chipDot"
+                  style="background:${getColorForCategory(cat)}">
+                </span>
+
+                ${escapeHtml(cat)}
+
+              </div>
+            `
+            :
+            ""
         }
 
         ${
-          loc
-          ?
-          `
-            <div class="chip">
-              📍
-              <span>
-                ${escapeHtml(loc)}
-              </span>
-            </div>
-          `
-          :
-          ""
+          ev.location
+            ?
+            `
+              <div class="chip">
+                📍 ${escapeHtml(ev.location)}
+              </div>
+            `
+            :
+            ""
         }
 
       </div>
 
-      <div class="evDetails">
-        ${escapeHtml(details)}
-      </div>
+      ${
+        ev.details
+          ?
+          `
+            <div class="evDetails">
+              ${escapeHtml(ev.details)}
+            </div>
+          `
+          :
+          ""
+      }
     `;
+
 
     $noteBody.appendChild(
       card
@@ -2743,19 +3620,27 @@ function closeNote(){
 }
 
 
+
+/* =========================================================
+   LISTE ADMIN
+========================================================= */
+
 function openEdit(
-  dateStr
+  date
 ){
 
   _editDate =
-  dateStr;
+  date;
+
 
   $editTitle.textContent =
-  `Événements — ${toFRDate(dateStr)}`;
+  `Événements — ${toFRDate(date)}`;
+
 
   renderEditList(
-    dateStr
+    date
   );
+
 
   $editOverlay.classList.add(
     "show"
@@ -2770,8 +3655,10 @@ function closeEdit(){
     "show"
   );
 
+
   _editDate =
   "";
+
 
   $editBody.innerHTML =
   "";
@@ -2779,65 +3666,6 @@ function closeEdit(){
 }
 
 
-function setDeleteButtonState(
-  button,
-  state
-){
-
-  button.classList.remove(
-    "deleting",
-    "deleted"
-  );
-
-  if(
-    state === "deleting"
-  ){
-
-    button.classList.add(
-      "deleting"
-    );
-
-    button.textContent =
-    "Suppression…";
-
-    button.disabled =
-    true;
-
-  }else if(
-    state === "deleted"
-  ){
-
-    button.classList.add(
-      "deleted"
-    );
-
-    button.textContent =
-    "✓ Supprimé";
-
-    button.disabled =
-    true;
-
-  }else{
-
-    button.textContent =
-    "🗑";
-
-    button.disabled =
-    false;
-
-  }
-
-}
-
-
-/*
-  SUPPRESSION LOCALE.
-
-  Cette fonction enlève immédiatement
-  l'événement de l'affichage ET détruit
-  le cache de l'année pour éviter qu'un
-  ancien événement revienne.
-*/
 function removeEventLocally_(
   ev
 ){
@@ -2849,7 +3677,7 @@ function removeEventLocally_(
     ev?.id
     ||
     ""
-  ).trim();
+  );
 
 
   events =
@@ -2863,7 +3691,7 @@ function removeEventLocally_(
         item?.id
         ||
         ""
-      ).trim();
+      );
 
 
       if(
@@ -2877,16 +3705,11 @@ function removeEventLocally_(
       }
 
 
-      if(
-        item === ev
-      ){
-
-        return false;
-
-      }
-
-
-      return true;
+      return (
+        item
+        !==
+        ev
+      );
 
     }
   );
@@ -2894,32 +3717,92 @@ function removeEventLocally_(
 
   rebuildMaps();
 
+
   renderMonth();
 
 
   /*
-    Très important pour les
-    événements fantômes.
+    Sauvegarde directement
+    l'état local sans l'événement.
   */
-  try{
 
-    localStorage.removeItem(
-      getCacheKey_()
+  savePlanningCache_({
+    ok:true,
+    events
+  });
+
+}
+
+
+function setDeleteState_(
+  button,
+  state
+){
+
+  button.classList.remove(
+    "deleting",
+    "deleted"
+  );
+
+
+  if(
+    state === "deleting"
+  ){
+
+    button.classList.add(
+      "deleting"
     );
 
-  }catch(e){}
+
+    button.textContent =
+    "Suppression…";
+
+
+    button.disabled =
+    true;
+
+  }
+
+  else if(
+    state === "deleted"
+  ){
+
+    button.classList.add(
+      "deleted"
+    );
+
+
+    button.textContent =
+    "✓ Supprimé";
+
+
+    button.disabled =
+    true;
+
+  }
+
+  else{
+
+    button.textContent =
+    "🗑";
+
+
+    button.disabled =
+    false;
+
+  }
 
 }
 
 
 function renderEditList(
-  dateStr
+  date
 ){
 
   const arr =
   (
     eventsByDate.get(
-      dateStr
+      date
     )
     ||
     []
@@ -2928,20 +3811,16 @@ function renderEditList(
 
 
   arr.sort(
-    (a,b)=>
+    (
+      a,
+      b
+    )=>
       String(
         a.start || ""
-      ).localeCompare(
+      )
+      .localeCompare(
         String(
           b.start || ""
-        )
-      )
-      ||
-      String(
-        a.title || ""
-      ).localeCompare(
-        String(
-          b.title || ""
         )
       )
   );
@@ -2955,24 +3834,13 @@ function renderEditList(
     !arr.length
   ){
 
-    const empty =
-    document.createElement(
-      "div"
-    );
-
-    empty.className =
-    "row";
-
-    empty.innerHTML =
+    $editBody.innerHTML =
     `
-      <div style="font-weight:900;opacity:.9">
+      <div class="row">
         Aucun événement ce jour.
       </div>
     `;
 
-    $editBody.appendChild(
-      empty
-    );
 
     return;
 
@@ -2984,39 +3852,11 @@ function renderEditList(
     of arr
   ){
 
-    const name =
-    String(
-      ev.title || ""
-    ).trim()
-    ||
-    "—";
-
-    const time =
-    formatTimeRange(
-      ev.start,
-      ev.end
-    );
-
-    const cat =
-    String(
-      ev.category || ""
-    ).trim();
-
-    const loc =
-    String(
-      ev.location || ""
-    ).trim();
-
-    const details =
-    String(
-      ev.details || ""
-    ).trim();
-
-
     const row =
     document.createElement(
       "div"
     );
+
 
     row.className =
     "row";
@@ -3027,11 +3867,16 @@ function renderEditList(
       <div class="rowTop">
 
         <div class="rowName">
-          ${escapeHtml(name)}
+          ${escapeHtml(ev.title || "—")}
         </div>
 
         <div class="evTime">
-          ${escapeHtml(time)}
+          ${escapeHtml(
+            formatTimeRange(
+              ev.start,
+              ev.end
+            )
+          )}
         </div>
 
       </div>
@@ -3039,27 +3884,19 @@ function renderEditList(
       <div class="rowSub">
 
         ${
-          cat
-          ?
-          `<span>🎨 ${escapeHtml(cat)}</span>`
-          :
-          ""
+          ev.category
+            ?
+            `<span>🎨 ${escapeHtml(ev.category)}</span>`
+            :
+            ""
         }
 
         ${
-          loc
-          ?
-          `<span>📍 ${escapeHtml(loc)}</span>`
-          :
-          ""
-        }
-
-        ${
-          details
-          ?
-          `<span>📝 note</span>`
-          :
-          ""
+          ev.location
+            ?
+            `<span>📍 ${escapeHtml(ev.location)}</span>`
+            :
+            ""
         }
 
       </div>
@@ -3068,216 +3905,185 @@ function renderEditList(
 
         <button
           class="iconBtn"
-          data-act="view">
+          data-action="view">
+
           👁
+
         </button>
 
         <button
           class="iconBtn"
-          data-act="edit">
+          data-action="edit">
+
           🖍
+
         </button>
 
         <button
           class="iconBtn danger"
-          data-act="del">
+          data-action="delete">
+
           🗑
+
         </button>
 
       </div>
     `;
 
 
-    row
-      .querySelectorAll(
-        "button"
-      )
-      .forEach(
-        b=>{
-
-          b.addEventListener(
-            "click",
-            async ()=>{
-
-              const act =
-              b.dataset.act;
+    const viewButton =
+    row.querySelector(
+      '[data-action="view"]'
+    );
 
 
-              if(
-                act === "view"
-              ){
-
-                alert(
-                  `📅 ${toFRDate(dateStr)}\n`
-                  +
-                  `🕒 ${time || "—"}\n`
-                  +
-                  `📌 ${name}\n`
-                  +
-                  (
-                    cat
-                    ? `🎨 ${cat}\n`
-                    : ""
-                  )
-                  +
-                  (
-                    loc
-                    ? `📍 ${loc}\n`
-                    : ""
-                  )
-                  +
-                  (
-                    details
-                    ? `\n📝 ${details}`
-                    : ""
-                  )
-                );
-
-                return;
-
-              }
+    const editButton =
+    row.querySelector(
+      '[data-action="edit"]'
+    );
 
 
-              if(
-                act === "edit"
-              ){
-
-                openEventForm(
-                  "edit",
-                  dateStr,
-                  ev
-                );
-
-                return;
-
-              }
+    const deleteButton =
+    row.querySelector(
+      '[data-action="delete"]'
+    );
 
 
-              if(
-                act === "del"
-              ){
+    viewButton.onclick =
+    ()=>{
 
-                if(
-                  DELETE_IN_PROGRESS
-                ){
-                  return;
-                }
-
-
-                const ok =
-                confirm(
-                  `Supprimer l’événement :\n\n`
-                  +
-                  `${name}\n`
-                  +
-                  `${time || ""}\n\n`
-                  +
-                  `Confirmer ?`
-                );
-
-
-                if(!ok){
-                  return;
-                }
-
-
-                DELETE_IN_PROGRESS =
-                true;
-
-
-                setDeleteButtonState(
-                  b,
-                  "deleting"
-                );
-
-
-                try{
-
-                  /*
-                    Si Google répond deleted:0,
-                    ce n'est PLUS une erreur.
-
-                    Cela veut simplement dire
-                    que l'événement n'existe
-                    déjà plus dans Sheets.
-                  */
-                  await apiDeleteEvent_(
-                    dateStr,
-                    ev
-                  );
-
-
-                  removeEventLocally_(
-                    ev
-                  );
-
-
-                  setDeleteButtonState(
-                    b,
-                    "deleted"
-                  );
-
-
-                  await new Promise(
-                    resolve=>
-                      setTimeout(
-                        resolve,
-                        250
-                      )
-                  );
-
-
-                  closeEdit();
-
-
-                  showDeletedMessage();
-
-
-                  /*
-                    Synchronisation fraîche
-                    derrière sans bloquer
-                    l'utilisateur.
-                  */
-                  loadApi(
-                    true
-                  )
-                  .catch(
-                    ()=>{}
-                  );
-
-
-                }catch(err){
-
-                  setDeleteButtonState(
-                    b,
-                    "normal"
-                  );
-
-                  alert(
-                    "Erreur lors de la suppression : "
-                    +
-                    String(
-                      err?.message
-                      ||
-                      err
-                    )
-                  );
-
-
-                }finally{
-
-                  DELETE_IN_PROGRESS =
-                  false;
-
-                }
-
-              }
-
-            }
-          );
-
-        }
+      alert(
+        `${toFRDate(date)}\n`
+        +
+        `${formatTimeRange(ev.start,ev.end)}\n\n`
+        +
+        `${ev.title || ""}\n`
+        +
+        `${ev.location || ""}\n\n`
+        +
+        `${ev.details || ""}`
       );
+
+    };
+
+
+    editButton.onclick =
+    ()=>{
+
+      openEventForm(
+        "edit",
+        date,
+        ev
+      );
+
+    };
+
+
+    deleteButton.onclick =
+    async ()=>{
+
+      if(
+        DELETE_IN_PROGRESS
+      ){
+        return;
+      }
+
+
+      if(
+        !confirm(
+          "Supprimer cet événement ?"
+        )
+      ){
+        return;
+      }
+
+
+      DELETE_IN_PROGRESS =
+      true;
+
+
+      setDeleteState_(
+        deleteButton,
+        "deleting"
+      );
+
+
+      try{
+
+        await apiDeleteEvent_(
+          ev
+        );
+
+
+        /*
+          L'ÉCRAN EST MIS À JOUR
+          IMMÉDIATEMENT.
+        */
+
+        removeEventLocally_(
+          ev
+        );
+
+
+        setDeleteState_(
+          deleteButton,
+          "deleted"
+        );
+
+
+        await new Promise(
+          resolve=>
+            setTimeout(
+              resolve,
+              200
+            )
+        );
+
+
+        closeEdit();
+
+
+        showDeletedMessage();
+
+
+        /*
+          RELECTURE GOOGLE
+          EN ARRIÈRE-PLAN.
+        */
+
+        refreshPlanning_(
+          true
+        )
+        .catch(
+          ()=>{}
+        );
+
+
+      }catch(error){
+
+        setDeleteState_(
+          deleteButton,
+          "normal"
+        );
+
+
+        alert(
+          "Erreur suppression : "
+          +
+          String(
+            error?.message
+            ||
+            error
+          )
+        );
+
+      }
+
+
+      DELETE_IN_PROGRESS =
+      false;
+
+    };
 
 
     $editBody.appendChild(
@@ -3289,95 +4095,12 @@ function renderEditList(
 }
 
 
-/*
-  AJOUT
-*/
-async function apiAddEvent_(
-  dateStr,
-  payload
-){
 
-  const email =
-  getEmailLocal();
+/* =========================================================
+   API SUPPRESSION
+========================================================= */
 
-
-  if(!email){
-
-    throw new Error(
-      "Email introuvable. Reconnecte-toi sur le portail."
-    );
-
-  }
-
-
-  const cb =
-  "cb_add_"
-  +
-  Math.random()
-    .toString(36)
-    .slice(2);
-
-
-  const url =
-  `${API}?view=planning_add`
-  +
-  `&email=${encodeURIComponent(email)}`
-  +
-  `&date=${encodeURIComponent(dateStr)}`
-  +
-  `&start=${encodeURIComponent(payload.start || "")}`
-  +
-  `&end=${encodeURIComponent(payload.end || "")}`
-  +
-  `&title=${encodeURIComponent(payload.title || "")}`
-  +
-  `&category=${encodeURIComponent(payload.category || "")}`
-  +
-  `&location=${encodeURIComponent(payload.location || "")}`
-  +
-  `&details=${encodeURIComponent(payload.details || "")}`
-  +
-  `&nocache=1`
-  +
-  `&callback=${cb}`;
-
-
-  const res =
-  await jsonp(
-    url,
-    cb,
-    20000
-  );
-
-
-  if(
-    !res
-    ||
-    res.ok !== true
-  ){
-
-    throw new Error(
-      res?.error
-      ||
-      "Erreur ajout"
-    );
-
-  }
-
-
-  return res;
-
-}
-
-
-/*
-  SUPPRESSION CORRIGÉE.
-
-  deleted:0 n'est plus considéré
-  comme une erreur.
-*/
 async function apiDeleteEvent_(
-  dateStr,
   ev
 ){
 
@@ -3388,7 +4111,7 @@ async function apiDeleteEvent_(
   if(!email){
 
     throw new Error(
-      "Email introuvable. Reconnecte-toi sur le portail."
+      "Email introuvable"
     );
 
   }
@@ -3401,50 +4124,50 @@ async function apiDeleteEvent_(
     ev?.id
     ||
     ""
-  ).trim();
+  )
+  .trim();
 
 
   /*
-    Ancien événement provenant du cache
-    mais sans event_id :
-    on le considère déjà absent du serveur.
+    ÉVÉNEMENT FANTÔME :
+    PAS D'ID = suppression locale.
   */
+
   if(!eventId){
 
     return {
       ok:true,
-      deleted:0,
-      alreadyMissing:true
+      deleted:0
     };
 
   }
 
 
   const cb =
-  "cb_del_"
+  "delete_"
   +
   Math.random()
     .toString(36)
     .slice(2);
 
 
-  const url =
-  `${API}?view=planning_delete`
-  +
-  `&email=${encodeURIComponent(email)}`
-  +
-  `&event_id=${encodeURIComponent(eventId)}`
-  +
-  `&nocache=1`
-  +
-  `&callback=${cb}`;
-
-
   const res =
   await jsonp(
-    url,
+
+    `${API}?view=planning_delete`
+    +
+    `&email=${encodeURIComponent(email)}`
+    +
+    `&event_id=${encodeURIComponent(eventId)}`
+    +
+    `&nocache=1`
+    +
+    `&callback=${cb}`,
+
     cb,
+
     20000
+
   );
 
 
@@ -3457,244 +4180,206 @@ async function apiDeleteEvent_(
     throw new Error(
       res?.error
       ||
-      "Erreur suppression"
+      "Suppression impossible"
     );
 
   }
 
 
-  return {
-    ...res,
+  /*
+    deleted = 0 n'est volontairement
+    PAS une erreur.
+  */
 
-    alreadyMissing:
-      Number(
-        res.deleted || 0
-      )
-      <
-      1
-  };
+  return res;
 
 }
 
 
-function buildCategoryOptions(
-  selectedValue
-){
 
-  $fCategory.innerHTML =
-  "";
+/* =========================================================
+   FORMULAIRE / ROULETTES
+========================================================= */
 
-
-  const none =
-  document.createElement(
-    "option"
-  );
-
-  none.value =
-  "";
-
-  none.textContent =
-  "Aucune";
-
-  $fCategory.appendChild(
-    none
-  );
-
-
-  const items =
-  [...catLabel.entries()]
-    .map(
-      ([k,label])=>({
-
-        k,
-
-        label,
-
-        order:
-        catOrder.has(k)
-          ? catOrder.get(k)
-          : 9999
-
-      })
-    );
+const HOURS =
+Array.from(
+  {
+    length:24
+  },
+  (
+    _,
+    i
+  )=>
+    String(
+      i
+    )
+    .padStart(
+      2,
+      "0"
+    )
+);
 
 
-  items.sort(
-    (a,b)=>
-      (
-        a.order-b.order
-      )
-      ||
-      a.label.localeCompare(
-        b.label
-      )
-  );
+const MINUTES =
+[
+  "00",
+  "15",
+  "30",
+  "45"
+];
 
 
-  for(
-    const it
-    of items
-  ){
+const TIME_PICKERS = {
 
-    const opt =
-    document.createElement(
-      "option"
-    );
+  startHour:{
+    wheel:$("startHourWheel"),
+    inner:$("startHourInner"),
+    values:HOURS,
+    value:"08"
+  },
 
-    opt.value =
-    it.label;
+  startMinute:{
+    wheel:$("startMinuteWheel"),
+    inner:$("startMinuteInner"),
+    values:MINUTES,
+    value:"00"
+  },
 
-    opt.textContent =
-    it.label;
+  endHour:{
+    wheel:$("endHourWheel"),
+    inner:$("endHourInner"),
+    values:HOURS,
+    value:"09"
+  },
 
-    $fCategory.appendChild(
-      opt
-    );
-
+  endMinute:{
+    wheel:$("endMinuteWheel"),
+    inner:$("endMinuteInner"),
+    values:MINUTES,
+    value:"00"
   }
 
-
-  $fCategory.value =
-  selectedValue
-  ||
-  "";
-
-}
+};
 
 
-function getLoopValues(
-  values
-){
-
-  const arr =
-  [];
-
-
-  for(
-    let i=0;
-    i<LOOP_DUPLICATES;
-    i++
-  ){
-
-    arr.push(
-      ...values
-    );
-
-  }
-
-
-  return arr;
-
-}
-
-
-function buildWheel(
-  pickerKey
+function buildWheel_(
+  key
 ){
 
   const picker =
   TIME_PICKERS[
-    pickerKey
+    key
   ];
-
-
-  const allValues =
-  getLoopValues(
-    picker.values
-  );
 
 
   picker.inner.innerHTML =
   "";
 
 
-  const padTop =
+  const values =
+  [];
+
+
+  /*
+    Moins de répétitions qu'avant :
+    beaucoup moins de DOM.
+  */
+
+  for(
+    let i=0;
+    i<5;
+    i++
+  ){
+
+    values.push(
+      ...picker.values
+    );
+
+  }
+
+
+  const top =
   document.createElement(
     "div"
   );
 
-  padTop.className =
+
+  top.className =
   "wheelPad";
 
+
   picker.inner.appendChild(
-    padTop
+    top
   );
 
 
-  allValues.forEach(
-    (v,idx)=>{
+  for(
+    const value
+    of values
+  ){
 
-      const item =
-      document.createElement(
-        "div"
-      );
-
-      item.className =
-      "wheelItem";
-
-      item.dataset.value =
-      v;
-
-      item.dataset.index =
-      String(idx);
-
-      item.textContent =
-      v;
+    const item =
+    document.createElement(
+      "div"
+    );
 
 
-      item.addEventListener(
-        "click",
-        ()=>setWheelValue(
-          pickerKey,
-          v,
-          true
-        )
-      );
+    item.className =
+    "wheelItem";
 
 
-      picker.inner.appendChild(
-        item
-      );
-
-    }
-  );
+    item.dataset.value =
+    value;
 
 
-  const padBottom =
+    item.textContent =
+    value;
+
+
+    picker.inner.appendChild(
+      item
+    );
+
+  }
+
+
+  const bottom =
   document.createElement(
     "div"
   );
 
-  padBottom.className =
+
+  bottom.className =
   "wheelPad";
 
+
   picker.inner.appendChild(
-    padBottom
+    bottom
   );
+
+
+  let timer;
 
 
   picker.wheel.addEventListener(
     "scroll",
     ()=>{
 
-      updateWheelActive(
-        pickerKey
-      );
-
-      keepWheelLooped(
-        pickerKey
-      );
-
       clearTimeout(
-        picker.timer
+        timer
       );
 
-      picker.timer =
+
+      timer =
       setTimeout(
-        ()=>snapWheel(
-          pickerKey
-        ),
-        80
+        ()=>{
+
+          updateWheel_(
+            key
+          );
+
+        },
+        60
       );
 
     }
@@ -3703,30 +4388,22 @@ function buildWheel(
 }
 
 
-function getWheelItems(
-  pickerKey
-){
-
-  return [
-    ...TIME_PICKERS[
-      pickerKey
-    ]
-    .inner
-    .querySelectorAll(
-      ".wheelItem"
-    )
-  ];
-
-}
-
-
-function getNearestWheelItem(
-  pickerKey
+function updateWheel_(
+  key
 ){
 
   const picker =
   TIME_PICKERS[
-    pickerKey
+    key
+  ];
+
+
+  const items =
+  [
+    ...picker.inner
+      .querySelectorAll(
+        ".wheelItem"
+      )
   ];
 
 
@@ -3738,265 +4415,145 @@ function getNearestWheelItem(
   2;
 
 
-  let bestItem =
+  let nearest =
   null;
 
 
-  let bestDist =
+  let nearestDistance =
   Infinity;
 
 
-  getWheelItems(
-    pickerKey
-  )
-  .forEach(
-    item=>{
+  for(
+    const item
+    of items
+  ){
 
-      const itemCenter =
-      item.offsetTop
-      +
-      item.offsetHeight
-      /
-      2;
-
-
-      const dist =
-      Math.abs(
-        center-itemCenter
-      );
-
-
-      if(
-        dist < bestDist
-      ){
-
-        bestDist =
-        dist;
-
-        bestItem =
-        item;
-
-      }
-
-    }
-  );
-
-
-  return bestItem;
-
-}
-
-
-function updateWheelActive(
-  pickerKey
-){
-
-  const picker =
-  TIME_PICKERS[
-    pickerKey
-  ];
-
-
-  const bestItem =
-  getNearestWheelItem(
-    pickerKey
-  );
-
-
-  getWheelItems(
-    pickerKey
-  )
-  .forEach(
-    i=>
-      i.classList.remove(
-        "active"
-      )
-  );
-
-
-  if(bestItem){
-
-    bestItem.classList.add(
+    item.classList.remove(
       "active"
     );
 
+
+    const itemCenter =
+    item.offsetTop
+    +
+    item.offsetHeight
+    /
+    2;
+
+
+    const distance =
+    Math.abs(
+      center
+      -
+      itemCenter
+    );
+
+
+    if(
+      distance
+      <
+      nearestDistance
+    ){
+
+      nearestDistance =
+      distance;
+
+
+      nearest =
+      item;
+
+    }
+
+  }
+
+
+  if(nearest){
+
+    nearest.classList.add(
+      "active"
+    );
+
+
     picker.value =
-    bestItem.dataset.value;
+    nearest.dataset.value;
 
   }
 
 }
 
 
-function keepWheelLooped(
-  pickerKey
-){
+function ensureWheels_(){
 
-  const picker =
-  TIME_PICKERS[
-    pickerKey
-  ];
-
-
-  if(!picker.looping){
+  if(
+    WHEELS_INITIALIZED
+  ){
     return;
   }
 
 
-  const valuesLen =
-  picker.values.length;
+  /*
+    CRÉÉES UNIQUEMENT
+    QUAND ON OUVRE LE FORMULAIRE.
+  */
 
-
-  const itemHeight =
-  42;
-
-
-  const cycleHeight =
-  valuesLen
-  *
-  itemHeight;
-
-
-  const minScroll =
-  cycleHeight
-  *
-  4;
-
-
-  const maxScroll =
-  cycleHeight
-  *
-  (
-    LOOP_DUPLICATES - 5
+  buildWheel_(
+    "startHour"
   );
 
 
-  if(
-    picker.wheel.scrollTop
-    <
-    minScroll
-  ){
+  buildWheel_(
+    "startMinute"
+  );
 
-    picker.wheel.scrollTop +=
-    cycleHeight * 6;
 
-  }else if(
-    picker.wheel.scrollTop
-    >
-    maxScroll
-  ){
+  buildWheel_(
+    "endHour"
+  );
 
-    picker.wheel.scrollTop -=
-    cycleHeight * 6;
 
-  }
+  buildWheel_(
+    "endMinute"
+  );
+
+
+  WHEELS_INITIALIZED =
+  true;
 
 }
 
 
-function findBestItemForValueNearCenter(
-  pickerKey,
+function setWheelValue_(
+  key,
   value
 ){
 
   const picker =
   TIME_PICKERS[
-    pickerKey
+    key
   ];
 
 
   const items =
-  getWheelItems(
-    pickerKey
-  )
+  [
+    ...picker.inner
+      .querySelectorAll(
+        ".wheelItem"
+      )
+  ]
   .filter(
-    i=>
-      i.dataset.value
+    item=>
+      item.dataset.value
       ===
       value
   );
 
 
-  if(
-    !items.length
-  ){
-
-    return null;
-
-  }
-
-
-  const currentCenter =
-  picker.wheel.scrollTop
-  +
-  picker.wheel.clientHeight
-  /
-  2;
-
-
-  let best =
-  items[0];
-
-
-  let bestDist =
-  Infinity;
-
-
-  items.forEach(
-    item=>{
-
-      const c =
-      item.offsetTop
-      +
-      item.offsetHeight
-      /
-      2;
-
-
-      const dist =
-      Math.abs(
-        c-currentCenter
-      );
-
-
-      if(
-        dist < bestDist
-      ){
-
-        bestDist =
-        dist;
-
-        best =
-        item;
-
-      }
-
-    }
-  );
-
-
-  return best;
-
-}
-
-
-function setWheelValue(
-  pickerKey,
-  value,
-  smooth
-){
-
-  const picker =
-  TIME_PICKERS[
-    pickerKey
-  ];
-
-
   const item =
-  findBestItemForValueNearCenter(
-    pickerKey,
-    value
-  );
+  items[
+    Math.floor(
+      items.length/2
+    )
+  ];
 
 
   if(!item){
@@ -4004,119 +4561,67 @@ function setWheelValue(
   }
 
 
-  const target =
+  picker.wheel.scrollTop =
   item.offsetTop
   -
-  (
-    picker.wheel.clientHeight
-    -
-    item.offsetHeight
-  )
+  picker.wheel.clientHeight
+  /
+  2
+  +
+  item.offsetHeight
   /
   2;
-
-
-  picker.wheel.scrollTo({
-
-    top:target,
-
-    behavior:
-    smooth
-      ? "smooth"
-      : "auto"
-
-  });
 
 
   picker.value =
   value;
 
 
-  setTimeout(
-    ()=>{
-
-      keepWheelLooped(
-        pickerKey
-      );
-
-      updateWheelActive(
-        pickerKey
-      );
-
-    },
-    smooth
-      ? 160
-      : 0
+  updateWheel_(
+    key
   );
 
 }
 
 
-function snapWheel(
-  pickerKey
+function setTime_(
+  prefix,
+  value
 ){
 
-  const picker =
-  TIME_PICKERS[
-    pickerKey
-  ];
+  const [
+    h,
+    m
+  ] =
+  String(
+    value || "00:00"
+  )
+  .split(":");
 
 
-  const bestItem =
-  getNearestWheelItem(
-    pickerKey
+  setWheelValue_(
+    prefix+"Hour",
+    HOURS.includes(h)
+      ?
+      h
+      :
+      "00"
   );
 
 
-  if(!bestItem){
-    return;
-  }
-
-
-  const target =
-  bestItem.offsetTop
-  -
-  (
-    picker.wheel.clientHeight
-    -
-    bestItem.offsetHeight
-  )
-  /
-  2;
-
-
-  picker.wheel.scrollTo({
-
-    top:target,
-
-    behavior:"smooth"
-
-  });
-
-
-  picker.value =
-  bestItem.dataset.value;
-
-
-  setTimeout(
-    ()=>{
-
-      keepWheelLooped(
-        pickerKey
-      );
-
-      updateWheelActive(
-        pickerKey
-      );
-
-    },
-    160
+  setWheelValue_(
+    prefix+"Minute",
+    MINUTES.includes(m)
+      ?
+      m
+      :
+      "00"
   );
 
 }
 
 
-function getTimeValue(
+function getTime_(
   prefix
 ){
 
@@ -4135,109 +4640,150 @@ function getTimeValue(
 }
 
 
-function setTimeValue(
-  prefix,
-  hhmm
+function buildCategoryOptions_(
+  selected
 ){
 
-  const val =
-  String(
-    hhmm || ""
-  ).trim();
+  $fCategory.innerHTML =
+  "";
 
 
-  const [hh,mm] =
-  val
-  &&
-  val.includes(":")
-    ? val.split(":")
-    : ["00","00"];
-
-
-  const hour =
-  HOURS.includes(hh)
-    ? hh
-    : "00";
-
-
-  const minute =
-  MINUTES.includes(mm)
-    ? mm
-    : "00";
-
-
-  setWheelValue(
-    prefix+"Hour",
-    hour,
-    false
+  const empty =
+  document.createElement(
+    "option"
   );
 
 
-  setWheelValue(
-    prefix+"Minute",
-    minute,
-    false
+  empty.value =
+  "";
+
+
+  empty.textContent =
+  "Aucune";
+
+
+  $fCategory.appendChild(
+    empty
   );
 
-}
+
+  const list =
+  [
+    ...catLabel.entries()
+  ];
 
 
-function ensureWheelsInitialized_(){
+  list.sort(
+    (
+      a,
+      b
+    )=>
+      (
+        catOrder.get(
+          a[0]
+        )
+        ||
+        9999
+      )
+      -
+      (
+        catOrder.get(
+          b[0]
+        )
+        ||
+        9999
+      )
+  );
 
-  if(
-    WHEELS_INITIALIZED
+
+  for(
+    const [
+      key,
+      label
+    ]
+    of list
   ){
-    return;
+
+    const option =
+    document.createElement(
+      "option"
+    );
+
+
+    option.value =
+    label;
+
+
+    option.textContent =
+    label;
+
+
+    $fCategory.appendChild(
+      option
+    );
+
   }
 
 
-  buildWheel(
-    "startHour"
-  );
-
-  buildWheel(
-    "startMinute"
-  );
-
-  buildWheel(
-    "endHour"
-  );
-
-  buildWheel(
-    "endMinute"
-  );
-
-
-  WHEELS_INITIALIZED =
-  true;
+  $fCategory.value =
+  selected
+  ||
+  "";
 
 }
 
 
 function openEventForm(
   mode,
-  dateStr,
-  ev
+  date,
+  event=null
 ){
 
-  ensureWheelsInitialized_();
+  ensureWheels_();
 
 
-  FORM_STATE.mode =
-  mode;
+  FORM_STATE = {
+
+    mode,
+
+    dateStr:date,
+
+    originalEvent:event
+
+  };
 
 
-  FORM_STATE.dateStr =
-  dateStr;
-
-
-  FORM_STATE.originalEvent =
-  ev || null;
-
-
-  buildCategoryOptions(
-    ev?.category || ""
+  buildCategoryOptions_(
+    event?.category
+    ||
+    ""
   );
+
+
+  $fTitle.value =
+  event?.title
+  ||
+  "";
+
+
+  $fLocation.value =
+  event?.location
+  ||
+  "";
+
+
+  $fDetails.value =
+  event?.details
+  ||
+  "";
+
+
+  $formTitle.textContent =
+  mode === "edit"
+    ?
+    `Modifier — ${toFRDate(date)}`
+    :
+    `Ajouter — ${toFRDate(date)}`;
 
 
   $formOverlay.classList.add(
@@ -4248,73 +4794,20 @@ function openEventForm(
   requestAnimationFrame(
     ()=>{
 
-      if(
-        mode === "edit"
-      ){
-
-        $formTitle.textContent =
-        `Modifier — ${toFRDate(dateStr)}`;
-
-
-        $fTitle.value =
-        ev?.title || "";
+      setTime_(
+        "start",
+        event?.start
+        ||
+        "08:00"
+      );
 
 
-        $fLocation.value =
-        ev?.location || "";
-
-
-        $fDetails.value =
-        ev?.details || "";
-
-
-        setTimeValue(
-          "start",
-          ev?.start || "08:00"
-        );
-
-
-        setTimeValue(
-          "end",
-          ev?.end || "09:00"
-        );
-
-
-      }else{
-
-
-        $formTitle.textContent =
-        `Ajouter — ${toFRDate(dateStr)}`;
-
-
-        $fTitle.value =
-        "";
-
-
-        $fLocation.value =
-        "";
-
-
-        $fDetails.value =
-        "";
-
-
-        $fCategory.value =
-        "";
-
-
-        setTimeValue(
-          "start",
-          "08:00"
-        );
-
-
-        setTimeValue(
-          "end",
-          "09:00"
-        );
-
-      }
+      setTime_(
+        "end",
+        event?.end
+        ||
+        "09:00"
+      );
 
     }
   );
@@ -4331,7 +4824,95 @@ function closeEventForm(){
 }
 
 
-function setSaveButtonState(
+
+/* =========================================================
+   API AJOUT
+========================================================= */
+
+async function apiAddEvent_(
+  date,
+  payload
+){
+
+  const email =
+  getEmailLocal();
+
+
+  if(!email){
+
+    throw new Error(
+      "Email introuvable"
+    );
+
+  }
+
+
+  const cb =
+  "add_"
+  +
+  Math.random()
+    .toString(36)
+    .slice(2);
+
+
+  const url =
+  `${API}?view=planning_add`
+  +
+  `&email=${encodeURIComponent(email)}`
+  +
+  `&date=${encodeURIComponent(date)}`
+  +
+  `&start=${encodeURIComponent(payload.start)}`
+  +
+  `&end=${encodeURIComponent(payload.end)}`
+  +
+  `&title=${encodeURIComponent(payload.title)}`
+  +
+  `&category=${encodeURIComponent(payload.category)}`
+  +
+  `&location=${encodeURIComponent(payload.location)}`
+  +
+  `&details=${encodeURIComponent(payload.details)}`
+  +
+  `&nocache=1`
+  +
+  `&callback=${cb}`;
+
+
+  const res =
+  await jsonp(
+    url,
+    cb,
+    20000
+  );
+
+
+  if(
+    !res
+    ||
+    res.ok !== true
+  ){
+
+    throw new Error(
+      res?.error
+      ||
+      "Enregistrement impossible"
+    );
+
+  }
+
+
+  return res;
+
+}
+
+
+
+/* =========================================================
+   ENREGISTREMENT
+========================================================= */
+
+function setSaveState_(
   state
 ){
 
@@ -4357,8 +4938,9 @@ function setSaveButtonState(
     $btnFormSave.disabled =
     true;
 
+  }
 
-  }else if(
+  else if(
     state === "saved"
   ){
 
@@ -4374,8 +4956,9 @@ function setSaveButtonState(
     $btnFormSave.disabled =
     true;
 
+  }
 
-  }else{
+  else{
 
     $btnFormSave.textContent =
     "Enregistrer";
@@ -4389,12 +4972,15 @@ function setSaveButtonState(
 }
 
 
-function applySavedEventLocally_(
-  payload
+function addEventLocally_(
+  payload,
+  response
 ){
 
   if(
-    FORM_STATE.mode === "edit"
+    FORM_STATE.mode
+    ===
+    "edit"
     &&
     FORM_STATE.originalEvent
   ){
@@ -4403,11 +4989,11 @@ function applySavedEventLocally_(
     FORM_STATE.originalEvent;
 
 
-    const oldId =
+    const id =
     String(
-      old?.event_id
+      old.event_id
       ||
-      old?.id
+      old.id
       ||
       ""
     );
@@ -4415,20 +5001,10 @@ function applySavedEventLocally_(
 
     events =
     events.filter(
-      ev=>{
+      item=>{
 
         if(
-          oldId
-          &&
-          String(
-            ev?.event_id
-            ||
-            ev?.id
-            ||
-            ""
-          )
-          ===
-          oldId
+          item === old
         ){
 
           return false;
@@ -4436,7 +5012,26 @@ function applySavedEventLocally_(
         }
 
 
-        return ev !== old;
+        if(
+          id
+          &&
+          String(
+            item.event_id
+            ||
+            item.id
+            ||
+            ""
+          )
+          ===
+          id
+        ){
+
+          return false;
+
+        }
+
+
+        return true;
 
       }
     );
@@ -4444,7 +5039,7 @@ function applySavedEventLocally_(
   }
 
 
-  events.push({
+  const newEvent = {
 
     date:
     FORM_STATE.dateStr,
@@ -4452,14 +5047,14 @@ function applySavedEventLocally_(
     title:
     payload.title,
 
+    category:
+    payload.category,
+
     start:
     payload.start,
 
     end:
     payload.end,
-
-    category:
-    payload.category,
 
     location:
     payload.location,
@@ -4467,7 +5062,39 @@ function applySavedEventLocally_(
     details:
     payload.details
 
-  });
+  };
+
+
+  /*
+    Si Apps Script renvoie
+    l'identifiant, on le garde.
+  */
+
+  if(
+    response?.event_id
+  ){
+
+    newEvent.event_id =
+    response.event_id;
+
+  }
+
+
+  if(
+    response?.id
+    &&
+    !newEvent.event_id
+  ){
+
+    newEvent.id =
+    response.id;
+
+  }
+
+
+  events.push(
+    newEvent
+  );
 
 
   rebuildMaps();
@@ -4476,23 +5103,15 @@ function applySavedEventLocally_(
   renderMonth();
 
 
-  /*
-    On enlève l'ancien cache.
-    La prochaine synchronisation
-    écrira une version fraîche.
-  */
-  try{
-
-    localStorage.removeItem(
-      getCacheKey_()
-    );
-
-  }catch(e){}
+  savePlanningCache_({
+    ok:true,
+    events
+  });
 
 }
 
 
-async function saveEventForm(){
+async function saveEventForm_(){
 
   if(
     SAVE_IN_PROGRESS
@@ -4501,47 +5120,49 @@ async function saveEventForm(){
   }
 
 
-  const title =
-  String(
-    $fTitle.value || ""
-  ).trim();
+  const payload = {
+
+    title:
+    String(
+      $fTitle.value || ""
+    ).trim(),
+
+    category:
+    String(
+      $fCategory.value || ""
+    ).trim(),
+
+    location:
+    String(
+      $fLocation.value || ""
+    ).trim(),
+
+    details:
+    String(
+      $fDetails.value || ""
+    ).trim(),
+
+    start:
+    getTime_(
+      "start"
+    ),
+
+    end:
+    getTime_(
+      "end"
+    )
+
+  };
 
 
-  const category =
-  String(
-    $fCategory.value || ""
-  ).trim();
-
-
-  const location =
-  String(
-    $fLocation.value || ""
-  ).trim();
-
-
-  const details =
-  String(
-    $fDetails.value || ""
-  ).trim();
-
-
-  const start =
-  getTimeValue(
-    "start"
-  );
-
-
-  const end =
-  getTimeValue(
-    "end"
-  );
-
-
-  if(!title){
+  if(
+    !payload.title
+  ){
 
     alert(
       "Titre obligatoire."
     );
+
 
     return;
 
@@ -4549,66 +5170,72 @@ async function saveEventForm(){
 
 
   if(
-    end < start
+    payload.end
+    <
+    payload.start
   ){
 
     alert(
-      "Heure fin incorrecte."
+      "Heure de fin incorrecte."
     );
+
 
     return;
 
   }
 
 
-  const payload = {
-    title,
-    category,
-    location,
-    details,
-    start,
-    end
-  };
-
-
   SAVE_IN_PROGRESS =
   true;
 
 
-  setSaveButtonState(
+  setSaveState_(
     "saving"
   );
 
 
   try{
 
+    /*
+      MODIFICATION =
+      suppression ancienne ligne
+      puis ajout nouvelle ligne.
+    */
 
     if(
-      FORM_STATE.mode === "edit"
+      FORM_STATE.mode
+      ===
+      "edit"
       &&
       FORM_STATE.originalEvent
     ){
 
       await apiDeleteEvent_(
-        FORM_STATE.dateStr,
         FORM_STATE.originalEvent
       );
 
     }
 
 
+    const response =
     await apiAddEvent_(
       FORM_STATE.dateStr,
       payload
     );
 
 
-    applySavedEventLocally_(
-      payload
+    /*
+      L'ÉCRAN EST MODIFIÉ
+      IMMÉDIATEMENT.
+    */
+
+    addEventLocally_(
+      payload,
+      response
     );
 
 
-    setSaveButtonState(
+    setSaveState_(
       "saved"
     );
 
@@ -4617,7 +5244,7 @@ async function saveEventForm(){
       resolve=>
         setTimeout(
           resolve,
-          250
+          200
         )
     );
 
@@ -4632,10 +5259,11 @@ async function saveEventForm(){
 
 
     /*
-      Synchronisation fraîche
-      sans bloquer l'écran.
+      GOOGLE EST RELU APRÈS,
+      SANS ATTENTE VISUELLE.
     */
-    loadApi(
+
+    refreshPlanning_(
       true
     )
     .catch(
@@ -4643,437 +5271,55 @@ async function saveEventForm(){
     );
 
 
-  }catch(err){
-
+  }catch(error){
 
     alert(
-      "Erreur lors de l'enregistrement : "
+      "Erreur enregistrement : "
       +
       String(
-        err?.message
+        error?.message
         ||
-        err
+        error
       )
     );
 
-
-  }finally{
-
-
-    SAVE_IN_PROGRESS =
-    false;
-
-
-    setTimeout(
-      ()=>setSaveButtonState(
-        "normal"
-      ),
-      350
-    );
-
   }
+
+
+  SAVE_IN_PROGRESS =
+  false;
+
+
+  setTimeout(
+    ()=>setSaveState_(
+      "normal"
+    ),
+    300
+  );
 
 }
 
 
-/*
-  CACHE LOCAL
-*/
-function saveCache_(
-  payload
-){
 
-  try{
-
-    localStorage.setItem(
-      getCacheKey_(),
-      JSON.stringify({
-        savedAt:Date.now(),
-        payload
-      })
-    );
-
-  }catch(e){}
-
-}
-
-
-function loadCache_(){
-
-  try{
-
-    const raw =
-    localStorage.getItem(
-      getCacheKey_()
-    );
-
-
-    if(!raw){
-      return null;
-    }
-
-
-    const obj =
-    JSON.parse(raw);
-
-
-    if(
-      !obj
-      ||
-      !obj.payload
-    ){
-      return null;
-    }
-
-
-    if(
-      obj.savedAt
-      &&
-      Date.now()-obj.savedAt
-      >
-      CACHE_MAX_AGE_MS
-    ){
-
-      return null;
-
-    }
-
-
-    return obj.payload;
-
-
-  }catch(e){
-
-    return null;
-
-  }
-
-}
-
-
-function applyPlanningData_(
-  py,
-  pc
-){
-
-  events =
-  Array.isArray(
-    py?.events
-  )
-    ? py.events
-    : [];
-
-
-  categoriesRaw =
-  Array.isArray(
-    pc?.categories
-  )
-  &&
-  pc.categories.length
-    ? pc.categories
-    : DEFAULT_CATEGORIES.slice();
-
-
-  rebuildMaps();
-
-
-  renderLegend();
-
-
-  renderMonth();
-
-}
-
-
-/*
-  SYNCHRONISATION CORRIGÉE.
-
-  Même si on affiche le cache immédiatement,
-  on demande TOUJOURS ensuite la version
-  fraîche à Apps Script avec nocache=1.
-*/
-async function loadApi(
-  forceFresh=false
-){
-
-  if(
-    !API
-    ||
-    API.includes(
-      "COLLE_ICI"
-    )
-  ){
-
-    showStatus(
-      "API manquante",
-      "Mets ton URL exec dans const API."
-    );
-
-    return;
-
-  }
-
-
-  const cached =
-  loadCache_();
-
-
-  /*
-    Affichage instantané depuis le cache.
-  */
-  if(
-    !forceFresh
-    &&
-    cached?.py
-    &&
-    cached?.pc
-  ){
-
-    applyPlanningData_(
-      cached.py,
-      cached.pc
-    );
-
-  }
-
-
-  const cb1 =
-  "cb_py_"
-  +
-  Math.random()
-    .toString(36)
-    .slice(2);
-
-
-  const cb2 =
-  "cb_pc_"
-  +
-  Math.random()
-    .toString(36)
-    .slice(2);
-
-
-  try{
-
-
-    /*
-      nocache=1 est désormais TOUJOURS
-      utilisé sur le planning.
-    */
-    const planningUrl =
-    `${API}?view=planning_year`
-    +
-    `&year=${ACTIVE_YEAR}`
-    +
-    `&nocache=1`
-    +
-    `&callback=${cb1}`;
-
-
-    const catsUrl =
-    `${API}?view=planning_categories`
-    +
-    `&nocache=1`
-    +
-    `&callback=${cb2}`;
-
-
-    const [py,pc] =
-    await Promise.all(
-      [
-
-        jsonp(
-          planningUrl,
-          cb1
-        ),
-
-        jsonp(
-          catsUrl,
-          cb2
-        )
-
-      ]
-    );
-
-
-    if(
-      py?.ok === false
-    ){
-
-      throw new Error(
-        py?.error
-        ||
-        "planning_year invalide"
-      );
-
-    }
-
-
-    if(
-      pc?.ok === false
-    ){
-
-      throw new Error(
-        pc?.error
-        ||
-        "planning_categories invalide"
-      );
-
-    }
-
-
-    /*
-      Les données fraîches remplacent
-      l'affichage et le cache.
-    */
-    applyPlanningData_(
-      py,
-      pc
-    );
-
-
-    saveCache_({
-      py,
-      pc
-    });
-
-
-  }catch(e){
-
-
-    /*
-      Si le réseau plante mais qu'on avait
-      déjà un cache affiché, on le conserve.
-    */
-    if(
-      !forceFresh
-      &&
-      cached?.py
-      &&
-      cached?.pc
-    ){
-
-      return;
-
-    }
-
-
-    throw e;
-
-  }
-
-}
-
-
-/*
-  ÉVÉNEMENTS INTERFACE
-*/
-
-$btnAddEvent.addEventListener(
-  "click",
-  ()=>{
-
-    if(!_editDate){
-      return;
-    }
-
-    openEventForm(
-      "add",
-      _editDate,
-      null
-    );
-
-  }
-);
-
-
-$btnCloseEdit.addEventListener(
-  "click",
-  closeEdit
-);
-
-
-$editOverlay.addEventListener(
-  "click",
-  e=>{
-
-    if(
-      e.target ===
-      $editOverlay
-    ){
-
-      closeEdit();
-
-    }
-
-  }
-);
-
-
-$btnFormCancel.addEventListener(
-  "click",
-  closeEventForm
-);
-
-
-$btnFormClose.addEventListener(
-  "click",
-  closeEventForm
-);
-
-
-$btnFormSave.addEventListener(
-  "click",
-  saveEventForm
-);
-
-
-$formOverlay.addEventListener(
-  "click",
-  e=>{
-
-    if(
-      e.target ===
-      $formOverlay
-    ){
-
-      closeEventForm();
-
-    }
-
-  }
-);
-
+/* =========================================================
+   CLICS
+========================================================= */
 
 $grid.addEventListener(
   "click",
-  e=>{
+  event=>{
 
     const day =
-    e.target.closest(
+    event.target.closest(
       ".day"
     );
 
 
-    if(!day){
-      return;
-    }
-
-
     if(
-      day.classList.contains(
-        "is-empty"
-      )
+      !day
+      ||
+      !day.dataset.date
     ){
-      return;
-    }
-
-
-    const dateStr =
-    day.dataset.date;
-
-
-    if(!dateStr){
       return;
     }
 
@@ -5085,8 +5331,9 @@ $grid.addEventListener(
     ){
 
       openEdit(
-        dateStr
+        day.dataset.date
       );
+
 
       return;
 
@@ -5094,13 +5341,13 @@ $grid.addEventListener(
 
 
     if(
-      day.classList.contains(
-        "has-note"
+      eventsByDate.has(
+        day.dataset.date
       )
     ){
 
       openNote(
-        dateStr
+        day.dataset.date
       );
 
     }
@@ -5109,130 +5356,124 @@ $grid.addEventListener(
 );
 
 
-$noteClose.addEventListener(
-  "click",
-  closeNote
-);
+$("noteClose").onclick =
+closeNote;
 
 
-$noteOverlay.addEventListener(
-  "click",
-  e=>{
-
-    if(
-      e.target ===
-      $noteOverlay
-    ){
-
-      closeNote();
-
-    }
-
-  }
-);
+$("btnCloseEdit").onclick =
+closeEdit;
 
 
-document.addEventListener(
-  "keydown",
-  e=>{
+$("btnAddEvent").onclick =
+()=>{
 
-    if(
-      e.key === "Escape"
-    ){
+  if(
+    _editDate
+  ){
 
-      closeNote();
-
-      closeEdit();
-
-      closeEventForm();
-
-    }
+    openEventForm(
+      "add",
+      _editDate,
+      null
+    );
 
   }
-);
+
+};
 
 
-$("btnBack").addEventListener(
-  "click",
-  ()=>{
-
-    location.href =
-    BACK_URL;
-
-  }
-);
+$("btnFormCancel").onclick =
+closeEventForm;
 
 
-$btnPrev.addEventListener(
-  "click",
-  ()=>{
-
-    if(
-      currentMonth > 0
-    ){
-
-      currentMonth--;
-
-      renderMonth();
-
-    }
-
-  }
-);
+$("btnFormClose").onclick =
+closeEventForm;
 
 
-$btnNext.addEventListener(
-  "click",
-  ()=>{
-
-    if(
-      currentMonth < 11
-    ){
-
-      currentMonth++;
-
-      renderMonth();
-
-    }
-
-  }
-);
+$("btnFormSave").onclick =
+saveEventForm_;
 
 
-$btnLock.addEventListener(
-  "click",
-  async ()=>{
+$btnLock.onclick =
+()=>{
 
-    if(!IS_ADMIN){
-      return;
-    }
+  if(
+    IS_ADMIN
+  ){
 
-    await setEditMode(
+    setEditMode(
       !EDIT_MODE
     );
 
   }
-);
+
+};
 
 
-/*
-  DÉMARRAGE
-*/
-(async function(){
+$("btnBack").onclick =
+()=>{
 
-  EDIT_MODE =
-  false;
+  location.href =
+  BACK_URL;
 
-
-  ACTIVE_YEAR =
-  PUBLIC_YEAR;
+};
 
 
-  rebuildMaps();
+$btnPrev.onclick =
+()=>{
+
+  if(
+    currentMonth > 0
+  ){
+
+    currentMonth--;
 
 
-  renderLegend();
+    renderMonth();
 
+  }
+
+};
+
+
+$btnNext.onclick =
+()=>{
+
+  if(
+    currentMonth < 11
+  ){
+
+    currentMonth++;
+
+
+    renderMonth();
+
+  }
+
+};
+
+
+
+/* =========================================================
+   DÉMARRAGE ULTRA RAPIDE
+========================================================= */
+
+(function startPlanning(){
+
+  /*
+    1.
+    LE CADENAS APPARAÎT
+    IMMÉDIATEMENT SI LE RÔLE
+    ADMIN EST DÉJÀ CONNU.
+  */
+
+  showLocalAdminImmediately_();
+
+
+  /*
+    2.
+    ANNÉE / MOIS IMMÉDIATS.
+  */
 
   const now =
   new Date();
@@ -5242,63 +5483,84 @@ $btnLock.addEventListener(
   now.getFullYear()
   ===
   PUBLIC_YEAR
-    ? now.getMonth()
-    : 0;
+    ?
+    now.getMonth()
+    :
+    0;
 
 
-  renderMonth();
+  /*
+    3.
+    CHARGE UNIQUEMENT
+    LE TÉLÉPHONE.
+    AUCUN GOOGLE.
+  */
+
+  const local =
+  loadLocalYear_();
 
 
   renderYearControl_();
 
 
   /*
-    Planning + contrôle du rôle
-    démarrent en parallèle.
+    4.
+    LE PLANNING EST DÉJÀ
+    AFFICHÉ À CE STADE.
   */
-  const planningPromise =
-  loadApi()
-    .catch(
-      ()=>{}
-    );
 
 
-  const rolePromise =
-  loadMyRole_()
-    .catch(
-      ()=>{
+  /*
+    5.
+    SYNCHRONISATION GOOGLE
+    DERRIÈRE.
+  */
 
-        IS_ADMIN =
-        false;
-
-      }
-    );
-
-
-  await rolePromise;
+  refreshPlanning_(
+    false
+  )
+  .catch(
+    ()=>{}
+  );
 
 
-  if(IS_ADMIN){
+  /*
+    6.
+    LES CATÉGORIES NE SONT
+    RECHARGÉES QUE SI ON
+    N'EN A PAS EN CACHE.
+  */
 
-    $btnLock.style.display =
-    "inline-block";
+  if(
+    !local.categoriesCache
+  ){
 
-  }else{
-
-    $btnLock.style.display =
-    "none";
+    refreshCategories_()
+      .catch(
+        ()=>{}
+      );
 
   }
 
 
-  renderYearControl_();
+  /*
+    7.
+    CONTRÔLE ADMIN
+    EN ARRIÈRE-PLAN.
 
+    IL NE BLOQUE PLUS
+    LE CADENAS.
+  */
 
-  await planningPromise;
+  verifyRoleInBackground_()
+    .catch(
+      ()=>{}
+    );
 
 })();
 
 </script>
 
 </body>
-  </html>
+
+</html>
