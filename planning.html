@@ -86,7 +86,7 @@
     }
 
     .yearSelect{
-      padding:5px 26px 5px 10px;
+      padding:5px 28px 5px 10px;
       border-radius:12px;
       border:1px solid rgba(255,255,255,.22);
       background:rgba(0,0,0,.20);
@@ -708,15 +708,9 @@
 
     <div class="topbar">
 
-      <h1 class="title" id="titleYear">
+      <h1 class="title">
         <span>PLANNING</span>
-        <span id="yearText">2026</span>
-
-        <select
-          id="yearSelect"
-          class="yearSelect"
-          style="display:none;">
-        </select>
+        <span id="yearControl">2026</span>
       </h1>
 
       <div style="display:flex;gap:10px;align-items:center;">
@@ -746,23 +740,13 @@
 
     <div class="monthbar">
 
-      <button
-        class="navbtn"
-        id="btnPrev"
-        aria-label="Mois précédent">
+      <button class="navbtn" id="btnPrev" aria-label="Mois précédent">
         ‹
       </button>
 
-      <h2
-        class="monthname"
-        id="monthName">
-        —
-      </h2>
+      <h2 class="monthname" id="monthName">—</h2>
 
-      <button
-        class="navbtn"
-        id="btnNext"
-        aria-label="Mois suivant">
+      <button class="navbtn" id="btnNext" aria-label="Mois suivant">
         ›
       </button>
 
@@ -780,18 +764,12 @@
         <div>Dim</div>
       </div>
 
-      <div
-        class="grid"
-        id="grid">
-      </div>
+      <div class="grid" id="grid"></div>
 
     </section>
 
     <section class="legend">
-      <div
-        class="legendGrid"
-        id="legendGrid">
-      </div>
+      <div class="legendGrid" id="legendGrid"></div>
     </section>
 
   </div>
@@ -803,13 +781,8 @@
       <span>⚠️</span>
 
       <div>
-        <div id="statusTxt">
-          Chargement…
-        </div>
-
-        <div
-          class="small"
-          id="statusSub">
+        <div id="statusTxt">Chargement…</div>
+        <div class="small" id="statusSub">
           Si ça reste, l’URL API est mauvaise.
         </div>
       </div>
@@ -818,74 +791,41 @@
 
   </div>
 
-  <div
-    class="noteOverlay"
-    id="noteOverlay"
-    aria-hidden="true">
+  <div class="noteOverlay" id="noteOverlay" aria-hidden="true">
 
-    <div
-      class="noteSheet"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Note du jour">
+    <div class="noteSheet" role="dialog" aria-modal="true">
 
       <div class="noteHead">
 
-        <div
-          class="noteTitle"
-          id="noteTitle">
-          —
-        </div>
+        <div class="noteTitle" id="noteTitle">—</div>
 
-        <button
-          class="noteClose"
-          id="noteClose">
+        <button class="noteClose" id="noteClose">
           Fermer
         </button>
 
       </div>
 
-      <div
-        class="noteBody"
-        id="noteBody">
-      </div>
+      <div class="noteBody" id="noteBody"></div>
 
     </div>
 
   </div>
 
-  <div
-    class="editOverlay"
-    id="editOverlay"
-    aria-hidden="true">
+  <div class="editOverlay" id="editOverlay" aria-hidden="true">
 
-    <div
-      class="editSheet"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Gestion des événements">
+    <div class="editSheet" role="dialog" aria-modal="true">
 
       <div class="editHead">
 
-        <div
-          class="editTitle"
-          id="editTitle">
-          —
-        </div>
+        <div class="editTitle" id="editTitle">—</div>
 
         <div class="editActions">
 
-          <button
-            class="iconBtn"
-            id="btnAddEvent"
-            title="Ajouter">
+          <button class="iconBtn" id="btnAddEvent">
             ＋
           </button>
 
-          <button
-            class="iconBtn"
-            id="btnCloseEdit"
-            title="Fermer">
+          <button class="iconBtn" id="btnCloseEdit">
             ✕
           </button>
 
@@ -893,39 +833,25 @@
 
       </div>
 
-      <div
-        class="editBody"
-        id="editBody">
-      </div>
+      <div class="editBody" id="editBody"></div>
 
     </div>
 
   </div>
 
-  <div
-    class="formOverlay"
-    id="formOverlay"
-    aria-hidden="true">
+  <div class="formOverlay" id="formOverlay" aria-hidden="true">
 
-    <div
-      class="formSheet"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Formulaire événement">
+    <div class="formSheet" role="dialog" aria-modal="true">
 
       <div class="formHead">
 
-        <div
-          class="formTitle"
-          id="formTitle">
+        <div class="formTitle" id="formTitle">
           Événement
         </div>
 
         <div class="formActions">
 
-          <button
-            class="iconBtn"
-            id="btnFormCancel">
+          <button class="iconBtn" id="btnFormCancel">
             ✕
           </button>
 
@@ -936,76 +862,37 @@
       <div class="formBody">
 
         <div class="formBlock">
-
-          <label
-            class="formLabel"
-            for="fTitle">
-            Titre
-          </label>
-
-          <input
-            class="fieldText"
-            id="fTitle"
-            type="text"
-            placeholder="Titre de l’événement" />
-
+          <label class="formLabel" for="fTitle">Titre</label>
+          <input class="fieldText" id="fTitle" type="text" placeholder="Titre de l’événement" />
         </div>
 
         <div class="formBlock">
-
-          <label
-            class="formLabel"
-            for="fCategory">
-            Catégorie
-          </label>
-
-          <select
-            class="fieldSelect"
-            id="fCategory">
-          </select>
-
+          <label class="formLabel" for="fCategory">Catégorie</label>
+          <select class="fieldSelect" id="fCategory"></select>
         </div>
 
         <div class="timePickerGroup">
 
           <div class="timeSection">
 
-            <label class="timeLabel">
-              Heure début
-            </label>
+            <label class="timeLabel">Heure début</label>
 
             <div class="timePickerRow">
 
-              <div
-                class="wheel"
-                id="startHourWheel">
-
+              <div class="wheel" id="startHourWheel">
                 <div class="wheelFadeTop"></div>
                 <div class="wheelFadeBottom"></div>
                 <div class="wheelFocus"></div>
-
-                <div
-                  class="wheelInner"
-                  id="startHourInner">
-                </div>
-
+                <div class="wheelInner" id="startHourInner"></div>
               </div>
 
               <div class="timeColon">:</div>
 
-              <div
-                class="wheel"
-                id="startMinuteWheel">
-
+              <div class="wheel" id="startMinuteWheel">
                 <div class="wheelFadeTop"></div>
                 <div class="wheelFadeBottom"></div>
                 <div class="wheelFocus"></div>
-
-                <div
-                  class="wheelInner"
-                  id="startMinuteInner">
-                </div>
-
+                <div class="wheelInner" id="startMinuteInner"></div>
               </div>
 
             </div>
@@ -1014,42 +901,24 @@
 
           <div class="timeSection">
 
-            <label class="timeLabel">
-              Heure fin
-            </label>
+            <label class="timeLabel">Heure fin</label>
 
             <div class="timePickerRow">
 
-              <div
-                class="wheel"
-                id="endHourWheel">
-
+              <div class="wheel" id="endHourWheel">
                 <div class="wheelFadeTop"></div>
                 <div class="wheelFadeBottom"></div>
                 <div class="wheelFocus"></div>
-
-                <div
-                  class="wheelInner"
-                  id="endHourInner">
-                </div>
-
+                <div class="wheelInner" id="endHourInner"></div>
               </div>
 
               <div class="timeColon">:</div>
 
-              <div
-                class="wheel"
-                id="endMinuteWheel">
-
+              <div class="wheel" id="endMinuteWheel">
                 <div class="wheelFadeTop"></div>
                 <div class="wheelFadeBottom"></div>
                 <div class="wheelFocus"></div>
-
-                <div
-                  class="wheelInner"
-                  id="endMinuteInner">
-                </div>
-
+                <div class="wheelInner" id="endMinuteInner"></div>
               </div>
 
             </div>
@@ -1059,53 +928,18 @@
         </div>
 
         <div class="formBlock">
-
-          <label
-            class="formLabel"
-            for="fLocation">
-            Lieu
-          </label>
-
-          <input
-            class="fieldText"
-            id="fLocation"
-            type="text"
-            placeholder="Lieu (optionnel)" />
-
+          <label class="formLabel" for="fLocation">Lieu</label>
+          <input class="fieldText" id="fLocation" type="text" placeholder="Lieu (optionnel)" />
         </div>
 
         <div class="formBlock">
-
-          <label
-            class="formLabel"
-            for="fDetails">
-            Détails / note
-          </label>
-
-          <textarea
-            class="fieldArea"
-            id="fDetails"
-            placeholder="Détails (optionnel)">
-          </textarea>
-
+          <label class="formLabel" for="fDetails">Détails / note</label>
+          <textarea class="fieldArea" id="fDetails" placeholder="Détails (optionnel)"></textarea>
         </div>
 
-        <div
-          class="formActions"
-          style="justify-content:flex-end;padding-bottom:2px;">
-
-          <button
-            class="btn"
-            id="btnFormClose">
-            Annuler
-          </button>
-
-          <button
-            class="btn"
-            id="btnFormSave">
-            Enregistrer
-          </button>
-
+        <div class="formActions" style="justify-content:flex-end;padding-bottom:2px;">
+          <button class="btn" id="btnFormClose">Annuler</button>
+          <button class="btn" id="btnFormSave">Enregistrer</button>
         </div>
 
       </div>
@@ -1116,3235 +950,2450 @@
 
 <script>
 
-  const API =
-    "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+const API =
+"https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-  const BACK_URL = "index.html";
+const BACK_URL = "index.html";
 
-  /*
-    ANNÉE PUBLIQUE
-    Les utilisateurs non admin restent sur cette année.
-  */
-  const PUBLIC_YEAR = 2026;
+const PUBLIC_YEAR = 2026;
 
-  /*
-    Les années admin seront chargées automatiquement
-    depuis l'onglet PlanningYears.
-  */
-  let ADMIN_YEARS = [PUBLIC_YEAR];
+let ACTIVE_YEAR = PUBLIC_YEAR;
 
-  /*
-    Année réellement affichée.
-  */
-  let ACTIVE_YEAR = PUBLIC_YEAR;
+let ADMIN_YEARS = [PUBLIC_YEAR];
 
-  const CACHE_MAX_AGE_MS =
-    1000 * 60 * 60 * 24 * 7;
+const CACHE_MAX_AGE_MS =
+1000 * 60 * 60 * 24 * 7;
 
-  const LS_EMAIL =
-    "cs_portail_email_v1";
+const LS_EMAIL =
+"cs_portail_email_v1";
 
-  function getCacheKey_(){
+function getCacheKey_(){
+  return `cs_planning_cache_v1_${ACTIVE_YEAR}`;
+}
 
-    return `cs_planning_cache_v1_${ACTIVE_YEAR}`;
+const DEFAULT_CATEGORIES = [
+  {category:"FMA centre",color:"#ff2d2d",order:1},
+  {category:"FMA équipe 1",color:"#24d36a",order:2},
+  {category:"FMA équipe 2",color:"#f6a000",order:3},
+  {category:"JSP",color:"#4aa8ff",order:4},
+  {category:"Navette",color:"#2f79ff",order:5},
+  {category:"RECSEC",color:"#a081ff",order:6},
+  {category:"Sainte Barbe",color:"#ff5a5a",order:7}
+];
 
+const OVERRIDE_COLORS = {
+  "fma centre":"#ff2d2d"
+};
+
+const $ = id =>
+document.getElementById(id);
+
+const $grid = $("grid");
+const $monthName = $("monthName");
+const $legendGrid = $("legendGrid");
+const $btnPrev = $("btnPrev");
+const $btnNext = $("btnNext");
+const $status = $("status");
+const $statusTxt = $("statusTxt");
+const $statusSub = $("statusSub");
+const $btnLock = $("btnLock");
+const $editLabel = $("editLabel");
+const $yearControl = $("yearControl");
+
+const $noteOverlay = $("noteOverlay");
+const $noteTitle = $("noteTitle");
+const $noteBody = $("noteBody");
+const $noteClose = $("noteClose");
+
+const $editOverlay = $("editOverlay");
+const $editTitle = $("editTitle");
+const $editBody = $("editBody");
+const $btnAddEvent = $("btnAddEvent");
+const $btnCloseEdit = $("btnCloseEdit");
+
+const $formOverlay = $("formOverlay");
+const $formTitle = $("formTitle");
+const $fTitle = $("fTitle");
+const $fCategory = $("fCategory");
+const $fLocation = $("fLocation");
+const $fDetails = $("fDetails");
+const $btnFormCancel = $("btnFormCancel");
+const $btnFormClose = $("btnFormClose");
+const $btnFormSave = $("btnFormSave");
+
+const monthsFR = [
+"Janvier","Février","Mars","Avril","Mai","Juin",
+"Juillet","Août","Septembre","Octobre","Novembre","Décembre"
+];
+
+const dowsFR = [
+"Dim","Lun","Mar","Mer","Jeu","Ven","Sam"
+];
+
+let IS_ADMIN = false;
+let EDIT_MODE = false;
+let events = [];
+let categoriesRaw = DEFAULT_CATEGORIES.slice();
+
+let eventsByDate = new Map();
+let catColor = new Map();
+let catLabel = new Map();
+let catOrder = new Map();
+let firstCatByDate = new Map();
+let hasNoteByDate = new Map();
+
+let currentMonth = 0;
+
+let _editDate = "";
+
+const HOURS =
+Array.from({length:24},(_,i)=>String(i).padStart(2,"0"));
+
+const MINUTES = [
+"00","15","30","45"
+];
+
+const LOOP_DUPLICATES = 15;
+
+let FORM_STATE = {
+  mode:"add",
+  dateStr:"",
+  originalEvent:null
+};
+
+const TIME_PICKERS = {
+
+  startHour:{
+    wheel:$("startHourWheel"),
+    inner:$("startHourInner"),
+    values:HOURS,
+    value:"08",
+    timer:null,
+    looping:true
+  },
+
+  startMinute:{
+    wheel:$("startMinuteWheel"),
+    inner:$("startMinuteInner"),
+    values:MINUTES,
+    value:"00",
+    timer:null,
+    looping:true
+  },
+
+  endHour:{
+    wheel:$("endHourWheel"),
+    inner:$("endHourInner"),
+    values:HOURS,
+    value:"09",
+    timer:null,
+    looping:true
+  },
+
+  endMinute:{
+    wheel:$("endMinuteWheel"),
+    inner:$("endMinuteInner"),
+    values:MINUTES,
+    value:"00",
+    timer:null,
+    looping:true
   }
 
-  const DEFAULT_CATEGORIES = [
+};
 
-    {
-      category:"FMA centre",
-      color:"#ff2d2d",
-      order:1
-    },
+function norm(s){
 
-    {
-      category:"FMA équipe 1",
-      color:"#24d36a",
-      order:2
-    },
+  return String(s||"")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .replace(/['’]/g,"")
+    .replace(/\s+/g," ");
 
-    {
-      category:"FMA équipe 2",
-      color:"#f6a000",
-      order:3
-    },
+}
 
-    {
-      category:"JSP",
-      color:"#4aa8ff",
-      order:4
-    },
+function escapeHtml(s){
 
-    {
-      category:"Navette",
-      color:"#2f79ff",
-      order:5
-    },
-
-    {
-      category:"RECSEC",
-      color:"#a081ff",
-      order:6
-    },
-
-    {
-      category:"Sainte Barbe",
-      color:"#ff5a5a",
-      order:7
-    }
-
-  ];
-
-  const OVERRIDE_COLORS = {
-
-    "fma centre":"#ff2d2d"
-
-  };
-
-  const $ =
-    (id)=>document.getElementById(id);
-
-  const $grid =
-    $("grid");
-
-  const $monthName =
-    $("monthName");
-
-  const $legendGrid =
-    $("legendGrid");
-
-  const $btnPrev =
-    $("btnPrev");
-
-  const $btnNext =
-    $("btnNext");
-
-  const $status =
-    $("status");
-
-  const $statusTxt =
-    $("statusTxt");
-
-  const $statusSub =
-    $("statusSub");
-
-  const $btnLock =
-    $("btnLock");
-
-  const $editLabel =
-    $("editLabel");
-
-  const $yearText =
-    $("yearText");
-
-  const $yearSelect =
-    $("yearSelect");
-
-  const $noteOverlay =
-    $("noteOverlay");
-
-  const $noteTitle =
-    $("noteTitle");
-
-  const $noteBody =
-    $("noteBody");
-
-  const $noteClose =
-    $("noteClose");
-
-  const $editOverlay =
-    $("editOverlay");
-
-  const $editTitle =
-    $("editTitle");
-
-  const $editBody =
-    $("editBody");
-
-  const $btnAddEvent =
-    $("btnAddEvent");
-
-  const $btnCloseEdit =
-    $("btnCloseEdit");
-
-  const $formOverlay =
-    $("formOverlay");
-
-  const $formTitle =
-    $("formTitle");
-
-  const $fTitle =
-    $("fTitle");
-
-  const $fCategory =
-    $("fCategory");
-
-  const $fLocation =
-    $("fLocation");
-
-  const $fDetails =
-    $("fDetails");
-
-  const $btnFormCancel =
-    $("btnFormCancel");
-
-  const $btnFormClose =
-    $("btnFormClose");
-
-  const $btnFormSave =
-    $("btnFormSave");
-
-  const monthsFR = [
-
-    "Janvier",
-    "Février",
-    "Mars",
-    "Avril",
-    "Mai",
-    "Juin",
-    "Juillet",
-    "Août",
-    "Septembre",
-    "Octobre",
-    "Novembre",
-    "Décembre"
-
-  ];
-
-  const dowsFR = [
-
-    "Dim",
-    "Lun",
-    "Mar",
-    "Mer",
-    "Jeu",
-    "Ven",
-    "Sam"
-
-  ];
-
-  let IS_ADMIN =
-    false;
-
-  let EDIT_MODE =
-    false;
-
-  let events =
-    [];
-
-  let categoriesRaw =
-    DEFAULT_CATEGORIES.slice();
-
-  let eventsByDate =
-    new Map();
-
-  let catColor =
-    new Map();
-
-  let catLabel =
-    new Map();
-
-  let catOrder =
-    new Map();
-
-  let firstCatByDate =
-    new Map();
-
-  let hasNoteByDate =
-    new Map();
-
-  let currentMonth =
-    0;
-
-  let _editDate =
-    "";
-
-  const HOURS =
-    Array.from(
-      {length:24},
-      (_,i)=>String(i).padStart(2,"0")
-    );
-
-  const MINUTES = [
-
-    "00",
-    "15",
-    "30",
-    "45"
-
-  ];
-
-  const LOOP_DUPLICATES =
-    15;
-
-  let FORM_STATE = {
-
-    mode:"add",
-    dateStr:"",
-    originalEvent:null
-
-  };
-
-  const TIME_PICKERS = {
-
-    startHour:{
-      wheel:$("startHourWheel"),
-      inner:$("startHourInner"),
-      values:HOURS,
-      value:"08",
-      timer:null,
-      looping:true
-    },
-
-    startMinute:{
-      wheel:$("startMinuteWheel"),
-      inner:$("startMinuteInner"),
-      values:MINUTES,
-      value:"00",
-      timer:null,
-      looping:true
-    },
-
-    endHour:{
-      wheel:$("endHourWheel"),
-      inner:$("endHourInner"),
-      values:HOURS,
-      value:"09",
-      timer:null,
-      looping:true
-    },
-
-    endMinute:{
-      wheel:$("endMinuteWheel"),
-      inner:$("endMinuteInner"),
-      values:MINUTES,
-      value:"00",
-      timer:null,
-      looping:true
-    }
-
-  };
-
-  function norm(s){
-
-    return String(s||"")
-      .trim()
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g,"")
-      .replace(/['’]/g,"")
-      .replace(/\s+/g," ");
-
-  }
-
-  function escapeHtml(s){
-
-    return (
-      s==null
-        ? ""
-        : String(s)
-    )
+  return (s==null ? "" : String(s))
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
     .replaceAll(">","&gt;")
     .replaceAll('"',"&quot;")
     .replaceAll("'","&#039;");
 
+}
+
+function ymd(d){
+
+  const y =
+  d.getFullYear();
+
+  const m =
+  String(d.getMonth()+1).padStart(2,"0");
+
+  const dd =
+  String(d.getDate()).padStart(2,"0");
+
+  return `${y}-${m}-${dd}`;
+
+}
+
+function firstMondayGrid(year,monthIndex){
+
+  const d =
+  new Date(year,monthIndex,1);
+
+  const js =
+  d.getDay();
+
+  const offset =
+  js===0 ? 6 : js-1;
+
+  d.setDate(
+    d.getDate()-offset
+  );
+
+  d.setHours(12,0,0,0);
+
+  return d;
+
+}
+
+function toFRDate(ymdStr){
+
+  const [y,m,d] =
+  String(ymdStr||"").split("-");
+
+  if(!y||!m||!d){
+    return ymdStr;
   }
 
-  function ymd(d){
+  const dt =
+  new Date(
+    Number(y),
+    Number(m)-1,
+    Number(d),
+    12,0,0,0
+  );
 
-    const y =
-      d.getFullYear();
+  const dow =
+  dowsFR[dt.getDay()];
 
-    const m =
-      String(
-        d.getMonth()+1
-      ).padStart(2,"0");
+  return `${dow} ${String(d).padStart(2,"0")}/${String(m).padStart(2,"0")}/${y}`;
 
-    const dd =
-      String(
-        d.getDate()
-      ).padStart(2,"0");
+}
 
-    return `${y}-${m}-${dd}`;
+function formatTimeRange(start,end){
 
+  const s =
+  String(start||"").trim();
+
+  const e =
+  String(end||"").trim();
+
+  if(s && e){
+    return `${s}–${e}`;
   }
 
-  function firstMondayGrid(
-    year,
-    monthIndex
-  ){
-
-    const d =
-      new Date(
-        year,
-        monthIndex,
-        1
-      );
-
-    const js =
-      d.getDay();
-
-    const offset =
-      (js===0)
-        ? 6
-        : (js-1);
-
-    d.setDate(
-      d.getDate()-offset
-    );
-
-    d.setHours(
-      12,
-      0,
-      0,
-      0
-    );
-
-    return d;
-
+  if(s){
+    return s;
   }
 
-  function toFRDate(
-    ymdStr
-  ){
-
-    const [
-      y,
-      m,
-      d
-    ] =
-      String(
-        ymdStr||""
-      ).split("-");
-
-    if(
-      !y ||
-      !m ||
-      !d
-    ){
-      return ymdStr;
-    }
-
-    const dt =
-      new Date(
-        Number(y),
-        Number(m)-1,
-        Number(d),
-        12,
-        0,
-        0,
-        0
-      );
-
-    const dow =
-      dowsFR[
-        dt.getDay()
-      ];
-
-    return (
-      `${dow} ` +
-      `${String(d).padStart(2,"0")}/` +
-      `${String(m).padStart(2,"0")}/` +
-      `${y}`
-    );
-
+  if(e){
+    return e;
   }
 
-  function formatTimeRange(
-    start,
-    end
-  ){
+  return "";
 
-    const s =
-      String(
-        start||""
-      ).trim();
+}
 
-    const e =
-      String(
-        end||""
-      ).trim();
+function getEmailLocal(){
 
-    if(
-      s &&
-      e
-    ){
-      return `${s}–${e}`;
-    }
+  return (
+    localStorage.getItem(LS_EMAIL)
+    ||
+    ""
+  )
+  .trim()
+  .toLowerCase();
 
-    if(s){
-      return s;
-    }
+}
 
-    if(e){
-      return e;
-    }
+function showStatus(txt,sub){
 
-    return "";
+  $statusTxt.textContent =
+  txt || "";
 
-  }
+  $statusSub.textContent =
+  sub || "";
 
-  function getEmailLocal(){
+  $status.style.display =
+  "block";
 
-    return (
-      localStorage
-        .getItem(
-          LS_EMAIL
-        ) || ""
-    )
-    .trim()
-    .toLowerCase();
+}
 
-  }
+function hideStatus(){
 
-  function showStatus(
-    txt,
-    sub
-  ){
+  $status.style.display =
+  "none";
 
-    $statusTxt.textContent =
-      txt || "";
+}
 
-    $statusSub.textContent =
-      sub || "";
+function jsonp(url,cbName,timeoutMs=15000){
 
-    $status.style.display =
-      "block";
+  return new Promise((resolve,reject)=>{
 
-  }
+    const script =
+    document.createElement("script");
 
-  function hideStatus(){
+    const cleanup = ()=>{
 
-    $status.style.display =
-      "none";
+      script.remove();
 
-  }
-
-  function jsonp(
-    url,
-    cbName,
-    timeoutMs=15000
-  ){
-
-    return new Promise(
-      (
-        resolve,
-        reject
-      )=>{
-
-        const script =
-          document.createElement(
-            "script"
-          );
-
-        const cleanup =
-          ()=>{
-
-            script.remove();
-
-            try{
-
-              delete window[
-                cbName
-              ];
-
-            }catch(e){
-
-              window[
-                cbName
-              ] =
-                undefined;
-
-            }
-
-          };
-
-        const timer =
-          setTimeout(
-            ()=>{
-
-              cleanup();
-
-              reject(
-                new Error(
-                  "Timeout JSONP"
-                )
-              );
-
-            },
-            timeoutMs
-          );
-
-        window[
-          cbName
-        ] =
-          (data)=>{
-
-            clearTimeout(
-              timer
-            );
-
-            cleanup();
-
-            resolve(
-              data
-            );
-
-          };
-
-        const sep =
-          url.includes("?")
-            ? "&"
-            : "?";
-
-        script.src =
-          url +
-          sep +
-          "t=" +
-          Date.now();
-
-        script.onerror =
-          ()=>{
-
-            clearTimeout(
-              timer
-            );
-
-            cleanup();
-
-            reject(
-              new Error(
-                "Erreur JSONP"
-              )
-            );
-
-          };
-
-        document.head
-          .appendChild(
-            script
-          );
-
+      try{
+        delete window[cbName];
+      }catch(e){
+        window[cbName] = undefined;
       }
-    );
+
+    };
+
+    const timer =
+    setTimeout(()=>{
+
+      cleanup();
+
+      reject(
+        new Error("Timeout JSONP")
+      );
+
+    },timeoutMs);
+
+    window[cbName] = data =>{
+
+      clearTimeout(timer);
+
+      cleanup();
+
+      resolve(data);
+
+    };
+
+    const sep =
+    url.includes("?") ? "&" : "?";
+
+    script.src =
+    url +
+    sep +
+    "t=" +
+    Date.now();
+
+    script.onerror = ()=>{
+
+      clearTimeout(timer);
+
+      cleanup();
+
+      reject(
+        new Error("Erreur JSONP")
+      );
+
+    };
+
+    document.head.appendChild(script);
+
+  });
+
+}
+
+async function loadMyRole_(){
+
+  const email =
+  getEmailLocal();
+
+  if(!email){
+
+    IS_ADMIN = false;
+
+    return;
 
   }
 
-  async function loadMyRole_(){
+  const cb =
+  "cb_auth_" +
+  Math.random()
+    .toString(36)
+    .slice(2);
 
-    const email =
-      getEmailLocal();
+  const url =
+  `${API}?view=auth_check` +
+  `&email=${encodeURIComponent(email)}` +
+  `&nocache=1` +
+  `&callback=${cb}`;
 
-    if(!email){
+  const res =
+  await jsonp(
+    url,
+    cb,
+    20000
+  );
 
-      IS_ADMIN =
-        false;
+  IS_ADMIN =
+  !!(
+    res &&
+    res.ok===true &&
+    String(res.role||"").toLowerCase()==="admin"
+  );
 
-      return;
+}
 
-    }
+async function loadPlanningYears_(){
 
-    const cb =
-      "cb_auth_" +
-      Math.random()
-        .toString(36)
-        .slice(2);
+  const cb =
+  "cb_years_" +
+  Math.random()
+    .toString(36)
+    .slice(2);
 
-    const url =
-      `${API}?view=auth_check` +
-      `&email=${encodeURIComponent(email)}` +
-      `&nocache=1` +
-      `&callback=${cb}`;
+  const url =
+  `${API}?view=planning_years_list` +
+  `&nocache=1` +
+  `&callback=${cb}`;
+
+  try{
 
     const res =
-      await jsonp(
-        url,
-        cb,
-        20000
-      );
-
-    IS_ADMIN =
-      !!(
-        res &&
-        res.ok===true &&
-        String(
-          res.role||""
-        )
-        .toLowerCase()
-        ===
-        "admin"
-      );
-
-  }
-
-  /*
-    Charge automatiquement les années
-    disponibles dans PlanningYears.
-  */
-  async function loadPlanningYears_(){
-
-    const cb =
-      "cb_years_" +
-      Math.random()
-        .toString(36)
-        .slice(2);
-
-    const url =
-      `${API}?view=planning_years_list` +
-      `&nocache=1` +
-      `&callback=${cb}`;
-
-    try{
-
-      const res =
-        await jsonp(
-          url,
-          cb,
-          20000
-        );
-
-      const rawYears =
-        Array.isArray(
-          res?.years
-        )
-          ? res.years
-          : [];
-
-      const years =
-        rawYears
-          .map(
-            item=>{
-
-              if(
-                typeof item
-                ===
-                "number"
-              ){
-                return item;
-              }
-
-              if(
-                typeof item
-                ===
-                "string"
-              ){
-                return Number(
-                  item
-                );
-              }
-
-              return Number(
-                item?.year
-              );
-
-            }
-          )
-          .filter(
-            year=>
-              Number.isInteger(
-                year
-              )
-              &&
-              year>=2000
-              &&
-              year<=2100
-          );
-
-      ADMIN_YEARS =
-        [
-          ...new Set(
-            [
-              PUBLIC_YEAR,
-              ...years
-            ]
-          )
-        ]
-        .sort(
-          (a,b)=>a-b
-        );
-
-    }catch(e){
-
-      ADMIN_YEARS =
-        [
-          PUBLIC_YEAR
-        ];
-
-    }
-
-  }
-
-  function rebuildMaps(){
-
-    eventsByDate =
-      new Map();
-
-    hasNoteByDate =
-      new Map();
-
-    for(
-      const ev
-      of events
-    ){
-
-      const date =
-        String(
-          ev.date||""
-        ).trim();
-
-      if(!date){
-        continue;
-      }
-
-      if(
-        !eventsByDate
-          .has(
-            date
-          )
-      ){
-
-        eventsByDate
-          .set(
-            date,
-            []
-          );
-
-      }
-
-      eventsByDate
-        .get(
-          date
-        )
-        .push(
-          ev
-        );
-
-      if(
-        String(
-          ev.details||""
-        ).trim()
-      ){
-
-        hasNoteByDate
-          .set(
-            date,
-            true
-          );
-
-      }
-
-    }
-
-    catColor =
-      new Map();
-
-    catLabel =
-      new Map();
-
-    catOrder =
-      new Map();
-
-    const cats =
-      [
-        ...categoriesRaw
-      ]
-      .map(
-        c=>({
-
-          category:
-            String(
-              c.category||""
-            ).trim(),
-
-          color:
-            String(
-              c.color||""
-            ).trim(),
-
-          order:
-            Number(
-              c.order||9999
-            ) || 9999
-
-        })
-      )
-      .filter(
-        c=>c.category
-      );
-
-    cats.sort(
-      (a,b)=>
-        (a.order-b.order)
-        ||
-        a.category
-          .localeCompare(
-            b.category
-          )
+    await jsonp(
+      url,
+      cb,
+      20000
     );
 
-    for(
-      const c
-      of cats
-    ){
+    const rawYears =
+    Array.isArray(res?.years)
+      ? res.years
+      : [];
 
-      const k =
-        norm(
-          c.category
-        );
+    const years =
+    rawYears
+      .map(item=>{
 
-      if(
-        catLabel.has(k)
-      ){
-        continue;
-      }
-
-      const forced =
-        OVERRIDE_COLORS[
-          k
-        ];
-
-      const col =
-        forced ||
-        c.color ||
-        "rgba(255,255,255,.25)";
-
-      catLabel.set(
-        k,
-        c.category
-      );
-
-      catColor.set(
-        k,
-        col
-      );
-
-      catOrder.set(
-        k,
-        c.order
-      );
-
-    }
-
-    firstCatByDate =
-      new Map();
-
-    for(
-      const [
-        date,
-        arr
-      ]
-      of eventsByDate
-    ){
-
-      let best =
-        null;
-
-      let bestOrder =
-        9999;
-
-      for(
-        const ev
-        of arr
-      ){
-
-        const k =
-          norm(
-            ev.category||""
-          );
-
-        const o =
-          catOrder.has(k)
-            ?
-            catOrder.get(k)
-            :
-            9999;
-
-        if(
-          o <
-          bestOrder
-        ){
-
-          bestOrder =
-            o;
-
-          best =
-            k;
-
+        if(typeof item==="number"){
+          return item;
         }
 
-      }
-
-      if(!best){
-
-        best =
-          norm(
-            arr[0]
-              ?.category ||
-            ""
-          );
-
-      }
-
-      firstCatByDate
-        .set(
-          date,
-          best
-        );
-
-    }
-
-  }
-
-  function getColorForCategory(
-    catKey
-  ){
-
-    const k =
-      norm(
-        catKey
-      );
-
-    if(
-      OVERRIDE_COLORS[
-        k
-      ]
-    ){
-
-      return (
-        OVERRIDE_COLORS[
-          k
-        ]
-      );
-
-    }
-
-    return (
-      catColor.get(k)
-      ||
-      "rgba(255,255,255,.25)"
-    );
-
-  }
-
-  function renderLegend(){
-
-    $legendGrid.innerHTML =
-      "";
-
-    for(
-      const [
-        k,
-        label
-      ]
-      of catLabel
-    ){
-
-      const col =
-        getColorForCategory(
-          k
-        );
-
-      const div =
-        document.createElement(
-          "div"
-        );
-
-      div.className =
-        "legItem";
-
-      div.innerHTML =
-        `
-        <div
-          class="sq"
-          style="background:${escapeHtml(col)}">
-        </div>
-
-        <div class="legTxt">
-          ${escapeHtml(label)}
-        </div>
-        `;
-
-      $legendGrid
-        .appendChild(
-          div
-        );
-
-    }
-
-  }
-
-  function renderMonth(){
-
-    $monthName.textContent =
-      monthsFR[
-        currentMonth
-      ];
-
-    $btnPrev.disabled =
-      (
-        currentMonth===0
-      );
-
-    $btnNext.disabled =
-      (
-        currentMonth===11
-      );
-
-    const start =
-      firstMondayGrid(
-        ACTIVE_YEAR,
-        currentMonth
-      );
-
-    const todayStr =
-      ymd(
-        new Date()
-      );
-
-    $grid.innerHTML =
-      "";
-
-    for(
-      let i=0;
-      i<42;
-      i++
-    ){
-
-      const d =
-        new Date(
-          start
-        );
-
-      d.setDate(
-        start.getDate()+i
-      );
-
-      const inMonth =
-        (
-          d.getMonth()
-          ===
-          currentMonth
-        );
-
-      const dateStr =
-        ymd(
-          d
-        );
-
-      const cell =
-        document.createElement(
-          "div"
-        );
-
-      cell.className =
-        "day" +
-        (
-          inMonth
-            ? ""
-            : " is-empty"
-        );
-
-      if(
-        inMonth
-      ){
-
-        cell.dataset.date =
-          dateStr;
-
-        const catKey =
-          firstCatByDate
-            .get(
-              dateStr
-            );
-
-        if(catKey){
-
-          cell.classList
-            .add(
-              "has-color"
-            );
-
-          cell.style
-            .setProperty(
-              "--dayColor",
-              getColorForCategory(
-                catKey
-              )
-            );
-
+        if(typeof item==="string"){
+          return Number(item);
         }
 
-        if(
-          dateStr
-          ===
-          todayStr
-        ){
+        return Number(item?.year);
 
-          cell.classList
-            .add(
-              "is-today"
-            );
+      })
+      .filter(year=>
+        Number.isInteger(year) &&
+        year>=2000 &&
+        year<=2100
+      );
 
-        }
+    ADMIN_YEARS =
+    [
+      ...new Set([
+        PUBLIC_YEAR,
+        ...years
+      ])
+    ]
+    .sort((a,b)=>a-b);
 
-        if(
-          hasNoteByDate
-            .get(
-              dateStr
-            )
-          ===
-          true
-        ){
+  }catch(e){
 
-          cell.classList
-            .add(
-              "has-note"
-            );
-
-        }
-
-      }
-
-      cell.innerHTML =
-        `<span>${
-          inMonth
-            ?
-            d.getDate()
-            :
-            ""
-        }</span>`;
-
-      $grid
-        .appendChild(
-          cell
-        );
-
-    }
-
-  }
-
-  function setEditMode(on){
-
-  EDIT_MODE = !!on;
-
-  $editLabel.style.display =
-    EDIT_MODE ? "inline-block" : "none";
-
-  if($btnLock){
-
-    $btnLock.textContent =
-      EDIT_MODE ? "🔓" : "🔒";
-
-    $btnLock.setAttribute(
-      "aria-pressed",
-      EDIT_MODE ? "true" : "false"
-    );
-
-  }
-
-  updateYearDisplay_();
-
-  if(!EDIT_MODE){
-
-    closeEdit();
-
-    ACTIVE_YEAR = PUBLIC_YEAR;
-
-    const now = new Date();
-
-    currentMonth =
-      now.getFullYear() === PUBLIC_YEAR
-        ? now.getMonth()
-        : 0;
-
-    renderMonth();
-    loadApi();
+    ADMIN_YEARS =
+    [PUBLIC_YEAR];
 
   }
 
 }
 
-  function openNote(
-    dateStr
-  ){
+function rebuildMaps(){
 
-    const arr =
-      eventsByDate
-        .get(
-          dateStr
-        )
-      || [];
+  eventsByDate =
+  new Map();
 
-    const withDetails =
-      arr.filter(
-        ev=>
-          String(
-            ev.details||""
-          ).trim()
-      );
+  hasNoteByDate =
+  new Map();
+
+  for(const ev of events){
+
+    const date =
+    String(ev.date||"").trim();
+
+    if(!date){
+      continue;
+    }
+
+    if(!eventsByDate.has(date)){
+      eventsByDate.set(date,[]);
+    }
+
+    eventsByDate
+      .get(date)
+      .push(ev);
 
     if(
-      !withDetails.length
-    ){
-      return;
-    }
-
-    $noteTitle.textContent =
-      `Note — ${
-        dateStr
-          .split("-")
-          .reverse()
-          .join("/")
-      }`;
-
-    $noteBody.innerHTML =
-      "";
-
-    for(
-      const ev
-      of withDetails
+      String(ev.details||"").trim()
     ){
 
-      const name =
-        String(
-          ev.title||""
-        ).trim()
-        ||
-        "—";
-
-      const time =
-        formatTimeRange(
-          ev.start,
-          ev.end
-        );
-
-      const catK =
-        norm(
-          ev.category||""
-        );
-
-      const catLabelTxt =
-        String(
-          ev.category||""
-        ).trim();
-
-      const loc =
-        String(
-          ev.location||""
-        ).trim();
-
-      const details =
-        String(
-          ev.details||""
-        ).trim();
-
-      const dotCol =
-        getColorForCategory(
-          catK
-        );
-
-      const card =
-        document.createElement(
-          "div"
-        );
-
-      card.className =
-        "evCard";
-
-      card.innerHTML =
-        `
-        <div class="evTop">
-
-          <div class="evName">
-            ${escapeHtml(name)}
-          </div>
-
-          <div class="evTime">
-            ${escapeHtml(time)}
-          </div>
-
-        </div>
-
-        <div class="evMeta">
-
-          ${
-            catLabelTxt
-              ?
-              `
-              <div class="chip">
-
-                <span
-                  class="chipDot"
-                  style="background:${escapeHtml(dotCol)}">
-                </span>
-
-                <span>
-                  ${escapeHtml(catLabelTxt)}
-                </span>
-
-              </div>
-              `
-              :
-              ""
-          }
-
-          ${
-            loc
-              ?
-              `
-              <div class="chip">
-                📍
-                <span>
-                  ${escapeHtml(loc)}
-                </span>
-              </div>
-              `
-              :
-              ""
-          }
-
-        </div>
-
-        <div class="evDetails">
-          ${escapeHtml(details)}
-        </div>
-        `;
-
-      $noteBody
-        .appendChild(
-          card
-        );
-
-    }
-
-    $noteOverlay
-      .classList
-      .add(
-        "show"
-      );
-
-    $noteOverlay
-      .setAttribute(
-        "aria-hidden",
-        "false"
-      );
-
-  }
-
-  function closeNote(){
-
-    $noteOverlay
-      .classList
-      .remove(
-        "show"
-      );
-
-    $noteOverlay
-      .setAttribute(
-        "aria-hidden",
-        "true"
-      );
-
-  }
-
-  function openEdit(
-    dateStr
-  ){
-
-    _editDate =
-      dateStr;
-
-    $editTitle.textContent =
-      `Événements — ${
-        toFRDate(
-          dateStr
-        )
-      }`;
-
-    renderEditList(
-      dateStr
-    );
-
-    $editOverlay
-      .classList
-      .add(
-        "show"
-      );
-
-    $editOverlay
-      .setAttribute(
-        "aria-hidden",
-        "false"
-      );
-
-  }
-
-  function closeEdit(){
-
-    $editOverlay
-      .classList
-      .remove(
-        "show"
-      );
-
-    $editOverlay
-      .setAttribute(
-        "aria-hidden",
-        "true"
-      );
-
-    _editDate =
-      "";
-
-    $editBody.innerHTML =
-      "";
-
-  }
-
-  function renderEditList(
-    dateStr
-  ){
-
-    const arr =
-      (
-        eventsByDate
-          .get(
-            dateStr
-          )
-        ||
-        []
-      )
-      .slice();
-
-    arr.sort(
-      (a,b)=>
-        String(
-          a.start||""
-        )
-        .localeCompare(
-          String(
-            b.start||""
-          )
-        )
-        ||
-        String(
-          a.title||""
-        )
-        .localeCompare(
-          String(
-            b.title||""
-          )
-        )
-    );
-
-    $editBody.innerHTML =
-      "";
-
-    if(
-      !arr.length
-    ){
-
-      const empty =
-        document.createElement(
-          "div"
-        );
-
-      empty.className =
-        "row";
-
-      empty.innerHTML =
-        `
-        <div
-          style="font-weight:900;opacity:.9">
-          Aucun événement ce jour.
-        </div>
-        `;
-
-      $editBody
-        .appendChild(
-          empty
-        );
-
-      return;
-
-    }
-
-    for(
-      const ev
-      of arr
-    ){
-
-      const name =
-        String(
-          ev.title||""
-        ).trim()
-        ||
-        "—";
-
-      const time =
-        formatTimeRange(
-          ev.start,
-          ev.end
-        );
-
-      const cat =
-        String(
-          ev.category||""
-        ).trim();
-
-      const loc =
-        String(
-          ev.location||""
-        ).trim();
-
-      const details =
-        String(
-          ev.details||""
-        ).trim();
-
-      const row =
-        document.createElement(
-          "div"
-        );
-
-      row.className =
-        "row";
-
-      row.innerHTML =
-        `
-        <div class="rowTop">
-
-          <div class="rowName">
-            ${escapeHtml(name)}
-          </div>
-
-          <div class="evTime">
-            ${escapeHtml(time)}
-          </div>
-
-        </div>
-
-        <div class="rowSub">
-
-          ${
-            cat
-              ?
-              `<span>🎨 ${escapeHtml(cat)}</span>`
-              :
-              ""
-          }
-
-          ${
-            loc
-              ?
-              `<span>📍 ${escapeHtml(loc)}</span>`
-              :
-              ""
-          }
-
-          ${
-            details
-              ?
-              `<span>📝 note</span>`
-              :
-              ""
-          }
-
-        </div>
-
-        <div class="rowBtns">
-
-          <button
-            class="iconBtn"
-            data-act="view">
-            👁
-          </button>
-
-          <button
-            class="iconBtn"
-            data-act="edit">
-            🖍
-          </button>
-
-          <button
-            class="iconBtn danger"
-            data-act="del">
-            🗑
-          </button>
-
-        </div>
-        `;
-
-      row
-        .querySelectorAll(
-          "button"
-        )
-        .forEach(
-          b=>{
-
-            b.addEventListener(
-              "click",
-              async ()=>{
-
-                const act =
-                  b.dataset.act;
-
-                if(
-                  act==="view"
-                ){
-
-                  alert(
-                    `📅 ${toFRDate(dateStr)}\n` +
-                    `🕒 ${time||"—"}\n` +
-                    `📌 ${name}\n` +
-                    (
-                      cat
-                        ?
-                        `🎨 ${cat}\n`
-                        :
-                        ""
-                    ) +
-                    (
-                      loc
-                        ?
-                        `📍 ${loc}\n`
-                        :
-                        ""
-                    ) +
-                    (
-                      details
-                        ?
-                        `\n📝 ${details}`
-                        :
-                        ""
-                    )
-                  );
-
-                  return;
-
-                }
-
-                if(
-                  act==="del"
-                ){
-
-                  const ok =
-                    confirm(
-                      `Supprimer l’événement :\n\n` +
-                      `${name}\n` +
-                      `${time||""}\n\n` +
-                      `Confirmer ?`
-                    );
-
-                  if(!ok){
-                    return;
-                  }
-
-                  await apiDeleteEvent_(
-                    dateStr,
-                    ev
-                  );
-
-                  await loadApi(
-                    true
-                  );
-
-                  renderEditList(
-                    dateStr
-                  );
-
-                  return;
-
-                }
-
-                if(
-                  act==="edit"
-                ){
-
-                  openEventForm(
-                    "edit",
-                    dateStr,
-                    ev
-                  );
-
-                }
-
-              }
-            );
-
-          }
-        );
-
-      $editBody
-        .appendChild(
-          row
-        );
+      hasNoteByDate
+        .set(date,true);
 
     }
 
   }
 
-  async function apiAddEvent_(
-    dateStr,
-    payload
-  ){
+  catColor =
+  new Map();
 
-    const email =
-      getEmailLocal();
+  catLabel =
+  new Map();
 
-    if(!email){
+  catOrder =
+  new Map();
 
-      alert(
-        "Email introuvable (localStorage). Reconnecte-toi sur le portail."
-      );
+  const cats =
+  [...categoriesRaw]
+    .map(c=>({
 
-      return;
+      category:
+      String(c.category||"").trim(),
 
-    }
+      color:
+      String(c.color||"").trim(),
 
-    const cb =
-      "cb_add_" +
-      Math.random()
-        .toString(36)
-        .slice(2);
+      order:
+      Number(c.order||9999) || 9999
 
-    const url =
-      `${API}?view=planning_add` +
-      `&email=${encodeURIComponent(email)}` +
-      `&date=${encodeURIComponent(dateStr)}` +
-      `&start=${encodeURIComponent(payload.start||"")}` +
-      `&end=${encodeURIComponent(payload.end||"")}` +
-      `&title=${encodeURIComponent(payload.title||"")}` +
-      `&category=${encodeURIComponent(payload.category||"")}` +
-      `&location=${encodeURIComponent(payload.location||"")}` +
-      `&details=${encodeURIComponent(payload.details||"")}` +
-      `&nocache=1` +
-      `&callback=${cb}`;
+    }))
+    .filter(c=>c.category);
 
-    const res =
-      await jsonp(
-        url,
-        cb,
-        20000
-      );
-
-    if(
-      !res ||
-      res.ok!==true
-    ){
-
-      throw new Error(
-        res?.error
-        ||
-        "Erreur ajout"
-      );
-
-    }
-
-    return res;
-
-  }
-
-  async function apiDeleteEvent_(
-    dateStr,
-    ev
-  ){
-
-    const email =
-      getEmailLocal();
-
-    if(!email){
-
-      alert(
-        "Email introuvable (localStorage). Reconnecte-toi sur le portail."
-      );
-
-      return;
-
-    }
-
-    const eventId =
-      String(
-        ev?.event_id
-        ||
-        ev?.id
-        ||
-        ""
-      ).trim();
-
-    if(!eventId){
-
-      alert(
-        "Suppression impossible : cet événement n’a pas d’identifiant event_id. Il faut le recréer ou lui ajouter un event_id dans Sheets."
-      );
-
-      return;
-
-    }
-
-    const cb =
-      "cb_del_" +
-      Math.random()
-        .toString(36)
-        .slice(2);
-
-    const url =
-      `${API}?view=planning_delete` +
-      `&email=${encodeURIComponent(email)}` +
-      `&event_id=${encodeURIComponent(eventId)}` +
-      `&nocache=1` +
-      `&callback=${cb}`;
-
-    const res =
-      await jsonp(
-        url,
-        cb,
-        20000
-      );
-
-    if(
-      !res ||
-      res.ok!==true
-    ){
-
-      throw new Error(
-        res?.error
-        ||
-        "Erreur suppression"
-      );
-
-    }
-
-    if(
-      Number(
-        res.deleted||0
-      )
-      <
-      1
-    ){
-
-      throw new Error(
-        "Aucune ligne supprimée. event_id non trouvé dans Sheets."
-      );
-
-    }
-
-    return res;
-
-  }
-
-  function buildCategoryOptions(
-    selectedValue
-  ){
-
-    $fCategory.innerHTML =
-      "";
-
-    const none =
-      document.createElement(
-        "option"
-      );
-
-    none.value =
-      "";
-
-    none.textContent =
-      "Aucune";
-
-    $fCategory
-      .appendChild(
-        none
-      );
-
-    const items =
-      [
-        ...catLabel.entries()
-      ]
-      .map(
-        ([k,label])=>({
-
-          k,
-          label,
-
-          order:
-            catOrder.has(k)
-              ?
-              catOrder.get(k)
-              :
-              9999
-
-        })
-      );
-
-    items.sort(
-      (a,b)=>
-        (a.order-b.order)
-        ||
-        a.label
-          .localeCompare(
-            b.label
-          )
-    );
-
-    for(
-      const it
-      of items
-    ){
-
-      const opt =
-        document.createElement(
-          "option"
-        );
-
-      opt.value =
-        it.label;
-
-      opt.textContent =
-        it.label;
-
-      $fCategory
-        .appendChild(
-          opt
-        );
-
-    }
-
-    $fCategory.value =
-      selectedValue
+  cats.sort(
+    (a,b)=>
+      (a.order-b.order)
       ||
-      "";
+      a.category.localeCompare(b.category)
+  );
 
-  }
+  for(const c of cats){
 
-  function getLoopValues(
-    values
-  ){
+    const k =
+    norm(c.category);
 
-    const arr =
-      [];
-
-    for(
-      let i=0;
-      i<LOOP_DUPLICATES;
-      i++
-    ){
-
-      arr.push(
-        ...values
-      );
-
+    if(catLabel.has(k)){
+      continue;
     }
 
-    return arr;
+    const forced =
+    OVERRIDE_COLORS[k];
+
+    const col =
+    forced ||
+    c.color ||
+    "rgba(255,255,255,.25)";
+
+    catLabel.set(k,c.category);
+    catColor.set(k,col);
+    catOrder.set(k,c.order);
 
   }
 
-  function buildWheel(
-    pickerKey
-  ){
+  firstCatByDate =
+  new Map();
 
-    const picker =
-      TIME_PICKERS[
-        pickerKey
-      ];
+  for(const [date,arr] of eventsByDate.entries()){
 
-    const allValues =
-      getLoopValues(
-        picker.values
-      );
+    let best = null;
+    let bestOrder = 9999;
 
-    picker.inner.innerHTML =
-      "";
+    for(const ev of arr){
 
-    picker.loopValues =
-      allValues;
+      const k =
+      norm(ev.category||"");
 
-    const padTop =
-      document.createElement(
-        "div"
-      );
+      const o =
+      catOrder.has(k)
+        ? catOrder.get(k)
+        : 9999;
 
-    padTop.className =
-      "wheelPad";
+      if(o<bestOrder){
 
-    picker.inner
-      .appendChild(
-        padTop
-      );
-
-    allValues
-      .forEach(
-        (
-          v,
-          idx
-        )=>{
-
-          const item =
-            document.createElement(
-              "div"
-            );
-
-          item.className =
-            "wheelItem";
-
-          item.dataset.value =
-            v;
-
-          item.dataset.index =
-            String(idx);
-
-          item.textContent =
-            v;
-
-          item.addEventListener(
-            "click",
-            ()=>setWheelValue(
-              pickerKey,
-              v,
-              true
-            )
-          );
-
-          picker.inner
-            .appendChild(
-              item
-            );
-
-        }
-      );
-
-    const padBottom =
-      document.createElement(
-        "div"
-      );
-
-    padBottom.className =
-      "wheelPad";
-
-    picker.inner
-      .appendChild(
-        padBottom
-      );
-
-    picker.wheel
-      .addEventListener(
-        "scroll",
-        ()=>{
-
-          updateWheelActive(
-            pickerKey
-          );
-
-          keepWheelLooped(
-            pickerKey
-          );
-
-          clearTimeout(
-            picker.timer
-          );
-
-          picker.timer =
-            setTimeout(
-              ()=>snapWheel(
-                pickerKey
-              ),
-              80
-            );
-
-        }
-      );
-
-  }
-
-  function getWheelItems(
-    pickerKey
-  ){
-
-    return [
-      ...TIME_PICKERS[
-        pickerKey
-      ]
-      .inner
-      .querySelectorAll(
-        ".wheelItem"
-      )
-    ];
-
-  }
-
-  function getNearestWheelItem(
-    pickerKey
-  ){
-
-    const picker =
-      TIME_PICKERS[
-        pickerKey
-      ];
-
-    const center =
-      picker.wheel.scrollTop
-      +
-      (
-        picker.wheel.clientHeight
-        /
-        2
-      );
-
-    let bestItem =
-      null;
-
-    let bestDist =
-      Infinity;
-
-    getWheelItems(
-      pickerKey
-    )
-    .forEach(
-      item=>{
-
-        const itemCenter =
-          item.offsetTop
-          +
-          (
-            item.offsetHeight
-            /
-            2
-          );
-
-        const dist =
-          Math.abs(
-            center
-            -
-            itemCenter
-          );
-
-        if(
-          dist
-          <
-          bestDist
-        ){
-
-          bestDist =
-            dist;
-
-          bestItem =
-            item;
-
-        }
+        bestOrder = o;
+        best = k;
 
       }
-    );
-
-    return bestItem;
-
-  }
-
-  function updateWheelActive(
-    pickerKey
-  ){
-
-    const picker =
-      TIME_PICKERS[
-        pickerKey
-      ];
-
-    const bestItem =
-      getNearestWheelItem(
-        pickerKey
-      );
-
-    getWheelItems(
-      pickerKey
-    )
-    .forEach(
-      i=>
-        i.classList
-          .remove(
-            "active"
-          )
-    );
-
-    if(bestItem){
-
-      bestItem.classList
-        .add(
-          "active"
-        );
-
-      picker.value =
-        bestItem
-          .dataset
-          .value;
 
     }
 
-  }
+    if(!best){
 
-  function keepWheelLooped(
-    pickerKey
-  ){
-
-    const picker =
-      TIME_PICKERS[
-        pickerKey
-      ];
-
-    if(
-      !picker.looping
-    ){
-      return;
-    }
-
-    const valuesLen =
-      picker.values.length;
-
-    const itemHeight =
-      42;
-
-    const cycleHeight =
-      valuesLen
-      *
-      itemHeight;
-
-    const minScroll =
-      cycleHeight
-      *
-      4;
-
-    const maxScroll =
-      cycleHeight
-      *
-      (
-        LOOP_DUPLICATES
-        -
-        5
-      );
-
-    if(
-      picker.wheel.scrollTop
-      <
-      minScroll
-    ){
-
-      picker.wheel.scrollTop +=
-        cycleHeight
-        *
-        6;
-
-    }else if(
-      picker.wheel.scrollTop
-      >
-      maxScroll
-    ){
-
-      picker.wheel.scrollTop -=
-        cycleHeight
-        *
-        6;
+      best =
+      norm(arr[0]?.category||"");
 
     }
 
-  }
-
-  function findBestItemForValueNearCenter(
-    pickerKey,
-    value
-  ){
-
-    const picker =
-      TIME_PICKERS[
-        pickerKey
-      ];
-
-    const items =
-      getWheelItems(
-        pickerKey
-      )
-      .filter(
-        i=>
-          i.dataset.value
-          ===
-          value
-      );
-
-    if(
-      !items.length
-    ){
-      return null;
-    }
-
-    const currentCenter =
-      picker.wheel.scrollTop
-      +
-      (
-        picker.wheel.clientHeight
-        /
-        2
-      );
-
-    let best =
-      items[0];
-
-    let bestDist =
-      Infinity;
-
-    items.forEach(
-      item=>{
-
-        const c =
-          item.offsetTop
-          +
-          (
-            item.offsetHeight
-            /
-            2
-          );
-
-        const dist =
-          Math.abs(
-            c-currentCenter
-          );
-
-        if(
-          dist
-          <
-          bestDist
-        ){
-
-          bestDist =
-            dist;
-
-          best =
-            item;
-
-        }
-
-      }
-    );
-
-    return best;
+    firstCatByDate
+      .set(date,best);
 
   }
 
-  function setWheelValue(
-    pickerKey,
-    value,
-    smooth
-  ){
+}
 
-    const picker =
-      TIME_PICKERS[
-        pickerKey
-      ];
+function getColorForCategory(catKey){
 
-    const item =
-      findBestItemForValueNearCenter(
-        pickerKey,
-        value
-      );
+  const k =
+  norm(catKey);
 
-    if(!item){
-      return;
-    }
+  if(OVERRIDE_COLORS[k]){
+    return OVERRIDE_COLORS[k];
+  }
 
-    const target =
-      item.offsetTop
-      -
-      (
-        (
-          picker.wheel.clientHeight
-          -
-          item.offsetHeight
-        )
-        /
-        2
-      );
+  return catColor.get(k)
+  ||
+  "rgba(255,255,255,.25)";
 
-    picker.wheel.scrollTo({
+}
 
-      top:target,
+function renderLegend(){
 
-      behavior:
-        smooth
-          ?
-          "smooth"
-          :
-          "auto"
+  $legendGrid.innerHTML =
+  "";
 
-    });
+  for(const [k,label] of catLabel.entries()){
 
-    picker.value =
-      value;
+    const col =
+    getColorForCategory(k);
 
-    setTimeout(
-      ()=>{
+    const div =
+    document.createElement("div");
 
-        keepWheelLooped(
-          pickerKey
-        );
+    div.className =
+    "legItem";
 
-        updateWheelActive(
-          pickerKey
-        );
+    div.innerHTML =
+    `
+      <div class="sq" style="background:${escapeHtml(col)}"></div>
+      <div class="legTxt">${escapeHtml(label)}</div>
+    `;
 
-      },
-      smooth
-        ?
-        160
-        :
-        0
-    );
+    $legendGrid
+      .appendChild(div);
 
   }
 
-  function snapWheel(
-    pickerKey
-  ){
+}
 
-    const picker =
-      TIME_PICKERS[
-        pickerKey
-      ];
+function renderMonth(){
 
-    const bestItem =
-      getNearestWheelItem(
-        pickerKey
-      );
+  $monthName.textContent =
+  monthsFR[currentMonth];
 
-    if(!bestItem){
-      return;
-    }
+  $btnPrev.disabled =
+  currentMonth===0;
 
-    const target =
-      bestItem.offsetTop
-      -
-      (
-        (
-          picker.wheel.clientHeight
-          -
-          bestItem.offsetHeight
-        )
-        /
-        2
-      );
+  $btnNext.disabled =
+  currentMonth===11;
 
-    picker.wheel.scrollTo({
+  const start =
+  firstMondayGrid(
+    ACTIVE_YEAR,
+    currentMonth
+  );
 
-      top:target,
+  const todayStr =
+  ymd(new Date());
 
-      behavior:"smooth"
+  $grid.innerHTML =
+  "";
 
-    });
+  for(let i=0;i<42;i++){
 
-    picker.value =
-      bestItem
-        .dataset
-        .value;
+    const d =
+    new Date(start);
 
-    setTimeout(
-      ()=>{
-
-        keepWheelLooped(
-          pickerKey
-        );
-
-        updateWheelActive(
-          pickerKey
-        );
-
-      },
-      160
+    d.setDate(
+      start.getDate()+i
     );
 
-  }
+    const inMonth =
+    d.getMonth()===currentMonth;
 
-  function getTimeValue(
-    prefix
-  ){
+    const dateStr =
+    ymd(d);
 
-    return (
-      `${TIME_PICKERS[prefix+"Hour"].value}` +
-      `:` +
-      `${TIME_PICKERS[prefix+"Minute"].value}`
+    const cell =
+    document.createElement("div");
+
+    cell.className =
+    "day" +
+    (
+      inMonth
+      ? ""
+      : " is-empty"
     );
 
-  }
+    if(inMonth){
 
-  function setTimeValue(
-    prefix,
-    hhmm
-  ){
-
-    const val =
-      String(
-        hhmm||""
-      ).trim();
-
-    const [
-      hh,
-      mm
-    ] =
-      val &&
-      val.includes(":")
-        ?
-        val.split(":")
-        :
-        [
-          "00",
-          "00"
-        ];
-
-    const hour =
-      HOURS.includes(
-        hh
-      )
-        ?
-        hh
-        :
-        "00";
-
-    const minute =
-      MINUTES.includes(
-        mm
-      )
-        ?
-        mm
-        :
-        "00";
-
-    setWheelValue(
-      prefix+"Hour",
-      hour,
-      false
-    );
-
-    setWheelValue(
-      prefix+"Minute",
-      minute,
-      false
-    );
-
-  }
-
-  function initWheels(){
-
-    buildWheel(
-      "startHour"
-    );
-
-    buildWheel(
-      "startMinute"
-    );
-
-    buildWheel(
-      "endHour"
-    );
-
-    buildWheel(
-      "endMinute"
-    );
-
-    setTimeout(
-      ()=>{
-
-        setTimeValue(
-          "start",
-          "08:00"
-        );
-
-        setTimeValue(
-          "end",
-          "09:00"
-        );
-
-        [
-          "startHour",
-          "startMinute",
-          "endHour",
-          "endMinute"
-        ]
-        .forEach(
-          k=>{
-
-            keepWheelLooped(
-              k
-            );
-
-            updateWheelActive(
-              k
-            );
-
-          }
-        );
-
-      },
-      0
-    );
-
-  }
-
-  function openEventForm(
-    mode,
-    dateStr,
-    ev
-  ){
-
-    FORM_STATE.mode =
-      mode;
-
-    FORM_STATE.dateStr =
+      cell.dataset.date =
       dateStr;
 
-    FORM_STATE.originalEvent =
-      ev || null;
+      const catKey =
+      firstCatByDate.get(dateStr);
 
-    buildCategoryOptions(
-      ev?.category
-      ||
-      ""
-    );
+      if(catKey){
 
-    if(
-      mode==="edit"
-    ){
+        cell.classList.add(
+          "has-color"
+        );
 
-      $formTitle.textContent =
-        `Modifier — ${
-          toFRDate(
-            dateStr
-          )
-        }`;
+        cell.style.setProperty(
+          "--dayColor",
+          getColorForCategory(catKey)
+        );
 
-      $fTitle.value =
-        ev?.title
-        ||
-        "";
+      }
 
-      $fLocation.value =
-        ev?.location
-        ||
-        "";
+      if(dateStr===todayStr){
 
-      $fDetails.value =
-        ev?.details
-        ||
-        "";
+        cell.classList.add(
+          "is-today"
+        );
 
-      setTimeValue(
-        "start",
-        ev?.start
-        ||
-        "08:00"
-      );
-
-      setTimeValue(
-        "end",
-        ev?.end
-        ||
-        "09:00"
-      );
-
-    }else{
-
-      $formTitle.textContent =
-        `Ajouter — ${
-          toFRDate(
-            dateStr
-          )
-        }`;
-
-      $fTitle.value =
-        "";
-
-      $fLocation.value =
-        "";
-
-      $fDetails.value =
-        "";
-
-      $fCategory.value =
-        "";
-
-      setTimeValue(
-        "start",
-        "08:00"
-      );
-
-      setTimeValue(
-        "end",
-        "09:00"
-      );
-
-    }
-
-    $formOverlay
-      .classList
-      .add(
-        "show"
-      );
-
-    $formOverlay
-      .setAttribute(
-        "aria-hidden",
-        "false"
-      );
-
-  }
-
-  function closeEventForm(){
-
-    $formOverlay
-      .classList
-      .remove(
-        "show"
-      );
-
-    $formOverlay
-      .setAttribute(
-        "aria-hidden",
-        "true"
-      );
-
-  }
-
-  async function saveEventForm(){
-
-    const title =
-      String(
-        $fTitle.value||""
-      ).trim();
-
-    const category =
-      String(
-        $fCategory.value||""
-      ).trim();
-
-    const location =
-      String(
-        $fLocation.value||""
-      ).trim();
-
-    const details =
-      String(
-        $fDetails.value||""
-      ).trim();
-
-    const start =
-      getTimeValue(
-        "start"
-      );
-
-    const end =
-      getTimeValue(
-        "end"
-      );
-
-    if(!title){
-
-      alert(
-        "Titre obligatoire."
-      );
-
-      return;
-
-    }
-
-    if(
-      end
-      <
-      start
-    ){
-
-      alert(
-        "Heure fin incorrecte."
-      );
-
-      return;
-
-    }
-
-    try{
+      }
 
       if(
-        FORM_STATE.mode
-        ===
-        "edit"
-        &&
-        FORM_STATE.originalEvent
+        hasNoteByDate.get(dateStr)===true
       ){
 
-        await apiDeleteEvent_(
-          FORM_STATE.dateStr,
-          FORM_STATE.originalEvent
+        cell.classList.add(
+          "has-note"
         );
 
       }
 
-      await apiAddEvent_(
-        FORM_STATE.dateStr,
-        {
+    }
 
-          title,
-          start,
-          end,
-          category,
-          location,
-          details
+    cell.innerHTML =
+    `<span>${
+      inMonth
+        ? d.getDate()
+        : ""
+    }</span>`;
 
-        }
-      );
+    $grid.appendChild(cell);
 
+  }
+
+}
+
+function renderYearControl_(){
+
+  /*
+    MODE NORMAL :
+    aucun <select> n'existe.
+  */
+  if(
+    !IS_ADMIN
+    ||
+    !EDIT_MODE
+  ){
+
+    $yearControl.innerHTML =
+    "";
+
+    $yearControl.textContent =
+    String(PUBLIC_YEAR);
+
+    return;
+
+  }
+
+  /*
+    MODE ADMIN + ÉDITION :
+    création du menu déroulant.
+  */
+  $yearControl.innerHTML =
+  "";
+
+  const select =
+  document.createElement("select");
+
+  select.className =
+  "yearSelect";
+
+  ADMIN_YEARS.forEach(year=>{
+
+    const opt =
+    document.createElement("option");
+
+    opt.value =
+    String(year);
+
+    opt.textContent =
+    String(year);
+
+    if(year===ACTIVE_YEAR){
+      opt.selected = true;
+    }
+
+    select.appendChild(opt);
+
+  });
+
+  select.addEventListener(
+    "change",
+    async ()=>{
+
+      if(
+        !IS_ADMIN
+        ||
+        !EDIT_MODE
+      ){
+        return;
+      }
+
+      const newYear =
+      Number(select.value);
+
+      if(
+        !ADMIN_YEARS.includes(newYear)
+      ){
+        return;
+      }
+
+      ACTIVE_YEAR =
+      newYear;
+
+      closeNote();
+      closeEdit();
       closeEventForm();
 
-      await loadApi(
-        true
+      events = [];
+
+      rebuildMaps();
+
+      const now =
+      new Date();
+
+      currentMonth =
+      now.getFullYear()===ACTIVE_YEAR
+        ? now.getMonth()
+        : 0;
+
+      renderMonth();
+
+      showStatus(
+        `Planning ${ACTIVE_YEAR}`,
+        "Chargement de l'année…"
       );
 
-      if(_editDate){
-
-        renderEditList(
-          _editDate
-        );
-
-      }
-
-    }catch(err){
-
-      alert(
-        "Erreur : " +
-        String(
-          err &&
-          err.message
-            ?
-            err.message
-            :
-            err
-        )
-      );
+      await loadApi();
 
     }
+  );
 
-  }
+  $yearControl.appendChild(select);
 
-  $btnAddEvent
-    .addEventListener(
-      "click",
-      ()=>{
+}
 
-        if(!_editDate){
-          return;
-        }
+async function setEditMode(on){
 
-        openEventForm(
-          "add",
-          _editDate,
-          null
-        );
+  EDIT_MODE =
+  !!on;
 
-      }
-    );
+  $editLabel.style.display =
+  EDIT_MODE
+    ? "inline-block"
+    : "none";
 
-  $btnCloseEdit
-    .addEventListener(
-      "click",
-      closeEdit
-    );
+  $btnLock.textContent =
+  EDIT_MODE
+    ? "🔓"
+    : "🔒";
 
-  $editOverlay
-    .addEventListener(
-      "click",
-      e=>{
+  $btnLock.setAttribute(
+    "aria-pressed",
+    EDIT_MODE
+      ? "true"
+      : "false"
+  );
 
-        if(
-          e.target
-          ===
-          $editOverlay
-        ){
+  /*
+    Si on ferme l'édition :
+    retour obligatoire au planning public.
+  */
+  if(!EDIT_MODE){
 
-          closeEdit();
+    closeEdit();
+    closeNote();
+    closeEventForm();
 
-        }
+    ACTIVE_YEAR =
+    PUBLIC_YEAR;
 
-      }
-    );
+    const now =
+    new Date();
 
-  $btnFormCancel
-    .addEventListener(
-      "click",
-      closeEventForm
-    );
+    currentMonth =
+    now.getFullYear()===PUBLIC_YEAR
+      ? now.getMonth()
+      : 0;
 
-  $btnFormClose
-    .addEventListener(
-      "click",
-      closeEventForm
-    );
-
-  $btnFormSave
-    .addEventListener(
-      "click",
-      saveEventForm
-    );
-
-  $formOverlay
-    .addEventListener(
-      "click",
-      e=>{
-
-        if(
-          e.target
-          ===
-          $formOverlay
-        ){
-
-          closeEventForm();
-
-        }
-
-      }
-    );
-
-  $grid
-    .addEventListener(
-      "click",
-      e=>{
-
-        const day =
-          e.target.closest(
-            ".day"
-          );
-
-        if(!day){
-          return;
-        }
-
-        if(
-          day.classList
-            .contains(
-              "is-empty"
-            )
-        ){
-          return;
-        }
-
-        const dateStr =
-          day.dataset.date;
-
-        if(!dateStr){
-          return;
-        }
-
-        if(
-          EDIT_MODE
-          &&
-          IS_ADMIN
-        ){
-
-          openEdit(
-            dateStr
-          );
-
-          return;
-
-        }
-
-        if(
-          day.classList
-            .contains(
-              "has-note"
-            )
-        ){
-
-          openNote(
-            dateStr
-          );
-
-        }
-
-      }
-    );
-
-  $noteClose
-    .addEventListener(
-      "click",
-      closeNote
-    );
-
-  $noteOverlay
-    .addEventListener(
-      "click",
-      e=>{
-
-        if(
-          e.target
-          ===
-          $noteOverlay
-        ){
-
-          closeNote();
-
-        }
-
-      }
-    );
-
-  document
-    .addEventListener(
-      "keydown",
-      e=>{
-
-        if(
-          e.key==="Escape"
-        ){
-
-          closeNote();
-          closeEdit();
-          closeEventForm();
-
-        }
-
-      }
-    );
-
-  function saveCache_(
-    payload
-  ){
-
-    try{
-
-      localStorage
-        .setItem(
-          getCacheKey_(),
-          JSON.stringify(
-            {
-
-              savedAt:
-                Date.now(),
-
-              payload
-
-            }
-          )
-        );
-
-    }catch(e){}
-
-  }
-
-  function loadCache_(){
-
-    try{
-
-      const raw =
-        localStorage
-          .getItem(
-            getCacheKey_()
-          );
-
-      if(!raw){
-        return null;
-      }
-
-      const obj =
-        JSON.parse(
-          raw
-        );
-
-      if(
-        !obj
-        ||
-        !obj.payload
-      ){
-        return null;
-      }
-
-      if(
-        obj.savedAt
-        &&
-        (
-          Date.now()
-          -
-          obj.savedAt
-        )
-        >
-        CACHE_MAX_AGE_MS
-      ){
-
-        return null;
-
-      }
-
-      return obj.payload;
-
-    }catch(e){
-
-      return null;
-
-    }
-
-  }
-
-  function applyPlanningData_(
-    py,
-    pc
-  ){
-
-    events =
-      Array.isArray(
-        py?.events
-      )
-        ?
-        py.events
-        :
-        [];
-
-    categoriesRaw =
-      (
-        Array.isArray(
-          pc?.categories
-        )
-        &&
-        pc.categories.length
-      )
-        ?
-        pc.categories
-        :
-        DEFAULT_CATEGORIES.slice();
-
-    rebuildMaps();
-
-    renderLegend();
+    renderYearControl_();
 
     renderMonth();
 
+    await loadApi();
+
+    return;
+
   }
 
-  async function loadApi(
-    forceFresh=false
+  /*
+    On vient d'ouvrir le mode édition.
+  */
+  renderYearControl_();
+
+}
+
+function openNote(dateStr){
+
+  const arr =
+  eventsByDate.get(dateStr)
+  ||
+  [];
+
+  const withDetails =
+  arr.filter(ev=>
+    String(ev.details||"").trim()
+  );
+
+  if(!withDetails.length){
+    return;
+  }
+
+  $noteTitle.textContent =
+  `Note — ${
+    dateStr
+      .split("-")
+      .reverse()
+      .join("/")
+  }`;
+
+  $noteBody.innerHTML =
+  "";
+
+  for(const ev of withDetails){
+
+    const name =
+    String(ev.title||"").trim()
+    ||
+    "—";
+
+    const time =
+    formatTimeRange(
+      ev.start,
+      ev.end
+    );
+
+    const catK =
+    norm(ev.category||"");
+
+    const catLabelTxt =
+    String(ev.category||"").trim();
+
+    const loc =
+    String(ev.location||"").trim();
+
+    const details =
+    String(ev.details||"").trim();
+
+    const dotCol =
+    getColorForCategory(catK);
+
+    const card =
+    document.createElement("div");
+
+    card.className =
+    "evCard";
+
+    card.innerHTML =
+    `
+      <div class="evTop">
+
+        <div class="evName">
+          ${escapeHtml(name)}
+        </div>
+
+        <div class="evTime">
+          ${escapeHtml(time)}
+        </div>
+
+      </div>
+
+      <div class="evMeta">
+
+        ${
+          catLabelTxt
+          ?
+          `<div class="chip">
+            <span class="chipDot" style="background:${escapeHtml(dotCol)}"></span>
+            <span>${escapeHtml(catLabelTxt)}</span>
+          </div>`
+          :
+          ""
+        }
+
+        ${
+          loc
+          ?
+          `<div class="chip">📍 <span>${escapeHtml(loc)}</span></div>`
+          :
+          ""
+        }
+
+      </div>
+
+      <div class="evDetails">
+        ${escapeHtml(details)}
+      </div>
+    `;
+
+    $noteBody.appendChild(card);
+
+  }
+
+  $noteOverlay.classList.add(
+    "show"
+  );
+
+  $noteOverlay.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+}
+
+function closeNote(){
+
+  $noteOverlay.classList.remove(
+    "show"
+  );
+
+  $noteOverlay.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+}
+
+function openEdit(dateStr){
+
+  _editDate =
+  dateStr;
+
+  $editTitle.textContent =
+  `Événements — ${toFRDate(dateStr)}`;
+
+  renderEditList(dateStr);
+
+  $editOverlay.classList.add(
+    "show"
+  );
+
+  $editOverlay.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+}
+
+function closeEdit(){
+
+  $editOverlay.classList.remove(
+    "show"
+  );
+
+  $editOverlay.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  _editDate =
+  "";
+
+  $editBody.innerHTML =
+  "";
+
+}
+
+function renderEditList(dateStr){
+
+  const arr =
+  (
+    eventsByDate.get(dateStr)
+    ||
+    []
+  )
+  .slice();
+
+  arr.sort(
+    (a,b)=>
+      String(a.start||"").localeCompare(String(b.start||""))
+      ||
+      String(a.title||"").localeCompare(String(b.title||""))
+  );
+
+  $editBody.innerHTML =
+  "";
+
+  if(!arr.length){
+
+    const empty =
+    document.createElement("div");
+
+    empty.className =
+    "row";
+
+    empty.innerHTML =
+    `<div style="font-weight:900;opacity:.9">
+      Aucun événement ce jour.
+    </div>`;
+
+    $editBody.appendChild(empty);
+
+    return;
+
+  }
+
+  for(const ev of arr){
+
+    const name =
+    String(ev.title||"").trim()
+    ||
+    "—";
+
+    const time =
+    formatTimeRange(
+      ev.start,
+      ev.end
+    );
+
+    const cat =
+    String(ev.category||"").trim();
+
+    const loc =
+    String(ev.location||"").trim();
+
+    const details =
+    String(ev.details||"").trim();
+
+    const row =
+    document.createElement("div");
+
+    row.className =
+    "row";
+
+    row.innerHTML =
+    `
+      <div class="rowTop">
+
+        <div class="rowName">
+          ${escapeHtml(name)}
+        </div>
+
+        <div class="evTime">
+          ${escapeHtml(time)}
+        </div>
+
+      </div>
+
+      <div class="rowSub">
+
+        ${cat ? `<span>🎨 ${escapeHtml(cat)}</span>` : ""}
+
+        ${loc ? `<span>📍 ${escapeHtml(loc)}</span>` : ""}
+
+        ${details ? `<span>📝 note</span>` : ""}
+
+      </div>
+
+      <div class="rowBtns">
+
+        <button class="iconBtn" data-act="view">👁</button>
+
+        <button class="iconBtn" data-act="edit">🖍</button>
+
+        <button class="iconBtn danger" data-act="del">🗑</button>
+
+      </div>
+    `;
+
+    row
+      .querySelectorAll("button")
+      .forEach(b=>{
+
+        b.addEventListener(
+          "click",
+          async ()=>{
+
+            const act =
+            b.dataset.act;
+
+            if(act==="view"){
+
+              alert(
+                `📅 ${toFRDate(dateStr)}\n` +
+                `🕒 ${time||"—"}\n` +
+                `📌 ${name}\n` +
+                (cat ? `🎨 ${cat}\n` : "") +
+                (loc ? `📍 ${loc}\n` : "") +
+                (details ? `\n📝 ${details}` : "")
+              );
+
+              return;
+
+            }
+
+            if(act==="del"){
+
+              const ok =
+              confirm(
+                `Supprimer l’événement :\n\n${name}\n${time||""}\n\nConfirmer ?`
+              );
+
+              if(!ok){
+                return;
+              }
+
+              await apiDeleteEvent_(
+                dateStr,
+                ev
+              );
+
+              await loadApi(true);
+
+              renderEditList(dateStr);
+
+              return;
+
+            }
+
+            if(act==="edit"){
+
+              openEventForm(
+                "edit",
+                dateStr,
+                ev
+              );
+
+            }
+
+          }
+        );
+
+      });
+
+    $editBody.appendChild(row);
+
+  }
+
+}
+
+async function apiAddEvent_(dateStr,payload){
+
+  const email =
+  getEmailLocal();
+
+  if(!email){
+
+    alert(
+      "Email introuvable (localStorage). Reconnecte-toi sur le portail."
+    );
+
+    return;
+
+  }
+
+  const cb =
+  "cb_add_" +
+  Math.random()
+    .toString(36)
+    .slice(2);
+
+  const url =
+  `${API}?view=planning_add` +
+  `&email=${encodeURIComponent(email)}` +
+  `&date=${encodeURIComponent(dateStr)}` +
+  `&start=${encodeURIComponent(payload.start||"")}` +
+  `&end=${encodeURIComponent(payload.end||"")}` +
+  `&title=${encodeURIComponent(payload.title||"")}` +
+  `&category=${encodeURIComponent(payload.category||"")}` +
+  `&location=${encodeURIComponent(payload.location||"")}` +
+  `&details=${encodeURIComponent(payload.details||"")}` +
+  `&nocache=1` +
+  `&callback=${cb}`;
+
+  const res =
+  await jsonp(
+    url,
+    cb,
+    20000
+  );
+
+  if(
+    !res
+    ||
+    res.ok!==true
   ){
 
-    if(
-      !API
+    throw new Error(
+      res?.error
       ||
-      API.includes(
-        "COLLE_ICI"
+      "Erreur ajout"
+    );
+
+  }
+
+  return res;
+
+}
+
+async function apiDeleteEvent_(dateStr,ev){
+
+  const email =
+  getEmailLocal();
+
+  if(!email){
+
+    alert(
+      "Email introuvable (localStorage). Reconnecte-toi sur le portail."
+    );
+
+    return;
+
+  }
+
+  const eventId =
+  String(
+    ev?.event_id
+    ||
+    ev?.id
+    ||
+    ""
+  ).trim();
+
+  if(!eventId){
+
+    alert(
+      "Suppression impossible : cet événement n’a pas d’identifiant event_id. Il faut le recréer ou lui ajouter un event_id dans Sheets."
+    );
+
+    return;
+
+  }
+
+  const cb =
+  "cb_del_" +
+  Math.random()
+    .toString(36)
+    .slice(2);
+
+  const url =
+  `${API}?view=planning_delete` +
+  `&email=${encodeURIComponent(email)}` +
+  `&event_id=${encodeURIComponent(eventId)}` +
+  `&nocache=1` +
+  `&callback=${cb}`;
+
+  const res =
+  await jsonp(
+    url,
+    cb,
+    20000
+  );
+
+  if(
+    !res
+    ||
+    res.ok!==true
+  ){
+
+    throw new Error(
+      res?.error
+      ||
+      "Erreur suppression"
+    );
+
+  }
+
+  if(
+    Number(res.deleted||0)<1
+  ){
+
+    throw new Error(
+      "Aucune ligne supprimée. event_id non trouvé dans Sheets."
+    );
+
+  }
+
+  return res;
+
+}
+
+function buildCategoryOptions(selectedValue){
+
+  $fCategory.innerHTML =
+  "";
+
+  const none =
+  document.createElement("option");
+
+  none.value =
+  "";
+
+  none.textContent =
+  "Aucune";
+
+  $fCategory.appendChild(none);
+
+  const items =
+  [...catLabel.entries()]
+    .map(([k,label])=>({
+
+      k,
+      label,
+
+      order:
+      catOrder.has(k)
+        ? catOrder.get(k)
+        : 9999
+
+    }));
+
+  items.sort(
+    (a,b)=>
+      (a.order-b.order)
+      ||
+      a.label.localeCompare(b.label)
+  );
+
+  for(const it of items){
+
+    const opt =
+    document.createElement("option");
+
+    opt.value =
+    it.label;
+
+    opt.textContent =
+    it.label;
+
+    $fCategory.appendChild(opt);
+
+  }
+
+  $fCategory.value =
+  selectedValue || "";
+
+}
+
+function getLoopValues(values){
+
+  const arr = [];
+
+  for(
+    let i=0;
+    i<LOOP_DUPLICATES;
+    i++
+  ){
+
+    arr.push(...values);
+
+  }
+
+  return arr;
+
+}
+
+function buildWheel(pickerKey){
+
+  const picker =
+  TIME_PICKERS[pickerKey];
+
+  const allValues =
+  getLoopValues(
+    picker.values
+  );
+
+  picker.inner.innerHTML =
+  "";
+
+  picker.loopValues =
+  allValues;
+
+  const padTop =
+  document.createElement("div");
+
+  padTop.className =
+  "wheelPad";
+
+  picker.inner.appendChild(padTop);
+
+  allValues.forEach((v,idx)=>{
+
+    const item =
+    document.createElement("div");
+
+    item.className =
+    "wheelItem";
+
+    item.dataset.value =
+    v;
+
+    item.dataset.index =
+    String(idx);
+
+    item.textContent =
+    v;
+
+    item.addEventListener(
+      "click",
+      ()=>setWheelValue(
+        pickerKey,
+        v,
+        true
       )
+    );
+
+    picker.inner.appendChild(item);
+
+  });
+
+  const padBottom =
+  document.createElement("div");
+
+  padBottom.className =
+  "wheelPad";
+
+  picker.inner.appendChild(padBottom);
+
+  picker.wheel.addEventListener(
+    "scroll",
+    ()=>{
+
+      updateWheelActive(pickerKey);
+
+      keepWheelLooped(pickerKey);
+
+      clearTimeout(picker.timer);
+
+      picker.timer =
+      setTimeout(
+        ()=>snapWheel(pickerKey),
+        80
+      );
+
+    }
+  );
+
+}
+
+function getWheelItems(pickerKey){
+
+  return [
+    ...TIME_PICKERS[pickerKey]
+      .inner
+      .querySelectorAll(".wheelItem")
+  ];
+
+}
+
+function getNearestWheelItem(pickerKey){
+
+  const picker =
+  TIME_PICKERS[pickerKey];
+
+  const center =
+  picker.wheel.scrollTop
+  +
+  picker.wheel.clientHeight/2;
+
+  let bestItem = null;
+  let bestDist = Infinity;
+
+  getWheelItems(pickerKey)
+    .forEach(item=>{
+
+      const itemCenter =
+      item.offsetTop
+      +
+      item.offsetHeight/2;
+
+      const dist =
+      Math.abs(
+        center-itemCenter
+      );
+
+      if(dist<bestDist){
+
+        bestDist = dist;
+
+        bestItem = item;
+
+      }
+
+    });
+
+  return bestItem;
+
+}
+
+function updateWheelActive(pickerKey){
+
+  const picker =
+  TIME_PICKERS[pickerKey];
+
+  const bestItem =
+  getNearestWheelItem(pickerKey);
+
+  getWheelItems(pickerKey)
+    .forEach(i=>
+      i.classList.remove("active")
+    );
+
+  if(bestItem){
+
+    bestItem.classList.add(
+      "active"
+    );
+
+    picker.value =
+    bestItem.dataset.value;
+
+  }
+
+}
+
+function keepWheelLooped(pickerKey){
+
+  const picker =
+  TIME_PICKERS[pickerKey];
+
+  if(!picker.looping){
+    return;
+  }
+
+  const valuesLen =
+  picker.values.length;
+
+  const itemHeight =
+  42;
+
+  const cycleHeight =
+  valuesLen * itemHeight;
+
+  const minScroll =
+  cycleHeight * 4;
+
+  const maxScroll =
+  cycleHeight * (LOOP_DUPLICATES-5);
+
+  if(
+    picker.wheel.scrollTop
+    <
+    minScroll
+  ){
+
+    picker.wheel.scrollTop +=
+    cycleHeight * 6;
+
+  }else if(
+    picker.wheel.scrollTop
+    >
+    maxScroll
+  ){
+
+    picker.wheel.scrollTop -=
+    cycleHeight * 6;
+
+  }
+
+}
+
+function findBestItemForValueNearCenter(pickerKey,value){
+
+  const picker =
+  TIME_PICKERS[pickerKey];
+
+  const items =
+  getWheelItems(pickerKey)
+    .filter(i=>
+      i.dataset.value===value
+    );
+
+  if(!items.length){
+    return null;
+  }
+
+  const currentCenter =
+  picker.wheel.scrollTop
+  +
+  picker.wheel.clientHeight/2;
+
+  let best =
+  items[0];
+
+  let bestDist =
+  Infinity;
+
+  items.forEach(item=>{
+
+    const c =
+    item.offsetTop
+    +
+    item.offsetHeight/2;
+
+    const dist =
+    Math.abs(c-currentCenter);
+
+    if(dist<bestDist){
+
+      bestDist = dist;
+
+      best = item;
+
+    }
+
+  });
+
+  return best;
+
+}
+
+function setWheelValue(pickerKey,value,smooth){
+
+  const picker =
+  TIME_PICKERS[pickerKey];
+
+  const item =
+  findBestItemForValueNearCenter(
+    pickerKey,
+    value
+  );
+
+  if(!item){
+    return;
+  }
+
+  const target =
+  item.offsetTop
+  -
+  (
+    picker.wheel.clientHeight
+    -
+    item.offsetHeight
+  )/2;
+
+  picker.wheel.scrollTo({
+
+    top:target,
+
+    behavior:
+    smooth
+      ? "smooth"
+      : "auto"
+
+  });
+
+  picker.value =
+  value;
+
+  setTimeout(()=>{
+
+    keepWheelLooped(pickerKey);
+
+    updateWheelActive(pickerKey);
+
+  },smooth ? 160 : 0);
+
+}
+
+function snapWheel(pickerKey){
+
+  const picker =
+  TIME_PICKERS[pickerKey];
+
+  const bestItem =
+  getNearestWheelItem(pickerKey);
+
+  if(!bestItem){
+    return;
+  }
+
+  const target =
+  bestItem.offsetTop
+  -
+  (
+    picker.wheel.clientHeight
+    -
+    bestItem.offsetHeight
+  )/2;
+
+  picker.wheel.scrollTo({
+
+    top:target,
+    behavior:"smooth"
+
+  });
+
+  picker.value =
+  bestItem.dataset.value;
+
+  setTimeout(()=>{
+
+    keepWheelLooped(pickerKey);
+
+    updateWheelActive(pickerKey);
+
+  },160);
+
+}
+
+function getTimeValue(prefix){
+
+  return (
+    TIME_PICKERS[
+      prefix+"Hour"
+    ].value
+    +
+    ":"
+    +
+    TIME_PICKERS[
+      prefix+"Minute"
+    ].value
+  );
+
+}
+
+function setTimeValue(prefix,hhmm){
+
+  const val =
+  String(hhmm||"").trim();
+
+  const [hh,mm] =
+  val && val.includes(":")
+    ? val.split(":")
+    : ["00","00"];
+
+  const hour =
+  HOURS.includes(hh)
+    ? hh
+    : "00";
+
+  const minute =
+  MINUTES.includes(mm)
+    ? mm
+    : "00";
+
+  setWheelValue(
+    prefix+"Hour",
+    hour,
+    false
+  );
+
+  setWheelValue(
+    prefix+"Minute",
+    minute,
+    false
+  );
+
+}
+
+function initWheels(){
+
+  buildWheel("startHour");
+  buildWheel("startMinute");
+  buildWheel("endHour");
+  buildWheel("endMinute");
+
+  setTimeout(()=>{
+
+    setTimeValue(
+      "start",
+      "08:00"
+    );
+
+    setTimeValue(
+      "end",
+      "09:00"
+    );
+
+    [
+      "startHour",
+      "startMinute",
+      "endHour",
+      "endMinute"
+    ]
+    .forEach(k=>{
+
+      keepWheelLooped(k);
+
+      updateWheelActive(k);
+
+    });
+
+  },0);
+
+}
+
+function openEventForm(mode,dateStr,ev){
+
+  FORM_STATE.mode =
+  mode;
+
+  FORM_STATE.dateStr =
+  dateStr;
+
+  FORM_STATE.originalEvent =
+  ev || null;
+
+  buildCategoryOptions(
+    ev?.category || ""
+  );
+
+  if(mode==="edit"){
+
+    $formTitle.textContent =
+    `Modifier — ${toFRDate(dateStr)}`;
+
+    $fTitle.value =
+    ev?.title || "";
+
+    $fLocation.value =
+    ev?.location || "";
+
+    $fDetails.value =
+    ev?.details || "";
+
+    setTimeValue(
+      "start",
+      ev?.start || "08:00"
+    );
+
+    setTimeValue(
+      "end",
+      ev?.end || "09:00"
+    );
+
+  }else{
+
+    $formTitle.textContent =
+    `Ajouter — ${toFRDate(dateStr)}`;
+
+    $fTitle.value = "";
+    $fLocation.value = "";
+    $fDetails.value = "";
+    $fCategory.value = "";
+
+    setTimeValue(
+      "start",
+      "08:00"
+    );
+
+    setTimeValue(
+      "end",
+      "09:00"
+    );
+
+  }
+
+  $formOverlay.classList.add(
+    "show"
+  );
+
+  $formOverlay.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+}
+
+function closeEventForm(){
+
+  $formOverlay.classList.remove(
+    "show"
+  );
+
+  $formOverlay.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+}
+
+async function saveEventForm(){
+
+  const title =
+  String($fTitle.value||"").trim();
+
+  const category =
+  String($fCategory.value||"").trim();
+
+  const location =
+  String($fLocation.value||"").trim();
+
+  const details =
+  String($fDetails.value||"").trim();
+
+  const start =
+  getTimeValue("start");
+
+  const end =
+  getTimeValue("end");
+
+  if(!title){
+
+    alert(
+      "Titre obligatoire."
+    );
+
+    return;
+
+  }
+
+  if(end<start){
+
+    alert(
+      "Heure fin incorrecte."
+    );
+
+    return;
+
+  }
+
+  try{
+
+    if(
+      FORM_STATE.mode==="edit"
+      &&
+      FORM_STATE.originalEvent
     ){
 
-      showStatus(
-        "API manquante",
-        "Mets ton URL exec dans const API."
+      await apiDeleteEvent_(
+        FORM_STATE.dateStr,
+        FORM_STATE.originalEvent
       );
+
+    }
+
+    await apiAddEvent_(
+      FORM_STATE.dateStr,
+      {
+        title,
+        start,
+        end,
+        category,
+        location,
+        details
+      }
+    );
+
+    closeEventForm();
+
+    await loadApi(true);
+
+    if(_editDate){
+
+      renderEditList(
+        _editDate
+      );
+
+    }
+
+  }catch(err){
+
+    alert(
+      "Erreur : " +
+      String(
+        err?.message || err
+      )
+    );
+
+  }
+
+}
+
+$btnAddEvent.addEventListener(
+  "click",
+  ()=>{
+
+    if(!_editDate){
+      return;
+    }
+
+    openEventForm(
+      "add",
+      _editDate,
+      null
+    );
+
+  }
+);
+
+$btnCloseEdit.addEventListener(
+  "click",
+  closeEdit
+);
+
+$editOverlay.addEventListener(
+  "click",
+  e=>{
+
+    if(
+      e.target===$editOverlay
+    ){
+
+      closeEdit();
+
+    }
+
+  }
+);
+
+$btnFormCancel.addEventListener(
+  "click",
+  closeEventForm
+);
+
+$btnFormClose.addEventListener(
+  "click",
+  closeEventForm
+);
+
+$btnFormSave.addEventListener(
+  "click",
+  saveEventForm
+);
+
+$formOverlay.addEventListener(
+  "click",
+  e=>{
+
+    if(
+      e.target===$formOverlay
+    ){
+
+      closeEventForm();
+
+    }
+
+  }
+);
+
+$grid.addEventListener(
+  "click",
+  e=>{
+
+    const day =
+    e.target.closest(".day");
+
+    if(!day){
+      return;
+    }
+
+    if(
+      day.classList.contains(
+        "is-empty"
+      )
+    ){
+      return;
+    }
+
+    const dateStr =
+    day.dataset.date;
+
+    if(!dateStr){
+      return;
+    }
+
+    if(
+      EDIT_MODE
+      &&
+      IS_ADMIN
+    ){
+
+      openEdit(dateStr);
 
       return;
 
     }
 
-    const cached =
-      loadCache_();
+    if(
+      day.classList.contains(
+        "has-note"
+      )
+    ){
+
+      openNote(dateStr);
+
+    }
+
+  }
+);
+
+$noteClose.addEventListener(
+  "click",
+  closeNote
+);
+
+$noteOverlay.addEventListener(
+  "click",
+  e=>{
+
+    if(
+      e.target===$noteOverlay
+    ){
+
+      closeNote();
+
+    }
+
+  }
+);
+
+document.addEventListener(
+  "keydown",
+  e=>{
+
+    if(e.key==="Escape"){
+
+      closeNote();
+      closeEdit();
+      closeEventForm();
+
+    }
+
+  }
+);
+
+function saveCache_(payload){
+
+  try{
+
+    localStorage.setItem(
+      getCacheKey_(),
+      JSON.stringify({
+        savedAt:Date.now(),
+        payload
+      })
+    );
+
+  }catch(e){}
+
+}
+
+function loadCache_(){
+
+  try{
+
+    const raw =
+    localStorage.getItem(
+      getCacheKey_()
+    );
+
+    if(!raw){
+      return null;
+    }
+
+    const obj =
+    JSON.parse(raw);
+
+    if(
+      !obj
+      ||
+      !obj.payload
+    ){
+      return null;
+    }
+
+    if(
+      obj.savedAt
+      &&
+      Date.now()-obj.savedAt
+      >
+      CACHE_MAX_AGE_MS
+    ){
+
+      return null;
+
+    }
+
+    return obj.payload;
+
+  }catch(e){
+
+    return null;
+
+  }
+
+}
+
+function applyPlanningData_(py,pc){
+
+  events =
+  Array.isArray(py?.events)
+    ? py.events
+    : [];
+
+  categoriesRaw =
+  Array.isArray(pc?.categories)
+  &&
+  pc.categories.length
+    ? pc.categories
+    : DEFAULT_CATEGORIES.slice();
+
+  rebuildMaps();
+  renderLegend();
+  renderMonth();
+
+}
+
+async function loadApi(forceFresh=false){
+
+  if(
+    !API
+    ||
+    API.includes("COLLE_ICI")
+  ){
+
+    showStatus(
+      "API manquante",
+      "Mets ton URL exec dans const API."
+    );
+
+    return;
+
+  }
+
+  const cached =
+  loadCache_();
+
+  if(
+    !forceFresh
+    &&
+    cached?.py
+    &&
+    cached?.pc
+  ){
+
+    applyPlanningData_(
+      cached.py,
+      cached.pc
+    );
+
+    showStatus(
+      "Synchronisation…",
+      "Mise à jour en cours."
+    );
+
+  }else{
+
+    showStatus(
+      "Chargement…",
+      "Récupération des événements et catégories."
+    );
+
+  }
+
+  const cb1 =
+  "cb_py_" +
+  Math.random()
+    .toString(36)
+    .slice(2);
+
+  const cb2 =
+  "cb_pc_" +
+  Math.random()
+    .toString(36)
+    .slice(2);
+
+  try{
+
+    const planningUrl =
+    `${API}?view=planning_year` +
+    `&year=${ACTIVE_YEAR}` +
+    (
+      forceFresh
+        ? "&nocache=1"
+        : ""
+    ) +
+    `&callback=${cb1}`;
+
+    const catsUrl =
+    `${API}?view=planning_categories` +
+    (
+      forceFresh
+        ? "&nocache=1"
+        : ""
+    ) +
+    `&callback=${cb2}`;
+
+    const [py,pc] =
+    await Promise.all([
+
+      jsonp(
+        planningUrl,
+        cb1
+      ),
+
+      jsonp(
+        catsUrl,
+        cb2
+      )
+
+    ]);
+
+    if(py?.ok===false){
+
+      throw new Error(
+        py?.error
+        ||
+        "planning_year invalide"
+      );
+
+    }
+
+    if(pc?.ok===false){
+
+      throw new Error(
+        pc?.error
+        ||
+        "planning_categories invalide"
+      );
+
+    }
+
+    applyPlanningData_(
+      py,
+      pc
+    );
+
+    saveCache_({
+      py,
+      pc
+    });
+
+    hideStatus();
+
+  }catch(e){
 
     if(
       !forceFresh
@@ -4354,401 +3403,158 @@
       cached?.pc
     ){
 
-      applyPlanningData_(
-        cached.py,
-        cached.pc
-      );
-
       showStatus(
-        "Synchronisation…",
-        "Mise à jour en cours."
+        "Hors ligne / lent",
+        "Les données affichées sont en cache."
       );
 
-    }else{
-
-      showStatus(
-        "Chargement…",
-        "Récupération des événements et catégories."
+      setTimeout(
+        hideStatus,
+        2500
       );
+
+      return;
 
     }
 
-    const cb1 =
-      "cb_py_" +
-      Math.random()
-        .toString(36)
-        .slice(2);
+    categoriesRaw =
+    DEFAULT_CATEGORIES.slice();
 
-    const cb2 =
-      "cb_pc_" +
-      Math.random()
-        .toString(36)
-        .slice(2);
+    events = [];
 
-    try{
+    rebuildMaps();
+    renderLegend();
+    renderMonth();
 
-      const planningUrl =
-        `${API}?view=planning_year` +
-        `&year=${ACTIVE_YEAR}` +
-        (
-          forceFresh
-            ?
-            "&nocache=1"
-            :
-            ""
-        ) +
-        `&callback=${cb1}`;
-
-      const catsUrl =
-        `${API}?view=planning_categories` +
-        (
-          forceFresh
-            ?
-            "&nocache=1"
-            :
-            ""
-        ) +
-        `&callback=${cb2}`;
-
-      const [
-        py,
-        pc
-      ] =
-        await Promise.all(
-          [
-
-            jsonp(
-              planningUrl,
-              cb1
-            ),
-
-            jsonp(
-              catsUrl,
-              cb2
-            )
-
-          ]
-        );
-
-      if(
-        py?.ok===false
-      ){
-
-        throw new Error(
-          py?.error
-          ||
-          "planning_year invalide"
-        );
-
-      }
-
-      if(
-        pc?.ok===false
-      ){
-
-        throw new Error(
-          pc?.error
-          ||
-          "planning_categories invalide"
-        );
-
-      }
-
-      applyPlanningData_(
-        py,
-        pc
-      );
-
-      saveCache_(
-        {
-          py,
-          pc
-        }
-      );
-
-      hideStatus();
-
-    }catch(e){
-
-      if(
-        !forceFresh
-        &&
-        cached?.py
-        &&
-        cached?.pc
-      ){
-
-        showStatus(
-          "Hors ligne / lent",
-          "Les données affichées sont en cache."
-        );
-
-        setTimeout(
-          hideStatus,
-          2500
-        );
-
-        return;
-
-      }
-
-      categoriesRaw =
-        DEFAULT_CATEGORIES.slice();
-
-      events =
-        [];
-
-      rebuildMaps();
-
-      renderLegend();
-
-      renderMonth();
-
-      showStatus(
-        "API HS / lente",
-        "La légende reste, mais pas d’événements."
-      );
-
-    }
-
-  }
-
-  function updateYearDisplay_(){
-
-  if(IS_ADMIN && EDIT_MODE){
-
-    $yearText.style.display = "none";
-    $yearSelect.style.display = "inline-block";
-
-    $yearSelect.innerHTML = "";
-
-    ADMIN_YEARS.forEach(year => {
-
-      const opt = document.createElement("option");
-
-      opt.value = String(year);
-      opt.textContent = String(year);
-
-      if(year === ACTIVE_YEAR){
-        opt.selected = true;
-      }
-
-      $yearSelect.appendChild(opt);
-
-    });
-
-  }else{
-
-    $yearSelect.style.display = "none";
-
-    $yearText.textContent = String(PUBLIC_YEAR);
-    $yearText.style.display = "inline";
+    showStatus(
+      "API HS / lente",
+      "La légende reste, mais pas d’événements."
+    );
 
   }
 
 }
 
-  $("btnBack")
-    .addEventListener(
-      "click",
-      ()=>location.href=
-        BACK_URL
-    );
+$("btnBack").addEventListener(
+  "click",
+  ()=>location.href=BACK_URL
+);
 
-  $btnPrev
-    .addEventListener(
-      "click",
-      ()=>{
+$btnPrev.addEventListener(
+  "click",
+  ()=>{
 
-        if(
-          currentMonth>0
-        ){
+    if(currentMonth>0){
 
-          currentMonth--;
-
-          renderMonth();
-
-        }
-
-      }
-    );
-
-  $btnNext
-    .addEventListener(
-      "click",
-      ()=>{
-
-        if(
-          currentMonth<11
-        ){
-
-          currentMonth++;
-
-          renderMonth();
-
-        }
-
-      }
-    );
-
-  $btnLock
-    .addEventListener(
-      "click",
-      ()=>{
-
-        if(!IS_ADMIN){
-          return;
-        }
-
-        setEditMode(
-          !EDIT_MODE
-        );
-
-      }
-    );
-
-  /*
-    Changement d'année uniquement pour l'admin.
-  */
-  $yearSelect
-    .addEventListener(
-      "change",
-      async ()=>{
-
-        if(!IS_ADMIN){
-          return;
-        }
-
-        const newYear =
-          Number(
-            $yearSelect.value
-          );
-
-        if(
-          !ADMIN_YEARS
-            .includes(
-              newYear
-            )
-        ){
-          return;
-        }
-
-        ACTIVE_YEAR =
-          newYear;
-
-        closeNote();
-        closeEdit();
-        closeEventForm();
-
-        events =
-          [];
-
-        rebuildMaps();
-
-        const now =
-          new Date();
-
-        currentMonth =
-          (
-            now.getFullYear()
-            ===
-            ACTIVE_YEAR
-          )
-            ?
-            now.getMonth()
-            :
-            0;
-
-        renderMonth();
-
-        showStatus(
-          `Planning ${ACTIVE_YEAR}`,
-          "Chargement de l'année…"
-        );
-
-        await loadApi();
-
-      }
-    );
-
-  /*
-    Démarrage
-  */
-  (
-    async function(){
-
-      rebuildMaps();
-
-      renderLegend();
-
-      initWheels();
-
-      try{
-
-        await loadMyRole_();
-
-      }catch(e){
-
-        IS_ADMIN =
-          false;
-
-      }
-
-      if(IS_ADMIN){
-
-        await loadPlanningYears_();
-
-      }else{
-
-        ADMIN_YEARS =
-          [
-            PUBLIC_YEAR
-          ];
-
-      }
-
-      ACTIVE_YEAR =
-        PUBLIC_YEAR;
-
-      updateYearDisplay_();
-
-      const now =
-        new Date();
-
-      currentMonth =
-        (
-          now.getFullYear()
-          ===
-          ACTIVE_YEAR
-        )
-          ?
-          now.getMonth()
-          :
-          0;
+      currentMonth--;
 
       renderMonth();
 
-      await loadApi();
+    }
 
-      if(IS_ADMIN){
+  }
+);
 
-        $btnLock.style.display =
-          "inline-block";
+$btnNext.addEventListener(
+  "click",
+  ()=>{
 
-      }else{
+    if(currentMonth<11){
 
-        $btnLock.style.display =
-          "none";
+      currentMonth++;
 
-        setEditMode(
-          false
-        );
-
-      }
+      renderMonth();
 
     }
-  )();
 
+  }
+);
+
+$btnLock.addEventListener(
+  "click",
+  async ()=>{
+
+    if(!IS_ADMIN){
+      return;
+    }
+
+    await setEditMode(
+      !EDIT_MODE
+    );
+
+  }
+);
+
+(async function(){
+
+  /*
+    Au démarrage :
+    aucune possibilité d'afficher le menu.
+  */
+  EDIT_MODE = false;
+  ACTIVE_YEAR = PUBLIC_YEAR;
+
+  $yearControl.textContent =
+  String(PUBLIC_YEAR);
+
+  rebuildMaps();
+  renderLegend();
+
+  initWheels();
+
+  const now =
+  new Date();
+
+  currentMonth =
+  now.getFullYear()===PUBLIC_YEAR
+    ? now.getMonth()
+    : 0;
+
+  renderMonth();
+
+  /*
+    Chargement normal du planning 2026.
+  */
+  await loadApi();
+
+  /*
+    Vérification du rôle seulement ensuite.
+  */
+  try{
+
+    await loadMyRole_();
+
+  }catch(e){
+
+    IS_ADMIN = false;
+
+  }
+
+  if(IS_ADMIN){
+
+    $btnLock.style.display =
+    "inline-block";
+
+    /*
+      On prépare les années,
+      mais on ne crée toujours PAS le menu.
+    */
+    await loadPlanningYears_();
+
+  }else{
+
+    $btnLock.style.display =
+    "none";
+
+  }
+
+  /*
+    Sécurité :
+    on force encore le titre simple au démarrage.
+  */
+  renderYearControl_();
+
+})();
 </script>
 
 </body>
