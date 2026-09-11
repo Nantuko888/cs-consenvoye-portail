@@ -486,14 +486,8 @@
       border-radius:14px;
       font-weight:950;
       cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
       min-width:42px;
       transition:.15s ease;
-    }
-
-    .noteClose:active,
-    .iconBtn:active{
-      transform:translateY(1px);
     }
 
     .iconBtn.danger{
@@ -683,8 +677,6 @@
       font-size:24px;
       font-weight:950;
       color:rgba(255,255,255,.92);
-      transform:translateY(-1px);
-      user-select:none;
     }
 
     .wheel{
@@ -720,18 +712,13 @@
       font-weight:900;
       color:rgba(255,255,255,.40);
       scroll-snap-align:center;
-      transition:
-        transform .12s ease,
-        color .12s ease,
-        opacity .12s ease;
       opacity:.65;
       user-select:none;
     }
 
     .wheelItem.active{
-      color:rgba(255,255,255,.98);
+      color:#fff;
       opacity:1;
-      transform:scale(1.01);
     }
 
     .wheelFocus{
@@ -744,7 +731,6 @@
       border:1px solid rgba(255,255,255,.18);
       background:rgba(255,255,255,.08);
       pointer-events:none;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
     }
 
     .wheelFadeTop,
@@ -759,22 +745,12 @@
 
     .wheelFadeTop{
       top:0;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(0,0,0,.46),
-          rgba(0,0,0,0)
-        );
+      background:linear-gradient(180deg,rgba(0,0,0,.46),transparent);
     }
 
     .wheelFadeBottom{
       bottom:0;
-      background:
-        linear-gradient(
-          0deg,
-          rgba(0,0,0,.46),
-          rgba(0,0,0,0)
-        );
+      background:linear-gradient(0deg,rgba(0,0,0,.46),transparent);
     }
 
     @media (max-width:520px){
@@ -825,15 +801,11 @@
 
   <div class="monthbar">
 
-    <button class="navbtn" id="btnPrev" aria-label="Mois précédent">
-      ‹
-    </button>
+    <button class="navbtn" id="btnPrev">‹</button>
 
     <h2 class="monthname" id="monthName">—</h2>
 
-    <button class="navbtn" id="btnNext" aria-label="Mois suivant">
-      ›
-    </button>
+    <button class="navbtn" id="btnNext">›</button>
 
   </div>
 
@@ -859,6 +831,7 @@
 
 </div>
 
+
 <div class="status" id="status">
 
   <div class="pill">
@@ -866,7 +839,7 @@
     <span id="statusIcon">⚠️</span>
 
     <div>
-      <div id="statusTxt">Chargement…</div>
+      <div id="statusTxt"></div>
       <div class="small" id="statusSub"></div>
     </div>
 
@@ -874,13 +847,14 @@
 
 </div>
 
-<div class="noteOverlay" id="noteOverlay" aria-hidden="true">
 
-  <div class="noteSheet" role="dialog" aria-modal="true">
+<div class="noteOverlay" id="noteOverlay">
+
+  <div class="noteSheet">
 
     <div class="noteHead">
 
-      <div class="noteTitle" id="noteTitle">—</div>
+      <div class="noteTitle" id="noteTitle"></div>
 
       <button class="noteClose" id="noteClose">
         Fermer
@@ -894,13 +868,14 @@
 
 </div>
 
-<div class="editOverlay" id="editOverlay" aria-hidden="true">
 
-  <div class="editSheet" role="dialog" aria-modal="true">
+<div class="editOverlay" id="editOverlay">
+
+  <div class="editSheet">
 
     <div class="editHead">
 
-      <div class="editTitle" id="editTitle">—</div>
+      <div class="editTitle" id="editTitle"></div>
 
       <div class="editActions">
 
@@ -922,9 +897,10 @@
 
 </div>
 
-<div class="formOverlay" id="formOverlay" aria-hidden="true">
 
-  <div class="formSheet" role="dialog" aria-modal="true">
+<div class="formOverlay" id="formOverlay">
+
+  <div class="formSheet">
 
     <div class="formHead">
 
@@ -932,31 +908,48 @@
         Événement
       </div>
 
-      <div class="formActions">
-        <button class="iconBtn" id="btnFormCancel">
-          ✕
-        </button>
-      </div>
+      <button class="iconBtn" id="btnFormCancel">
+        ✕
+      </button>
 
     </div>
 
     <div class="formBody">
 
       <div class="formBlock">
-        <label class="formLabel" for="fTitle">Titre</label>
-        <input class="fieldText" id="fTitle" type="text" placeholder="Titre de l’événement" />
+
+        <label class="formLabel">
+          Titre
+        </label>
+
+        <input
+          class="fieldText"
+          id="fTitle"
+          type="text"
+          placeholder="Titre de l’événement">
+
       </div>
 
       <div class="formBlock">
-        <label class="formLabel" for="fCategory">Catégorie</label>
-        <select class="fieldSelect" id="fCategory"></select>
+
+        <label class="formLabel">
+          Catégorie
+        </label>
+
+        <select
+          class="fieldSelect"
+          id="fCategory">
+        </select>
+
       </div>
 
       <div class="timePickerGroup">
 
         <div class="timeSection">
 
-          <label class="timeLabel">Heure début</label>
+          <label class="timeLabel">
+            Heure début
+          </label>
 
           <div class="timePickerRow">
 
@@ -982,7 +975,9 @@
 
         <div class="timeSection">
 
-          <label class="timeLabel">Heure fin</label>
+          <label class="timeLabel">
+            Heure fin
+          </label>
 
           <div class="timePickerRow">
 
@@ -1009,18 +1004,48 @@
       </div>
 
       <div class="formBlock">
-        <label class="formLabel" for="fLocation">Lieu</label>
-        <input class="fieldText" id="fLocation" type="text" placeholder="Lieu (optionnel)" />
+
+        <label class="formLabel">
+          Lieu
+        </label>
+
+        <input
+          class="fieldText"
+          id="fLocation"
+          type="text"
+          placeholder="Lieu (optionnel)">
+
       </div>
 
       <div class="formBlock">
-        <label class="formLabel" for="fDetails">Détails / note</label>
-        <textarea class="fieldArea" id="fDetails" placeholder="Détails (optionnel)"></textarea>
+
+        <label class="formLabel">
+          Détails / note
+        </label>
+
+        <textarea
+          class="fieldArea"
+          id="fDetails"
+          placeholder="Détails (optionnel)"></textarea>
+
       </div>
 
-      <div class="formActions" style="justify-content:flex-end;padding-bottom:2px;">
-        <button class="btn" id="btnFormClose">Annuler</button>
-        <button class="btn" id="btnFormSave">Enregistrer</button>
+      <div
+        class="formActions"
+        style="justify-content:flex-end;padding-bottom:2px;">
+
+        <button
+          class="btn"
+          id="btnFormClose">
+          Annuler
+        </button>
+
+        <button
+          class="btn"
+          id="btnFormSave">
+          Enregistrer
+        </button>
+
       </div>
 
     </div>
@@ -1028,6 +1053,7 @@
   </div>
 
 </div>
+
 
 <script>
 
@@ -1064,9 +1090,13 @@ const CACHE_MAX_AGE_MS =
 const LS_EMAIL =
 "cs_portail_email_v1";
 
+
 function getCacheKey_(){
+
   return `cs_planning_cache_v1_${ACTIVE_YEAR}`;
+
 }
+
 
 const DEFAULT_CATEGORIES = [
   {category:"FMA centre",color:"#ff2d2d",order:1},
@@ -1078,49 +1108,76 @@ const DEFAULT_CATEGORIES = [
   {category:"Sainte Barbe",color:"#ff5a5a",order:7}
 ];
 
+
 const OVERRIDE_COLORS = {
   "fma centre":"#ff2d2d"
 };
 
+
 const $ = id =>
 document.getElementById(id);
 
+
 const $grid = $("grid");
+
 const $monthName = $("monthName");
+
 const $legendGrid = $("legendGrid");
+
 const $btnPrev = $("btnPrev");
+
 const $btnNext = $("btnNext");
 
 const $status = $("status");
+
 const $statusIcon = $("statusIcon");
+
 const $statusTxt = $("statusTxt");
+
 const $statusSub = $("statusSub");
 
 const $btnLock = $("btnLock");
+
 const $editLabel = $("editLabel");
+
 const $yearControl = $("yearControl");
 
 const $noteOverlay = $("noteOverlay");
+
 const $noteTitle = $("noteTitle");
+
 const $noteBody = $("noteBody");
+
 const $noteClose = $("noteClose");
 
 const $editOverlay = $("editOverlay");
+
 const $editTitle = $("editTitle");
+
 const $editBody = $("editBody");
+
 const $btnAddEvent = $("btnAddEvent");
+
 const $btnCloseEdit = $("btnCloseEdit");
 
 const $formOverlay = $("formOverlay");
+
 const $formTitle = $("formTitle");
+
 const $fTitle = $("fTitle");
+
 const $fCategory = $("fCategory");
+
 const $fLocation = $("fLocation");
+
 const $fDetails = $("fDetails");
 
 const $btnFormCancel = $("btnFormCancel");
+
 const $btnFormClose = $("btnFormClose");
+
 const $btnFormSave = $("btnFormSave");
+
 
 const monthsFR = [
   "Janvier",
@@ -1137,6 +1194,7 @@ const monthsFR = [
   "Décembre"
 ];
 
+
 const dowsFR = [
   "Dim",
   "Lun",
@@ -1147,27 +1205,47 @@ const dowsFR = [
   "Sam"
 ];
 
+
 let IS_ADMIN = false;
+
 let EDIT_MODE = false;
 
 let events = [];
-let categoriesRaw = DEFAULT_CATEGORIES.slice();
 
-let eventsByDate = new Map();
-let catColor = new Map();
-let catLabel = new Map();
-let catOrder = new Map();
-let categoryKeysByDate = new Map();
-let hasNoteByDate = new Map();
+let categoriesRaw =
+DEFAULT_CATEGORIES.slice();
 
-let currentMonth = 0;
-let _editDate = "";
+let eventsByDate =
+new Map();
+
+let catColor =
+new Map();
+
+let catLabel =
+new Map();
+
+let catOrder =
+new Map();
+
+let categoryKeysByDate =
+new Map();
+
+let hasNoteByDate =
+new Map();
+
+let currentMonth =
+0;
+
+let _editDate =
+"";
+
 
 const HOURS =
 Array.from(
   {length:24},
   (_,i)=>String(i).padStart(2,"0")
 );
+
 
 const MINUTES = [
   "00",
@@ -1176,14 +1254,17 @@ const MINUTES = [
   "45"
 ];
 
+
 const LOOP_DUPLICATES =
 15;
+
 
 let FORM_STATE = {
   mode:"add",
   dateStr:"",
   originalEvent:null
 };
+
 
 const TIME_PICKERS = {
 
@@ -1225,6 +1306,7 @@ const TIME_PICKERS = {
 
 };
 
+
 function norm(s){
 
   return String(s || "")
@@ -1237,12 +1319,13 @@ function norm(s){
 
 }
 
+
 function escapeHtml(s){
 
-  return (
+  return String(
     s == null
       ? ""
-      : String(s)
+      : s
   )
   .replaceAll("&","&amp;")
   .replaceAll("<","&lt;")
@@ -1251,6 +1334,7 @@ function escapeHtml(s){
   .replaceAll("'","&#039;");
 
 }
+
 
 function ymd(d){
 
@@ -1270,6 +1354,7 @@ function ymd(d){
   return `${y}-${m}-${dd}`;
 
 }
+
 
 function firstMondayGrid(
   year,
@@ -1305,6 +1390,7 @@ function firstMondayGrid(
   return d;
 
 }
+
 
 function toFRDate(
   ymdStr
@@ -1344,6 +1430,7 @@ function toFRDate(
 
 }
 
+
 function formatTimeRange(
   start,
   end
@@ -1375,6 +1462,7 @@ function formatTimeRange(
 
 }
 
+
 function getEmailLocal(){
 
   return (
@@ -1388,6 +1476,7 @@ function getEmailLocal(){
   .toLowerCase();
 
 }
+
 
 function showStatus(
   txt,
@@ -1436,6 +1525,7 @@ function showStatus(
 
 }
 
+
 function hideStatus(){
 
   $status.style.display =
@@ -1447,6 +1537,7 @@ function hideStatus(){
   );
 
 }
+
 
 function showSavedMessage(){
 
@@ -1463,6 +1554,7 @@ function showSavedMessage(){
 
 }
 
+
 function showDeletedMessage(){
 
   showStatus(
@@ -1477,6 +1569,7 @@ function showDeletedMessage(){
   );
 
 }
+
 
 function jsonp(
   url,
@@ -1536,9 +1629,12 @@ function jsonp(
         : "?";
 
       script.src =
-      url +
-      sep +
-      "t=" +
+      url
+      +
+      sep
+      +
+      "t="
+      +
       Date.now();
 
       script.onerror = ()=>{
@@ -1564,6 +1660,7 @@ function jsonp(
 
 }
 
+
 async function loadMyRole_(){
 
   const email =
@@ -1579,15 +1676,19 @@ async function loadMyRole_(){
   }
 
   const cb =
-  "cb_auth_" +
+  "cb_auth_"
+  +
   Math.random()
     .toString(36)
     .slice(2);
 
   const url =
-  `${API}?view=auth_check` +
-  `&email=${encodeURIComponent(email)}` +
-  `&nocache=1` +
+  `${API}?view=auth_check`
+  +
+  `&email=${encodeURIComponent(email)}`
+  +
+  `&nocache=1`
+  +
   `&callback=${cb}`;
 
   const res =
@@ -1599,8 +1700,10 @@ async function loadMyRole_(){
 
   IS_ADMIN =
   !!(
-    res &&
-    res.ok === true &&
+    res
+    &&
+    res.ok === true
+    &&
     String(
       res.role || ""
     ).toLowerCase()
@@ -1610,21 +1713,27 @@ async function loadMyRole_(){
 
 }
 
+
 async function loadPlanningYears_(){
 
-  if(ADMIN_YEARS_LOADED){
+  if(
+    ADMIN_YEARS_LOADED
+  ){
     return;
   }
 
   const cb =
-  "cb_years_" +
+  "cb_years_"
+  +
   Math.random()
     .toString(36)
     .slice(2);
 
   const url =
-  `${API}?view=planning_years_list` +
-  `&nocache=1` +
+  `${API}?view=planning_years_list`
+  +
+  `&nocache=1`
+  +
   `&callback=${cb}`;
 
   try{
@@ -1707,6 +1816,7 @@ async function loadPlanningYears_(){
 
 }
 
+
 function rebuildMaps(){
 
   eventsByDate =
@@ -1762,6 +1872,7 @@ function rebuildMaps(){
 
   }
 
+
   catColor =
   new Map();
 
@@ -1770,6 +1881,7 @@ function rebuildMaps(){
 
   catOrder =
   new Map();
+
 
   const cats =
   [...categoriesRaw]
@@ -1799,6 +1911,7 @@ function rebuildMaps(){
       c=>c.category
     );
 
+
   cats.sort(
     (a,b)=>
       (
@@ -1809,6 +1922,7 @@ function rebuildMaps(){
         b.category
       )
   );
+
 
   for(
     const c
@@ -1853,6 +1967,7 @@ function rebuildMaps(){
 
   }
 
+
   for(
     const [date,arr]
     of
@@ -1891,6 +2006,7 @@ function rebuildMaps(){
 
     }
 
+
     uniqueKeys.sort(
       (a,b)=>{
 
@@ -1909,6 +2025,7 @@ function rebuildMaps(){
       }
     );
 
+
     if(
       uniqueKeys.length
     ){
@@ -1923,6 +2040,7 @@ function rebuildMaps(){
   }
 
 }
+
 
 function getColorForCategory(
   catKey
@@ -1948,6 +2066,7 @@ function getColorForCategory(
   );
 
 }
+
 
 function getDayBackground(
   dateStr
@@ -2014,6 +2133,7 @@ function getDayBackground(
 
 }
 
+
 function renderLegend(){
 
   $legendGrid.innerHTML =
@@ -2055,6 +2175,7 @@ function renderLegend(){
   }
 
 }
+
 
 function renderMonth(){
 
@@ -2184,6 +2305,7 @@ function renderMonth(){
 
 }
 
+
 function getPublicYears_(){
 
   return [
@@ -2192,6 +2314,7 @@ function getPublicYears_(){
   ];
 
 }
+
 
 function renderYearControl_(){
 
@@ -2216,6 +2339,7 @@ function renderYearControl_(){
 
   }
 
+
   if(
     !yearsToShow.includes(
       ACTIVE_YEAR
@@ -2227,6 +2351,7 @@ function renderYearControl_(){
 
   }
 
+
   const select =
   document.createElement(
     "select"
@@ -2234,6 +2359,7 @@ function renderYearControl_(){
 
   select.className =
   "yearSelect";
+
 
   for(
     const year
@@ -2265,6 +2391,7 @@ function renderYearControl_(){
     );
 
   }
+
 
   select.addEventListener(
     "change",
@@ -2322,16 +2449,28 @@ function renderYearControl_(){
         "Chargement de l'année…"
       );
 
-      await loadApi();
+      try{
+
+        await loadApi(
+          true
+        );
+
+      }finally{
+
+        hideStatus();
+
+      }
 
     }
   );
+
 
   $yearControl.appendChild(
     select
   );
 
 }
+
 
 async function setEditMode(
   on
@@ -2360,6 +2499,7 @@ async function setEditMode(
       : "false"
   );
 
+
   if(EDIT_MODE){
 
     if(
@@ -2383,12 +2523,17 @@ async function setEditMode(
 
   }
 
+
   closeEdit();
+
   closeNote();
+
   closeEventForm();
+
 
   const publicYears =
   getPublicYears_();
+
 
   if(
     !publicYears.includes(
@@ -2401,7 +2546,9 @@ async function setEditMode(
 
   }
 
+
   renderYearControl_();
+
 
   if(
     ACTIVE_YEAR !== oldYear
@@ -2419,11 +2566,14 @@ async function setEditMode(
 
     renderMonth();
 
-    await loadApi();
+    await loadApi(
+      true
+    );
 
   }
 
 }
+
 
 function openNote(
   dateStr
@@ -2460,6 +2610,7 @@ function openNote(
 
   $noteBody.innerHTML =
   "";
+
 
   for(
     const ev
@@ -2575,16 +2726,13 @@ function openNote(
 
   }
 
+
   $noteOverlay.classList.add(
     "show"
   );
 
-  $noteOverlay.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
 }
+
 
 function closeNote(){
 
@@ -2592,12 +2740,8 @@ function closeNote(){
     "show"
   );
 
-  $noteOverlay.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
 }
+
 
 function openEdit(
   dateStr
@@ -2617,22 +2761,13 @@ function openEdit(
     "show"
   );
 
-  $editOverlay.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
 }
+
 
 function closeEdit(){
 
   $editOverlay.classList.remove(
     "show"
-  );
-
-  $editOverlay.setAttribute(
-    "aria-hidden",
-    "true"
   );
 
   _editDate =
@@ -2642,6 +2777,7 @@ function closeEdit(){
   "";
 
 }
+
 
 function setDeleteButtonState(
   button,
@@ -2693,6 +2829,15 @@ function setDeleteButtonState(
 
 }
 
+
+/*
+  SUPPRESSION LOCALE.
+
+  Cette fonction enlève immédiatement
+  l'événement de l'affichage ET détruit
+  le cache de l'année pour éviter qu'un
+  ancien événement revienne.
+*/
 function removeEventLocally_(
   ev
 ){
@@ -2704,40 +2849,68 @@ function removeEventLocally_(
     ev?.id
     ||
     ""
-  );
+  ).trim();
+
 
   events =
   events.filter(
     item=>{
 
+      const itemId =
+      String(
+        item?.event_id
+        ||
+        item?.id
+        ||
+        ""
+      ).trim();
+
+
       if(
         id
         &&
-        String(
-          item?.event_id
-          ||
-          item?.id
-          ||
-          ""
-        )
-        ===
-        id
+        itemId === id
       ){
 
         return false;
 
       }
 
-      return item !== ev;
+
+      if(
+        item === ev
+      ){
+
+        return false;
+
+      }
+
+
+      return true;
 
     }
   );
+
 
   rebuildMaps();
 
   renderMonth();
 
+
+  /*
+    Très important pour les
+    événements fantômes.
+  */
+  try{
+
+    localStorage.removeItem(
+      getCacheKey_()
+    );
+
+  }catch(e){}
+
 }
+
 
 function renderEditList(
   dateStr
@@ -2752,6 +2925,7 @@ function renderEditList(
     []
   )
   .slice();
+
 
   arr.sort(
     (a,b)=>
@@ -2772,8 +2946,10 @@ function renderEditList(
       )
   );
 
+
   $editBody.innerHTML =
   "";
+
 
   if(
     !arr.length
@@ -2801,6 +2977,7 @@ function renderEditList(
     return;
 
   }
+
 
   for(
     const ev
@@ -2835,6 +3012,7 @@ function renderEditList(
       ev.details || ""
     ).trim();
 
+
     const row =
     document.createElement(
       "div"
@@ -2842,6 +3020,7 @@ function renderEditList(
 
     row.className =
     "row";
+
 
     row.innerHTML =
     `
@@ -2908,6 +3087,7 @@ function renderEditList(
       </div>
     `;
 
+
     row
       .querySelectorAll(
         "button"
@@ -2921,6 +3101,7 @@ function renderEditList(
 
               const act =
               b.dataset.act;
+
 
               if(
                 act === "view"
@@ -2956,6 +3137,7 @@ function renderEditList(
 
               }
 
+
               if(
                 act === "edit"
               ){
@@ -2970,6 +3152,7 @@ function renderEditList(
 
               }
 
+
               if(
                 act === "del"
               ){
@@ -2979,6 +3162,7 @@ function renderEditList(
                 ){
                   return;
                 }
+
 
                 const ok =
                 confirm(
@@ -2991,33 +3175,48 @@ function renderEditList(
                   `Confirmer ?`
                 );
 
+
                 if(!ok){
                   return;
                 }
 
+
                 DELETE_IN_PROGRESS =
                 true;
+
 
                 setDeleteButtonState(
                   b,
                   "deleting"
                 );
 
+
                 try{
 
+                  /*
+                    Si Google répond deleted:0,
+                    ce n'est PLUS une erreur.
+
+                    Cela veut simplement dire
+                    que l'événement n'existe
+                    déjà plus dans Sheets.
+                  */
                   await apiDeleteEvent_(
                     dateStr,
                     ev
                   );
 
+
                   removeEventLocally_(
                     ev
                   );
+
 
                   setDeleteButtonState(
                     b,
                     "deleted"
                   );
+
 
                   await new Promise(
                     resolve=>
@@ -3027,16 +3226,25 @@ function renderEditList(
                       )
                   );
 
+
                   closeEdit();
+
 
                   showDeletedMessage();
 
+
+                  /*
+                    Synchronisation fraîche
+                    derrière sans bloquer
+                    l'utilisateur.
+                  */
                   loadApi(
                     true
                   )
                   .catch(
                     ()=>{}
                   );
+
 
                 }catch(err){
 
@@ -3055,6 +3263,7 @@ function renderEditList(
                     )
                   );
 
+
                 }finally{
 
                   DELETE_IN_PROGRESS =
@@ -3070,6 +3279,7 @@ function renderEditList(
         }
       );
 
+
     $editBody.appendChild(
       row
     );
@@ -3078,6 +3288,10 @@ function renderEditList(
 
 }
 
+
+/*
+  AJOUT
+*/
 async function apiAddEvent_(
   dateStr,
   payload
@@ -3086,23 +3300,23 @@ async function apiAddEvent_(
   const email =
   getEmailLocal();
 
+
   if(!email){
 
-    alert(
-      "Email introuvable (localStorage). Reconnecte-toi sur le portail."
-    );
-
     throw new Error(
-      "Email introuvable"
+      "Email introuvable. Reconnecte-toi sur le portail."
     );
 
   }
 
+
   const cb =
-  "cb_add_" +
+  "cb_add_"
+  +
   Math.random()
     .toString(36)
     .slice(2);
+
 
   const url =
   `${API}?view=planning_add`
@@ -3127,12 +3341,14 @@ async function apiAddEvent_(
   +
   `&callback=${cb}`;
 
+
   const res =
   await jsonp(
     url,
     cb,
     20000
   );
+
 
   if(
     !res
@@ -3148,10 +3364,18 @@ async function apiAddEvent_(
 
   }
 
+
   return res;
 
 }
 
+
+/*
+  SUPPRESSION CORRIGÉE.
+
+  deleted:0 n'est plus considéré
+  comme une erreur.
+*/
 async function apiDeleteEvent_(
   dateStr,
   ev
@@ -3160,6 +3384,7 @@ async function apiDeleteEvent_(
   const email =
   getEmailLocal();
 
+
   if(!email){
 
     throw new Error(
@@ -3167,6 +3392,7 @@ async function apiDeleteEvent_(
     );
 
   }
+
 
   const eventId =
   String(
@@ -3177,19 +3403,30 @@ async function apiDeleteEvent_(
     ""
   ).trim();
 
+
+  /*
+    Ancien événement provenant du cache
+    mais sans event_id :
+    on le considère déjà absent du serveur.
+  */
   if(!eventId){
 
-    throw new Error(
-      "Suppression impossible : cet événement n’a pas d’identifiant event_id."
-    );
+    return {
+      ok:true,
+      deleted:0,
+      alreadyMissing:true
+    };
 
   }
 
+
   const cb =
-  "cb_del_" +
+  "cb_del_"
+  +
   Math.random()
     .toString(36)
     .slice(2);
+
 
   const url =
   `${API}?view=planning_delete`
@@ -3202,12 +3439,14 @@ async function apiDeleteEvent_(
   +
   `&callback=${cb}`;
 
+
   const res =
   await jsonp(
     url,
     cb,
     20000
   );
+
 
   if(
     !res
@@ -3223,23 +3462,20 @@ async function apiDeleteEvent_(
 
   }
 
-  if(
-    Number(
-      res.deleted || 0
-    )
-    <
-    1
-  ){
 
-    throw new Error(
-      "Aucune ligne supprimée. event_id non trouvé."
-    );
+  return {
+    ...res,
 
-  }
-
-  return res;
+    alreadyMissing:
+      Number(
+        res.deleted || 0
+      )
+      <
+      1
+  };
 
 }
+
 
 function buildCategoryOptions(
   selectedValue
@@ -3247,6 +3483,7 @@ function buildCategoryOptions(
 
   $fCategory.innerHTML =
   "";
+
 
   const none =
   document.createElement(
@@ -3262,6 +3499,7 @@ function buildCategoryOptions(
   $fCategory.appendChild(
     none
   );
+
 
   const items =
   [...catLabel.entries()]
@@ -3280,6 +3518,7 @@ function buildCategoryOptions(
       })
     );
 
+
   items.sort(
     (a,b)=>
       (
@@ -3290,6 +3529,7 @@ function buildCategoryOptions(
         b.label
       )
   );
+
 
   for(
     const it
@@ -3313,6 +3553,7 @@ function buildCategoryOptions(
 
   }
 
+
   $fCategory.value =
   selectedValue
   ||
@@ -3320,12 +3561,14 @@ function buildCategoryOptions(
 
 }
 
+
 function getLoopValues(
   values
 ){
 
   const arr =
   [];
+
 
   for(
     let i=0;
@@ -3339,9 +3582,11 @@ function getLoopValues(
 
   }
 
+
   return arr;
 
 }
+
 
 function buildWheel(
   pickerKey
@@ -3352,13 +3597,16 @@ function buildWheel(
     pickerKey
   ];
 
+
   const allValues =
   getLoopValues(
     picker.values
   );
 
+
   picker.inner.innerHTML =
   "";
+
 
   const padTop =
   document.createElement(
@@ -3371,6 +3619,7 @@ function buildWheel(
   picker.inner.appendChild(
     padTop
   );
+
 
   allValues.forEach(
     (v,idx)=>{
@@ -3392,6 +3641,7 @@ function buildWheel(
       item.textContent =
       v;
 
+
       item.addEventListener(
         "click",
         ()=>setWheelValue(
@@ -3401,12 +3651,14 @@ function buildWheel(
         )
       );
 
+
       picker.inner.appendChild(
         item
       );
 
     }
   );
+
 
   const padBottom =
   document.createElement(
@@ -3419,6 +3671,7 @@ function buildWheel(
   picker.inner.appendChild(
     padBottom
   );
+
 
   picker.wheel.addEventListener(
     "scroll",
@@ -3449,6 +3702,7 @@ function buildWheel(
 
 }
 
+
 function getWheelItems(
   pickerKey
 ){
@@ -3465,6 +3719,7 @@ function getWheelItems(
 
 }
 
+
 function getNearestWheelItem(
   pickerKey
 ){
@@ -3474,6 +3729,7 @@ function getNearestWheelItem(
     pickerKey
   ];
 
+
   const center =
   picker.wheel.scrollTop
   +
@@ -3481,11 +3737,14 @@ function getNearestWheelItem(
   /
   2;
 
+
   let bestItem =
   null;
 
+
   let bestDist =
   Infinity;
+
 
   getWheelItems(
     pickerKey
@@ -3500,10 +3759,12 @@ function getNearestWheelItem(
       /
       2;
 
+
       const dist =
       Math.abs(
         center-itemCenter
       );
+
 
       if(
         dist < bestDist
@@ -3520,9 +3781,11 @@ function getNearestWheelItem(
     }
   );
 
+
   return bestItem;
 
 }
+
 
 function updateWheelActive(
   pickerKey
@@ -3533,10 +3796,12 @@ function updateWheelActive(
     pickerKey
   ];
 
+
   const bestItem =
   getNearestWheelItem(
     pickerKey
   );
+
 
   getWheelItems(
     pickerKey
@@ -3547,6 +3812,7 @@ function updateWheelActive(
         "active"
       )
   );
+
 
   if(bestItem){
 
@@ -3561,6 +3827,7 @@ function updateWheelActive(
 
 }
 
+
 function keepWheelLooped(
   pickerKey
 ){
@@ -3570,25 +3837,31 @@ function keepWheelLooped(
     pickerKey
   ];
 
+
   if(!picker.looping){
     return;
   }
 
+
   const valuesLen =
   picker.values.length;
 
+
   const itemHeight =
   42;
+
 
   const cycleHeight =
   valuesLen
   *
   itemHeight;
 
+
   const minScroll =
   cycleHeight
   *
   4;
+
 
   const maxScroll =
   cycleHeight
@@ -3596,6 +3869,7 @@ function keepWheelLooped(
   (
     LOOP_DUPLICATES - 5
   );
+
 
   if(
     picker.wheel.scrollTop
@@ -3619,6 +3893,7 @@ function keepWheelLooped(
 
 }
 
+
 function findBestItemForValueNearCenter(
   pickerKey,
   value
@@ -3628,6 +3903,7 @@ function findBestItemForValueNearCenter(
   TIME_PICKERS[
     pickerKey
   ];
+
 
   const items =
   getWheelItems(
@@ -3640,6 +3916,7 @@ function findBestItemForValueNearCenter(
       value
   );
 
+
   if(
     !items.length
   ){
@@ -3648,6 +3925,7 @@ function findBestItemForValueNearCenter(
 
   }
 
+
   const currentCenter =
   picker.wheel.scrollTop
   +
@@ -3655,11 +3933,14 @@ function findBestItemForValueNearCenter(
   /
   2;
 
+
   let best =
   items[0];
 
+
   let bestDist =
   Infinity;
+
 
   items.forEach(
     item=>{
@@ -3671,10 +3952,12 @@ function findBestItemForValueNearCenter(
       /
       2;
 
+
       const dist =
       Math.abs(
         c-currentCenter
       );
+
 
       if(
         dist < bestDist
@@ -3691,9 +3974,11 @@ function findBestItemForValueNearCenter(
     }
   );
 
+
   return best;
 
 }
+
 
 function setWheelValue(
   pickerKey,
@@ -3706,15 +3991,18 @@ function setWheelValue(
     pickerKey
   ];
 
+
   const item =
   findBestItemForValueNearCenter(
     pickerKey,
     value
   );
 
+
   if(!item){
     return;
   }
+
 
   const target =
   item.offsetTop
@@ -3727,6 +4015,7 @@ function setWheelValue(
   /
   2;
 
+
   picker.wheel.scrollTo({
 
     top:target,
@@ -3738,8 +4027,10 @@ function setWheelValue(
 
   });
 
+
   picker.value =
   value;
+
 
   setTimeout(
     ()=>{
@@ -3760,6 +4051,7 @@ function setWheelValue(
 
 }
 
+
 function snapWheel(
   pickerKey
 ){
@@ -3769,14 +4061,17 @@ function snapWheel(
     pickerKey
   ];
 
+
   const bestItem =
   getNearestWheelItem(
     pickerKey
   );
 
+
   if(!bestItem){
     return;
   }
+
 
   const target =
   bestItem.offsetTop
@@ -3789,15 +4084,19 @@ function snapWheel(
   /
   2;
 
+
   picker.wheel.scrollTo({
 
     top:target,
+
     behavior:"smooth"
 
   });
 
+
   picker.value =
   bestItem.dataset.value;
+
 
   setTimeout(
     ()=>{
@@ -3815,6 +4114,7 @@ function snapWheel(
   );
 
 }
+
 
 function getTimeValue(
   prefix
@@ -3834,6 +4134,7 @@ function getTimeValue(
 
 }
 
+
 function setTimeValue(
   prefix,
   hhmm
@@ -3844,6 +4145,7 @@ function setTimeValue(
     hhmm || ""
   ).trim();
 
+
   const [hh,mm] =
   val
   &&
@@ -3851,21 +4153,25 @@ function setTimeValue(
     ? val.split(":")
     : ["00","00"];
 
+
   const hour =
   HOURS.includes(hh)
     ? hh
     : "00";
+
 
   const minute =
   MINUTES.includes(mm)
     ? mm
     : "00";
 
+
   setWheelValue(
     prefix+"Hour",
     hour,
     false
   );
+
 
   setWheelValue(
     prefix+"Minute",
@@ -3875,6 +4181,7 @@ function setTimeValue(
 
 }
 
+
 function ensureWheelsInitialized_(){
 
   if(
@@ -3882,6 +4189,7 @@ function ensureWheelsInitialized_(){
   ){
     return;
   }
+
 
   buildWheel(
     "startHour"
@@ -3899,10 +4207,12 @@ function ensureWheelsInitialized_(){
     "endMinute"
   );
 
+
   WHEELS_INITIALIZED =
   true;
 
 }
+
 
 function openEventForm(
   mode,
@@ -3912,27 +4222,28 @@ function openEventForm(
 
   ensureWheelsInitialized_();
 
+
   FORM_STATE.mode =
   mode;
+
 
   FORM_STATE.dateStr =
   dateStr;
 
+
   FORM_STATE.originalEvent =
   ev || null;
+
 
   buildCategoryOptions(
     ev?.category || ""
   );
 
+
   $formOverlay.classList.add(
     "show"
   );
 
-  $formOverlay.setAttribute(
-    "aria-hidden",
-    "false"
-  );
 
   requestAnimationFrame(
     ()=>{
@@ -3944,46 +4255,59 @@ function openEventForm(
         $formTitle.textContent =
         `Modifier — ${toFRDate(dateStr)}`;
 
+
         $fTitle.value =
         ev?.title || "";
+
 
         $fLocation.value =
         ev?.location || "";
 
+
         $fDetails.value =
         ev?.details || "";
+
 
         setTimeValue(
           "start",
           ev?.start || "08:00"
         );
 
+
         setTimeValue(
           "end",
           ev?.end || "09:00"
         );
 
+
       }else{
+
 
         $formTitle.textContent =
         `Ajouter — ${toFRDate(dateStr)}`;
 
+
         $fTitle.value =
         "";
+
 
         $fLocation.value =
         "";
 
+
         $fDetails.value =
         "";
 
+
         $fCategory.value =
         "";
+
 
         setTimeValue(
           "start",
           "08:00"
         );
+
 
         setTimeValue(
           "end",
@@ -3997,18 +4321,15 @@ function openEventForm(
 
 }
 
+
 function closeEventForm(){
 
   $formOverlay.classList.remove(
     "show"
   );
 
-  $formOverlay.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
 }
+
 
 function setSaveButtonState(
   state
@@ -4019,6 +4340,7 @@ function setSaveButtonState(
     "saved"
   );
 
+
   if(
     state === "saving"
   ){
@@ -4027,11 +4349,14 @@ function setSaveButtonState(
       "saving"
     );
 
+
     $btnFormSave.textContent =
     "Enregistrement…";
 
+
     $btnFormSave.disabled =
     true;
+
 
   }else if(
     state === "saved"
@@ -4041,16 +4366,20 @@ function setSaveButtonState(
       "saved"
     );
 
+
     $btnFormSave.textContent =
     "✓ Enregistré";
 
+
     $btnFormSave.disabled =
     true;
+
 
   }else{
 
     $btnFormSave.textContent =
     "Enregistrer";
+
 
     $btnFormSave.disabled =
     false;
@@ -4058,6 +4387,7 @@ function setSaveButtonState(
   }
 
 }
+
 
 function applySavedEventLocally_(
   payload
@@ -4072,6 +4402,7 @@ function applySavedEventLocally_(
     const old =
     FORM_STATE.originalEvent;
 
+
     const oldId =
     String(
       old?.event_id
@@ -4080,6 +4411,7 @@ function applySavedEventLocally_(
       ||
       ""
     );
+
 
     events =
     events.filter(
@@ -4103,12 +4435,14 @@ function applySavedEventLocally_(
 
         }
 
+
         return ev !== old;
 
       }
     );
 
   }
+
 
   events.push({
 
@@ -4135,11 +4469,28 @@ function applySavedEventLocally_(
 
   });
 
+
   rebuildMaps();
+
 
   renderMonth();
 
+
+  /*
+    On enlève l'ancien cache.
+    La prochaine synchronisation
+    écrira une version fraîche.
+  */
+  try{
+
+    localStorage.removeItem(
+      getCacheKey_()
+    );
+
+  }catch(e){}
+
 }
+
 
 async function saveEventForm(){
 
@@ -4149,35 +4500,42 @@ async function saveEventForm(){
     return;
   }
 
+
   const title =
   String(
     $fTitle.value || ""
   ).trim();
+
 
   const category =
   String(
     $fCategory.value || ""
   ).trim();
 
+
   const location =
   String(
     $fLocation.value || ""
   ).trim();
+
 
   const details =
   String(
     $fDetails.value || ""
   ).trim();
 
+
   const start =
   getTimeValue(
     "start"
   );
 
+
   const end =
   getTimeValue(
     "end"
   );
+
 
   if(!title){
 
@@ -4188,6 +4546,7 @@ async function saveEventForm(){
     return;
 
   }
+
 
   if(
     end < start
@@ -4201,6 +4560,7 @@ async function saveEventForm(){
 
   }
 
+
   const payload = {
     title,
     category,
@@ -4210,14 +4570,18 @@ async function saveEventForm(){
     end
   };
 
+
   SAVE_IN_PROGRESS =
   true;
+
 
   setSaveButtonState(
     "saving"
   );
 
+
   try{
+
 
     if(
       FORM_STATE.mode === "edit"
@@ -4232,18 +4596,22 @@ async function saveEventForm(){
 
     }
 
+
     await apiAddEvent_(
       FORM_STATE.dateStr,
       payload
     );
 
+
     applySavedEventLocally_(
       payload
     );
 
+
     setSaveButtonState(
       "saved"
     );
+
 
     await new Promise(
       resolve=>
@@ -4253,12 +4621,20 @@ async function saveEventForm(){
         )
     );
 
+
     closeEventForm();
+
 
     closeEdit();
 
+
     showSavedMessage();
 
+
+    /*
+      Synchronisation fraîche
+      sans bloquer l'écran.
+    */
     loadApi(
       true
     )
@@ -4266,7 +4642,9 @@ async function saveEventForm(){
       ()=>{}
     );
 
+
   }catch(err){
+
 
     alert(
       "Erreur lors de l'enregistrement : "
@@ -4278,10 +4656,13 @@ async function saveEventForm(){
       )
     );
 
+
   }finally{
+
 
     SAVE_IN_PROGRESS =
     false;
+
 
     setTimeout(
       ()=>setSaveButtonState(
@@ -4294,170 +4675,10 @@ async function saveEventForm(){
 
 }
 
-$btnAddEvent.addEventListener(
-  "click",
-  ()=>{
 
-    if(!_editDate){
-      return;
-    }
-
-    openEventForm(
-      "add",
-      _editDate,
-      null
-    );
-
-  }
-);
-
-$btnCloseEdit.addEventListener(
-  "click",
-  closeEdit
-);
-
-$editOverlay.addEventListener(
-  "click",
-  e=>{
-
-    if(
-      e.target ===
-      $editOverlay
-    ){
-
-      closeEdit();
-
-    }
-
-  }
-);
-
-$btnFormCancel.addEventListener(
-  "click",
-  closeEventForm
-);
-
-$btnFormClose.addEventListener(
-  "click",
-  closeEventForm
-);
-
-$btnFormSave.addEventListener(
-  "click",
-  saveEventForm
-);
-
-$formOverlay.addEventListener(
-  "click",
-  e=>{
-
-    if(
-      e.target ===
-      $formOverlay
-    ){
-
-      closeEventForm();
-
-    }
-
-  }
-);
-
-$grid.addEventListener(
-  "click",
-  e=>{
-
-    const day =
-    e.target.closest(
-      ".day"
-    );
-
-    if(!day){
-      return;
-    }
-
-    if(
-      day.classList.contains(
-        "is-empty"
-      )
-    ){
-      return;
-    }
-
-    const dateStr =
-    day.dataset.date;
-
-    if(!dateStr){
-      return;
-    }
-
-    if(
-      EDIT_MODE
-      &&
-      IS_ADMIN
-    ){
-
-      openEdit(
-        dateStr
-      );
-
-      return;
-
-    }
-
-    if(
-      day.classList.contains(
-        "has-note"
-      )
-    ){
-
-      openNote(
-        dateStr
-      );
-
-    }
-
-  }
-);
-
-$noteClose.addEventListener(
-  "click",
-  closeNote
-);
-
-$noteOverlay.addEventListener(
-  "click",
-  e=>{
-
-    if(
-      e.target ===
-      $noteOverlay
-    ){
-
-      closeNote();
-
-    }
-
-  }
-);
-
-document.addEventListener(
-  "keydown",
-  e=>{
-
-    if(
-      e.key === "Escape"
-    ){
-
-      closeNote();
-      closeEdit();
-      closeEventForm();
-
-    }
-
-  }
-);
-
+/*
+  CACHE LOCAL
+*/
 function saveCache_(
   payload
 ){
@@ -4476,6 +4697,7 @@ function saveCache_(
 
 }
 
+
 function loadCache_(){
 
   try{
@@ -4485,12 +4707,15 @@ function loadCache_(){
       getCacheKey_()
     );
 
+
     if(!raw){
       return null;
     }
 
+
     const obj =
     JSON.parse(raw);
+
 
     if(
       !obj
@@ -4499,6 +4724,7 @@ function loadCache_(){
     ){
       return null;
     }
+
 
     if(
       obj.savedAt
@@ -4512,7 +4738,9 @@ function loadCache_(){
 
     }
 
+
     return obj.payload;
+
 
   }catch(e){
 
@@ -4521,6 +4749,7 @@ function loadCache_(){
   }
 
 }
+
 
 function applyPlanningData_(
   py,
@@ -4534,6 +4763,7 @@ function applyPlanningData_(
     ? py.events
     : [];
 
+
   categoriesRaw =
   Array.isArray(
     pc?.categories
@@ -4543,14 +4773,25 @@ function applyPlanningData_(
     ? pc.categories
     : DEFAULT_CATEGORIES.slice();
 
+
   rebuildMaps();
 
+
   renderLegend();
+
 
   renderMonth();
 
 }
 
+
+/*
+  SYNCHRONISATION CORRIGÉE.
+
+  Même si on affiche le cache immédiatement,
+  on demande TOUJOURS ensuite la version
+  fraîche à Apps Script avec nocache=1.
+*/
 async function loadApi(
   forceFresh=false
 ){
@@ -4572,9 +4813,14 @@ async function loadApi(
 
   }
 
+
   const cached =
   loadCache_();
 
+
+  /*
+    Affichage instantané depuis le cache.
+  */
   if(
     !forceFresh
     &&
@@ -4590,47 +4836,52 @@ async function loadApi(
 
   }
 
+
   const cb1 =
-  "cb_py_" +
+  "cb_py_"
+  +
   Math.random()
     .toString(36)
     .slice(2);
 
+
   const cb2 =
-  "cb_pc_" +
+  "cb_pc_"
+  +
   Math.random()
     .toString(36)
     .slice(2);
+
 
   try{
 
+
+    /*
+      nocache=1 est désormais TOUJOURS
+      utilisé sur le planning.
+    */
     const planningUrl =
     `${API}?view=planning_year`
     +
     `&year=${ACTIVE_YEAR}`
     +
-    (
-      forceFresh
-        ? "&nocache=1"
-        : ""
-    )
+    `&nocache=1`
     +
     `&callback=${cb1}`;
+
 
     const catsUrl =
     `${API}?view=planning_categories`
     +
-    (
-      forceFresh
-        ? "&nocache=1"
-        : ""
-    )
+    `&nocache=1`
     +
     `&callback=${cb2}`;
+
 
     const [py,pc] =
     await Promise.all(
       [
+
         jsonp(
           planningUrl,
           cb1
@@ -4640,8 +4891,10 @@ async function loadApi(
           catsUrl,
           cb2
         )
+
       ]
     );
+
 
     if(
       py?.ok === false
@@ -4655,6 +4908,7 @@ async function loadApi(
 
     }
 
+
     if(
       pc?.ok === false
     ){
@@ -4667,18 +4921,30 @@ async function loadApi(
 
     }
 
+
+    /*
+      Les données fraîches remplacent
+      l'affichage et le cache.
+    */
     applyPlanningData_(
       py,
       pc
     );
+
 
     saveCache_({
       py,
       pc
     });
 
+
   }catch(e){
 
+
+    /*
+      Si le réseau plante mais qu'on avait
+      déjà un cache affiché, on le conserve.
+    */
     if(
       !forceFresh
       &&
@@ -4691,11 +4957,200 @@ async function loadApi(
 
     }
 
+
     throw e;
 
   }
 
 }
+
+
+/*
+  ÉVÉNEMENTS INTERFACE
+*/
+
+$btnAddEvent.addEventListener(
+  "click",
+  ()=>{
+
+    if(!_editDate){
+      return;
+    }
+
+    openEventForm(
+      "add",
+      _editDate,
+      null
+    );
+
+  }
+);
+
+
+$btnCloseEdit.addEventListener(
+  "click",
+  closeEdit
+);
+
+
+$editOverlay.addEventListener(
+  "click",
+  e=>{
+
+    if(
+      e.target ===
+      $editOverlay
+    ){
+
+      closeEdit();
+
+    }
+
+  }
+);
+
+
+$btnFormCancel.addEventListener(
+  "click",
+  closeEventForm
+);
+
+
+$btnFormClose.addEventListener(
+  "click",
+  closeEventForm
+);
+
+
+$btnFormSave.addEventListener(
+  "click",
+  saveEventForm
+);
+
+
+$formOverlay.addEventListener(
+  "click",
+  e=>{
+
+    if(
+      e.target ===
+      $formOverlay
+    ){
+
+      closeEventForm();
+
+    }
+
+  }
+);
+
+
+$grid.addEventListener(
+  "click",
+  e=>{
+
+    const day =
+    e.target.closest(
+      ".day"
+    );
+
+
+    if(!day){
+      return;
+    }
+
+
+    if(
+      day.classList.contains(
+        "is-empty"
+      )
+    ){
+      return;
+    }
+
+
+    const dateStr =
+    day.dataset.date;
+
+
+    if(!dateStr){
+      return;
+    }
+
+
+    if(
+      EDIT_MODE
+      &&
+      IS_ADMIN
+    ){
+
+      openEdit(
+        dateStr
+      );
+
+      return;
+
+    }
+
+
+    if(
+      day.classList.contains(
+        "has-note"
+      )
+    ){
+
+      openNote(
+        dateStr
+      );
+
+    }
+
+  }
+);
+
+
+$noteClose.addEventListener(
+  "click",
+  closeNote
+);
+
+
+$noteOverlay.addEventListener(
+  "click",
+  e=>{
+
+    if(
+      e.target ===
+      $noteOverlay
+    ){
+
+      closeNote();
+
+    }
+
+  }
+);
+
+
+document.addEventListener(
+  "keydown",
+  e=>{
+
+    if(
+      e.key === "Escape"
+    ){
+
+      closeNote();
+
+      closeEdit();
+
+      closeEventForm();
+
+    }
+
+  }
+);
+
 
 $("btnBack").addEventListener(
   "click",
@@ -4706,6 +5161,7 @@ $("btnBack").addEventListener(
 
   }
 );
+
 
 $btnPrev.addEventListener(
   "click",
@@ -4724,6 +5180,7 @@ $btnPrev.addEventListener(
   }
 );
 
+
 $btnNext.addEventListener(
   "click",
   ()=>{
@@ -4741,6 +5198,7 @@ $btnNext.addEventListener(
   }
 );
 
+
 $btnLock.addEventListener(
   "click",
   async ()=>{
@@ -4756,20 +5214,29 @@ $btnLock.addEventListener(
   }
 );
 
+
+/*
+  DÉMARRAGE
+*/
 (async function(){
 
   EDIT_MODE =
   false;
 
+
   ACTIVE_YEAR =
   PUBLIC_YEAR;
 
+
   rebuildMaps();
+
 
   renderLegend();
 
+
   const now =
   new Date();
+
 
   currentMonth =
   now.getFullYear()
@@ -4778,15 +5245,23 @@ $btnLock.addEventListener(
     ? now.getMonth()
     : 0;
 
+
   renderMonth();
+
 
   renderYearControl_();
 
+
+  /*
+    Planning + contrôle du rôle
+    démarrent en parallèle.
+  */
   const planningPromise =
   loadApi()
     .catch(
       ()=>{}
     );
+
 
   const rolePromise =
   loadMyRole_()
@@ -4799,7 +5274,9 @@ $btnLock.addEventListener(
       }
     );
 
+
   await rolePromise;
+
 
   if(IS_ADMIN){
 
@@ -4813,11 +5290,14 @@ $btnLock.addEventListener(
 
   }
 
+
   renderYearControl_();
+
 
   await planningPromise;
 
 })();
+
 </script>
 
 </body>
