@@ -249,7 +249,14 @@
       position:absolute;
       inset:0;
       border-radius:18px;
+
+      /*
+        Peut maintenant recevoir :
+        - une couleur simple
+        - un linear-gradient avec plusieurs couleurs
+      */
       background:var(--dayColor,transparent);
+
       opacity:.78;
       z-index:0;
     }
@@ -266,7 +273,9 @@
       border-color:#ffffff;
     }
 
-    .day.has-note{cursor:pointer}
+    .day.has-note{
+      cursor:pointer;
+    }
 
     .day.has-note::after{
       content:"";
@@ -914,7 +923,11 @@
 
       <div class="formBlock">
         <label class="formLabel" for="fTitle">Titre</label>
-        <input class="fieldText" id="fTitle" type="text" placeholder="Titre de l’événement" />
+        <input
+          class="fieldText"
+          id="fTitle"
+          type="text"
+          placeholder="Titre de l’événement" />
       </div>
 
       <div class="formBlock">
@@ -980,17 +993,33 @@
 
       <div class="formBlock">
         <label class="formLabel" for="fLocation">Lieu</label>
-        <input class="fieldText" id="fLocation" type="text" placeholder="Lieu (optionnel)" />
+        <input
+          class="fieldText"
+          id="fLocation"
+          type="text"
+          placeholder="Lieu (optionnel)" />
       </div>
 
       <div class="formBlock">
         <label class="formLabel" for="fDetails">Détails / note</label>
-        <textarea class="fieldArea" id="fDetails" placeholder="Détails (optionnel)"></textarea>
+        <textarea
+          class="fieldArea"
+          id="fDetails"
+          placeholder="Détails (optionnel)"></textarea>
       </div>
 
-      <div class="formActions" style="justify-content:flex-end;padding-bottom:2px;">
-        <button class="btn" id="btnFormClose">Annuler</button>
-        <button class="btn" id="btnFormSave">Enregistrer</button>
+      <div
+        class="formActions"
+        style="justify-content:flex-end;padding-bottom:2px;">
+
+        <button class="btn" id="btnFormClose">
+          Annuler
+        </button>
+
+        <button class="btn" id="btnFormSave">
+          Enregistrer
+        </button>
+
       </div>
 
     </div>
@@ -1110,21 +1139,46 @@ const dowsFR = [
   "Sam"
 ];
 
-let IS_ADMIN = false;
-let EDIT_MODE = false;
+let IS_ADMIN =
+false;
 
-let events = [];
-let categoriesRaw = DEFAULT_CATEGORIES.slice();
+let EDIT_MODE =
+false;
 
-let eventsByDate = new Map();
-let catColor = new Map();
-let catLabel = new Map();
-let catOrder = new Map();
-let firstCatByDate = new Map();
-let hasNoteByDate = new Map();
+let events =
+[];
 
-let currentMonth = 0;
-let _editDate = "";
+let categoriesRaw =
+DEFAULT_CATEGORIES.slice();
+
+let eventsByDate =
+new Map();
+
+let catColor =
+new Map();
+
+let catLabel =
+new Map();
+
+let catOrder =
+new Map();
+
+/*
+  NOUVEAU :
+  liste des catégories présentes
+  pour chaque date.
+*/
+let categoryKeysByDate =
+new Map();
+
+let hasNoteByDate =
+new Map();
+
+let currentMonth =
+0;
+
+let _editDate =
+"";
 
 const HOURS =
 Array.from(
@@ -1452,10 +1506,9 @@ function jsonp(
 
       };
 
-      document.head
-        .appendChild(
-          script
-        );
+      document.head.appendChild(
+        script
+      );
 
     }
   );
@@ -1613,6 +1666,13 @@ function rebuildMaps(){
   hasNoteByDate =
   new Map();
 
+  categoryKeysByDate =
+  new Map();
+
+  /*
+    On construit d'abord les événements
+    regroupés par date.
+  */
   for(
     const ev
     of events
@@ -1748,20 +1808,25 @@ function rebuildMaps(){
 
   }
 
-  firstCatByDate =
-  new Map();
+  /*
+    NOUVEAU :
+    pour chaque date, on récupère toutes
+    les catégories différentes.
 
+    Si deux événements ont la même catégorie,
+    elle ne sera comptée qu'une seule fois.
+  */
   for(
     const [date,arr]
     of
     eventsByDate.entries()
   ){
 
-    let best =
-    null;
+    const uniqueKeys =
+    [];
 
-    let bestOrder =
-    9999;
+    const seen =
+    new Set();
 
     for(
       const ev
@@ -1773,40 +1838,53 @@ function rebuildMaps(){
         ev.category || ""
       );
 
-      const o =
-      catOrder.has(k)
-        ? catOrder.get(k)
-        : 9999;
+      if(!k){
+        continue;
+      }
 
       if(
-        o < bestOrder
+        seen.has(k)
       ){
-
-        bestOrder =
-        o;
-
-        best =
-        k;
-
+        continue;
       }
+
+      seen.add(k);
+
+      uniqueKeys.push(k);
 
     }
 
-    if(!best){
+    /*
+      On respecte l'ordre des catégories.
+    */
+    uniqueKeys.sort(
+      (a,b)=>{
 
-      best =
-      norm(
-        arr[0]?.category
-        ||
-        ""
+        const oa =
+        catOrder.has(a)
+          ? catOrder.get(a)
+          : 9999;
+
+        const ob =
+        catOrder.has(b)
+          ? catOrder.get(b)
+          : 9999;
+
+        return oa-ob;
+
+      }
+    );
+
+    if(
+      uniqueKeys.length
+    ){
+
+      categoryKeysByDate.set(
+        date,
+        uniqueKeys
       );
 
     }
-
-    firstCatByDate.set(
-      date,
-      best
-    );
 
   }
 
@@ -1833,6 +1911,85 @@ function getColorForCategory(
     catColor.get(k)
     ||
     "rgba(255,255,255,.25)"
+  );
+
+}
+
+/*
+  NOUVELLE FONCTION
+
+  1 couleur :
+  rouge
+
+  2 couleurs :
+  rouge 50 % / bleu 50 %
+
+  3 couleurs :
+  environ 33 % chacune
+
+  etc.
+*/
+function getDayBackground(
+  dateStr
+){
+
+  const keys =
+  categoryKeysByDate.get(
+    dateStr
+  )
+  ||
+  [];
+
+  if(
+    !keys.length
+  ){
+
+    return "";
+
+  }
+
+  const colors =
+  keys.map(
+    k=>
+      getColorForCategory(k)
+  );
+
+  if(
+    colors.length === 1
+  ){
+
+    return colors[0];
+
+  }
+
+  const step =
+  100 / colors.length;
+
+  const parts =
+  [];
+
+  colors.forEach(
+    (color,index)=>{
+
+      const start =
+      index * step;
+
+      const end =
+      (index + 1) * step;
+
+      parts.push(
+        `${color} ${start}%`
+      );
+
+      parts.push(
+        `${color} ${end}%`
+      );
+
+    }
+  );
+
+  return (
+    `linear-gradient(90deg, ${parts.join(", ")})`
   );
 
 }
@@ -1946,12 +2103,18 @@ function renderMonth(){
       cell.dataset.date =
       dateStr;
 
-      const catKey =
-      firstCatByDate.get(
+      /*
+        NOUVEAU :
+        couleur simple ou dégradé partagé.
+      */
+      const dayBackground =
+      getDayBackground(
         dateStr
       );
 
-      if(catKey){
+      if(
+        dayBackground
+      ){
 
         cell.classList.add(
           "has-color"
@@ -1959,9 +2122,7 @@ function renderMonth(){
 
         cell.style.setProperty(
           "--dayColor",
-          getColorForCategory(
-            catKey
-          )
+          dayBackground
         );
 
       }
@@ -2185,11 +2346,6 @@ async function setEditMode(
 
   if(EDIT_MODE){
 
-    /*
-      Les années admin ne sont chargées
-      QUE lors de la première ouverture
-      du cadenas.
-    */
     if(
       !ADMIN_YEARS_LOADED
     ){
@@ -2231,10 +2387,6 @@ async function setEditMode(
 
   renderYearControl_();
 
-  /*
-    On ne recharge l'API que si
-    l'année a réellement changé.
-  */
   if(
     ACTIVE_YEAR !== oldYear
   ){
@@ -3553,11 +3705,6 @@ function setTimeValue(
 
 }
 
-/*
-  OPTIMISATION IMPORTANTE :
-  les roulettes ne sont plus créées
-  au démarrage de la page.
-*/
 function ensureWheelsInitialized_(){
 
   if(
@@ -3630,10 +3777,6 @@ function openEventForm(
   ev
 ){
 
-  /*
-    Création des roulettes seulement ici,
-    au premier ajout/modification.
-  */
   ensureWheelsInitialized_();
 
   FORM_STATE.mode =
@@ -3658,10 +3801,6 @@ function openEventForm(
     "false"
   );
 
-  /*
-    Attendre que la fenêtre soit visible
-    avant de positionner les roulettes.
-  */
   requestAnimationFrame(
     ()=>{
 
@@ -4130,10 +4269,6 @@ async function loadApi(
   const cached =
   loadCache_();
 
-  /*
-    Si cache disponible :
-    affichage immédiat.
-  */
   if(
     !forceFresh
     &&
@@ -4199,9 +4334,6 @@ async function loadApi(
     +
     `&callback=${cb2}`;
 
-    /*
-      Les deux requêtes partent en même temps.
-    */
     const [py,pc] =
     await Promise.all(
       [
@@ -4357,9 +4489,6 @@ $btnLock.addEventListener(
   }
 );
 
-/*
-  DÉMARRAGE OPTIMISÉ
-*/
 (async function(){
 
   EDIT_MODE =
@@ -4385,15 +4514,14 @@ $btnLock.addEventListener(
   renderMonth();
 
   /*
-    Accessible immédiatement à tous :
+    Tout le monde :
     2026 + 2027.
   */
   renderYearControl_();
 
   /*
-    IMPORTANT :
-    planning et contrôle admin démarrent
-    EN MÊME TEMPS.
+    Planning et contrôle admin
+    chargés simultanément.
   */
   const planningPromise =
   loadApi();
@@ -4423,11 +4551,6 @@ $btnLock.addEventListener(
 
   }
 
-  /*
-    On ne charge PAS PlanningYears ici.
-    Il sera chargé uniquement si l'admin
-    ouvre le cadenas.
-  */
   renderYearControl_();
 
   await planningPromise;
