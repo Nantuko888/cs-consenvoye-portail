@@ -16,6 +16,7 @@
       --orange2:#b95800;
       --today:#fff200;
       --note:#fff200;
+      --success:#1ca84a;
     }
 
     *{box-sizing:border-box}
@@ -61,7 +62,6 @@
         calc(env(safe-area-inset-top) + 10px)
         12px
         calc(env(safe-area-inset-bottom) + 12px);
-
       display:grid;
       grid-template-rows:auto auto 1fr auto;
       gap:10px;
@@ -126,9 +126,29 @@
       font-weight:900;
       cursor:pointer;
       -webkit-tap-highlight-color:transparent;
+      transition:.15s ease;
     }
 
-    .btn:active{transform:translateY(1px)}
+    .btn:active{
+      transform:translateY(1px);
+    }
+
+    .btn.saving{
+      background:#177b36;
+      border-color:#28cb60;
+      color:#fff;
+    }
+
+    .btn.saved{
+      background:var(--success);
+      border-color:#56e17e;
+      color:#fff;
+    }
+
+    .btn:disabled{
+      cursor:default;
+      opacity:1;
+    }
 
     .monthbar{
       display:grid;
@@ -249,14 +269,7 @@
       position:absolute;
       inset:0;
       border-radius:18px;
-
-      /*
-        Peut maintenant recevoir :
-        - une couleur simple
-        - un linear-gradient avec plusieurs couleurs
-      */
       background:var(--dayColor,transparent);
-
       opacity:.78;
       z-index:0;
     }
@@ -331,7 +344,6 @@
       border-radius:5px;
       border:1px solid rgba(255,255,255,.18);
       flex:0 0 auto;
-      background:rgba(255,255,255,.25);
     }
 
     .legTxt{
@@ -348,11 +360,12 @@
       left:12px;
       right:12px;
       bottom:calc(env(safe-area-inset-bottom) + 12px);
-      z-index:80;
+      z-index:250;
       display:none;
       max-width:980px;
       margin:0 auto;
       pointer-events:none;
+      text-align:center;
     }
 
     .status .pill{
@@ -360,15 +373,18 @@
       display:inline-flex;
       gap:10px;
       align-items:center;
-      padding:10px 12px;
+      padding:10px 14px;
       border-radius:16px;
-      background:rgba(0,0,0,.62);
+      background:rgba(0,0,0,.75);
       border:1px solid rgba(255,255,255,.14);
       box-shadow:var(--shadow);
-      color:rgba(255,255,255,.90);
+      color:#fff;
       font-weight:900;
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
+    }
+
+    .status.success .pill{
+      background:rgba(17,126,54,.92);
+      border-color:rgba(94,231,132,.55);
     }
 
     .status .small{
@@ -467,13 +483,7 @@
       border-radius:14px;
       font-weight:950;
       cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
       min-width:42px;
-    }
-
-    .noteClose:active,
-    .iconBtn:active{
-      transform:translateY(1px);
     }
 
     .iconBtn.danger{
@@ -484,7 +494,6 @@
     .editBody{
       padding:12px;
       overflow:auto;
-      -webkit-overflow-scrolling:touch;
       display:flex;
       flex-direction:column;
       gap:10px;
@@ -493,7 +502,6 @@
     .formBody{
       padding:10px;
       overflow:auto;
-      -webkit-overflow-scrolling:touch;
       display:flex;
       flex-direction:column;
       gap:8px;
@@ -522,7 +530,6 @@
     .rowName{
       font-weight:950;
       font-size:16px;
-      line-height:1.1;
       overflow:hidden;
       text-overflow:ellipsis;
       white-space:nowrap;
@@ -533,7 +540,6 @@
       font-size:13px;
       color:rgba(255,255,255,.78);
       white-space:nowrap;
-      flex:0 0 auto;
     }
 
     .evMeta,
@@ -562,14 +568,12 @@
       height:10px;
       border-radius:3px;
       border:1px solid rgba(255,255,255,.20);
-      background:rgba(255,255,255,.25);
     }
 
     .evDetails{
       font-size:15px;
       font-weight:850;
       color:rgba(255,255,255,.92);
-      line-height:1.25;
       white-space:pre-wrap;
     }
 
@@ -589,14 +593,12 @@
       font-weight:900;
       color:rgba(255,255,255,.82);
       text-transform:uppercase;
-      letter-spacing:.4px;
     }
 
     .fieldText,
     .fieldArea,
     .fieldSelect{
       width:100%;
-      border:none;
       outline:none;
       background:rgba(0,0,0,.18);
       color:var(--txt);
@@ -612,18 +614,6 @@
       min-height:88px;
       resize:vertical;
       font-weight:800;
-    }
-
-    .timeSection{padding:10px}
-
-    .timeLabel{
-      display:block;
-      margin:0 0 6px 0;
-      font-size:12px;
-      font-weight:900;
-      color:rgba(255,255,255,.82);
-      text-transform:uppercase;
-      letter-spacing:.4px;
     }
 
     .timePickerGroup{
@@ -643,9 +633,6 @@
       text-align:center;
       font-size:24px;
       font-weight:950;
-      color:rgba(255,255,255,.92);
-      transform:translateY(-1px);
-      user-select:none;
     }
 
     .wheel{
@@ -656,16 +643,12 @@
       background:rgba(255,255,255,.05);
       overflow-y:auto;
       scroll-snap-type:y mandatory;
-      -webkit-overflow-scrolling:touch;
       scrollbar-width:none;
     }
 
     .wheel::-webkit-scrollbar{display:none}
 
-    .wheelPad{
-      height:42px;
-      flex:0 0 auto;
-    }
+    .wheelPad{height:42px}
 
     .wheelInner{
       display:flex;
@@ -681,18 +664,12 @@
       font-weight:900;
       color:rgba(255,255,255,.40);
       scroll-snap-align:center;
-      transition:
-        transform .12s ease,
-        color .12s ease,
-        opacity .12s ease;
       opacity:.65;
-      user-select:none;
     }
 
     .wheelItem.active{
-      color:rgba(255,255,255,.98);
+      color:#fff;
       opacity:1;
-      transform:scale(1.01);
     }
 
     .wheelFocus{
@@ -705,7 +682,6 @@
       border:1px solid rgba(255,255,255,.18);
       background:rgba(255,255,255,.08);
       pointer-events:none;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
     }
 
     .wheelFadeTop,
@@ -720,44 +696,16 @@
 
     .wheelFadeTop{
       top:0;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(0,0,0,.46),
-          rgba(0,0,0,0)
-        );
+      background:linear-gradient(180deg,rgba(0,0,0,.46),transparent);
     }
 
     .wheelFadeBottom{
       bottom:0;
-      background:
-        linear-gradient(
-          0deg,
-          rgba(0,0,0,.46),
-          rgba(0,0,0,0)
-        );
+      background:linear-gradient(0deg,rgba(0,0,0,.46),transparent);
     }
 
-    @media (max-width:520px){
-      .timePickerGroup{
-        grid-template-columns:1fr;
-      }
-    }
-
-    @media (max-width:360px){
-      .monthname{font-size:20px}
-      .day{font-size:20px;border-radius:16px}
-      .day.has-color::before{border-radius:16px}
-      .grid{grid-auto-rows:minmax(50px,1fr)}
-      .legTxt{font-size:16px}
-      .sq{width:18px;height:18px}
-      .noteSheet{height:min(56vh,520px)}
-      .editSheet{height:min(68vh,680px)}
-      .formSheet{height:min(80vh,730px)}
-      .wheel{height:118px}
-      .wheelPad{height:38px}
-      .wheelFocus{top:38px;height:42px}
-      .wheelItem{font-size:17px}
+    @media(max-width:520px){
+      .timePickerGroup{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -786,8 +734,6 @@
       <button
         class="btn"
         id="btnLock"
-        title="Mode édition"
-        aria-pressed="false"
         style="display:none;">
         🔒
       </button>
@@ -802,15 +748,11 @@
 
   <div class="monthbar">
 
-    <button class="navbtn" id="btnPrev" aria-label="Mois précédent">
-      ‹
-    </button>
+    <button class="navbtn" id="btnPrev">‹</button>
 
     <h2 class="monthname" id="monthName">—</h2>
 
-    <button class="navbtn" id="btnNext" aria-label="Mois suivant">
-      ›
-    </button>
+    <button class="navbtn" id="btnNext">›</button>
 
   </div>
 
@@ -836,35 +778,28 @@
 
 </div>
 
-<div class="status" id="status">
 
+<div class="status" id="status">
   <div class="pill">
 
-    <span>⚠️</span>
+    <span id="statusIcon">⚠️</span>
 
     <div>
-      <div id="statusTxt">Chargement…</div>
-      <div class="small" id="statusSub">
-        Si ça reste, l’URL API est mauvaise.
-      </div>
+      <div id="statusTxt"></div>
+      <div class="small" id="statusSub"></div>
     </div>
 
   </div>
-
 </div>
 
-<div class="noteOverlay" id="noteOverlay" aria-hidden="true">
 
-  <div class="noteSheet" role="dialog" aria-modal="true">
+<div class="noteOverlay" id="noteOverlay">
+
+  <div class="noteSheet">
 
     <div class="noteHead">
-
-      <div class="noteTitle" id="noteTitle">—</div>
-
-      <button class="noteClose" id="noteClose">
-        Fermer
-      </button>
-
+      <div class="noteTitle" id="noteTitle"></div>
+      <button class="noteClose" id="noteClose">Fermer</button>
     </div>
 
     <div class="noteBody" id="noteBody"></div>
@@ -873,24 +808,18 @@
 
 </div>
 
-<div class="editOverlay" id="editOverlay" aria-hidden="true">
 
-  <div class="editSheet" role="dialog" aria-modal="true">
+<div class="editOverlay" id="editOverlay">
+
+  <div class="editSheet">
 
     <div class="editHead">
 
-      <div class="editTitle" id="editTitle">—</div>
+      <div class="editTitle" id="editTitle"></div>
 
       <div class="editActions">
-
-        <button class="iconBtn" id="btnAddEvent">
-          ＋
-        </button>
-
-        <button class="iconBtn" id="btnCloseEdit">
-          ✕
-        </button>
-
+        <button class="iconBtn" id="btnAddEvent">＋</button>
+        <button class="iconBtn" id="btnCloseEdit">✕</button>
       </div>
 
     </div>
@@ -901,9 +830,10 @@
 
 </div>
 
-<div class="formOverlay" id="formOverlay" aria-hidden="true">
 
-  <div class="formSheet" role="dialog" aria-modal="true">
+<div class="formOverlay" id="formOverlay">
+
+  <div class="formSheet">
 
     <div class="formHead">
 
@@ -911,35 +841,49 @@
         Événement
       </div>
 
-      <div class="formActions">
-        <button class="iconBtn" id="btnFormCancel">
-          ✕
-        </button>
-      </div>
+      <button class="iconBtn" id="btnFormCancel">
+        ✕
+      </button>
 
     </div>
 
     <div class="formBody">
 
       <div class="formBlock">
-        <label class="formLabel" for="fTitle">Titre</label>
+
+        <label class="formLabel">
+          Titre
+        </label>
+
         <input
           class="fieldText"
           id="fTitle"
-          type="text"
-          placeholder="Titre de l’événement" />
+          type="text">
+
       </div>
 
+
       <div class="formBlock">
-        <label class="formLabel" for="fCategory">Catégorie</label>
-        <select class="fieldSelect" id="fCategory"></select>
+
+        <label class="formLabel">
+          Catégorie
+        </label>
+
+        <select
+          class="fieldSelect"
+          id="fCategory">
+        </select>
+
       </div>
+
 
       <div class="timePickerGroup">
 
         <div class="timeSection">
 
-          <label class="timeLabel">Heure début</label>
+          <label class="formLabel">
+            Heure début
+          </label>
 
           <div class="timePickerRow">
 
@@ -963,9 +907,12 @@
 
         </div>
 
+
         <div class="timeSection">
 
-          <label class="timeLabel">Heure fin</label>
+          <label class="formLabel">
+            Heure fin
+          </label>
 
           <div class="timePickerRow">
 
@@ -991,32 +938,48 @@
 
       </div>
 
+
       <div class="formBlock">
-        <label class="formLabel" for="fLocation">Lieu</label>
+
+        <label class="formLabel">
+          Lieu
+        </label>
+
         <input
           class="fieldText"
           id="fLocation"
-          type="text"
-          placeholder="Lieu (optionnel)" />
+          type="text">
+
       </div>
 
+
       <div class="formBlock">
-        <label class="formLabel" for="fDetails">Détails / note</label>
+
+        <label class="formLabel">
+          Détails / note
+        </label>
+
         <textarea
           class="fieldArea"
-          id="fDetails"
-          placeholder="Détails (optionnel)"></textarea>
+          id="fDetails">
+        </textarea>
+
       </div>
+
 
       <div
         class="formActions"
-        style="justify-content:flex-end;padding-bottom:2px;">
+        style="justify-content:flex-end">
 
-        <button class="btn" id="btnFormClose">
+        <button
+          class="btn"
+          id="btnFormClose">
           Annuler
         </button>
 
-        <button class="btn" id="btnFormSave">
+        <button
+          class="btn"
+          id="btnFormSave">
           Enregistrer
         </button>
 
@@ -1028,28 +991,25 @@
 
 </div>
 
+
 <script>
 
 const API =
 "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-const BACK_URL =
-"index.html";
+const BACK_URL = "index.html";
 
-const PUBLIC_YEAR =
-2026;
+const PUBLIC_YEAR = 2026;
 
-let ACTIVE_YEAR =
-PUBLIC_YEAR;
+let ACTIVE_YEAR = PUBLIC_YEAR;
 
-let ADMIN_YEARS =
-[PUBLIC_YEAR];
+let ADMIN_YEARS = [PUBLIC_YEAR];
 
-let ADMIN_YEARS_LOADED =
-false;
+let ADMIN_YEARS_LOADED = false;
 
-let WHEELS_INITIALIZED =
-false;
+let WHEELS_INITIALIZED = false;
+
+let SAVE_IN_PROGRESS = false;
 
 const CACHE_MAX_AGE_MS =
 1000 * 60 * 60 * 24 * 7;
@@ -1057,9 +1017,6 @@ const CACHE_MAX_AGE_MS =
 const LS_EMAIL =
 "cs_portail_email_v1";
 
-function getCacheKey_(){
-  return `cs_planning_cache_v1_${ACTIVE_YEAR}`;
-}
 
 const DEFAULT_CATEGORIES = [
   {category:"FMA centre",color:"#ff2d2d",order:1},
@@ -1081,104 +1038,80 @@ document.getElementById(id);
 const $grid = $("grid");
 const $monthName = $("monthName");
 const $legendGrid = $("legendGrid");
+
 const $btnPrev = $("btnPrev");
 const $btnNext = $("btnNext");
-
-const $status = $("status");
-const $statusTxt = $("statusTxt");
-const $statusSub = $("statusSub");
 
 const $btnLock = $("btnLock");
 const $editLabel = $("editLabel");
 const $yearControl = $("yearControl");
 
+const $status = $("status");
+const $statusIcon = $("statusIcon");
+const $statusTxt = $("statusTxt");
+const $statusSub = $("statusSub");
+
 const $noteOverlay = $("noteOverlay");
 const $noteTitle = $("noteTitle");
 const $noteBody = $("noteBody");
-const $noteClose = $("noteClose");
 
 const $editOverlay = $("editOverlay");
 const $editTitle = $("editTitle");
 const $editBody = $("editBody");
-const $btnAddEvent = $("btnAddEvent");
-const $btnCloseEdit = $("btnCloseEdit");
 
 const $formOverlay = $("formOverlay");
 const $formTitle = $("formTitle");
+
 const $fTitle = $("fTitle");
 const $fCategory = $("fCategory");
 const $fLocation = $("fLocation");
 const $fDetails = $("fDetails");
 
-const $btnFormCancel = $("btnFormCancel");
-const $btnFormClose = $("btnFormClose");
 const $btnFormSave = $("btnFormSave");
 
+
 const monthsFR = [
-  "Janvier",
-  "Février",
-  "Mars",
-  "Avril",
-  "Mai",
-  "Juin",
-  "Juillet",
-  "Août",
-  "Septembre",
-  "Octobre",
-  "Novembre",
-  "Décembre"
+  "Janvier","Février","Mars","Avril","Mai","Juin",
+  "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
 ];
 
 const dowsFR = [
-  "Dim",
-  "Lun",
-  "Mar",
-  "Mer",
-  "Jeu",
-  "Ven",
-  "Sam"
+  "Dim","Lun","Mar","Mer","Jeu","Ven","Sam"
 ];
 
-let IS_ADMIN =
-false;
 
-let EDIT_MODE =
-false;
+let IS_ADMIN = false;
 
-let events =
-[];
+let EDIT_MODE = false;
+
+let events = [];
 
 let categoriesRaw =
 DEFAULT_CATEGORIES.slice();
 
-let eventsByDate =
-new Map();
+let eventsByDate = new Map();
 
-let catColor =
-new Map();
+let catColor = new Map();
 
-let catLabel =
-new Map();
+let catLabel = new Map();
 
-let catOrder =
-new Map();
+let catOrder = new Map();
 
-/*
-  NOUVEAU :
-  liste des catégories présentes
-  pour chaque date.
-*/
-let categoryKeysByDate =
-new Map();
+let categoryKeysByDate = new Map();
 
-let hasNoteByDate =
-new Map();
+let hasNoteByDate = new Map();
 
-let currentMonth =
-0;
+let currentMonth = 0;
 
-let _editDate =
-"";
+let _editDate = "";
+
+
+let FORM_STATE = {
+  mode:"add",
+  dateStr:"",
+  originalEvent:null
+};
+
 
 const HOURS =
 Array.from(
@@ -1187,20 +1120,11 @@ Array.from(
 );
 
 const MINUTES = [
-  "00",
-  "15",
-  "30",
-  "45"
+  "00","15","30","45"
 ];
 
-const LOOP_DUPLICATES =
-15;
+const LOOP_DUPLICATES = 15;
 
-let FORM_STATE = {
-  mode:"add",
-  dateStr:"",
-  originalEvent:null
-};
 
 const TIME_PICKERS = {
 
@@ -1208,39 +1132,32 @@ const TIME_PICKERS = {
     wheel:$("startHourWheel"),
     inner:$("startHourInner"),
     values:HOURS,
-    value:"08",
-    timer:null,
-    looping:true
+    value:"08"
   },
 
   startMinute:{
     wheel:$("startMinuteWheel"),
     inner:$("startMinuteInner"),
     values:MINUTES,
-    value:"00",
-    timer:null,
-    looping:true
+    value:"00"
   },
 
   endHour:{
     wheel:$("endHourWheel"),
     inner:$("endHourInner"),
     values:HOURS,
-    value:"09",
-    timer:null,
-    looping:true
+    value:"09"
   },
 
   endMinute:{
     wheel:$("endMinuteWheel"),
     inner:$("endMinuteInner"),
     values:MINUTES,
-    value:"00",
-    timer:null,
-    looping:true
+    value:"00"
   }
 
 };
+
 
 function norm(s){
 
@@ -1254,39 +1171,39 @@ function norm(s){
 
 }
 
+
 function escapeHtml(s){
 
-  return (
-    s == null
-      ? ""
-      : String(s)
-  )
-  .replaceAll("&","&amp;")
-  .replaceAll("<","&lt;")
-  .replaceAll(">","&gt;")
-  .replaceAll('"',"&quot;")
-  .replaceAll("'","&#039;");
+  return String(s ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
 }
+
 
 function ymd(d){
 
-  const y =
-  d.getFullYear();
-
-  const m =
-  String(
-    d.getMonth()+1
-  ).padStart(2,"0");
-
-  const dd =
-  String(
-    d.getDate()
-  ).padStart(2,"0");
-
-  return `${y}-${m}-${dd}`;
+  return (
+    d.getFullYear()
+    +
+    "-"
+    +
+    String(
+      d.getMonth()+1
+    ).padStart(2,"0")
+    +
+    "-"
+    +
+    String(
+      d.getDate()
+    ).padStart(2,"0")
+  );
 
 }
+
 
 function firstMondayGrid(
   year,
@@ -1300,97 +1217,66 @@ function firstMondayGrid(
     1
   );
 
-  const js =
-  d.getDay();
-
   const offset =
-  js === 0
+  d.getDay() === 0
     ? 6
-    : js - 1;
+    : d.getDay()-1;
 
   d.setDate(
-    d.getDate() - offset
+    d.getDate()-offset
   );
 
-  d.setHours(
-    12,
-    0,
-    0,
-    0
-  );
+  d.setHours(12,0,0,0);
 
   return d;
 
 }
 
-function toFRDate(
-  ymdStr
-){
+
+function toFRDate(str){
 
   const [y,m,d] =
-  String(
-    ymdStr || ""
-  ).split("-");
-
-  if(!y || !m || !d){
-    return ymdStr;
-  }
+  String(str).split("-");
 
   const dt =
   new Date(
     Number(y),
     Number(m)-1,
-    Number(d),
-    12,
-    0,
-    0,
-    0
+    Number(d)
   );
 
-  const dow =
-  dowsFR[
-    dt.getDay()
-  ];
-
   return (
-    `${dow} ` +
-    `${String(d).padStart(2,"0")}/` +
-    `${String(m).padStart(2,"0")}/` +
-    `${y}`
+    dowsFR[dt.getDay()]
+    +
+    " "
+    +
+    d
+    +
+    "/"
+    +
+    m
+    +
+    "/"
+    +
+    y
   );
 
 }
+
 
 function formatTimeRange(
   start,
   end
 ){
 
-  const s =
-  String(
-    start || ""
-  ).trim();
-
-  const e =
-  String(
-    end || ""
-  ).trim();
-
-  if(s && e){
-    return `${s}–${e}`;
+  if(start && end){
+    return `${start}–${end}`;
   }
 
-  if(s){
-    return s;
-  }
-
-  if(e){
-    return e;
-  }
-
-  return "";
+  return start || end || "";
 
 }
+
 
 function getEmailLocal(){
 
@@ -1406,28 +1292,62 @@ function getEmailLocal(){
 
 }
 
+
 function showStatus(
   txt,
-  sub
+  sub="",
+  success=false
 ){
 
   $statusTxt.textContent =
-  txt || "";
+  txt;
 
   $statusSub.textContent =
-  sub || "";
+  sub;
+
+  $statusIcon.textContent =
+  success
+    ? "✅"
+    : "⚠️";
+
+  $status.classList.toggle(
+    "success",
+    success
+  );
 
   $status.style.display =
   "block";
 
 }
 
+
 function hideStatus(){
 
   $status.style.display =
   "none";
 
+  $status.classList.remove(
+    "success"
+  );
+
 }
+
+
+function showSavedMessage(){
+
+  showStatus(
+    "Enregistré",
+    "",
+    true
+  );
+
+  setTimeout(
+    hideStatus,
+    1200
+  );
+
+}
+
 
 function jsonp(
   url,
@@ -1449,9 +1369,7 @@ function jsonp(
 
         try{
           delete window[cbName];
-        }catch(e){
-          window[cbName] = undefined;
-        }
+        }catch(e){}
 
       };
 
@@ -1471,7 +1389,8 @@ function jsonp(
         timeoutMs
       );
 
-      window[cbName] = data=>{
+      window[cbName] =
+      data=>{
 
         clearTimeout(timer);
 
@@ -1481,18 +1400,21 @@ function jsonp(
 
       };
 
-      const sep =
-      url.includes("?")
-        ? "&"
-        : "?";
-
       script.src =
-      url +
-      sep +
-      "t=" +
+      url
+      +
+      (
+        url.includes("?")
+          ? "&"
+          : "?"
+      )
+      +
+      "t="
+      +
       Date.now();
 
-      script.onerror = ()=>{
+      script.onerror =
+      ()=>{
 
         clearTimeout(timer);
 
@@ -1515,43 +1437,39 @@ function jsonp(
 
 }
 
+
 async function loadMyRole_(){
 
   const email =
   getEmailLocal();
 
   if(!email){
-
-    IS_ADMIN =
-    false;
-
     return;
-
   }
 
   const cb =
-  "cb_auth_" +
+  "auth_"
+  +
   Math.random()
     .toString(36)
     .slice(2);
 
-  const url =
-  `${API}?view=auth_check` +
-  `&email=${encodeURIComponent(email)}` +
-  `&nocache=1` +
-  `&callback=${cb}`;
-
   const res =
   await jsonp(
-    url,
-    cb,
-    20000
+    `${API}?view=auth_check`
+    +
+    `&email=${encodeURIComponent(email)}`
+    +
+    `&nocache=1`
+    +
+    `&callback=${cb}`,
+    cb
   );
 
   IS_ADMIN =
   !!(
-    res &&
-    res.ok === true &&
+    res?.ok
+    &&
     String(
       res.role || ""
     ).toLowerCase()
@@ -1561,81 +1479,60 @@ async function loadMyRole_(){
 
 }
 
+
 async function loadPlanningYears_(){
 
-  if(ADMIN_YEARS_LOADED){
+  if(
+    ADMIN_YEARS_LOADED
+  ){
     return;
   }
 
   const cb =
-  "cb_years_" +
+  "years_"
+  +
   Math.random()
     .toString(36)
     .slice(2);
-
-  const url =
-  `${API}?view=planning_years_list` +
-  `&nocache=1` +
-  `&callback=${cb}`;
 
   try{
 
     const res =
     await jsonp(
-      url,
-      cb,
-      20000
+      `${API}?view=planning_years_list`
+      +
+      `&nocache=1`
+      +
+      `&callback=${cb}`,
+      cb
     );
 
-    const rawYears =
-    Array.isArray(
-      res?.years
-    )
-      ? res.years
-      : [];
-
     const years =
-    rawYears
-      .map(
-        item=>{
-
-          if(
-            typeof item
-            ===
-            "number"
-          ){
-            return item;
-          }
-
-          if(
-            typeof item
-            ===
-            "string"
-          ){
-            return Number(item);
-          }
-
-          return Number(
-            item?.year
-          );
-
-        }
+    (
+      Array.isArray(
+        res?.years
       )
-      .filter(
-        year=>
-          Number.isInteger(year)
-          &&
-          year >= 2000
-          &&
-          year <= 2100
-      );
+        ? res.years
+        : []
+    )
+    .map(
+      x=>
+        Number(
+          typeof x === "object"
+            ? x.year
+            : x
+        )
+    )
+    .filter(
+      Number.isInteger
+    );
 
     ADMIN_YEARS =
     [
       ...new Set(
         [
           PUBLIC_YEAR,
-          PUBLIC_YEAR + 1,
+          PUBLIC_YEAR+1,
           ...years
         ]
       )
@@ -1648,7 +1545,7 @@ async function loadPlanningYears_(){
 
     ADMIN_YEARS = [
       PUBLIC_YEAR,
-      PUBLIC_YEAR + 1
+      PUBLIC_YEAR+1
     ];
 
   }
@@ -1657,6 +1554,7 @@ async function loadPlanningYears_(){
   true;
 
 }
+
 
 function rebuildMaps(){
 
@@ -1669,10 +1567,6 @@ function rebuildMaps(){
   categoryKeysByDate =
   new Map();
 
-  /*
-    On construit d'abord les événements
-    regroupés par date.
-  */
   for(
     const ev
     of events
@@ -1717,6 +1611,7 @@ function rebuildMaps(){
 
   }
 
+
   catColor =
   new Map();
 
@@ -1725,6 +1620,7 @@ function rebuildMaps(){
 
   catOrder =
   new Map();
+
 
   const cats =
   [...categoriesRaw]
@@ -1745,8 +1641,6 @@ function rebuildMaps(){
         Number(
           c.order || 9999
         )
-        ||
-        9999
 
       })
     )
@@ -1754,16 +1648,6 @@ function rebuildMaps(){
       c=>c.category
     );
 
-  cats.sort(
-    (a,b)=>
-      (
-        a.order-b.order
-      )
-      ||
-      a.category.localeCompare(
-        b.category
-      )
-  );
 
   for(
     const c
@@ -1775,22 +1659,6 @@ function rebuildMaps(){
       c.category
     );
 
-    if(
-      catLabel.has(k)
-    ){
-      continue;
-    }
-
-    const forced =
-    OVERRIDE_COLORS[k];
-
-    const col =
-    forced
-    ||
-    c.color
-    ||
-    "rgba(255,255,255,.25)";
-
     catLabel.set(
       k,
       c.category
@@ -1798,7 +1666,11 @@ function rebuildMaps(){
 
     catColor.set(
       k,
-      col
+      OVERRIDE_COLORS[k]
+      ||
+      c.color
+      ||
+      "#777"
     );
 
     catOrder.set(
@@ -1808,24 +1680,14 @@ function rebuildMaps(){
 
   }
 
-  /*
-    NOUVEAU :
-    pour chaque date, on récupère toutes
-    les catégories différentes.
 
-    Si deux événements ont la même catégorie,
-    elle ne sera comptée qu'une seule fois.
-  */
   for(
     const [date,arr]
     of
     eventsByDate.entries()
   ){
 
-    const uniqueKeys =
-    [];
-
-    const seen =
+    const set =
     new Set();
 
     for(
@@ -1835,100 +1697,59 @@ function rebuildMaps(){
 
       const k =
       norm(
-        ev.category || ""
+        ev.category
       );
 
-      if(!k){
-        continue;
+      if(k){
+        set.add(k);
       }
-
-      if(
-        seen.has(k)
-      ){
-        continue;
-      }
-
-      seen.add(k);
-
-      uniqueKeys.push(k);
 
     }
 
-    /*
-      On respecte l'ordre des catégories.
-    */
-    uniqueKeys.sort(
-      (a,b)=>{
+    const keys =
+    [...set];
 
-        const oa =
-        catOrder.has(a)
-          ? catOrder.get(a)
-          : 9999;
-
-        const ob =
-        catOrder.has(b)
-          ? catOrder.get(b)
-          : 9999;
-
-        return oa-ob;
-
-      }
+    keys.sort(
+      (a,b)=>
+        (
+          catOrder.get(a)
+          ||
+          9999
+        )
+        -
+        (
+          catOrder.get(b)
+          ||
+          9999
+        )
     );
 
-    if(
-      uniqueKeys.length
-    ){
-
-      categoryKeysByDate.set(
-        date,
-        uniqueKeys
-      );
-
-    }
+    categoryKeysByDate.set(
+      date,
+      keys
+    );
 
   }
 
 }
 
-function getColorForCategory(
-  catKey
-){
 
-  const k =
-  norm(
-    catKey
-  );
+function getColorForCategory(k){
 
-  if(
-    OVERRIDE_COLORS[k]
-  ){
-
-    return OVERRIDE_COLORS[k];
-
-  }
+  k =
+  norm(k);
 
   return (
+    OVERRIDE_COLORS[k]
+    ||
     catColor.get(k)
     ||
-    "rgba(255,255,255,.25)"
+    "#777"
   );
 
 }
 
-/*
-  NOUVELLE FONCTION
 
-  1 couleur :
-  rouge
-
-  2 couleurs :
-  rouge 50 % / bleu 50 %
-
-  3 couleurs :
-  environ 33 % chacune
-
-  etc.
-*/
 function getDayBackground(
   dateStr
 ){
@@ -1940,59 +1761,49 @@ function getDayBackground(
   ||
   [];
 
-  if(
-    !keys.length
-  ){
-
-    return "";
-
-  }
-
   const colors =
   keys.map(
-    k=>
-      getColorForCategory(k)
+    getColorForCategory
   );
+
+  if(
+    colors.length === 0
+  ){
+    return "";
+  }
 
   if(
     colors.length === 1
   ){
-
     return colors[0];
-
   }
 
   const step =
-  100 / colors.length;
+  100/colors.length;
 
   const parts =
   [];
 
   colors.forEach(
-    (color,index)=>{
-
-      const start =
-      index * step;
-
-      const end =
-      (index + 1) * step;
+    (color,i)=>{
 
       parts.push(
-        `${color} ${start}%`
+        `${color} ${i*step}%`
       );
 
       parts.push(
-        `${color} ${end}%`
+        `${color} ${(i+1)*step}%`
       );
 
     }
   );
 
   return (
-    `linear-gradient(90deg, ${parts.join(", ")})`
+    `linear-gradient(90deg,${parts.join(",")})`
   );
 
 }
+
 
 function renderLegend(){
 
@@ -2004,9 +1815,6 @@ function renderLegend(){
     of
     catLabel.entries()
   ){
-
-    const col =
-    getColorForCategory(k);
 
     const div =
     document.createElement(
@@ -2020,7 +1828,7 @@ function renderLegend(){
     `
       <div
         class="sq"
-        style="background:${escapeHtml(col)}">
+        style="background:${getColorForCategory(k)}">
       </div>
 
       <div class="legTxt">
@@ -2036,12 +1844,11 @@ function renderLegend(){
 
 }
 
+
 function renderMonth(){
 
   $monthName.textContent =
-  monthsFR[
-    currentMonth
-  ];
+  monthsFR[currentMonth];
 
   $btnPrev.disabled =
   currentMonth === 0;
@@ -2055,7 +1862,7 @@ function renderMonth(){
     currentMonth
   );
 
-  const todayStr =
+  const today =
   ymd(
     new Date()
   );
@@ -2081,7 +1888,7 @@ function renderMonth(){
     ===
     currentMonth;
 
-    const dateStr =
+    const date =
     ymd(d);
 
     const cell =
@@ -2098,23 +1905,18 @@ function renderMonth(){
         : " is-empty"
     );
 
+
     if(inMonth){
 
       cell.dataset.date =
-      dateStr;
+      date;
 
-      /*
-        NOUVEAU :
-        couleur simple ou dégradé partagé.
-      */
-      const dayBackground =
+      const bg =
       getDayBackground(
-        dateStr
+        date
       );
 
-      if(
-        dayBackground
-      ){
+      if(bg){
 
         cell.classList.add(
           "has-color"
@@ -2122,13 +1924,13 @@ function renderMonth(){
 
         cell.style.setProperty(
           "--dayColor",
-          dayBackground
+          bg
         );
 
       }
 
       if(
-        dateStr === todayStr
+        date === today
       ){
 
         cell.classList.add(
@@ -2138,11 +1940,7 @@ function renderMonth(){
       }
 
       if(
-        hasNoteByDate.get(
-          dateStr
-        )
-        ===
-        true
+        hasNoteByDate.get(date)
       ){
 
         cell.classList.add(
@@ -2168,48 +1966,21 @@ function renderMonth(){
 
 }
 
-function getPublicYears_(){
-
-  return [
-    PUBLIC_YEAR,
-    PUBLIC_YEAR + 1
-  ];
-
-}
 
 function renderYearControl_(){
 
   $yearControl.innerHTML =
   "";
 
-  let yearsToShow;
-
-  if(
-    IS_ADMIN
-    &&
-    EDIT_MODE
-  ){
-
-    yearsToShow =
-    ADMIN_YEARS.slice();
-
-  }else{
-
-    yearsToShow =
-    getPublicYears_();
-
-  }
-
-  if(
-    !yearsToShow.includes(
-      ACTIVE_YEAR
-    )
-  ){
-
-    ACTIVE_YEAR =
-    PUBLIC_YEAR;
-
-  }
+  const years =
+  IS_ADMIN
+  &&
+  EDIT_MODE
+    ? ADMIN_YEARS
+    : [
+        PUBLIC_YEAR,
+        PUBLIC_YEAR+1
+      ];
 
   const select =
   document.createElement(
@@ -2219,97 +1990,54 @@ function renderYearControl_(){
   select.className =
   "yearSelect";
 
-  for(
-    const year
-    of yearsToShow
-  ){
+  years.forEach(
+    year=>{
 
-    const opt =
-    document.createElement(
-      "option"
-    );
-
-    opt.value =
-    String(year);
-
-    opt.textContent =
-    String(year);
-
-    if(
-      year === ACTIVE_YEAR
-    ){
-
-      opt.selected =
-      true;
-
-    }
-
-    select.appendChild(
-      opt
-    );
-
-  }
-
-  select.addEventListener(
-    "change",
-    async ()=>{
-
-      const newYear =
-      Number(
-        select.value
+      const option =
+      document.createElement(
+        "option"
       );
 
-      if(
-        !yearsToShow.includes(
-          newYear
-        )
-      ){
+      option.value =
+      year;
 
-        return;
+      option.textContent =
+      year;
 
-      }
+      option.selected =
+      year === ACTIVE_YEAR;
 
-      if(
-        newYear === ACTIVE_YEAR
-      ){
-
-        return;
-
-      }
-
-      ACTIVE_YEAR =
-      newYear;
-
-      closeNote();
-      closeEdit();
-      closeEventForm();
-
-      events =
-      [];
-
-      rebuildMaps();
-
-      const now =
-      new Date();
-
-      currentMonth =
-      now.getFullYear()
-      ===
-      ACTIVE_YEAR
-        ? now.getMonth()
-        : 0;
-
-      renderMonth();
-
-      showStatus(
-        `Planning ${ACTIVE_YEAR}`,
-        "Chargement de l'année…"
+      select.appendChild(
+        option
       );
-
-      await loadApi();
 
     }
   );
+
+  select.onchange =
+  async ()=>{
+
+    ACTIVE_YEAR =
+    Number(
+      select.value
+    );
+
+    currentMonth =
+    new Date().getFullYear()
+    ===
+    ACTIVE_YEAR
+      ? new Date().getMonth()
+      : 0;
+
+    events = [];
+
+    rebuildMaps();
+
+    renderMonth();
+
+    await loadApi();
+
+  };
 
   $yearControl.appendChild(
     select
@@ -2317,258 +2045,56 @@ function renderYearControl_(){
 
 }
 
+
 async function setEditMode(
   on
 ){
 
-  const oldYear =
-  ACTIVE_YEAR;
-
   EDIT_MODE =
   !!on;
-
-  $editLabel.style.display =
-  EDIT_MODE
-    ? "inline-block"
-    : "none";
 
   $btnLock.textContent =
   EDIT_MODE
     ? "🔓"
     : "🔒";
 
-  $btnLock.setAttribute(
-    "aria-pressed",
+  $editLabel.style.display =
+  EDIT_MODE
+    ? "inline"
+    : "none";
+
+  if(
     EDIT_MODE
-      ? "true"
-      : "false"
-  );
+    &&
+    !ADMIN_YEARS_LOADED
+  ){
 
-  if(EDIT_MODE){
-
-    if(
-      !ADMIN_YEARS_LOADED
-    ){
-
-      showStatus(
-        "Mode édition",
-        "Chargement des années…"
-      );
-
-      await loadPlanningYears_();
-
-      hideStatus();
-
-    }
-
-    renderYearControl_();
-
-    return;
+    await loadPlanningYears_();
 
   }
 
-  closeEdit();
-  closeNote();
-  closeEventForm();
-
-  const publicYears =
-  getPublicYears_();
-
   if(
-    !publicYears.includes(
-      ACTIVE_YEAR
-    )
+    !EDIT_MODE
+    &&
+    ACTIVE_YEAR
+    >
+    PUBLIC_YEAR+1
   ){
 
     ACTIVE_YEAR =
     PUBLIC_YEAR;
 
+    currentMonth =
+    new Date().getMonth();
+
+    loadApi();
+
   }
 
   renderYearControl_();
 
-  if(
-    ACTIVE_YEAR !== oldYear
-  ){
-
-    const now =
-    new Date();
-
-    currentMonth =
-    now.getFullYear()
-    ===
-    ACTIVE_YEAR
-      ? now.getMonth()
-      : 0;
-
-    renderMonth();
-
-    await loadApi();
-
-  }
-
 }
 
-function openNote(
-  dateStr
-){
-
-  const arr =
-  eventsByDate.get(
-    dateStr
-  )
-  ||
-  [];
-
-  const withDetails =
-  arr.filter(
-    ev=>
-      String(
-        ev.details || ""
-      ).trim()
-  );
-
-  if(
-    !withDetails.length
-  ){
-    return;
-  }
-
-  $noteTitle.textContent =
-  `Note — ${
-    dateStr
-      .split("-")
-      .reverse()
-      .join("/")
-  }`;
-
-  $noteBody.innerHTML =
-  "";
-
-  for(
-    const ev
-    of withDetails
-  ){
-
-    const name =
-    String(
-      ev.title || ""
-    ).trim()
-    ||
-    "—";
-
-    const time =
-    formatTimeRange(
-      ev.start,
-      ev.end
-    );
-
-    const catK =
-    norm(
-      ev.category || ""
-    );
-
-    const catLabelTxt =
-    String(
-      ev.category || ""
-    ).trim();
-
-    const loc =
-    String(
-      ev.location || ""
-    ).trim();
-
-    const details =
-    String(
-      ev.details || ""
-    ).trim();
-
-    const dotCol =
-    getColorForCategory(
-      catK
-    );
-
-    const card =
-    document.createElement(
-      "div"
-    );
-
-    card.className =
-    "evCard";
-
-    card.innerHTML =
-    `
-      <div class="evTop">
-
-        <div class="evName">
-          ${escapeHtml(name)}
-        </div>
-
-        <div class="evTime">
-          ${escapeHtml(time)}
-        </div>
-
-      </div>
-
-      <div class="evMeta">
-
-        ${
-          catLabelTxt
-          ?
-          `
-            <div class="chip">
-              <span
-                class="chipDot"
-                style="background:${escapeHtml(dotCol)}">
-              </span>
-
-              <span>
-                ${escapeHtml(catLabelTxt)}
-              </span>
-            </div>
-          `
-          :
-          ""
-        }
-
-        ${
-          loc
-          ?
-          `
-            <div class="chip">
-              📍
-              <span>
-                ${escapeHtml(loc)}
-              </span>
-            </div>
-          `
-          :
-          ""
-        }
-
-      </div>
-
-      <div class="evDetails">
-        ${escapeHtml(details)}
-      </div>
-    `;
-
-    $noteBody.appendChild(
-      card
-    );
-
-  }
-
-  $noteOverlay.classList.add(
-    "show"
-  );
-
-  $noteOverlay.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
-}
 
 function closeNote(){
 
@@ -2576,37 +2102,8 @@ function closeNote(){
     "show"
   );
 
-  $noteOverlay.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
 }
 
-function openEdit(
-  dateStr
-){
-
-  _editDate =
-  dateStr;
-
-  $editTitle.textContent =
-  `Événements — ${toFRDate(dateStr)}`;
-
-  renderEditList(
-    dateStr
-  );
-
-  $editOverlay.classList.add(
-    "show"
-  );
-
-  $editOverlay.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
-}
 
 function closeEdit(){
 
@@ -2614,516 +2111,245 @@ function closeEdit(){
     "show"
   );
 
-  $editOverlay.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
   _editDate =
-  "";
-
-  $editBody.innerHTML =
   "";
 
 }
 
+
+function closeEventForm(){
+
+  $formOverlay.classList.remove(
+    "show"
+  );
+
+}
+
+
+function openEdit(
+  date
+){
+
+  _editDate =
+  date;
+
+  $editTitle.textContent =
+  `Événements — ${toFRDate(date)}`;
+
+  renderEditList(
+    date
+  );
+
+  $editOverlay.classList.add(
+    "show"
+  );
+
+}
+
+
+function openNote(
+  date
+){
+
+  const arr =
+  eventsByDate.get(date)
+  ||
+  [];
+
+  $noteTitle.textContent =
+  `Événements — ${toFRDate(date)}`;
+
+  $noteBody.innerHTML =
+  "";
+
+  arr.forEach(
+    ev=>{
+
+      const card =
+      document.createElement(
+        "div"
+      );
+
+      card.className =
+      "evCard";
+
+      card.innerHTML =
+      `
+        <div class="evTop">
+
+          <div class="evName">
+            ${escapeHtml(ev.title)}
+          </div>
+
+          <div class="evTime">
+            ${escapeHtml(
+              formatTimeRange(
+                ev.start,
+                ev.end
+              )
+            )}
+          </div>
+
+        </div>
+
+        ${
+          ev.details
+          ?
+          `
+            <div class="evDetails">
+              ${escapeHtml(ev.details)}
+            </div>
+          `
+          :
+          ""
+        }
+      `;
+
+      $noteBody.appendChild(
+        card
+      );
+
+    }
+  );
+
+  $noteOverlay.classList.add(
+    "show"
+  );
+
+}
+
+
 function renderEditList(
-  dateStr
+  date
 ){
 
   const arr =
   (
-    eventsByDate.get(
-      dateStr
-    )
+    eventsByDate.get(date)
     ||
     []
   )
   .slice();
 
-  arr.sort(
-    (a,b)=>
-      String(
-        a.start || ""
-      ).localeCompare(
-        String(
-          b.start || ""
-        )
-      )
-      ||
-      String(
-        a.title || ""
-      ).localeCompare(
-        String(
-          b.title || ""
-        )
-      )
-  );
-
   $editBody.innerHTML =
   "";
 
-  if(
-    !arr.length
-  ){
+  if(!arr.length){
 
-    const empty =
-    document.createElement(
-      "div"
-    );
-
-    empty.className =
-    "row";
-
-    empty.innerHTML =
+    $editBody.innerHTML =
     `
-      <div style="font-weight:900;opacity:.9">
+      <div class="row">
         Aucun événement ce jour.
       </div>
     `;
 
-    $editBody.appendChild(
-      empty
-    );
-
     return;
 
   }
 
-  for(
-    const ev
-    of arr
-  ){
 
-    const name =
-    String(
-      ev.title || ""
-    ).trim()
-    ||
-    "—";
+  arr.forEach(
+    ev=>{
 
-    const time =
-    formatTimeRange(
-      ev.start,
-      ev.end
-    );
-
-    const cat =
-    String(
-      ev.category || ""
-    ).trim();
-
-    const loc =
-    String(
-      ev.location || ""
-    ).trim();
-
-    const details =
-    String(
-      ev.details || ""
-    ).trim();
-
-    const row =
-    document.createElement(
-      "div"
-    );
-
-    row.className =
-    "row";
-
-    row.innerHTML =
-    `
-      <div class="rowTop">
-
-        <div class="rowName">
-          ${escapeHtml(name)}
-        </div>
-
-        <div class="evTime">
-          ${escapeHtml(time)}
-        </div>
-
-      </div>
-
-      <div class="rowSub">
-
-        ${
-          cat
-          ?
-          `<span>🎨 ${escapeHtml(cat)}</span>`
-          :
-          ""
-        }
-
-        ${
-          loc
-          ?
-          `<span>📍 ${escapeHtml(loc)}</span>`
-          :
-          ""
-        }
-
-        ${
-          details
-          ?
-          `<span>📝 note</span>`
-          :
-          ""
-        }
-
-      </div>
-
-      <div class="rowBtns">
-
-        <button
-          class="iconBtn"
-          data-act="view">
-          👁
-        </button>
-
-        <button
-          class="iconBtn"
-          data-act="edit">
-          🖍
-        </button>
-
-        <button
-          class="iconBtn danger"
-          data-act="del">
-          🗑
-        </button>
-
-      </div>
-    `;
-
-    row
-      .querySelectorAll(
-        "button"
-      )
-      .forEach(
-        b=>{
-
-          b.addEventListener(
-            "click",
-            async ()=>{
-
-              const act =
-              b.dataset.act;
-
-              if(
-                act === "view"
-              ){
-
-                alert(
-                  `📅 ${toFRDate(dateStr)}\n`
-                  +
-                  `🕒 ${time || "—"}\n`
-                  +
-                  `📌 ${name}\n`
-                  +
-                  (
-                    cat
-                    ? `🎨 ${cat}\n`
-                    : ""
-                  )
-                  +
-                  (
-                    loc
-                    ? `📍 ${loc}\n`
-                    : ""
-                  )
-                  +
-                  (
-                    details
-                    ? `\n📝 ${details}`
-                    : ""
-                  )
-                );
-
-                return;
-
-              }
-
-              if(
-                act === "del"
-              ){
-
-                const ok =
-                confirm(
-                  `Supprimer l’événement :\n\n`
-                  +
-                  `${name}\n`
-                  +
-                  `${time || ""}\n\n`
-                  +
-                  `Confirmer ?`
-                );
-
-                if(!ok){
-                  return;
-                }
-
-                await apiDeleteEvent_(
-                  dateStr,
-                  ev
-                );
-
-                await loadApi(
-                  true
-                );
-
-                renderEditList(
-                  dateStr
-                );
-
-                return;
-
-              }
-
-              if(
-                act === "edit"
-              ){
-
-                openEventForm(
-                  "edit",
-                  dateStr,
-                  ev
-                );
-
-              }
-
-            }
-          );
-
-        }
+      const row =
+      document.createElement(
+        "div"
       );
 
-    $editBody.appendChild(
-      row
-    );
+      row.className =
+      "row";
 
-  }
+      row.innerHTML =
+      `
+        <div class="rowTop">
 
-}
+          <div class="rowName">
+            ${escapeHtml(ev.title)}
+          </div>
 
-async function apiAddEvent_(
-  dateStr,
-  payload
-){
+          <div class="evTime">
+            ${escapeHtml(
+              formatTimeRange(
+                ev.start,
+                ev.end
+              )
+            )}
+          </div>
 
-  const email =
-  getEmailLocal();
+        </div>
 
-  if(!email){
+        <div class="rowBtns">
 
-    alert(
-      "Email introuvable (localStorage). Reconnecte-toi sur le portail."
-    );
+          <button
+            class="iconBtn edit">
+            🖍
+          </button>
 
-    return;
+          <button
+            class="iconBtn danger del">
+            🗑
+          </button>
 
-  }
+        </div>
+      `;
 
-  const cb =
-  "cb_add_" +
-  Math.random()
-    .toString(36)
-    .slice(2);
 
-  const url =
-  `${API}?view=planning_add`
-  +
-  `&email=${encodeURIComponent(email)}`
-  +
-  `&date=${encodeURIComponent(dateStr)}`
-  +
-  `&start=${encodeURIComponent(payload.start || "")}`
-  +
-  `&end=${encodeURIComponent(payload.end || "")}`
-  +
-  `&title=${encodeURIComponent(payload.title || "")}`
-  +
-  `&category=${encodeURIComponent(payload.category || "")}`
-  +
-  `&location=${encodeURIComponent(payload.location || "")}`
-  +
-  `&details=${encodeURIComponent(payload.details || "")}`
-  +
-  `&nocache=1`
-  +
-  `&callback=${cb}`;
+      row.querySelector(
+        ".edit"
+      )
+      .onclick =
+      ()=>openEventForm(
+        "edit",
+        date,
+        ev
+      );
 
-  const res =
-  await jsonp(
-    url,
-    cb,
-    20000
+
+      row.querySelector(
+        ".del"
+      )
+      .onclick =
+      async ()=>{
+
+        if(
+          !confirm(
+            "Supprimer cet événement ?"
+          )
+        ){
+          return;
+        }
+
+        await apiDeleteEvent_(
+          date,
+          ev
+        );
+
+        loadApi(true);
+
+      };
+
+
+      $editBody.appendChild(
+        row
+      );
+
+    }
   );
 
-  if(
-    !res
-    ||
-    res.ok !== true
-  ){
-
-    throw new Error(
-      res?.error
-      ||
-      "Erreur ajout"
-    );
-
-  }
-
-  return res;
-
 }
 
-async function apiDeleteEvent_(
-  dateStr,
-  ev
-){
-
-  const email =
-  getEmailLocal();
-
-  if(!email){
-
-    alert(
-      "Email introuvable (localStorage). Reconnecte-toi sur le portail."
-    );
-
-    return;
-
-  }
-
-  const eventId =
-  String(
-    ev?.event_id
-    ||
-    ev?.id
-    ||
-    ""
-  ).trim();
-
-  if(!eventId){
-
-    alert(
-      "Suppression impossible : cet événement n’a pas d’identifiant event_id."
-    );
-
-    return;
-
-  }
-
-  const cb =
-  "cb_del_" +
-  Math.random()
-    .toString(36)
-    .slice(2);
-
-  const url =
-  `${API}?view=planning_delete`
-  +
-  `&email=${encodeURIComponent(email)}`
-  +
-  `&event_id=${encodeURIComponent(eventId)}`
-  +
-  `&nocache=1`
-  +
-  `&callback=${cb}`;
-
-  const res =
-  await jsonp(
-    url,
-    cb,
-    20000
-  );
-
-  if(
-    !res
-    ||
-    res.ok !== true
-  ){
-
-    throw new Error(
-      res?.error
-      ||
-      "Erreur suppression"
-    );
-
-  }
-
-  if(
-    Number(
-      res.deleted || 0
-    )
-    <
-    1
-  ){
-
-    throw new Error(
-      "Aucune ligne supprimée. event_id non trouvé."
-    );
-
-  }
-
-  return res;
-
-}
 
 function buildCategoryOptions(
-  selectedValue
+  selected
 ){
 
   $fCategory.innerHTML =
   "";
 
-  const none =
-  document.createElement(
-    "option"
-  );
-
-  none.value =
-  "";
-
-  none.textContent =
-  "Aucune";
-
-  $fCategory.appendChild(
-    none
-  );
-
-  const items =
-  [...catLabel.entries()]
-    .map(
-      ([k,label])=>({
-
-        k,
-
-        label,
-
-        order:
-        catOrder.has(k)
-          ? catOrder.get(k)
-          : 9999
-
-      })
-    );
-
-  items.sort(
-    (a,b)=>
-      (
-        a.order-b.order
-      )
-      ||
-      a.label.localeCompare(
-        b.label
-      )
-  );
-
   for(
-    const it
-    of items
+    const label
+    of
+    catLabel.values()
   ){
 
     const opt =
@@ -3132,10 +2358,10 @@ function buildCategoryOptions(
     );
 
     opt.value =
-    it.label;
+    label;
 
     opt.textContent =
-    it.label;
+    label;
 
     $fCategory.appendChild(
       opt
@@ -3143,18 +2369,24 @@ function buildCategoryOptions(
 
   }
 
-  $fCategory.value =
-  selectedValue
-  ||
-  "";
+  if(selected){
+
+    $fCategory.value =
+    selected;
+
+  }
 
 }
 
-function getLoopValues(
-  values
+
+function buildWheel(
+  key
 ){
 
-  const arr =
+  const p =
+  TIME_PICKERS[key];
+
+  const values =
   [];
 
   for(
@@ -3163,47 +2395,29 @@ function getLoopValues(
     i++
   ){
 
-    arr.push(
-      ...values
+    values.push(
+      ...p.values
     );
 
   }
 
-  return arr;
-
-}
-
-function buildWheel(
-  pickerKey
-){
-
-  const picker =
-  TIME_PICKERS[
-    pickerKey
-  ];
-
-  const allValues =
-  getLoopValues(
-    picker.values
-  );
-
-  picker.inner.innerHTML =
+  p.inner.innerHTML =
   "";
 
-  const padTop =
+  const pad =
   document.createElement(
     "div"
   );
 
-  padTop.className =
+  pad.className =
   "wheelPad";
 
-  picker.inner.appendChild(
-    padTop
+  p.inner.appendChild(
+    pad
   );
 
-  allValues.forEach(
-    (v,idx)=>{
+  values.forEach(
+    v=>{
 
       const item =
       document.createElement(
@@ -3213,438 +2427,174 @@ function buildWheel(
       item.className =
       "wheelItem";
 
-      item.dataset.value =
-      v;
-
-      item.dataset.index =
-      String(idx);
-
       item.textContent =
       v;
 
-      item.addEventListener(
-        "click",
-        ()=>setWheelValue(
-          pickerKey,
-          v,
-          true
-        )
-      );
+      item.dataset.value =
+      v;
 
-      picker.inner.appendChild(
+      p.inner.appendChild(
         item
       );
 
     }
   );
 
-  const padBottom =
-  document.createElement(
-    "div"
+  p.inner.appendChild(
+    pad.cloneNode()
   );
 
-  padBottom.className =
-  "wheelPad";
-
-  picker.inner.appendChild(
-    padBottom
-  );
-
-  picker.wheel.addEventListener(
+  p.wheel.addEventListener(
     "scroll",
     ()=>{
 
-      updateWheelActive(
-        pickerKey
-      );
-
-      keepWheelLooped(
-        pickerKey
-      );
-
-      clearTimeout(
-        picker.timer
-      );
-
-      picker.timer =
-      setTimeout(
-        ()=>snapWheel(
-          pickerKey
-        ),
-        80
-      );
-
-    }
-  );
-
-}
-
-function getWheelItems(
-  pickerKey
-){
-
-  return [
-    ...TIME_PICKERS[
-      pickerKey
-    ]
-    .inner
-    .querySelectorAll(
-      ".wheelItem"
-    )
-  ];
-
-}
-
-function getNearestWheelItem(
-  pickerKey
-){
-
-  const picker =
-  TIME_PICKERS[
-    pickerKey
-  ];
-
-  const center =
-  picker.wheel.scrollTop
-  +
-  picker.wheel.clientHeight
-  /
-  2;
-
-  let bestItem =
-  null;
-
-  let bestDist =
-  Infinity;
-
-  getWheelItems(
-    pickerKey
-  )
-  .forEach(
-    item=>{
-
-      const itemCenter =
-      item.offsetTop
+      const center =
+      p.wheel.scrollTop
       +
-      item.offsetHeight
-      /
-      2;
+      p.wheel.clientHeight/2;
 
-      const dist =
-      Math.abs(
-        center-itemCenter
+      let best =
+      null;
+
+      let dist =
+      Infinity;
+
+      [
+        ...p.inner.querySelectorAll(
+          ".wheelItem"
+        )
+      ]
+      .forEach(
+        item=>{
+
+          item.classList.remove(
+            "active"
+          );
+
+          const d =
+          Math.abs(
+            item.offsetTop
+            +
+            item.offsetHeight/2
+            -
+            center
+          );
+
+          if(
+            d < dist
+          ){
+
+            dist =
+            d;
+
+            best =
+            item;
+
+          }
+
+        }
       );
 
-      if(
-        dist < bestDist
-      ){
+      if(best){
 
-        bestDist =
-        dist;
+        best.classList.add(
+          "active"
+        );
 
-        bestItem =
-        item;
+        p.value =
+        best.dataset.value;
 
       }
 
     }
   );
 
-  return bestItem;
-
 }
 
-function updateWheelActive(
-  pickerKey
-){
 
-  const picker =
-  TIME_PICKERS[
-    pickerKey
-  ];
+function ensureWheelsInitialized_(){
 
-  const bestItem =
-  getNearestWheelItem(
-    pickerKey
-  );
-
-  getWheelItems(
-    pickerKey
-  )
-  .forEach(
-    i=>
-      i.classList.remove(
-        "active"
-      )
-  );
-
-  if(bestItem){
-
-    bestItem.classList.add(
-      "active"
-    );
-
-    picker.value =
-    bestItem.dataset.value;
-
-  }
-
-}
-
-function keepWheelLooped(
-  pickerKey
-){
-
-  const picker =
-  TIME_PICKERS[
-    pickerKey
-  ];
-
-  if(!picker.looping){
+  if(
+    WHEELS_INITIALIZED
+  ){
     return;
   }
 
-  const valuesLen =
-  picker.values.length;
-
-  const itemHeight =
-  42;
-
-  const cycleHeight =
-  valuesLen
-  *
-  itemHeight;
-
-  const minScroll =
-  cycleHeight
-  *
-  4;
-
-  const maxScroll =
-  cycleHeight
-  *
-  (
-    LOOP_DUPLICATES - 5
+  Object.keys(
+    TIME_PICKERS
+  )
+  .forEach(
+    buildWheel
   );
 
-  if(
-    picker.wheel.scrollTop
-    <
-    minScroll
-  ){
-
-    picker.wheel.scrollTop +=
-    cycleHeight * 6;
-
-  }else if(
-    picker.wheel.scrollTop
-    >
-    maxScroll
-  ){
-
-    picker.wheel.scrollTop -=
-    cycleHeight * 6;
-
-  }
+  WHEELS_INITIALIZED =
+  true;
 
 }
 
-function findBestItemForValueNearCenter(
-  pickerKey,
+
+function setWheelValue(
+  key,
   value
 ){
 
-  const picker =
-  TIME_PICKERS[
-    pickerKey
-  ];
+  const p =
+  TIME_PICKERS[key];
 
-  const items =
-  getWheelItems(
-    pickerKey
-  )
-  .filter(
-    i=>
-      i.dataset.value
-      ===
-      value
-  );
-
-  if(
-    !items.length
-  ){
-
-    return null;
-
-  }
-
-  const currentCenter =
-  picker.wheel.scrollTop
-  +
-  picker.wheel.clientHeight
-  /
-  2;
-
-  let best =
-  items[0];
-
-  let bestDist =
-  Infinity;
-
-  items.forEach(
-    item=>{
-
-      const c =
-      item.offsetTop
-      +
-      item.offsetHeight
-      /
-      2;
-
-      const dist =
-      Math.abs(
-        c-currentCenter
-      );
-
-      if(
-        dist < bestDist
-      ){
-
-        bestDist =
-        dist;
-
-        best =
-        item;
-
-      }
-
-    }
-  );
-
-  return best;
-
-}
-
-function setWheelValue(
-  pickerKey,
-  value,
-  smooth
-){
-
-  const picker =
-  TIME_PICKERS[
-    pickerKey
+  const matches =
+  [
+    ...p.inner.querySelectorAll(
+      `.wheelItem[data-value="${value}"]`
+    )
   ];
 
   const item =
-  findBestItemForValueNearCenter(
-    pickerKey,
-    value
-  );
+  matches[
+    Math.floor(
+      matches.length/2
+    )
+  ];
 
   if(!item){
     return;
   }
 
-  const target =
+  p.wheel.scrollTop =
   item.offsetTop
   -
-  (
-    picker.wheel.clientHeight
-    -
-    item.offsetHeight
-  )
-  /
-  2;
+  p.wheel.clientHeight/2
+  +
+  item.offsetHeight/2;
 
-  picker.wheel.scrollTo({
-
-    top:target,
-
-    behavior:
-    smooth
-      ? "smooth"
-      : "auto"
-
-  });
-
-  picker.value =
+  p.value =
   value;
 
-  setTimeout(
-    ()=>{
-
-      keepWheelLooped(
-        pickerKey
-      );
-
-      updateWheelActive(
-        pickerKey
-      );
-
-    },
-    smooth
-      ? 160
-      : 0
-  );
-
 }
 
-function snapWheel(
-  pickerKey
+
+function setTimeValue(
+  prefix,
+  value
 ){
 
-  const picker =
-  TIME_PICKERS[
-    pickerKey
-  ];
+  const [h,m] =
+  String(
+    value || "00:00"
+  )
+  .split(":");
 
-  const bestItem =
-  getNearestWheelItem(
-    pickerKey
+  setWheelValue(
+    prefix+"Hour",
+    h
   );
 
-  if(!bestItem){
-    return;
-  }
-
-  const target =
-  bestItem.offsetTop
-  -
-  (
-    picker.wheel.clientHeight
-    -
-    bestItem.offsetHeight
-  )
-  /
-  2;
-
-  picker.wheel.scrollTo({
-
-    top:target,
-    behavior:"smooth"
-
-  });
-
-  picker.value =
-  bestItem.dataset.value;
-
-  setTimeout(
-    ()=>{
-
-      keepWheelLooped(
-        pickerKey
-      );
-
-      updateWheelActive(
-        pickerKey
-      );
-
-    },
-    160
+  setWheelValue(
+    prefix+"Minute",
+    m
   );
 
 }
+
 
 function getTimeValue(
   prefix
@@ -3664,252 +2614,231 @@ function getTimeValue(
 
 }
 
-function setTimeValue(
-  prefix,
-  hhmm
-){
-
-  const val =
-  String(
-    hhmm || ""
-  ).trim();
-
-  const [hh,mm] =
-  val
-  &&
-  val.includes(":")
-    ? val.split(":")
-    : ["00","00"];
-
-  const hour =
-  HOURS.includes(hh)
-    ? hh
-    : "00";
-
-  const minute =
-  MINUTES.includes(mm)
-    ? mm
-    : "00";
-
-  setWheelValue(
-    prefix+"Hour",
-    hour,
-    false
-  );
-
-  setWheelValue(
-    prefix+"Minute",
-    minute,
-    false
-  );
-
-}
-
-function ensureWheelsInitialized_(){
-
-  if(
-    WHEELS_INITIALIZED
-  ){
-    return;
-  }
-
-  buildWheel(
-    "startHour"
-  );
-
-  buildWheel(
-    "startMinute"
-  );
-
-  buildWheel(
-    "endHour"
-  );
-
-  buildWheel(
-    "endMinute"
-  );
-
-  WHEELS_INITIALIZED =
-  true;
-
-  setTimeout(
-    ()=>{
-
-      setTimeValue(
-        "start",
-        "08:00"
-      );
-
-      setTimeValue(
-        "end",
-        "09:00"
-      );
-
-      [
-        "startHour",
-        "startMinute",
-        "endHour",
-        "endMinute"
-      ]
-      .forEach(
-        k=>{
-
-          keepWheelLooped(
-            k
-          );
-
-          updateWheelActive(
-            k
-          );
-
-        }
-      );
-
-    },
-    0
-  );
-
-}
 
 function openEventForm(
   mode,
-  dateStr,
-  ev
+  date,
+  ev=null
 ){
 
   ensureWheelsInitialized_();
 
-  FORM_STATE.mode =
-  mode;
-
-  FORM_STATE.dateStr =
-  dateStr;
-
-  FORM_STATE.originalEvent =
-  ev || null;
+  FORM_STATE = {
+    mode,
+    dateStr:date,
+    originalEvent:ev
+  };
 
   buildCategoryOptions(
-    ev?.category || ""
+    ev?.category
+    ||
+    ""
   );
+
+  $formTitle.textContent =
+  mode === "edit"
+    ? `Modifier — ${toFRDate(date)}`
+    : `Ajouter — ${toFRDate(date)}`;
+
+  $fTitle.value =
+  ev?.title || "";
+
+  $fLocation.value =
+  ev?.location || "";
+
+  $fDetails.value =
+  ev?.details || "";
 
   $formOverlay.classList.add(
     "show"
   );
 
-  $formOverlay.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
   requestAnimationFrame(
     ()=>{
 
-      if(
-        mode === "edit"
-      ){
+      setTimeValue(
+        "start",
+        ev?.start || "08:00"
+      );
 
-        $formTitle.textContent =
-        `Modifier — ${toFRDate(dateStr)}`;
-
-        $fTitle.value =
-        ev?.title || "";
-
-        $fLocation.value =
-        ev?.location || "";
-
-        $fDetails.value =
-        ev?.details || "";
-
-        setTimeValue(
-          "start",
-          ev?.start || "08:00"
-        );
-
-        setTimeValue(
-          "end",
-          ev?.end || "09:00"
-        );
-
-      }else{
-
-        $formTitle.textContent =
-        `Ajouter — ${toFRDate(dateStr)}`;
-
-        $fTitle.value =
-        "";
-
-        $fLocation.value =
-        "";
-
-        $fDetails.value =
-        "";
-
-        $fCategory.value =
-        "";
-
-        setTimeValue(
-          "start",
-          "08:00"
-        );
-
-        setTimeValue(
-          "end",
-          "09:00"
-        );
-
-      }
+      setTimeValue(
+        "end",
+        ev?.end || "09:00"
+      );
 
     }
   );
 
 }
 
-function closeEventForm(){
 
-  $formOverlay.classList.remove(
-    "show"
+function setSaveButtonState(
+  state
+){
+
+  $btnFormSave.classList.remove(
+    "saving",
+    "saved"
   );
 
-  $formOverlay.setAttribute(
-    "aria-hidden",
-    "true"
-  );
+  if(
+    state === "saving"
+  ){
+
+    $btnFormSave.classList.add(
+      "saving"
+    );
+
+    $btnFormSave.textContent =
+    "Enregistrement…";
+
+    $btnFormSave.disabled =
+    true;
+
+  }
+
+  else if(
+    state === "saved"
+  ){
+
+    $btnFormSave.classList.add(
+      "saved"
+    );
+
+    $btnFormSave.textContent =
+    "✓ Enregistré";
+
+    $btnFormSave.disabled =
+    true;
+
+  }
+
+  else{
+
+    $btnFormSave.textContent =
+    "Enregistrer";
+
+    $btnFormSave.disabled =
+    false;
+
+  }
 
 }
 
+
+/*
+  Mise à jour locale instantanée.
+  Cela évite d'attendre le rechargement
+  complet Google Sheets.
+*/
+function applySavedEventLocally_(
+  payload
+){
+
+  if(
+    FORM_STATE.mode === "edit"
+    &&
+    FORM_STATE.originalEvent
+  ){
+
+    const old =
+    FORM_STATE.originalEvent;
+
+    events =
+    events.filter(
+      ev=>
+        ev !== old
+        &&
+        String(
+          ev.event_id || ev.id || ""
+        )
+        !==
+        String(
+          old.event_id || old.id || ""
+        )
+    );
+
+  }
+
+  events.push({
+
+    date:
+    FORM_STATE.dateStr,
+
+    title:
+    payload.title,
+
+    start:
+    payload.start,
+
+    end:
+    payload.end,
+
+    category:
+    payload.category,
+
+    location:
+    payload.location,
+
+    details:
+    payload.details
+
+  });
+
+  rebuildMaps();
+
+  renderMonth();
+
+}
+
+
 async function saveEventForm(){
 
-  const title =
-  String(
-    $fTitle.value || ""
-  ).trim();
+  if(
+    SAVE_IN_PROGRESS
+  ){
+    return;
+  }
 
-  const category =
-  String(
-    $fCategory.value || ""
-  ).trim();
 
-  const location =
-  String(
-    $fLocation.value || ""
-  ).trim();
+  const payload = {
 
-  const details =
-  String(
-    $fDetails.value || ""
-  ).trim();
+    title:
+    String(
+      $fTitle.value || ""
+    ).trim(),
 
-  const start =
-  getTimeValue(
-    "start"
-  );
+    category:
+    String(
+      $fCategory.value || ""
+    ).trim(),
 
-  const end =
-  getTimeValue(
-    "end"
-  );
+    location:
+    String(
+      $fLocation.value || ""
+    ).trim(),
 
-  if(!title){
+    details:
+    String(
+      $fDetails.value || ""
+    ).trim(),
+
+    start:
+    getTimeValue(
+      "start"
+    ),
+
+    end:
+    getTimeValue(
+      "end"
+    )
+
+  };
+
+
+  if(
+    !payload.title
+  ){
 
     alert(
       "Titre obligatoire."
@@ -3919,17 +2848,29 @@ async function saveEventForm(){
 
   }
 
+
   if(
-    end < start
+    payload.end
+    <
+    payload.start
   ){
 
     alert(
-      "Heure fin incorrecte."
+      "Heure de fin incorrecte."
     );
 
     return;
 
   }
+
+
+  SAVE_IN_PROGRESS =
+  true;
+
+  setSaveButtonState(
+    "saving"
+  );
+
 
   try{
 
@@ -3946,36 +2887,70 @@ async function saveEventForm(){
 
     }
 
+
     await apiAddEvent_(
       FORM_STATE.dateStr,
-      {
-        title,
-        start,
-        end,
-        category,
-        location,
-        details
-      }
+      payload
     );
 
+
+    /*
+      GOOGLE A CONFIRMÉ L'ÉCRITURE.
+      On met à jour l'écran immédiatement.
+    */
+    applySavedEventLocally_(
+      payload
+    );
+
+
+    setSaveButtonState(
+      "saved"
+    );
+
+
+    /*
+      Petit délai juste pour que l'utilisateur
+      voie "Enregistré".
+    */
+    await new Promise(
+      resolve=>
+        setTimeout(
+          resolve,
+          300
+        )
+    );
+
+
+    /*
+      On ferme les deux tableaux.
+    */
     closeEventForm();
 
-    await loadApi(
-      true
-    );
+    closeEdit();
 
-    if(_editDate){
 
-      renderEditList(
-        _editDate
+    /*
+      Message vert bref.
+    */
+    showSavedMessage();
+
+
+    /*
+      IMPORTANT :
+      rafraîchissement Google Sheets
+      EN ARRIÈRE-PLAN.
+      Aucun blocage visuel.
+    */
+    loadApi(true)
+      .catch(
+        ()=>{}
       );
 
-    }
 
   }catch(err){
 
     alert(
-      "Erreur : "
+      "Erreur lors de l'enregistrement : "
       +
       String(
         err?.message
@@ -3984,182 +2959,150 @@ async function saveEventForm(){
       )
     );
 
+  }finally{
+
+    SAVE_IN_PROGRESS =
+    false;
+
+    setTimeout(
+      ()=>setSaveButtonState(
+        "normal"
+      ),
+      400
+    );
+
   }
 
 }
 
-$btnAddEvent.addEventListener(
-  "click",
-  ()=>{
 
-    if(!_editDate){
-      return;
-    }
-
-    openEventForm(
-      "add",
-      _editDate,
-      null
-    );
-
-  }
-);
-
-$btnCloseEdit.addEventListener(
-  "click",
-  closeEdit
-);
-
-$editOverlay.addEventListener(
-  "click",
-  e=>{
-
-    if(
-      e.target ===
-      $editOverlay
-    ){
-
-      closeEdit();
-
-    }
-
-  }
-);
-
-$btnFormCancel.addEventListener(
-  "click",
-  closeEventForm
-);
-
-$btnFormClose.addEventListener(
-  "click",
-  closeEventForm
-);
-
-$btnFormSave.addEventListener(
-  "click",
-  saveEventForm
-);
-
-$formOverlay.addEventListener(
-  "click",
-  e=>{
-
-    if(
-      e.target ===
-      $formOverlay
-    ){
-
-      closeEventForm();
-
-    }
-
-  }
-);
-
-$grid.addEventListener(
-  "click",
-  e=>{
-
-    const day =
-    e.target.closest(
-      ".day"
-    );
-
-    if(!day){
-      return;
-    }
-
-    if(
-      day.classList.contains(
-        "is-empty"
-      )
-    ){
-      return;
-    }
-
-    const dateStr =
-    day.dataset.date;
-
-    if(!dateStr){
-      return;
-    }
-
-    if(
-      EDIT_MODE
-      &&
-      IS_ADMIN
-    ){
-
-      openEdit(
-        dateStr
-      );
-
-      return;
-
-    }
-
-    if(
-      day.classList.contains(
-        "has-note"
-      )
-    ){
-
-      openNote(
-        dateStr
-      );
-
-    }
-
-  }
-);
-
-$noteClose.addEventListener(
-  "click",
-  closeNote
-);
-
-$noteOverlay.addEventListener(
-  "click",
-  e=>{
-
-    if(
-      e.target ===
-      $noteOverlay
-    ){
-
-      closeNote();
-
-    }
-
-  }
-);
-
-document.addEventListener(
-  "keydown",
-  e=>{
-
-    if(
-      e.key === "Escape"
-    ){
-
-      closeNote();
-      closeEdit();
-      closeEventForm();
-
-    }
-
-  }
-);
-
-function saveCache_(
-  payload
+async function apiAddEvent_(
+  date,
+  p
 ){
+
+  const email =
+  getEmailLocal();
+
+  const cb =
+  "add_"
+  +
+  Math.random()
+    .toString(36)
+    .slice(2);
+
+  const url =
+  `${API}?view=planning_add`
+  +
+  `&email=${encodeURIComponent(email)}`
+  +
+  `&date=${encodeURIComponent(date)}`
+  +
+  `&start=${encodeURIComponent(p.start)}`
+  +
+  `&end=${encodeURIComponent(p.end)}`
+  +
+  `&title=${encodeURIComponent(p.title)}`
+  +
+  `&category=${encodeURIComponent(p.category)}`
+  +
+  `&location=${encodeURIComponent(p.location)}`
+  +
+  `&details=${encodeURIComponent(p.details)}`
+  +
+  `&nocache=1`
+  +
+  `&callback=${cb}`;
+
+  const res =
+  await jsonp(
+    url,
+    cb,
+    20000
+  );
+
+  if(
+    !res?.ok
+  ){
+
+    throw new Error(
+      res?.error
+      ||
+      "Erreur ajout"
+    );
+
+  }
+
+}
+
+
+async function apiDeleteEvent_(
+  date,
+  ev
+){
+
+  const id =
+  String(
+    ev?.event_id
+    ||
+    ev?.id
+    ||
+    ""
+  );
+
+  if(!id){
+
+    throw new Error(
+      "Identifiant événement manquant."
+    );
+
+  }
+
+  const email =
+  getEmailLocal();
+
+  const cb =
+  "del_"
+  +
+  Math.random()
+    .toString(36)
+    .slice(2);
+
+  const res =
+  await jsonp(
+    `${API}?view=planning_delete`
+    +
+    `&email=${encodeURIComponent(email)}`
+    +
+    `&event_id=${encodeURIComponent(id)}`
+    +
+    `&nocache=1`
+    +
+    `&callback=${cb}`,
+    cb
+  );
+
+  if(
+    !res?.ok
+  ){
+
+    throw new Error(
+      res?.error
+      ||
+      "Erreur suppression"
+    );
+
+  }
+
+}
+
+
+function saveCache_(payload){
 
   try{
 
     localStorage.setItem(
-      getCacheKey_(),
+      `cs_planning_cache_v1_${ACTIVE_YEAR}`,
       JSON.stringify({
         savedAt:Date.now(),
         payload
@@ -4170,43 +3113,23 @@ function saveCache_(
 
 }
 
+
 function loadCache_(){
 
   try{
 
     const raw =
     localStorage.getItem(
-      getCacheKey_()
+      `cs_planning_cache_v1_${ACTIVE_YEAR}`
     );
 
     if(!raw){
       return null;
     }
 
-    const obj =
-    JSON.parse(raw);
-
-    if(
-      !obj
-      ||
-      !obj.payload
-    ){
-      return null;
-    }
-
-    if(
-      obj.savedAt
-      &&
-      Date.now()-obj.savedAt
-      >
-      CACHE_MAX_AGE_MS
-    ){
-
-      return null;
-
-    }
-
-    return obj.payload;
+    return JSON.parse(
+      raw
+    ).payload;
 
   }catch(e){
 
@@ -4215,6 +3138,7 @@ function loadCache_(){
   }
 
 }
+
 
 function applyPlanningData_(
   py,
@@ -4245,36 +3169,18 @@ function applyPlanningData_(
 
 }
 
+
 async function loadApi(
-  forceFresh=false
+  force=false
 ){
-
-  if(
-    !API
-    ||
-    API.includes(
-      "COLLE_ICI"
-    )
-  ){
-
-    showStatus(
-      "API manquante",
-      "Mets ton URL exec dans const API."
-    );
-
-    return;
-
-  }
 
   const cached =
   loadCache_();
 
   if(
-    !forceFresh
+    cached
     &&
-    cached?.py
-    &&
-    cached?.pc
+    !force
   ){
 
     applyPlanningData_(
@@ -4282,224 +3188,195 @@ async function loadApi(
       cached.pc
     );
 
-    showStatus(
-      "Synchronisation…",
-      "Mise à jour en arrière-plan."
-    );
-
-  }else{
-
-    showStatus(
-      "Chargement…",
-      "Récupération du planning."
-    );
-
   }
 
+
   const cb1 =
-  "cb_py_" +
+  "py_"
+  +
   Math.random()
     .toString(36)
     .slice(2);
 
   const cb2 =
-  "cb_pc_" +
+  "pc_"
+  +
   Math.random()
     .toString(36)
     .slice(2);
 
-  try{
 
-    const planningUrl =
-    `${API}?view=planning_year`
-    +
-    `&year=${ACTIVE_YEAR}`
-    +
-    (
-      forceFresh
-        ? "&nocache=1"
-        : ""
-    )
-    +
-    `&callback=${cb1}`;
+  const [py,pc] =
+  await Promise.all(
+    [
 
-    const catsUrl =
-    `${API}?view=planning_categories`
-    +
-    (
-      forceFresh
-        ? "&nocache=1"
-        : ""
-    )
-    +
-    `&callback=${cb2}`;
-
-    const [py,pc] =
-    await Promise.all(
-      [
-        jsonp(
-          planningUrl,
-          cb1
-        ),
-
-        jsonp(
-          catsUrl,
-          cb2
+      jsonp(
+        `${API}?view=planning_year`
+        +
+        `&year=${ACTIVE_YEAR}`
+        +
+        (
+          force
+          ? "&nocache=1"
+          : ""
         )
-      ]
-    );
+        +
+        `&callback=${cb1}`,
+        cb1
+      ),
 
-    if(
-      py?.ok === false
-    ){
+      jsonp(
+        `${API}?view=planning_categories`
+        +
+        `&callback=${cb2}`,
+        cb2
+      )
 
-      throw new Error(
-        py?.error
-        ||
-        "planning_year invalide"
-      );
+    ]
+  );
 
-    }
 
-    if(
-      pc?.ok === false
-    ){
+  applyPlanningData_(
+    py,
+    pc
+  );
 
-      throw new Error(
-        pc?.error
-        ||
-        "planning_categories invalide"
-      );
-
-    }
-
-    applyPlanningData_(
-      py,
-      pc
-    );
-
-    saveCache_({
-      py,
-      pc
-    });
-
-    hideStatus();
-
-  }catch(e){
-
-    if(
-      !forceFresh
-      &&
-      cached?.py
-      &&
-      cached?.pc
-    ){
-
-      showStatus(
-        "Hors ligne / lent",
-        "Les données affichées sont celles du cache."
-      );
-
-      setTimeout(
-        hideStatus,
-        2000
-      );
-
-      return;
-
-    }
-
-    categoriesRaw =
-    DEFAULT_CATEGORIES.slice();
-
-    events =
-    [];
-
-    rebuildMaps();
-
-    renderLegend();
-
-    renderMonth();
-
-    showStatus(
-      "API lente ou indisponible",
-      "Le calendrier reste accessible."
-    );
-
-  }
+  saveCache_({
+    py,
+    pc
+  });
 
 }
 
-$("btnBack").addEventListener(
-  "click",
-  ()=>{
 
-    location.href =
-    BACK_URL;
+$grid.onclick =
+e=>{
+
+  const day =
+  e.target.closest(
+    ".day"
+  );
+
+  if(
+    !day
+    ||
+    !day.dataset.date
+  ){
+    return;
+  }
+
+  if(
+    EDIT_MODE
+    &&
+    IS_ADMIN
+  ){
+
+    openEdit(
+      day.dataset.date
+    );
+
+  }else if(
+    eventsByDate.has(
+      day.dataset.date
+    )
+  ){
+
+    openNote(
+      day.dataset.date
+    );
 
   }
-);
 
-$btnPrev.addEventListener(
-  "click",
-  ()=>{
+};
 
-    if(
-      currentMonth > 0
-    ){
 
-      currentMonth--;
+$("btnAddEvent").onclick =
+()=>{
 
-      renderMonth();
+  if(_editDate){
 
-    }
+    openEventForm(
+      "add",
+      _editDate
+    );
 
   }
-);
 
-$btnNext.addEventListener(
-  "click",
-  ()=>{
+};
 
-    if(
-      currentMonth < 11
-    ){
 
-      currentMonth++;
+$("btnCloseEdit").onclick =
+closeEdit;
 
-      renderMonth();
+$("noteClose").onclick =
+closeNote;
 
-    }
+$("btnFormCancel").onclick =
+closeEventForm;
+
+$("btnFormClose").onclick =
+closeEventForm;
+
+$("btnFormSave").onclick =
+saveEventForm;
+
+
+$btnPrev.onclick =
+()=>{
+
+  if(
+    currentMonth > 0
+  ){
+
+    currentMonth--;
+
+    renderMonth();
 
   }
-);
 
-$btnLock.addEventListener(
-  "click",
-  async ()=>{
+};
 
-    if(!IS_ADMIN){
-      return;
-    }
+
+$btnNext.onclick =
+()=>{
+
+  if(
+    currentMonth < 11
+  ){
+
+    currentMonth++;
+
+    renderMonth();
+
+  }
+
+};
+
+
+$("btnBack").onclick =
+()=>{
+
+  location.href =
+  BACK_URL;
+
+};
+
+
+$btnLock.onclick =
+async ()=>{
+
+  if(IS_ADMIN){
 
     await setEditMode(
       !EDIT_MODE
     );
 
   }
-);
+
+};
+
 
 (async function(){
-
-  EDIT_MODE =
-  false;
-
-  ACTIVE_YEAR =
-  PUBLIC_YEAR;
-
-  rebuildMaps();
-
-  renderLegend();
 
   const now =
   new Date();
@@ -4511,52 +3388,43 @@ $btnLock.addEventListener(
     ? now.getMonth()
     : 0;
 
+
+  rebuildMaps();
+
+  renderLegend();
+
   renderMonth();
 
-  /*
-    Tout le monde :
-    2026 + 2027.
-  */
   renderYearControl_();
 
-  /*
-    Planning et contrôle admin
-    chargés simultanément.
-  */
-  const planningPromise =
-  loadApi();
 
-  const rolePromise =
-  loadMyRole_()
+  const planning =
+  loadApi()
     .catch(
-      ()=>{
-
-        IS_ADMIN =
-        false;
-
-      }
+      ()=>{}
     );
 
-  await rolePromise;
 
-  if(IS_ADMIN){
+  await loadMyRole_()
+    .catch(
+      ()=>{}
+    );
 
-    $btnLock.style.display =
-    "inline-block";
 
-  }else{
+  $btnLock.style.display =
+  IS_ADMIN
+    ? "inline-block"
+    : "none";
 
-    $btnLock.style.display =
-    "none";
-
-  }
 
   renderYearControl_();
 
-  await planningPromise;
+
+  await planning;
 
 })();
+
 </script>
 
 </body>
-  </html>
+</html>
