@@ -2326,50 +2326,46 @@
 
   }
 
-  function setEditMode(
-    on
-  ){
+  function setEditMode(on){
 
-    EDIT_MODE =
-      !!on;
+  EDIT_MODE = !!on;
 
-    $editLabel.style.display =
-      EDIT_MODE
-        ?
-        "inline-block"
-        :
-        "none";
+  $editLabel.style.display =
+    EDIT_MODE ? "inline-block" : "none";
 
-    if($btnLock){
+  if($btnLock){
 
-      $btnLock.textContent =
-        EDIT_MODE
-          ?
-          "🔓"
-          :
-          "🔒";
+    $btnLock.textContent =
+      EDIT_MODE ? "🔓" : "🔒";
 
-      $btnLock
-        .setAttribute(
-          "aria-pressed",
-          EDIT_MODE
-            ?
-            "true"
-            :
-            "false"
-        );
-
-    }
-
-    if(
-      !EDIT_MODE
-    ){
-
-      closeEdit();
-
-    }
+    $btnLock.setAttribute(
+      "aria-pressed",
+      EDIT_MODE ? "true" : "false"
+    );
 
   }
+
+  updateYearDisplay_();
+
+  if(!EDIT_MODE){
+
+    closeEdit();
+
+    ACTIVE_YEAR = PUBLIC_YEAR;
+
+    const now = new Date();
+
+    currentMonth =
+      now.getFullYear() === PUBLIC_YEAR
+        ? now.getMonth()
+        : 0;
+
+    renderMonth();
+    loadApi();
+
+  }
+
+}
 
   function openNote(
     dateStr
@@ -4519,74 +4515,38 @@
 
   function updateYearDisplay_(){
 
-    if(IS_ADMIN){
+  if(IS_ADMIN && EDIT_MODE){
 
-      $yearText.style.display =
-        "none";
+    $yearText.style.display = "none";
+    $yearSelect.style.display = "inline-block";
 
-      $yearSelect.style.display =
-        "inline-block";
+    $yearSelect.innerHTML = "";
 
-      $yearSelect.innerHTML =
-        "";
+    ADMIN_YEARS.forEach(year => {
 
-      ADMIN_YEARS
-        .forEach(
-          year=>{
+      const opt = document.createElement("option");
 
-            const opt =
-              document.createElement(
-                "option"
-              );
+      opt.value = String(year);
+      opt.textContent = String(year);
 
-            opt.value =
-              String(
-                year
-              );
+      if(year === ACTIVE_YEAR){
+        opt.selected = true;
+      }
 
-            opt.textContent =
-              String(
-                year
-              );
+      $yearSelect.appendChild(opt);
 
-            if(
-              year
-              ===
-              ACTIVE_YEAR
-            ){
+    });
 
-              opt.selected =
-                true;
+  }else{
 
-            }
+    $yearSelect.style.display = "none";
 
-            $yearSelect
-              .appendChild(
-                opt
-              );
-
-          }
-        );
-
-    }else{
-
-      ACTIVE_YEAR =
-        PUBLIC_YEAR;
-
-      $yearText.textContent =
-        String(
-          PUBLIC_YEAR
-        );
-
-      $yearText.style.display =
-        "inline";
-
-      $yearSelect.style.display =
-        "none";
-
-    }
+    $yearText.textContent = String(PUBLIC_YEAR);
+    $yearText.style.display = "inline";
 
   }
+
+}
 
   $("btnBack")
     .addEventListener(
