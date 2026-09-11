@@ -18,14 +18,9 @@
       --note:#fff200;
     }
 
-    *{
-      box-sizing:border-box;
-    }
+    *{box-sizing:border-box}
 
-    html,
-    body{
-      height:100%;
-    }
+    html,body{height:100%}
 
     body{
       margin:0;
@@ -77,24 +72,18 @@
       align-items:center;
       justify-content:space-between;
       gap:10px;
-
       padding:10px 12px;
-
       border-radius:18px;
-
       background:
         linear-gradient(
           180deg,
           rgba(212,106,0,.75),
           rgba(185,88,0,.58)
         );
-
       border:1px solid rgba(255,255,255,.12);
       box-shadow:var(--shadow);
-
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
-
       min-height:46px;
     }
 
@@ -105,7 +94,6 @@
       font-size:18px;
       margin:0;
       white-space:nowrap;
-
       display:flex;
       align-items:center;
       gap:6px;
@@ -113,18 +101,13 @@
 
     .yearSelect{
       padding:5px 28px 5px 10px;
-
       border-radius:12px;
-
       border:1px solid rgba(255,255,255,.22);
-
       background:rgba(0,0,0,.20);
       color:#fff;
-
       font-family:inherit;
       font-size:18px;
       font-weight:950;
-
       outline:none;
       cursor:pointer;
     }
@@ -138,73 +121,51 @@
       border:1px solid rgba(255,255,255,.18);
       background:rgba(0,0,0,.18);
       color:var(--txt);
-
       padding:9px 12px;
-
       border-radius:14px;
-
       font-weight:900;
-
       cursor:pointer;
-
       -webkit-tap-highlight-color:transparent;
     }
 
-    .btn:active{
-      transform:translateY(1px);
-    }
+    .btn:active{transform:translateY(1px)}
 
     .monthbar{
       display:grid;
       grid-template-columns:52px 1fr 52px;
       align-items:center;
       gap:10px;
-
       padding:8px 10px;
-
       border-radius:18px;
-
       background:
         linear-gradient(
           180deg,
           rgba(212,106,0,.62),
           rgba(185,88,0,.45)
         );
-
       border:1px solid rgba(255,255,255,.12);
       box-shadow:var(--shadow);
-
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
-
       min-height:50px;
     }
 
     .navbtn{
       height:42px;
-
       border-radius:16px;
-
       font-size:22px;
       font-weight:950;
-
       display:flex;
       align-items:center;
       justify-content:center;
-
       border:1px solid rgba(255,255,255,.14);
-
       background:rgba(0,0,0,.18);
       color:var(--txt);
-
       cursor:pointer;
-
       -webkit-tap-highlight-color:transparent;
     }
 
-    .navbtn:active{
-      transform:translateY(1px);
-    }
+    .navbtn:active{transform:translateY(1px)}
 
     .navbtn:disabled{
       opacity:.35;
@@ -222,29 +183,21 @@
 
     .calCard{
       border-radius:var(--radius);
-
       background:
         linear-gradient(
           180deg,
           rgba(0,0,0,.46),
           rgba(0,0,0,.30)
         );
-
       border:1px solid var(--stroke);
       box-shadow:var(--shadow);
-
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
-
       overflow:hidden;
-
       padding:12px;
-
       display:flex;
       flex-direction:column;
-
       gap:10px;
-
       min-height:0;
     }
 
@@ -252,54 +205,37 @@
       display:grid;
       grid-template-columns:repeat(7,1fr);
       gap:8px;
-
       padding:0 2px;
-
       color:rgba(255,255,255,.72);
-
       font-weight:900;
       letter-spacing:.5px;
       font-size:14px;
-
       user-select:none;
     }
 
-    .dow div{
-      text-align:center;
-    }
+    .dow div{text-align:center}
 
     .grid{
       flex:1;
-
       display:grid;
       grid-template-columns:repeat(7,1fr);
       grid-auto-rows:minmax(54px,1fr);
-
       gap:8px;
-
       min-height:0;
     }
 
     .day{
       position:relative;
-
       border-radius:18px;
-
       background:rgba(0,0,0,.26);
-
       border:1px solid rgba(255,255,255,.06);
-
       display:flex;
       align-items:center;
       justify-content:center;
-
       font-weight:950;
       font-size:22px;
-
       color:rgba(255,255,255,.92);
-
       user-select:none;
-
       -webkit-tap-highlight-color:transparent;
     }
 
@@ -310,16 +246,11 @@
 
     .day.has-color::before{
       content:"";
-
       position:absolute;
       inset:0;
-
       border-radius:18px;
-
       background:var(--dayColor,transparent);
-
       opacity:.78;
-
       z-index:0;
     }
 
@@ -332,56 +263,38 @@
       box-shadow:
         inset 0 0 0 4px #ffffff,
         0 0 8px rgba(0,0,0,.6);
-
       border-color:#ffffff;
     }
 
-    .day.has-note{
-      cursor:pointer;
-    }
+    .day.has-note{cursor:pointer}
 
     .day.has-note::after{
       content:"";
-
       position:absolute;
-
       top:8px;
       right:8px;
-
       width:8px;
       height:8px;
-
       border-radius:999px;
-
       background:rgba(255,242,0,.95);
-
-      box-shadow:
-        0 0 8px rgba(255,242,0,.45);
-
+      box-shadow:0 0 8px rgba(255,242,0,.45);
       z-index:2;
     }
 
     .legend{
       border-radius:var(--radius);
-
       background:
         linear-gradient(
           180deg,
           rgba(0,0,0,.40),
           rgba(0,0,0,.28)
         );
-
       border:1px solid var(--stroke);
-
       box-shadow:var(--shadow);
-
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
-
       padding:10px;
-
       overflow:hidden;
-
       min-height:92px;
     }
 
@@ -396,28 +309,19 @@
       display:flex;
       align-items:center;
       gap:10px;
-
       padding:8px 10px;
-
       border-radius:16px;
-
       background:rgba(0,0,0,.18);
-
       border:1px solid rgba(255,255,255,.08);
-
       min-height:44px;
     }
 
     .sq{
       width:20px;
       height:20px;
-
       border-radius:5px;
-
       border:1px solid rgba(255,255,255,.18);
-
       flex:0 0 auto;
-
       background:rgba(255,255,255,.25);
     }
 
@@ -425,7 +329,6 @@
       font-weight:900;
       font-size:18px;
       line-height:1.05;
-
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -433,44 +336,28 @@
 
     .status{
       position:fixed;
-
       left:12px;
       right:12px;
-
-      bottom:
-        calc(env(safe-area-inset-bottom) + 12px);
-
+      bottom:calc(env(safe-area-inset-bottom) + 12px);
       z-index:80;
-
       display:none;
-
       max-width:980px;
       margin:0 auto;
-
       pointer-events:none;
     }
 
     .status .pill{
       pointer-events:auto;
-
       display:inline-flex;
       gap:10px;
       align-items:center;
-
       padding:10px 12px;
-
       border-radius:16px;
-
       background:rgba(0,0,0,.62);
-
       border:1px solid rgba(255,255,255,.14);
-
       box-shadow:var(--shadow);
-
       color:rgba(255,255,255,.90);
-
       font-weight:900;
-
       backdrop-filter:blur(10px);
       -webkit-backdrop-filter:blur(10px);
     }
@@ -491,28 +378,20 @@
 
     .noteOverlay{
       background:rgba(0,0,0,.55);
-
       backdrop-filter:blur(6px);
       -webkit-backdrop-filter:blur(6px);
-
       z-index:120;
     }
 
     .editOverlay,
     .formOverlay{
       background:rgba(0,0,0,.62);
-
       backdrop-filter:blur(8px);
       -webkit-backdrop-filter:blur(8px);
     }
 
-    .editOverlay{
-      z-index:140;
-    }
-
-    .formOverlay{
-      z-index:180;
-    }
+    .editOverlay{z-index:140}
+    .formOverlay{z-index:180}
 
     .noteOverlay.show,
     .editOverlay.show,
@@ -524,47 +403,28 @@
     .editSheet,
     .formSheet{
       position:absolute;
-
       left:12px;
       right:12px;
-
-      bottom:
-        calc(env(safe-area-inset-bottom) + 12px);
-
+      bottom:calc(env(safe-area-inset-bottom) + 12px);
       max-width:980px;
-
       margin:0 auto;
-
       border-radius:22px;
-
       background:
         linear-gradient(
           180deg,
           rgba(0,0,0,.78),
           rgba(0,0,0,.62)
         );
-
       border:1px solid rgba(255,255,255,.14);
-
       box-shadow:var(--shadow);
-
       overflow:hidden;
-
       display:flex;
       flex-direction:column;
     }
 
-    .noteSheet{
-      height:min(52vh,520px);
-    }
-
-    .editSheet{
-      height:min(62vh,620px);
-    }
-
-    .formSheet{
-      height:min(76vh,700px);
-    }
+    .noteSheet{height:min(52vh,520px)}
+    .editSheet{height:min(62vh,620px)}
+    .formSheet{height:min(76vh,700px)}
 
     .noteHead,
     .editHead,
@@ -573,12 +433,8 @@
       align-items:center;
       justify-content:space-between;
       gap:10px;
-
       padding:12px;
-
-      border-bottom:
-        1px solid rgba(255,255,255,.10);
-
+      border-bottom:1px solid rgba(255,255,255,.10);
       background:rgba(0,0,0,.22);
     }
 
@@ -587,9 +443,7 @@
     .formTitle{
       font-weight:950;
       font-size:16px;
-
       color:rgba(255,255,255,.92);
-
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -598,21 +452,13 @@
     .noteClose,
     .iconBtn{
       border:1px solid rgba(255,255,255,.18);
-
       background:rgba(0,0,0,.18);
-
       color:var(--txt);
-
       padding:8px 10px;
-
       border-radius:14px;
-
       font-weight:950;
-
       cursor:pointer;
-
       -webkit-tap-highlight-color:transparent;
-
       min-width:42px;
     }
 
@@ -628,11 +474,8 @@
     .noteBody,
     .editBody{
       padding:12px;
-
       overflow:auto;
-
       -webkit-overflow-scrolling:touch;
-
       display:flex;
       flex-direction:column;
       gap:10px;
@@ -640,11 +483,8 @@
 
     .formBody{
       padding:10px;
-
       overflow:auto;
-
       -webkit-overflow-scrolling:touch;
-
       display:flex;
       flex-direction:column;
       gap:8px;
@@ -655,11 +495,8 @@
     .formBlock,
     .timeSection{
       border-radius:18px;
-
       background:rgba(0,0,0,.22);
-
       border:1px solid rgba(255,255,255,.10);
-
       padding:10px 12px;
     }
 
@@ -669,7 +506,6 @@
       align-items:center;
       justify-content:space-between;
       gap:10px;
-
       margin-bottom:6px;
     }
 
@@ -678,7 +514,6 @@
       font-weight:950;
       font-size:16px;
       line-height:1.1;
-
       overflow:hidden;
       text-overflow:ellipsis;
       white-space:nowrap;
@@ -687,11 +522,8 @@
     .evTime{
       font-weight:900;
       font-size:13px;
-
       color:rgba(255,255,255,.78);
-
       white-space:nowrap;
-
       flex:0 0 auto;
     }
 
@@ -699,13 +531,10 @@
     .rowSub{
       font-weight:850;
       font-size:13px;
-
       color:rgba(255,255,255,.78);
-
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-
       margin-bottom:8px;
     }
 
@@ -713,35 +542,25 @@
       display:inline-flex;
       align-items:center;
       gap:8px;
-
       padding:6px 10px;
-
       border-radius:999px;
-
       background:rgba(255,255,255,.06);
-
       border:1px solid rgba(255,255,255,.10);
     }
 
     .chipDot{
       width:10px;
       height:10px;
-
       border-radius:3px;
-
       border:1px solid rgba(255,255,255,.20);
-
       background:rgba(255,255,255,.25);
     }
 
     .evDetails{
       font-size:15px;
       font-weight:850;
-
       color:rgba(255,255,255,.92);
-
       line-height:1.25;
-
       white-space:pre-wrap;
     }
 
@@ -756,16 +575,11 @@
 
     .formLabel{
       display:block;
-
       margin:0 0 5px 0;
-
       font-size:12px;
       font-weight:900;
-
       color:rgba(255,255,255,.82);
-
       text-transform:uppercase;
-
       letter-spacing:.4px;
     }
 
@@ -773,21 +587,14 @@
     .fieldArea,
     .fieldSelect{
       width:100%;
-
       border:none;
       outline:none;
-
       background:rgba(0,0,0,.18);
       color:var(--txt);
-
       padding:10px 12px;
-
       border-radius:14px;
-
       font-weight:900;
-
       border:1px solid rgba(255,255,255,.10);
-
       font-family:inherit;
       font-size:14px;
     }
@@ -798,22 +605,15 @@
       font-weight:800;
     }
 
-    .timeSection{
-      padding:10px;
-    }
+    .timeSection{padding:10px}
 
     .timeLabel{
       display:block;
-
       margin:0 0 6px 0;
-
       font-size:12px;
       font-weight:900;
-
       color:rgba(255,255,255,.82);
-
       text-transform:uppercase;
-
       letter-spacing:.4px;
     }
 
@@ -832,40 +632,26 @@
 
     .timeColon{
       text-align:center;
-
       font-size:24px;
       font-weight:950;
-
       color:rgba(255,255,255,.92);
-
       transform:translateY(-1px);
-
       user-select:none;
     }
 
     .wheel{
       position:relative;
-
       height:128px;
-
       border-radius:18px;
-
       border:1px solid rgba(255,255,255,.12);
-
       background:rgba(255,255,255,.05);
-
       overflow-y:auto;
-
       scroll-snap-type:y mandatory;
-
       -webkit-overflow-scrolling:touch;
-
       scrollbar-width:none;
     }
 
-    .wheel::-webkit-scrollbar{
-      display:none;
-    }
+    .wheel::-webkit-scrollbar{display:none}
 
     .wheelPad{
       height:42px;
@@ -879,75 +665,52 @@
 
     .wheelItem{
       height:42px;
-
       display:flex;
       align-items:center;
       justify-content:center;
-
       font-size:18px;
       font-weight:900;
-
       color:rgba(255,255,255,.40);
-
       scroll-snap-align:center;
-
       transition:
         transform .12s ease,
         color .12s ease,
         opacity .12s ease;
-
       opacity:.65;
-
       user-select:none;
     }
 
     .wheelItem.active{
       color:rgba(255,255,255,.98);
-
       opacity:1;
-
       transform:scale(1.01);
     }
 
     .wheelFocus{
       position:absolute;
-
       left:6px;
       right:6px;
-
       top:42px;
-
       height:42px;
-
       border-radius:16px;
-
       border:1px solid rgba(255,255,255,.18);
-
       background:rgba(255,255,255,.08);
-
       pointer-events:none;
-
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.05);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
     }
 
     .wheelFadeTop,
     .wheelFadeBottom{
       position:absolute;
-
       left:0;
       right:0;
-
       height:26px;
-
       pointer-events:none;
-
       z-index:2;
     }
 
     .wheelFadeTop{
       top:0;
-
       background:
         linear-gradient(
           180deg,
@@ -958,7 +721,6 @@
 
     .wheelFadeBottom{
       bottom:0;
-
       background:
         linear-gradient(
           0deg,
@@ -968,497 +730,274 @@
     }
 
     @media (max-width:520px){
-
       .timePickerGroup{
         grid-template-columns:1fr;
       }
-
     }
 
     @media (max-width:360px){
-
-      .monthname{
-        font-size:20px;
-      }
-
-      .day{
-        font-size:20px;
-        border-radius:16px;
-      }
-
-      .day.has-color::before{
-        border-radius:16px;
-      }
-
-      .grid{
-        grid-auto-rows:minmax(50px,1fr);
-      }
-
-      .legTxt{
-        font-size:16px;
-      }
-
-      .sq{
-        width:18px;
-        height:18px;
-      }
-
-      .noteSheet{
-        height:min(56vh,520px);
-      }
-
-      .editSheet{
-        height:min(68vh,680px);
-      }
-
-      .formSheet{
-        height:min(80vh,730px);
-      }
-
-      .wheel{
-        height:118px;
-      }
-
-      .wheelPad{
-        height:38px;
-      }
-
-      .wheelFocus{
-        top:38px;
-        height:42px;
-      }
-
-      .wheelItem{
-        font-size:17px;
-      }
-
+      .monthname{font-size:20px}
+      .day{font-size:20px;border-radius:16px}
+      .day.has-color::before{border-radius:16px}
+      .grid{grid-auto-rows:minmax(50px,1fr)}
+      .legTxt{font-size:16px}
+      .sq{width:18px;height:18px}
+      .noteSheet{height:min(56vh,520px)}
+      .editSheet{height:min(68vh,680px)}
+      .formSheet{height:min(80vh,730px)}
+      .wheel{height:118px}
+      .wheelPad{height:38px}
+      .wheelFocus{top:38px;height:42px}
+      .wheelItem{font-size:17px}
     }
   </style>
 </head>
 
 <body>
 
-  <div class="bg"></div>
+<div class="bg"></div>
 
-  <div class="wrap">
+<div class="wrap">
 
-    <div class="topbar">
+  <div class="topbar">
 
-      <h1 class="title">
-        <span>PLANNING</span>
-        <span id="yearControl"></span>
-      </h1>
+    <h1 class="title">
+      <span>PLANNING</span>
+      <span id="yearControl"></span>
+    </h1>
 
-      <div style="display:flex;gap:10px;align-items:center;">
+    <div style="display:flex;gap:10px;align-items:center;">
 
-        <span
-          id="editLabel"
-          style="
-            display:none;
-            margin-right:6px;
-            font-weight:700;
-            font-size:12px;
-            color:#fff200;
-          ">
-          MODE ÉDITION
-        </span>
-
-        <button
-          class="btn"
-          id="btnLock"
-          title="Mode édition"
-          aria-pressed="false"
-          style="display:none;">
-          🔒
-        </button>
-
-        <button
-          class="btn"
-          id="btnBack">
-          Retour
-        </button>
-
-      </div>
-
-    </div>
-
-    <div class="monthbar">
+      <span
+        id="editLabel"
+        style="display:none;margin-right:6px;font-weight:700;font-size:12px;color:#fff200;">
+        MODE ÉDITION
+      </span>
 
       <button
-        class="navbtn"
-        id="btnPrev"
-        aria-label="Mois précédent">
-        ‹
+        class="btn"
+        id="btnLock"
+        title="Mode édition"
+        aria-pressed="false"
+        style="display:none;">
+        🔒
       </button>
 
-      <h2
-        class="monthname"
-        id="monthName">
-        —
-      </h2>
-
-      <button
-        class="navbtn"
-        id="btnNext"
-        aria-label="Mois suivant">
-        ›
+      <button class="btn" id="btnBack">
+        Retour
       </button>
 
     </div>
 
-    <section class="calCard">
+  </div>
 
-      <div class="dow">
-        <div>Lun</div>
-        <div>Mar</div>
-        <div>Mer</div>
-        <div>Jeu</div>
-        <div>Ven</div>
-        <div>Sam</div>
-        <div>Dim</div>
-      </div>
+  <div class="monthbar">
 
-      <div
-        class="grid"
-        id="grid">
-      </div>
+    <button class="navbtn" id="btnPrev" aria-label="Mois précédent">
+      ‹
+    </button>
 
-    </section>
+    <h2 class="monthname" id="monthName">—</h2>
 
-    <section class="legend">
-
-      <div
-        class="legendGrid"
-        id="legendGrid">
-      </div>
-
-    </section>
+    <button class="navbtn" id="btnNext" aria-label="Mois suivant">
+      ›
+    </button>
 
   </div>
 
-  <div
-    class="status"
-    id="status">
+  <section class="calCard">
 
-    <div class="pill">
+    <div class="dow">
+      <div>Lun</div>
+      <div>Mar</div>
+      <div>Mer</div>
+      <div>Jeu</div>
+      <div>Ven</div>
+      <div>Sam</div>
+      <div>Dim</div>
+    </div>
 
-      <span>⚠️</span>
+    <div class="grid" id="grid"></div>
 
-      <div>
+  </section>
 
-        <div id="statusTxt">
-          Chargement…
-        </div>
+  <section class="legend">
+    <div class="legendGrid" id="legendGrid"></div>
+  </section>
 
-        <div
-          class="small"
-          id="statusSub">
-          Si ça reste, l’URL API est mauvaise.
-        </div>
+</div>
 
+<div class="status" id="status">
+
+  <div class="pill">
+
+    <span>⚠️</span>
+
+    <div>
+      <div id="statusTxt">Chargement…</div>
+      <div class="small" id="statusSub">
+        Si ça reste, l’URL API est mauvaise.
       </div>
-
     </div>
 
   </div>
 
-  <div
-    class="noteOverlay"
-    id="noteOverlay"
-    aria-hidden="true">
+</div>
 
-    <div
-      class="noteSheet"
-      role="dialog"
-      aria-modal="true">
+<div class="noteOverlay" id="noteOverlay" aria-hidden="true">
 
-      <div class="noteHead">
+  <div class="noteSheet" role="dialog" aria-modal="true">
 
-        <div
-          class="noteTitle"
-          id="noteTitle">
-          —
-        </div>
+    <div class="noteHead">
 
-        <button
-          class="noteClose"
-          id="noteClose">
-          Fermer
+      <div class="noteTitle" id="noteTitle">—</div>
+
+      <button class="noteClose" id="noteClose">
+        Fermer
+      </button>
+
+    </div>
+
+    <div class="noteBody" id="noteBody"></div>
+
+  </div>
+
+</div>
+
+<div class="editOverlay" id="editOverlay" aria-hidden="true">
+
+  <div class="editSheet" role="dialog" aria-modal="true">
+
+    <div class="editHead">
+
+      <div class="editTitle" id="editTitle">—</div>
+
+      <div class="editActions">
+
+        <button class="iconBtn" id="btnAddEvent">
+          ＋
+        </button>
+
+        <button class="iconBtn" id="btnCloseEdit">
+          ✕
         </button>
 
       </div>
 
-      <div
-        class="noteBody"
-        id="noteBody">
+    </div>
+
+    <div class="editBody" id="editBody"></div>
+
+  </div>
+
+</div>
+
+<div class="formOverlay" id="formOverlay" aria-hidden="true">
+
+  <div class="formSheet" role="dialog" aria-modal="true">
+
+    <div class="formHead">
+
+      <div class="formTitle" id="formTitle">
+        Événement
+      </div>
+
+      <div class="formActions">
+        <button class="iconBtn" id="btnFormCancel">
+          ✕
+        </button>
       </div>
 
     </div>
 
-  </div>
+    <div class="formBody">
 
-  <div
-    class="editOverlay"
-    id="editOverlay"
-    aria-hidden="true">
-
-    <div
-      class="editSheet"
-      role="dialog"
-      aria-modal="true">
-
-      <div class="editHead">
-
-        <div
-          class="editTitle"
-          id="editTitle">
-          —
-        </div>
-
-        <div class="editActions">
-
-          <button
-            class="iconBtn"
-            id="btnAddEvent">
-            ＋
-          </button>
-
-          <button
-            class="iconBtn"
-            id="btnCloseEdit">
-            ✕
-          </button>
-
-        </div>
-
+      <div class="formBlock">
+        <label class="formLabel" for="fTitle">Titre</label>
+        <input class="fieldText" id="fTitle" type="text" placeholder="Titre de l’événement" />
       </div>
 
-      <div
-        class="editBody"
-        id="editBody">
+      <div class="formBlock">
+        <label class="formLabel" for="fCategory">Catégorie</label>
+        <select class="fieldSelect" id="fCategory"></select>
       </div>
 
-    </div>
+      <div class="timePickerGroup">
 
-  </div>
+        <div class="timeSection">
 
-  <div
-    class="formOverlay"
-    id="formOverlay"
-    aria-hidden="true">
+          <label class="timeLabel">Heure début</label>
 
-    <div
-      class="formSheet"
-      role="dialog"
-      aria-modal="true">
+          <div class="timePickerRow">
 
-      <div class="formHead">
-
-        <div
-          class="formTitle"
-          id="formTitle">
-          Événement
-        </div>
-
-        <div class="formActions">
-
-          <button
-            class="iconBtn"
-            id="btnFormCancel">
-            ✕
-          </button>
-
-        </div>
-
-      </div>
-
-      <div class="formBody">
-
-        <div class="formBlock">
-
-          <label
-            class="formLabel"
-            for="fTitle">
-            Titre
-          </label>
-
-          <input
-            class="fieldText"
-            id="fTitle"
-            type="text"
-            placeholder="Titre de l’événement" />
-
-        </div>
-
-        <div class="formBlock">
-
-          <label
-            class="formLabel"
-            for="fCategory">
-            Catégorie
-          </label>
-
-          <select
-            class="fieldSelect"
-            id="fCategory">
-          </select>
-
-        </div>
-
-        <div class="timePickerGroup">
-
-          <div class="timeSection">
-
-            <label class="timeLabel">
-              Heure début
-            </label>
-
-            <div class="timePickerRow">
-
-              <div
-                class="wheel"
-                id="startHourWheel">
-
-                <div class="wheelFadeTop"></div>
-                <div class="wheelFadeBottom"></div>
-                <div class="wheelFocus"></div>
-
-                <div
-                  class="wheelInner"
-                  id="startHourInner">
-                </div>
-
-              </div>
-
-              <div class="timeColon">
-                :
-              </div>
-
-              <div
-                class="wheel"
-                id="startMinuteWheel">
-
-                <div class="wheelFadeTop"></div>
-                <div class="wheelFadeBottom"></div>
-                <div class="wheelFocus"></div>
-
-                <div
-                  class="wheelInner"
-                  id="startMinuteInner">
-                </div>
-
-              </div>
-
+            <div class="wheel" id="startHourWheel">
+              <div class="wheelFadeTop"></div>
+              <div class="wheelFadeBottom"></div>
+              <div class="wheelFocus"></div>
+              <div class="wheelInner" id="startHourInner"></div>
             </div>
 
-          </div>
+            <div class="timeColon">:</div>
 
-          <div class="timeSection">
-
-            <label class="timeLabel">
-              Heure fin
-            </label>
-
-            <div class="timePickerRow">
-
-              <div
-                class="wheel"
-                id="endHourWheel">
-
-                <div class="wheelFadeTop"></div>
-                <div class="wheelFadeBottom"></div>
-                <div class="wheelFocus"></div>
-
-                <div
-                  class="wheelInner"
-                  id="endHourInner">
-                </div>
-
-              </div>
-
-              <div class="timeColon">
-                :
-              </div>
-
-              <div
-                class="wheel"
-                id="endMinuteWheel">
-
-                <div class="wheelFadeTop"></div>
-                <div class="wheelFadeBottom"></div>
-                <div class="wheelFocus"></div>
-
-                <div
-                  class="wheelInner"
-                  id="endMinuteInner">
-                </div>
-
-              </div>
-
+            <div class="wheel" id="startMinuteWheel">
+              <div class="wheelFadeTop"></div>
+              <div class="wheelFadeBottom"></div>
+              <div class="wheelFocus"></div>
+              <div class="wheelInner" id="startMinuteInner"></div>
             </div>
 
           </div>
 
         </div>
 
-        <div class="formBlock">
+        <div class="timeSection">
 
-          <label
-            class="formLabel"
-            for="fLocation">
-            Lieu
-          </label>
+          <label class="timeLabel">Heure fin</label>
 
-          <input
-            class="fieldText"
-            id="fLocation"
-            type="text"
-            placeholder="Lieu (optionnel)" />
+          <div class="timePickerRow">
 
-        </div>
+            <div class="wheel" id="endHourWheel">
+              <div class="wheelFadeTop"></div>
+              <div class="wheelFadeBottom"></div>
+              <div class="wheelFocus"></div>
+              <div class="wheelInner" id="endHourInner"></div>
+            </div>
 
-        <div class="formBlock">
+            <div class="timeColon">:</div>
 
-          <label
-            class="formLabel"
-            for="fDetails">
-            Détails / note
-          </label>
+            <div class="wheel" id="endMinuteWheel">
+              <div class="wheelFadeTop"></div>
+              <div class="wheelFadeBottom"></div>
+              <div class="wheelFocus"></div>
+              <div class="wheelInner" id="endMinuteInner"></div>
+            </div>
 
-          <textarea
-            class="fieldArea"
-            id="fDetails"
-            placeholder="Détails (optionnel)">
-          </textarea>
-
-        </div>
-
-        <div
-          class="formActions"
-          style="
-            justify-content:flex-end;
-            padding-bottom:2px;
-          ">
-
-          <button
-            class="btn"
-            id="btnFormClose">
-            Annuler
-          </button>
-
-          <button
-            class="btn"
-            id="btnFormSave">
-            Enregistrer
-          </button>
+          </div>
 
         </div>
 
       </div>
 
+      <div class="formBlock">
+        <label class="formLabel" for="fLocation">Lieu</label>
+        <input class="fieldText" id="fLocation" type="text" placeholder="Lieu (optionnel)" />
+      </div>
+
+      <div class="formBlock">
+        <label class="formLabel" for="fDetails">Détails / note</label>
+        <textarea class="fieldArea" id="fDetails" placeholder="Détails (optionnel)"></textarea>
+      </div>
+
+      <div class="formActions" style="justify-content:flex-end;padding-bottom:2px;">
+        <button class="btn" id="btnFormClose">Annuler</button>
+        <button class="btn" id="btnFormSave">Enregistrer</button>
+      </div>
+
     </div>
 
   </div>
+
+</div>
 
 <script>
 
@@ -1477,6 +1016,12 @@ PUBLIC_YEAR;
 let ADMIN_YEARS =
 [PUBLIC_YEAR];
 
+let ADMIN_YEARS_LOADED =
+false;
+
+let WHEELS_INITIALIZED =
+false;
+
 const CACHE_MAX_AGE_MS =
 1000 * 60 * 60 * 24 * 7;
 
@@ -1484,155 +1029,63 @@ const LS_EMAIL =
 "cs_portail_email_v1";
 
 function getCacheKey_(){
-
   return `cs_planning_cache_v1_${ACTIVE_YEAR}`;
-
 }
 
 const DEFAULT_CATEGORIES = [
-
-  {
-    category:"FMA centre",
-    color:"#ff2d2d",
-    order:1
-  },
-
-  {
-    category:"FMA équipe 1",
-    color:"#24d36a",
-    order:2
-  },
-
-  {
-    category:"FMA équipe 2",
-    color:"#f6a000",
-    order:3
-  },
-
-  {
-    category:"JSP",
-    color:"#4aa8ff",
-    order:4
-  },
-
-  {
-    category:"Navette",
-    color:"#2f79ff",
-    order:5
-  },
-
-  {
-    category:"RECSEC",
-    color:"#a081ff",
-    order:6
-  },
-
-  {
-    category:"Sainte Barbe",
-    color:"#ff5a5a",
-    order:7
-  }
-
+  {category:"FMA centre",color:"#ff2d2d",order:1},
+  {category:"FMA équipe 1",color:"#24d36a",order:2},
+  {category:"FMA équipe 2",color:"#f6a000",order:3},
+  {category:"JSP",color:"#4aa8ff",order:4},
+  {category:"Navette",color:"#2f79ff",order:5},
+  {category:"RECSEC",color:"#a081ff",order:6},
+  {category:"Sainte Barbe",color:"#ff5a5a",order:7}
 ];
 
 const OVERRIDE_COLORS = {
-
   "fma centre":"#ff2d2d"
-
 };
 
 const $ = id =>
 document.getElementById(id);
 
-const $grid =
-$("grid");
+const $grid = $("grid");
+const $monthName = $("monthName");
+const $legendGrid = $("legendGrid");
+const $btnPrev = $("btnPrev");
+const $btnNext = $("btnNext");
 
-const $monthName =
-$("monthName");
+const $status = $("status");
+const $statusTxt = $("statusTxt");
+const $statusSub = $("statusSub");
 
-const $legendGrid =
-$("legendGrid");
+const $btnLock = $("btnLock");
+const $editLabel = $("editLabel");
+const $yearControl = $("yearControl");
 
-const $btnPrev =
-$("btnPrev");
+const $noteOverlay = $("noteOverlay");
+const $noteTitle = $("noteTitle");
+const $noteBody = $("noteBody");
+const $noteClose = $("noteClose");
 
-const $btnNext =
-$("btnNext");
+const $editOverlay = $("editOverlay");
+const $editTitle = $("editTitle");
+const $editBody = $("editBody");
+const $btnAddEvent = $("btnAddEvent");
+const $btnCloseEdit = $("btnCloseEdit");
 
-const $status =
-$("status");
+const $formOverlay = $("formOverlay");
+const $formTitle = $("formTitle");
+const $fTitle = $("fTitle");
+const $fCategory = $("fCategory");
+const $fLocation = $("fLocation");
+const $fDetails = $("fDetails");
 
-const $statusTxt =
-$("statusTxt");
-
-const $statusSub =
-$("statusSub");
-
-const $btnLock =
-$("btnLock");
-
-const $editLabel =
-$("editLabel");
-
-const $yearControl =
-$("yearControl");
-
-const $noteOverlay =
-$("noteOverlay");
-
-const $noteTitle =
-$("noteTitle");
-
-const $noteBody =
-$("noteBody");
-
-const $noteClose =
-$("noteClose");
-
-const $editOverlay =
-$("editOverlay");
-
-const $editTitle =
-$("editTitle");
-
-const $editBody =
-$("editBody");
-
-const $btnAddEvent =
-$("btnAddEvent");
-
-const $btnCloseEdit =
-$("btnCloseEdit");
-
-const $formOverlay =
-$("formOverlay");
-
-const $formTitle =
-$("formTitle");
-
-const $fTitle =
-$("fTitle");
-
-const $fCategory =
-$("fCategory");
-
-const $fLocation =
-$("fLocation");
-
-const $fDetails =
-$("fDetails");
-
-const $btnFormCancel =
-$("btnFormCancel");
-
-const $btnFormClose =
-$("btnFormClose");
-
-const $btnFormSave =
-$("btnFormSave");
+const $btnFormCancel = $("btnFormCancel");
+const $btnFormClose = $("btnFormClose");
+const $btnFormSave = $("btnFormSave");
 
 const monthsFR = [
-
   "Janvier",
   "Février",
   "Mars",
@@ -1645,11 +1098,9 @@ const monthsFR = [
   "Octobre",
   "Novembre",
   "Décembre"
-
 ];
 
 const dowsFR = [
-
   "Dim",
   "Lun",
   "Mar",
@@ -1657,116 +1108,82 @@ const dowsFR = [
   "Jeu",
   "Ven",
   "Sam"
-
 ];
 
-let IS_ADMIN =
-false;
+let IS_ADMIN = false;
+let EDIT_MODE = false;
 
-let EDIT_MODE =
-false;
+let events = [];
+let categoriesRaw = DEFAULT_CATEGORIES.slice();
 
-let events =
-[];
+let eventsByDate = new Map();
+let catColor = new Map();
+let catLabel = new Map();
+let catOrder = new Map();
+let firstCatByDate = new Map();
+let hasNoteByDate = new Map();
 
-let categoriesRaw =
-DEFAULT_CATEGORIES.slice();
-
-let eventsByDate =
-new Map();
-
-let catColor =
-new Map();
-
-let catLabel =
-new Map();
-
-let catOrder =
-new Map();
-
-let firstCatByDate =
-new Map();
-
-let hasNoteByDate =
-new Map();
-
-let currentMonth =
-0;
-
-let _editDate =
-"";
+let currentMonth = 0;
+let _editDate = "";
 
 const HOURS =
 Array.from(
   {length:24},
-  (_,i)=>
-    String(i).padStart(2,"0")
+  (_,i)=>String(i).padStart(2,"0")
 );
 
 const MINUTES = [
-
   "00",
   "15",
   "30",
   "45"
-
 ];
 
 const LOOP_DUPLICATES =
 15;
 
 let FORM_STATE = {
-
   mode:"add",
   dateStr:"",
   originalEvent:null
-
 };
 
 const TIME_PICKERS = {
 
   startHour:{
-
     wheel:$("startHourWheel"),
     inner:$("startHourInner"),
     values:HOURS,
     value:"08",
     timer:null,
     looping:true
-
   },
 
   startMinute:{
-
     wheel:$("startMinuteWheel"),
     inner:$("startMinuteInner"),
     values:MINUTES,
     value:"00",
     timer:null,
     looping:true
-
   },
 
   endHour:{
-
     wheel:$("endHourWheel"),
     inner:$("endHourInner"),
     values:HOURS,
     value:"09",
     timer:null,
     looping:true
-
   },
 
   endMinute:{
-
     wheel:$("endMinuteWheel"),
     inner:$("endMinuteInner"),
     values:MINUTES,
     value:"00",
     timer:null,
     looping:true
-
   }
 
 };
@@ -1777,18 +1194,9 @@ function norm(s){
     .trim()
     .toLowerCase()
     .normalize("NFD")
-    .replace(
-      /[\u0300-\u036f]/g,
-      ""
-    )
-    .replace(
-      /['’]/g,
-      ""
-    )
-    .replace(
-      /\s+/g,
-      " "
-    );
+    .replace(/[\u0300-\u036f]/g,"")
+    .replace(/['’]/g,"")
+    .replace(/\s+/g," ");
 
 }
 
@@ -1799,26 +1207,11 @@ function escapeHtml(s){
       ? ""
       : String(s)
   )
-  .replaceAll(
-    "&",
-    "&amp;"
-  )
-  .replaceAll(
-    "<",
-    "&lt;"
-  )
-  .replaceAll(
-    ">",
-    "&gt;"
-  )
-  .replaceAll(
-    '"',
-    "&quot;"
-  )
-  .replaceAll(
-    "'",
-    "&#039;"
-  );
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
 
 }
 
@@ -1830,20 +1223,12 @@ function ymd(d){
   const m =
   String(
     d.getMonth()+1
-  )
-  .padStart(
-    2,
-    "0"
-  );
+  ).padStart(2,"0");
 
   const dd =
   String(
     d.getDate()
-  )
-  .padStart(
-    2,
-    "0"
-  );
+  ).padStart(2,"0");
 
   return `${y}-${m}-${dd}`;
 
@@ -1888,24 +1273,13 @@ function toFRDate(
   ymdStr
 ){
 
-  const [
-    y,
-    m,
-    d
-  ] =
+  const [y,m,d] =
   String(
     ymdStr || ""
-  )
-  .split("-");
+  ).split("-");
 
-  if(
-    !y ||
-    !m ||
-    !d
-  ){
-
+  if(!y || !m || !d){
     return ymdStr;
-
   }
 
   const dt =
@@ -1941,34 +1315,23 @@ function formatTimeRange(
   const s =
   String(
     start || ""
-  )
-  .trim();
+  ).trim();
 
   const e =
   String(
     end || ""
-  )
-  .trim();
+  ).trim();
 
-  if(
-    s &&
-    e
-  ){
-
+  if(s && e){
     return `${s}–${e}`;
-
   }
 
   if(s){
-
     return s;
-
   }
 
   if(e){
-
     return e;
-
   }
 
   return "";
@@ -2019,34 +1382,21 @@ function jsonp(
 ){
 
   return new Promise(
-    (
-      resolve,
-      reject
-    )=>{
+    (resolve,reject)=>{
 
       const script =
       document.createElement(
         "script"
       );
 
-      const cleanup =
-      ()=>{
+      const cleanup = ()=>{
 
         script.remove();
 
         try{
-
-          delete window[
-            cbName
-          ];
-
+          delete window[cbName];
         }catch(e){
-
-          window[
-            cbName
-          ] =
-          undefined;
-
+          window[cbName] = undefined;
         }
 
       };
@@ -2067,20 +1417,13 @@ function jsonp(
         timeoutMs
       );
 
-      window[
-        cbName
-      ] =
-      data=>{
+      window[cbName] = data=>{
 
-        clearTimeout(
-          timer
-        );
+        clearTimeout(timer);
 
         cleanup();
 
-        resolve(
-          data
-        );
+        resolve(data);
 
       };
 
@@ -2095,12 +1438,9 @@ function jsonp(
       "t=" +
       Date.now();
 
-      script.onerror =
-      ()=>{
+      script.onerror = ()=>{
 
-        clearTimeout(
-          timer
-        );
+        clearTimeout(timer);
 
         cleanup();
 
@@ -2161,8 +1501,7 @@ async function loadMyRole_(){
     res.ok === true &&
     String(
       res.role || ""
-    )
-    .toLowerCase()
+    ).toLowerCase()
     ===
     "admin"
   );
@@ -2170,6 +1509,10 @@ async function loadMyRole_(){
 }
 
 async function loadPlanningYears_(){
+
+  if(ADMIN_YEARS_LOADED){
+    return;
+  }
 
   const cb =
   "cb_years_" +
@@ -2208,9 +1551,7 @@ async function loadPlanningYears_(){
             ===
             "number"
           ){
-
             return item;
-
           }
 
           if(
@@ -2218,11 +1559,7 @@ async function loadPlanningYears_(){
             ===
             "string"
           ){
-
-            return Number(
-              item
-            );
-
+            return Number(item);
           }
 
           return Number(
@@ -2233,9 +1570,7 @@ async function loadPlanningYears_(){
       )
       .filter(
         year=>
-          Number.isInteger(
-            year
-          )
+          Number.isInteger(year)
           &&
           year >= 2000
           &&
@@ -2247,23 +1582,26 @@ async function loadPlanningYears_(){
       ...new Set(
         [
           PUBLIC_YEAR,
+          PUBLIC_YEAR + 1,
           ...years
         ]
       )
     ]
     .sort(
-      (a,b)=>
-        a-b
+      (a,b)=>a-b
     );
 
   }catch(e){
 
-    ADMIN_YEARS =
-    [
-      PUBLIC_YEAR
+    ADMIN_YEARS = [
+      PUBLIC_YEAR,
+      PUBLIC_YEAR + 1
     ];
 
   }
+
+  ADMIN_YEARS_LOADED =
+  true;
 
 }
 
@@ -2283,50 +1621,37 @@ function rebuildMaps(){
     const date =
     String(
       ev.date || ""
-    )
-    .trim();
+    ).trim();
 
     if(!date){
-
       continue;
-
     }
 
     if(
-      !eventsByDate
-        .has(
-          date
-        )
+      !eventsByDate.has(date)
     ){
 
-      eventsByDate
-        .set(
-          date,
-          []
-        );
+      eventsByDate.set(
+        date,
+        []
+      );
 
     }
 
     eventsByDate
-      .get(
-        date
-      )
-      .push(
-        ev
-      );
+      .get(date)
+      .push(ev);
 
     if(
       String(
         ev.details || ""
-      )
-      .trim()
+      ).trim()
     ){
 
-      hasNoteByDate
-        .set(
-          date,
-          true
-        );
+      hasNoteByDate.set(
+        date,
+        true
+      );
 
     }
 
@@ -2349,14 +1674,12 @@ function rebuildMaps(){
         category:
         String(
           c.category || ""
-        )
-        .trim(),
+        ).trim(),
 
         color:
         String(
           c.color || ""
-        )
-        .trim(),
+        ).trim(),
 
         order:
         Number(
@@ -2368,21 +1691,18 @@ function rebuildMaps(){
       })
     )
     .filter(
-      c=>
-        c.category
+      c=>c.category
     );
 
   cats.sort(
     (a,b)=>
       (
-        a.order -
-        b.order
+        a.order-b.order
       )
       ||
-      a.category
-        .localeCompare(
-          b.category
-        )
+      a.category.localeCompare(
+        b.category
+      )
   );
 
   for(
@@ -2396,20 +1716,13 @@ function rebuildMaps(){
     );
 
     if(
-      catLabel
-        .has(
-          k
-        )
+      catLabel.has(k)
     ){
-
       continue;
-
     }
 
     const forced =
-    OVERRIDE_COLORS[
-      k
-    ];
+    OVERRIDE_COLORS[k];
 
     const col =
     forced
@@ -2418,23 +1731,20 @@ function rebuildMaps(){
     ||
     "rgba(255,255,255,.25)";
 
-    catLabel
-      .set(
-        k,
-        c.category
-      );
+    catLabel.set(
+      k,
+      c.category
+    );
 
-    catColor
-      .set(
-        k,
-        col
-      );
+    catColor.set(
+      k,
+      col
+    );
 
-    catOrder
-      .set(
-        k,
-        c.order
-      );
+    catOrder.set(
+      k,
+      c.order
+    );
 
   }
 
@@ -2442,13 +1752,9 @@ function rebuildMaps(){
   new Map();
 
   for(
-    const [
-      date,
-      arr
-    ]
+    const [date,arr]
     of
-    eventsByDate
-      .entries()
+    eventsByDate.entries()
   ){
 
     let best =
@@ -2468,21 +1774,12 @@ function rebuildMaps(){
       );
 
       const o =
-      catOrder
-        .has(
-          k
-        )
-        ?
-        catOrder
-          .get(
-            k
-          )
-        :
-        9999;
+      catOrder.has(k)
+        ? catOrder.get(k)
+        : 9999;
 
       if(
-        o <
-        bestOrder
+        o < bestOrder
       ){
 
         bestOrder =
@@ -2506,11 +1803,10 @@ function rebuildMaps(){
 
     }
 
-    firstCatByDate
-      .set(
-        date,
-        best
-      );
+    firstCatByDate.set(
+      date,
+      best
+    );
 
   }
 
@@ -2526,22 +1822,15 @@ function getColorForCategory(
   );
 
   if(
-    OVERRIDE_COLORS[
-      k
-    ]
+    OVERRIDE_COLORS[k]
   ){
 
-    return OVERRIDE_COLORS[
-      k
-    ];
+    return OVERRIDE_COLORS[k];
 
   }
 
   return (
-    catColor
-      .get(
-        k
-      )
+    catColor.get(k)
     ||
     "rgba(255,255,255,.25)"
   );
@@ -2554,25 +1843,18 @@ function renderLegend(){
   "";
 
   for(
-    const [
-      k,
-      label
-    ]
+    const [k,label]
     of
-    catLabel
-      .entries()
+    catLabel.entries()
   ){
 
     const col =
-    getColorForCategory(
-      k
-    );
+    getColorForCategory(k);
 
     const div =
-    document
-      .createElement(
-        "div"
-      );
+    document.createElement(
+      "div"
+    );
 
     div.className =
     "legItem";
@@ -2581,9 +1863,7 @@ function renderLegend(){
     `
       <div
         class="sq"
-        style="
-          background:${escapeHtml(col)}
-        ">
+        style="background:${escapeHtml(col)}">
       </div>
 
       <div class="legTxt">
@@ -2591,10 +1871,9 @@ function renderLegend(){
       </div>
     `;
 
-    $legendGrid
-      .appendChild(
-        div
-      );
+    $legendGrid.appendChild(
+      div
+    );
 
   }
 
@@ -2608,14 +1887,10 @@ function renderMonth(){
   ];
 
   $btnPrev.disabled =
-  currentMonth
-  ===
-  0;
+  currentMonth === 0;
 
   $btnNext.disabled =
-  currentMonth
-  ===
-  11;
+  currentMonth === 11;
 
   const start =
   firstMondayGrid(
@@ -2638,14 +1913,10 @@ function renderMonth(){
   ){
 
     const d =
-    new Date(
-      start
-    );
+    new Date(start);
 
     d.setDate(
-      start.getDate()
-      +
-      i
+      start.getDate()+i
     );
 
     const inMonth =
@@ -2654,15 +1925,12 @@ function renderMonth(){
     currentMonth;
 
     const dateStr =
-    ymd(
-      d
-    );
+    ymd(d);
 
     const cell =
-    document
-      .createElement(
-        "div"
-      );
+    document.createElement(
+      "div"
+    );
 
     cell.className =
     "day"
@@ -2673,64 +1941,52 @@ function renderMonth(){
         : " is-empty"
     );
 
-    if(
-      inMonth
-    ){
+    if(inMonth){
 
       cell.dataset.date =
       dateStr;
 
       const catKey =
-      firstCatByDate
-        .get(
-          dateStr
+      firstCatByDate.get(
+        dateStr
+      );
+
+      if(catKey){
+
+        cell.classList.add(
+          "has-color"
         );
 
-      if(
-        catKey
-      ){
-
-        cell.classList
-          .add(
-            "has-color"
-          );
-
-        cell.style
-          .setProperty(
-            "--dayColor",
-            getColorForCategory(
-              catKey
-            )
-          );
-
-      }
-
-      if(
-        dateStr
-        ===
-        todayStr
-      ){
-
-        cell.classList
-          .add(
-            "is-today"
-          );
-
-      }
-
-      if(
-        hasNoteByDate
-          .get(
-            dateStr
+        cell.style.setProperty(
+          "--dayColor",
+          getColorForCategory(
+            catKey
           )
+        );
+
+      }
+
+      if(
+        dateStr === todayStr
+      ){
+
+        cell.classList.add(
+          "is-today"
+        );
+
+      }
+
+      if(
+        hasNoteByDate.get(
+          dateStr
+        )
         ===
         true
       ){
 
-        cell.classList
-          .add(
-            "has-note"
-          );
+        cell.classList.add(
+          "has-note"
+        );
 
       }
 
@@ -2739,16 +1995,13 @@ function renderMonth(){
     cell.innerHTML =
     `<span>${
       inMonth
-        ?
-        d.getDate()
-        :
-        ""
+        ? d.getDate()
+        : ""
     }</span>`;
 
-    $grid
-      .appendChild(
-        cell
-      );
+    $grid.appendChild(
+      cell
+    );
 
   }
 
@@ -2777,8 +2030,7 @@ function renderYearControl_(){
   ){
 
     yearsToShow =
-    ADMIN_YEARS
-      .slice();
+    ADMIN_YEARS.slice();
 
   }else{
 
@@ -2788,10 +2040,9 @@ function renderYearControl_(){
   }
 
   if(
-    !yearsToShow
-      .includes(
-        ACTIVE_YEAR
-      )
+    !yearsToShow.includes(
+      ACTIVE_YEAR
+    )
   ){
 
     ACTIVE_YEAR =
@@ -2800,10 +2051,9 @@ function renderYearControl_(){
   }
 
   const select =
-  document
-    .createElement(
-      "select"
-    );
+  document.createElement(
+    "select"
+  );
 
   select.className =
   "yearSelect";
@@ -2814,25 +2064,18 @@ function renderYearControl_(){
   ){
 
     const opt =
-    document
-      .createElement(
-        "option"
-      );
+    document.createElement(
+      "option"
+    );
 
     opt.value =
-    String(
-      year
-    );
+    String(year);
 
     opt.textContent =
-    String(
-      year
-    );
+    String(year);
 
     if(
-      year
-      ===
-      ACTIVE_YEAR
+      year === ACTIVE_YEAR
     ){
 
       opt.selected =
@@ -2840,10 +2083,9 @@ function renderYearControl_(){
 
     }
 
-    select
-      .appendChild(
-        opt
-      );
+    select.appendChild(
+      opt
+    );
 
   }
 
@@ -2857,10 +2099,17 @@ function renderYearControl_(){
       );
 
       if(
-        !yearsToShow
-          .includes(
-            newYear
-          )
+        !yearsToShow.includes(
+          newYear
+        )
+      ){
+
+        return;
+
+      }
+
+      if(
+        newYear === ACTIVE_YEAR
       ){
 
         return;
@@ -2886,10 +2135,8 @@ function renderYearControl_(){
       now.getFullYear()
       ===
       ACTIVE_YEAR
-        ?
-        now.getMonth()
-        :
-        0;
+        ? now.getMonth()
+        : 0;
 
       renderMonth();
 
@@ -2903,10 +2150,9 @@ function renderYearControl_(){
     }
   );
 
-  $yearControl
-    .appendChild(
-      select
-    );
+  $yearControl.appendChild(
+    select
+  );
 
 }
 
@@ -2914,57 +2160,84 @@ async function setEditMode(
   on
 ){
 
+  const oldYear =
+  ACTIVE_YEAR;
+
   EDIT_MODE =
   !!on;
 
   $editLabel.style.display =
   EDIT_MODE
-    ?
-    "inline-block"
-    :
-    "none";
+    ? "inline-block"
+    : "none";
 
   $btnLock.textContent =
   EDIT_MODE
-    ?
-    "🔓"
-    :
-    "🔒";
+    ? "🔓"
+    : "🔒";
 
-  $btnLock
-    .setAttribute(
-      "aria-pressed",
-      EDIT_MODE
-        ?
-        "true"
-        :
-        "false"
-    );
+  $btnLock.setAttribute(
+    "aria-pressed",
+    EDIT_MODE
+      ? "true"
+      : "false"
+  );
 
-  if(
-    !EDIT_MODE
-  ){
+  if(EDIT_MODE){
 
-    closeEdit();
-    closeNote();
-    closeEventForm();
-
-    const publicYears =
-    getPublicYears_();
-
+    /*
+      Les années admin ne sont chargées
+      QUE lors de la première ouverture
+      du cadenas.
+    */
     if(
-      !publicYears
-        .includes(
-          ACTIVE_YEAR
-        )
+      !ADMIN_YEARS_LOADED
     ){
 
-      ACTIVE_YEAR =
-      PUBLIC_YEAR;
+      showStatus(
+        "Mode édition",
+        "Chargement des années…"
+      );
+
+      await loadPlanningYears_();
+
+      hideStatus();
 
     }
 
     renderYearControl_();
+
+    return;
+
+  }
+
+  closeEdit();
+  closeNote();
+  closeEventForm();
+
+  const publicYears =
+  getPublicYears_();
+
+  if(
+    !publicYears.includes(
+      ACTIVE_YEAR
+    )
+  ){
+
+    ACTIVE_YEAR =
+    PUBLIC_YEAR;
+
+  }
+
+  renderYearControl_();
+
+  /*
+    On ne recharge l'API que si
+    l'année a réellement changé.
+  */
+  if(
+    ACTIVE_YEAR !== oldYear
+  ){
 
     const now =
     new Date();
@@ -2973,20 +2246,14 @@ async function setEditMode(
     now.getFullYear()
     ===
     ACTIVE_YEAR
-      ?
-      now.getMonth()
-      :
-      0;
+      ? now.getMonth()
+      : 0;
 
     renderMonth();
 
     await loadApi();
 
-    return;
-
   }
-
-  renderYearControl_();
 
 }
 
@@ -2995,10 +2262,9 @@ function openNote(
 ){
 
   const arr =
-  eventsByDate
-    .get(
-      dateStr
-    )
+  eventsByDate.get(
+    dateStr
+  )
   ||
   [];
 
@@ -3007,16 +2273,13 @@ function openNote(
     ev=>
       String(
         ev.details || ""
-      )
-      .trim()
+      ).trim()
   );
 
   if(
     !withDetails.length
   ){
-
     return;
-
   }
 
   $noteTitle.textContent =
@@ -3038,8 +2301,7 @@ function openNote(
     const name =
     String(
       ev.title || ""
-    )
-    .trim()
+    ).trim()
     ||
     "—";
 
@@ -3057,20 +2319,17 @@ function openNote(
     const catLabelTxt =
     String(
       ev.category || ""
-    )
-    .trim();
+    ).trim();
 
     const loc =
     String(
       ev.location || ""
-    )
-    .trim();
+    ).trim();
 
     const details =
     String(
       ev.details || ""
-    )
-    .trim();
+    ).trim();
 
     const dotCol =
     getColorForCategory(
@@ -3078,10 +2337,9 @@ function openNote(
     );
 
     const card =
-    document
-      .createElement(
-        "div"
-      );
+    document.createElement(
+      "div"
+    );
 
     card.className =
     "evCard";
@@ -3107,18 +2365,14 @@ function openNote(
           ?
           `
             <div class="chip">
-
               <span
                 class="chipDot"
-                style="
-                  background:${escapeHtml(dotCol)}
-                ">
+                style="background:${escapeHtml(dotCol)}">
               </span>
 
               <span>
                 ${escapeHtml(catLabelTxt)}
               </span>
-
             </div>
           `
           :
@@ -3147,40 +2401,33 @@ function openNote(
       </div>
     `;
 
-    $noteBody
-      .appendChild(
-        card
-      );
+    $noteBody.appendChild(
+      card
+    );
 
   }
 
-  $noteOverlay
-    .classList
-    .add(
-      "show"
-    );
+  $noteOverlay.classList.add(
+    "show"
+  );
 
-  $noteOverlay
-    .setAttribute(
-      "aria-hidden",
-      "false"
-    );
+  $noteOverlay.setAttribute(
+    "aria-hidden",
+    "false"
+  );
 
 }
 
 function closeNote(){
 
-  $noteOverlay
-    .classList
-    .remove(
-      "show"
-    );
+  $noteOverlay.classList.remove(
+    "show"
+  );
 
-  $noteOverlay
-    .setAttribute(
-      "aria-hidden",
-      "true"
-    );
+  $noteOverlay.setAttribute(
+    "aria-hidden",
+    "true"
+  );
 
 }
 
@@ -3198,33 +2445,27 @@ function openEdit(
     dateStr
   );
 
-  $editOverlay
-    .classList
-    .add(
-      "show"
-    );
+  $editOverlay.classList.add(
+    "show"
+  );
 
-  $editOverlay
-    .setAttribute(
-      "aria-hidden",
-      "false"
-    );
+  $editOverlay.setAttribute(
+    "aria-hidden",
+    "false"
+  );
 
 }
 
 function closeEdit(){
 
-  $editOverlay
-    .classList
-    .remove(
-      "show"
-    );
+  $editOverlay.classList.remove(
+    "show"
+  );
 
-  $editOverlay
-    .setAttribute(
-      "aria-hidden",
-      "true"
-    );
+  $editOverlay.setAttribute(
+    "aria-hidden",
+    "true"
+  );
 
   _editDate =
   "";
@@ -3240,10 +2481,9 @@ function renderEditList(
 
   const arr =
   (
-    eventsByDate
-      .get(
-        dateStr
-      )
+    eventsByDate.get(
+      dateStr
+    )
     ||
     []
   )
@@ -3253,8 +2493,7 @@ function renderEditList(
     (a,b)=>
       String(
         a.start || ""
-      )
-      .localeCompare(
+      ).localeCompare(
         String(
           b.start || ""
         )
@@ -3262,8 +2501,7 @@ function renderEditList(
       ||
       String(
         a.title || ""
-      )
-      .localeCompare(
+      ).localeCompare(
         String(
           b.title || ""
         )
@@ -3278,29 +2516,23 @@ function renderEditList(
   ){
 
     const empty =
-    document
-      .createElement(
-        "div"
-      );
+    document.createElement(
+      "div"
+    );
 
     empty.className =
     "row";
 
     empty.innerHTML =
     `
-      <div
-        style="
-          font-weight:900;
-          opacity:.9;
-        ">
+      <div style="font-weight:900;opacity:.9">
         Aucun événement ce jour.
       </div>
     `;
 
-    $editBody
-      .appendChild(
-        empty
-      );
+    $editBody.appendChild(
+      empty
+    );
 
     return;
 
@@ -3314,8 +2546,7 @@ function renderEditList(
     const name =
     String(
       ev.title || ""
-    )
-    .trim()
+    ).trim()
     ||
     "—";
 
@@ -3328,26 +2559,22 @@ function renderEditList(
     const cat =
     String(
       ev.category || ""
-    )
-    .trim();
+    ).trim();
 
     const loc =
     String(
       ev.location || ""
-    )
-    .trim();
+    ).trim();
 
     const details =
     String(
       ev.details || ""
-    )
-    .trim();
+    ).trim();
 
     const row =
-    document
-      .createElement(
-        "div"
-      );
+    document.createElement(
+      "div"
+    );
 
     row.className =
     "row";
@@ -3432,9 +2659,7 @@ function renderEditList(
               b.dataset.act;
 
               if(
-                act
-                ===
-                "view"
+                act === "view"
               ){
 
                 alert(
@@ -3446,26 +2671,20 @@ function renderEditList(
                   +
                   (
                     cat
-                    ?
-                    `🎨 ${cat}\n`
-                    :
-                    ""
+                    ? `🎨 ${cat}\n`
+                    : ""
                   )
                   +
                   (
                     loc
-                    ?
-                    `📍 ${loc}\n`
-                    :
-                    ""
+                    ? `📍 ${loc}\n`
+                    : ""
                   )
                   +
                   (
                     details
-                    ?
-                    `\n📝 ${details}`
-                    :
-                    ""
+                    ? `\n📝 ${details}`
+                    : ""
                   )
                 );
 
@@ -3474,9 +2693,7 @@ function renderEditList(
               }
 
               if(
-                act
-                ===
-                "del"
+                act === "del"
               ){
 
                 const ok =
@@ -3490,12 +2707,8 @@ function renderEditList(
                   `Confirmer ?`
                 );
 
-                if(
-                  !ok
-                ){
-
+                if(!ok){
                   return;
-
                 }
 
                 await apiDeleteEvent_(
@@ -3516,9 +2729,7 @@ function renderEditList(
               }
 
               if(
-                act
-                ===
-                "edit"
+                act === "edit"
               ){
 
                 openEventForm(
@@ -3535,10 +2746,9 @@ function renderEditList(
         }
       );
 
-    $editBody
-      .appendChild(
-        row
-      );
+    $editBody.appendChild(
+      row
+    );
 
   }
 
@@ -3552,9 +2762,7 @@ async function apiAddEvent_(
   const email =
   getEmailLocal();
 
-  if(
-    !email
-  ){
+  if(!email){
 
     alert(
       "Email introuvable (localStorage). Reconnecte-toi sur le portail."
@@ -3626,9 +2834,7 @@ async function apiDeleteEvent_(
   const email =
   getEmailLocal();
 
-  if(
-    !email
-  ){
+  if(!email){
 
     alert(
       "Email introuvable (localStorage). Reconnecte-toi sur le portail."
@@ -3645,15 +2851,12 @@ async function apiDeleteEvent_(
     ev?.id
     ||
     ""
-  )
-  .trim();
+  ).trim();
 
-  if(
-    !eventId
-  ){
+  if(!eventId){
 
     alert(
-      "Suppression impossible : cet événement n’a pas d’identifiant event_id. Il faut le recréer ou lui ajouter un event_id dans Sheets."
+      "Suppression impossible : cet événement n’a pas d’identifiant event_id."
     );
 
     return;
@@ -3707,7 +2910,7 @@ async function apiDeleteEvent_(
   ){
 
     throw new Error(
-      "Aucune ligne supprimée. event_id non trouvé dans Sheets."
+      "Aucune ligne supprimée. event_id non trouvé."
     );
 
   }
@@ -3724,10 +2927,9 @@ function buildCategoryOptions(
   "";
 
   const none =
-  document
-    .createElement(
-      "option"
-    );
+  document.createElement(
+    "option"
+  );
 
   none.value =
   "";
@@ -3735,37 +2937,23 @@ function buildCategoryOptions(
   none.textContent =
   "Aucune";
 
-  $fCategory
-    .appendChild(
-      none
-    );
+  $fCategory.appendChild(
+    none
+  );
 
   const items =
   [...catLabel.entries()]
     .map(
-      (
-        [
-          k,
-          label
-        ]
-      )=>({
+      ([k,label])=>({
 
         k,
 
         label,
 
         order:
-        catOrder
-          .has(
-            k
-          )
-          ?
-          catOrder
-            .get(
-              k
-            )
-          :
-          9999
+        catOrder.has(k)
+          ? catOrder.get(k)
+          : 9999
 
       })
     );
@@ -3773,14 +2961,12 @@ function buildCategoryOptions(
   items.sort(
     (a,b)=>
       (
-        a.order -
-        b.order
+        a.order-b.order
       )
       ||
-      a.label
-        .localeCompare(
-          b.label
-        )
+      a.label.localeCompare(
+        b.label
+      )
   );
 
   for(
@@ -3789,10 +2975,9 @@ function buildCategoryOptions(
   ){
 
     const opt =
-    document
-      .createElement(
-        "option"
-      );
+    document.createElement(
+      "option"
+    );
 
     opt.value =
     it.label;
@@ -3800,10 +2985,9 @@ function buildCategoryOptions(
     opt.textContent =
     it.label;
 
-    $fCategory
-      .appendChild(
-        opt
-      );
+    $fCategory.appendChild(
+      opt
+    );
 
   }
 
@@ -3854,34 +3038,25 @@ function buildWheel(
   picker.inner.innerHTML =
   "";
 
-  picker.loopValues =
-  allValues;
-
   const padTop =
-  document
-    .createElement(
-      "div"
-    );
+  document.createElement(
+    "div"
+  );
 
   padTop.className =
   "wheelPad";
 
-  picker.inner
-    .appendChild(
-      padTop
-    );
+  picker.inner.appendChild(
+    padTop
+  );
 
   allValues.forEach(
-    (
-      v,
-      idx
-    )=>{
+    (v,idx)=>{
 
       const item =
-      document
-        .createElement(
-          "div"
-        );
+      document.createElement(
+        "div"
+      );
 
       item.className =
       "wheelItem";
@@ -3890,9 +3065,7 @@ function buildWheel(
       v;
 
       item.dataset.index =
-      String(
-        idx
-      );
+      String(idx);
 
       item.textContent =
       v;
@@ -3906,55 +3079,51 @@ function buildWheel(
         )
       );
 
-      picker.inner
-        .appendChild(
-          item
-        );
+      picker.inner.appendChild(
+        item
+      );
 
     }
   );
 
   const padBottom =
-  document
-    .createElement(
-      "div"
-    );
+  document.createElement(
+    "div"
+  );
 
   padBottom.className =
   "wheelPad";
 
-  picker.inner
-    .appendChild(
-      padBottom
-    );
+  picker.inner.appendChild(
+    padBottom
+  );
 
-  picker.wheel
-    .addEventListener(
-      "scroll",
-      ()=>{
+  picker.wheel.addEventListener(
+    "scroll",
+    ()=>{
 
-        updateWheelActive(
+      updateWheelActive(
+        pickerKey
+      );
+
+      keepWheelLooped(
+        pickerKey
+      );
+
+      clearTimeout(
+        picker.timer
+      );
+
+      picker.timer =
+      setTimeout(
+        ()=>snapWheel(
           pickerKey
-        );
+        ),
+        80
+      );
 
-        keepWheelLooped(
-          pickerKey
-        );
-
-        clearTimeout(
-          picker.timer
-        );
-
-        picker.timer =
-        setTimeout(
-          ()=>snapWheel(
-            pickerKey
-          ),
-          80
-        );
-
-      }
-    );
+    }
+  );
 
 }
 
@@ -4011,15 +3180,11 @@ function getNearestWheelItem(
 
       const dist =
       Math.abs(
-        center
-        -
-        itemCenter
+        center-itemCenter
       );
 
       if(
-        dist
-        <
-        bestDist
+        dist < bestDist
       ){
 
         bestDist =
@@ -4056,21 +3221,16 @@ function updateWheelActive(
   )
   .forEach(
     i=>
-      i.classList
-        .remove(
-          "active"
-        )
+      i.classList.remove(
+        "active"
+      )
   );
 
-  if(
-    bestItem
-  ){
+  if(bestItem){
 
-    bestItem
-      .classList
-      .add(
-        "active"
-      );
+    bestItem.classList.add(
+      "active"
+    );
 
     picker.value =
     bestItem.dataset.value;
@@ -4088,12 +3248,8 @@ function keepWheelLooped(
     pickerKey
   ];
 
-  if(
-    !picker.looping
-  ){
-
+  if(!picker.looping){
     return;
-
   }
 
   const valuesLen =
@@ -4116,9 +3272,7 @@ function keepWheelLooped(
   cycleHeight
   *
   (
-    LOOP_DUPLICATES
-    -
-    5
+    LOOP_DUPLICATES - 5
   );
 
   if(
@@ -4127,11 +3281,8 @@ function keepWheelLooped(
     minScroll
   ){
 
-    picker.wheel.scrollTop
-    +=
-    cycleHeight
-    *
-    6;
+    picker.wheel.scrollTop +=
+    cycleHeight * 6;
 
   }else if(
     picker.wheel.scrollTop
@@ -4139,11 +3290,8 @@ function keepWheelLooped(
     maxScroll
   ){
 
-    picker.wheel.scrollTop
-    -=
-    cycleHeight
-    *
-    6;
+    picker.wheel.scrollTop -=
+    cycleHeight * 6;
 
   }
 
@@ -4186,9 +3334,7 @@ function findBestItemForValueNearCenter(
   2;
 
   let best =
-  items[
-    0
-  ];
+  items[0];
 
   let bestDist =
   Infinity;
@@ -4205,15 +3351,11 @@ function findBestItemForValueNearCenter(
 
       const dist =
       Math.abs(
-        c
-        -
-        currentCenter
+        c-currentCenter
       );
 
       if(
-        dist
-        <
-        bestDist
+        dist < bestDist
       ){
 
         bestDist =
@@ -4248,12 +3390,8 @@ function setWheelValue(
     value
   );
 
-  if(
-    !item
-  ){
-
+  if(!item){
     return;
-
   }
 
   const target =
@@ -4273,10 +3411,8 @@ function setWheelValue(
 
     behavior:
     smooth
-      ?
-      "smooth"
-      :
-      "auto"
+      ? "smooth"
+      : "auto"
 
   });
 
@@ -4296,10 +3432,8 @@ function setWheelValue(
 
     },
     smooth
-      ?
-      160
-      :
-      0
+      ? 160
+      : 0
   );
 
 }
@@ -4318,12 +3452,8 @@ function snapWheel(
     pickerKey
   );
 
-  if(
-    !bestItem
-  ){
-
+  if(!bestItem){
     return;
-
   }
 
   const target =
@@ -4340,7 +3470,6 @@ function snapWheel(
   picker.wheel.scrollTo({
 
     top:target,
-
     behavior:"smooth"
 
   });
@@ -4371,20 +3500,14 @@ function getTimeValue(
 
   return (
     TIME_PICKERS[
-      prefix
-      +
-      "Hour"
-    ]
-    .value
+      prefix+"Hour"
+    ].value
     +
     ":"
     +
     TIME_PICKERS[
-      prefix
-      +
-      "Minute"
-    ]
-    .value
+      prefix+"Minute"
+    ].value
   );
 
 }
@@ -4397,61 +3520,51 @@ function setTimeValue(
   const val =
   String(
     hhmm || ""
-  )
-  .trim();
+  ).trim();
 
-  const [
-    hh,
-    mm
-  ] =
+  const [hh,mm] =
   val
   &&
   val.includes(":")
-    ?
-    val.split(":")
-    :
-    [
-      "00",
-      "00"
-    ];
+    ? val.split(":")
+    : ["00","00"];
 
   const hour =
-  HOURS.includes(
-    hh
-  )
-    ?
-    hh
-    :
-    "00";
+  HOURS.includes(hh)
+    ? hh
+    : "00";
 
   const minute =
-  MINUTES.includes(
-    mm
-  )
-    ?
-    mm
-    :
-    "00";
+  MINUTES.includes(mm)
+    ? mm
+    : "00";
 
   setWheelValue(
-    prefix
-    +
-    "Hour",
+    prefix+"Hour",
     hour,
     false
   );
 
   setWheelValue(
-    prefix
-    +
-    "Minute",
+    prefix+"Minute",
     minute,
     false
   );
 
 }
 
-function initWheels(){
+/*
+  OPTIMISATION IMPORTANTE :
+  les roulettes ne sont plus créées
+  au démarrage de la page.
+*/
+function ensureWheelsInitialized_(){
+
+  if(
+    WHEELS_INITIALIZED
+  ){
+    return;
+  }
 
   buildWheel(
     "startHour"
@@ -4468,6 +3581,9 @@ function initWheels(){
   buildWheel(
     "endMinute"
   );
+
+  WHEELS_INITIALIZED =
+  true;
 
   setTimeout(
     ()=>{
@@ -4514,6 +3630,12 @@ function openEventForm(
   ev
 ){
 
+  /*
+    Création des roulettes seulement ici,
+    au premier ajout/modification.
+  */
+  ensureWheelsInitialized_();
+
   FORM_STATE.mode =
   mode;
 
@@ -4527,90 +3649,92 @@ function openEventForm(
     ev?.category || ""
   );
 
-  if(
-    mode
-    ===
-    "edit"
-  ){
+  $formOverlay.classList.add(
+    "show"
+  );
 
-    $formTitle.textContent =
-    `Modifier — ${toFRDate(dateStr)}`;
+  $formOverlay.setAttribute(
+    "aria-hidden",
+    "false"
+  );
 
-    $fTitle.value =
-    ev?.title || "";
+  /*
+    Attendre que la fenêtre soit visible
+    avant de positionner les roulettes.
+  */
+  requestAnimationFrame(
+    ()=>{
 
-    $fLocation.value =
-    ev?.location || "";
+      if(
+        mode === "edit"
+      ){
 
-    $fDetails.value =
-    ev?.details || "";
+        $formTitle.textContent =
+        `Modifier — ${toFRDate(dateStr)}`;
 
-    setTimeValue(
-      "start",
-      ev?.start || "08:00"
-    );
+        $fTitle.value =
+        ev?.title || "";
 
-    setTimeValue(
-      "end",
-      ev?.end || "09:00"
-    );
+        $fLocation.value =
+        ev?.location || "";
 
-  }else{
+        $fDetails.value =
+        ev?.details || "";
 
-    $formTitle.textContent =
-    `Ajouter — ${toFRDate(dateStr)}`;
+        setTimeValue(
+          "start",
+          ev?.start || "08:00"
+        );
 
-    $fTitle.value =
-    "";
+        setTimeValue(
+          "end",
+          ev?.end || "09:00"
+        );
 
-    $fLocation.value =
-    "";
+      }else{
 
-    $fDetails.value =
-    "";
+        $formTitle.textContent =
+        `Ajouter — ${toFRDate(dateStr)}`;
 
-    $fCategory.value =
-    "";
+        $fTitle.value =
+        "";
 
-    setTimeValue(
-      "start",
-      "08:00"
-    );
+        $fLocation.value =
+        "";
 
-    setTimeValue(
-      "end",
-      "09:00"
-    );
+        $fDetails.value =
+        "";
 
-  }
+        $fCategory.value =
+        "";
 
-  $formOverlay
-    .classList
-    .add(
-      "show"
-    );
+        setTimeValue(
+          "start",
+          "08:00"
+        );
 
-  $formOverlay
-    .setAttribute(
-      "aria-hidden",
-      "false"
-    );
+        setTimeValue(
+          "end",
+          "09:00"
+        );
+
+      }
+
+    }
+  );
 
 }
 
 function closeEventForm(){
 
-  $formOverlay
-    .classList
-    .remove(
-      "show"
-    );
+  $formOverlay.classList.remove(
+    "show"
+  );
 
-  $formOverlay
-    .setAttribute(
-      "aria-hidden",
-      "true"
-    );
+  $formOverlay.setAttribute(
+    "aria-hidden",
+    "true"
+  );
 
 }
 
@@ -4619,26 +3743,22 @@ async function saveEventForm(){
   const title =
   String(
     $fTitle.value || ""
-  )
-  .trim();
+  ).trim();
 
   const category =
   String(
     $fCategory.value || ""
-  )
-  .trim();
+  ).trim();
 
   const location =
   String(
     $fLocation.value || ""
-  )
-  .trim();
+  ).trim();
 
   const details =
   String(
     $fDetails.value || ""
-  )
-  .trim();
+  ).trim();
 
   const start =
   getTimeValue(
@@ -4650,9 +3770,7 @@ async function saveEventForm(){
     "end"
   );
 
-  if(
-    !title
-  ){
+  if(!title){
 
     alert(
       "Titre obligatoire."
@@ -4663,9 +3781,7 @@ async function saveEventForm(){
   }
 
   if(
-    end
-    <
-    start
+    end < start
   ){
 
     alert(
@@ -4679,9 +3795,7 @@ async function saveEventForm(){
   try{
 
     if(
-      FORM_STATE.mode
-      ===
-      "edit"
+      FORM_STATE.mode === "edit"
       &&
       FORM_STATE.originalEvent
     ){
@@ -4696,19 +3810,12 @@ async function saveEventForm(){
     await apiAddEvent_(
       FORM_STATE.dateStr,
       {
-
         title,
-
         start,
-
         end,
-
         category,
-
         location,
-
         details
-
       }
     );
 
@@ -4718,9 +3825,7 @@ async function saveEventForm(){
       true
     );
 
-    if(
-      _editDate
-    ){
+    if(_editDate){
 
       renderEditList(
         _editDate
@@ -4744,204 +3849,169 @@ async function saveEventForm(){
 
 }
 
-$btnAddEvent
-  .addEventListener(
-    "click",
-    ()=>{
+$btnAddEvent.addEventListener(
+  "click",
+  ()=>{
 
-      if(
-        !_editDate
-      ){
+    if(!_editDate){
+      return;
+    }
 
-        return;
+    openEventForm(
+      "add",
+      _editDate,
+      null
+    );
 
-      }
+  }
+);
 
-      openEventForm(
-        "add",
-        _editDate,
-        null
+$btnCloseEdit.addEventListener(
+  "click",
+  closeEdit
+);
+
+$editOverlay.addEventListener(
+  "click",
+  e=>{
+
+    if(
+      e.target ===
+      $editOverlay
+    ){
+
+      closeEdit();
+
+    }
+
+  }
+);
+
+$btnFormCancel.addEventListener(
+  "click",
+  closeEventForm
+);
+
+$btnFormClose.addEventListener(
+  "click",
+  closeEventForm
+);
+
+$btnFormSave.addEventListener(
+  "click",
+  saveEventForm
+);
+
+$formOverlay.addEventListener(
+  "click",
+  e=>{
+
+    if(
+      e.target ===
+      $formOverlay
+    ){
+
+      closeEventForm();
+
+    }
+
+  }
+);
+
+$grid.addEventListener(
+  "click",
+  e=>{
+
+    const day =
+    e.target.closest(
+      ".day"
+    );
+
+    if(!day){
+      return;
+    }
+
+    if(
+      day.classList.contains(
+        "is-empty"
+      )
+    ){
+      return;
+    }
+
+    const dateStr =
+    day.dataset.date;
+
+    if(!dateStr){
+      return;
+    }
+
+    if(
+      EDIT_MODE
+      &&
+      IS_ADMIN
+    ){
+
+      openEdit(
+        dateStr
+      );
+
+      return;
+
+    }
+
+    if(
+      day.classList.contains(
+        "has-note"
+      )
+    ){
+
+      openNote(
+        dateStr
       );
 
     }
-  );
 
-$btnCloseEdit
-  .addEventListener(
-    "click",
-    closeEdit
-  );
+  }
+);
 
-$editOverlay
-  .addEventListener(
-    "click",
-    e=>{
+$noteClose.addEventListener(
+  "click",
+  closeNote
+);
 
-      if(
-        e.target
-        ===
-        $editOverlay
-      ){
+$noteOverlay.addEventListener(
+  "click",
+  e=>{
 
-        closeEdit();
+    if(
+      e.target ===
+      $noteOverlay
+    ){
 
-      }
+      closeNote();
 
     }
-  );
 
-$btnFormCancel
-  .addEventListener(
-    "click",
-    closeEventForm
-  );
+  }
+);
 
-$btnFormClose
-  .addEventListener(
-    "click",
-    closeEventForm
-  );
+document.addEventListener(
+  "keydown",
+  e=>{
 
-$btnFormSave
-  .addEventListener(
-    "click",
-    saveEventForm
-  );
+    if(
+      e.key === "Escape"
+    ){
 
-$formOverlay
-  .addEventListener(
-    "click",
-    e=>{
-
-      if(
-        e.target
-        ===
-        $formOverlay
-      ){
-
-        closeEventForm();
-
-      }
+      closeNote();
+      closeEdit();
+      closeEventForm();
 
     }
-  );
 
-$grid
-  .addEventListener(
-    "click",
-    e=>{
-
-      const day =
-      e.target
-        .closest(
-          ".day"
-        );
-
-      if(
-        !day
-      ){
-
-        return;
-
-      }
-
-      if(
-        day.classList
-          .contains(
-            "is-empty"
-          )
-      ){
-
-        return;
-
-      }
-
-      const dateStr =
-      day.dataset.date;
-
-      if(
-        !dateStr
-      ){
-
-        return;
-
-      }
-
-      if(
-        EDIT_MODE
-        &&
-        IS_ADMIN
-      ){
-
-        openEdit(
-          dateStr
-        );
-
-        return;
-
-      }
-
-      if(
-        day.classList
-          .contains(
-            "has-note"
-          )
-      ){
-
-        openNote(
-          dateStr
-        );
-
-      }
-
-    }
-  );
-
-$noteClose
-  .addEventListener(
-    "click",
-    closeNote
-  );
-
-$noteOverlay
-  .addEventListener(
-    "click",
-    e=>{
-
-      if(
-        e.target
-        ===
-        $noteOverlay
-      ){
-
-        closeNote();
-
-      }
-
-    }
-  );
-
-document
-  .addEventListener(
-    "keydown",
-    e=>{
-
-      if(
-        e.key
-        ===
-        "Escape"
-      ){
-
-        closeNote();
-
-        closeEdit();
-
-        closeEventForm();
-
-      }
-
-    }
-  );
+  }
+);
 
 function saveCache_(
   payload
@@ -4949,18 +4019,13 @@ function saveCache_(
 
   try{
 
-    localStorage
-      .setItem(
-        getCacheKey_(),
-        JSON.stringify({
-
-          savedAt:
-          Date.now(),
-
-          payload
-
-        })
-      );
+    localStorage.setItem(
+      getCacheKey_(),
+      JSON.stringify({
+        savedAt:Date.now(),
+        payload
+      })
+    );
 
   }catch(e){}
 
@@ -4971,40 +4036,29 @@ function loadCache_(){
   try{
 
     const raw =
-    localStorage
-      .getItem(
-        getCacheKey_()
-      );
+    localStorage.getItem(
+      getCacheKey_()
+    );
 
-    if(
-      !raw
-    ){
-
+    if(!raw){
       return null;
-
     }
 
     const obj =
-    JSON.parse(
-      raw
-    );
+    JSON.parse(raw);
 
     if(
       !obj
       ||
       !obj.payload
     ){
-
       return null;
-
     }
 
     if(
       obj.savedAt
       &&
-      Date.now()
-      -
-      obj.savedAt
+      Date.now()-obj.savedAt
       >
       CACHE_MAX_AGE_MS
     ){
@@ -5032,10 +4086,8 @@ function applyPlanningData_(
   Array.isArray(
     py?.events
   )
-    ?
-    py.events
-    :
-    [];
+    ? py.events
+    : [];
 
   categoriesRaw =
   Array.isArray(
@@ -5043,11 +4095,8 @@ function applyPlanningData_(
   )
   &&
   pc.categories.length
-    ?
-    pc.categories
-    :
-    DEFAULT_CATEGORIES
-      .slice();
+    ? pc.categories
+    : DEFAULT_CATEGORIES.slice();
 
   rebuildMaps();
 
@@ -5081,6 +4130,10 @@ async function loadApi(
   const cached =
   loadCache_();
 
+  /*
+    Si cache disponible :
+    affichage immédiat.
+  */
   if(
     !forceFresh
     &&
@@ -5096,14 +4149,14 @@ async function loadApi(
 
     showStatus(
       "Synchronisation…",
-      "Mise à jour en cours."
+      "Mise à jour en arrière-plan."
     );
 
   }else{
 
     showStatus(
       "Chargement…",
-      "Récupération des événements et catégories."
+      "Récupération du planning."
     );
 
   }
@@ -5129,10 +4182,8 @@ async function loadApi(
     +
     (
       forceFresh
-        ?
-        "&nocache=1"
-        :
-        ""
+        ? "&nocache=1"
+        : ""
     )
     +
     `&callback=${cb1}`;
@@ -5142,21 +4193,18 @@ async function loadApi(
     +
     (
       forceFresh
-        ?
-        "&nocache=1"
-        :
-        ""
+        ? "&nocache=1"
+        : ""
     )
     +
     `&callback=${cb2}`;
 
-    const [
-      py,
-      pc
-    ] =
+    /*
+      Les deux requêtes partent en même temps.
+    */
+    const [py,pc] =
     await Promise.all(
       [
-
         jsonp(
           planningUrl,
           cb1
@@ -5166,14 +4214,11 @@ async function loadApi(
           catsUrl,
           cb2
         )
-
       ]
     );
 
     if(
-      py?.ok
-      ===
-      false
+      py?.ok === false
     ){
 
       throw new Error(
@@ -5185,9 +4230,7 @@ async function loadApi(
     }
 
     if(
-      pc?.ok
-      ===
-      false
+      pc?.ok === false
     ){
 
       throw new Error(
@@ -5203,12 +4246,10 @@ async function loadApi(
       pc
     );
 
-    saveCache_(
-      {
-        py,
-        pc
-      }
-    );
+    saveCache_({
+      py,
+      pc
+    });
 
     hideStatus();
 
@@ -5224,12 +4265,12 @@ async function loadApi(
 
       showStatus(
         "Hors ligne / lent",
-        "Les données affichées sont en cache."
+        "Les données affichées sont celles du cache."
       );
 
       setTimeout(
         hideStatus,
-        2500
+        2000
       );
 
       return;
@@ -5237,8 +4278,7 @@ async function loadApi(
     }
 
     categoriesRaw =
-    DEFAULT_CATEGORIES
-      .slice();
+    DEFAULT_CATEGORIES.slice();
 
     events =
     [];
@@ -5250,85 +4290,76 @@ async function loadApi(
     renderMonth();
 
     showStatus(
-      "API HS / lente",
-      "La légende reste, mais pas d’événements."
+      "API lente ou indisponible",
+      "Le calendrier reste accessible."
     );
 
   }
 
 }
 
-$("btnBack")
-  .addEventListener(
-    "click",
-    ()=>{
+$("btnBack").addEventListener(
+  "click",
+  ()=>{
 
-      location.href =
-      BACK_URL;
+    location.href =
+    BACK_URL;
 
-    }
-  );
+  }
+);
 
-$btnPrev
-  .addEventListener(
-    "click",
-    ()=>{
+$btnPrev.addEventListener(
+  "click",
+  ()=>{
 
-      if(
-        currentMonth
-        >
-        0
-      ){
+    if(
+      currentMonth > 0
+    ){
 
-        currentMonth--;
+      currentMonth--;
 
-        renderMonth();
-
-      }
+      renderMonth();
 
     }
-  );
 
-$btnNext
-  .addEventListener(
-    "click",
-    ()=>{
+  }
+);
 
-      if(
-        currentMonth
-        <
-        11
-      ){
+$btnNext.addEventListener(
+  "click",
+  ()=>{
 
-        currentMonth++;
+    if(
+      currentMonth < 11
+    ){
 
-        renderMonth();
+      currentMonth++;
 
-      }
+      renderMonth();
 
     }
-  );
 
-$btnLock
-  .addEventListener(
-    "click",
-    async ()=>{
+  }
+);
 
-      if(
-        !IS_ADMIN
-      ){
+$btnLock.addEventListener(
+  "click",
+  async ()=>{
 
-        return;
-
-      }
-
-      await setEditMode(
-        !EDIT_MODE
-      );
-
+    if(!IS_ADMIN){
+      return;
     }
-  );
 
+    await setEditMode(
+      !EDIT_MODE
+    );
+
+  }
+);
+
+/*
+  DÉMARRAGE OPTIMISÉ
+*/
 (async function(){
 
   EDIT_MODE =
@@ -5341,8 +4372,6 @@ $btnLock
 
   renderLegend();
 
-  initWheels();
-
   const now =
   new Date();
 
@@ -5350,44 +4379,42 @@ $btnLock
   now.getFullYear()
   ===
   PUBLIC_YEAR
-    ?
-    now.getMonth()
-    :
-    0;
+    ? now.getMonth()
+    : 0;
 
   renderMonth();
 
   /*
-    CONSULTATION NORMALE :
-    année en cours + année suivante.
+    Accessible immédiatement à tous :
+    2026 + 2027.
   */
   renderYearControl_();
 
-  await loadApi();
+  /*
+    IMPORTANT :
+    planning et contrôle admin démarrent
+    EN MÊME TEMPS.
+  */
+  const planningPromise =
+  loadApi();
 
-  try{
+  const rolePromise =
+  loadMyRole_()
+    .catch(
+      ()=>{
 
-    await loadMyRole_();
+        IS_ADMIN =
+        false;
 
-  }catch(e){
+      }
+    );
 
-    IS_ADMIN =
-    false;
+  await rolePromise;
 
-  }
-
-  if(
-    IS_ADMIN
-  ){
+  if(IS_ADMIN){
 
     $btnLock.style.display =
     "inline-block";
-
-    /*
-      Chargement des années supplémentaires
-      qui seront visibles seulement en mode édition.
-    */
-    await loadPlanningYears_();
 
   }else{
 
@@ -5397,10 +4424,13 @@ $btnLock
   }
 
   /*
-    On garde le menu public tant que
-    le cadenas n'est pas ouvert.
+    On ne charge PAS PlanningYears ici.
+    Il sera chargé uniquement si l'admin
+    ouvre le cadenas.
   */
   renderYearControl_();
+
+  await planningPromise;
 
 })();
 </script>
