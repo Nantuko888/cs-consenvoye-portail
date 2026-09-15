@@ -1,16 +1,12 @@
 <!doctype html>
 <html lang="fr">
-
 <head>
 <meta charset="utf-8">
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
 <title>Statistiques — CS Consenvoye</title>
 
 <style>
-
 :root{
   --txt:#f4f4f4;
   --muted:rgba(255,255,255,.70);
@@ -22,12 +18,9 @@
   --danger:#a72525;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
-html,
-body{
+html,body{
   min-height:100%;
 }
 
@@ -42,11 +35,7 @@ body{
   position:fixed;
   inset:0;
   background:
-    linear-gradient(
-      180deg,
-      rgba(0,0,0,.52),
-      rgba(0,0,0,.68)
-    ),
+    linear-gradient(180deg,rgba(0,0,0,.52),rgba(0,0,0,.68)),
     url("background.png") center top / cover no-repeat;
   z-index:-2;
 }
@@ -66,7 +55,6 @@ body{
 .wrap{
   max-width:980px;
   margin:0 auto;
-
   padding:
     calc(env(safe-area-inset-top) + 10px)
     12px
@@ -78,21 +66,16 @@ body{
   align-items:center;
   justify-content:space-between;
   gap:10px;
-
   padding:10px 12px;
-
   border-radius:18px;
-
   background:
     linear-gradient(
       180deg,
       rgba(212,106,0,.78),
       rgba(185,88,0,.58)
     );
-
   border:1px solid rgba(255,255,255,.12);
   box-shadow:var(--shadow);
-
   min-height:48px;
   margin-bottom:12px;
 }
@@ -116,13 +99,9 @@ body{
   border:1px solid rgba(255,255,255,.18);
   background:rgba(0,0,0,.20);
   color:#fff;
-
   padding:9px 12px;
-
   border-radius:14px;
-
   font-weight:900;
-
   cursor:pointer;
 }
 
@@ -153,30 +132,22 @@ body{
 .section{
   margin-bottom:14px;
   padding:12px;
-
   border-radius:22px;
-
   background:rgba(0,0,0,.35);
-
   border:1px solid var(--stroke);
-
   box-shadow:var(--shadow);
 }
 
 .sectionTitle{
   margin:0 0 10px 0;
-
   padding:10px 12px;
-
   border-radius:16px;
-
   background:
     linear-gradient(
       180deg,
       rgba(212,106,0,.65),
       rgba(185,88,0,.43)
     );
-
   font-size:18px;
   font-weight:950;
 }
@@ -184,9 +155,7 @@ body{
 .sectionSub{
   margin-top:-2px;
   margin-bottom:12px;
-
   color:var(--muted);
-
   font-size:13px;
   font-weight:700;
 }
@@ -214,19 +183,12 @@ body{
 .select,
 .input{
   width:100%;
-
   padding:11px 12px;
-
   border-radius:14px;
-
   border:1px solid rgba(255,255,255,.12);
-
   background:rgba(0,0,0,.30);
-
   color:#fff;
-
   outline:none;
-
   font-size:15px;
   font-weight:900;
 }
@@ -238,15 +200,10 @@ body{
 
 .empty{
   padding:18px 14px;
-
   text-align:center;
-
   border-radius:16px;
-
   background:rgba(255,255,255,.04);
-
   color:rgba(255,255,255,.68);
-
   font-weight:800;
 }
 
@@ -258,11 +215,8 @@ body{
 
 .captureCard{
   overflow:hidden;
-
   border-radius:18px;
-
   border:1px solid rgba(255,255,255,.10);
-
   background:rgba(0,0,0,.25);
 }
 
@@ -271,9 +225,7 @@ body{
   align-items:center;
   justify-content:space-between;
   gap:10px;
-
   padding:10px 12px;
-
   border-bottom:1px solid rgba(255,255,255,.08);
 }
 
@@ -321,12 +273,15 @@ body{
 
 .yearStat{
   padding:10px 12px;
-
   border-radius:15px;
-
   background:rgba(255,255,255,.05);
-
   border:1px solid rgba(255,255,255,.08);
+  transition:.18s;
+}
+
+.yearStat.removing{
+  opacity:0;
+  transform:scale(.96);
 }
 
 .yearStatInner{
@@ -359,18 +314,12 @@ body{
 
 .chartBox{
   position:relative;
-
   width:100%;
   height:300px;
-
   padding:8px;
-
   border-radius:18px;
-
   background:rgba(255,255,255,.04);
-
   border:1px solid rgba(255,255,255,.08);
-
   overflow:hidden;
 }
 
@@ -382,15 +331,10 @@ body{
 
 .adminPanel{
   display:none;
-
   margin-top:12px;
-
   padding:12px;
-
   border-radius:18px;
-
   border:1px dashed rgba(255,210,100,.45);
-
   background:rgba(125,75,0,.12);
 }
 
@@ -400,7 +344,6 @@ body{
 
 .adminPanelTitle{
   margin:0 0 10px 0;
-
   font-size:15px;
   font-weight:950;
   color:#ffd36a;
@@ -425,34 +368,22 @@ body{
 
 .status{
   position:fixed;
-
   left:12px;
   right:12px;
-
   bottom:calc(env(safe-area-inset-bottom) + 12px);
-
   display:none;
-
   z-index:300;
-
   text-align:center;
-
   pointer-events:none;
 }
 
 .statusPill{
   display:inline-block;
-
   padding:10px 14px;
-
   border-radius:16px;
-
   background:rgba(0,0,0,.86);
-
   border:1px solid rgba(255,255,255,.14);
-
   box-shadow:var(--shadow);
-
   font-weight:900;
 }
 
@@ -467,11 +398,8 @@ body{
 .overlay{
   position:fixed;
   inset:0;
-
   display:none;
-
   z-index:200;
-
   background:rgba(0,0,0,.68);
 }
 
@@ -481,24 +409,15 @@ body{
 
 .sheet{
   position:absolute;
-
   left:12px;
   right:12px;
-
   bottom:calc(env(safe-area-inset-bottom) + 12px);
-
   max-width:780px;
-
   margin:auto;
-
   padding:12px;
-
   border-radius:22px;
-
   background:#171717;
-
   border:1px solid rgba(255,255,255,.14);
-
   box-shadow:var(--shadow);
 }
 
@@ -507,7 +426,6 @@ body{
   justify-content:space-between;
   align-items:center;
   gap:10px;
-
   margin-bottom:12px;
 }
 
@@ -524,11 +442,8 @@ body{
 
 .previewBox{
   display:none;
-
   overflow:hidden;
-
   border-radius:16px;
-
   border:1px solid rgba(255,255,255,.10);
 }
 
@@ -565,7 +480,6 @@ body{
   }
 
 }
-
 </style>
 </head>
 
@@ -653,7 +567,6 @@ body{
 
     </div>
 
-
     <div
       id="capturesEmpty"
       class="empty">
@@ -662,12 +575,10 @@ body{
 
     </div>
 
-
     <div
       id="captureList"
       class="captureList">
     </div>
-
 
     <div
       id="captureAdminPanel"
@@ -705,7 +616,6 @@ body{
       Aucune donnée annuelle enregistrée.
 
     </div>
-
 
     <div
       id="annualContent"
@@ -747,14 +657,12 @@ body{
 
       </div>
 
-
       <div
         id="yearList"
         class="yearList">
       </div>
 
     </div>
-
 
     <div
       id="annualAdminPanel"
@@ -782,7 +690,6 @@ body{
 
         </div>
 
-
         <div class="fieldWrap">
 
           <label class="fieldLabel">
@@ -797,7 +704,6 @@ body{
             inputmode="numeric">
 
         </div>
-
 
         <button
           id="btnSaveAnnual"
@@ -824,7 +730,6 @@ body{
       Évolution du nombre d’interventions au fil des années.
     </div>
 
-
     <div
       id="chartEmpty"
       class="empty">
@@ -832,7 +737,6 @@ body{
       Le graphique apparaîtra dès que plusieurs années seront renseignées.
 
     </div>
-
 
     <div
       id="chartBox"
@@ -872,7 +776,6 @@ body{
 
     </div>
 
-
     <div class="sheetBody">
 
       <div class="adminCaptureGrid">
@@ -892,7 +795,6 @@ body{
             inputmode="numeric">
 
         </div>
-
 
         <div class="fieldWrap">
 
@@ -921,7 +823,6 @@ body{
 
         </div>
 
-
         <div class="fieldWrap full">
 
           <label class="fieldLabel">
@@ -935,7 +836,6 @@ body{
             placeholder="Ex. Statistiques générales">
 
         </div>
-
 
         <div class="fieldWrap full">
 
@@ -953,7 +853,6 @@ body{
 
       </div>
 
-
       <div
         id="previewBox"
         class="previewBox">
@@ -963,7 +862,6 @@ body{
           alt="Aperçu">
 
       </div>
-
 
       <div style="display:flex;justify-content:flex-end;gap:8px">
 
@@ -1019,7 +917,7 @@ const LS_ROLE =
 "cs_role_v1";
 
 const CACHE_KEY =
-"cs_statistiques_cache_v2";
+"cs_statistiques_cache_v3";
 
 const MONTHS = [
   "",
@@ -1046,14 +944,13 @@ String(
 ===
 "admin";
 
-let EDIT_MODE =
-false;
+let EDIT_MODE = false;
 
-let CAPTURES =
-[];
+let CAPTURES = [];
 
-let ANNUAL =
-[];
+let ANNUAL = [];
+
+let DELETE_ANNUAL_IN_PROGRESS = false;
 
 
 const $ =
@@ -1181,7 +1078,7 @@ function showStatus(
       $status.style.display =
       "none";
     },
-    1400
+    1200
   );
 
 }
@@ -1190,7 +1087,7 @@ function showStatus(
 function jsonp(
   url,
   cbName,
-  timeout=15000
+  timeout=20000
 ){
 
   return new Promise(
@@ -1204,9 +1101,18 @@ function jsonp(
         "script"
       );
 
+      let finished =
+      false;
+
       const timer =
       setTimeout(
         ()=>{
+
+          if(finished){
+            return;
+          }
+
+          finished = true;
 
           cleanup();
 
@@ -1233,6 +1139,12 @@ function jsonp(
       window[cbName] =
       data=>{
 
+        if(finished){
+          return;
+        }
+
+        finished = true;
+
         cleanup();
 
         resolve(data);
@@ -1241,6 +1153,12 @@ function jsonp(
 
       script.onerror =
       ()=>{
+
+        if(finished){
+          return;
+        }
+
+        finished = true;
 
         cleanup();
 
@@ -1265,10 +1183,9 @@ function jsonp(
       +
       Date.now();
 
-      document.head
-        .appendChild(
-          script
-        );
+      document.head.appendChild(
+        script
+      );
 
     }
   );
@@ -1524,7 +1441,9 @@ function renderPeriodSelectors(){
     opt.textContent =
     "Aucune donnée";
 
-    $yearSelect.appendChild(opt);
+    $yearSelect.appendChild(
+      opt
+    );
 
     $monthSelect.innerHTML =
     `<option value="">Aucune donnée</option>`;
@@ -1551,7 +1470,9 @@ function renderPeriodSelectors(){
     opt.textContent =
     String(year);
 
-    $yearSelect.appendChild(opt);
+    $yearSelect.appendChild(
+      opt
+    );
 
   }
 
@@ -1602,7 +1523,9 @@ function renderMonths(
     opt.textContent =
     MONTHS[month];
 
-    $monthSelect.appendChild(opt);
+    $monthSelect.appendChild(
+      opt
+    );
 
   }
 
@@ -1619,7 +1542,9 @@ function renderMonths(
     opt.textContent =
     "Aucun mois";
 
-    $monthSelect.appendChild(opt);
+    $monthSelect.appendChild(
+      opt
+    );
 
   }
 
@@ -1849,6 +1774,9 @@ function renderAnnual(){
     div.className =
     "yearStat";
 
+    div.dataset.year =
+    String(row.year);
+
     div.innerHTML =
     `
       <div class="yearStatInner">
@@ -1940,9 +1868,7 @@ function drawEvolution(){
       $canvas.getBoundingClientRect();
 
       const dpr =
-      window.devicePixelRatio
-      ||
-      1;
+      window.devicePixelRatio || 1;
 
       $canvas.width =
       Math.floor(
@@ -1981,31 +1907,16 @@ function drawEvolution(){
         H
       );
 
-      const left =
-      46;
-
-      const right =
-      16;
-
-      const top =
-      18;
-
-      const bottom =
-      38;
+      const left = 46;
+      const right = 16;
+      const top = 18;
+      const bottom = 38;
 
       const graphW =
-      W
-      -
-      left
-      -
-      right;
+      W-left-right;
 
       const graphH =
-      H
-      -
-      top
-      -
-      bottom;
+      H-top-bottom;
 
       const values =
       ANNUAL.map(
@@ -2013,14 +1924,10 @@ function drawEvolution(){
       );
 
       const minVal =
-      Math.min(
-        ...values
-      );
+      Math.min(...values);
 
       const maxVal =
-      Math.max(
-        ...values
-      );
+      Math.max(...values);
 
       const margin =
       Math.max(
@@ -2498,7 +2405,23 @@ async function deleteAnnualYear(
   year
 ){
 
-  if(!IS_ADMIN){
+  if(
+    !IS_ADMIN
+    ||
+    DELETE_ANNUAL_IN_PROGRESS
+  ){
+    return;
+  }
+
+  const original =
+  ANNUAL.find(
+    item=>
+      Number(item.year)
+      ===
+      Number(year)
+  );
+
+  if(!original){
     return;
   }
 
@@ -2510,6 +2433,67 @@ async function deleteAnnualYear(
     return;
   }
 
+
+  DELETE_ANNUAL_IN_PROGRESS =
+  true;
+
+
+  const backup =
+  {
+    year:Number(original.year),
+    interventions:Number(original.interventions)
+  };
+
+
+  const card =
+  $yearList.querySelector(
+    `[data-year="${year}"]`
+  );
+
+
+  if(card){
+    card.classList.add(
+      "removing"
+    );
+  }
+
+
+  await new Promise(
+    resolve=>
+      setTimeout(
+        resolve,
+        150
+      )
+  );
+
+
+  /*
+    SUPPRESSION IMMÉDIATE À L'ÉCRAN
+  */
+
+  ANNUAL =
+  ANNUAL.filter(
+    item=>
+      Number(item.year)
+      !==
+      Number(year)
+  );
+
+
+  saveLocalCache();
+
+  renderAnnual();
+
+  showStatus(
+    "Supprimé",
+    "danger"
+  );
+
+
+  /*
+    ENSUITE APPS SCRIPT TRAVAILLE DERRIÈRE
+  */
+
   const email =
   getEmail();
 
@@ -2519,6 +2503,7 @@ async function deleteAnnualYear(
   Math.random()
     .toString(36)
     .slice(2);
+
 
   try{
 
@@ -2535,9 +2520,10 @@ async function deleteAnnualYear(
 
       cb,
 
-      20000
+      30000
 
     );
+
 
     if(
       !res
@@ -2553,36 +2539,145 @@ async function deleteAnnualYear(
 
     }
 
-    ANNUAL =
-    ANNUAL.filter(
-      item=>
-        Number(item.year)
-        !==
-        Number(year)
-    );
 
-    saveLocalCache();
+    /*
+      TOUT EST BON.
+      ON GARDE L'ÉTAT ACTUEL.
+    */
 
-    renderAnnual();
-
-    showStatus(
-      `${year} supprimée`,
-      "danger"
-    );
 
   }catch(error){
 
-    alert(
-      "Erreur suppression : "
+    /*
+      SI TIMEOUT OU ERREUR :
+      ON RELIT LA SOURCE.
+
+      Si la suppression a finalement
+      bien eu lieu dans Sheets, on ne
+      remet surtout pas l'année.
+    */
+
+    let confirmedDeleted =
+    false;
+
+
+    try{
+
+      const checkCb =
+      "stats_check_"
       +
-      String(
-        error?.message
-        ||
-        error
-      )
-    );
+      Math.random()
+        .toString(36)
+        .slice(2);
+
+
+      const check =
+      await jsonp(
+
+        `${API}?view=statistiques_list`
+        +
+        `&callback=${checkCb}`,
+
+        checkCb,
+
+        30000
+
+      );
+
+
+      if(
+        check
+        &&
+        check.ok === true
+        &&
+        Array.isArray(
+          check.annual
+        )
+      ){
+
+        const exists =
+        check.annual.some(
+          item=>
+            Number(item.year)
+            ===
+            Number(year)
+        );
+
+
+        confirmedDeleted =
+        !exists;
+
+
+        if(confirmedDeleted){
+
+          ANNUAL =
+          check.annual;
+
+
+          CAPTURES =
+          Array.isArray(
+            check.captures
+          )
+            ?
+            check.captures
+            :
+            CAPTURES;
+
+
+          saveLocalCache();
+
+          renderAll();
+
+        }
+
+      }
+
+    }catch(checkError){}
+
+
+    if(
+      !confirmedDeleted
+    ){
+
+      /*
+        VRAIE ERREUR :
+        ON RESTAURE L'ANNÉE.
+      */
+
+      const alreadyThere =
+      ANNUAL.some(
+        item=>
+          Number(item.year)
+          ===
+          Number(year)
+      );
+
+
+      if(!alreadyThere){
+
+        ANNUAL.push(
+          backup
+        );
+
+      }
+
+
+      saveLocalCache();
+
+      renderAnnual();
+
+
+      alert(
+        "La suppression n'a pas pu être confirmée."
+      );
+
+    }
 
   }
+
+
+  DELETE_ANNUAL_IN_PROGRESS =
+  false;
 
 }
 
@@ -2692,7 +2787,7 @@ async function saveCapture(){
   alert(
     "La partie image est prête. "
     +
-    "On branchera maintenant l'envoi réel vers Google Drive."
+    "Il reste à brancher l'envoi vers Google Drive."
   );
 
 }
@@ -2718,6 +2813,38 @@ async function deleteCapture(
     return;
   }
 
+  const backup =
+  CAPTURES.find(
+    item=>
+      String(item.id)
+      ===
+      String(id)
+  );
+
+
+  /*
+    SUPPRESSION VISUELLE IMMÉDIATE
+  */
+
+  CAPTURES =
+  CAPTURES.filter(
+    item=>
+      String(item.id)
+      !==
+      String(id)
+  );
+
+
+  saveLocalCache();
+
+  renderPeriodSelectors();
+
+  showStatus(
+    "Supprimé",
+    "danger"
+  );
+
+
   const email =
   getEmail();
 
@@ -2727,6 +2854,7 @@ async function deleteCapture(
   Math.random()
     .toString(36)
     .slice(2);
+
 
   try{
 
@@ -2743,9 +2871,10 @@ async function deleteCapture(
 
       cb,
 
-      20000
+      30000
 
     );
+
 
     if(
       !res
@@ -2761,34 +2890,89 @@ async function deleteCapture(
 
     }
 
-    CAPTURES =
-    CAPTURES.filter(
-      item=>
-        String(item.id)
-        !==
-        String(id)
-    );
-
-    saveLocalCache();
-
-    renderPeriodSelectors();
-
-    showStatus(
-      "Capture supprimée",
-      "danger"
-    );
 
   }catch(error){
 
-    alert(
-      "Erreur suppression : "
+    /*
+      À ce stade on restaurera
+      seulement si la suppression
+      n'est vraiment pas confirmée.
+    */
+
+    let confirmedDeleted =
+    false;
+
+
+    try{
+
+      const checkCb =
+      "stats_capture_check_"
       +
-      String(
-        error?.message
-        ||
-        error
-      )
-    );
+      Math.random()
+        .toString(36)
+        .slice(2);
+
+
+      const check =
+      await jsonp(
+
+        `${API}?view=statistiques_list`
+        +
+        `&callback=${checkCb}`,
+
+        checkCb,
+
+        30000
+
+      );
+
+
+      if(
+        check
+        &&
+        check.ok === true
+        &&
+        Array.isArray(
+          check.captures
+        )
+      ){
+
+        const exists =
+        check.captures.some(
+          item=>
+            String(item.id)
+            ===
+            String(id)
+        );
+
+
+        confirmedDeleted =
+        !exists;
+
+      }
+
+    }catch(checkError){}
+
+
+    if(
+      !confirmedDeleted
+      &&
+      backup
+    ){
+
+      CAPTURES.push(
+        backup
+      );
+
+      saveLocalCache();
+
+      renderPeriodSelectors();
+
+      alert(
+        "La suppression de la capture n'a pas pu être confirmée."
+      );
+
+    }
 
   }
 
