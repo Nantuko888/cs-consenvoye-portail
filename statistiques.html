@@ -15,45 +15,25 @@
 <style>
 
 :root{
-
   --txt:#f4f4f4;
-
-  --muted:
-    rgba(255,255,255,.65);
-
-  --stroke:
-    rgba(255,255,255,.10);
-
-  --panel:
-    rgba(12,12,12,.78);
-
+  --muted:rgba(255,255,255,.65);
+  --stroke:rgba(255,255,255,.10);
+  --panel:rgba(12,12,12,.78);
   --orange:#d46a00;
-
   --orange2:#9f4f00;
-
   --green:#168039;
-
   --red:#a71f1f;
-
-  --shadow:
-    0 14px 34px
-    rgba(0,0,0,.45);
-
+  --shadow:0 14px 34px rgba(0,0,0,.45);
 }
-
 
 *{
   box-sizing:border-box;
 }
 
-
 html,
 body{
-
   margin:0;
-
   min-height:100%;
-
   font-family:
     system-ui,
     -apple-system,
@@ -61,21 +41,15 @@ body{
     Roboto,
     Arial,
     sans-serif;
-
   color:var(--txt);
-
   background:#080808;
-
 }
 
-
 body{
-
   padding:
     calc(env(safe-area-inset-top) + 12px)
     12px
     calc(env(safe-area-inset-bottom) + 24px);
-
 }
 
 
@@ -84,45 +58,33 @@ body{
 ========================================================= */
 
 .bg{
-
   position:fixed;
-
   inset:0;
-
   z-index:-2;
 
   background:
-
     linear-gradient(
       180deg,
       rgba(0,0,0,.55),
       rgba(0,0,0,.70)
     ),
-
     url("background.png")
       center top /
       cover
       no-repeat;
-
 }
 
-
 .bg::after{
-
   content:"";
-
   position:absolute;
-
   inset:0;
 
   background:
-
     radial-gradient(
       circle at 50% 5%,
       rgba(255,135,0,.12),
       transparent 50%
     );
-
 }
 
 
@@ -131,13 +93,9 @@ body{
 ========================================================= */
 
 .wrap{
-
   width:100%;
-
   max-width:900px;
-
   margin:0 auto;
-
 }
 
 
@@ -146,81 +104,53 @@ body{
 ========================================================= */
 
 .topbar{
-
   display:flex;
-
   align-items:center;
-
-  justify-content:
-    space-between;
-
+  justify-content:space-between;
   gap:12px;
 
   padding:18px 22px;
-
   margin-bottom:20px;
 
   border-radius:26px;
 
   background:
-
     linear-gradient(
       180deg,
       rgba(212,106,0,.76),
       rgba(120,55,0,.66)
     );
 
-  border:
-    1px solid
-    rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.14);
 
-  box-shadow:
-    var(--shadow);
+  box-shadow:var(--shadow);
 
-  backdrop-filter:
-    blur(10px);
-
+  backdrop-filter:blur(10px);
 }
 
-
 .pageTitle{
-
   margin:0;
 
   font-size:22px;
-
   font-weight:950;
-
   letter-spacing:.4px;
-
   text-transform:uppercase;
-
 }
-
 
 .topActions{
-
   display:flex;
-
   gap:8px;
-
   align-items:center;
-
 }
 
-
 .btn{
-
   border:0;
-
   border-radius:17px;
 
   padding:12px 18px;
 
   font-family:inherit;
-
   font-size:16px;
-
   font-weight:900;
 
   color:white;
@@ -233,40 +163,113 @@ body{
     rgba(255,255,255,.10);
 
   cursor:pointer;
-
 }
-
 
 .btn:active{
-
-  transform:
-    scale(.98);
-
+  transform:scale(.98);
 }
 
-
 .lockBtn{
-
   width:58px;
-
   height:54px;
 
   padding:0;
 
   font-size:23px;
-
 }
 
 
 /* =========================================================
-   PANNEAUX
+   CHARGEMENT
 ========================================================= */
 
-.panel{
+.loading{
+  display:none;
+
+  padding:14px;
+  margin-bottom:16px;
+
+  border-radius:18px;
+
+  text-align:center;
+
+  background:
+    rgba(0,0,0,.55);
+
+  color:
+    rgba(255,255,255,.75);
+
+  font-weight:850;
+}
+
+.loading.show{
+  display:block;
+}
+
+
+/* =========================================================
+   ADMIN
+========================================================= */
+
+.adminPanel{
+  display:none;
 
   margin-bottom:18px;
+  padding:20px;
 
-  padding:22px;
+  border-radius:26px;
+
+  background:
+    rgba(76,38,0,.62);
+
+  border:
+    1px solid
+    rgba(255,147,38,.25);
+
+  box-shadow:var(--shadow);
+}
+
+.adminPanel.show{
+  display:block;
+}
+
+.adminTitle{
+  margin-bottom:14px;
+
+  font-size:19px;
+  font-weight:950;
+}
+
+.adminButtons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.adminButtons .btn{
+  background:
+    rgba(212,106,0,.85);
+}
+
+.btnGreen{
+  background:
+    var(--green)
+    !important;
+}
+
+.btnRed{
+  background:
+    var(--red)
+    !important;
+}
+
+
+/* =========================================================
+   ACCORDÉONS
+========================================================= */
+
+.accordion{
+  margin-bottom:18px;
 
   border-radius:28px;
 
@@ -283,46 +286,83 @@ body{
   backdrop-filter:
     blur(10px);
 
+  overflow:hidden;
 }
 
+.accordionHeader{
+  width:100%;
 
-.sectionTitle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
 
-  margin:
-    0 0 18px;
+  padding:18px 22px;
 
-  padding:
-    15px 20px;
+  border:0;
 
-  border-radius:22px;
+  color:#fff;
 
   background:
-
     linear-gradient(
       180deg,
-      rgba(170,79,0,.78),
-      rgba(105,48,0,.64)
+      rgba(212,106,0,.76),
+      rgba(120,55,0,.66)
     );
+
+  font-family:inherit;
+  font-size:22px;
+  font-weight:950;
+
+  text-align:left;
+
+  cursor:pointer;
+}
+
+.accordionHeader:active{
+  filter:brightness(.92);
+}
+
+.accordionArrow{
+  flex:0 0 auto;
 
   font-size:22px;
 
-  font-weight:950;
+  transition:
+    transform .25s ease;
+}
 
+.accordion.open
+.accordionArrow{
+  transform:
+    rotate(180deg);
+}
+
+.accordionContent{
+  display:none;
+
+  padding:20px;
+}
+
+.accordion.open
+.accordionContent{
+  display:block;
 }
 
 
-.intro{
+/* =========================================================
+   TEXTES
+========================================================= */
 
+.intro{
   margin:
-    -2px 0 20px;
+    0 0 20px;
 
   color:
     var(--muted);
 
   font-size:16px;
-
   font-weight:700;
-
 }
 
 
@@ -331,7 +371,6 @@ body{
 ========================================================= */
 
 .selectGrid{
-
   display:grid;
 
   grid-template-columns:
@@ -340,12 +379,9 @@ body{
   gap:16px;
 
   margin-bottom:20px;
-
 }
 
-
 .fieldLabel{
-
   display:block;
 
   margin-bottom:8px;
@@ -354,17 +390,13 @@ body{
     rgba(255,255,255,.65);
 
   font-size:13px;
-
   font-weight:950;
 
   text-transform:uppercase;
-
 }
-
 
 select,
 input{
-
   width:100%;
 
   padding:
@@ -382,22 +414,15 @@ input{
   color:white;
 
   font-family:inherit;
-
   font-size:17px;
-
   font-weight:850;
 
   outline:none;
-
 }
 
-
 select option{
-
   color:#111;
-
   background:white;
-
 }
 
 
@@ -406,7 +431,6 @@ select option{
 ========================================================= */
 
 .captureCard{
-
   position:relative;
 
   overflow:hidden;
@@ -421,48 +445,34 @@ select option{
   border:
     1px solid
     rgba(255,255,255,.10);
-
 }
 
-
 .captureTitle{
-
   padding:
     14px 18px;
 
   font-size:20px;
-
   font-weight:950;
-
 }
 
-
 .captureImage{
-
   display:block;
 
   width:100%;
-
   height:auto;
 
   background:#fff;
-
 }
 
-
 .captureActions{
-
   display:flex;
 
   justify-content:flex-end;
 
   padding:12px;
-
 }
 
-
 .deleteBtn{
-
   border:0;
 
   border-radius:14px;
@@ -476,14 +486,10 @@ select option{
   color:white;
 
   font-weight:900;
-
   font-family:inherit;
-
 }
 
-
 .empty{
-
   padding:
     28px 12px;
 
@@ -493,97 +499,15 @@ select option{
     rgba(255,255,255,.48);
 
   font-size:17px;
-
   font-weight:750;
-
 }
 
 
 /* =========================================================
-   ADMIN
-========================================================= */
-
-.adminPanel{
-
-  display:none;
-
-  margin-bottom:18px;
-
-  padding:20px;
-
-  border-radius:26px;
-
-  background:
-    rgba(76,38,0,.62);
-
-  border:
-    1px solid
-    rgba(255,147,38,.25);
-
-}
-
-
-.adminPanel.show{
-
-  display:block;
-
-}
-
-
-.adminTitle{
-
-  margin-bottom:14px;
-
-  font-size:19px;
-
-  font-weight:950;
-
-}
-
-
-.adminButtons{
-
-  display:flex;
-
-  flex-wrap:wrap;
-
-  gap:10px;
-
-}
-
-
-.adminButtons .btn{
-
-  background:
-    rgba(212,106,0,.85);
-
-}
-
-
-.btnGreen{
-
-  background:
-    var(--green)
-    !important;
-
-}
-
-
-.btnRed{
-
-  background:
-    var(--red)
-    !important;
-
-}
-
-
-/* =========================================================
-   ANNUEL
+   ACTIVITÉ ANNUELLE
 ========================================================= */
 
 .annualRow{
-
   display:flex;
 
   align-items:center;
@@ -602,34 +526,22 @@ select option{
 
   background:
     rgba(255,255,255,.055);
-
 }
-
 
 .annualYear{
-
   font-size:18px;
-
   font-weight:950;
-
 }
-
 
 .annualValue{
-
   font-size:20px;
-
   font-weight:950;
-
 }
 
-
 .annualDelete{
-
   border:0;
 
   width:38px;
-
   height:38px;
 
   border-radius:12px;
@@ -640,9 +552,7 @@ select option{
   color:white;
 
   font-size:17px;
-
   font-weight:900;
-
 }
 
 
@@ -651,7 +561,6 @@ select option{
 ========================================================= */
 
 .chartBox{
-
   margin-top:20px;
 
   padding:12px;
@@ -662,30 +571,21 @@ select option{
     rgba(0,0,0,.38);
 
   overflow:hidden;
-
 }
 
-
 .chartTitle{
-
   margin:
     4px 6px 10px;
 
   font-size:18px;
-
   font-weight:950;
-
 }
 
-
 .chartSvg{
-
   display:block;
 
   width:100%;
-
   height:auto;
-
 }
 
 
@@ -694,7 +594,6 @@ select option{
 ========================================================= */
 
 .annualForm{
-
   display:grid;
 
   grid-template-columns:
@@ -703,15 +602,11 @@ select option{
   gap:10px;
 
   margin-top:16px;
-
 }
 
-
 .annualForm button{
-
   grid-column:
     1 / -1;
-
 }
 
 
@@ -720,7 +615,6 @@ select option{
 ========================================================= */
 
 .uploadOverlay{
-
   display:none;
 
   position:fixed;
@@ -736,21 +630,15 @@ select option{
 
   background:
     rgba(0,0,0,.90);
-
 }
 
-
 .uploadOverlay.show{
-
   display:flex;
 
   flex-direction:column;
-
 }
 
-
 .uploadTop{
-
   display:flex;
 
   align-items:center;
@@ -761,21 +649,14 @@ select option{
   gap:10px;
 
   padding:10px 4px;
-
 }
-
 
 .uploadTitle{
-
   font-size:19px;
-
   font-weight:950;
-
 }
 
-
 .uploadWindow{
-
   flex:1;
 
   min-height:0;
@@ -789,57 +670,17 @@ select option{
   border:
     1px solid
     rgba(255,255,255,.12);
-
 }
 
-
 .uploadFrame{
-
   display:block;
 
   width:100%;
-
   height:100%;
 
   border:0;
 
   background:#151515;
-
-}
-
-
-/* =========================================================
-   CHARGEMENT PAGE
-========================================================= */
-
-.loading{
-
-  display:none;
-
-  padding:
-    14px;
-
-  margin-bottom:16px;
-
-  border-radius:18px;
-
-  text-align:center;
-
-  background:
-    rgba(0,0,0,.55);
-
-  color:
-    rgba(255,255,255,.75);
-
-  font-weight:850;
-
-}
-
-
-.loading.show{
-
-  display:block;
-
 }
 
 
@@ -850,47 +691,32 @@ select option{
 @media(max-width:600px){
 
   body{
-
     padding-left:10px;
-
     padding-right:10px;
-
   }
-
 
   .topbar{
-
     padding:
       16px 18px;
-
   }
-
 
   .pageTitle{
-
     font-size:20px;
-
   }
 
+  .accordionHeader{
+    padding:
+      17px 18px;
 
-  .panel{
+    font-size:20px;
+  }
 
+  .accordionContent{
     padding:16px;
-
   }
-
-
-  .sectionTitle{
-
-    font-size:20px;
-
-  }
-
 
   .selectGrid{
-
     gap:10px;
-
   }
 
 }
@@ -1005,7 +831,7 @@ select option{
         class="btn btnGreen"
         type="button">
 
-        Enregistrer le bilan annuel
+        Enregistrer l’activité annuelle
 
       </button>
 
@@ -1019,60 +845,84 @@ select option{
        STATISTIQUES MENSUELLES
   ====================================================== -->
 
-  <section class="panel">
+  <section
+    id="monthlyAccordion"
+    class="accordion">
 
 
-    <h2 class="sectionTitle">
-      Statistiques mensuelles
-    </h2>
+    <button
+      id="monthlyHeader"
+      class="accordionHeader"
+      type="button"
+      aria-expanded="false">
 
 
-    <p class="intro">
-      Sélectionnez une année puis un mois.
-    </p>
+      <span>
+        Statistiques mensuelles
+      </span>
 
 
-    <div class="selectGrid">
+      <span class="accordionArrow">
+        ▼
+      </span>
 
 
-      <div>
-
-        <label
-          class="fieldLabel"
-          for="yearSelect">
-
-          Année
-
-        </label>
+    </button>
 
 
-        <select id="yearSelect">
-        </select>
+    <div
+      class="accordionContent">
+
+
+      <p class="intro">
+        Sélectionnez une année puis un mois.
+      </p>
+
+
+      <div class="selectGrid">
+
+
+        <div>
+
+          <label
+            class="fieldLabel"
+            for="yearSelect">
+
+            Année
+
+          </label>
+
+
+          <select id="yearSelect">
+          </select>
+
+        </div>
+
+
+        <div>
+
+          <label
+            class="fieldLabel"
+            for="monthSelect">
+
+            Mois
+
+          </label>
+
+
+          <select id="monthSelect">
+          </select>
+
+        </div>
+
 
       </div>
 
 
-      <div>
-
-        <label
-          class="fieldLabel"
-          for="monthSelect">
-
-          Mois
-
-        </label>
-
-
-        <select id="monthSelect">
-        </select>
-
+      <div id="capturesContainer">
       </div>
 
 
-    </div>
-
-
-    <div id="capturesContainer">
     </div>
 
 
@@ -1080,39 +930,63 @@ select option{
 
 
   <!-- =====================================================
-       ANNUEL
+       ACTIVITÉ ANNUELLE
   ====================================================== -->
 
-  <section class="panel">
+  <section
+    id="annualAccordion"
+    class="accordion">
 
 
-    <h2 class="sectionTitle">
-      Nombre d’interventions
-    </h2>
+    <button
+      id="annualHeader"
+      class="accordionHeader"
+      type="button"
+      aria-expanded="false">
 
 
-    <div id="annualContainer">
-    </div>
+      <span>
+        Activité annuelle
+      </span>
+
+
+      <span class="accordionArrow">
+        ▼
+      </span>
+
+
+    </button>
 
 
     <div
-      id="chartBox"
-      class="chartBox"
-      style="display:none;">
+      class="accordionContent">
 
 
-      <div class="chartTitle">
-        Évolution de l’activité
+      <div id="annualContainer">
       </div>
 
 
-      <svg
-        id="chartSvg"
-        class="chartSvg"
-        viewBox="0 0 700 300"
-        preserveAspectRatio="xMidYMid meet">
+      <div
+        id="chartBox"
+        class="chartBox"
+        style="display:none;">
 
-      </svg>
+
+        <div class="chartTitle">
+          Évolution de l’activité
+        </div>
+
+
+        <svg
+          id="chartSvg"
+          class="chartSvg"
+          viewBox="0 0 700 300"
+          preserveAspectRatio="xMidYMid meet">
+
+        </svg>
+
+
+      </div>
 
 
     </div>
@@ -1232,6 +1106,47 @@ let ADMIN_OPEN = false;
 
 
 /* =========================================================
+   ACCORDÉONS
+========================================================= */
+
+function toggleAccordion(
+  accordionId,
+  headerId
+){
+
+  const accordion =
+    $(
+      accordionId
+    );
+
+
+  const header =
+    $(
+      headerId
+    );
+
+
+  const isOpen =
+    accordion
+      .classList
+      .toggle(
+        "open"
+      );
+
+
+  header.setAttribute(
+    "aria-expanded",
+    isOpen
+      ?
+      "true"
+      :
+      "false"
+  );
+
+}
+
+
+/* =========================================================
    IDENTITÉ
 ========================================================= */
 
@@ -1324,7 +1239,9 @@ function jsonp(
           return;
         }
 
-        finished = true;
+        finished =
+          true;
+
 
         clearTimeout(
           timeout
@@ -1879,15 +1796,6 @@ function captureTitle(
     .trim();
 
 
-  /*
-    Google Sheets peut parfois
-    transformer "Août 2026"
-    en vraie date.
-
-    Dans ce cas on réaffiche
-    simplement le mois + année.
-  */
-
   if(
     !value
     ||
@@ -2126,16 +2034,14 @@ function renderCaptures(){
 
 
 /* =========================================================
-   ADMIN CAPTURE
+   SUPPRESSION CAPTURE
 ========================================================= */
 
 async function deleteCapture(
   id
 ){
 
-  if(
-    !id
-  ){
+  if(!id){
     return;
   }
 
@@ -2148,11 +2054,6 @@ async function deleteCapture(
     return;
   }
 
-
-  /*
-    Suppression immédiate
-    à l'écran.
-  */
 
   STATS.captures =
     STATS.captures.filter(
@@ -2228,7 +2129,7 @@ async function deleteCapture(
 
 
 /* =========================================================
-   ANNUEL
+   ACTIVITÉ ANNUELLE
 ========================================================= */
 
 function normalizeAnnual(){
@@ -2428,7 +2329,7 @@ function renderAnnual(){
 
 
 /* =========================================================
-   AJOUT / MODIFICATION ANNUEL
+   AJOUT / MODIFICATION ACTIVITÉ ANNUELLE
 ========================================================= */
 
 async function saveAnnual(){
@@ -2542,7 +2443,7 @@ async function saveAnnual(){
 
 
 /* =========================================================
-   SUPPRESSION ANNUEL
+   SUPPRESSION ACTIVITÉ ANNUELLE
 ========================================================= */
 
 async function deleteAnnual(
@@ -2551,7 +2452,7 @@ async function deleteAnnual(
 
   if(
     !confirm(
-      "Supprimer les statistiques annuelles "
+      "Supprimer l’activité annuelle "
       +
       year
       +
@@ -2561,10 +2462,6 @@ async function deleteAnnual(
     return;
   }
 
-
-  /*
-    Disparition immédiate.
-  */
 
   STATS.annual =
     STATS.annual.filter(
@@ -2715,10 +2612,6 @@ function renderChart(
     );
 
 
-  const minValue =
-    0;
-
-
   function xAt(index){
 
     if(
@@ -2759,19 +2652,9 @@ function renderChart(
       chartH
       -
       (
-        (
-          value
-          -
-          minValue
-        )
+        value
         /
-        (
-          maxValue
-          -
-          minValue
-          ||
-          1
-        )
+        maxValue
       )
       *
       chartH
@@ -2779,10 +2662,6 @@ function renderChart(
 
   }
 
-
-  /*
-    Grilles
-  */
 
   for(
     let i=0;
@@ -2851,10 +2730,6 @@ function renderChart(
 
   }
 
-
-  /*
-    Ligne
-  */
 
   const points =
     list.map(
@@ -2927,10 +2802,6 @@ function renderChart(
     polyline
   );
 
-
-  /*
-    Points + textes
-  */
 
   list.forEach(
     function(
@@ -3126,9 +2997,7 @@ function openUpload(){
     );
 
 
-  if(
-    !year
-  ){
+  if(!year){
 
     year =
       new Date()
@@ -3137,9 +3006,7 @@ function openUpload(){
   }
 
 
-  if(
-    !month
-  ){
+  if(!month){
 
     month =
       new Date()
@@ -3217,7 +3084,7 @@ function closeUpload(){
 
 
 /* =========================================================
-   MESSAGE REÇU DE L'IFRAME
+   RETOUR APRÈS IMPORT
 ========================================================= */
 
 window.addEventListener(
@@ -3228,21 +3095,11 @@ window.addEventListener(
       event.data || {};
 
 
-    /*
-      L'enregistrement vient
-      de réussir côté Apps Script.
-    */
-
     if(
       data.type
       ===
       "stats-upload-success"
     ){
-
-      /*
-        On récupère immédiatement
-        les nouvelles données.
-      */
 
       loadStats(
         true
@@ -3250,11 +3107,6 @@ window.addEventListener(
 
     }
 
-
-    /*
-      L'iframe demande sa fermeture
-      après affichage du 100 %.
-    */
 
     if(
       data.type
@@ -3264,12 +3116,6 @@ window.addEventListener(
 
       closeUpload();
 
-
-      /*
-        Deuxième recharge très courte
-        pour garantir que la ligne
-        Sheets soit bien visible.
-      */
 
       setTimeout(
         function(){
@@ -3403,6 +3249,30 @@ $("saveAnnualBtn")
     saveAnnual;
 
 
+$("monthlyHeader")
+  .onclick =
+    function(){
+
+      toggleAccordion(
+        "monthlyAccordion",
+        "monthlyHeader"
+      );
+
+    };
+
+
+$("annualHeader")
+  .onclick =
+    function(){
+
+      toggleAccordion(
+        "annualAccordion",
+        "annualHeader"
+      );
+
+    };
+
+
 $("yearSelect")
   .addEventListener(
     "change",
@@ -3439,6 +3309,26 @@ async function init(){
     "admin";
 
 
+  /*
+    Les deux rubriques restent
+    volontairement repliées
+    au démarrage.
+  */
+
+  $("monthlyAccordion")
+    .classList
+    .remove(
+      "open"
+    );
+
+
+  $("annualAccordion")
+    .classList
+    .remove(
+      "open"
+    );
+
+
   updateAdminUi();
 
 
@@ -3452,7 +3342,6 @@ async function init(){
 init();
 
 </script>
-
 
 </body>
 
