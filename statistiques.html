@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="fr">
 
 <head>
@@ -42,14 +43,12 @@ body{
 .bg{
   position:fixed;
   inset:0;
-
   background:
     linear-gradient(
       rgba(0,0,0,.52),
       rgba(0,0,0,.72)
     ),
     url("background.png") center / cover no-repeat;
-
   z-index:-1;
 }
 
@@ -82,7 +81,6 @@ body{
     );
 
   border:1px solid var(--stroke);
-
   box-shadow:var(--shadow);
 }
 
@@ -101,9 +99,7 @@ body{
 
 .btn{
   border:1px solid rgba(255,255,255,.15);
-
   background:rgba(0,0,0,.25);
-
   color:white;
 
   border-radius:14px;
@@ -125,10 +121,6 @@ body{
   background:var(--danger);
 }
 
-.btn:disabled{
-  opacity:.5;
-}
-
 .editLabel{
   display:none;
   font-size:11px;
@@ -138,7 +130,6 @@ body{
 
 .section{
   margin-bottom:14px;
-
   padding:12px;
 
   border-radius:22px;
@@ -146,7 +137,6 @@ body{
   background:rgba(0,0,0,.40);
 
   border:1px solid var(--stroke);
-
   box-shadow:var(--shadow);
 }
 
@@ -198,7 +188,6 @@ label{
 input,
 select{
   width:100%;
-
   padding:12px;
 
   border-radius:14px;
@@ -219,7 +208,6 @@ select option{
 
 .empty{
   padding:18px 12px;
-
   text-align:center;
 
   border-radius:16px;
@@ -335,7 +323,6 @@ select option{
 .latest{
   display:flex;
   justify-content:space-between;
-
   margin-bottom:12px;
 }
 
@@ -367,126 +354,53 @@ canvas{
   height:100%;
 }
 
-.overlay{
+.uploadOverlay{
   display:none;
 
   position:fixed;
   inset:0;
 
-  z-index:100;
+  z-index:500;
 
-  background:rgba(0,0,0,.72);
+  background:rgba(0,0,0,.78);
+
+  padding:
+    calc(env(safe-area-inset-top) + 12px)
+    12px
+    calc(env(safe-area-inset-bottom) + 12px);
 }
 
-.overlay.show{
+.uploadOverlay.show{
   display:block;
 }
 
-.sheet{
-  position:absolute;
+.uploadWindow{
+  position:relative;
 
-  left:12px;
-  right:12px;
-  bottom:12px;
-
+  width:100%;
   max-width:760px;
-  max-height:94vh;
+  height:100%;
 
   margin:auto;
-  padding:14px;
 
-  overflow:auto;
+  overflow:hidden;
 
   border-radius:22px;
 
   background:#151515;
 
-  border:1px solid rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.14);
+
+  box-shadow:var(--shadow);
 }
 
-.sheetHead{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-
-  margin-bottom:14px;
-}
-
-.sheetTitle{
-  font-size:18px;
-  font-weight:950;
-}
-
-.formGrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.full{
-  grid-column:1/-1;
-}
-
-.preview{
-  display:none;
-
-  margin-top:12px;
-
-  border-radius:16px;
-
-  overflow:hidden;
-
-  border:1px solid rgba(255,255,255,.10);
-}
-
-.preview img{
-  display:block;
+.uploadFrame{
   width:100%;
-}
-
-.uploadBox{
-  display:none;
-
-  margin-top:12px;
-
-  padding:12px;
-
-  border-radius:15px;
-
-  background:rgba(22,128,57,.14);
-
-  border:1px solid rgba(80,220,120,.30);
-}
-
-.progressOuter{
-  height:9px;
-
-  margin-top:8px;
-
-  overflow:hidden;
-
-  border-radius:20px;
-
-  background:rgba(255,255,255,.10);
-}
-
-.progressInner{
   height:100%;
-  width:0%;
 
-  border-radius:20px;
+  border:0;
 
-  background:#2ab85a;
-
-  transition:width .15s;
-}
-
-.formButtons{
-  display:flex;
-  justify-content:flex-end;
-  gap:8px;
-
-  margin-top:12px;
+  background:#151515;
 }
 
 .status{
@@ -498,7 +412,7 @@ canvas{
   right:12px;
   bottom:16px;
 
-  z-index:300;
+  z-index:700;
 
   text-align:center;
 }
@@ -527,23 +441,17 @@ canvas{
     grid-column:1/-1;
   }
 
-  .formGrid{
-    grid-template-columns:1fr;
-  }
-
-  .full{
-    grid-column:auto;
-  }
-
 }
 
 </style>
 
 </head>
 
+
 <body>
 
 <div class="bg"></div>
+
 
 <div class="wrap">
 
@@ -603,6 +511,7 @@ canvas{
 
     </div>
 
+
     <div class="field">
 
       <label>
@@ -640,7 +549,9 @@ canvas{
     <button
       id="addCapture"
       class="btn primary">
+
       ＋ Ajouter une capture
+
     </button>
 
   </div>
@@ -660,13 +571,16 @@ canvas{
   <div
     id="annualEmpty"
     class="empty">
+
     Aucune donnée annuelle enregistrée.
+
   </div>
 
 
   <div
     id="annualContent"
     style="display:none">
+
 
     <div class="latest">
 
@@ -683,6 +597,7 @@ canvas{
         </div>
 
       </div>
+
 
       <div style="text-align:right">
 
@@ -749,7 +664,9 @@ canvas{
       <button
         id="saveAnnual"
         class="btn success">
+
         Enregistrer
+
       </button>
 
     </div>
@@ -769,11 +686,15 @@ canvas{
     Évolution du nombre d’interventions au fil des années.
   </div>
 
+
   <div
     id="chartEmpty"
     class="empty">
+
     Le graphique apparaîtra avec plusieurs années.
+
   </div>
+
 
   <div
     id="chartBox"
@@ -791,143 +712,15 @@ canvas{
 
 
 <div
-  id="overlay"
-  class="overlay">
+  id="uploadOverlay"
+  class="uploadOverlay">
 
-  <div class="sheet">
+  <div class="uploadWindow">
 
-
-    <div class="sheetHead">
-
-      <div class="sheetTitle">
-        Ajouter une capture
-      </div>
-
-      <button
-        id="closeForm"
-        class="btn">
-        ✕
-      </button>
-
-    </div>
-
-
-    <div class="formGrid">
-
-      <div class="field">
-
-        <label>
-          Année
-        </label>
-
-        <input
-          id="captureYear"
-          type="number">
-
-      </div>
-
-
-      <div class="field">
-
-        <label>
-          Mois
-        </label>
-
-        <select id="captureMonth">
-
-          <option value="1">Janvier</option>
-          <option value="2">Février</option>
-          <option value="3">Mars</option>
-          <option value="4">Avril</option>
-          <option value="5">Mai</option>
-          <option value="6">Juin</option>
-          <option value="7">Juillet</option>
-          <option value="8">Août</option>
-          <option value="9">Septembre</option>
-          <option value="10">Octobre</option>
-          <option value="11">Novembre</option>
-          <option value="12">Décembre</option>
-
-        </select>
-
-      </div>
-
-
-      <div class="field full">
-
-        <label>
-          Titre
-        </label>
-
-        <input
-          id="captureTitle"
-          type="text">
-
-      </div>
-
-
-      <div class="field full">
-
-        <label>
-          Image
-        </label>
-
-        <input
-          id="captureFile"
-          type="file"
-          accept="image/*">
-
-      </div>
-
-    </div>
-
-
-    <div
-      id="preview"
-      class="preview">
-
-      <img
-        id="previewImg"
-        alt="Aperçu">
-
-    </div>
-
-
-    <div
-      id="uploadBox"
-      class="uploadBox">
-
-      <div id="uploadText">
-        Préparation…
-      </div>
-
-      <div class="progressOuter">
-
-        <div
-          id="progress"
-          class="progressInner">
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="formButtons">
-
-      <button
-        id="cancelForm"
-        class="btn">
-        Annuler
-      </button>
-
-      <button
-        id="saveCapture"
-        class="btn success">
-        Enregistrer
-      </button>
-
-    </div>
+    <iframe
+      id="uploadFrame"
+      class="uploadFrame">
+    </iframe>
 
   </div>
 
@@ -937,7 +730,9 @@ canvas{
 <div
   id="status"
   class="status">
+
   <span id="statusText"></span>
+
 </div>
 
 
@@ -957,13 +752,7 @@ const LS_ROLE =
 "cs_role_v1";
 
 const CACHE_KEY =
-"cs_statistiques_cache_v6";
-
-const CHUNK_SIZE =
-4500;
-
-const MAX_BASE64 =
-280000;
+"cs_statistiques_cache_v7";
 
 const MONTHS = [
   "",
@@ -996,7 +785,6 @@ String(
 "admin";
 
 let EDIT_MODE = false;
-let UPLOADING = false;
 
 
 const $ =
@@ -1021,48 +809,53 @@ function jsonp(
     )=>{
 
       const callback =
-      "stats_"
-      +
-      Date.now()
-      +
-      "_"
-      +
-      Math.random()
-        .toString(36)
-        .slice(2);
+        "stats_"
+        +
+        Date.now()
+        +
+        "_"
+        +
+        Math.random()
+          .toString(36)
+          .slice(2);
+
 
       const query =
-      new URLSearchParams({
-        view:view,
-        ...params,
-        callback:callback,
-        _:Date.now()
-      });
+        new URLSearchParams({
+          view:view,
+          ...params,
+          callback:callback,
+          _:Date.now()
+        });
+
 
       const script =
-      document.createElement(
-        "script"
-      );
+        document.createElement(
+          "script"
+        );
+
 
       let done = false;
 
+
       const timer =
-      setTimeout(
-        ()=>{
+        setTimeout(
+          ()=>{
 
-          if(done) return;
+            if(done) return;
 
-          done = true;
+            done = true;
 
-          cleanup();
+            cleanup();
 
-          reject(
-            new Error("Timeout")
-          );
+            reject(
+              new Error("Timeout")
+            );
 
-        },
-        timeout
-      );
+          },
+          timeout
+        );
+
 
       function cleanup(){
 
@@ -1076,42 +869,46 @@ function jsonp(
 
       }
 
+
       window[callback] =
-      data=>{
+        data=>{
 
-        if(done) return;
+          if(done) return;
 
-        done = true;
+          done = true;
 
-        cleanup();
+          cleanup();
 
-        resolve(data);
+          resolve(data);
 
-      };
+        };
+
 
       script.onerror =
-      ()=>{
+        ()=>{
 
-        if(done) return;
+          if(done) return;
 
-        done = true;
+          done = true;
 
-        cleanup();
+          cleanup();
 
-        reject(
-          new Error(
-            "Erreur réseau"
-          )
-        );
+          reject(
+            new Error(
+              "Erreur réseau"
+            )
+          );
 
-      };
+        };
+
 
       script.src =
-      API
-      +
-      "?"
-      +
-      query.toString();
+        API
+        +
+        "?"
+        +
+        query.toString();
+
 
       document.head
         .appendChild(
@@ -1141,35 +938,22 @@ function getEmail(){
 }
 
 
-function makeId(){
-
-  return (
-    "STAT-"
-    +
-    Date.now()
-    +
-    "-"
-    +
-    Math.random()
-      .toString(36)
-      .slice(2,8)
-  );
-
-}
-
-
 function showStatus(text){
 
   $("statusText").textContent =
-  text;
+    text;
+
 
   $("status").style.display =
-  "block";
+    "block";
+
 
   setTimeout(
     ()=>{
+
       $("status").style.display =
-      "none";
+        "none";
+
     },
     1400
   );
@@ -1199,24 +983,29 @@ function loadCache(){
   try{
 
     const raw =
-    localStorage.getItem(
-      CACHE_KEY
-    );
+      localStorage.getItem(
+        CACHE_KEY
+      );
+
 
     if(!raw) return;
 
+
     const data =
-    JSON.parse(raw);
+      JSON.parse(raw);
+
 
     CAPTURES =
-    Array.isArray(data.captures)
-      ? data.captures
-      : [];
+      Array.isArray(data.captures)
+        ? data.captures
+        : [];
+
 
     ANNUAL =
-    Array.isArray(data.annual)
-      ? data.annual
-      : [];
+      Array.isArray(data.annual)
+        ? data.annual
+        : [];
+
 
   }catch(e){}
 
@@ -1230,19 +1019,22 @@ function loadCache(){
 function applyAdmin(){
 
   $("lock").style.display =
-  IS_ADMIN
-    ? "inline-block"
-    : "none";
+    IS_ADMIN
+      ? "inline-block"
+      : "none";
+
 
   $("lock").textContent =
-  EDIT_MODE
-    ? "🔓"
-    : "🔒";
+    EDIT_MODE
+      ? "🔓"
+      : "🔒";
+
 
   $("editLabel").style.display =
-  EDIT_MODE
-    ? "inline"
-    : "none";
+    EDIT_MODE
+      ? "inline"
+      : "none";
+
 
   $("captureAdmin")
     .classList.toggle(
@@ -1250,11 +1042,13 @@ function applyAdmin(){
       IS_ADMIN && EDIT_MODE
     );
 
+
   $("annualAdmin")
     .classList.toggle(
       "show",
       IS_ADMIN && EDIT_MODE
     );
+
 
   $("annualSection")
     .classList.toggle(
@@ -1268,37 +1062,48 @@ function applyAdmin(){
 async function verifyAdmin(){
 
   const email =
-  getEmail();
+    getEmail();
+
 
   if(!email) return;
+
 
   try{
 
     const res =
-    await jsonp(
-      "auth_check",
-      {
-        email:email
-      }
-    );
+      await jsonp(
+        "auth_check",
+        {
+          email:email
+        }
+      );
 
-    if(!res || res.ok !== true){
+
+    if(
+      !res
+      ||
+      res.ok !== true
+    ){
       return;
     }
 
+
     const role =
-    String(
-      res.role || ""
-    )
-    .toLowerCase();
+      String(
+        res.role || ""
+      )
+      .toLowerCase();
+
 
     localStorage.setItem(
       LS_ROLE,
       role
     );
 
+
     IS_ADMIN =
-    role === "admin";
+      role === "admin";
+
 
     applyAdmin();
 
@@ -1306,13 +1111,14 @@ async function verifyAdmin(){
 
     renderAnnual();
 
+
   }catch(e){}
 
 }
 
 
 /* =========================================================
-   DONNÉES
+   RECHARGE
 ========================================================= */
 
 async function reload(){
@@ -1322,22 +1128,27 @@ async function reload(){
       "statistiques_list"
     );
 
+
   if(
-    !res ||
+    !res
+    ||
     res.ok !== true
   ){
     return;
   }
+
 
   CAPTURES =
     Array.isArray(res.captures)
       ? res.captures
       : [];
 
+
   ANNUAL =
     Array.isArray(res.annual)
       ? res.annual
       : [];
+
 
   saveCache();
 
@@ -1353,36 +1164,38 @@ async function reload(){
 function renderPeriods(){
 
   const years =
-  [
-    ...new Set(
-      CAPTURES.map(
-        x=>Number(x.year)
+    [
+      ...new Set(
+        CAPTURES.map(
+          x=>Number(x.year)
+        )
       )
-    )
-  ]
-  .filter(Number.isInteger)
-  .sort(
-    (a,b)=>b-a
-  );
+    ]
+    .filter(Number.isInteger)
+    .sort(
+      (a,b)=>b-a
+    );
 
 
   const previousYear =
-  Number(
-    $("yearSelect").value
-  );
+    Number(
+      $("yearSelect").value
+    );
 
 
   $("yearSelect").innerHTML =
-  "";
+    "";
 
 
   if(!years.length){
 
     $("yearSelect").innerHTML =
-    `<option>Aucune donnée</option>`;
+      `<option>Aucune donnée</option>`;
+
 
     $("monthSelect").innerHTML =
-    `<option>Aucun mois</option>`;
+      `<option>Aucun mois</option>`;
+
 
     renderCaptures();
 
@@ -1395,12 +1208,18 @@ function renderPeriods(){
     year=>{
 
       const opt =
-      document.createElement(
-        "option"
-      );
+        document.createElement(
+          "option"
+        );
 
-      opt.value = year;
-      opt.textContent = year;
+
+      opt.value =
+        year;
+
+
+      opt.textContent =
+        year;
+
 
       $("yearSelect")
         .appendChild(opt);
@@ -1410,13 +1229,13 @@ function renderPeriods(){
 
 
   const selected =
-  years.includes(previousYear)
-    ? previousYear
-    : years[0];
+    years.includes(previousYear)
+      ? previousYear
+      : years[0];
 
 
   $("yearSelect").value =
-  selected;
+    selected;
 
 
   renderMonths(selected);
@@ -1427,51 +1246,54 @@ function renderPeriods(){
 function renderMonths(year){
 
   const oldMonth =
-  Number(
-    $("monthSelect").value
-  );
+    Number(
+      $("monthSelect").value
+    );
 
 
   const months =
-  [
-    ...new Set(
-      CAPTURES
-        .filter(
-          x=>
-            Number(x.year)
-            ===
-            Number(year)
-        )
-        .map(
-          x=>Number(x.month)
-        )
+    [
+      ...new Set(
+        CAPTURES
+          .filter(
+            x=>
+              Number(x.year)
+              ===
+              Number(year)
+          )
+          .map(
+            x=>Number(x.month)
+          )
+      )
+    ]
+    .filter(
+      m=>m>=1 && m<=12
     )
-  ]
-  .filter(
-    m=>m>=1 && m<=12
-  )
-  .sort(
-    (a,b)=>a-b
-  );
+    .sort(
+      (a,b)=>a-b
+    );
 
 
   $("monthSelect").innerHTML =
-  "";
+    "";
 
 
   months.forEach(
     month=>{
 
       const opt =
-      document.createElement(
-        "option"
-      );
+        document.createElement(
+          "option"
+        );
+
 
       opt.value =
-      month;
+        month;
+
 
       opt.textContent =
-      MONTHS[month];
+        MONTHS[month];
+
 
       $("monthSelect")
         .appendChild(opt);
@@ -1483,7 +1305,8 @@ function renderMonths(year){
   if(!months.length){
 
     $("monthSelect").innerHTML =
-    `<option>Aucun mois</option>`;
+      `<option>Aucun mois</option>`;
+
 
     renderCaptures();
 
@@ -1493,11 +1316,11 @@ function renderMonths(year){
 
 
   $("monthSelect").value =
-  months.includes(oldMonth)
-    ? oldMonth
-    : months[
-        months.length-1
-      ];
+    months.includes(oldMonth)
+      ? oldMonth
+      : months[
+          months.length-1
+        ];
 
 
   renderCaptures();
@@ -1512,83 +1335,85 @@ function renderMonths(year){
 function renderCaptures(){
 
   const year =
-  Number(
-    $("yearSelect").value
-  );
-
-  const month =
-  Number(
-    $("monthSelect").value
-  );
-
-
-  const list =
-  CAPTURES
-    .filter(
-      x=>
-        Number(x.year) === year
-        &&
-        Number(x.month) === month
-    )
-    .sort(
-      (a,b)=>
-        Number(a.order || 0)
-        -
-        Number(b.order || 0)
+    Number(
+      $("yearSelect").value
     );
 
 
+  const month =
+    Number(
+      $("monthSelect").value
+    );
+
+
+  const list =
+    CAPTURES
+      .filter(
+        x=>
+          Number(x.year) === year
+          &&
+          Number(x.month) === month
+      )
+      .sort(
+        (a,b)=>
+          Number(a.order || 0)
+          -
+          Number(b.order || 0)
+      );
+
+
   $("captureList").innerHTML =
-  "";
+    "";
 
 
   $("captureEmpty").style.display =
-  list.length
-    ? "none"
-    : "block";
+    list.length
+      ? "none"
+      : "block";
 
 
   list.forEach(
     item=>{
 
       const card =
-      document.createElement(
-        "div"
-      );
+        document.createElement(
+          "div"
+        );
+
 
       card.className =
-      "captureCard";
+        "captureCard";
 
 
       card.innerHTML =
-      `
-        <div class="captureHead">
+        `
+          <div class="captureHead">
 
-          <div class="captureTitle">
-            ${item.title || ""}
+            <div class="captureTitle">
+              ${item.title || ""}
+            </div>
+
+            ${
+              IS_ADMIN && EDIT_MODE
+              ?
+              `
+                <button
+                  class="btn danger"
+                  data-delete="${item.id}">
+                  🗑
+                </button>
+              `
+              :
+              ""
+            }
+
           </div>
 
-          ${
-            IS_ADMIN && EDIT_MODE
-            ?
-            `
-              <button
-                class="btn danger"
-                data-delete="${item.id}">
-                🗑
-              </button>
-            `
-            :
-            ""
-          }
-
-        </div>
-
-        <img
-          class="captureImage"
-          src="${item.image_url}"
-          alt="Statistiques">
-      `;
+          <img
+            class="captureImage"
+            src="${item.image_url}"
+            alt="Statistiques">
+        `;
 
 
       $("captureList")
@@ -1606,14 +1431,162 @@ function renderCaptures(){
       button=>{
 
         button.onclick =
-        ()=>deleteCapture(
-          button.dataset.delete
-        );
+          ()=>deleteCapture(
+            button.dataset.delete
+          );
 
       }
     );
 
 }
+
+
+/* =========================================================
+   UPLOAD
+========================================================= */
+
+function openUpload(){
+
+  const email =
+    getEmail();
+
+
+  let year =
+    Number(
+      $("yearSelect").value
+    );
+
+
+  let month =
+    Number(
+      $("monthSelect").value
+    );
+
+
+  const now =
+    new Date();
+
+
+  if(!Number.isInteger(year)){
+
+    year =
+      now.getFullYear();
+
+  }
+
+
+  if(
+    !Number.isInteger(month)
+    ||
+    month < 1
+    ||
+    month > 12
+  ){
+
+    month =
+      now.getMonth()+1;
+
+  }
+
+
+  const url =
+    API
+    +
+    "?view=statistiques_upload_page"
+    +
+    "&email="
+    +
+    encodeURIComponent(email)
+    +
+    "&year="
+    +
+    encodeURIComponent(year)
+    +
+    "&month="
+    +
+    encodeURIComponent(month)
+    +
+    "&_="
+    +
+    Date.now();
+
+
+  $("uploadFrame").src =
+    url;
+
+
+  $("uploadOverlay")
+    .classList.add(
+      "show"
+    );
+
+}
+
+
+function closeUpload(){
+
+  $("uploadOverlay")
+    .classList.remove(
+      "show"
+    );
+
+
+  $("uploadFrame").src =
+    "about:blank";
+
+}
+
+
+/* =========================================================
+   MESSAGE DE LA PAGE APPS SCRIPT
+========================================================= */
+
+window.addEventListener(
+  "message",
+  async function(event){
+
+    const data =
+      event.data || {};
+
+
+    if(
+      data.type ===
+      "stats-upload-cancel"
+    ){
+
+      closeUpload();
+
+      return;
+
+    }
+
+
+    if(
+      data.type ===
+      "stats-upload-success"
+    ){
+
+      closeUpload();
+
+
+      showStatus(
+        "Capture enregistrée"
+      );
+
+
+      try{
+
+        await reload();
+
+      }catch(e){}
+
+
+      return;
+
+    }
+
+  }
+);
 
 
 /* =========================================================
@@ -1623,38 +1596,44 @@ function renderCaptures(){
 function renderAnnual(){
 
   ANNUAL =
-  ANNUAL
-    .map(
-      x=>({
-        year:Number(x.year),
-        interventions:
-          Number(x.interventions)
-      })
-    )
-    .filter(
-      x=>
-        Number.isInteger(x.year)
-        &&
-        Number.isFinite(
-          x.interventions
-        )
-    )
-    .sort(
-      (a,b)=>a.year-b.year
-    );
+    ANNUAL
+      .map(
+        x=>({
+
+          year:
+            Number(x.year),
+
+          interventions:
+            Number(x.interventions)
+
+        })
+      )
+      .filter(
+        x=>
+          Number.isInteger(x.year)
+          &&
+          Number.isFinite(
+            x.interventions
+          )
+      )
+      .sort(
+        (a,b)=>a.year-b.year
+      );
 
 
   $("yearList").innerHTML =
-  "";
+    "";
 
 
   if(!ANNUAL.length){
 
     $("annualEmpty").style.display =
-    "block";
+      "block";
+
 
     $("annualContent").style.display =
-    "none";
+      "none";
+
 
     drawChart();
 
@@ -1664,23 +1643,25 @@ function renderAnnual(){
 
 
   $("annualEmpty").style.display =
-  "none";
+    "none";
+
 
   $("annualContent").style.display =
-  "block";
+    "block";
 
 
   const latest =
-  ANNUAL[
-    ANNUAL.length-1
-  ];
+    ANNUAL[
+      ANNUAL.length-1
+    ];
 
 
   $("latestYear").textContent =
-  latest.year;
+    latest.year;
+
 
   $("latestValue").textContent =
-  latest.interventions;
+    latest.interventions;
 
 
   ANNUAL
@@ -1690,34 +1671,35 @@ function renderAnnual(){
       row=>{
 
         const div =
-        document.createElement(
-          "div"
-        );
+          document.createElement(
+            "div"
+          );
+
 
         div.className =
-        "yearBox";
+          "yearBox";
 
 
         div.innerHTML =
-        `
-          <div>
+          `
+            <div>
 
-            <div class="year">
-              ${row.year}
+              <div class="year">
+                ${row.year}
+              </div>
+
+              <div class="value">
+                ${row.interventions}
+              </div>
+
             </div>
 
-            <div class="value">
-              ${row.interventions}
-            </div>
-
-          </div>
-
-          <button
-            class="btn danger yearDelete"
-            data-year-delete="${row.year}">
-            🗑
-          </button>
-        `;
+            <button
+              class="btn danger yearDelete"
+              data-year-delete="${row.year}">
+              🗑
+            </button>
+          `;
 
 
         $("yearList")
@@ -1735,11 +1717,11 @@ function renderAnnual(){
       button=>{
 
         button.onclick =
-        ()=>deleteAnnual(
-          Number(
-            button.dataset.yearDelete
-          )
-        );
+          ()=>deleteAnnual(
+            Number(
+              button.dataset.yearDelete
+            )
+          );
 
       }
     );
@@ -1759,10 +1741,12 @@ function drawChart(){
   if(ANNUAL.length < 2){
 
     $("chartEmpty").style.display =
-    "block";
+      "block";
+
 
     $("chartBox").style.display =
-    "none";
+      "none";
+
 
     return;
 
@@ -1770,32 +1754,39 @@ function drawChart(){
 
 
   $("chartEmpty").style.display =
-  "none";
+    "none";
+
 
   $("chartBox").style.display =
-  "block";
+    "block";
 
 
   requestAnimationFrame(
     ()=>{
 
       const canvas =
-      $("chart");
+        $("chart");
+
 
       const rect =
-      canvas.getBoundingClientRect();
+        canvas.getBoundingClientRect();
+
 
       const dpr =
-      window.devicePixelRatio || 1;
+        window.devicePixelRatio || 1;
+
 
       canvas.width =
-      rect.width*dpr;
+        rect.width*dpr;
+
 
       canvas.height =
-      rect.height*dpr;
+        rect.height*dpr;
+
 
       const ctx =
-      canvas.getContext("2d");
+        canvas.getContext("2d");
+
 
       ctx.setTransform(
         dpr,
@@ -1808,93 +1799,108 @@ function drawChart(){
 
 
       const W =
-      rect.width;
+        rect.width;
+
 
       const H =
-      rect.height;
+        rect.height;
+
 
       const left = 44;
       const right = 15;
       const top = 20;
       const bottom = 35;
 
+
       const graphW =
-      W-left-right;
+        W-left-right;
+
 
       const graphH =
-      H-top-bottom;
+        H-top-bottom;
 
 
       const values =
-      ANNUAL.map(
-        x=>x.interventions
-      );
+        ANNUAL.map(
+          x=>x.interventions
+        );
 
 
       const min =
-      Math.min(...values);
+        Math.min(...values);
+
 
       const max =
-      Math.max(...values);
+        Math.max(...values);
+
 
       const margin =
-      Math.max(
-        10,
-        Math.round(
-          (max-min)*.15
-        )
-      );
+        Math.max(
+          10,
+          Math.round(
+            (max-min)*.15
+          )
+        );
+
 
       const yMin =
-      Math.max(
-        0,
-        min-margin
-      );
+        Math.max(
+          0,
+          min-margin
+        );
+
 
       const yMax =
-      max+margin;
+        max+margin;
 
 
       ctx.strokeStyle =
-      "rgba(255,255,255,.15)";
+        "rgba(255,255,255,.15)";
+
 
       ctx.fillStyle =
-      "rgba(255,255,255,.65)";
+        "rgba(255,255,255,.65)";
+
 
       ctx.font =
-      "11px system-ui";
+        "11px system-ui";
 
 
       for(let i=0;i<=4;i++){
 
         const y =
-        top
-        +
-        graphH*i/4;
+          top
+          +
+          graphH*i/4;
+
 
         ctx.beginPath();
+
 
         ctx.moveTo(
           left,
           y
         );
 
+
         ctx.lineTo(
           left+graphW,
           y
         );
 
+
         ctx.stroke();
 
 
         const value =
-        Math.round(
-          yMax
-          -
-          (yMax-yMin)
-          *
-          i/4
-        );
+          Math.round(
+            yMax
+            -
+            (yMax-yMin)
+            *
+            i/4
+          );
+
 
         ctx.fillText(
           value,
@@ -1906,45 +1912,53 @@ function drawChart(){
 
 
       const points =
-      ANNUAL.map(
-        (row,index)=>{
+        ANNUAL.map(
+          (row,index)=>{
 
-          const x =
-          left
-          +
-          graphW
-          *
-          index
-          /
-          (ANNUAL.length-1);
+            const x =
+              left
+              +
+              graphW
+              *
+              index
+              /
+              (ANNUAL.length-1);
 
-          const ratio =
-          (
-            row.interventions-yMin
-          )
-          /
-          (
-            yMax-yMin || 1
-          );
 
-          const y =
-          top
-          +
-          graphH
-          -
-          graphH*ratio;
+            const ratio =
+              (
+                row.interventions-yMin
+              )
+              /
+              (
+                yMax-yMin || 1
+              );
 
-          return {x,y};
 
-        }
-      );
+            const y =
+              top
+              +
+              graphH
+              -
+              graphH*ratio;
+
+
+            return {
+              x:x,
+              y:y
+            };
+
+          }
+        );
 
 
       ctx.strokeStyle =
-      "#f1a037";
+        "#f1a037";
+
 
       ctx.lineWidth =
-      3;
+        3;
+
 
       ctx.beginPath();
 
@@ -1953,9 +1967,19 @@ function drawChart(){
         (p,i)=>{
 
           if(i===0){
-            ctx.moveTo(p.x,p.y);
+
+            ctx.moveTo(
+              p.x,
+              p.y
+            );
+
           }else{
-            ctx.lineTo(p.x,p.y);
+
+            ctx.lineTo(
+              p.x,
+              p.y
+            );
+
           }
 
         }
@@ -1970,6 +1994,7 @@ function drawChart(){
 
           ctx.beginPath();
 
+
           ctx.arc(
             p.x,
             p.y,
@@ -1978,8 +2003,10 @@ function drawChart(){
             Math.PI*2
           );
 
+
           ctx.fillStyle =
-          "#fff";
+            "#fff";
+
 
           ctx.fill();
 
@@ -1988,10 +2015,11 @@ function drawChart(){
 
 
       ctx.textAlign =
-      "center";
+        "center";
+
 
       ctx.fillStyle =
-      "rgba(255,255,255,.70)";
+        "rgba(255,255,255,.70)";
 
 
       ANNUAL.forEach(
@@ -2008,7 +2036,7 @@ function drawChart(){
 
 
       ctx.textAlign =
-      "left";
+        "left";
 
     }
   );
@@ -2017,20 +2045,21 @@ function drawChart(){
 
 
 /* =========================================================
-   SAUVEGARDE ANNUELLE
+   ENREGISTRER ANNUEL
 ========================================================= */
 
 async function saveAnnual(){
 
   const year =
-  Number(
-    $("annualYear").value
-  );
+    Number(
+      $("annualYear").value
+    );
+
 
   const value =
-  Number(
-    $("annualValue").value
-  );
+    Number(
+      $("annualValue").value
+    );
 
 
   if(
@@ -2049,17 +2078,21 @@ async function saveAnnual(){
 
 
   const res =
-  await jsonp(
-    "statistiques_annual_set",
-    {
-      email:getEmail(),
-      year:year,
-      interventions:value
-    }
-  );
+    await jsonp(
+      "statistiques_annual_set",
+      {
+        email:getEmail(),
+        year:year,
+        interventions:value
+      }
+    );
 
 
-  if(!res || res.ok !== true){
+  if(
+    !res
+    ||
+    res.ok !== true
+  ){
 
     alert(
       res?.error || "Erreur"
@@ -2071,15 +2104,15 @@ async function saveAnnual(){
 
 
   const existing =
-  ANNUAL.find(
-    x=>x.year===year
-  );
+    ANNUAL.find(
+      x=>x.year===year
+    );
 
 
   if(existing){
 
     existing.interventions =
-    value;
+      value;
 
   }else{
 
@@ -2103,14 +2136,18 @@ async function saveAnnual(){
 
 
 /* =========================================================
-   SUPPRESSION ANNUELLE
+   SUPPRESSION ANNÉE
 ========================================================= */
 
 async function deleteAnnual(year){
 
   if(
     !confirm(
-      `Supprimer ${year} ?`
+      "Supprimer "
+      +
+      year
+      +
+      " ?"
     )
   ){
     return;
@@ -2118,9 +2155,9 @@ async function deleteAnnual(year){
 
 
   ANNUAL =
-  ANNUAL.filter(
-    x=>x.year!==year
-  );
+    ANNUAL.filter(
+      x=>x.year!==year
+    );
 
 
   saveCache();
@@ -2148,714 +2185,6 @@ async function deleteAnnual(year){
 
 
 /* =========================================================
-   OUVERTURE FORMULAIRE
-========================================================= */
-
-function openCaptureForm(){
-
-  const now =
-  new Date();
-
-
-  $("captureYear").value =
-  $("yearSelect").value
-  ||
-  now.getFullYear();
-
-
-  $("captureMonth").value =
-  $("monthSelect").value
-  ||
-  now.getMonth()+1;
-
-
-  $("captureTitle").value =
-  "";
-
-
-  $("captureFile").value =
-  "";
-
-
-  $("preview").style.display =
-  "none";
-
-
-  $("uploadBox").style.display =
-  "none";
-
-
-  $("progress").style.width =
-  "0%";
-
-
-  $("overlay")
-    .classList.add(
-      "show"
-    );
-
-}
-
-
-function closeCaptureForm(){
-
-  if(UPLOADING){
-    return;
-  }
-
-  $("overlay")
-    .classList.remove(
-      "show"
-    );
-
-}
-
-
-/* =========================================================
-   APERÇU
-========================================================= */
-
-$("captureFile")
-.addEventListener(
-  "change",
-  ()=>{
-
-    const file =
-    $("captureFile")
-      .files?.[0];
-
-    if(!file){
-
-      $("preview").style.display =
-      "none";
-
-      return;
-
-    }
-
-
-    const reader =
-    new FileReader();
-
-
-    reader.onload =
-    ()=>{
-
-      $("previewImg").src =
-      reader.result;
-
-      $("preview").style.display =
-      "block";
-
-    };
-
-
-    reader.readAsDataURL(
-      file
-    );
-
-  }
-);
-
-
-/* =========================================================
-   COMPRESSION IMAGE
-========================================================= */
-
-function loadImage(file){
-
-  return new Promise(
-    (
-      resolve,
-      reject
-    )=>{
-
-      const reader =
-      new FileReader();
-
-      reader.onerror =
-      reject;
-
-      reader.onload =
-      ()=>{
-
-        const image =
-        new Image();
-
-        image.onerror =
-        reject;
-
-        image.onload =
-        ()=>resolve(image);
-
-        image.src =
-        reader.result;
-
-      };
-
-      reader.readAsDataURL(
-        file
-      );
-
-    }
-  );
-
-}
-
-
-async function compressImage(file){
-
-  const image =
-  await loadImage(file);
-
-
-  let maxWidth =
-  1400;
-
-
-  let quality =
-  .72;
-
-
-  for(
-    let attempt=0;
-    attempt<8;
-    attempt++
-  ){
-
-    let width =
-    image.naturalWidth;
-
-    let height =
-    image.naturalHeight;
-
-
-    if(width > maxWidth){
-
-      const ratio =
-      maxWidth/width;
-
-      width =
-      Math.round(
-        width*ratio
-      );
-
-      height =
-      Math.round(
-        height*ratio
-      );
-
-    }
-
-
-    const canvas =
-    document.createElement(
-      "canvas"
-    );
-
-
-    canvas.width =
-    width;
-
-    canvas.height =
-    height;
-
-
-    const ctx =
-    canvas.getContext(
-      "2d"
-    );
-
-
-    ctx.fillStyle =
-    "#ffffff";
-
-    ctx.fillRect(
-      0,
-      0,
-      width,
-      height
-    );
-
-
-    ctx.drawImage(
-      image,
-      0,
-      0,
-      width,
-      height
-    );
-
-
-    const dataUrl =
-    canvas.toDataURL(
-      "image/jpeg",
-      quality
-    );
-
-
-    const base64 =
-    dataUrl.split(",")[1];
-
-
-    if(
-      base64.length
-      <=
-      MAX_BASE64
-    ){
-
-      return base64;
-
-    }
-
-
-    if(quality > .55){
-
-      quality -= .08;
-
-    }else{
-
-      maxWidth =
-      Math.round(
-        maxWidth*.82
-      );
-
-    }
-
-  }
-
-
-  throw new Error(
-    "L'image reste trop volumineuse."
-  );
-
-}
-
-
-/* =========================================================
-   ENVOI D'UN MORCEAU AVEC RELANCE
-========================================================= */
-
-async function sendChunk(
-  id,
-  token,
-  index,
-  data
-){
-
-  let lastError = null;
-
-
-  for(
-    let attempt=0;
-    attempt<3;
-    attempt++
-  ){
-
-    try{
-
-      const res =
-      await jsonp(
-        "statistiques_capture_chunk",
-        {
-          id:id,
-          token:token,
-          index:index,
-          data:data
-        },
-        30000
-      );
-
-
-      if(
-        res &&
-        res.ok === true
-      ){
-
-        return;
-
-      }
-
-
-      lastError =
-      new Error(
-        res?.error
-        ||
-        "Erreur morceau"
-      );
-
-
-    }catch(e){
-
-      lastError = e;
-
-    }
-
-  }
-
-
-  throw lastError
-  ||
-  new Error(
-    "Erreur d'envoi."
-  );
-
-}
-
-
-/* =========================================================
-   ENVOI IMAGE COMPLET
-========================================================= */
-
-async function saveCapture(){
-
-  if(
-    UPLOADING ||
-    !IS_ADMIN
-  ){
-    return;
-  }
-
-
-  const file =
-  $("captureFile")
-    .files?.[0];
-
-
-  if(!file){
-
-    alert(
-      "Choisis une image."
-    );
-
-    return;
-
-  }
-
-
-  const year =
-  Number(
-    $("captureYear").value
-  );
-
-
-  const month =
-  Number(
-    $("captureMonth").value
-  );
-
-
-  if(
-    !Number.isInteger(year)
-    ||
-    !Number.isInteger(month)
-  ){
-
-    alert(
-      "Année ou mois incorrect."
-    );
-
-    return;
-
-  }
-
-
-  UPLOADING = true;
-
-
-  $("saveCapture").disabled =
-  true;
-
-  $("cancelForm").disabled =
-  true;
-
-  $("closeForm").disabled =
-  true;
-
-  $("uploadBox").style.display =
-  "block";
-
-  $("uploadText").textContent =
-  "Préparation de l'image…";
-
-
-  try{
-
-
-    /*
-      1 — COMPRESSION
-    */
-
-    const base64 =
-    await compressImage(
-      file
-    );
-
-
-    /*
-      2 — DÉCOUPAGE
-    */
-
-    const chunks = [];
-
-
-    for(
-      let i=0;
-      i<base64.length;
-      i+=CHUNK_SIZE
-    ){
-
-      chunks.push(
-        base64.slice(
-          i,
-          i+CHUNK_SIZE
-        )
-      );
-
-    }
-
-
-    const id =
-    makeId();
-
-
-    /*
-      3 — OUVERTURE SESSION
-    */
-
-    $("uploadText").textContent =
-    "Préparation de l'envoi…";
-
-
-    const begin =
-    await jsonp(
-      "statistiques_capture_begin",
-      {
-        email:getEmail(),
-        id:id,
-        year:year,
-        month:month,
-
-        title:
-          $("captureTitle")
-          .value
-          .trim()
-          ||
-          `${MONTHS[month]} ${year}`,
-
-        filename:
-          file.name
-          ||
-          "statistiques.jpg",
-
-        mime_type:
-          "image/jpeg",
-
-        total_chunks:
-          chunks.length
-      },
-      30000
-    );
-
-
-    if(
-      !begin ||
-      begin.ok !== true
-    ){
-
-      throw new Error(
-        begin?.error
-        ||
-        "Impossible de démarrer l'envoi."
-      );
-
-    }
-
-
-    if(begin.already_exists){
-
-      await reload();
-
-      $("overlay")
-        .classList.remove(
-          "show"
-        );
-
-      showStatus(
-        "Capture enregistrée"
-      );
-
-      return;
-
-    }
-
-
-    const token =
-    begin.token;
-
-
-    /*
-      4 — ENVOI PAR PETITS GROUPES
-    */
-
-    const concurrency =
-    4;
-
-
-    for(
-      let start=0;
-      start<chunks.length;
-      start+=concurrency
-    ){
-
-      const jobs = [];
-
-
-      for(
-        let offset=0;
-        offset<concurrency;
-        offset++
-      ){
-
-        const index =
-        start+offset;
-
-
-        if(index >= chunks.length){
-          break;
-        }
-
-
-        jobs.push(
-          sendChunk(
-            id,
-            token,
-            index,
-            chunks[index]
-          )
-        );
-
-      }
-
-
-      await Promise.all(
-        jobs
-      );
-
-
-      const sent =
-      Math.min(
-        start+concurrency,
-        chunks.length
-      );
-
-
-      const percent =
-      Math.round(
-        sent
-        /
-        chunks.length
-        *
-        100
-      );
-
-
-      $("progress").style.width =
-      percent + "%";
-
-
-      $("uploadText").textContent =
-      `Envoi vers Google Drive… ${percent}%`;
-
-    }
-
-
-    /*
-      5 — RÉASSEMBLAGE + DRIVE
-    */
-
-    $("uploadText").textContent =
-    "Enregistrement dans Google Drive…";
-
-
-    const finish =
-    await jsonp(
-      "statistiques_capture_finish",
-      {
-        id:id,
-        token:token
-      },
-      60000
-    );
-
-
-    if(
-      !finish ||
-      finish.ok !== true
-    ){
-
-      throw new Error(
-        finish?.error
-        ||
-        "Enregistrement impossible."
-      );
-
-    }
-
-
-    /*
-      6 — RELECTURE
-    */
-
-    await reload();
-
-
-    $("overlay")
-      .classList.remove(
-        "show"
-      );
-
-
-    showStatus(
-      "Capture enregistrée"
-    );
-
-
-  }catch(error){
-
-    alert(
-      "Erreur d'enregistrement : "
-      +
-      String(
-        error?.message
-        ||
-        error
-      )
-    );
-
-  }finally{
-
-    UPLOADING =
-    false;
-
-    $("saveCapture").disabled =
-    false;
-
-    $("cancelForm").disabled =
-    false;
-
-    $("closeForm").disabled =
-    false;
-
-    $("progress").style.width =
-    "0%";
-
-  }
-
-}
-
-
-/* =========================================================
    SUPPRESSION CAPTURE
 ========================================================= */
 
@@ -2871,17 +2200,18 @@ async function deleteCapture(id){
 
 
   CAPTURES =
-  CAPTURES.filter(
-    x=>
-      String(x.id)
-      !==
-      String(id)
-  );
+    CAPTURES.filter(
+      x=>
+        String(x.id)
+        !==
+        String(id)
+    );
 
 
   saveCache();
 
   renderPeriods();
+
 
   showStatus(
     "Supprimé"
@@ -2910,7 +2240,9 @@ async function deleteCapture(id){
 function renderAll(){
 
   renderPeriods();
+
   renderAnnual();
+
   applyAdmin();
 
 }
@@ -2921,63 +2253,52 @@ function renderAll(){
 ========================================================= */
 
 $("back").onclick =
-()=>{
+  ()=>{
 
-  location.href =
-  "index.html";
+    location.href =
+      "index.html";
 
-};
+  };
 
 
 $("lock").onclick =
-()=>{
+  ()=>{
 
-  EDIT_MODE =
-  !EDIT_MODE;
+    EDIT_MODE =
+      !EDIT_MODE;
 
-  applyAdmin();
 
-  renderCaptures();
+    applyAdmin();
 
-  renderAnnual();
+    renderCaptures();
 
-};
+    renderAnnual();
+
+  };
 
 
 $("yearSelect").onchange =
-()=>{
+  ()=>{
 
-  renderMonths(
-    Number(
-      $("yearSelect").value
-    )
-  );
+    renderMonths(
+      Number(
+        $("yearSelect").value
+      )
+    );
 
-};
+  };
 
 
 $("monthSelect").onchange =
-renderCaptures;
+  renderCaptures;
 
 
 $("addCapture").onclick =
-openCaptureForm;
-
-
-$("closeForm").onclick =
-closeCaptureForm;
-
-
-$("cancelForm").onclick =
-closeCaptureForm;
-
-
-$("saveCapture").onclick =
-saveCapture;
+  openUpload;
 
 
 $("saveAnnual").onclick =
-saveAnnual;
+  saveAnnual;
 
 
 window.addEventListener(
@@ -3006,4 +2327,5 @@ window.addEventListener(
 </script>
 
 </body>
+
 </html>
