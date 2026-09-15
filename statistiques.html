@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -7,6 +8,7 @@
 <title>Statistiques — CS Consenvoye</title>
 
 <style>
+
 :root{
   --txt:#f4f4f4;
   --muted:rgba(255,255,255,.70);
@@ -18,9 +20,12 @@
   --danger:#a72525;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
-html,body{
+html,
+body{
   min-height:100%;
 }
 
@@ -34,16 +39,24 @@ body{
 .bg{
   position:fixed;
   inset:0;
+
   background:
-    linear-gradient(180deg,rgba(0,0,0,.52),rgba(0,0,0,.68)),
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,.52),
+      rgba(0,0,0,.68)
+    ),
     url("background.png") center top / cover no-repeat;
+
   z-index:-2;
 }
 
 .bg::after{
   content:"";
+
   position:absolute;
   inset:0;
+
   background:
     radial-gradient(
       circle at 50% 8%,
@@ -55,6 +68,7 @@ body{
 .wrap{
   max-width:980px;
   margin:0 auto;
+
   padding:
     calc(env(safe-area-inset-top) + 10px)
     12px
@@ -66,26 +80,38 @@ body{
   align-items:center;
   justify-content:space-between;
   gap:10px;
+
   padding:10px 12px;
+
   border-radius:18px;
+
   background:
     linear-gradient(
       180deg,
       rgba(212,106,0,.78),
       rgba(185,88,0,.58)
     );
+
   border:1px solid rgba(255,255,255,.12);
+
   box-shadow:var(--shadow);
+
   min-height:48px;
+
   margin-bottom:12px;
 }
 
 .title{
   margin:0;
+
   font-size:18px;
+
   font-weight:950;
+
   letter-spacing:.8px;
+
   text-transform:uppercase;
+
   white-space:nowrap;
 }
 
@@ -97,11 +123,17 @@ body{
 
 .btn{
   border:1px solid rgba(255,255,255,.18);
+
   background:rgba(0,0,0,.20);
+
   color:#fff;
+
   padding:9px 12px;
+
   border-radius:14px;
+
   font-weight:900;
+
   cursor:pointer;
 }
 
@@ -118,78 +150,110 @@ body{
 }
 
 .btn:disabled{
-  opacity:.55;
+  opacity:.60;
   cursor:default;
 }
 
 .editLabel{
   display:none;
+
   font-size:12px;
+
   font-weight:900;
+
   color:#fff200;
 }
 
 .section{
   margin-bottom:14px;
+
   padding:12px;
+
   border-radius:22px;
+
   background:rgba(0,0,0,.35);
+
   border:1px solid var(--stroke);
+
   box-shadow:var(--shadow);
 }
 
 .sectionTitle{
   margin:0 0 10px 0;
+
   padding:10px 12px;
+
   border-radius:16px;
+
   background:
     linear-gradient(
       180deg,
       rgba(212,106,0,.65),
       rgba(185,88,0,.43)
     );
+
   font-size:18px;
+
   font-weight:950;
 }
 
 .sectionSub{
   margin-top:-2px;
   margin-bottom:12px;
+
   color:var(--muted);
+
   font-size:13px;
+
   font-weight:700;
 }
 
 .filters{
   display:grid;
+
   grid-template-columns:1fr 1fr;
+
   gap:10px;
+
   margin-bottom:12px;
 }
 
 .fieldWrap{
   display:flex;
+
   flex-direction:column;
+
   gap:5px;
 }
 
 .fieldLabel{
   font-size:12px;
+
   color:rgba(255,255,255,.78);
+
   font-weight:900;
+
   text-transform:uppercase;
 }
 
 .select,
 .input{
   width:100%;
+
   padding:11px 12px;
+
   border-radius:14px;
+
   border:1px solid rgba(255,255,255,.12);
+
   background:rgba(0,0,0,.30);
+
   color:#fff;
+
   outline:none;
+
   font-size:15px;
+
   font-weight:900;
 }
 
@@ -200,32 +264,47 @@ body{
 
 .empty{
   padding:18px 14px;
+
   text-align:center;
+
   border-radius:16px;
+
   background:rgba(255,255,255,.04);
+
   color:rgba(255,255,255,.68);
+
   font-weight:800;
 }
 
 .captureList{
   display:flex;
+
   flex-direction:column;
+
   gap:12px;
 }
 
 .captureCard{
   overflow:hidden;
+
   border-radius:18px;
+
   border:1px solid rgba(255,255,255,.10);
+
   background:rgba(0,0,0,.25);
 }
 
 .captureHead{
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
+
   gap:10px;
+
   padding:10px 12px;
+
   border-bottom:1px solid rgba(255,255,255,.08);
 }
 
@@ -240,72 +319,86 @@ body{
 
 .captureImage{
   display:block;
+
   width:100%;
+
   height:auto;
+
   background:#111;
 }
 
 .annualTop{
   display:flex;
+
   justify-content:space-between;
+
   align-items:center;
+
   gap:10px;
+
   margin-bottom:10px;
 }
 
 .totalBig{
   font-size:30px;
+
   font-weight:950;
 }
 
 .totalLabel{
   color:var(--muted);
+
   font-size:13px;
+
   font-weight:800;
 }
 
 .yearList{
   display:grid;
+
   grid-template-columns:repeat(2,minmax(0,1fr));
+
   gap:8px;
+
   margin-bottom:12px;
 }
 
 .yearStat{
   padding:10px 12px;
-  border-radius:15px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.08);
-  transition:.18s;
-}
 
-.yearStat.removing{
-  opacity:0;
-  transform:scale(.96);
+  border-radius:15px;
+
+  background:rgba(255,255,255,.05);
+
+  border:1px solid rgba(255,255,255,.08);
 }
 
 .yearStatInner{
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
+
   gap:8px;
 }
 
 .yearStatYear{
   font-size:13px;
+
   color:var(--muted);
+
   font-weight:800;
 }
 
 .yearStatValue{
   font-size:22px;
+
   font-weight:950;
 }
 
 .yearDelete{
   display:none;
-  min-width:42px;
-  padding:8px 10px;
 }
 
 .editMode .yearDelete{
@@ -314,27 +407,40 @@ body{
 
 .chartBox{
   position:relative;
+
   width:100%;
+
   height:300px;
+
   padding:8px;
+
   border-radius:18px;
+
   background:rgba(255,255,255,.04);
+
   border:1px solid rgba(255,255,255,.08);
+
   overflow:hidden;
 }
 
 #evolutionCanvas{
   width:100%;
   height:100%;
+
   display:block;
 }
 
 .adminPanel{
   display:none;
+
   margin-top:12px;
+
   padding:12px;
+
   border-radius:18px;
+
   border:1px dashed rgba(255,210,100,.45);
+
   background:rgba(125,75,0,.12);
 }
 
@@ -344,21 +450,29 @@ body{
 
 .adminPanelTitle{
   margin:0 0 10px 0;
+
   font-size:15px;
+
   font-weight:950;
+
   color:#ffd36a;
 }
 
 .adminForm{
   display:grid;
+
   grid-template-columns:1fr 1fr auto;
+
   gap:8px;
+
   align-items:end;
 }
 
 .adminCaptureGrid{
   display:grid;
+
   grid-template-columns:1fr 1fr;
+
   gap:10px;
 }
 
@@ -368,38 +482,54 @@ body{
 
 .status{
   position:fixed;
+
   left:12px;
   right:12px;
+
   bottom:calc(env(safe-area-inset-bottom) + 12px);
+
   display:none;
-  z-index:300;
+
+  z-index:500;
+
   text-align:center;
+
   pointer-events:none;
 }
 
 .statusPill{
   display:inline-block;
+
   padding:10px 14px;
+
   border-radius:16px;
-  background:rgba(0,0,0,.86);
+
+  background:rgba(0,0,0,.90);
+
   border:1px solid rgba(255,255,255,.14);
+
   box-shadow:var(--shadow);
+
   font-weight:900;
 }
 
 .status.success .statusPill{
-  background:rgba(22,128,57,.95);
+  background:rgba(22,128,57,.97);
 }
 
 .status.danger .statusPill{
-  background:rgba(151,24,24,.95);
+  background:rgba(151,24,24,.97);
 }
 
 .overlay{
   position:fixed;
+
   inset:0;
+
   display:none;
+
   z-index:200;
+
   background:rgba(0,0,0,.68);
 }
 
@@ -409,48 +539,89 @@ body{
 
 .sheet{
   position:absolute;
+
   left:12px;
   right:12px;
+
   bottom:calc(env(safe-area-inset-bottom) + 12px);
+
   max-width:780px;
+
   margin:auto;
+
   padding:12px;
+
+  max-height:92vh;
+
+  overflow:auto;
+
   border-radius:22px;
+
   background:#171717;
+
   border:1px solid rgba(255,255,255,.14);
+
   box-shadow:var(--shadow);
 }
 
 .sheetHead{
   display:flex;
+
   justify-content:space-between;
+
   align-items:center;
+
   gap:10px;
+
   margin-bottom:12px;
 }
 
 .sheetTitle{
   font-size:17px;
+
   font-weight:950;
 }
 
 .sheetBody{
   display:flex;
+
   flex-direction:column;
+
   gap:10px;
 }
 
 .previewBox{
   display:none;
+
   overflow:hidden;
+
   border-radius:16px;
+
   border:1px solid rgba(255,255,255,.10);
 }
 
 .previewBox img{
   display:block;
+
   width:100%;
+
   height:auto;
+}
+
+.uploadInfo{
+  display:none;
+
+  padding:10px 12px;
+
+  border-radius:14px;
+
+  background:rgba(31,157,73,.15);
+
+  border:1px solid rgba(71,220,116,.30);
+
+  font-size:13px;
+
+  font-weight:850;
 }
 
 @media(max-width:600px){
@@ -480,64 +651,222 @@ body{
   }
 
 }
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="bg"></div>
+
 
 <div class="wrap">
 
-  <div class="topbar">
 
-    <h1 class="title">
-      Statistiques
-    </h1>
+<div class="topbar">
 
-    <div class="topActions">
+  <h1 class="title">
+    Statistiques
+  </h1>
 
-      <span
-        id="editLabel"
-        class="editLabel">
 
-        MODE ÉDITION
+  <div class="topActions">
 
-      </span>
+    <span
+      id="editLabel"
+      class="editLabel">
 
-      <button
-        id="btnLock"
-        class="btn"
-        style="display:none">
+      MODE ÉDITION
 
-        🔒
+    </span>
 
-      </button>
 
-      <button
-        id="btnBack"
-        class="btn">
+    <button
+      id="btnLock"
+      class="btn"
+      style="display:none">
 
-        Retour
+      🔒
 
-      </button>
+    </button>
+
+
+    <button
+      id="btnBack"
+      class="btn">
+
+      Retour
+
+    </button>
+
+  </div>
+
+</div>
+
+
+
+<section class="section">
+
+  <h2 class="sectionTitle">
+    Statistiques mensuelles
+  </h2>
+
+  <div class="sectionSub">
+    Consultez les statistiques disponibles par année et par mois.
+  </div>
+
+
+  <div class="filters">
+
+    <div class="fieldWrap">
+
+      <label class="fieldLabel">
+        Année
+      </label>
+
+      <select
+        id="yearSelect"
+        class="select">
+      </select>
+
+    </div>
+
+
+    <div class="fieldWrap">
+
+      <label class="fieldLabel">
+        Mois
+      </label>
+
+      <select
+        id="monthSelect"
+        class="select">
+      </select>
 
     </div>
 
   </div>
 
 
-  <section class="section">
+  <div
+    id="capturesEmpty"
+    class="empty">
 
-    <h2 class="sectionTitle">
-      Statistiques mensuelles
-    </h2>
+    Aucune statistique disponible.
 
-    <div class="sectionSub">
-      Consultez les statistiques disponibles par année et par mois.
+  </div>
+
+
+  <div
+    id="captureList"
+    class="captureList">
+  </div>
+
+
+  <div
+    id="captureAdminPanel"
+    class="adminPanel">
+
+    <div class="adminPanelTitle">
+      Administration — Captures mensuelles
     </div>
 
-    <div class="filters">
+    <button
+      id="btnOpenCaptureForm"
+      class="btn primary">
+
+      ＋ Ajouter une capture
+
+    </button>
+
+  </div>
+
+</section>
+
+
+
+<section
+  id="annualSection"
+  class="section">
+
+  <h2 class="sectionTitle">
+    Nombre d’interventions
+  </h2>
+
+
+  <div
+    id="annualEmpty"
+    class="empty">
+
+    Aucune donnée annuelle enregistrée.
+
+  </div>
+
+
+  <div
+    id="annualContent"
+    style="display:none">
+
+
+    <div class="annualTop">
+
+      <div>
+
+        <div class="totalLabel">
+          Dernière année renseignée
+        </div>
+
+        <div
+          id="latestYearLabel"
+          class="totalBig">
+
+          —
+
+        </div>
+
+      </div>
+
+
+      <div style="text-align:right">
+
+        <div class="totalLabel">
+          Interventions
+        </div>
+
+        <div
+          id="latestYearValue"
+          class="totalBig">
+
+          —
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div
+      id="yearList"
+      class="yearList">
+    </div>
+
+  </div>
+
+
+  <div
+    id="annualAdminPanel"
+    class="adminPanel">
+
+    <div class="adminPanelTitle">
+      Administration — Interventions annuelles
+    </div>
+
+
+    <div class="adminForm">
 
       <div class="fieldWrap">
 
@@ -545,214 +874,86 @@ body{
           Année
         </label>
 
-        <select
-          id="yearSelect"
-          class="select">
-        </select>
+        <input
+          id="adminYear"
+          class="input"
+          type="number"
+          min="1900"
+          max="2200"
+          inputmode="numeric">
 
       </div>
+
 
       <div class="fieldWrap">
 
         <label class="fieldLabel">
-          Mois
+          Nombre d’interventions
         </label>
 
-        <select
-          id="monthSelect"
-          class="select">
-        </select>
+        <input
+          id="adminInterventions"
+          class="input"
+          type="number"
+          min="0"
+          inputmode="numeric">
 
       </div>
 
-    </div>
-
-    <div
-      id="capturesEmpty"
-      class="empty">
-
-      Aucune statistique disponible.
-
-    </div>
-
-    <div
-      id="captureList"
-      class="captureList">
-    </div>
-
-    <div
-      id="captureAdminPanel"
-      class="adminPanel">
-
-      <div class="adminPanelTitle">
-        Administration — Captures mensuelles
-      </div>
 
       <button
-        id="btnOpenCaptureForm"
-        class="btn primary">
+        id="btnSaveAnnual"
+        class="btn success">
 
-        ＋ Ajouter une capture
+        Enregistrer
 
       </button>
 
     </div>
 
-  </section>
+  </div>
+
+</section>
 
 
-  <section
-    id="annualSection"
-    class="section">
 
-    <h2 class="sectionTitle">
-      Nombre d’interventions
-    </h2>
+<section class="section">
 
-    <div
-      id="annualEmpty"
-      class="empty">
+  <h2 class="sectionTitle">
+    Évolution de l’activité
+  </h2>
 
-      Aucune donnée annuelle enregistrée.
-
-    </div>
-
-    <div
-      id="annualContent"
-      style="display:none">
-
-      <div class="annualTop">
-
-        <div>
-
-          <div class="totalLabel">
-            Dernière année renseignée
-          </div>
-
-          <div
-            id="latestYearLabel"
-            class="totalBig">
-
-            —
-
-          </div>
-
-        </div>
-
-        <div style="text-align:right">
-
-          <div class="totalLabel">
-            Interventions
-          </div>
-
-          <div
-            id="latestYearValue"
-            class="totalBig">
-
-            —
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <div
-        id="yearList"
-        class="yearList">
-      </div>
-
-    </div>
-
-    <div
-      id="annualAdminPanel"
-      class="adminPanel">
-
-      <div class="adminPanelTitle">
-        Administration — Interventions annuelles
-      </div>
-
-      <div class="adminForm">
-
-        <div class="fieldWrap">
-
-          <label class="fieldLabel">
-            Année
-          </label>
-
-          <input
-            id="adminYear"
-            class="input"
-            type="number"
-            min="1900"
-            max="2200"
-            inputmode="numeric">
-
-        </div>
-
-        <div class="fieldWrap">
-
-          <label class="fieldLabel">
-            Nombre d’interventions
-          </label>
-
-          <input
-            id="adminInterventions"
-            class="input"
-            type="number"
-            min="0"
-            inputmode="numeric">
-
-        </div>
-
-        <button
-          id="btnSaveAnnual"
-          class="btn success">
-
-          Enregistrer
-
-        </button>
-
-      </div>
-
-    </div>
-
-  </section>
+  <div class="sectionSub">
+    Évolution du nombre d’interventions au fil des années.
+  </div>
 
 
-  <section class="section">
+  <div
+    id="chartEmpty"
+    class="empty">
 
-    <h2 class="sectionTitle">
-      Évolution de l’activité
-    </h2>
+    Le graphique apparaîtra dès que plusieurs années seront renseignées.
 
-    <div class="sectionSub">
-      Évolution du nombre d’interventions au fil des années.
-    </div>
+  </div>
 
-    <div
-      id="chartEmpty"
-      class="empty">
 
-      Le graphique apparaîtra dès que plusieurs années seront renseignées.
+  <div
+    id="chartBox"
+    class="chartBox"
+    style="display:none">
 
-    </div>
+    <canvas id="evolutionCanvas"></canvas>
 
-    <div
-      id="chartBox"
-      class="chartBox"
-      style="display:none">
+  </div>
 
-      <canvas
-        id="evolutionCanvas">
-      </canvas>
+</section>
 
-    </div>
-
-  </section>
 
 </div>
 
+
+
+<!-- FORMULAIRE CAPTURE -->
 
 <div
   id="captureOverlay"
@@ -760,11 +961,13 @@ body{
 
   <div class="sheet">
 
+
     <div class="sheetHead">
 
       <div class="sheetTitle">
         Ajouter une capture
       </div>
+
 
       <button
         id="btnCloseCapture"
@@ -776,9 +979,12 @@ body{
 
     </div>
 
+
     <div class="sheetBody">
 
+
       <div class="adminCaptureGrid">
+
 
         <div class="fieldWrap">
 
@@ -795,6 +1001,7 @@ body{
             inputmode="numeric">
 
         </div>
+
 
         <div class="fieldWrap">
 
@@ -823,6 +1030,7 @@ body{
 
         </div>
 
+
         <div class="fieldWrap full">
 
           <label class="fieldLabel">
@@ -833,9 +1041,10 @@ body{
             id="captureTitle"
             class="input"
             type="text"
-            placeholder="Ex. Statistiques générales">
+            placeholder="Ex. Statistiques août 2026">
 
         </div>
+
 
         <div class="fieldWrap full">
 
@@ -853,6 +1062,7 @@ body{
 
       </div>
 
+
       <div
         id="previewBox"
         class="previewBox">
@@ -863,7 +1073,22 @@ body{
 
       </div>
 
-      <div style="display:flex;justify-content:flex-end;gap:8px">
+
+      <div
+        id="uploadInfo"
+        class="uploadInfo">
+
+        Envoi de la capture vers Google Drive…
+
+      </div>
+
+
+      <div
+        style="
+          display:flex;
+          justify-content:flex-end;
+          gap:8px
+        ">
 
         <button
           id="btnCancelCapture"
@@ -872,6 +1097,7 @@ body{
           Annuler
 
         </button>
+
 
         <button
           id="btnSaveCapture"
@@ -890,6 +1116,7 @@ body{
 </div>
 
 
+
 <div
   id="status"
   class="status">
@@ -902,22 +1129,32 @@ body{
 </div>
 
 
+
 <script>
+
+/* =========================================================
+   CONFIG
+========================================================= */
 
 const API =
 "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
+
 const BACK_URL =
 "index.html";
+
 
 const LS_EMAIL =
 "cs_portail_email_v1";
 
+
 const LS_ROLE =
 "cs_role_v1";
 
+
 const CACHE_KEY =
-"cs_statistiques_cache_v3";
+"cs_statistiques_cache_v4";
+
 
 const MONTHS = [
   "",
@@ -935,23 +1172,40 @@ const MONTHS = [
   "Décembre"
 ];
 
+
 let IS_ADMIN =
 String(
-  localStorage.getItem(LS_ROLE) || ""
+  localStorage.getItem(
+    LS_ROLE
+  )
+  ||
+  ""
 )
 .trim()
 .toLowerCase()
 ===
 "admin";
 
-let EDIT_MODE = false;
 
-let CAPTURES = [];
+let EDIT_MODE =
+false;
 
-let ANNUAL = [];
 
-let DELETE_ANNUAL_IN_PROGRESS = false;
+let CAPTURES =
+[];
 
+
+let ANNUAL =
+[];
+
+
+let UPLOAD_IN_PROGRESS =
+false;
+
+
+/* =========================================================
+   DOM
+========================================================= */
 
 const $ =
 id =>
@@ -1021,12 +1275,19 @@ $("previewBox");
 const $previewImage =
 $("previewImage");
 
+const $uploadInfo =
+$("uploadInfo");
+
 const $status =
 $("status");
 
 const $statusPill =
 $("statusPill");
 
+
+/* =========================================================
+   OUTILS
+========================================================= */
 
 function escapeHtml(value){
 
@@ -1043,12 +1304,31 @@ function escapeHtml(value){
 function getEmail(){
 
   return String(
-    localStorage.getItem(LS_EMAIL)
+    localStorage.getItem(
+      LS_EMAIL
+    )
     ||
     ""
   )
   .trim()
   .toLowerCase();
+
+}
+
+
+function uniqueId(){
+
+  return (
+    "STAT-"
+    +
+    Date.now()
+    +
+    "-"
+    +
+    Math.random()
+      .toString(36)
+      .slice(2,8)
+  );
 
 }
 
@@ -1063,22 +1343,41 @@ function showStatus(
     "danger"
   );
 
+
   if(type){
     $status.classList.add(type);
   }
 
+
   $statusPill.textContent =
   text;
 
+
   $status.style.display =
   "block";
+
 
   setTimeout(
     ()=>{
       $status.style.display =
       "none";
     },
-    1200
+    1300
+  );
+
+}
+
+
+function wait(
+  ms
+){
+
+  return new Promise(
+    resolve=>
+      setTimeout(
+        resolve,
+        ms
+      )
   );
 
 }
@@ -1096,69 +1395,88 @@ function jsonp(
       reject
     )=>{
 
+
       const script =
       document.createElement(
         "script"
       );
 
-      let finished =
+
+      let done =
       false;
+
 
       const timer =
       setTimeout(
         ()=>{
 
-          if(finished){
+          if(done){
             return;
           }
 
-          finished = true;
+          done =
+          true;
 
           cleanup();
 
           reject(
-            new Error("Timeout")
+            new Error(
+              "Timeout"
+            )
           );
 
         },
         timeout
       );
 
+
       function cleanup(){
 
-        clearTimeout(timer);
+        clearTimeout(
+          timer
+        );
 
         script.remove();
 
         try{
-          delete window[cbName];
+          delete window[
+            cbName
+          ];
         }catch(e){}
 
       }
 
-      window[cbName] =
+
+      window[
+        cbName
+      ] =
       data=>{
 
-        if(finished){
+        if(done){
           return;
         }
 
-        finished = true;
+        done =
+        true;
 
         cleanup();
 
-        resolve(data);
+        resolve(
+          data
+        );
 
       };
+
 
       script.onerror =
       ()=>{
 
-        if(finished){
+        if(done){
           return;
         }
 
-        finished = true;
+        done =
+        true;
 
         cleanup();
 
@@ -1170,28 +1488,37 @@ function jsonp(
 
       };
 
+
       script.src =
       url
       +
       (
         url.includes("?")
-          ? "&"
-          : "?"
+          ?
+          "&"
+          :
+          "?"
       )
       +
       "_="
       +
       Date.now();
 
-      document.head.appendChild(
-        script
-      );
+
+      document.head
+        .appendChild(
+          script
+        );
 
     }
   );
 
 }
 
+
+/* =========================================================
+   CACHE
+========================================================= */
 
 function saveLocalCache(){
 
@@ -1220,12 +1547,17 @@ function loadLocalCache(){
       CACHE_KEY
     );
 
+
     if(!raw){
       return;
     }
 
+
     const data =
-    JSON.parse(raw);
+    JSON.parse(
+      raw
+    );
+
 
     CAPTURES =
     Array.isArray(
@@ -1235,6 +1567,7 @@ function loadLocalCache(){
       data.captures
       :
       [];
+
 
     ANNUAL =
     Array.isArray(
@@ -1250,6 +1583,10 @@ function loadLocalCache(){
 }
 
 
+/* =========================================================
+   ADMIN
+========================================================= */
+
 function applyAdminState(){
 
   $btnLock.style.display =
@@ -1259,12 +1596,14 @@ function applyAdminState(){
     :
     "none";
 
+
   $btnLock.textContent =
   EDIT_MODE
     ?
     "🔓"
     :
     "🔒";
+
 
   $editLabel.style.display =
   EDIT_MODE
@@ -1273,20 +1612,32 @@ function applyAdminState(){
     :
     "none";
 
-  $captureAdminPanel.classList.toggle(
-    "show",
-    IS_ADMIN && EDIT_MODE
-  );
 
-  $annualAdminPanel.classList.toggle(
-    "show",
-    IS_ADMIN && EDIT_MODE
-  );
+  $captureAdminPanel
+    .classList.toggle(
+      "show",
+      IS_ADMIN
+      &&
+      EDIT_MODE
+    );
 
-  $annualSection.classList.toggle(
-    "editMode",
-    IS_ADMIN && EDIT_MODE
-  );
+
+  $annualAdminPanel
+    .classList.toggle(
+      "show",
+      IS_ADMIN
+      &&
+      EDIT_MODE
+    );
+
+
+  $annualSection
+    .classList.toggle(
+      "editMode",
+      IS_ADMIN
+      &&
+      EDIT_MODE
+    );
 
 }
 
@@ -1296,9 +1647,11 @@ async function verifyAdminInBackground(){
   const email =
   getEmail();
 
+
   if(!email){
     return;
   }
+
 
   const cb =
   "stat_auth_"
@@ -1307,17 +1660,22 @@ async function verifyAdminInBackground(){
     .toString(36)
     .slice(2);
 
+
   try{
 
     const res =
     await jsonp(
+
       `${API}?view=auth_check`
       +
       `&email=${encodeURIComponent(email)}`
       +
       `&callback=${cb}`,
+
       cb
+
     );
+
 
     if(
       !res
@@ -1327,6 +1685,7 @@ async function verifyAdminInBackground(){
       return;
     }
 
+
     const role =
     String(
       res.role || ""
@@ -1334,17 +1693,24 @@ async function verifyAdminInBackground(){
     .trim()
     .toLowerCase();
 
+
     localStorage.setItem(
       LS_ROLE,
       role
     );
 
+
     IS_ADMIN =
     role === "admin";
 
+
     if(!IS_ADMIN){
-      EDIT_MODE = false;
+
+      EDIT_MODE =
+      false;
+
     }
+
 
     applyAdminState();
 
@@ -1357,18 +1723,24 @@ async function verifyAdminInBackground(){
 }
 
 
+/* =========================================================
+   CAPTURES
+========================================================= */
+
 function getAvailableYears(){
 
   return [
     ...new Set(
       CAPTURES
-      .map(
-        item=>
-          Number(item.year)
-      )
-      .filter(
-        Number.isInteger
-      )
+        .map(
+          item=>
+            Number(
+              item.year
+            )
+        )
+        .filter(
+          Number.isInteger
+        )
     )
   ]
   .sort(
@@ -1385,22 +1757,28 @@ function getAvailableMonths(
   return [
     ...new Set(
       CAPTURES
-      .filter(
-        item=>
-          Number(item.year)
-          ===
-          Number(year)
-      )
-      .map(
-        item=>
-          Number(item.month)
-      )
-      .filter(
-        month=>
-          month >= 1
-          &&
-          month <= 12
-      )
+        .filter(
+          item=>
+            Number(
+              item.year
+            )
+            ===
+            Number(
+              year
+            )
+        )
+        .map(
+          item=>
+            Number(
+              item.month
+            )
+        )
+        .filter(
+          month=>
+            month >= 1
+            &&
+            month <= 12
+        )
     )
   ]
   .sort(
@@ -1412,41 +1790,37 @@ function getAvailableMonths(
 
 function renderPeriodSelectors(){
 
-  const previousYear =
+  const oldYear =
   Number(
     $yearSelect.value
   );
 
-  const previousMonth =
+
+  const oldMonth =
   Number(
     $monthSelect.value
   );
 
+
   const years =
   getAvailableYears();
+
 
   $yearSelect.innerHTML =
   "";
 
-  if(!years.length){
 
-    const opt =
-    document.createElement(
-      "option"
-    );
+  if(
+    !years.length
+  ){
 
-    opt.value =
-    "";
+    $yearSelect.innerHTML =
+    `<option value="">Aucune donnée</option>`;
 
-    opt.textContent =
-    "Aucune donnée";
-
-    $yearSelect.appendChild(
-      opt
-    );
 
     $monthSelect.innerHTML =
     `<option value="">Aucune donnée</option>`;
+
 
     renderCaptures();
 
@@ -1454,41 +1828,51 @@ function renderPeriodSelectors(){
 
   }
 
+
   for(
     const year
     of years
   ){
 
-    const opt =
+    const option =
     document.createElement(
       "option"
     );
 
-    opt.value =
-    String(year);
 
-    opt.textContent =
-    String(year);
+    option.value =
+    year;
 
-    $yearSelect.appendChild(
-      opt
-    );
+
+    option.textContent =
+    year;
+
+
+    $yearSelect
+      .appendChild(
+        option
+      );
 
   }
 
-  const selectedYear =
-  years.includes(previousYear)
+
+  const selected =
+  years.includes(
+    oldYear
+  )
     ?
-    previousYear
+    oldYear
     :
     years[0];
 
+
   $yearSelect.value =
-  String(selectedYear);
+  selected;
+
 
   renderMonths(
-    selectedYear,
-    previousMonth
+    selected,
+    oldMonth
   );
 
 }
@@ -1504,65 +1888,74 @@ function renderMonths(
     year
   );
 
+
   $monthSelect.innerHTML =
   "";
+
+
+  if(
+    !months.length
+  ){
+
+    $monthSelect.innerHTML =
+    `<option value="">Aucun mois</option>`;
+
+
+    renderCaptures();
+
+    return;
+
+  }
+
 
   for(
     const month
     of months
   ){
 
-    const opt =
+    const option =
     document.createElement(
       "option"
     );
 
-    opt.value =
-    String(month);
 
-    opt.textContent =
-    MONTHS[month];
+    option.value =
+    month;
 
-    $monthSelect.appendChild(
-      opt
-    );
 
-  }
+    option.textContent =
+    MONTHS[
+      month
+    ];
 
-  if(!months.length){
 
-    const opt =
-    document.createElement(
-      "option"
-    );
-
-    opt.value =
-    "";
-
-    opt.textContent =
-    "Aucun mois";
-
-    $monthSelect.appendChild(
-      opt
-    );
+    $monthSelect
+      .appendChild(
+        option
+      );
 
   }
 
-  const selectedMonth =
+
+  const selected =
   months.includes(
-    Number(wantedMonth)
+    Number(
+      wantedMonth
+    )
   )
     ?
-    Number(wantedMonth)
+    Number(
+      wantedMonth
+    )
     :
-    months[months.length-1];
+    months[
+      months.length-1
+    ];
 
-  if(selectedMonth){
 
-    $monthSelect.value =
-    String(selectedMonth);
+  $monthSelect.value =
+  selected;
 
-  }
 
   renderCaptures();
 
@@ -1576,28 +1969,44 @@ function renderCaptures(){
     $yearSelect.value
   );
 
+
   const month =
   Number(
     $monthSelect.value
   );
 
+
   const list =
   CAPTURES
     .filter(
       item=>
-        Number(item.year) === year
+        Number(
+          item.year
+        )
+        ===
+        year
         &&
-        Number(item.month) === month
+        Number(
+          item.month
+        )
+        ===
+        month
     )
     .sort(
       (a,b)=>
-        Number(a.order || 0)
+        Number(
+          a.order || 0
+        )
         -
-        Number(b.order || 0)
+        Number(
+          b.order || 0
+        )
     );
+
 
   $captureList.innerHTML =
   "";
+
 
   $capturesEmpty.style.display =
   list.length
@@ -1605,6 +2014,7 @@ function renderCaptures(){
     "none"
     :
     "block";
+
 
   for(
     const item
@@ -1616,99 +2026,116 @@ function renderCaptures(){
       "div"
     );
 
+
     card.className =
     "captureCard";
 
-    const adminButtons =
-    IS_ADMIN
-    &&
-    EDIT_MODE
-      ?
-      `
-        <div class="captureActions">
-
-          <button
-            class="btn danger"
-            data-delete="${escapeHtml(item.id || "")}">
-
-            🗑
-
-          </button>
-
-        </div>
-      `
-      :
-      "";
 
     card.innerHTML =
     `
       <div class="captureHead">
 
         <div class="captureTitle">
+
           ${escapeHtml(
             item.title
             ||
             `${MONTHS[month]} ${year}`
           )}
+
         </div>
 
-        ${adminButtons}
+        ${
+          IS_ADMIN && EDIT_MODE
+            ?
+            `
+              <div class="captureActions">
+
+                <button
+                  class="btn danger"
+                  data-delete-capture="${escapeHtml(item.id)}">
+
+                  🗑
+
+                </button>
+
+              </div>
+            `
+            :
+            ""
+        }
 
       </div>
 
       <img
         class="captureImage"
         src="${escapeHtml(item.image_url || "")}"
-        alt="${escapeHtml(item.title || "Statistiques")}">
+        alt="Statistiques">
     `;
 
-    $captureList.appendChild(
-      card
-    );
+
+    $captureList
+      .appendChild(
+        card
+      );
 
   }
 
+
   $captureList
-  .querySelectorAll(
-    "[data-delete]"
-  )
-  .forEach(
-    button=>{
+    .querySelectorAll(
+      "[data-delete-capture]"
+    )
+    .forEach(
+      button=>{
 
-      button.onclick =
-      ()=>{
+        button.onclick =
+        ()=>{
 
-        deleteCapture(
-          button.dataset.delete
-        );
+          deleteCapture(
+            button.dataset.deleteCapture
+          );
 
-      };
+        };
 
-    }
-  );
+      }
+    );
 
 }
 
+
+/* =========================================================
+   ANNUEL
+========================================================= */
 
 function normalizeAnnual(){
 
   ANNUAL =
   ANNUAL
-  .map(
-    row=>({
-      year:Number(row.year),
-      interventions:Number(row.interventions)
-    })
-  )
-  .filter(
-    row=>
-      Number.isInteger(row.year)
-      &&
-      Number.isFinite(row.interventions)
-  )
-  .sort(
-    (a,b)=>a.year-b.year
-  );
+    .map(
+      row=>({
+        year:Number(
+          row.year
+        ),
+        interventions:Number(
+          row.interventions
+        )
+      })
+    )
+    .filter(
+      row=>
+        Number.isInteger(
+          row.year
+        )
+        &&
+        Number.isFinite(
+          row.interventions
+        )
+    )
+    .sort(
+      (a,b)=>
+        a.year-b.year
+    );
 
 }
 
@@ -1717,8 +2144,10 @@ function renderAnnual(){
 
   normalizeAnnual();
 
+
   const hasData =
   ANNUAL.length > 0;
+
 
   $annualEmpty.style.display =
   hasData
@@ -1727,6 +2156,7 @@ function renderAnnual(){
     :
     "block";
 
+
   $annualContent.style.display =
   hasData
     ?
@@ -1734,8 +2164,10 @@ function renderAnnual(){
     :
     "none";
 
+
   $yearList.innerHTML =
   "";
+
 
   if(!hasData){
 
@@ -1745,25 +2177,26 @@ function renderAnnual(){
 
   }
 
+
   const latest =
   ANNUAL[
     ANNUAL.length-1
   ];
 
+
   $latestYearLabel.textContent =
   latest.year;
+
 
   $latestYearValue.textContent =
   latest.interventions;
 
-  const reversed =
-  ANNUAL
-    .slice()
-    .reverse();
 
   for(
     const row
-    of reversed
+    of ANNUAL
+      .slice()
+      .reverse()
   ){
 
     const div =
@@ -1771,11 +2204,10 @@ function renderAnnual(){
       "div"
     );
 
+
     div.className =
     "yearStat";
 
-    div.dataset.year =
-    String(row.year);
 
     div.innerHTML =
     `
@@ -1795,8 +2227,7 @@ function renderAnnual(){
 
         <button
           class="btn danger yearDelete"
-          data-delete-year="${row.year}"
-          title="Supprimer ${row.year}">
+          data-delete-year="${row.year}">
 
           🗑
 
@@ -1805,11 +2236,14 @@ function renderAnnual(){
       </div>
     `;
 
-    $yearList.appendChild(
-      div
-    );
+
+    $yearList
+      .appendChild(
+        div
+      );
 
   }
+
 
   $yearList
     .querySelectorAll(
@@ -1832,14 +2266,20 @@ function renderAnnual(){
       }
     );
 
+
   drawEvolution();
 
 }
 
 
+/* =========================================================
+   COURBE
+========================================================= */
+
 function drawEvolution(){
 
   normalizeAnnual();
+
 
   if(
     ANNUAL.length < 2
@@ -1848,42 +2288,61 @@ function drawEvolution(){
     $chartEmpty.style.display =
     "block";
 
+
     $chartBox.style.display =
     "none";
+
 
     return;
 
   }
 
+
   $chartEmpty.style.display =
   "none";
+
 
   $chartBox.style.display =
   "block";
 
+
   requestAnimationFrame(
     ()=>{
 
+
       const rect =
-      $canvas.getBoundingClientRect();
+      $canvas
+        .getBoundingClientRect();
+
 
       const dpr =
-      window.devicePixelRatio || 1;
+      window.devicePixelRatio
+      ||
+      1;
+
 
       $canvas.width =
       Math.floor(
-        rect.width * dpr
+        rect.width
+        *
+        dpr
       );
+
 
       $canvas.height =
       Math.floor(
-        rect.height * dpr
+        rect.height
+        *
+        dpr
       );
 
+
       const ctx =
-      $canvas.getContext(
-        "2d"
-      );
+      $canvas
+        .getContext(
+          "2d"
+        );
+
 
       ctx.setTransform(
         dpr,
@@ -1894,11 +2353,14 @@ function drawEvolution(){
         0
       );
 
+
       const W =
       rect.width;
 
+
       const H =
       rect.height;
+
 
       ctx.clearRect(
         0,
@@ -1907,27 +2369,54 @@ function drawEvolution(){
         H
       );
 
-      const left = 46;
-      const right = 16;
-      const top = 18;
-      const bottom = 38;
+
+      const left =
+      46;
+
+      const right =
+      16;
+
+      const top =
+      18;
+
+      const bottom =
+      38;
+
 
       const graphW =
-      W-left-right;
+      W
+      -
+      left
+      -
+      right;
+
 
       const graphH =
-      H-top-bottom;
+      H
+      -
+      top
+      -
+      bottom;
+
 
       const values =
       ANNUAL.map(
-        x=>x.interventions
+        row=>
+          row.interventions
       );
 
+
       const minVal =
-      Math.min(...values);
+      Math.min(
+        ...values
+      );
+
 
       const maxVal =
-      Math.max(...values);
+      Math.max(
+        ...values
+      );
+
 
       const margin =
       Math.max(
@@ -1941,26 +2430,29 @@ function drawEvolution(){
         )
       );
 
+
       const yMin =
       Math.max(
         0,
         minVal-margin
       );
 
+
       const yMax =
       maxVal+margin;
+
 
       ctx.font =
       "12px system-ui";
 
-      ctx.lineWidth =
-      1;
 
       ctx.strokeStyle =
       "rgba(255,255,255,.15)";
 
+
       ctx.fillStyle =
       "rgba(255,255,255,.72)";
+
 
       for(
         let i=0;
@@ -1974,6 +2466,7 @@ function drawEvolution(){
         graphH
         *
         i/4;
+
 
         ctx.beginPath();
 
@@ -1989,6 +2482,7 @@ function drawEvolution(){
 
         ctx.stroke();
 
+
         const value =
         Math.round(
           yMax
@@ -2000,13 +2494,15 @@ function drawEvolution(){
           i/4
         );
 
+
         ctx.fillText(
-          String(value),
+          value,
           4,
           y+4
         );
 
       }
+
 
       const points =
       ANNUAL.map(
@@ -2014,6 +2510,7 @@ function drawEvolution(){
           row,
           index
         )=>{
+
 
           const x =
           left
@@ -2025,6 +2522,7 @@ function drawEvolution(){
           (
             ANNUAL.length-1
           );
+
 
           const ratio =
           (
@@ -2039,6 +2537,7 @@ function drawEvolution(){
             1
           );
 
+
           const y =
           top
           +
@@ -2048,22 +2547,26 @@ function drawEvolution(){
           *
           ratio;
 
+
           return {
             x,
-            y,
-            row
+            y
           };
 
         }
       );
 
+
       ctx.strokeStyle =
       "#f2a23a";
+
 
       ctx.lineWidth =
       3;
 
+
       ctx.beginPath();
+
 
       points.forEach(
         (
@@ -2090,37 +2593,39 @@ function drawEvolution(){
         }
       );
 
+
       ctx.stroke();
 
-      for(
-        const point
-        of points
-      ){
 
-        ctx.beginPath();
+      points.forEach(
+        point=>{
 
-        ctx.arc(
-          point.x,
-          point.y,
-          4,
-          0,
-          Math.PI*2
-        );
+          ctx.beginPath();
 
-        ctx.fillStyle =
-        "#ffffff";
+          ctx.arc(
+            point.x,
+            point.y,
+            4,
+            0,
+            Math.PI*2
+          );
 
-        ctx.fill();
+          ctx.fillStyle =
+          "#fff";
 
-        ctx.strokeStyle =
-        "#d46a00";
+          ctx.fill();
 
-        ctx.lineWidth =
-        2;
+          ctx.strokeStyle =
+          "#d46a00";
 
-        ctx.stroke();
+          ctx.lineWidth =
+          2;
 
-      }
+          ctx.stroke();
+
+        }
+      );
+
 
       const maxLabels =
       W < 600
@@ -2128,6 +2633,7 @@ function drawEvolution(){
         6
         :
         10;
+
 
       const step =
       Math.max(
@@ -2139,14 +2645,18 @@ function drawEvolution(){
         )
       );
 
+
       ctx.fillStyle =
       "rgba(255,255,255,.70)";
+
 
       ctx.font =
       "11px system-ui";
 
+
       ctx.textAlign =
       "center";
+
 
       ANNUAL.forEach(
         (
@@ -2157,24 +2667,22 @@ function drawEvolution(){
           if(
             index % step !== 0
             &&
-            index !== ANNUAL.length-1
+            index !==
+            ANNUAL.length-1
           ){
             return;
           }
 
-          const point =
-          points[index];
 
           ctx.fillText(
-            String(
-              row.year
-            ),
-            point.x,
+            row.year,
+            points[index].x,
             H-12
           );
 
         }
       );
+
 
       ctx.textAlign =
       "left";
@@ -2185,6 +2693,10 @@ function drawEvolution(){
 }
 
 
+/* =========================================================
+   LECTURE API
+========================================================= */
+
 async function loadStatsFromApi(){
 
   const cb =
@@ -2194,55 +2706,65 @@ async function loadStatsFromApi(){
     .toString(36)
     .slice(2);
 
-  try{
 
-    const res =
-    await jsonp(
+  const res =
+  await jsonp(
 
-      `${API}?view=statistiques_list`
-      +
-      `&callback=${cb}`,
+    `${API}?view=statistiques_list`
+    +
+    `&callback=${cb}`,
 
-      cb,
+    cb,
 
-      20000
+    30000
 
-    );
+  );
 
-    if(
-      !res
-      ||
-      res.ok !== true
-    ){
-      return;
-    }
 
-    CAPTURES =
-    Array.isArray(
-      res.captures
-    )
-      ?
-      res.captures
-      :
-      [];
+  if(
+    !res
+    ||
+    res.ok !== true
+  ){
 
-    ANNUAL =
-    Array.isArray(
-      res.annual
-    )
-      ?
-      res.annual
-      :
-      [];
+    return null;
 
-    saveLocalCache();
+  }
 
-    renderAll();
 
-  }catch(e){}
+  CAPTURES =
+  Array.isArray(
+    res.captures
+  )
+    ?
+    res.captures
+    :
+    [];
+
+
+  ANNUAL =
+  Array.isArray(
+    res.annual
+  )
+    ?
+    res.annual
+    :
+    [];
+
+
+  saveLocalCache();
+
+  renderAll();
+
+
+  return res;
 
 }
 
+
+/* =========================================================
+   ANNUEL SAVE
+========================================================= */
 
 async function saveAnnual(){
 
@@ -2250,22 +2772,23 @@ async function saveAnnual(){
     return;
   }
 
+
   const year =
   Number(
     $("adminYear").value
   );
+
 
   const interventions =
   Number(
     $("adminInterventions").value
   );
 
+
   if(
     !Number.isInteger(year)
     ||
     year < 1900
-    ||
-    year > 2200
   ){
 
     alert(
@@ -2276,8 +2799,11 @@ async function saveAnnual(){
 
   }
 
+
   if(
-    !Number.isFinite(interventions)
+    !Number.isFinite(
+      interventions
+    )
     ||
     interventions < 0
   ){
@@ -2290,8 +2816,18 @@ async function saveAnnual(){
 
   }
 
-  const email =
-  getEmail();
+
+  const button =
+  $("btnSaveAnnual");
+
+
+  button.disabled =
+  true;
+
+
+  button.textContent =
+  "Enregistrement…";
+
 
   const cb =
   "stats_annual_"
@@ -2300,11 +2836,6 @@ async function saveAnnual(){
     .toString(36)
     .slice(2);
 
-  $("btnSaveAnnual").disabled =
-  true;
-
-  $("btnSaveAnnual").textContent =
-  "Enregistrement…";
 
   try{
 
@@ -2313,208 +2844,11 @@ async function saveAnnual(){
 
       `${API}?view=statistiques_annual_set`
       +
-      `&email=${encodeURIComponent(email)}`
+      `&email=${encodeURIComponent(getEmail())}`
       +
-      `&year=${encodeURIComponent(year)}`
+      `&year=${year}`
       +
-      `&interventions=${encodeURIComponent(interventions)}`
-      +
-      `&callback=${cb}`,
-
-      cb,
-
-      20000
-
-    );
-
-    if(
-      !res
-      ||
-      res.ok !== true
-    ){
-
-      throw new Error(
-        res?.error
-        ||
-        "Erreur"
-      );
-
-    }
-
-    const existing =
-    ANNUAL.find(
-      item=>
-        Number(item.year)
-        ===
-        year
-    );
-
-    if(existing){
-
-      existing.interventions =
-      interventions;
-
-    }else{
-
-      ANNUAL.push({
-        year,
-        interventions
-      });
-
-    }
-
-    saveLocalCache();
-
-    renderAnnual();
-
-    $("adminYear").value =
-    "";
-
-    $("adminInterventions").value =
-    "";
-
-    showStatus(
-      "Enregistré",
-      "success"
-    );
-
-  }catch(error){
-
-    alert(
-      "Erreur : "
-      +
-      String(
-        error?.message
-        ||
-        error
-      )
-    );
-
-  }
-
-  $("btnSaveAnnual").disabled =
-  false;
-
-  $("btnSaveAnnual").textContent =
-  "Enregistrer";
-
-}
-
-
-async function deleteAnnualYear(
-  year
-){
-
-  if(
-    !IS_ADMIN
-    ||
-    DELETE_ANNUAL_IN_PROGRESS
-  ){
-    return;
-  }
-
-  const original =
-  ANNUAL.find(
-    item=>
-      Number(item.year)
-      ===
-      Number(year)
-  );
-
-  if(!original){
-    return;
-  }
-
-  if(
-    !confirm(
-      `Supprimer l'année ${year} et son nombre d'interventions ?`
-    )
-  ){
-    return;
-  }
-
-
-  DELETE_ANNUAL_IN_PROGRESS =
-  true;
-
-
-  const backup =
-  {
-    year:Number(original.year),
-    interventions:Number(original.interventions)
-  };
-
-
-  const card =
-  $yearList.querySelector(
-    `[data-year="${year}"]`
-  );
-
-
-  if(card){
-    card.classList.add(
-      "removing"
-    );
-  }
-
-
-  await new Promise(
-    resolve=>
-      setTimeout(
-        resolve,
-        150
-      )
-  );
-
-
-  /*
-    SUPPRESSION IMMÉDIATE À L'ÉCRAN
-  */
-
-  ANNUAL =
-  ANNUAL.filter(
-    item=>
-      Number(item.year)
-      !==
-      Number(year)
-  );
-
-
-  saveLocalCache();
-
-  renderAnnual();
-
-  showStatus(
-    "Supprimé",
-    "danger"
-  );
-
-
-  /*
-    ENSUITE APPS SCRIPT TRAVAILLE DERRIÈRE
-  */
-
-  const email =
-  getEmail();
-
-  const cb =
-  "stats_year_delete_"
-  +
-  Math.random()
-    .toString(36)
-    .slice(2);
-
-
-  try{
-
-    const res =
-    await jsonp(
-
-      `${API}?view=statistiques_annual_delete`
-      +
-      `&email=${encodeURIComponent(email)}`
-      +
-      `&year=${encodeURIComponent(year)}`
+      `&interventions=${interventions}`
       +
       `&callback=${cb}`,
 
@@ -2532,165 +2866,255 @@ async function deleteAnnualYear(
     ){
 
       throw new Error(
-        res?.error
-        ||
-        "Erreur suppression"
+        res?.error || "Erreur"
       );
 
     }
 
 
-    /*
-      TOUT EST BON.
-      ON GARDE L'ÉTAT ACTUEL.
-    */
+    const old =
+    ANNUAL.find(
+      item=>
+        Number(
+          item.year
+        )
+        ===
+        year
+    );
+
+
+    if(old){
+
+      old.interventions =
+      interventions;
+
+    }else{
+
+      ANNUAL.push({
+        year,
+        interventions
+      });
+
+    }
+
+
+    saveLocalCache();
+
+    renderAnnual();
+
+
+    $("adminYear").value =
+    "";
+
+
+    $("adminInterventions").value =
+    "";
+
+
+    showStatus(
+      "Enregistré",
+      "success"
+    );
 
 
   }catch(error){
 
-    /*
-      SI TIMEOUT OU ERREUR :
-      ON RELIT LA SOURCE.
+    alert(
+      "Erreur : "
+      +
+      (
+        error?.message
+        ||
+        error
+      )
+    );
 
-      Si la suppression a finalement
-      bien eu lieu dans Sheets, on ne
-      remet surtout pas l'année.
-    */
+  }
 
-    let confirmedDeleted =
-    false;
 
+  button.disabled =
+  false;
+
+
+  button.textContent =
+  "Enregistrer";
+
+}
+
+
+/* =========================================================
+   ANNUEL DELETE
+========================================================= */
+
+async function deleteAnnualYear(
+  year
+){
+
+  if(!IS_ADMIN){
+    return;
+  }
+
+
+  if(
+    !confirm(
+      `Supprimer l'année ${year} ?`
+    )
+  ){
+    return;
+  }
+
+
+  const backup =
+  ANNUAL.find(
+    item=>
+      Number(
+        item.year
+      )
+      ===
+      Number(
+        year
+      )
+  );
+
+
+  ANNUAL =
+  ANNUAL.filter(
+    item=>
+      Number(
+        item.year
+      )
+      !==
+      Number(
+        year
+      )
+  );
+
+
+  saveLocalCache();
+
+  renderAnnual();
+
+
+  showStatus(
+    "Supprimé",
+    "danger"
+  );
+
+
+  const cb =
+  "stats_year_delete_"
+  +
+  Math.random()
+    .toString(36)
+    .slice(2);
+
+
+  try{
+
+    const res =
+    await jsonp(
+
+      `${API}?view=statistiques_annual_delete`
+      +
+      `&email=${encodeURIComponent(getEmail())}`
+      +
+      `&year=${year}`
+      +
+      `&callback=${cb}`,
+
+      cb,
+
+      30000
+
+    );
+
+
+    if(
+      !res
+      ||
+      res.ok !== true
+    ){
+
+      throw new Error(
+        res?.error || "Erreur"
+      );
+
+    }
+
+
+  }catch(error){
 
     try{
 
-      const checkCb =
-      "stats_check_"
-      +
-      Math.random()
-        .toString(36)
-        .slice(2);
-
-
-      const check =
-      await jsonp(
-
-        `${API}?view=statistiques_list`
-        +
-        `&callback=${checkCb}`,
-
-        checkCb,
-
-        30000
-
-      );
+      const fresh =
+      await loadStatsFromApi();
 
 
       if(
-        check
-        &&
-        check.ok === true
+        fresh
         &&
         Array.isArray(
-          check.annual
+          fresh.annual
         )
       ){
 
-        const exists =
-        check.annual.some(
+        const stillExists =
+        fresh.annual.some(
           item=>
-            Number(item.year)
+            Number(
+              item.year
+            )
             ===
-            Number(year)
+            year
         );
 
 
-        confirmedDeleted =
-        !exists;
+        if(stillExists){
 
-
-        if(confirmedDeleted){
-
-          ANNUAL =
-          check.annual;
-
-
-          CAPTURES =
-          Array.isArray(
-            check.captures
-          )
-            ?
-            check.captures
-            :
-            CAPTURES;
-
-
-          saveLocalCache();
-
-          renderAll();
+          alert(
+            "La suppression n'a pas abouti."
+          );
 
         }
 
       }
 
-    }catch(checkError){}
+    }catch(e){
 
-
-    if(
-      !confirmedDeleted
-    ){
-
-      /*
-        VRAIE ERREUR :
-        ON RESTAURE L'ANNÉE.
-      */
-
-      const alreadyThere =
-      ANNUAL.some(
-        item=>
-          Number(item.year)
-          ===
-          Number(year)
-      );
-
-
-      if(!alreadyThere){
+      if(backup){
 
         ANNUAL.push(
           backup
         );
 
+        saveLocalCache();
+
+        renderAnnual();
+
       }
-
-
-      saveLocalCache();
-
-      renderAnnual();
-
-
-      alert(
-        "La suppression n'a pas pu être confirmée."
-      );
 
     }
 
   }
 
-
-  DELETE_ANNUAL_IN_PROGRESS =
-  false;
-
 }
 
+
+/* =========================================================
+   FORMULAIRE CAPTURE
+========================================================= */
 
 function openCaptureForm(){
 
   const now =
   new Date();
 
+
   $("captureYear").value =
   $yearSelect.value
   ||
   now.getFullYear();
+
 
   $("captureMonth").value =
   $monthSelect.value
@@ -2699,40 +3123,60 @@ function openCaptureForm(){
     now.getMonth()+1
   );
 
+
   $("captureTitle").value =
   "";
+
 
   $captureFile.value =
   "";
 
+
   $previewBox.style.display =
   "none";
+
 
   $previewImage.src =
   "";
 
-  $captureOverlay.classList.add(
-    "show"
-  );
+
+  $uploadInfo.style.display =
+  "none";
+
+
+  $captureOverlay
+    .classList.add(
+      "show"
+    );
 
 }
 
 
 function closeCaptureForm(){
 
-  $captureOverlay.classList.remove(
-    "show"
-  );
+  if(
+    UPLOAD_IN_PROGRESS
+  ){
+    return;
+  }
+
+
+  $captureOverlay
+    .classList.remove(
+      "show"
+    );
 
 }
 
 
-$captureFile.addEventListener(
+$captureFile
+.addEventListener(
   "change",
   ()=>{
 
     const file =
     $captureFile.files?.[0];
+
 
     if(!file){
 
@@ -2743,8 +3187,10 @@ $captureFile.addEventListener(
 
     }
 
+
     const reader =
     new FileReader();
+
 
     reader.onload =
     ()=>{
@@ -2752,10 +3198,12 @@ $captureFile.addEventListener(
       $previewImage.src =
       reader.result;
 
+
       $previewBox.style.display =
       "block";
 
     };
+
 
     reader.readAsDataURL(
       file
@@ -2765,14 +3213,439 @@ $captureFile.addEventListener(
 );
 
 
+/* =========================================================
+   COMPRESSION IMAGE
+========================================================= */
+
+function imageFileToDataUrl(
+  file
+){
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    )=>{
+
+
+      const reader =
+      new FileReader();
+
+
+      reader.onerror =
+      reject;
+
+
+      reader.onload =
+      ()=>{
+
+
+        const img =
+        new Image();
+
+
+        img.onerror =
+        reject;
+
+
+        img.onload =
+        ()=>{
+
+
+          let width =
+          img.naturalWidth;
+
+
+          let height =
+          img.naturalHeight;
+
+
+          const maxWidth =
+          2200;
+
+
+          const maxHeight =
+          4200;
+
+
+          const ratio =
+          Math.min(
+            1,
+            maxWidth/width,
+            maxHeight/height
+          );
+
+
+          width =
+          Math.round(
+            width*ratio
+          );
+
+
+          height =
+          Math.round(
+            height*ratio
+          );
+
+
+          const canvas =
+          document.createElement(
+            "canvas"
+          );
+
+
+          canvas.width =
+          width;
+
+
+          canvas.height =
+          height;
+
+
+          const ctx =
+          canvas.getContext(
+            "2d"
+          );
+
+
+          ctx.drawImage(
+            img,
+            0,
+            0,
+            width,
+            height
+          );
+
+
+          const dataUrl =
+          canvas.toDataURL(
+            "image/jpeg",
+            .88
+          );
+
+
+          resolve(
+            dataUrl
+          );
+
+        };
+
+
+        img.src =
+        reader.result;
+
+      };
+
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   POST INVISIBLE VERS APPS SCRIPT
+========================================================= */
+
+function postCaptureToAppsScript(
+  fields
+){
+
+  const iframeName =
+  "stats_upload_iframe_"
+  +
+  Date.now();
+
+
+  const iframe =
+  document.createElement(
+    "iframe"
+  );
+
+
+  iframe.name =
+  iframeName;
+
+
+  iframe.style.display =
+  "none";
+
+
+  document.body
+    .appendChild(
+      iframe
+    );
+
+
+  const form =
+  document.createElement(
+    "form"
+  );
+
+
+  form.method =
+  "POST";
+
+
+  form.action =
+  API;
+
+
+  form.target =
+  iframeName;
+
+
+  form.style.display =
+  "none";
+
+
+  Object.entries(
+    fields
+  )
+  .forEach(
+    (
+      [
+        name,
+        value
+      ]
+    )=>{
+
+
+      const input =
+      document.createElement(
+        "textarea"
+      );
+
+
+      input.name =
+      name;
+
+
+      input.value =
+      String(
+        value ?? ""
+      );
+
+
+      form.appendChild(
+        input
+      );
+
+    }
+  );
+
+
+  document.body
+    .appendChild(
+      form
+    );
+
+
+  form.submit();
+
+
+  setTimeout(
+    ()=>{
+
+      form.remove();
+
+      iframe.remove();
+
+    },
+    90000
+  );
+
+}
+
+
+/* =========================================================
+   ATTEND QUE LA CAPTURE EXISTE DANS SHEETS
+========================================================= */
+
+async function waitForUploadedCapture(
+  id
+){
+
+  const deadline =
+  Date.now()
+  +
+  60000;
+
+
+  while(
+    Date.now()
+    <
+    deadline
+  ){
+
+    await wait(
+      1800
+    );
+
+
+    try{
+
+      const cb =
+      "stats_upload_check_"
+      +
+      Math.random()
+        .toString(36)
+        .slice(2);
+
+
+      const res =
+      await jsonp(
+
+        `${API}?view=statistiques_list`
+        +
+        `&nocache=1`
+        +
+        `&callback=${cb}`,
+
+        cb,
+
+        15000
+
+      );
+
+
+      if(
+        res
+        &&
+        res.ok === true
+        &&
+        Array.isArray(
+          res.captures
+        )
+      ){
+
+        const found =
+        res.captures.find(
+          item=>
+            String(
+              item.id
+            )
+            ===
+            String(
+              id
+            )
+        );
+
+
+        if(found){
+
+          CAPTURES =
+          res.captures;
+
+
+          ANNUAL =
+          Array.isArray(
+            res.annual
+          )
+            ?
+            res.annual
+            :
+            ANNUAL;
+
+
+          saveLocalCache();
+
+          renderAll();
+
+
+          return found;
+
+        }
+
+      }
+
+    }catch(e){}
+
+  }
+
+
+  throw new Error(
+    "Enregistrement non confirmé"
+  );
+
+}
+
+
+/* =========================================================
+   SAVE CAPTURE
+========================================================= */
+
 async function saveCapture(){
 
-  if(!IS_ADMIN){
+  if(
+    !IS_ADMIN
+    ||
+    UPLOAD_IN_PROGRESS
+  ){
     return;
   }
 
+
+  const year =
+  Number(
+    $("captureYear").value
+  );
+
+
+  const month =
+  Number(
+    $("captureMonth").value
+  );
+
+
+  const title =
+  String(
+    $("captureTitle").value
+    ||
+    ""
+  )
+  .trim();
+
+
   const file =
   $captureFile.files?.[0];
+
+
+  if(
+    !Number.isInteger(year)
+    ||
+    year < 2000
+  ){
+
+    alert(
+      "Année incorrecte."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !Number.isInteger(month)
+    ||
+    month < 1
+    ||
+    month > 12
+  ){
+
+    alert(
+      "Mois incorrect."
+    );
+
+    return;
+
+  }
+
 
   if(!file){
 
@@ -2784,26 +3657,173 @@ async function saveCapture(){
 
   }
 
-  alert(
-    "La partie image est prête. "
-    +
-    "Il reste à brancher l'envoi vers Google Drive."
-  );
+
+  UPLOAD_IN_PROGRESS =
+  true;
+
+
+  const button =
+  $("btnSaveCapture");
+
+
+  button.disabled =
+  true;
+
+
+  button.textContent =
+  "Enregistrement…";
+
+
+  $("btnCancelCapture").disabled =
+  true;
+
+
+  $("btnCloseCapture").disabled =
+  true;
+
+
+  $uploadInfo.style.display =
+  "block";
+
+
+  try{
+
+
+    const dataUrl =
+    await imageFileToDataUrl(
+      file
+    );
+
+
+    const base64 =
+    dataUrl.split(
+      ","
+    )[1];
+
+
+    const id =
+    uniqueId();
+
+
+    postCaptureToAppsScript({
+
+      action:
+      "statistiques_capture_add",
+
+      id:
+      id,
+
+      email:
+      getEmail(),
+
+      year:
+      year,
+
+      month:
+      month,
+
+      title:
+      title
+      ||
+      `${MONTHS[month]} ${year}`,
+
+      filename:
+      file.name
+      ||
+      `statistiques-${year}-${month}.jpg`,
+
+      mime_type:
+      "image/jpeg",
+
+      image_data:
+      base64
+
+    });
+
+
+    await waitForUploadedCapture(
+      id
+    );
+
+
+    button.textContent =
+    "✓ Enregistré";
+
+
+    showStatus(
+      "Capture enregistrée",
+      "success"
+    );
+
+
+    await wait(
+      350
+    );
+
+
+    $captureOverlay
+      .classList.remove(
+        "show"
+      );
+
+
+  }catch(error){
+
+    alert(
+      "Erreur d'enregistrement : "
+      +
+      (
+        error?.message
+        ||
+        error
+      )
+    );
+
+  }
+
+
+  UPLOAD_IN_PROGRESS =
+  false;
+
+
+  button.disabled =
+  false;
+
+
+  button.textContent =
+  "Enregistrer";
+
+
+  $("btnCancelCapture").disabled =
+  false;
+
+
+  $("btnCloseCapture").disabled =
+  false;
+
+
+  $uploadInfo.style.display =
+  "none";
 
 }
 
+
+/* =========================================================
+   DELETE CAPTURE
+========================================================= */
 
 async function deleteCapture(
   id
 ){
 
   if(
-    !id
-    ||
     !IS_ADMIN
+    ||
+    !id
   ){
     return;
   }
+
 
   if(
     !confirm(
@@ -2813,25 +3833,30 @@ async function deleteCapture(
     return;
   }
 
+
   const backup =
   CAPTURES.find(
     item=>
-      String(item.id)
+      String(
+        item.id
+      )
       ===
-      String(id)
+      String(
+        id
+      )
   );
 
-
-  /*
-    SUPPRESSION VISUELLE IMMÉDIATE
-  */
 
   CAPTURES =
   CAPTURES.filter(
     item=>
-      String(item.id)
+      String(
+        item.id
+      )
       !==
-      String(id)
+      String(
+        id
+      )
   );
 
 
@@ -2839,17 +3864,15 @@ async function deleteCapture(
 
   renderPeriodSelectors();
 
+
   showStatus(
     "Supprimé",
     "danger"
   );
 
 
-  const email =
-  getEmail();
-
   const cb =
-  "stats_delete_"
+  "stats_delete_capture_"
   +
   Math.random()
     .toString(36)
@@ -2863,7 +3886,7 @@ async function deleteCapture(
 
       `${API}?view=statistiques_capture_delete`
       +
-      `&email=${encodeURIComponent(email)}`
+      `&email=${encodeURIComponent(getEmail())}`
       +
       `&id=${encodeURIComponent(id)}`
       +
@@ -2883,9 +3906,7 @@ async function deleteCapture(
     ){
 
       throw new Error(
-        res?.error
-        ||
-        "Erreur suppression"
+        res?.error || "Erreur"
       );
 
     }
@@ -2893,84 +3914,23 @@ async function deleteCapture(
 
   }catch(error){
 
-    /*
-      À ce stade on restaurera
-      seulement si la suppression
-      n'est vraiment pas confirmée.
-    */
-
-    let confirmedDeleted =
-    false;
-
-
     try{
 
-      const checkCb =
-      "stats_capture_check_"
-      +
-      Math.random()
-        .toString(36)
-        .slice(2);
+      await loadStatsFromApi();
 
+    }catch(e){
 
-      const check =
-      await jsonp(
+      if(backup){
 
-        `${API}?view=statistiques_list`
-        +
-        `&callback=${checkCb}`,
-
-        checkCb,
-
-        30000
-
-      );
-
-
-      if(
-        check
-        &&
-        check.ok === true
-        &&
-        Array.isArray(
-          check.captures
-        )
-      ){
-
-        const exists =
-        check.captures.some(
-          item=>
-            String(item.id)
-            ===
-            String(id)
+        CAPTURES.push(
+          backup
         );
 
+        saveLocalCache();
 
-        confirmedDeleted =
-        !exists;
+        renderPeriodSelectors();
 
       }
-
-    }catch(checkError){}
-
-
-    if(
-      !confirmedDeleted
-      &&
-      backup
-    ){
-
-      CAPTURES.push(
-        backup
-      );
-
-      saveLocalCache();
-
-      renderPeriodSelectors();
-
-      alert(
-        "La suppression de la capture n'a pas pu être confirmée."
-      );
 
     }
 
@@ -2978,6 +3938,10 @@ async function deleteCapture(
 
 }
 
+
+/* =========================================================
+   GLOBAL
+========================================================= */
 
 function renderAll(){
 
@@ -2989,6 +3953,10 @@ function renderAll(){
 
 }
 
+
+/* =========================================================
+   EVENTS
+========================================================= */
 
 $("btnBack").onclick =
 ()=>{
@@ -3006,8 +3974,10 @@ $btnLock.onclick =
     return;
   }
 
+
   EDIT_MODE =
   !EDIT_MODE;
+
 
   applyAdminState();
 
@@ -3057,13 +4027,13 @@ saveCapture;
 
 window.addEventListener(
   "resize",
-  ()=>{
-
-    drawEvolution();
-
-  }
+  drawEvolution
 );
 
+
+/* =========================================================
+   START
+========================================================= */
 
 (function start(){
 
@@ -3073,8 +4043,10 @@ window.addEventListener(
 
   applyAdminState();
 
+
   verifyAdminInBackground()
     .catch(()=>{});
+
 
   loadStatsFromApi()
     .catch(()=>{});
