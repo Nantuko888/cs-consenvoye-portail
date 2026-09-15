@@ -2,8 +2,12 @@
 <html lang="fr">
 
 <head>
+
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,viewport-fit=cover">
 
 <title>Statistiques — CS Consenvoye</title>
 
@@ -15,8 +19,7 @@
   --shadow:0 14px 34px rgba(0,0,0,.40);
   --stroke:rgba(255,255,255,.10);
   --orange:#d46a00;
-  --orange2:#b95800;
-  --success:#1f9d49;
+  --success:#168039;
   --danger:#a72525;
 }
 
@@ -33,7 +36,7 @@ body{
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   color:var(--txt);
-  background:#0b0b0b;
+  background:#080808;
 }
 
 .bg{
@@ -42,46 +45,32 @@ body{
 
   background:
     linear-gradient(
-      180deg,
       rgba(0,0,0,.52),
-      rgba(0,0,0,.68)
+      rgba(0,0,0,.72)
     ),
-    url("background.png") center top / cover no-repeat;
+    url("background.png") center / cover no-repeat;
 
-  z-index:-2;
-}
-
-.bg::after{
-  content:"";
-
-  position:absolute;
-  inset:0;
-
-  background:
-    radial-gradient(
-      circle at 50% 8%,
-      rgba(255,170,60,.14),
-      rgba(0,0,0,.62) 62%
-    );
+  z-index:-1;
 }
 
 .wrap{
   max-width:980px;
-  margin:0 auto;
+  margin:auto;
 
   padding:
     calc(env(safe-area-inset-top) + 10px)
     12px
-    calc(env(safe-area-inset-bottom) + 20px);
+    28px;
 }
 
 .topbar{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  gap:10px;
+  align-items:center;
+  gap:8px;
 
-  padding:10px 12px;
+  padding:11px 12px;
+  margin-bottom:12px;
 
   border-radius:18px;
 
@@ -89,56 +78,43 @@ body{
     linear-gradient(
       180deg,
       rgba(212,106,0,.78),
-      rgba(185,88,0,.58)
+      rgba(160,73,0,.58)
     );
 
-  border:1px solid rgba(255,255,255,.12);
+  border:1px solid var(--stroke);
 
   box-shadow:var(--shadow);
-
-  min-height:48px;
-
-  margin-bottom:12px;
 }
 
 .title{
   margin:0;
-
   font-size:18px;
-
   font-weight:950;
-
-  letter-spacing:.8px;
-
   text-transform:uppercase;
-
-  white-space:nowrap;
 }
 
-.topActions{
+.actions{
   display:flex;
-  align-items:center;
   gap:8px;
+  align-items:center;
 }
 
 .btn{
-  border:1px solid rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.15);
 
-  background:rgba(0,0,0,.20);
+  background:rgba(0,0,0,.25);
 
-  color:#fff;
-
-  padding:9px 12px;
+  color:white;
 
   border-radius:14px;
 
-  font-weight:900;
+  padding:10px 13px;
 
-  cursor:pointer;
+  font-weight:900;
 }
 
 .btn.primary{
-  background:rgba(212,106,0,.90);
+  background:#ba5b00;
 }
 
 .btn.success{
@@ -150,18 +126,14 @@ body{
 }
 
 .btn:disabled{
-  opacity:.60;
-  cursor:default;
+  opacity:.5;
 }
 
 .editLabel{
   display:none;
-
-  font-size:12px;
-
-  font-weight:900;
-
-  color:#fff200;
+  font-size:11px;
+  font-weight:950;
+  color:#ffe800;
 }
 
 .section{
@@ -171,7 +143,7 @@ body{
 
   border-radius:22px;
 
-  background:rgba(0,0,0,.35);
+  background:rgba(0,0,0,.40);
 
   border:1px solid var(--stroke);
 
@@ -179,91 +151,74 @@ body{
 }
 
 .sectionTitle{
-  margin:0 0 10px 0;
+  margin:0 0 12px;
 
-  padding:10px 12px;
+  padding:11px 13px;
 
   border-radius:16px;
 
   background:
     linear-gradient(
       180deg,
-      rgba(212,106,0,.65),
-      rgba(185,88,0,.43)
+      rgba(212,106,0,.64),
+      rgba(155,68,0,.42)
     );
 
-  font-size:18px;
-
+  font-size:19px;
   font-weight:950;
 }
 
 .sectionSub{
-  margin-top:-2px;
-  margin-bottom:12px;
-
+  margin:-3px 0 12px;
   color:var(--muted);
-
-  font-size:13px;
-
   font-weight:700;
+  font-size:13px;
 }
 
 .filters{
   display:grid;
-
   grid-template-columns:1fr 1fr;
-
   gap:10px;
-
   margin-bottom:12px;
 }
 
-.fieldWrap{
+.field{
   display:flex;
-
   flex-direction:column;
-
-  gap:5px;
+  gap:6px;
 }
 
-.fieldLabel{
+label{
   font-size:12px;
-
-  color:rgba(255,255,255,.78);
-
-  font-weight:900;
-
+  font-weight:950;
+  color:rgba(255,255,255,.72);
   text-transform:uppercase;
 }
 
-.select,
-.input{
+input,
+select{
   width:100%;
 
-  padding:11px 12px;
+  padding:12px;
 
   border-radius:14px;
 
-  border:1px solid rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.11);
 
-  background:rgba(0,0,0,.30);
+  background:rgba(0,0,0,.35);
 
-  color:#fff;
-
-  outline:none;
+  color:white;
 
   font-size:15px;
-
   font-weight:900;
 }
 
-.select option{
+select option{
   color:#111;
-  background:#fff;
 }
 
 .empty{
-  padding:18px 14px;
+  padding:18px 12px;
 
   text-align:center;
 
@@ -271,16 +226,14 @@ body{
 
   background:rgba(255,255,255,.04);
 
-  color:rgba(255,255,255,.68);
+  color:rgba(255,255,255,.60);
 
-  font-weight:800;
+  font-weight:850;
 }
 
 .captureList{
   display:flex;
-
   flex-direction:column;
-
   gap:12px;
 }
 
@@ -296,104 +249,78 @@ body{
 
 .captureHead{
   display:flex;
-
   align-items:center;
-
   justify-content:space-between;
-
-  gap:10px;
 
   padding:10px 12px;
 
-  border-bottom:1px solid rgba(255,255,255,.08);
+  gap:8px;
 }
 
 .captureTitle{
   font-weight:950;
 }
 
-.captureActions{
-  display:flex;
-  gap:8px;
-}
-
 .captureImage{
   display:block;
-
   width:100%;
-
   height:auto;
-
-  background:#111;
 }
 
-.annualTop{
-  display:flex;
+.adminPanel{
+  display:none;
 
-  justify-content:space-between;
+  margin-top:12px;
+  padding:12px;
 
-  align-items:center;
+  border-radius:18px;
 
-  gap:10px;
+  border:1px dashed rgba(255,200,80,.45);
+}
 
+.adminPanel.show{
+  display:block;
+}
+
+.adminTitle{
+  color:#ffd06a;
+  font-weight:950;
   margin-bottom:10px;
 }
 
-.totalBig{
-  font-size:30px;
-
-  font-weight:950;
-}
-
-.totalLabel{
-  color:var(--muted);
-
-  font-size:13px;
-
-  font-weight:800;
+.adminAnnual{
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:8px;
+  align-items:end;
 }
 
 .yearList{
   display:grid;
-
-  grid-template-columns:repeat(2,minmax(0,1fr));
-
+  grid-template-columns:repeat(2,1fr);
   gap:8px;
-
-  margin-bottom:12px;
 }
 
-.yearStat{
-  padding:10px 12px;
+.yearBox{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:11px;
 
   border-radius:15px;
 
   background:rgba(255,255,255,.05);
-
-  border:1px solid rgba(255,255,255,.08);
 }
 
-.yearStatInner{
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-between;
-
-  gap:8px;
-}
-
-.yearStatYear{
-  font-size:13px;
-
+.year{
   color:var(--muted);
-
-  font-weight:800;
+  font-size:13px;
+  font-weight:850;
 }
 
-.yearStatValue{
+.value{
   font-size:22px;
-
   font-weight:950;
 }
 
@@ -405,132 +332,50 @@ body{
   display:block;
 }
 
+.latest{
+  display:flex;
+  justify-content:space-between;
+
+  margin-bottom:12px;
+}
+
+.latestBig{
+  font-size:29px;
+  font-weight:950;
+}
+
+.latestSmall{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:800;
+}
+
 .chartBox{
-  position:relative;
-
-  width:100%;
-
-  height:300px;
-
-  padding:8px;
+  height:280px;
 
   border-radius:18px;
 
-  background:rgba(255,255,255,.04);
+  padding:8px;
 
-  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.04);
 
   overflow:hidden;
 }
 
-#evolutionCanvas{
+canvas{
   width:100%;
   height:100%;
-
-  display:block;
-}
-
-.adminPanel{
-  display:none;
-
-  margin-top:12px;
-
-  padding:12px;
-
-  border-radius:18px;
-
-  border:1px dashed rgba(255,210,100,.45);
-
-  background:rgba(125,75,0,.12);
-}
-
-.adminPanel.show{
-  display:block;
-}
-
-.adminPanelTitle{
-  margin:0 0 10px 0;
-
-  font-size:15px;
-
-  font-weight:950;
-
-  color:#ffd36a;
-}
-
-.adminForm{
-  display:grid;
-
-  grid-template-columns:1fr 1fr auto;
-
-  gap:8px;
-
-  align-items:end;
-}
-
-.adminCaptureGrid{
-  display:grid;
-
-  grid-template-columns:1fr 1fr;
-
-  gap:10px;
-}
-
-.full{
-  grid-column:1/-1;
-}
-
-.status{
-  position:fixed;
-
-  left:12px;
-  right:12px;
-
-  bottom:calc(env(safe-area-inset-bottom) + 12px);
-
-  display:none;
-
-  z-index:500;
-
-  text-align:center;
-
-  pointer-events:none;
-}
-
-.statusPill{
-  display:inline-block;
-
-  padding:10px 14px;
-
-  border-radius:16px;
-
-  background:rgba(0,0,0,.90);
-
-  border:1px solid rgba(255,255,255,.14);
-
-  box-shadow:var(--shadow);
-
-  font-weight:900;
-}
-
-.status.success .statusPill{
-  background:rgba(22,128,57,.97);
-}
-
-.status.danger .statusPill{
-  background:rgba(151,24,24,.97);
 }
 
 .overlay{
-  position:fixed;
-
-  inset:0;
-
   display:none;
 
-  z-index:200;
+  position:fixed;
+  inset:0;
 
-  background:rgba(0,0,0,.68);
+  z-index:100;
+
+  background:rgba(0,0,0,.72);
 }
 
 .overlay.show{
@@ -542,112 +387,152 @@ body{
 
   left:12px;
   right:12px;
+  bottom:12px;
 
-  bottom:calc(env(safe-area-inset-bottom) + 12px);
-
-  max-width:780px;
+  max-width:760px;
+  max-height:94vh;
 
   margin:auto;
-
-  padding:12px;
-
-  max-height:92vh;
+  padding:14px;
 
   overflow:auto;
 
   border-radius:22px;
 
-  background:#171717;
+  background:#151515;
 
-  border:1px solid rgba(255,255,255,.14);
-
-  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.13);
 }
 
 .sheetHead{
   display:flex;
-
   justify-content:space-between;
-
   align-items:center;
 
-  gap:10px;
-
-  margin-bottom:12px;
+  margin-bottom:14px;
 }
 
 .sheetTitle{
-  font-size:17px;
-
+  font-size:18px;
   font-weight:950;
 }
 
-.sheetBody{
-  display:flex;
-
-  flex-direction:column;
-
+.formGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
   gap:10px;
 }
 
-.previewBox{
+.full{
+  grid-column:1/-1;
+}
+
+.preview{
   display:none;
 
-  overflow:hidden;
+  margin-top:12px;
 
   border-radius:16px;
+
+  overflow:hidden;
 
   border:1px solid rgba(255,255,255,.10);
 }
 
-.previewBox img{
+.preview img{
   display:block;
-
   width:100%;
-
-  height:auto;
 }
 
-.uploadInfo{
+.uploadBox{
   display:none;
 
-  padding:10px 12px;
+  margin-top:12px;
 
-  border-radius:14px;
+  padding:12px;
 
-  background:rgba(31,157,73,.15);
+  border-radius:15px;
 
-  border:1px solid rgba(71,220,116,.30);
+  background:rgba(22,128,57,.14);
 
-  font-size:13px;
+  border:1px solid rgba(80,220,120,.30);
+}
 
-  font-weight:850;
+.progressOuter{
+  height:9px;
+
+  margin-top:8px;
+
+  overflow:hidden;
+
+  border-radius:20px;
+
+  background:rgba(255,255,255,.10);
+}
+
+.progressInner{
+  height:100%;
+  width:0%;
+
+  border-radius:20px;
+
+  background:#2ab85a;
+
+  transition:width .15s;
+}
+
+.formButtons{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+
+  margin-top:12px;
+}
+
+.status{
+  display:none;
+
+  position:fixed;
+
+  left:12px;
+  right:12px;
+  bottom:16px;
+
+  z-index:300;
+
+  text-align:center;
+}
+
+.status span{
+  display:inline-block;
+
+  padding:10px 15px;
+
+  border-radius:15px;
+
+  background:#168039;
+
+  font-weight:950;
+
+  box-shadow:var(--shadow);
 }
 
 @media(max-width:600px){
 
-  .adminForm{
+  .adminAnnual{
     grid-template-columns:1fr 1fr;
   }
 
-  .adminForm .btn{
+  .adminAnnual button{
     grid-column:1/-1;
   }
 
-  .adminCaptureGrid{
+  .formGrid{
     grid-template-columns:1fr;
   }
 
   .full{
     grid-column:auto;
-  }
-
-  .yearList{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .chartBox{
-    height:260px;
   }
 
 }
@@ -656,12 +541,9 @@ body{
 
 </head>
 
-
 <body>
 
-
 <div class="bg"></div>
-
 
 <div class="wrap">
 
@@ -672,40 +554,30 @@ body{
     Statistiques
   </h1>
 
-
-  <div class="topActions">
+  <div class="actions">
 
     <span
       id="editLabel"
       class="editLabel">
-
       MODE ÉDITION
-
     </span>
 
-
     <button
-      id="btnLock"
+      id="lock"
       class="btn"
       style="display:none">
-
       🔒
-
     </button>
 
-
     <button
-      id="btnBack"
+      id="back"
       class="btn">
-
       Retour
-
     </button>
 
   </div>
 
 </div>
-
 
 
 <section class="section">
@@ -715,36 +587,29 @@ body{
   </h2>
 
   <div class="sectionSub">
-    Consultez les statistiques disponibles par année et par mois.
+    Sélectionnez une année puis un mois.
   </div>
 
 
   <div class="filters">
 
-    <div class="fieldWrap">
+    <div class="field">
 
-      <label class="fieldLabel">
+      <label>
         Année
       </label>
 
-      <select
-        id="yearSelect"
-        class="select">
-      </select>
+      <select id="yearSelect"></select>
 
     </div>
 
+    <div class="field">
 
-    <div class="fieldWrap">
-
-      <label class="fieldLabel">
+      <label>
         Mois
       </label>
 
-      <select
-        id="monthSelect"
-        class="select">
-      </select>
+      <select id="monthSelect"></select>
 
     </div>
 
@@ -752,11 +617,9 @@ body{
 
 
   <div
-    id="capturesEmpty"
+    id="captureEmpty"
     class="empty">
-
     Aucune statistique disponible.
-
   </div>
 
 
@@ -767,25 +630,22 @@ body{
 
 
   <div
-    id="captureAdminPanel"
+    id="captureAdmin"
     class="adminPanel">
 
-    <div class="adminPanelTitle">
+    <div class="adminTitle">
       Administration — Captures mensuelles
     </div>
 
     <button
-      id="btnOpenCaptureForm"
+      id="addCapture"
       class="btn primary">
-
       ＋ Ajouter une capture
-
     </button>
 
   </div>
 
 </section>
-
 
 
 <section
@@ -800,9 +660,7 @@ body{
   <div
     id="annualEmpty"
     class="empty">
-
     Aucune donnée annuelle enregistrée.
-
   </div>
 
 
@@ -810,38 +668,32 @@ body{
     id="annualContent"
     style="display:none">
 
-
-    <div class="annualTop">
+    <div class="latest">
 
       <div>
 
-        <div class="totalLabel">
+        <div class="latestSmall">
           Dernière année renseignée
         </div>
 
         <div
-          id="latestYearLabel"
-          class="totalBig">
-
+          id="latestYear"
+          class="latestBig">
           —
-
         </div>
 
       </div>
 
-
       <div style="text-align:right">
 
-        <div class="totalLabel">
+        <div class="latestSmall">
           Interventions
         </div>
 
         <div
-          id="latestYearValue"
-          class="totalBig">
-
+          id="latestValue"
+          class="latestBig">
           —
-
         </div>
 
       </div>
@@ -858,55 +710,46 @@ body{
 
 
   <div
-    id="annualAdminPanel"
+    id="annualAdmin"
     class="adminPanel">
 
-    <div class="adminPanelTitle">
+    <div class="adminTitle">
       Administration — Interventions annuelles
     </div>
 
 
-    <div class="adminForm">
+    <div class="adminAnnual">
 
-      <div class="fieldWrap">
+      <div class="field">
 
-        <label class="fieldLabel">
+        <label>
           Année
         </label>
 
         <input
-          id="adminYear"
-          class="input"
-          type="number"
-          min="1900"
-          max="2200"
-          inputmode="numeric">
+          id="annualYear"
+          type="number">
 
       </div>
 
 
-      <div class="fieldWrap">
+      <div class="field">
 
-        <label class="fieldLabel">
+        <label>
           Nombre d’interventions
         </label>
 
         <input
-          id="adminInterventions"
-          class="input"
-          type="number"
-          min="0"
-          inputmode="numeric">
+          id="annualValue"
+          type="number">
 
       </div>
 
 
       <button
-        id="btnSaveAnnual"
+        id="saveAnnual"
         class="btn success">
-
         Enregistrer
-
       </button>
 
     </div>
@@ -914,7 +757,6 @@ body{
   </div>
 
 </section>
-
 
 
 <section class="section">
@@ -927,22 +769,18 @@ body{
     Évolution du nombre d’interventions au fil des années.
   </div>
 
-
   <div
     id="chartEmpty"
     class="empty">
-
-    Le graphique apparaîtra dès que plusieurs années seront renseignées.
-
+    Le graphique apparaîtra avec plusieurs années.
   </div>
-
 
   <div
     id="chartBox"
     class="chartBox"
     style="display:none">
 
-    <canvas id="evolutionCanvas"></canvas>
+    <canvas id="chart"></canvas>
 
   </div>
 
@@ -952,11 +790,8 @@ body{
 </div>
 
 
-
-<!-- FORMULAIRE CAPTURE -->
-
 <div
-  id="captureOverlay"
+  id="overlay"
   class="overlay">
 
   <div class="sheet">
@@ -968,146 +803,129 @@ body{
         Ajouter une capture
       </div>
 
-
       <button
-        id="btnCloseCapture"
+        id="closeForm"
         class="btn">
-
         ✕
-
       </button>
 
     </div>
 
 
-    <div class="sheetBody">
+    <div class="formGrid">
 
+      <div class="field">
 
-      <div class="adminCaptureGrid">
+        <label>
+          Année
+        </label>
 
-
-        <div class="fieldWrap">
-
-          <label class="fieldLabel">
-            Année
-          </label>
-
-          <input
-            id="captureYear"
-            class="input"
-            type="number"
-            min="2000"
-            max="2200"
-            inputmode="numeric">
-
-        </div>
-
-
-        <div class="fieldWrap">
-
-          <label class="fieldLabel">
-            Mois
-          </label>
-
-          <select
-            id="captureMonth"
-            class="select">
-
-            <option value="1">Janvier</option>
-            <option value="2">Février</option>
-            <option value="3">Mars</option>
-            <option value="4">Avril</option>
-            <option value="5">Mai</option>
-            <option value="6">Juin</option>
-            <option value="7">Juillet</option>
-            <option value="8">Août</option>
-            <option value="9">Septembre</option>
-            <option value="10">Octobre</option>
-            <option value="11">Novembre</option>
-            <option value="12">Décembre</option>
-
-          </select>
-
-        </div>
-
-
-        <div class="fieldWrap full">
-
-          <label class="fieldLabel">
-            Titre
-          </label>
-
-          <input
-            id="captureTitle"
-            class="input"
-            type="text"
-            placeholder="Ex. Statistiques août 2026">
-
-        </div>
-
-
-        <div class="fieldWrap full">
-
-          <label class="fieldLabel">
-            Image
-          </label>
-
-          <input
-            id="captureFile"
-            class="input"
-            type="file"
-            accept="image/*">
-
-        </div>
+        <input
+          id="captureYear"
+          type="number">
 
       </div>
 
 
-      <div
-        id="previewBox"
-        class="previewBox">
+      <div class="field">
 
-        <img
-          id="previewImage"
-          alt="Aperçu">
+        <label>
+          Mois
+        </label>
+
+        <select id="captureMonth">
+
+          <option value="1">Janvier</option>
+          <option value="2">Février</option>
+          <option value="3">Mars</option>
+          <option value="4">Avril</option>
+          <option value="5">Mai</option>
+          <option value="6">Juin</option>
+          <option value="7">Juillet</option>
+          <option value="8">Août</option>
+          <option value="9">Septembre</option>
+          <option value="10">Octobre</option>
+          <option value="11">Novembre</option>
+          <option value="12">Décembre</option>
+
+        </select>
+
+      </div>
+
+
+      <div class="field full">
+
+        <label>
+          Titre
+        </label>
+
+        <input
+          id="captureTitle"
+          type="text">
 
       </div>
 
 
-      <div
-        id="uploadInfo"
-        class="uploadInfo">
+      <div class="field full">
 
-        Envoi de la capture vers Google Drive…
+        <label>
+          Image
+        </label>
+
+        <input
+          id="captureFile"
+          type="file"
+          accept="image/*">
+
+      </div>
+
+    </div>
+
+
+    <div
+      id="preview"
+      class="preview">
+
+      <img
+        id="previewImg"
+        alt="Aperçu">
+
+    </div>
+
+
+    <div
+      id="uploadBox"
+      class="uploadBox">
+
+      <div id="uploadText">
+        Préparation…
+      </div>
+
+      <div class="progressOuter">
+
+        <div
+          id="progress"
+          class="progressInner">
+        </div>
 
       </div>
 
-
-      <div
-        style="
-          display:flex;
-          justify-content:flex-end;
-          gap:8px
-        ">
-
-        <button
-          id="btnCancelCapture"
-          class="btn">
-
-          Annuler
-
-        </button>
+    </div>
 
 
-        <button
-          id="btnSaveCapture"
-          class="btn success">
+    <div class="formButtons">
 
-          Enregistrer
+      <button
+        id="cancelForm"
+        class="btn">
+        Annuler
+      </button>
 
-        </button>
-
-      </div>
+      <button
+        id="saveCapture"
+        class="btn success">
+        Enregistrer
+      </button>
 
     </div>
 
@@ -1116,18 +934,11 @@ body{
 </div>
 
 
-
 <div
   id="status"
   class="status">
-
-  <div
-    id="statusPill"
-    class="statusPill">
-  </div>
-
+  <span id="statusText"></span>
 </div>
-
 
 
 <script>
@@ -1139,22 +950,20 @@ body{
 const API =
 "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-
-const BACK_URL =
-"index.html";
-
-
 const LS_EMAIL =
 "cs_portail_email_v1";
-
 
 const LS_ROLE =
 "cs_role_v1";
 
-
 const CACHE_KEY =
-"cs_statistiques_cache_v4";
+"cs_statistiques_cache_v6";
 
+const CHUNK_SIZE =
+4500;
+
+const MAX_BASE64 =
+280000;
 
 const MONTHS = [
   "",
@@ -1173,142 +982,158 @@ const MONTHS = [
 ];
 
 
+let CAPTURES = [];
+let ANNUAL = [];
+
 let IS_ADMIN =
 String(
   localStorage.getItem(
     LS_ROLE
-  )
-  ||
-  ""
+  ) || ""
 )
-.trim()
 .toLowerCase()
 ===
 "admin";
 
+let EDIT_MODE = false;
+let UPLOADING = false;
 
-let EDIT_MODE =
-false;
-
-
-let CAPTURES =
-[];
-
-
-let ANNUAL =
-[];
-
-
-let UPLOAD_IN_PROGRESS =
-false;
-
-
-/* =========================================================
-   DOM
-========================================================= */
 
 const $ =
 id =>
 document.getElementById(id);
 
 
-const $btnLock =
-$("btnLock");
+/* =========================================================
+   JSONP
+========================================================= */
 
-const $editLabel =
-$("editLabel");
+function jsonp(
+  view,
+  params={},
+  timeout=30000
+){
 
-const $yearSelect =
-$("yearSelect");
+  return new Promise(
+    (
+      resolve,
+      reject
+    )=>{
 
-const $monthSelect =
-$("monthSelect");
+      const callback =
+      "stats_"
+      +
+      Date.now()
+      +
+      "_"
+      +
+      Math.random()
+        .toString(36)
+        .slice(2);
 
-const $captureList =
-$("captureList");
+      const query =
+      new URLSearchParams({
+        view:view,
+        ...params,
+        callback:callback,
+        _:Date.now()
+      });
 
-const $capturesEmpty =
-$("capturesEmpty");
+      const script =
+      document.createElement(
+        "script"
+      );
 
-const $captureAdminPanel =
-$("captureAdminPanel");
+      let done = false;
 
-const $annualAdminPanel =
-$("annualAdminPanel");
+      const timer =
+      setTimeout(
+        ()=>{
 
-const $annualEmpty =
-$("annualEmpty");
+          if(done) return;
 
-const $annualContent =
-$("annualContent");
+          done = true;
 
-const $yearList =
-$("yearList");
+          cleanup();
 
-const $latestYearLabel =
-$("latestYearLabel");
+          reject(
+            new Error("Timeout")
+          );
 
-const $latestYearValue =
-$("latestYearValue");
+        },
+        timeout
+      );
 
-const $annualSection =
-$("annualSection");
+      function cleanup(){
 
-const $chartEmpty =
-$("chartEmpty");
+        clearTimeout(timer);
 
-const $chartBox =
-$("chartBox");
+        script.remove();
 
-const $canvas =
-$("evolutionCanvas");
+        try{
+          delete window[callback];
+        }catch(e){}
 
-const $captureOverlay =
-$("captureOverlay");
+      }
 
-const $captureFile =
-$("captureFile");
+      window[callback] =
+      data=>{
 
-const $previewBox =
-$("previewBox");
+        if(done) return;
 
-const $previewImage =
-$("previewImage");
+        done = true;
 
-const $uploadInfo =
-$("uploadInfo");
+        cleanup();
 
-const $status =
-$("status");
+        resolve(data);
 
-const $statusPill =
-$("statusPill");
+      };
+
+      script.onerror =
+      ()=>{
+
+        if(done) return;
+
+        done = true;
+
+        cleanup();
+
+        reject(
+          new Error(
+            "Erreur réseau"
+          )
+        );
+
+      };
+
+      script.src =
+      API
+      +
+      "?"
+      +
+      query.toString();
+
+      document.head
+        .appendChild(
+          script
+        );
+
+    }
+  );
+
+}
 
 
 /* =========================================================
    OUTILS
 ========================================================= */
 
-function escapeHtml(value){
-
-  return String(value ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-
 function getEmail(){
 
   return String(
     localStorage.getItem(
       LS_EMAIL
-    )
-    ||
-    ""
+    ) || ""
   )
   .trim()
   .toLowerCase();
@@ -1316,7 +1141,7 @@ function getEmail(){
 }
 
 
-function uniqueId(){
+function makeId(){
 
   return (
     "STAT-"
@@ -1333,194 +1158,26 @@ function uniqueId(){
 }
 
 
-function showStatus(
-  text,
-  type=""
-){
+function showStatus(text){
 
-  $status.classList.remove(
-    "success",
-    "danger"
-  );
-
-
-  if(type){
-    $status.classList.add(type);
-  }
-
-
-  $statusPill.textContent =
+  $("statusText").textContent =
   text;
 
-
-  $status.style.display =
+  $("status").style.display =
   "block";
-
 
   setTimeout(
     ()=>{
-      $status.style.display =
+      $("status").style.display =
       "none";
     },
-    1300
+    1400
   );
 
 }
 
 
-function wait(
-  ms
-){
-
-  return new Promise(
-    resolve=>
-      setTimeout(
-        resolve,
-        ms
-      )
-  );
-
-}
-
-
-function jsonp(
-  url,
-  cbName,
-  timeout=20000
-){
-
-  return new Promise(
-    (
-      resolve,
-      reject
-    )=>{
-
-
-      const script =
-      document.createElement(
-        "script"
-      );
-
-
-      let done =
-      false;
-
-
-      const timer =
-      setTimeout(
-        ()=>{
-
-          if(done){
-            return;
-          }
-
-          done =
-          true;
-
-          cleanup();
-
-          reject(
-            new Error(
-              "Timeout"
-            )
-          );
-
-        },
-        timeout
-      );
-
-
-      function cleanup(){
-
-        clearTimeout(
-          timer
-        );
-
-        script.remove();
-
-        try{
-          delete window[
-            cbName
-          ];
-        }catch(e){}
-
-      }
-
-
-      window[
-        cbName
-      ] =
-      data=>{
-
-        if(done){
-          return;
-        }
-
-        done =
-        true;
-
-        cleanup();
-
-        resolve(
-          data
-        );
-
-      };
-
-
-      script.onerror =
-      ()=>{
-
-        if(done){
-          return;
-        }
-
-        done =
-        true;
-
-        cleanup();
-
-        reject(
-          new Error(
-            "Erreur réseau"
-          )
-        );
-
-      };
-
-
-      script.src =
-      url
-      +
-      (
-        url.includes("?")
-          ?
-          "&"
-          :
-          "?"
-      )
-      +
-      "_="
-      +
-      Date.now();
-
-
-      document.head
-        .appendChild(
-          script
-        );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   CACHE
-========================================================= */
-
-function saveLocalCache(){
+function saveCache(){
 
   try{
 
@@ -1528,8 +1185,7 @@ function saveLocalCache(){
       CACHE_KEY,
       JSON.stringify({
         captures:CAPTURES,
-        annual:ANNUAL,
-        savedAt:Date.now()
+        annual:ANNUAL
       })
     );
 
@@ -1538,7 +1194,7 @@ function saveLocalCache(){
 }
 
 
-function loadLocalCache(){
+function loadCache(){
 
   try{
 
@@ -1547,36 +1203,20 @@ function loadLocalCache(){
       CACHE_KEY
     );
 
-
-    if(!raw){
-      return;
-    }
-
+    if(!raw) return;
 
     const data =
-    JSON.parse(
-      raw
-    );
-
+    JSON.parse(raw);
 
     CAPTURES =
-    Array.isArray(
-      data.captures
-    )
-      ?
-      data.captures
-      :
-      [];
-
+    Array.isArray(data.captures)
+      ? data.captures
+      : [];
 
     ANNUAL =
-    Array.isArray(
-      data.annual
-    )
-      ?
-      data.annual
-      :
-      [];
+    Array.isArray(data.annual)
+      ? data.annual
+      : [];
 
   }catch(e){}
 
@@ -1587,132 +1227,80 @@ function loadLocalCache(){
    ADMIN
 ========================================================= */
 
-function applyAdminState(){
+function applyAdmin(){
 
-  $btnLock.style.display =
+  $("lock").style.display =
   IS_ADMIN
-    ?
-    "inline-block"
-    :
-    "none";
+    ? "inline-block"
+    : "none";
 
-
-  $btnLock.textContent =
+  $("lock").textContent =
   EDIT_MODE
-    ?
-    "🔓"
-    :
-    "🔒";
+    ? "🔓"
+    : "🔒";
 
-
-  $editLabel.style.display =
+  $("editLabel").style.display =
   EDIT_MODE
-    ?
-    "inline-block"
-    :
-    "none";
+    ? "inline"
+    : "none";
 
-
-  $captureAdminPanel
+  $("captureAdmin")
     .classList.toggle(
       "show",
-      IS_ADMIN
-      &&
-      EDIT_MODE
+      IS_ADMIN && EDIT_MODE
     );
 
-
-  $annualAdminPanel
+  $("annualAdmin")
     .classList.toggle(
       "show",
-      IS_ADMIN
-      &&
-      EDIT_MODE
+      IS_ADMIN && EDIT_MODE
     );
 
-
-  $annualSection
+  $("annualSection")
     .classList.toggle(
       "editMode",
-      IS_ADMIN
-      &&
-      EDIT_MODE
+      IS_ADMIN && EDIT_MODE
     );
 
 }
 
 
-async function verifyAdminInBackground(){
+async function verifyAdmin(){
 
   const email =
   getEmail();
 
-
-  if(!email){
-    return;
-  }
-
-
-  const cb =
-  "stat_auth_"
-  +
-  Math.random()
-    .toString(36)
-    .slice(2);
-
+  if(!email) return;
 
   try{
 
     const res =
     await jsonp(
-
-      `${API}?view=auth_check`
-      +
-      `&email=${encodeURIComponent(email)}`
-      +
-      `&callback=${cb}`,
-
-      cb
-
+      "auth_check",
+      {
+        email:email
+      }
     );
 
-
-    if(
-      !res
-      ||
-      res.ok !== true
-    ){
+    if(!res || res.ok !== true){
       return;
     }
-
 
     const role =
     String(
       res.role || ""
     )
-    .trim()
     .toLowerCase();
-
 
     localStorage.setItem(
       LS_ROLE,
       role
     );
 
-
     IS_ADMIN =
     role === "admin";
 
-
-    if(!IS_ADMIN){
-
-      EDIT_MODE =
-      false;
-
-    }
-
-
-    applyAdminState();
+    applyAdmin();
 
     renderCaptures();
 
@@ -1724,103 +1312,178 @@ async function verifyAdminInBackground(){
 
 
 /* =========================================================
-   CAPTURES
+   DONNÉES
 ========================================================= */
 
-function getAvailableYears(){
+async function reload(){
 
-  return [
+  const res =
+    await jsonp(
+      "statistiques_list"
+    );
+
+  if(
+    !res ||
+    res.ok !== true
+  ){
+    return;
+  }
+
+  CAPTURES =
+    Array.isArray(res.captures)
+      ? res.captures
+      : [];
+
+  ANNUAL =
+    Array.isArray(res.annual)
+      ? res.annual
+      : [];
+
+  saveCache();
+
+  renderAll();
+
+}
+
+
+/* =========================================================
+   PÉRIODES
+========================================================= */
+
+function renderPeriods(){
+
+  const years =
+  [
     ...new Set(
-      CAPTURES
-        .map(
-          item=>
-            Number(
-              item.year
-            )
-        )
-        .filter(
-          Number.isInteger
-        )
+      CAPTURES.map(
+        x=>Number(x.year)
+      )
     )
   ]
+  .filter(Number.isInteger)
   .sort(
     (a,b)=>b-a
   );
 
+
+  const previousYear =
+  Number(
+    $("yearSelect").value
+  );
+
+
+  $("yearSelect").innerHTML =
+  "";
+
+
+  if(!years.length){
+
+    $("yearSelect").innerHTML =
+    `<option>Aucune donnée</option>`;
+
+    $("monthSelect").innerHTML =
+    `<option>Aucun mois</option>`;
+
+    renderCaptures();
+
+    return;
+
+  }
+
+
+  years.forEach(
+    year=>{
+
+      const opt =
+      document.createElement(
+        "option"
+      );
+
+      opt.value = year;
+      opt.textContent = year;
+
+      $("yearSelect")
+        .appendChild(opt);
+
+    }
+  );
+
+
+  const selected =
+  years.includes(previousYear)
+    ? previousYear
+    : years[0];
+
+
+  $("yearSelect").value =
+  selected;
+
+
+  renderMonths(selected);
+
 }
 
 
-function getAvailableMonths(
-  year
-){
+function renderMonths(year){
 
-  return [
+  const oldMonth =
+  Number(
+    $("monthSelect").value
+  );
+
+
+  const months =
+  [
     ...new Set(
       CAPTURES
         .filter(
-          item=>
-            Number(
-              item.year
-            )
+          x=>
+            Number(x.year)
             ===
-            Number(
-              year
-            )
+            Number(year)
         )
         .map(
-          item=>
-            Number(
-              item.month
-            )
-        )
-        .filter(
-          month=>
-            month >= 1
-            &&
-            month <= 12
+          x=>Number(x.month)
         )
     )
   ]
+  .filter(
+    m=>m>=1 && m<=12
+  )
   .sort(
     (a,b)=>a-b
   );
 
-}
 
-
-function renderPeriodSelectors(){
-
-  const oldYear =
-  Number(
-    $yearSelect.value
-  );
-
-
-  const oldMonth =
-  Number(
-    $monthSelect.value
-  );
-
-
-  const years =
-  getAvailableYears();
-
-
-  $yearSelect.innerHTML =
+  $("monthSelect").innerHTML =
   "";
 
 
-  if(
-    !years.length
-  ){
+  months.forEach(
+    month=>{
 
-    $yearSelect.innerHTML =
-    `<option value="">Aucune donnée</option>`;
+      const opt =
+      document.createElement(
+        "option"
+      );
+
+      opt.value =
+      month;
+
+      opt.textContent =
+      MONTHS[month];
+
+      $("monthSelect")
+        .appendChild(opt);
+
+    }
+  );
 
 
-    $monthSelect.innerHTML =
-    `<option value="">Aucune donnée</option>`;
+  if(!months.length){
 
+    $("monthSelect").innerHTML =
+    `<option>Aucun mois</option>`;
 
     renderCaptures();
 
@@ -1829,132 +1492,12 @@ function renderPeriodSelectors(){
   }
 
 
-  for(
-    const year
-    of years
-  ){
-
-    const option =
-    document.createElement(
-      "option"
-    );
-
-
-    option.value =
-    year;
-
-
-    option.textContent =
-    year;
-
-
-    $yearSelect
-      .appendChild(
-        option
-      );
-
-  }
-
-
-  const selected =
-  years.includes(
-    oldYear
-  )
-    ?
-    oldYear
-    :
-    years[0];
-
-
-  $yearSelect.value =
-  selected;
-
-
-  renderMonths(
-    selected,
-    oldMonth
-  );
-
-}
-
-
-function renderMonths(
-  year,
-  wantedMonth
-){
-
-  const months =
-  getAvailableMonths(
-    year
-  );
-
-
-  $monthSelect.innerHTML =
-  "";
-
-
-  if(
-    !months.length
-  ){
-
-    $monthSelect.innerHTML =
-    `<option value="">Aucun mois</option>`;
-
-
-    renderCaptures();
-
-    return;
-
-  }
-
-
-  for(
-    const month
-    of months
-  ){
-
-    const option =
-    document.createElement(
-      "option"
-    );
-
-
-    option.value =
-    month;
-
-
-    option.textContent =
-    MONTHS[
-      month
-    ];
-
-
-    $monthSelect
-      .appendChild(
-        option
-      );
-
-  }
-
-
-  const selected =
-  months.includes(
-    Number(
-      wantedMonth
-    )
-  )
-    ?
-    Number(
-      wantedMonth
-    )
-    :
-    months[
-      months.length-1
-    ];
-
-
-  $monthSelect.value =
-  selected;
+  $("monthSelect").value =
+  months.includes(oldMonth)
+    ? oldMonth
+    : months[
+        months.length-1
+      ];
 
 
   renderCaptures();
@@ -1962,141 +1505,110 @@ function renderMonths(
 }
 
 
+/* =========================================================
+   CAPTURES
+========================================================= */
+
 function renderCaptures(){
 
   const year =
   Number(
-    $yearSelect.value
+    $("yearSelect").value
   );
-
 
   const month =
   Number(
-    $monthSelect.value
+    $("monthSelect").value
   );
 
 
   const list =
   CAPTURES
     .filter(
-      item=>
-        Number(
-          item.year
-        )
-        ===
-        year
+      x=>
+        Number(x.year) === year
         &&
-        Number(
-          item.month
-        )
-        ===
-        month
+        Number(x.month) === month
     )
     .sort(
       (a,b)=>
-        Number(
-          a.order || 0
-        )
+        Number(a.order || 0)
         -
-        Number(
-          b.order || 0
-        )
+        Number(b.order || 0)
     );
 
 
-  $captureList.innerHTML =
+  $("captureList").innerHTML =
   "";
 
 
-  $capturesEmpty.style.display =
+  $("captureEmpty").style.display =
   list.length
-    ?
-    "none"
-    :
-    "block";
+    ? "none"
+    : "block";
 
 
-  for(
-    const item
-    of list
-  ){
+  list.forEach(
+    item=>{
 
-    const card =
-    document.createElement(
-      "div"
-    );
+      const card =
+      document.createElement(
+        "div"
+      );
 
-
-    card.className =
-    "captureCard";
+      card.className =
+      "captureCard";
 
 
-    card.innerHTML =
-    `
-      <div class="captureHead">
+      card.innerHTML =
+      `
+        <div class="captureHead">
 
-        <div class="captureTitle">
+          <div class="captureTitle">
+            ${item.title || ""}
+          </div>
 
-          ${escapeHtml(
-            item.title
-            ||
-            `${MONTHS[month]} ${year}`
-          )}
-
-        </div>
-
-        ${
-          IS_ADMIN && EDIT_MODE
+          ${
+            IS_ADMIN && EDIT_MODE
             ?
             `
-              <div class="captureActions">
-
-                <button
-                  class="btn danger"
-                  data-delete-capture="${escapeHtml(item.id)}">
-
-                  🗑
-
-                </button>
-
-              </div>
+              <button
+                class="btn danger"
+                data-delete="${item.id}">
+                🗑
+              </button>
             `
             :
             ""
-        }
+          }
 
-      </div>
+        </div>
 
-      <img
-        class="captureImage"
-        src="${escapeHtml(item.image_url || "")}"
-        alt="Statistiques">
-    `;
-
-
-    $captureList
-      .appendChild(
-        card
-      );
-
-  }
+        <img
+          class="captureImage"
+          src="${item.image_url}"
+          alt="Statistiques">
+      `;
 
 
-  $captureList
+      $("captureList")
+        .appendChild(card);
+
+    }
+  );
+
+
+  document
     .querySelectorAll(
-      "[data-delete-capture]"
+      "[data-delete]"
     )
     .forEach(
       button=>{
 
         button.onclick =
-        ()=>{
-
-          deleteCapture(
-            button.dataset.deleteCapture
-          );
-
-        };
+        ()=>deleteCapture(
+          button.dataset.delete
+        );
 
       }
     );
@@ -2108,74 +1620,54 @@ function renderCaptures(){
    ANNUEL
 ========================================================= */
 
-function normalizeAnnual(){
+function renderAnnual(){
 
   ANNUAL =
   ANNUAL
     .map(
-      row=>({
-        year:Number(
-          row.year
-        ),
-        interventions:Number(
-          row.interventions
-        )
+      x=>({
+        year:Number(x.year),
+        interventions:
+          Number(x.interventions)
       })
     )
     .filter(
-      row=>
-        Number.isInteger(
-          row.year
-        )
+      x=>
+        Number.isInteger(x.year)
         &&
         Number.isFinite(
-          row.interventions
+          x.interventions
         )
     )
     .sort(
-      (a,b)=>
-        a.year-b.year
+      (a,b)=>a.year-b.year
     );
 
-}
 
-
-function renderAnnual(){
-
-  normalizeAnnual();
-
-
-  const hasData =
-  ANNUAL.length > 0;
-
-
-  $annualEmpty.style.display =
-  hasData
-    ?
-    "none"
-    :
-    "block";
-
-
-  $annualContent.style.display =
-  hasData
-    ?
-    "block"
-    :
-    "none";
-
-
-  $yearList.innerHTML =
+  $("yearList").innerHTML =
   "";
 
 
-  if(!hasData){
+  if(!ANNUAL.length){
 
-    drawEvolution();
+    $("annualEmpty").style.display =
+    "block";
+
+    $("annualContent").style.display =
+    "none";
+
+    drawChart();
 
     return;
 
   }
+
+
+  $("annualEmpty").style.display =
+  "none";
+
+  $("annualContent").style.display =
+  "block";
 
 
   const latest =
@@ -2184,90 +1676,76 @@ function renderAnnual(){
   ];
 
 
-  $latestYearLabel.textContent =
+  $("latestYear").textContent =
   latest.year;
 
-
-  $latestYearValue.textContent =
+  $("latestValue").textContent =
   latest.interventions;
 
 
-  for(
-    const row
-    of ANNUAL
-      .slice()
-      .reverse()
-  ){
-
-    const div =
-    document.createElement(
-      "div"
-    );
-
-
-    div.className =
-    "yearStat";
-
-
-    div.innerHTML =
-    `
-      <div class="yearStatInner">
-
-        <div>
-
-          <div class="yearStatYear">
-            ${row.year}
-          </div>
-
-          <div class="yearStatValue">
-            ${row.interventions}
-          </div>
-
-        </div>
-
-        <button
-          class="btn danger yearDelete"
-          data-delete-year="${row.year}">
-
-          🗑
-
-        </button>
-
-      </div>
-    `;
-
-
-    $yearList
-      .appendChild(
-        div
-      );
-
-  }
-
-
-  $yearList
-    .querySelectorAll(
-      "[data-delete-year]"
-    )
+  ANNUAL
+    .slice()
+    .reverse()
     .forEach(
-      button=>{
+      row=>{
 
-        button.onclick =
-        ()=>{
+        const div =
+        document.createElement(
+          "div"
+        );
 
-          deleteAnnualYear(
-            Number(
-              button.dataset.deleteYear
-            )
-          );
+        div.className =
+        "yearBox";
 
-        };
+
+        div.innerHTML =
+        `
+          <div>
+
+            <div class="year">
+              ${row.year}
+            </div>
+
+            <div class="value">
+              ${row.interventions}
+            </div>
+
+          </div>
+
+          <button
+            class="btn danger yearDelete"
+            data-year-delete="${row.year}">
+            🗑
+          </button>
+        `;
+
+
+        $("yearList")
+          .appendChild(div);
 
       }
     );
 
 
-  drawEvolution();
+  document
+    .querySelectorAll(
+      "[data-year-delete]"
+    )
+    .forEach(
+      button=>{
+
+        button.onclick =
+        ()=>deleteAnnual(
+          Number(
+            button.dataset.yearDelete
+          )
+        );
+
+      }
+    );
+
+
+  drawChart();
 
 }
 
@@ -2276,73 +1754,48 @@ function renderAnnual(){
    COURBE
 ========================================================= */
 
-function drawEvolution(){
+function drawChart(){
 
-  normalizeAnnual();
+  if(ANNUAL.length < 2){
 
-
-  if(
-    ANNUAL.length < 2
-  ){
-
-    $chartEmpty.style.display =
+    $("chartEmpty").style.display =
     "block";
 
-
-    $chartBox.style.display =
+    $("chartBox").style.display =
     "none";
-
 
     return;
 
   }
 
 
-  $chartEmpty.style.display =
+  $("chartEmpty").style.display =
   "none";
 
-
-  $chartBox.style.display =
+  $("chartBox").style.display =
   "block";
 
 
   requestAnimationFrame(
     ()=>{
 
+      const canvas =
+      $("chart");
 
       const rect =
-      $canvas
-        .getBoundingClientRect();
-
+      canvas.getBoundingClientRect();
 
       const dpr =
-      window.devicePixelRatio
-      ||
-      1;
+      window.devicePixelRatio || 1;
 
+      canvas.width =
+      rect.width*dpr;
 
-      $canvas.width =
-      Math.floor(
-        rect.width
-        *
-        dpr
-      );
-
-
-      $canvas.height =
-      Math.floor(
-        rect.height
-        *
-        dpr
-      );
-
+      canvas.height =
+      rect.height*dpr;
 
       const ctx =
-      $canvas
-        .getContext(
-          "2d"
-        );
-
+      canvas.getContext("2d");
 
       ctx.setTransform(
         dpr,
@@ -2357,116 +1810,67 @@ function drawEvolution(){
       const W =
       rect.width;
 
-
       const H =
       rect.height;
 
-
-      ctx.clearRect(
-        0,
-        0,
-        W,
-        H
-      );
-
-
-      const left =
-      46;
-
-      const right =
-      16;
-
-      const top =
-      18;
-
-      const bottom =
-      38;
-
+      const left = 44;
+      const right = 15;
+      const top = 20;
+      const bottom = 35;
 
       const graphW =
-      W
-      -
-      left
-      -
-      right;
-
+      W-left-right;
 
       const graphH =
-      H
-      -
-      top
-      -
-      bottom;
+      H-top-bottom;
 
 
       const values =
       ANNUAL.map(
-        row=>
-          row.interventions
+        x=>x.interventions
       );
 
 
-      const minVal =
-      Math.min(
-        ...values
-      );
+      const min =
+      Math.min(...values);
 
-
-      const maxVal =
-      Math.max(
-        ...values
-      );
-
+      const max =
+      Math.max(...values);
 
       const margin =
       Math.max(
         10,
         Math.round(
-          (
-            maxVal-minVal
-          )
-          *
-          .15
+          (max-min)*.15
         )
       );
-
 
       const yMin =
       Math.max(
         0,
-        minVal-margin
+        min-margin
       );
 
-
       const yMax =
-      maxVal+margin;
-
-
-      ctx.font =
-      "12px system-ui";
+      max+margin;
 
 
       ctx.strokeStyle =
       "rgba(255,255,255,.15)";
 
-
       ctx.fillStyle =
-      "rgba(255,255,255,.72)";
+      "rgba(255,255,255,.65)";
+
+      ctx.font =
+      "11px system-ui";
 
 
-      for(
-        let i=0;
-        i<=4;
-        i++
-      ){
+      for(let i=0;i<=4;i++){
 
         const y =
         top
         +
-        graphH
-        *
-        i/4;
-
+        graphH*i/4;
 
         ctx.beginPath();
 
@@ -2487,17 +1891,14 @@ function drawEvolution(){
         Math.round(
           yMax
           -
-          (
-            yMax-yMin
-          )
+          (yMax-yMin)
           *
           i/4
         );
 
-
         ctx.fillText(
           value,
-          4,
+          3,
           y+4
         );
 
@@ -2506,11 +1907,7 @@ function drawEvolution(){
 
       const points =
       ANNUAL.map(
-        (
-          row,
-          index
-        )=>{
-
+        (row,index)=>{
 
           const x =
           left
@@ -2519,75 +1916,46 @@ function drawEvolution(){
           *
           index
           /
-          (
-            ANNUAL.length-1
-          );
-
+          (ANNUAL.length-1);
 
           const ratio =
           (
-            row.interventions
-            -
-            yMin
+            row.interventions-yMin
           )
           /
           (
-            yMax-yMin
-            ||
-            1
+            yMax-yMin || 1
           );
-
 
           const y =
           top
           +
           graphH
           -
-          graphH
-          *
-          ratio;
+          graphH*ratio;
 
-
-          return {
-            x,
-            y
-          };
+          return {x,y};
 
         }
       );
 
 
       ctx.strokeStyle =
-      "#f2a23a";
-
+      "#f1a037";
 
       ctx.lineWidth =
       3;
-
 
       ctx.beginPath();
 
 
       points.forEach(
-        (
-          point,
-          index
-        )=>{
+        (p,i)=>{
 
-          if(index === 0){
-
-            ctx.moveTo(
-              point.x,
-              point.y
-            );
-
+          if(i===0){
+            ctx.moveTo(p.x,p.y);
           }else{
-
-            ctx.lineTo(
-              point.x,
-              point.y
-            );
-
+            ctx.lineTo(p.x,p.y);
           }
 
         }
@@ -2598,13 +1966,13 @@ function drawEvolution(){
 
 
       points.forEach(
-        point=>{
+        p=>{
 
           ctx.beginPath();
 
           ctx.arc(
-            point.x,
-            point.y,
+            p.x,
+            p.y,
             4,
             0,
             Math.PI*2
@@ -2615,69 +1983,24 @@ function drawEvolution(){
 
           ctx.fill();
 
-          ctx.strokeStyle =
-          "#d46a00";
-
-          ctx.lineWidth =
-          2;
-
-          ctx.stroke();
-
         }
       );
-
-
-      const maxLabels =
-      W < 600
-        ?
-        6
-        :
-        10;
-
-
-      const step =
-      Math.max(
-        1,
-        Math.ceil(
-          ANNUAL.length
-          /
-          maxLabels
-        )
-      );
-
-
-      ctx.fillStyle =
-      "rgba(255,255,255,.70)";
-
-
-      ctx.font =
-      "11px system-ui";
 
 
       ctx.textAlign =
       "center";
 
+      ctx.fillStyle =
+      "rgba(255,255,255,.70)";
+
 
       ANNUAL.forEach(
-        (
-          row,
-          index
-        )=>{
-
-          if(
-            index % step !== 0
-            &&
-            index !==
-            ANNUAL.length-1
-          ){
-            return;
-          }
-
+        (row,index)=>{
 
           ctx.fillText(
             row.year,
             points[index].x,
-            H-12
+            H-10
           );
 
         }
@@ -2694,105 +2017,30 @@ function drawEvolution(){
 
 
 /* =========================================================
-   LECTURE API
-========================================================= */
-
-async function loadStatsFromApi(){
-
-  const cb =
-  "stats_list_"
-  +
-  Math.random()
-    .toString(36)
-    .slice(2);
-
-
-  const res =
-  await jsonp(
-
-    `${API}?view=statistiques_list`
-    +
-    `&callback=${cb}`,
-
-    cb,
-
-    30000
-
-  );
-
-
-  if(
-    !res
-    ||
-    res.ok !== true
-  ){
-
-    return null;
-
-  }
-
-
-  CAPTURES =
-  Array.isArray(
-    res.captures
-  )
-    ?
-    res.captures
-    :
-    [];
-
-
-  ANNUAL =
-  Array.isArray(
-    res.annual
-  )
-    ?
-    res.annual
-    :
-    [];
-
-
-  saveLocalCache();
-
-  renderAll();
-
-
-  return res;
-
-}
-
-
-/* =========================================================
-   ANNUEL SAVE
+   SAUVEGARDE ANNUELLE
 ========================================================= */
 
 async function saveAnnual(){
 
-  if(!IS_ADMIN){
-    return;
-  }
-
-
   const year =
   Number(
-    $("adminYear").value
+    $("annualYear").value
   );
 
-
-  const interventions =
+  const value =
   Number(
-    $("adminInterventions").value
+    $("annualValue").value
   );
 
 
   if(
     !Number.isInteger(year)
     ||
-    year < 1900
+    !Number.isFinite(value)
   ){
 
     alert(
-      "Année incorrecte."
+      "Valeurs incorrectes."
     );
 
     return;
@@ -2800,16 +2048,21 @@ async function saveAnnual(){
   }
 
 
-  if(
-    !Number.isFinite(
-      interventions
-    )
-    ||
-    interventions < 0
-  ){
+  const res =
+  await jsonp(
+    "statistiques_annual_set",
+    {
+      email:getEmail(),
+      year:year,
+      interventions:value
+    }
+  );
+
+
+  if(!res || res.ok !== true){
 
     alert(
-      "Nombre d’interventions incorrect."
+      res?.error || "Erreur"
     );
 
     return;
@@ -2817,291 +2070,85 @@ async function saveAnnual(){
   }
 
 
-  const button =
-  $("btnSaveAnnual");
+  const existing =
+  ANNUAL.find(
+    x=>x.year===year
+  );
 
 
-  button.disabled =
-  true;
+  if(existing){
 
+    existing.interventions =
+    value;
 
-  button.textContent =
-  "Enregistrement…";
+  }else{
 
-
-  const cb =
-  "stats_annual_"
-  +
-  Math.random()
-    .toString(36)
-    .slice(2);
-
-
-  try{
-
-    const res =
-    await jsonp(
-
-      `${API}?view=statistiques_annual_set`
-      +
-      `&email=${encodeURIComponent(getEmail())}`
-      +
-      `&year=${year}`
-      +
-      `&interventions=${interventions}`
-      +
-      `&callback=${cb}`,
-
-      cb,
-
-      30000
-
-    );
-
-
-    if(
-      !res
-      ||
-      res.ok !== true
-    ){
-
-      throw new Error(
-        res?.error || "Erreur"
-      );
-
-    }
-
-
-    const old =
-    ANNUAL.find(
-      item=>
-        Number(
-          item.year
-        )
-        ===
-        year
-    );
-
-
-    if(old){
-
-      old.interventions =
-      interventions;
-
-    }else{
-
-      ANNUAL.push({
-        year,
-        interventions
-      });
-
-    }
-
-
-    saveLocalCache();
-
-    renderAnnual();
-
-
-    $("adminYear").value =
-    "";
-
-
-    $("adminInterventions").value =
-    "";
-
-
-    showStatus(
-      "Enregistré",
-      "success"
-    );
-
-
-  }catch(error){
-
-    alert(
-      "Erreur : "
-      +
-      (
-        error?.message
-        ||
-        error
-      )
-    );
+    ANNUAL.push({
+      year:year,
+      interventions:value
+    });
 
   }
 
 
-  button.disabled =
-  false;
+  saveCache();
 
+  renderAnnual();
 
-  button.textContent =
-  "Enregistrer";
+  showStatus(
+    "Enregistré"
+  );
 
 }
 
 
 /* =========================================================
-   ANNUEL DELETE
+   SUPPRESSION ANNUELLE
 ========================================================= */
 
-async function deleteAnnualYear(
-  year
-){
-
-  if(!IS_ADMIN){
-    return;
-  }
-
+async function deleteAnnual(year){
 
   if(
     !confirm(
-      `Supprimer l'année ${year} ?`
+      `Supprimer ${year} ?`
     )
   ){
     return;
   }
-
-
-  const backup =
-  ANNUAL.find(
-    item=>
-      Number(
-        item.year
-      )
-      ===
-      Number(
-        year
-      )
-  );
 
 
   ANNUAL =
   ANNUAL.filter(
-    item=>
-      Number(
-        item.year
-      )
-      !==
-      Number(
-        year
-      )
+    x=>x.year!==year
   );
 
 
-  saveLocalCache();
+  saveCache();
 
   renderAnnual();
 
-
   showStatus(
-    "Supprimé",
-    "danger"
+    "Supprimé"
   );
-
-
-  const cb =
-  "stats_year_delete_"
-  +
-  Math.random()
-    .toString(36)
-    .slice(2);
 
 
   try{
 
-    const res =
     await jsonp(
-
-      `${API}?view=statistiques_annual_delete`
-      +
-      `&email=${encodeURIComponent(getEmail())}`
-      +
-      `&year=${year}`
-      +
-      `&callback=${cb}`,
-
-      cb,
-
-      30000
-
+      "statistiques_annual_delete",
+      {
+        email:getEmail(),
+        year:year
+      }
     );
 
-
-    if(
-      !res
-      ||
-      res.ok !== true
-    ){
-
-      throw new Error(
-        res?.error || "Erreur"
-      );
-
-    }
-
-
-  }catch(error){
-
-    try{
-
-      const fresh =
-      await loadStatsFromApi();
-
-
-      if(
-        fresh
-        &&
-        Array.isArray(
-          fresh.annual
-        )
-      ){
-
-        const stillExists =
-        fresh.annual.some(
-          item=>
-            Number(
-              item.year
-            )
-            ===
-            year
-        );
-
-
-        if(stillExists){
-
-          alert(
-            "La suppression n'a pas abouti."
-          );
-
-        }
-
-      }
-
-    }catch(e){
-
-      if(backup){
-
-        ANNUAL.push(
-          backup
-        );
-
-        saveLocalCache();
-
-        renderAnnual();
-
-      }
-
-    }
-
-  }
+  }catch(e){}
 
 }
 
 
 /* =========================================================
-   FORMULAIRE CAPTURE
+   OUVERTURE FORMULAIRE
 ========================================================= */
 
 function openCaptureForm(){
@@ -3111,40 +2158,38 @@ function openCaptureForm(){
 
 
   $("captureYear").value =
-  $yearSelect.value
+  $("yearSelect").value
   ||
   now.getFullYear();
 
 
   $("captureMonth").value =
-  $monthSelect.value
+  $("monthSelect").value
   ||
-  (
-    now.getMonth()+1
-  );
+  now.getMonth()+1;
 
 
   $("captureTitle").value =
   "";
 
 
-  $captureFile.value =
+  $("captureFile").value =
   "";
 
 
-  $previewBox.style.display =
+  $("preview").style.display =
   "none";
 
 
-  $previewImage.src =
-  "";
-
-
-  $uploadInfo.style.display =
+  $("uploadBox").style.display =
   "none";
 
 
-  $captureOverlay
+  $("progress").style.width =
+  "0%";
+
+
+  $("overlay")
     .classList.add(
       "show"
     );
@@ -3154,14 +2199,11 @@ function openCaptureForm(){
 
 function closeCaptureForm(){
 
-  if(
-    UPLOAD_IN_PROGRESS
-  ){
+  if(UPLOADING){
     return;
   }
 
-
-  $captureOverlay
+  $("overlay")
     .classList.remove(
       "show"
     );
@@ -3169,18 +2211,22 @@ function closeCaptureForm(){
 }
 
 
-$captureFile
+/* =========================================================
+   APERÇU
+========================================================= */
+
+$("captureFile")
 .addEventListener(
   "change",
   ()=>{
 
     const file =
-    $captureFile.files?.[0];
-
+    $("captureFile")
+      .files?.[0];
 
     if(!file){
 
-      $previewBox.style.display =
+      $("preview").style.display =
       "none";
 
       return;
@@ -3195,11 +2241,10 @@ $captureFile
     reader.onload =
     ()=>{
 
-      $previewImage.src =
+      $("previewImg").src =
       reader.result;
 
-
-      $previewBox.style.display =
+      $("preview").style.display =
       "block";
 
     };
@@ -3217,9 +2262,7 @@ $captureFile
    COMPRESSION IMAGE
 ========================================================= */
 
-function imageFileToDataUrl(
-  file
-){
+function loadImage(file){
 
   return new Promise(
     (
@@ -3227,115 +2270,28 @@ function imageFileToDataUrl(
       reject
     )=>{
 
-
       const reader =
       new FileReader();
-
 
       reader.onerror =
       reject;
 
-
       reader.onload =
       ()=>{
 
-
-        const img =
+        const image =
         new Image();
 
-
-        img.onerror =
+        image.onerror =
         reject;
 
+        image.onload =
+        ()=>resolve(image);
 
-        img.onload =
-        ()=>{
-
-
-          let width =
-          img.naturalWidth;
-
-
-          let height =
-          img.naturalHeight;
-
-
-          const maxWidth =
-          2200;
-
-
-          const maxHeight =
-          4200;
-
-
-          const ratio =
-          Math.min(
-            1,
-            maxWidth/width,
-            maxHeight/height
-          );
-
-
-          width =
-          Math.round(
-            width*ratio
-          );
-
-
-          height =
-          Math.round(
-            height*ratio
-          );
-
-
-          const canvas =
-          document.createElement(
-            "canvas"
-          );
-
-
-          canvas.width =
-          width;
-
-
-          canvas.height =
-          height;
-
-
-          const ctx =
-          canvas.getContext(
-            "2d"
-          );
-
-
-          ctx.drawImage(
-            img,
-            0,
-            0,
-            width,
-            height
-          );
-
-
-          const dataUrl =
-          canvas.toDataURL(
-            "image/jpeg",
-            .88
-          );
-
-
-          resolve(
-            dataUrl
-          );
-
-        };
-
-
-        img.src =
+        image.src =
         reader.result;
 
       };
-
 
       reader.readAsDataURL(
         file
@@ -3347,246 +2303,233 @@ function imageFileToDataUrl(
 }
 
 
-/* =========================================================
-   POST INVISIBLE VERS APPS SCRIPT
-========================================================= */
+async function compressImage(file){
 
-function postCaptureToAppsScript(
-  fields
-){
-
-  const iframeName =
-  "stats_upload_iframe_"
-  +
-  Date.now();
+  const image =
+  await loadImage(file);
 
 
-  const iframe =
-  document.createElement(
-    "iframe"
-  );
+  let maxWidth =
+  1400;
 
 
-  iframe.name =
-  iframeName;
+  let quality =
+  .72;
 
 
-  iframe.style.display =
-  "none";
+  for(
+    let attempt=0;
+    attempt<8;
+    attempt++
+  ){
+
+    let width =
+    image.naturalWidth;
+
+    let height =
+    image.naturalHeight;
 
 
-  document.body
-    .appendChild(
-      iframe
-    );
+    if(width > maxWidth){
 
+      const ratio =
+      maxWidth/width;
 
-  const form =
-  document.createElement(
-    "form"
-  );
-
-
-  form.method =
-  "POST";
-
-
-  form.action =
-  API;
-
-
-  form.target =
-  iframeName;
-
-
-  form.style.display =
-  "none";
-
-
-  Object.entries(
-    fields
-  )
-  .forEach(
-    (
-      [
-        name,
-        value
-      ]
-    )=>{
-
-
-      const input =
-      document.createElement(
-        "textarea"
+      width =
+      Math.round(
+        width*ratio
       );
 
-
-      input.name =
-      name;
-
-
-      input.value =
-      String(
-        value ?? ""
-      );
-
-
-      form.appendChild(
-        input
+      height =
+      Math.round(
+        height*ratio
       );
 
     }
-  );
 
 
-  document.body
-    .appendChild(
-      form
+    const canvas =
+    document.createElement(
+      "canvas"
     );
 
 
-  form.submit();
+    canvas.width =
+    width;
+
+    canvas.height =
+    height;
 
 
-  setTimeout(
-    ()=>{
-
-      form.remove();
-
-      iframe.remove();
-
-    },
-    90000
-  );
-
-}
-
-
-/* =========================================================
-   ATTEND QUE LA CAPTURE EXISTE DANS SHEETS
-========================================================= */
-
-async function waitForUploadedCapture(
-  id
-){
-
-  const deadline =
-  Date.now()
-  +
-  60000;
-
-
-  while(
-    Date.now()
-    <
-    deadline
-  ){
-
-    await wait(
-      1800
+    const ctx =
+    canvas.getContext(
+      "2d"
     );
 
 
-    try{
+    ctx.fillStyle =
+    "#ffffff";
 
-      const cb =
-      "stats_upload_check_"
-      +
-      Math.random()
-        .toString(36)
-        .slice(2);
+    ctx.fillRect(
+      0,
+      0,
+      width,
+      height
+    );
 
 
-      const res =
-      await jsonp(
+    ctx.drawImage(
+      image,
+      0,
+      0,
+      width,
+      height
+    );
 
-        `${API}?view=statistiques_list`
-        +
-        `&nocache=1`
-        +
-        `&callback=${cb}`,
 
-        cb,
+    const dataUrl =
+    canvas.toDataURL(
+      "image/jpeg",
+      quality
+    );
 
-        15000
 
+    const base64 =
+    dataUrl.split(",")[1];
+
+
+    if(
+      base64.length
+      <=
+      MAX_BASE64
+    ){
+
+      return base64;
+
+    }
+
+
+    if(quality > .55){
+
+      quality -= .08;
+
+    }else{
+
+      maxWidth =
+      Math.round(
+        maxWidth*.82
       );
 
-
-      if(
-        res
-        &&
-        res.ok === true
-        &&
-        Array.isArray(
-          res.captures
-        )
-      ){
-
-        const found =
-        res.captures.find(
-          item=>
-            String(
-              item.id
-            )
-            ===
-            String(
-              id
-            )
-        );
-
-
-        if(found){
-
-          CAPTURES =
-          res.captures;
-
-
-          ANNUAL =
-          Array.isArray(
-            res.annual
-          )
-            ?
-            res.annual
-            :
-            ANNUAL;
-
-
-          saveLocalCache();
-
-          renderAll();
-
-
-          return found;
-
-        }
-
-      }
-
-    }catch(e){}
+    }
 
   }
 
 
   throw new Error(
-    "Enregistrement non confirmé"
+    "L'image reste trop volumineuse."
   );
 
 }
 
 
 /* =========================================================
-   SAVE CAPTURE
+   ENVOI D'UN MORCEAU AVEC RELANCE
+========================================================= */
+
+async function sendChunk(
+  id,
+  token,
+  index,
+  data
+){
+
+  let lastError = null;
+
+
+  for(
+    let attempt=0;
+    attempt<3;
+    attempt++
+  ){
+
+    try{
+
+      const res =
+      await jsonp(
+        "statistiques_capture_chunk",
+        {
+          id:id,
+          token:token,
+          index:index,
+          data:data
+        },
+        30000
+      );
+
+
+      if(
+        res &&
+        res.ok === true
+      ){
+
+        return;
+
+      }
+
+
+      lastError =
+      new Error(
+        res?.error
+        ||
+        "Erreur morceau"
+      );
+
+
+    }catch(e){
+
+      lastError = e;
+
+    }
+
+  }
+
+
+  throw lastError
+  ||
+  new Error(
+    "Erreur d'envoi."
+  );
+
+}
+
+
+/* =========================================================
+   ENVOI IMAGE COMPLET
 ========================================================= */
 
 async function saveCapture(){
 
   if(
+    UPLOADING ||
     !IS_ADMIN
-    ||
-    UPLOAD_IN_PROGRESS
   ){
     return;
+  }
+
+
+  const file =
+  $("captureFile")
+    .files?.[0];
+
+
+  if(!file){
+
+    alert(
+      "Choisis une image."
+    );
+
+    return;
+
   }
 
 
@@ -3602,44 +2545,14 @@ async function saveCapture(){
   );
 
 
-  const title =
-  String(
-    $("captureTitle").value
-    ||
-    ""
-  )
-  .trim();
-
-
-  const file =
-  $captureFile.files?.[0];
-
-
   if(
     !Number.isInteger(year)
     ||
-    year < 2000
-  ){
-
-    alert(
-      "Année incorrecte."
-    );
-
-    return;
-
-  }
-
-
-  if(
     !Number.isInteger(month)
-    ||
-    month < 1
-    ||
-    month > 12
   ){
 
     alert(
-      "Mois incorrect."
+      "Année ou mois incorrect."
     );
 
     return;
@@ -3647,124 +2560,265 @@ async function saveCapture(){
   }
 
 
-  if(!file){
-
-    alert(
-      "Choisis une capture."
-    );
-
-    return;
-
-  }
+  UPLOADING = true;
 
 
-  UPLOAD_IN_PROGRESS =
+  $("saveCapture").disabled =
   true;
 
-
-  const button =
-  $("btnSaveCapture");
-
-
-  button.disabled =
+  $("cancelForm").disabled =
   true;
 
-
-  button.textContent =
-  "Enregistrement…";
-
-
-  $("btnCancelCapture").disabled =
+  $("closeForm").disabled =
   true;
 
-
-  $("btnCloseCapture").disabled =
-  true;
-
-
-  $uploadInfo.style.display =
+  $("uploadBox").style.display =
   "block";
+
+  $("uploadText").textContent =
+  "Préparation de l'image…";
 
 
   try{
 
 
-    const dataUrl =
-    await imageFileToDataUrl(
+    /*
+      1 — COMPRESSION
+    */
+
+    const base64 =
+    await compressImage(
       file
     );
 
 
-    const base64 =
-    dataUrl.split(
-      ","
-    )[1];
+    /*
+      2 — DÉCOUPAGE
+    */
+
+    const chunks = [];
+
+
+    for(
+      let i=0;
+      i<base64.length;
+      i+=CHUNK_SIZE
+    ){
+
+      chunks.push(
+        base64.slice(
+          i,
+          i+CHUNK_SIZE
+        )
+      );
+
+    }
 
 
     const id =
-    uniqueId();
+    makeId();
 
 
-    postCaptureToAppsScript({
+    /*
+      3 — OUVERTURE SESSION
+    */
 
-      action:
-      "statistiques_capture_add",
-
-      id:
-      id,
-
-      email:
-      getEmail(),
-
-      year:
-      year,
-
-      month:
-      month,
-
-      title:
-      title
-      ||
-      `${MONTHS[month]} ${year}`,
-
-      filename:
-      file.name
-      ||
-      `statistiques-${year}-${month}.jpg`,
-
-      mime_type:
-      "image/jpeg",
-
-      image_data:
-      base64
-
-    });
+    $("uploadText").textContent =
+    "Préparation de l'envoi…";
 
 
-    await waitForUploadedCapture(
-      id
+    const begin =
+    await jsonp(
+      "statistiques_capture_begin",
+      {
+        email:getEmail(),
+        id:id,
+        year:year,
+        month:month,
+
+        title:
+          $("captureTitle")
+          .value
+          .trim()
+          ||
+          `${MONTHS[month]} ${year}`,
+
+        filename:
+          file.name
+          ||
+          "statistiques.jpg",
+
+        mime_type:
+          "image/jpeg",
+
+        total_chunks:
+          chunks.length
+      },
+      30000
     );
 
 
-    button.textContent =
-    "✓ Enregistré";
+    if(
+      !begin ||
+      begin.ok !== true
+    ){
+
+      throw new Error(
+        begin?.error
+        ||
+        "Impossible de démarrer l'envoi."
+      );
+
+    }
 
 
-    showStatus(
-      "Capture enregistrée",
-      "success"
+    if(begin.already_exists){
+
+      await reload();
+
+      $("overlay")
+        .classList.remove(
+          "show"
+        );
+
+      showStatus(
+        "Capture enregistrée"
+      );
+
+      return;
+
+    }
+
+
+    const token =
+    begin.token;
+
+
+    /*
+      4 — ENVOI PAR PETITS GROUPES
+    */
+
+    const concurrency =
+    4;
+
+
+    for(
+      let start=0;
+      start<chunks.length;
+      start+=concurrency
+    ){
+
+      const jobs = [];
+
+
+      for(
+        let offset=0;
+        offset<concurrency;
+        offset++
+      ){
+
+        const index =
+        start+offset;
+
+
+        if(index >= chunks.length){
+          break;
+        }
+
+
+        jobs.push(
+          sendChunk(
+            id,
+            token,
+            index,
+            chunks[index]
+          )
+        );
+
+      }
+
+
+      await Promise.all(
+        jobs
+      );
+
+
+      const sent =
+      Math.min(
+        start+concurrency,
+        chunks.length
+      );
+
+
+      const percent =
+      Math.round(
+        sent
+        /
+        chunks.length
+        *
+        100
+      );
+
+
+      $("progress").style.width =
+      percent + "%";
+
+
+      $("uploadText").textContent =
+      `Envoi vers Google Drive… ${percent}%`;
+
+    }
+
+
+    /*
+      5 — RÉASSEMBLAGE + DRIVE
+    */
+
+    $("uploadText").textContent =
+    "Enregistrement dans Google Drive…";
+
+
+    const finish =
+    await jsonp(
+      "statistiques_capture_finish",
+      {
+        id:id,
+        token:token
+      },
+      60000
     );
 
 
-    await wait(
-      350
-    );
+    if(
+      !finish ||
+      finish.ok !== true
+    ){
+
+      throw new Error(
+        finish?.error
+        ||
+        "Enregistrement impossible."
+      );
+
+    }
 
 
-    $captureOverlay
+    /*
+      6 — RELECTURE
+    */
+
+    await reload();
+
+
+    $("overlay")
       .classList.remove(
         "show"
       );
+
+
+    showStatus(
+      "Capture enregistrée"
+    );
 
 
   }catch(error){
@@ -3772,58 +2826,40 @@ async function saveCapture(){
     alert(
       "Erreur d'enregistrement : "
       +
-      (
+      String(
         error?.message
         ||
         error
       )
     );
 
+  }finally{
+
+    UPLOADING =
+    false;
+
+    $("saveCapture").disabled =
+    false;
+
+    $("cancelForm").disabled =
+    false;
+
+    $("closeForm").disabled =
+    false;
+
+    $("progress").style.width =
+    "0%";
+
   }
-
-
-  UPLOAD_IN_PROGRESS =
-  false;
-
-
-  button.disabled =
-  false;
-
-
-  button.textContent =
-  "Enregistrer";
-
-
-  $("btnCancelCapture").disabled =
-  false;
-
-
-  $("btnCloseCapture").disabled =
-  false;
-
-
-  $uploadInfo.style.display =
-  "none";
 
 }
 
 
 /* =========================================================
-   DELETE CAPTURE
+   SUPPRESSION CAPTURE
 ========================================================= */
 
-async function deleteCapture(
-  id
-){
-
-  if(
-    !IS_ADMIN
-    ||
-    !id
-  ){
-    return;
-  }
-
+async function deleteCapture(id){
 
   if(
     !confirm(
@@ -3834,107 +2870,35 @@ async function deleteCapture(
   }
 
 
-  const backup =
-  CAPTURES.find(
-    item=>
-      String(
-        item.id
-      )
-      ===
-      String(
-        id
-      )
-  );
-
-
   CAPTURES =
   CAPTURES.filter(
-    item=>
-      String(
-        item.id
-      )
+    x=>
+      String(x.id)
       !==
-      String(
-        id
-      )
+      String(id)
   );
 
 
-  saveLocalCache();
+  saveCache();
 
-  renderPeriodSelectors();
-
+  renderPeriods();
 
   showStatus(
-    "Supprimé",
-    "danger"
+    "Supprimé"
   );
-
-
-  const cb =
-  "stats_delete_capture_"
-  +
-  Math.random()
-    .toString(36)
-    .slice(2);
 
 
   try{
 
-    const res =
     await jsonp(
-
-      `${API}?view=statistiques_capture_delete`
-      +
-      `&email=${encodeURIComponent(getEmail())}`
-      +
-      `&id=${encodeURIComponent(id)}`
-      +
-      `&callback=${cb}`,
-
-      cb,
-
-      30000
-
+      "statistiques_capture_delete",
+      {
+        email:getEmail(),
+        id:id
+      }
     );
 
-
-    if(
-      !res
-      ||
-      res.ok !== true
-    ){
-
-      throw new Error(
-        res?.error || "Erreur"
-      );
-
-    }
-
-
-  }catch(error){
-
-    try{
-
-      await loadStatsFromApi();
-
-    }catch(e){
-
-      if(backup){
-
-        CAPTURES.push(
-          backup
-        );
-
-        saveLocalCache();
-
-        renderPeriodSelectors();
-
-      }
-
-    }
-
-  }
+  }catch(e){}
 
 }
 
@@ -3945,41 +2909,33 @@ async function deleteCapture(
 
 function renderAll(){
 
-  renderPeriodSelectors();
-
+  renderPeriods();
   renderAnnual();
-
-  applyAdminState();
+  applyAdmin();
 
 }
 
 
 /* =========================================================
-   EVENTS
+   ÉVÉNEMENTS
 ========================================================= */
 
-$("btnBack").onclick =
+$("back").onclick =
 ()=>{
 
   location.href =
-  BACK_URL;
+  "index.html";
 
 };
 
 
-$btnLock.onclick =
+$("lock").onclick =
 ()=>{
-
-  if(!IS_ADMIN){
-    return;
-  }
-
 
   EDIT_MODE =
   !EDIT_MODE;
 
-
-  applyAdminState();
+  applyAdmin();
 
   renderCaptures();
 
@@ -3988,67 +2944,61 @@ $btnLock.onclick =
 };
 
 
-$yearSelect.onchange =
+$("yearSelect").onchange =
 ()=>{
 
   renderMonths(
     Number(
-      $yearSelect.value
-    ),
-    0
+      $("yearSelect").value
+    )
   );
 
 };
 
 
-$monthSelect.onchange =
+$("monthSelect").onchange =
 renderCaptures;
 
 
-$("btnSaveAnnual").onclick =
-saveAnnual;
-
-
-$("btnOpenCaptureForm").onclick =
+$("addCapture").onclick =
 openCaptureForm;
 
 
-$("btnCloseCapture").onclick =
+$("closeForm").onclick =
 closeCaptureForm;
 
 
-$("btnCancelCapture").onclick =
+$("cancelForm").onclick =
 closeCaptureForm;
 
 
-$("btnSaveCapture").onclick =
+$("saveCapture").onclick =
 saveCapture;
+
+
+$("saveAnnual").onclick =
+saveAnnual;
 
 
 window.addEventListener(
   "resize",
-  drawEvolution
+  drawChart
 );
 
 
 /* =========================================================
-   START
+   DÉMARRAGE
 ========================================================= */
 
-(function start(){
+(function(){
 
-  loadLocalCache();
+  loadCache();
 
   renderAll();
 
-  applyAdminState();
+  verifyAdmin();
 
-
-  verifyAdminInBackground()
-    .catch(()=>{});
-
-
-  loadStatsFromApi()
+  reload()
     .catch(()=>{});
 
 })();
