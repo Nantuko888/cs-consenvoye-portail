@@ -1,1141 +1,3197 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,viewport-fit=cover">
+
 <title>Statistiques — CS Consenvoye</title>
 
 <style>
+
 :root{
   --txt:#f4f4f4;
-  --muted:rgba(255,255,255,.72);
+  --muted:rgba(255,255,255,.70);
   --shadow:0 14px 34px rgba(0,0,0,.40);
   --stroke:rgba(255,255,255,.10);
-  --orange1:rgba(212,106,0,.75);
-  --orange2:rgba(185,88,0,.58);
-  --radius:18px;
+  --orange:#d46a00;
+  --orange2:#b95800;
+  --success:#1f9d49;
+  --danger:#a72525;
 }
 
-*{box-sizing:border-box}
-html,body{height:100%}
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  min-height:100%;
+}
 
 body{
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   color:var(--txt);
   background:#0b0b0b;
-  overflow:hidden;
 }
 
 .bg{
   position:fixed;
   inset:0;
   background:
-    linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.65)),
-    url("background.png") center/cover no-repeat;
-  z-index:-1;
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,.52),
+      rgba(0,0,0,.68)
+    ),
+    url("background.png") center top / cover no-repeat;
+  z-index:-2;
+}
+
+.bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(
+      circle at 50% 8%,
+      rgba(255,170,60,.14),
+      rgba(0,0,0,.62) 62%
+    );
 }
 
 .wrap{
-  height:100vh;
   max-width:980px;
   margin:0 auto;
-  padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 10px);
-  display:grid;
-  grid-template-rows:auto auto auto 1fr;
-  gap:10px;
+
+  padding:
+    calc(env(safe-area-inset-top) + 10px)
+    12px
+    calc(env(safe-area-inset-bottom) + 20px);
 }
 
-/* HEADER */
 .topbar{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:10px;
+
   padding:10px 12px;
-  min-height:46px;
+
   border-radius:18px;
-  background:linear-gradient(180deg, var(--orange1), var(--orange2));
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(212,106,0,.78),
+      rgba(185,88,0,.58)
+    );
+
   border:1px solid rgba(255,255,255,.12);
+
   box-shadow:var(--shadow);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
+
+  min-height:48px;
+
+  margin-bottom:12px;
 }
+
 .title{
-  font-weight:950;
-  letter-spacing:.8px;
-  text-transform:uppercase;
+  margin:0;
+
   font-size:18px;
+
+  font-weight:950;
+
+  letter-spacing:.8px;
+
+  text-transform:uppercase;
+
   white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 }
-.topRight{
+
+.topActions{
   display:flex;
   align-items:center;
   gap:8px;
 }
-.btn,
-.lockBtn,
-.smallBtn{
+
+.btn{
   border:1px solid rgba(255,255,255,.18);
-  background:rgba(0,0,0,.18);
+
+  background:rgba(0,0,0,.20);
+
   color:#fff;
+
   padding:9px 12px;
+
   border-radius:14px;
+
   font-weight:900;
+
   cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
-}
-.btn:active,
-.lockBtn:active,
-.smallBtn:active{
-  transform:translateY(1px);
-}
-.lockBtn{
-  min-width:44px;
-  padding:9px 11px;
-  display:none;
 }
 
-/* FILTERS */
+.btn.primary{
+  background:rgba(212,106,0,.90);
+}
+
+.btn.success{
+  background:var(--success);
+}
+
+.btn.danger{
+  background:var(--danger);
+}
+
+.btn:disabled{
+  opacity:.55;
+  cursor:default;
+}
+
+.editLabel{
+  display:none;
+
+  font-size:12px;
+
+  font-weight:900;
+
+  color:#fff200;
+}
+
+.section{
+  margin-bottom:14px;
+
+  padding:12px;
+
+  border-radius:22px;
+
+  background:rgba(0,0,0,.35);
+
+  border:1px solid var(--stroke);
+
+  box-shadow:var(--shadow);
+}
+
+.sectionTitle{
+  margin:0 0 10px 0;
+
+  padding:10px 12px;
+
+  border-radius:16px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(212,106,0,.65),
+      rgba(185,88,0,.43)
+    );
+
+  font-size:18px;
+
+  font-weight:950;
+}
+
+.sectionSub{
+  margin-top:-2px;
+  margin-bottom:12px;
+
+  color:var(--muted);
+
+  font-size:13px;
+
+  font-weight:700;
+}
+
 .filters{
   display:grid;
+
   grid-template-columns:1fr 1fr;
+
   gap:10px;
-}
-.filterBox{
-  border-radius:18px;
-  background:rgba(0,0,0,.35);
-  border:1px solid rgba(255,255,255,.10);
-  box-shadow:var(--shadow);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  min-height:54px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-}
-.selectMonth{
-  width:100%;
-  height:100%;
-  border:none;
-  outline:none;
-  background:transparent;
-  color:#fff;
-  font-weight:900;
-  font-size:16px;
-  text-align:center;
-  text-align-last:center;
-  padding:0 14px;
-  appearance:none;
-  -webkit-appearance:none;
-}
-.yearBox{
-  font-weight:950;
-  font-size:18px;
-  letter-spacing:.5px;
+
+  margin-bottom:12px;
 }
 
-/* PIE */
-.pieWrap{
+.fieldWrap{
   display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:8px 0 2px;
-}
-.pie{
-  width:180px;
-  height:180px;
-  border-radius:50%;
-  box-shadow:var(--shadow);
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.08);
+  flex-direction:column;
+  gap:5px;
 }
 
-/* AGENT VIEW */
-.agentView{
-  min-height:0;
-  overflow:auto;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  padding-right:2px;
-}
-.block{
-  border-radius:18px;
-  background:rgba(0,0,0,.35);
-  border:1px solid rgba(255,255,255,.10);
-  box-shadow:var(--shadow);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  padding:12px;
-}
-.blockTitle{
-  font-weight:950;
-  font-size:18px;
-  margin-bottom:8px;
-}
-.table{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
-.row{
-  display:grid;
-  grid-template-columns:1fr 84px 84px;
-  gap:8px;
-  align-items:center;
-}
-.row.header{
-  padding-bottom:4px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  margin-bottom:2px;
-}
-.cellType{
-  font-weight:850;
-  font-size:15px;
-  color:#fff;
-}
-.cellHead{
-  font-weight:900;
+.fieldLabel{
   font-size:12px;
-  text-align:right;
-  color:rgba(255,255,255,.72);
+
+  color:rgba(255,255,255,.78);
+
+  font-weight:900;
+
   text-transform:uppercase;
 }
-.cellVal{
-  font-weight:950;
-  font-size:16px;
-  text-align:right;
+
+.select,
+.input{
+  width:100%;
+
+  padding:11px 12px;
+
+  border-radius:14px;
+
+  border:1px solid rgba(255,255,255,.12);
+
+  background:rgba(0,0,0,.30);
+
   color:#fff;
-}
-.emptyCard{
-  border-radius:18px;
-  background:rgba(0,0,0,.35);
-  border:1px solid rgba(255,255,255,.10);
-  box-shadow:var(--shadow);
-  padding:16px;
-  text-align:center;
+
+  outline:none;
+
+  font-size:15px;
+
   font-weight:900;
 }
 
-/* STATUS */
-.statusPill{
+.select option{
+  color:#111;
+  background:#fff;
+}
+
+.empty{
+  padding:18px 14px;
+
+  text-align:center;
+
+  border-radius:16px;
+
+  background:rgba(255,255,255,.04);
+
+  color:rgba(255,255,255,.68);
+
+  font-weight:800;
+}
+
+.captureList{
+  display:flex;
+
+  flex-direction:column;
+
+  gap:12px;
+}
+
+.captureCard{
+  overflow:hidden;
+
+  border-radius:18px;
+
+  border:1px solid rgba(255,255,255,.10);
+
+  background:rgba(0,0,0,.25);
+}
+
+.captureHead{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:10px;
+
+  padding:10px 12px;
+
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.captureTitle{
+  font-weight:950;
+}
+
+.captureActions{
+  display:flex;
+  gap:8px;
+}
+
+.captureImage{
+  display:block;
+
+  width:100%;
+
+  height:auto;
+
+  background:#111;
+}
+
+.annualTop{
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  gap:10px;
+
+  margin-bottom:10px;
+}
+
+.totalBig{
+  font-size:30px;
+
+  font-weight:950;
+}
+
+.totalLabel{
+  color:var(--muted);
+
+  font-size:13px;
+
+  font-weight:800;
+}
+
+.yearList{
+  display:grid;
+
+  grid-template-columns:repeat(2,minmax(0,1fr));
+
+  gap:8px;
+
+  margin-bottom:12px;
+}
+
+.yearStat{
+  padding:10px 12px;
+
+  border-radius:15px;
+
+  background:rgba(255,255,255,.05);
+
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.yearStatYear{
+  font-size:13px;
+
+  color:var(--muted);
+
+  font-weight:800;
+}
+
+.yearStatValue{
+  font-size:22px;
+
+  font-weight:950;
+}
+
+.chartBox{
+  position:relative;
+
+  width:100%;
+
+  height:300px;
+
+  padding:8px;
+
+  border-radius:18px;
+
+  background:rgba(255,255,255,.04);
+
+  border:1px solid rgba(255,255,255,.08);
+
+  overflow:hidden;
+}
+
+#evolutionCanvas{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.adminPanel{
+  display:none;
+
+  margin-top:12px;
+
+  padding:12px;
+
+  border-radius:18px;
+
+  border:1px dashed rgba(255,210,100,.45);
+
+  background:rgba(125,75,0,.12);
+}
+
+.adminPanel.show{
+  display:block;
+}
+
+.adminPanelTitle{
+  margin:0 0 10px 0;
+
+  font-size:15px;
+
+  font-weight:950;
+
+  color:#ffd36a;
+}
+
+.adminForm{
+  display:grid;
+
+  grid-template-columns:1fr 1fr auto;
+
+  gap:8px;
+
+  align-items:end;
+}
+
+.adminCaptureGrid{
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:10px;
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+.status{
   position:fixed;
+
   left:12px;
   right:12px;
+
   bottom:calc(env(safe-area-inset-bottom) + 12px);
-  max-width:980px;
-  margin:0 auto;
-  z-index:90;
+
   display:none;
-}
-.statusPillInner{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 12px;
-  border-radius:16px;
-  background:rgba(0,0,0,.68);
-  border:1px solid rgba(255,255,255,.14);
-  box-shadow:var(--shadow);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  font-weight:900;
-}
-.statusSub{
-  font-size:12px;
-  color:var(--muted);
-  margin-top:2px;
+
+  z-index:300;
+
+  text-align:center;
+
+  pointer-events:none;
 }
 
-/* OVERLAYS */
+.statusPill{
+  display:inline-block;
+
+  padding:10px 14px;
+
+  border-radius:16px;
+
+  background:rgba(0,0,0,.86);
+
+  border:1px solid rgba(255,255,255,.14);
+
+  box-shadow:var(--shadow);
+
+  font-weight:900;
+}
+
+.status.success .statusPill{
+  background:rgba(22,128,57,.95);
+}
+
+.status.danger .statusPill{
+  background:rgba(151,24,24,.95);
+}
+
 .overlay{
   position:fixed;
+
   inset:0;
-  background:rgba(0,0,0,.58);
-  backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
+
   display:none;
-  z-index:150;
+
+  z-index:200;
+
+  background:rgba(0,0,0,.68);
 }
-.overlay.show{display:block}
+
+.overlay.show{
+  display:block;
+}
 
 .sheet{
   position:absolute;
+
   left:12px;
   right:12px;
+
   bottom:calc(env(safe-area-inset-bottom) + 12px);
-  max-width:980px;
-  margin:0 auto;
+
+  max-width:780px;
+
+  margin:auto;
+
+  padding:12px;
+
   border-radius:22px;
-  background:linear-gradient(180deg, rgba(0,0,0,.84), rgba(0,0,0,.72));
-  border:1px solid rgba(255,255,255,.12);
+
+  background:#171717;
+
+  border:1px solid rgba(255,255,255,.14);
+
   box-shadow:var(--shadow);
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
 }
-.menuSheet{ height:min(42vh, 420px); }
-.panelSheet{ height:min(78vh, 800px); }
 
 .sheetHead{
   display:flex;
-  align-items:center;
+
   justify-content:space-between;
+
+  align-items:center;
+
   gap:10px;
-  padding:12px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  background:rgba(0,0,0,.18);
+
+  margin-bottom:12px;
 }
+
 .sheetTitle{
-  font-weight:950;
-  font-size:16px;
-}
-.sheetBody{
-  padding:12px;
-  overflow:auto;
-  -webkit-overflow-scrolling:touch;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-/* ADMIN MENU */
-.menuGrid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:10px;
-}
-.menuCard{
-  border-radius:18px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.10);
-  box-shadow:var(--shadow);
-  padding:14px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  cursor:pointer;
-}
-.menuCard:active{transform:translateY(1px)}
-.menuLeft{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  min-width:0;
-}
-.menuEmoji{
-  font-size:24px;
-  flex:0 0 auto;
-}
-.menuText{
-  min-width:0;
-}
-.menuMain{
-  font-weight:950;
   font-size:17px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.menuSub{
-  font-size:12px;
-  color:var(--muted);
-  margin-top:2px;
-}
-.menuArrow{
-  font-size:18px;
-  opacity:.8;
-}
 
-/* PANELS */
-.section{
-  border-radius:18px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-  padding:12px;
-}
-.sectionTitle{
   font-weight:950;
-  font-size:15px;
-  margin-bottom:10px;
-}
-.hint{
-  font-size:12px;
-  color:var(--muted);
-  margin-top:-4px;
-  margin-bottom:8px;
-}
-.grid2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-}
-.field, .select{
-  width:100%;
-  border:none;
-  outline:none;
-  background:rgba(0,0,0,.24);
-  color:#fff;
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:14px;
-  padding:11px 12px;
-  font:inherit;
-  font-weight:800;
-}
-.actionRow{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.smallBtn.danger{
-  border-color:rgba(255,90,90,.28);
-}
-.listAdmin{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-.item{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:10px 12px;
-  border-radius:14px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-}
-.itemLeft{
-  min-width:0;
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.dot{
-  width:12px;
-  height:12px;
-  border-radius:4px;
-  border:1px solid rgba(255,255,255,.20);
-  flex:0 0 auto;
-}
-.itemMain{
-  font-weight:900;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.itemSub{
-  font-size:12px;
-  color:var(--muted);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.vehicleChecks{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-}
-.checkCard{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:10px 12px;
-  border-radius:14px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-  font-weight:850;
-}
-.catalogLayout{
-  display:grid;
-  grid-template-columns:1.1fr 1fr;
-  gap:10px;
-}
-.vehicleListSelectable{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-.vehicleSelectable{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 12px;
-  border-radius:14px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-  cursor:pointer;
-}
-.vehicleSelectable.active{
-  background:rgba(255,255,255,.10);
-  border-color:rgba(255,255,255,.22);
-}
-.vehicleSelectable:active{transform:translateY(1px)}
-.emptyMini{
-  font-size:13px;
-  color:var(--muted);
-  padding:8px 2px;
 }
 
-@media (max-width:640px){
-  .filters,
-  .grid2,
-  .vehicleChecks,
-  .catalogLayout{
+.sheetBody{
+  display:flex;
+
+  flex-direction:column;
+
+  gap:10px;
+}
+
+.previewBox{
+  display:none;
+
+  overflow:hidden;
+
+  border-radius:16px;
+
+  border:1px solid rgba(255,255,255,.10);
+}
+
+.previewBox img{
+  display:block;
+
+  width:100%;
+
+  height:auto;
+}
+
+@media(max-width:600px){
+
+  .filters{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .adminForm{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .adminForm .btn{
+    grid-column:1/-1;
+  }
+
+  .adminCaptureGrid{
     grid-template-columns:1fr;
   }
-  .row{
-    grid-template-columns:1fr 68px 68px;
+
+  .full{
+    grid-column:auto;
   }
+
+  .yearList{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .chartBox{
+    height:260px;
+  }
+
 }
+
 </style>
 </head>
 
+
 <body>
+
 <div class="bg"></div>
 
 <div class="wrap">
 
   <div class="topbar">
-    <div class="title">Statistiques</div>
-    <div class="topRight">
-      <button id="lockBtn" class="lockBtn" type="button" aria-label="Administration">🔒</button>
-      <button class="btn" onclick="location.href='informations.html'">Retour</button>
+
+    <h1 class="title">
+      Statistiques
+    </h1>
+
+    <div class="topActions">
+
+      <span
+        id="editLabel"
+        class="editLabel">
+
+        MODE ÉDITION
+
+      </span>
+
+      <button
+        id="btnLock"
+        class="btn"
+        style="display:none">
+
+        🔒
+
+      </button>
+
+      <button
+        id="btnBack"
+        class="btn">
+
+        Retour
+
+      </button>
+
     </div>
+
   </div>
 
-  <div class="filters">
-    <div class="filterBox">
-      <select id="monthSelect" class="selectMonth"></select>
+
+  <!-- =====================================================
+       STATISTIQUES MENSUELLES
+  ====================================================== -->
+
+  <section class="section">
+
+    <h2 class="sectionTitle">
+      Statistiques mensuelles
+    </h2>
+
+    <div class="sectionSub">
+      Consultez les statistiques disponibles par année et par mois.
     </div>
-    <div class="filterBox yearBox" id="yearBox">2026</div>
-  </div>
 
-  <div class="pieWrap">
-    <div id="pie" class="pie"></div>
-  </div>
+    <div class="filters">
 
-  <div id="agentView" class="agentView"></div>
+      <div class="fieldWrap">
 
-</div>
+        <label class="fieldLabel">
+          Année
+        </label>
 
-<div id="statusPill" class="statusPill">
-  <div class="statusPillInner">
-    <div>⚠️</div>
-    <div>
-      <div id="statusMain">Chargement…</div>
-      <div id="statusSub" class="statusSub"></div>
-    </div>
-  </div>
-</div>
+        <select
+          id="yearSelect"
+          class="select">
+        </select>
 
-<!-- MENU ADMIN -->
-<div id="menuOverlay" class="overlay">
-  <div class="sheet menuSheet">
-    <div class="sheetHead">
-      <div class="sheetTitle">Administration statistiques</div>
-      <button id="menuClose" class="smallBtn" type="button">Fermer</button>
-    </div>
-    <div class="sheetBody">
-      <div class="menuGrid">
-        <div class="menuCard" data-open-panel="catalogue">
-          <div class="menuLeft">
-            <div class="menuEmoji">📁</div>
-            <div class="menuText">
-              <div class="menuMain">Catalogue</div>
-              <div class="menuSub">Véhicules + descriptifs liés à chaque véhicule</div>
-            </div>
-          </div>
-          <div class="menuArrow">›</div>
-        </div>
-
-        <div class="menuCard" data-open-panel="remplissage">
-          <div class="menuLeft">
-            <div class="menuEmoji">📝</div>
-            <div class="menuText">
-              <div class="menuMain">Remplissage</div>
-              <div class="menuSub">Choix véhicule, descriptif, date, lieu, hors secteur</div>
-            </div>
-          </div>
-          <div class="menuArrow">›</div>
-        </div>
       </div>
+
+      <div class="fieldWrap">
+
+        <label class="fieldLabel">
+          Mois
+        </label>
+
+        <select
+          id="monthSelect"
+          class="select">
+        </select>
+
+      </div>
+
     </div>
-  </div>
+
+
+    <div
+      id="capturesEmpty"
+      class="empty">
+
+      Aucune statistique disponible.
+
+    </div>
+
+
+    <div
+      id="captureList"
+      class="captureList">
+    </div>
+
+
+    <div
+      id="captureAdminPanel"
+      class="adminPanel">
+
+      <div class="adminPanelTitle">
+        Administration — Captures mensuelles
+      </div>
+
+      <button
+        id="btnOpenCaptureForm"
+        class="btn primary">
+
+        ＋ Ajouter une capture
+
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       INTERVENTIONS ANNUELLES
+  ====================================================== -->
+
+  <section class="section">
+
+    <h2 class="sectionTitle">
+      Nombre d’interventions
+    </h2>
+
+    <div
+      id="annualEmpty"
+      class="empty">
+
+      Aucune donnée annuelle enregistrée.
+
+    </div>
+
+
+    <div
+      id="annualContent"
+      style="display:none">
+
+      <div class="annualTop">
+
+        <div>
+
+          <div class="totalLabel">
+            Dernière année renseignée
+          </div>
+
+          <div
+            id="latestYearLabel"
+            class="totalBig">
+
+            —
+
+          </div>
+
+        </div>
+
+        <div style="text-align:right">
+
+          <div class="totalLabel">
+            Interventions
+          </div>
+
+          <div
+            id="latestYearValue"
+            class="totalBig">
+
+            —
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="yearList"
+        class="yearList">
+      </div>
+
+    </div>
+
+
+    <div
+      id="annualAdminPanel"
+      class="adminPanel">
+
+      <div class="adminPanelTitle">
+        Administration — Interventions annuelles
+      </div>
+
+      <div class="adminForm">
+
+        <div class="fieldWrap">
+
+          <label class="fieldLabel">
+            Année
+          </label>
+
+          <input
+            id="adminYear"
+            class="input"
+            type="number"
+            min="1900"
+            max="2200"
+            inputmode="numeric">
+
+        </div>
+
+
+        <div class="fieldWrap">
+
+          <label class="fieldLabel">
+            Nombre d’interventions
+          </label>
+
+          <input
+            id="adminInterventions"
+            class="input"
+            type="number"
+            min="0"
+            inputmode="numeric">
+
+        </div>
+
+
+        <button
+          id="btnSaveAnnual"
+          class="btn success">
+
+          Enregistrer
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       ÉVOLUTION
+  ====================================================== -->
+
+  <section class="section">
+
+    <h2 class="sectionTitle">
+      Évolution de l’activité
+    </h2>
+
+    <div class="sectionSub">
+      Évolution du nombre d’interventions au fil des années.
+    </div>
+
+
+    <div
+      id="chartEmpty"
+      class="empty">
+
+      Le graphique apparaîtra dès que plusieurs années seront renseignées.
+
+    </div>
+
+
+    <div
+      id="chartBox"
+      class="chartBox"
+      style="display:none">
+
+      <canvas
+        id="evolutionCanvas">
+      </canvas>
+
+    </div>
+
+  </section>
+
 </div>
 
-<!-- PANNEAU DETAIL -->
-<div id="panelOverlay" class="overlay">
-  <div class="sheet panelSheet">
+
+<!-- =====================================================
+     FORMULAIRE CAPTURE ADMIN
+====================================================== -->
+
+<div
+  id="captureOverlay"
+  class="overlay">
+
+  <div class="sheet">
+
     <div class="sheetHead">
-      <div id="panelTitle" class="sheetTitle">Admin</div>
-      <button id="panelClose" class="smallBtn" type="button">Fermer</button>
+
+      <div class="sheetTitle">
+        Ajouter une capture
+      </div>
+
+      <button
+        id="btnCloseCapture"
+        class="btn">
+
+        ✕
+
+      </button>
+
     </div>
-    <div id="panelBody" class="sheetBody"></div>
+
+
+    <div class="sheetBody">
+
+      <div class="adminCaptureGrid">
+
+        <div class="fieldWrap">
+
+          <label class="fieldLabel">
+            Année
+          </label>
+
+          <input
+            id="captureYear"
+            class="input"
+            type="number"
+            min="2000"
+            max="2200"
+            inputmode="numeric">
+
+        </div>
+
+
+        <div class="fieldWrap">
+
+          <label class="fieldLabel">
+            Mois
+          </label>
+
+          <select
+            id="captureMonth"
+            class="select">
+
+            <option value="1">Janvier</option>
+            <option value="2">Février</option>
+            <option value="3">Mars</option>
+            <option value="4">Avril</option>
+            <option value="5">Mai</option>
+            <option value="6">Juin</option>
+            <option value="7">Juillet</option>
+            <option value="8">Août</option>
+            <option value="9">Septembre</option>
+            <option value="10">Octobre</option>
+            <option value="11">Novembre</option>
+            <option value="12">Décembre</option>
+
+          </select>
+
+        </div>
+
+
+        <div class="fieldWrap full">
+
+          <label class="fieldLabel">
+            Titre
+          </label>
+
+          <input
+            id="captureTitle"
+            class="input"
+            type="text"
+            placeholder="Ex. Statistiques générales">
+
+        </div>
+
+
+        <div class="fieldWrap full">
+
+          <label class="fieldLabel">
+            Image
+          </label>
+
+          <input
+            id="captureFile"
+            class="input"
+            type="file"
+            accept="image/*">
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="previewBox"
+        class="previewBox">
+
+        <img
+          id="previewImage"
+          alt="Aperçu">
+
+      </div>
+
+
+      <div style="display:flex;justify-content:flex-end;gap:8px">
+
+        <button
+          id="btnCancelCapture"
+          class="btn">
+
+          Annuler
+
+        </button>
+
+        <button
+          id="btnSaveCapture"
+          class="btn success">
+
+          Enregistrer
+
+        </button>
+
+      </div>
+
+    </div>
+
   </div>
+
 </div>
+
+
+<div
+  id="status"
+  class="status">
+
+  <div
+    id="statusPill"
+    class="statusPill">
+  </div>
+
+</div>
+
 
 <script>
-/* ========= CONFIG ========= */
-const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
-const LS_EMAIL = "cs_portail_email_v1";
 
-/* ========= DONNEES TEMPORAIRES UI ========= */
-let vehicleCatalog = {
-  "VSAV": {
-    color: "#ff3b3b",
-    descriptors: ["Malaise", "AVP", "Chute"]
-  },
-  "FPT": {
-    color: "#3b8bff",
-    descriptors: ["Feu habitation", "Feu VL"]
-  }
-};
+/* =========================================================
+   CONFIGURATION
+========================================================= */
 
-let interventions = [
-  { id:1, date:"2026-04-01", vehicle:"VSAV", descriptor:"Malaise", horsSecteur:false, lieu:"Consenvoye" },
-  { id:2, date:"2026-04-03", vehicle:"VSAV", descriptor:"Chute", horsSecteur:true, lieu:"Extérieur" },
-  { id:3, date:"2026-04-05", vehicle:"FPT", descriptor:"Feu habitation", horsSecteur:false, lieu:"Centre" },
-  { id:4, date:"2026-04-07", vehicle:"VSAV", descriptor:"AVP", horsSecteur:true, lieu:"RD" },
-  { id:5, date:"2026-04-09", vehicle:"VSAV", descriptor:"Malaise", horsSecteur:false, lieu:"Consenvoye" }
+const API =
+"https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+
+
+const BACK_URL =
+"index.html";
+
+
+const LS_EMAIL =
+"cs_portail_email_v1";
+
+
+const LS_ROLE =
+"cs_role_v1";
+
+
+const CACHE_KEY =
+"cs_statistiques_cache_v1";
+
+
+const MONTHS = [
+  "",
+  "Janvier",
+  "Février",
+  "Mars",
+  "Avril",
+  "Mai",
+  "Juin",
+  "Juillet",
+  "Août",
+  "Septembre",
+  "Octobre",
+  "Novembre",
+  "Décembre"
 ];
 
-let isAdmin = false;
-let selectedCatalogVehicle = Object.keys(vehicleCatalog)[0] || "";
 
-/* ========= DOM ========= */
-const monthSelect = document.getElementById("monthSelect");
-const yearBox = document.getElementById("yearBox");
-const pie = document.getElementById("pie");
-const agentView = document.getElementById("agentView");
-const lockBtn = document.getElementById("lockBtn");
+let IS_ADMIN =
+String(
+  localStorage.getItem(LS_ROLE) || ""
+)
+.trim()
+.toLowerCase()
+===
+"admin";
 
-const menuOverlay = document.getElementById("menuOverlay");
-const menuClose = document.getElementById("menuClose");
-const panelOverlay = document.getElementById("panelOverlay");
-const panelTitle = document.getElementById("panelTitle");
-const panelBody = document.getElementById("panelBody");
-const panelClose = document.getElementById("panelClose");
 
-const statusPill = document.getElementById("statusPill");
-const statusMain = document.getElementById("statusMain");
-const statusSub = document.getElementById("statusSub");
+let EDIT_MODE =
+false;
 
-/* ========= UTILS ========= */
-function showStatus(main, sub=""){
-  statusMain.textContent = main || "";
-  statusSub.textContent = sub || "";
-  statusPill.style.display = "block";
-}
-function hideStatus(){
-  statusPill.style.display = "none";
-}
-function getEmailLocal(){
-  return (localStorage.getItem(LS_EMAIL) || "").trim().toLowerCase();
-}
-function jsonp(url, cbName, timeoutMs=15000){
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    const cleanup = () => {
-      script.remove();
-      try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
-    };
-    const timer = setTimeout(() => {
-      cleanup();
-      reject(new Error("Timeout JSONP"));
-    }, timeoutMs);
-    window[cbName] = (data) => {
-      clearTimeout(timer);
-      cleanup();
-      resolve(data);
-    };
-    const sep = url.includes("?") ? "&" : "?";
-    script.src = url + sep + "t=" + Date.now();
-    script.onerror = () => {
-      clearTimeout(timer);
-      cleanup();
-      reject(new Error("Erreur JSONP"));
-    };
-    document.head.appendChild(script);
-  });
-}
-async function loadMyRole(){
-  const email = getEmailLocal();
-  if(!email){
-    isAdmin = false;
-    lockBtn.style.display = "none";
-    return;
-  }
-  const cb = "cb_auth_" + Math.random().toString(36).slice(2);
-  const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
 
-  try{
-    const res = await jsonp(url, cb, 20000);
-    isAdmin = !!(res && res.ok === true && String(res.role || "").toLowerCase() === "admin");
-    lockBtn.style.display = isAdmin ? "inline-block" : "none";
-  }catch(e){
-    isAdmin = false;
-    lockBtn.style.display = "none";
-  }
-}
-function escapeHtml(s){
-  return String(s == null ? "" : s)
+let CAPTURES =
+[];
+
+
+let ANNUAL =
+[];
+
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const $ =
+id =>
+document.getElementById(id);
+
+
+const $btnLock =
+$("btnLock");
+
+
+const $editLabel =
+$("editLabel");
+
+
+const $yearSelect =
+$("yearSelect");
+
+
+const $monthSelect =
+$("monthSelect");
+
+
+const $captureList =
+$("captureList");
+
+
+const $capturesEmpty =
+$("capturesEmpty");
+
+
+const $captureAdminPanel =
+$("captureAdminPanel");
+
+
+const $annualAdminPanel =
+$("annualAdminPanel");
+
+
+const $annualEmpty =
+$("annualEmpty");
+
+
+const $annualContent =
+$("annualContent");
+
+
+const $yearList =
+$("yearList");
+
+
+const $latestYearLabel =
+$("latestYearLabel");
+
+
+const $latestYearValue =
+$("latestYearValue");
+
+
+const $chartEmpty =
+$("chartEmpty");
+
+
+const $chartBox =
+$("chartBox");
+
+
+const $canvas =
+$("evolutionCanvas");
+
+
+const $captureOverlay =
+$("captureOverlay");
+
+
+const $captureFile =
+$("captureFile");
+
+
+const $previewBox =
+$("previewBox");
+
+
+const $previewImage =
+$("previewImage");
+
+
+const $status =
+$("status");
+
+
+const $statusPill =
+$("statusPill");
+
+
+
+/* =========================================================
+   OUTILS
+========================================================= */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
     .replaceAll(">","&gt;")
     .replaceAll('"',"&quot;")
     .replaceAll("'","&#039;");
+
 }
 
-/* ========= MOIS / ANNEE ========= */
-const months = [
-  "Janvier","Février","Mars","Avril","Mai","Juin",
-  "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
-];
-months.forEach((m, i) => {
-  const opt = document.createElement("option");
-  opt.value = String(i + 1).padStart(2, "0");
-  opt.textContent = m;
-  monthSelect.appendChild(opt);
-});
-monthSelect.value = "04";
-yearBox.textContent = "2026";
 
-function selectedYear(){ return String(yearBox.textContent || "").trim(); }
-function selectedMonth(){ return String(monthSelect.value || "").trim(); }
+function getEmail(){
 
-function filteredInterventions(){
-  return interventions.filter(i => {
-    const parts = String(i.date || "").split("-");
-    if(parts.length !== 3) return false;
-    return parts[0] === selectedYear() && parts[1] === selectedMonth();
-  });
+  return String(
+    localStorage.getItem(LS_EMAIL)
+    ||
+    ""
+  )
+  .trim()
+  .toLowerCase();
+
 }
 
-/* ========= VUE AGENT ========= */
-function buildStats(filtered){
-  const stats = {};
-  const pieTotals = {};
 
-  filtered.forEach(inter => {
-    const v = inter.vehicle;
-    if(!stats[v]){
-      stats[v] = {
-        color: (vehicleCatalog[v] && vehicleCatalog[v].color) || "#999999",
-        descriptors: {}
+function showStatus(
+  text,
+  type=""
+){
+
+  $status.classList.remove(
+    "success",
+    "danger"
+  );
+
+
+  if(type){
+    $status.classList.add(type);
+  }
+
+
+  $statusPill.textContent =
+  text;
+
+
+  $status.style.display =
+  "block";
+
+
+  setTimeout(
+    ()=>{
+      $status.style.display =
+      "none";
+    },
+    1400
+  );
+
+}
+
+
+function jsonp(
+  url,
+  cbName,
+  timeout=15000
+){
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    )=>{
+
+      const script =
+      document.createElement(
+        "script"
+      );
+
+
+      const timer =
+      setTimeout(
+        ()=>{
+
+          cleanup();
+
+          reject(
+            new Error("Timeout")
+          );
+
+        },
+        timeout
+      );
+
+
+      function cleanup(){
+
+        clearTimeout(timer);
+
+        script.remove();
+
+        try{
+          delete window[cbName];
+        }catch(e){}
+
+      }
+
+
+      window[cbName] =
+      data=>{
+
+        cleanup();
+
+        resolve(data);
+
       };
-    }
-    if(!stats[v].descriptors[inter.descriptor]){
-      stats[v].descriptors[inter.descriptor] = { secteur:0, hors:0 };
-    }
 
-    if(inter.horsSecteur){
-      stats[v].descriptors[inter.descriptor].hors += 1;
-    }else{
-      stats[v].descriptors[inter.descriptor].secteur += 1;
+
+      script.onerror =
+      ()=>{
+
+        cleanup();
+
+        reject(
+          new Error(
+            "Erreur réseau"
+          )
+        );
+
+      };
+
+
+      script.src =
+      url
+      +
+      (
+        url.includes("?")
+          ? "&"
+          : "?"
+      )
+      +
+      "_="
+      +
+      Date.now();
+
+
+      document.head
+        .appendChild(
+          script
+        );
+
     }
+  );
 
-    pieTotals[v] = (pieTotals[v] || 0) + 1;
-  });
-
-  return { stats, pieTotals };
 }
 
-function renderPie(pieTotals){
-  const keys = Object.keys(pieTotals);
-  if(!keys.length){
-    pie.style.background = "rgba(255,255,255,.08)";
+
+
+/* =========================================================
+   CACHE LOCAL
+========================================================= */
+
+function saveLocalCache(){
+
+  try{
+
+    localStorage.setItem(
+      CACHE_KEY,
+      JSON.stringify({
+        captures:CAPTURES,
+        annual:ANNUAL,
+        savedAt:Date.now()
+      })
+    );
+
+  }catch(e){}
+
+}
+
+
+function loadLocalCache(){
+
+  try{
+
+    const raw =
+    localStorage.getItem(
+      CACHE_KEY
+    );
+
+
+    if(!raw){
+      return;
+    }
+
+
+    const data =
+    JSON.parse(raw);
+
+
+    CAPTURES =
+    Array.isArray(
+      data.captures
+    )
+      ?
+      data.captures
+      :
+      [];
+
+
+    ANNUAL =
+    Array.isArray(
+      data.annual
+    )
+      ?
+      data.annual
+      :
+      [];
+
+  }catch(e){}
+
+}
+
+
+
+/* =========================================================
+   ADMIN
+========================================================= */
+
+function applyAdminState(){
+
+  $btnLock.style.display =
+  IS_ADMIN
+    ?
+    "inline-block"
+    :
+    "none";
+
+
+  $btnLock.textContent =
+  EDIT_MODE
+    ?
+    "🔓"
+    :
+    "🔒";
+
+
+  $editLabel.style.display =
+  EDIT_MODE
+    ?
+    "inline-block"
+    :
+    "none";
+
+
+  $captureAdminPanel.classList.toggle(
+    "show",
+    IS_ADMIN && EDIT_MODE
+  );
+
+
+  $annualAdminPanel.classList.toggle(
+    "show",
+    IS_ADMIN && EDIT_MODE
+  );
+
+}
+
+
+async function verifyAdminInBackground(){
+
+  const email =
+  getEmail();
+
+
+  if(!email){
     return;
   }
 
-  const total = keys.reduce((s,k) => s + pieTotals[k], 0);
-  let current = 0;
-  const parts = [];
 
-  keys.forEach(k => {
-    const pct = (pieTotals[k] / total) * 100;
-    const color = (vehicleCatalog[k] && vehicleCatalog[k].color) || "#999999";
-    parts.push(`${color} ${current}% ${current + pct}%`);
-    current += pct;
-  });
+  const cb =
+  "stat_auth_"
+  +
+  Math.random()
+    .toString(36)
+    .slice(2);
 
-  pie.style.background = `conic-gradient(${parts.join(",")})`;
+
+  try{
+
+    const res =
+    await jsonp(
+      `${API}?view=auth_check`
+      +
+      `&email=${encodeURIComponent(email)}`
+      +
+      `&callback=${cb}`,
+      cb
+    );
+
+
+    if(
+      !res
+      ||
+      res.ok !== true
+    ){
+      return;
+    }
+
+
+    const role =
+    String(
+      res.role || ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+    localStorage.setItem(
+      LS_ROLE,
+      role
+    );
+
+
+    IS_ADMIN =
+    role === "admin";
+
+
+    if(!IS_ADMIN){
+      EDIT_MODE = false;
+    }
+
+
+    applyAdminState();
+
+  }catch(e){}
+
 }
 
-function renderAgent(stats){
-  agentView.innerHTML = "";
-  const vehKeys = Object.keys(stats);
 
-  if(!vehKeys.length){
-    agentView.innerHTML = `<div class="emptyCard">Aucune donnée pour cette période</div>`;
+
+/* =========================================================
+   CAPTURES
+========================================================= */
+
+function getAvailableYears(){
+
+  return [
+    ...new Set(
+      CAPTURES
+      .map(
+        item=>
+          Number(item.year)
+      )
+      .filter(
+        Number.isInteger
+      )
+    )
+  ]
+  .sort(
+    (a,b)=>b-a
+  );
+
+}
+
+
+function getAvailableMonths(
+  year
+){
+
+  return [
+    ...new Set(
+      CAPTURES
+      .filter(
+        item=>
+          Number(item.year)
+          ===
+          Number(year)
+      )
+      .map(
+        item=>
+          Number(item.month)
+      )
+      .filter(
+        month=>
+          month >= 1
+          &&
+          month <= 12
+      )
+    )
+  ]
+  .sort(
+    (a,b)=>a-b
+  );
+
+}
+
+
+function renderPeriodSelectors(){
+
+  const previousYear =
+  Number(
+    $yearSelect.value
+  );
+
+
+  const previousMonth =
+  Number(
+    $monthSelect.value
+  );
+
+
+  const years =
+  getAvailableYears();
+
+
+  $yearSelect.innerHTML =
+  "";
+
+
+  if(!years.length){
+
+    const opt =
+    document.createElement(
+      "option"
+    );
+
+
+    opt.value =
+    "";
+
+
+    opt.textContent =
+    "Aucune donnée";
+
+
+    $yearSelect.appendChild(opt);
+
+
+    $monthSelect.innerHTML =
+    `<option value="">Aucune donnée</option>`;
+
+
+    renderCaptures();
+
     return;
+
   }
 
-  vehKeys.forEach(v => {
-    const block = document.createElement("div");
-    block.className = "block";
 
-    let html = `<div class="blockTitle" style="color:${escapeHtml(stats[v].color)}">${escapeHtml(v)}</div>`;
-    html += `
-      <div class="table">
-        <div class="row header">
-          <div class="cellHead" style="text-align:left">Descriptif</div>
-          <div class="cellHead">Secteur</div>
-          <div class="cellHead">Hors secteur</div>
+  for(
+    const year
+    of years
+  ){
+
+    const opt =
+    document.createElement(
+      "option"
+    );
+
+
+    opt.value =
+    String(year);
+
+
+    opt.textContent =
+    String(year);
+
+
+    $yearSelect.appendChild(opt);
+
+  }
+
+
+  const selectedYear =
+  years.includes(previousYear)
+    ?
+    previousYear
+    :
+    years[0];
+
+
+  $yearSelect.value =
+  String(selectedYear);
+
+
+  renderMonths(
+    selectedYear,
+    previousMonth
+  );
+
+}
+
+
+function renderMonths(
+  year,
+  wantedMonth
+){
+
+  const months =
+  getAvailableMonths(
+    year
+  );
+
+
+  $monthSelect.innerHTML =
+  "";
+
+
+  for(
+    const month
+    of months
+  ){
+
+    const opt =
+    document.createElement(
+      "option"
+    );
+
+
+    opt.value =
+    String(month);
+
+
+    opt.textContent =
+    MONTHS[month];
+
+
+    $monthSelect.appendChild(opt);
+
+  }
+
+
+  if(!months.length){
+
+    const opt =
+    document.createElement(
+      "option"
+    );
+
+
+    opt.value =
+    "";
+
+
+    opt.textContent =
+    "Aucun mois";
+
+
+    $monthSelect.appendChild(opt);
+
+  }
+
+
+  const selectedMonth =
+  months.includes(
+    Number(wantedMonth)
+  )
+    ?
+    Number(wantedMonth)
+    :
+    months[months.length-1];
+
+
+  if(selectedMonth){
+
+    $monthSelect.value =
+    String(selectedMonth);
+
+  }
+
+
+  renderCaptures();
+
+}
+
+
+function renderCaptures(){
+
+  const year =
+  Number(
+    $yearSelect.value
+  );
+
+
+  const month =
+  Number(
+    $monthSelect.value
+  );
+
+
+  const list =
+  CAPTURES
+    .filter(
+      item=>
+        Number(item.year) === year
+        &&
+        Number(item.month) === month
+    )
+    .sort(
+      (a,b)=>
+        Number(a.order || 0)
+        -
+        Number(b.order || 0)
+    );
+
+
+  $captureList.innerHTML =
+  "";
+
+
+  $capturesEmpty.style.display =
+  list.length
+    ?
+    "none"
+    :
+    "block";
+
+
+  for(
+    const item
+    of list
+  ){
+
+    const card =
+    document.createElement(
+      "div"
+    );
+
+
+    card.className =
+    "captureCard";
+
+
+    const adminButtons =
+    IS_ADMIN
+    &&
+    EDIT_MODE
+      ?
+      `
+        <div class="captureActions">
+
+          <button
+            class="btn danger"
+            data-delete="${escapeHtml(item.id || "")}">
+
+            🗑
+
+          </button>
+
         </div>
+      `
+      :
+      "";
+
+
+    card.innerHTML =
+    `
+      <div class="captureHead">
+
+        <div class="captureTitle">
+          ${escapeHtml(
+            item.title
+            ||
+            `${MONTHS[month]} ${year}`
+          )}
+        </div>
+
+        ${adminButtons}
+
+      </div>
+
+      <img
+        class="captureImage"
+        src="${escapeHtml(item.image_url || "")}"
+        alt="${escapeHtml(item.title || "Statistiques")}">
     `;
 
-    Object.keys(stats[v].descriptors).forEach(desc => {
-      const s = stats[v].descriptors[desc].secteur;
-      const h = stats[v].descriptors[desc].hors;
-      html += `
-        <div class="row">
-          <div class="cellType">${escapeHtml(desc)}</div>
-          <div class="cellVal">${s}</div>
-          <div class="cellVal">${h}</div>
-        </div>
-      `;
-    });
 
-    html += `</div>`;
-    block.innerHTML = html;
-    agentView.appendChild(block);
-  });
+    $captureList.appendChild(
+      card
+    );
+
+  }
+
+
+  $captureList
+  .querySelectorAll(
+    "[data-delete]"
+  )
+  .forEach(
+    button=>{
+
+      button.onclick =
+      ()=>{
+
+        const id =
+        button.dataset.delete;
+
+
+        deleteCapture(
+          id
+        );
+
+      };
+
+    }
+  );
+
 }
+
+
+
+/* =========================================================
+   ANNUEL
+========================================================= */
+
+function normalizeAnnual(){
+
+  ANNUAL =
+  ANNUAL
+  .map(
+    row=>({
+      year:Number(row.year),
+      interventions:Number(row.interventions)
+    })
+  )
+  .filter(
+    row=>
+      Number.isInteger(row.year)
+      &&
+      Number.isFinite(row.interventions)
+  )
+  .sort(
+    (a,b)=>a.year-b.year
+  );
+
+}
+
+
+function renderAnnual(){
+
+  normalizeAnnual();
+
+
+  const hasData =
+  ANNUAL.length > 0;
+
+
+  $annualEmpty.style.display =
+  hasData
+    ?
+    "none"
+    :
+    "block";
+
+
+  $annualContent.style.display =
+  hasData
+    ?
+    "block"
+    :
+    "none";
+
+
+  $yearList.innerHTML =
+  "";
+
+
+  if(!hasData){
+
+    drawEvolution();
+
+    return;
+
+  }
+
+
+  const latest =
+  ANNUAL[
+    ANNUAL.length-1
+  ];
+
+
+  $latestYearLabel.textContent =
+  latest.year;
+
+
+  $latestYearValue.textContent =
+  latest.interventions;
+
+
+  const reversed =
+  ANNUAL
+    .slice()
+    .reverse();
+
+
+  for(
+    const row
+    of reversed
+  ){
+
+    const div =
+    document.createElement(
+      "div"
+    );
+
+
+    div.className =
+    "yearStat";
+
+
+    div.innerHTML =
+    `
+      <div class="yearStatYear">
+        ${row.year}
+      </div>
+
+      <div class="yearStatValue">
+        ${row.interventions}
+      </div>
+    `;
+
+
+    $yearList.appendChild(
+      div
+    );
+
+  }
+
+
+  drawEvolution();
+
+}
+
+
+
+/* =========================================================
+   GRAPHIQUE
+========================================================= */
+
+function drawEvolution(){
+
+  normalizeAnnual();
+
+
+  if(
+    ANNUAL.length < 2
+  ){
+
+    $chartEmpty.style.display =
+    "block";
+
+
+    $chartBox.style.display =
+    "none";
+
+
+    return;
+
+  }
+
+
+  $chartEmpty.style.display =
+  "none";
+
+
+  $chartBox.style.display =
+  "block";
+
+
+  requestAnimationFrame(
+    ()=>{
+
+      const rect =
+      $canvas.getBoundingClientRect();
+
+
+      const dpr =
+      window.devicePixelRatio
+      ||
+      1;
+
+
+      $canvas.width =
+      Math.floor(
+        rect.width * dpr
+      );
+
+
+      $canvas.height =
+      Math.floor(
+        rect.height * dpr
+      );
+
+
+      const ctx =
+      $canvas.getContext(
+        "2d"
+      );
+
+
+      ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+      );
+
+
+      const W =
+      rect.width;
+
+
+      const H =
+      rect.height;
+
+
+      ctx.clearRect(
+        0,
+        0,
+        W,
+        H
+      );
+
+
+      const left =
+      46;
+
+
+      const right =
+      16;
+
+
+      const top =
+      18;
+
+
+      const bottom =
+      38;
+
+
+      const graphW =
+      W
+      -
+      left
+      -
+      right;
+
+
+      const graphH =
+      H
+      -
+      top
+      -
+      bottom;
+
+
+      const values =
+      ANNUAL.map(
+        x=>x.interventions
+      );
+
+
+      const minVal =
+      Math.min(
+        ...values
+      );
+
+
+      const maxVal =
+      Math.max(
+        ...values
+      );
+
+
+      const margin =
+      Math.max(
+        10,
+        Math.round(
+          (
+            maxVal-minVal
+          )
+          *
+          .15
+        )
+      );
+
+
+      const yMin =
+      Math.max(
+        0,
+        minVal-margin
+      );
+
+
+      const yMax =
+      maxVal+margin;
+
+
+      ctx.font =
+      "12px system-ui";
+
+
+      ctx.lineWidth =
+      1;
+
+
+      ctx.strokeStyle =
+      "rgba(255,255,255,.15)";
+
+
+      ctx.fillStyle =
+      "rgba(255,255,255,.72)";
+
+
+      for(
+        let i=0;
+        i<=4;
+        i++
+      ){
+
+        const y =
+        top
+        +
+        graphH
+        *
+        i/4;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+          left,
+          y
+        );
+
+        ctx.lineTo(
+          left+graphW,
+          y
+        );
+
+        ctx.stroke();
+
+
+        const value =
+        Math.round(
+          yMax
+          -
+          (
+            yMax-yMin
+          )
+          *
+          i/4
+        );
+
+
+        ctx.fillText(
+          String(value),
+          4,
+          y+4
+        );
+
+      }
+
+
+      const points =
+      ANNUAL.map(
+        (
+          row,
+          index
+        )=>{
+
+          const x =
+          ANNUAL.length === 1
+            ?
+            left+graphW/2
+            :
+            left
+            +
+            graphW
+            *
+            index
+            /
+            (
+              ANNUAL.length-1
+            );
+
+
+          const ratio =
+          (
+            row.interventions
+            -
+            yMin
+          )
+          /
+          (
+            yMax-yMin
+            ||
+            1
+          );
+
+
+          const y =
+          top
+          +
+          graphH
+          -
+          graphH
+          *
+          ratio;
+
+
+          return {
+            x,
+            y,
+            row
+          };
+
+        }
+      );
+
+
+      ctx.strokeStyle =
+      "#f2a23a";
+
+
+      ctx.lineWidth =
+      3;
+
+
+      ctx.beginPath();
+
+
+      points.forEach(
+        (
+          point,
+          index
+        )=>{
+
+          if(index === 0){
+
+            ctx.moveTo(
+              point.x,
+              point.y
+            );
+
+          }else{
+
+            ctx.lineTo(
+              point.x,
+              point.y
+            );
+
+          }
+
+        }
+      );
+
+
+      ctx.stroke();
+
+
+      for(
+        const point
+        of points
+      ){
+
+        ctx.beginPath();
+
+        ctx.arc(
+          point.x,
+          point.y,
+          4,
+          0,
+          Math.PI*2
+        );
+
+        ctx.fillStyle =
+        "#ffffff";
+
+        ctx.fill();
+
+
+        ctx.strokeStyle =
+        "#d46a00";
+
+        ctx.lineWidth =
+        2;
+
+        ctx.stroke();
+
+      }
+
+
+      const maxLabels =
+      W < 600
+        ?
+        6
+        :
+        10;
+
+
+      const step =
+      Math.max(
+        1,
+        Math.ceil(
+          ANNUAL.length
+          /
+          maxLabels
+        )
+      );
+
+
+      ctx.fillStyle =
+      "rgba(255,255,255,.70)";
+
+
+      ctx.font =
+      "11px system-ui";
+
+
+      ctx.textAlign =
+      "center";
+
+
+      ANNUAL.forEach(
+        (
+          row,
+          index
+        )=>{
+
+          if(
+            index % step !== 0
+            &&
+            index !== ANNUAL.length-1
+          ){
+            return;
+          }
+
+
+          const point =
+          points[index];
+
+
+          ctx.fillText(
+            String(
+              row.year
+            ),
+            point.x,
+            H-12
+          );
+
+        }
+      );
+
+
+      ctx.textAlign =
+      "left";
+
+    }
+  );
+
+}
+
+
+
+/* =========================================================
+   API LISTE STATISTIQUES
+========================================================= */
+
+async function loadStatsFromApi(){
+
+  const cb =
+  "stats_list_"
+  +
+  Math.random()
+    .toString(36)
+    .slice(2);
+
+
+  try{
+
+    const res =
+    await jsonp(
+
+      `${API}?view=statistiques_list`
+      +
+      `&callback=${cb}`,
+
+      cb,
+
+      20000
+
+    );
+
+
+    if(
+      !res
+      ||
+      res.ok !== true
+    ){
+      return;
+    }
+
+
+    CAPTURES =
+    Array.isArray(
+      res.captures
+    )
+      ?
+      res.captures
+      :
+      [];
+
+
+    ANNUAL =
+    Array.isArray(
+      res.annual
+    )
+      ?
+      res.annual
+      :
+      [];
+
+
+    saveLocalCache();
+
+
+    renderAll();
+
+  }catch(e){}
+
+}
+
+
+
+/* =========================================================
+   API ANNUEL
+========================================================= */
+
+async function saveAnnual(){
+
+  if(!IS_ADMIN){
+    return;
+  }
+
+
+  const year =
+  Number(
+    $("adminYear").value
+  );
+
+
+  const interventions =
+  Number(
+    $("adminInterventions").value
+  );
+
+
+  if(
+    !Number.isInteger(year)
+    ||
+    year < 1900
+    ||
+    year > 2200
+  ){
+
+    alert(
+      "Année incorrecte."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !Number.isFinite(interventions)
+    ||
+    interventions < 0
+  ){
+
+    alert(
+      "Nombre d’interventions incorrect."
+    );
+
+    return;
+
+  }
+
+
+  const email =
+  getEmail();
+
+
+  const cb =
+  "stats_annual_"
+  +
+  Math.random()
+    .toString(36)
+    .slice(2);
+
+
+  $("btnSaveAnnual").disabled =
+  true;
+
+
+  $("btnSaveAnnual").textContent =
+  "Enregistrement…";
+
+
+  try{
+
+    const res =
+    await jsonp(
+
+      `${API}?view=statistiques_annual_set`
+      +
+      `&email=${encodeURIComponent(email)}`
+      +
+      `&year=${encodeURIComponent(year)}`
+      +
+      `&interventions=${encodeURIComponent(interventions)}`
+      +
+      `&callback=${cb}`,
+
+      cb,
+
+      20000
+
+    );
+
+
+    if(
+      !res
+      ||
+      res.ok !== true
+    ){
+
+      throw new Error(
+        res?.error
+        ||
+        "Erreur"
+      );
+
+    }
+
+
+    const existing =
+    ANNUAL.find(
+      item=>
+        Number(item.year)
+        ===
+        year
+    );
+
+
+    if(existing){
+
+      existing.interventions =
+      interventions;
+
+    }else{
+
+      ANNUAL.push({
+        year,
+        interventions
+      });
+
+    }
+
+
+    saveLocalCache();
+
+
+    renderAnnual();
+
+
+    $("adminYear").value =
+    "";
+
+
+    $("adminInterventions").value =
+    "";
+
+
+    showStatus(
+      "Enregistré",
+      "success"
+    );
+
+  }catch(error){
+
+    alert(
+      "Erreur : "
+      +
+      String(
+        error?.message
+        ||
+        error
+      )
+    );
+
+  }
+
+
+  $("btnSaveAnnual").disabled =
+  false;
+
+
+  $("btnSaveAnnual").textContent =
+  "Enregistrer";
+
+}
+
+
+
+/* =========================================================
+   CAPTURES — FORMULAIRE
+========================================================= */
+
+function openCaptureForm(){
+
+  const now =
+  new Date();
+
+
+  $("captureYear").value =
+  $yearSelect.value
+  ||
+  now.getFullYear();
+
+
+  $("captureMonth").value =
+  $monthSelect.value
+  ||
+  (
+    now.getMonth()+1
+  );
+
+
+  $("captureTitle").value =
+  "";
+
+
+  $captureFile.value =
+  "";
+
+
+  $previewBox.style.display =
+  "none";
+
+
+  $previewImage.src =
+  "";
+
+
+  $captureOverlay.classList.add(
+    "show"
+  );
+
+}
+
+
+function closeCaptureForm(){
+
+  $captureOverlay.classList.remove(
+    "show"
+  );
+
+}
+
+
+$captureFile.addEventListener(
+  "change",
+  ()=>{
+
+    const file =
+    $captureFile.files?.[0];
+
+
+    if(!file){
+
+      $previewBox.style.display =
+      "none";
+
+      return;
+
+    }
+
+
+    const reader =
+    new FileReader();
+
+
+    reader.onload =
+    ()=>{
+
+      $previewImage.src =
+      reader.result;
+
+
+      $previewBox.style.display =
+      "block";
+
+    };
+
+
+    reader.readAsDataURL(
+      file
+    );
+
+  }
+);
+
+
+async function saveCapture(){
+
+  if(!IS_ADMIN){
+    return;
+  }
+
+
+  const year =
+  Number(
+    $("captureYear").value
+  );
+
+
+  const month =
+  Number(
+    $("captureMonth").value
+  );
+
+
+  const title =
+  String(
+    $("captureTitle").value
+    ||
+    ""
+  )
+  .trim();
+
+
+  const file =
+  $captureFile.files?.[0];
+
+
+  if(
+    !Number.isInteger(year)
+    ||
+    year < 2000
+  ){
+
+    alert(
+      "Année incorrecte."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    month < 1
+    ||
+    month > 12
+  ){
+
+    alert(
+      "Mois incorrect."
+    );
+
+    return;
+
+  }
+
+
+  if(!file){
+
+    alert(
+      "Choisis une capture."
+    );
+
+    return;
+
+  }
+
+
+  /*
+    IMPORTANT :
+    Le navigateur ne peut pas envoyer directement
+    une image à Apps Script avec notre JSONP actuel.
+
+    La partie Apps Script/Drive sera ajoutée ensuite.
+  */
+
+
+  alert(
+    "La sélection de la capture fonctionne. "
+    +
+    "Il reste à brancher l’envoi vers Google Drive dans Apps Script."
+  );
+
+}
+
+
+
+/* =========================================================
+   SUPPRESSION CAPTURE
+========================================================= */
+
+async function deleteCapture(
+  id
+){
+
+  if(
+    !id
+    ||
+    !IS_ADMIN
+  ){
+    return;
+  }
+
+
+  if(
+    !confirm(
+      "Supprimer cette capture ?"
+    )
+  ){
+    return;
+  }
+
+
+  const email =
+  getEmail();
+
+
+  const cb =
+  "stats_delete_"
+  +
+  Math.random()
+    .toString(36)
+    .slice(2);
+
+
+  try{
+
+    const res =
+    await jsonp(
+
+      `${API}?view=statistiques_capture_delete`
+      +
+      `&email=${encodeURIComponent(email)}`
+      +
+      `&id=${encodeURIComponent(id)}`
+      +
+      `&callback=${cb}`,
+
+      cb,
+
+      20000
+
+    );
+
+
+    if(
+      !res
+      ||
+      res.ok !== true
+    ){
+
+      throw new Error(
+        res?.error
+        ||
+        "Erreur suppression"
+      );
+
+    }
+
+
+    CAPTURES =
+    CAPTURES.filter(
+      item=>
+        String(item.id)
+        !==
+        String(id)
+    );
+
+
+    saveLocalCache();
+
+
+    renderPeriodSelectors();
+
+
+    showStatus(
+      "Capture supprimée",
+      "danger"
+    );
+
+  }catch(error){
+
+    alert(
+      "Erreur suppression : "
+      +
+      String(
+        error?.message
+        ||
+        error
+      )
+    );
+
+  }
+
+}
+
+
+
+/* =========================================================
+   RENDER GLOBAL
+========================================================= */
 
 function renderAll(){
-  const filtered = filteredInterventions();
-  const { stats, pieTotals } = buildStats(filtered);
-  renderPie(pieTotals);
-  renderAgent(stats);
+
+  renderPeriodSelectors();
+
+  renderAnnual();
+
+  applyAdminState();
+
 }
 
-/* ========= OVERLAYS ========= */
-function openMenu(){
-  if(!isAdmin) return;
-  menuOverlay.classList.add("show");
-}
-function closeMenu(){
-  menuOverlay.classList.remove("show");
-}
-function openPanel(name){
-  closeMenu();
-  panelOverlay.classList.add("show");
 
-  if(name === "catalogue"){
-    panelTitle.textContent = "Catalogue";
-    renderCataloguePanel();
-  }else if(name === "remplissage"){
-    panelTitle.textContent = "Remplissage";
-    renderRemplissagePanel();
-  }
-}
-function closePanel(){
-  panelOverlay.classList.remove("show");
-  panelBody.innerHTML = "";
-}
 
-/* ========= PANEL CATALOGUE ========= */
-function renderCataloguePanel(){
-  if(!selectedCatalogVehicle || !vehicleCatalog[selectedCatalogVehicle]){
-    selectedCatalogVehicle = Object.keys(vehicleCatalog)[0] || "";
-  }
+/* =========================================================
+   ÉVÉNEMENTS
+========================================================= */
 
-  panelBody.innerHTML = `
-    <div class="section">
-      <div class="sectionTitle">Ajouter un véhicule</div>
-      <div class="hint">Nom du véhicule + couleur.</div>
-      <div class="grid2">
-        <input id="pc_vehicle_name" class="field" type="text" placeholder="Nom véhicule (ex : VSAV)">
-        <input id="pc_vehicle_color" class="field" type="text" placeholder="Couleur HEX (ex : #ff3b3b)">
-      </div>
-      <div class="actionRow" style="margin-top:10px;">
-        <button id="pc_add_vehicle" class="smallBtn" type="button">Ajouter véhicule</button>
-      </div>
-    </div>
+$("btnBack").onclick =
+()=>{
 
-    <div class="catalogLayout">
-      <div class="section">
-        <div class="sectionTitle">Véhicules</div>
-        <div id="pc_vehicle_list" class="vehicleListSelectable"></div>
-      </div>
+  location.href =
+  BACK_URL;
 
-      <div class="section">
-        <div class="sectionTitle">Descriptifs liés</div>
-        <div class="hint">Tu sélectionnes un véhicule, puis tu ajoutes ses descriptifs.</div>
-        <div id="pc_desc_zone"></div>
-      </div>
-    </div>
-  `;
+};
 
-  document.getElementById("pc_add_vehicle").onclick = () => {
-    const name = String(document.getElementById("pc_vehicle_name").value || "").trim().toUpperCase();
-    const color = String(document.getElementById("pc_vehicle_color").value || "").trim();
-    if(!name || !color) return;
-    if(!vehicleCatalog[name]){
-      vehicleCatalog[name] = { color, descriptors: [] };
-    }else{
-      vehicleCatalog[name].color = color;
-    }
-    selectedCatalogVehicle = name;
-    renderCataloguePanel();
-    renderAll();
-  };
 
-  const list = document.getElementById("pc_vehicle_list");
-  const keys = Object.keys(vehicleCatalog);
+$btnLock.onclick =
+()=>{
 
-  if(!keys.length){
-    list.innerHTML = `<div class="emptyMini">Aucun véhicule.</div>`;
-  }else{
-    keys.forEach(v => {
-      const el = document.createElement("div");
-      el.className = "vehicleSelectable" + (v === selectedCatalogVehicle ? " active" : "");
-      el.innerHTML = `
-        <span class="dot" style="background:${escapeHtml(vehicleCatalog[v].color)}"></span>
-        <div style="min-width:0;">
-          <div class="itemMain">${escapeHtml(v)}</div>
-          <div class="itemSub">${escapeHtml(vehicleCatalog[v].color)}</div>
-        </div>
-      `;
-      el.onclick = () => {
-        selectedCatalogVehicle = v;
-        renderCataloguePanel();
-      };
-      list.appendChild(el);
-    });
-  }
-
-  renderDescriptorsZone();
-}
-
-function renderDescriptorsZone(){
-  const zone = document.getElementById("pc_desc_zone");
-  if(!zone) return;
-
-  if(!selectedCatalogVehicle || !vehicleCatalog[selectedCatalogVehicle]){
-    zone.innerHTML = `<div class="emptyMini">Sélectionne un véhicule.</div>`;
+  if(!IS_ADMIN){
     return;
   }
 
-  const vehicle = vehicleCatalog[selectedCatalogVehicle];
-  zone.innerHTML = `
-    <div style="margin-bottom:10px;">
-      <div class="itemMain" style="margin-bottom:4px;">${escapeHtml(selectedCatalogVehicle)}</div>
-      <div class="itemSub">${escapeHtml(vehicle.color)}</div>
-    </div>
 
-    <div class="grid2">
-      <input id="pc_desc_name" class="field" type="text" placeholder="Descriptif (ex : Malaise)">
-      <div></div>
-    </div>
+  EDIT_MODE =
+  !EDIT_MODE;
 
-    <div class="actionRow" style="margin-top:10px; margin-bottom:10px;">
-      <button id="pc_add_desc" class="smallBtn" type="button">Ajouter descriptif</button>
-      <button id="pc_delete_vehicle" class="smallBtn danger" type="button">Supprimer véhicule</button>
-    </div>
 
-    <div id="pc_desc_list" class="listAdmin"></div>
-  `;
+  applyAdminState();
 
-  document.getElementById("pc_add_desc").onclick = () => {
-    const name = String(document.getElementById("pc_desc_name").value || "").trim();
-    if(!name) return;
-    if(!vehicle.descriptors.includes(name)){
-      vehicle.descriptors.push(name);
-    }
-    renderDescriptorsZone();
-    renderAll();
-  };
 
-  document.getElementById("pc_delete_vehicle").onclick = () => {
-    delete vehicleCatalog[selectedCatalogVehicle];
-    interventions = interventions.filter(it => it.vehicle !== selectedCatalogVehicle);
-    selectedCatalogVehicle = Object.keys(vehicleCatalog)[0] || "";
-    renderCataloguePanel();
-    renderAll();
-  };
+  renderCaptures();
 
-  const list = document.getElementById("pc_desc_list");
-  if(!vehicle.descriptors.length){
-    list.innerHTML = `<div class="emptyMini">Aucun descriptif pour ce véhicule.</div>`;
-    return;
+};
+
+
+$yearSelect.onchange =
+()=>{
+
+  renderMonths(
+    Number(
+      $yearSelect.value
+    ),
+    0
+  );
+
+};
+
+
+$monthSelect.onchange =
+renderCaptures;
+
+
+$("btnSaveAnnual").onclick =
+saveAnnual;
+
+
+$("btnOpenCaptureForm").onclick =
+openCaptureForm;
+
+
+$("btnCloseCapture").onclick =
+closeCaptureForm;
+
+
+$("btnCancelCapture").onclick =
+closeCaptureForm;
+
+
+$("btnSaveCapture").onclick =
+saveCapture;
+
+
+window.addEventListener(
+  "resize",
+  ()=>{
+
+    drawEvolution();
+
   }
+);
 
-  vehicle.descriptors.forEach(desc => {
-    const div = document.createElement("div");
-    div.className = "item";
-    div.innerHTML = `
-      <div class="itemLeft">
-        <div>
-          <div class="itemMain">${escapeHtml(desc)}</div>
-          <div class="itemSub">${escapeHtml(selectedCatalogVehicle)}</div>
-        </div>
-      </div>
-      <button class="smallBtn danger" type="button">Supprimer</button>
-    `;
-    div.querySelector("button").onclick = () => {
-      vehicle.descriptors = vehicle.descriptors.filter(x => x !== desc);
-      interventions = interventions.filter(it => !(it.vehicle === selectedCatalogVehicle && it.descriptor === desc));
-      renderDescriptorsZone();
-      renderAll();
-    };
-    list.appendChild(div);
-  });
-}
 
-/* ========= PANEL REMPLISSAGE ========= */
-function renderRemplissagePanel(){
-  panelBody.innerHTML = `
-    <div class="section">
-      <div class="sectionTitle">Nouvelle intervention</div>
-      <div class="hint">Choisis un véhicule, puis un descriptif lié à ce véhicule.</div>
 
-      <div class="grid2">
-        <select id="pr_vehicle" class="select"></select>
-        <select id="pr_descriptor" class="select"></select>
-      </div>
+/* =========================================================
+   DÉMARRAGE
+========================================================= */
 
-      <div class="grid2" style="margin-top:10px;">
-        <input id="pr_date" class="field" type="date">
-        <input id="pr_lieu" class="field" type="text" placeholder="Lieu">
-      </div>
+(function start(){
 
-      <div class="grid2" style="margin-top:10px;">
-        <label class="checkCard">
-          <input id="pr_hs" type="checkbox">
-          <span>Hors secteur</span>
-        </label>
-        <div></div>
-      </div>
+  /*
+    Affichage immédiat depuis le téléphone.
+  */
 
-      <div class="actionRow" style="margin-top:10px;">
-        <button id="pr_add" class="smallBtn" type="button">Ajouter intervention</button>
-      </div>
-    </div>
+  loadLocalCache();
 
-    <div class="section">
-      <div class="sectionTitle">Interventions enregistrées</div>
-      <div id="pr_list" class="listAdmin"></div>
-    </div>
-  `;
 
-  const vehicleSel = document.getElementById("pr_vehicle");
-  const descSel = document.getElementById("pr_descriptor");
-
-  const vehKeys = Object.keys(vehicleCatalog);
-  vehKeys.forEach(v => {
-    const opt = document.createElement("option");
-    opt.value = v;
-    opt.textContent = v;
-    vehicleSel.appendChild(opt);
-  });
-
-  function refreshDescriptors(){
-    const v = vehicleSel.value;
-    descSel.innerHTML = "";
-    const descs = (vehicleCatalog[v] && vehicleCatalog[v].descriptors) ? vehicleCatalog[v].descriptors : [];
-    descs.forEach(d => {
-      const opt = document.createElement("option");
-      opt.value = d;
-      opt.textContent = d;
-      descSel.appendChild(opt);
-    });
-  }
-
-  refreshDescriptors();
-  vehicleSel.onchange = refreshDescriptors;
-
-  document.getElementById("pr_add").onclick = () => {
-    const vehicle = String(vehicleSel.value || "").trim();
-    const descriptor = String(descSel.value || "").trim();
-    const date = String(document.getElementById("pr_date").value || "").trim();
-    const lieu = String(document.getElementById("pr_lieu").value || "").trim();
-    const horsSecteur = !!document.getElementById("pr_hs").checked;
-
-    if(!vehicle || !descriptor || !date) return;
-
-    interventions.push({
-      id: Date.now(),
-      date,
-      vehicle,
-      descriptor,
-      horsSecteur,
-      lieu
-    });
-
-    renderRemplissagePanel();
-    renderAll();
-  };
-
-  const list = document.getElementById("pr_list");
-  if(!interventions.length){
-    list.innerHTML = `<div class="emptyMini">Aucune intervention enregistrée.</div>`;
-    return;
-  }
-
-  [...interventions]
-    .sort((a,b) => String(b.date).localeCompare(String(a.date)))
-    .forEach(it => {
-      const color = vehicleCatalog[it.vehicle] ? vehicleCatalog[it.vehicle].color : "#999999";
-      const div = document.createElement("div");
-      div.className = "item";
-      div.innerHTML = `
-        <div class="itemLeft">
-          <span class="dot" style="background:${escapeHtml(color)}"></span>
-          <div>
-            <div class="itemMain">${escapeHtml(it.date)} — ${escapeHtml(it.vehicle)} — ${escapeHtml(it.descriptor)}</div>
-            <div class="itemSub">${escapeHtml(it.lieu || "—")} • ${it.horsSecteur ? "Hors secteur" : "Secteur 1er appel"}</div>
-          </div>
-        </div>
-        <button class="smallBtn danger" type="button">Supprimer</button>
-      `;
-      div.querySelector("button").onclick = () => {
-        interventions = interventions.filter(x => x.id !== it.id);
-        renderRemplissagePanel();
-        renderAll();
-      };
-      list.appendChild(div);
-    });
-}
-
-/* ========= EVENTS ========= */
-lockBtn.addEventListener("click", openMenu);
-monthSelect.addEventListener("change", renderAll);
-
-document.querySelectorAll("[data-open-panel]").forEach(el => {
-  el.addEventListener("click", () => openPanel(el.dataset.openPanel));
-});
-
-menuClose.addEventListener("click", closeMenu);
-panelClose.addEventListener("click", closePanel);
-
-menuOverlay.addEventListener("click", (e) => {
-  if(e.target === menuOverlay) closeMenu();
-});
-panelOverlay.addEventListener("click", (e) => {
-  if(e.target === panelOverlay) closePanel();
-});
-
-document.addEventListener("keydown", (e) => {
-  if(e.key === "Escape"){
-    closeMenu();
-    closePanel();
-  }
-});
-
-/* ========= INIT ========= */
-(async function init(){
   renderAll();
-  showStatus("Vérification accès admin…", "Le cadenas s’affiche seulement si l’utilisateur est admin.");
-  await loadMyRole();
-  hideStatus();
+
+
+  /*
+    Cadenas immédiatement si rôle déjà connu.
+  */
+
+  applyAdminState();
+
+
+  /*
+    Vérification admin en arrière-plan.
+  */
+
+  verifyAdminInBackground()
+    .catch(()=>{});
+
+
+  /*
+    Données Google en arrière-plan.
+  */
+
+  loadStatsFromApi()
+    .catch(()=>{});
+
 })();
+
 </script>
+
 </body>
 </html>
