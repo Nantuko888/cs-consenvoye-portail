@@ -11,21 +11,25 @@
 
 <title>Statistiques — CS Consenvoye</title>
 
-
 <style>
 
 :root{
   --txt:#f4f4f4;
-  --muted:rgba(255,255,255,.65);
-  --stroke:rgba(255,255,255,.10);
-  --panel:rgba(12,12,12,.78);
-  --orange:#d46a00;
-  --orange2:#9f4f00;
+  --muted:rgba(255,255,255,.68);
+  --stroke:rgba(255,255,255,.13);
+
+  --orange1:rgba(196,94,0,.58);
+  --orange2:rgba(126,57,0,.48);
+
+  --violet1:rgba(104,82,139,.52);
+  --violet2:rgba(61,47,84,.46);
+
+  --panel:rgba(8,8,8,.67);
+
   --green:#168039;
   --red:#a71f1f;
-  --violet1:rgba(103,82,138,.78);
-  --violet2:rgba(61,48,83,.72);
-  --shadow:0 14px 34px rgba(0,0,0,.45);
+
+  --shadow:0 10px 26px rgba(0,0,0,.34);
 }
 
 *{
@@ -36,6 +40,7 @@ html,
 body{
   margin:0;
   min-height:100%;
+
   font-family:
     system-ui,
     -apple-system,
@@ -43,15 +48,16 @@ body{
     Roboto,
     Arial,
     sans-serif;
+
   color:var(--txt);
   background:#080808;
 }
 
 body{
   padding:
-    calc(env(safe-area-inset-top) + 12px)
-    12px
-    calc(env(safe-area-inset-bottom) + 24px);
+    calc(env(safe-area-inset-top) + 10px)
+    10px
+    calc(env(safe-area-inset-bottom) + 18px);
 }
 
 
@@ -67,26 +73,13 @@ body{
   background:
     linear-gradient(
       180deg,
-      rgba(0,0,0,.55),
-      rgba(0,0,0,.70)
+      rgba(0,0,0,.42),
+      rgba(0,0,0,.58)
     ),
     url("background.png")
       center top /
       cover
       no-repeat;
-}
-
-.bg::after{
-  content:"";
-  position:absolute;
-  inset:0;
-
-  background:
-    radial-gradient(
-      circle at 50% 5%,
-      rgba(255,135,0,.12),
-      transparent 50%
-    );
 }
 
 
@@ -96,75 +89,88 @@ body{
 
 .wrap{
   width:100%;
-  max-width:900px;
+  max-width:980px;
   margin:0 auto;
 }
 
 
 /* =========================================================
-   BARRE HAUTE
+   BANDEAU HAUT
+   GABARIT PROCHE PAGE INFORMATIONS
 ========================================================= */
 
 .topbar{
+  min-height:64px;
+
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:12px;
 
-  padding:18px 22px;
-  margin-bottom:20px;
+  gap:10px;
 
-  border-radius:26px;
+  padding:10px 14px;
+
+  margin-bottom:14px;
+
+  border-radius:22px;
 
   background:
     linear-gradient(
       180deg,
-      rgba(212,106,0,.76),
-      rgba(120,55,0,.66)
+      var(--orange1),
+      var(--orange2)
     );
 
-  border:1px solid rgba(255,255,255,.14);
+  border:1px solid var(--stroke);
 
   box-shadow:var(--shadow);
 
-  backdrop-filter:blur(10px);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
 }
 
 .pageTitle{
   margin:0;
 
-  font-size:22px;
+  font-size:20px;
+  line-height:1;
+
   font-weight:950;
-  letter-spacing:.4px;
+
+  letter-spacing:.5px;
+
   text-transform:uppercase;
 }
 
 .topActions{
   display:flex;
-  gap:8px;
   align-items:center;
+  gap:7px;
 }
 
 .btn{
-  border:0;
-  border-radius:17px;
+  min-height:44px;
 
-  padding:12px 18px;
+  border:1px solid rgba(255,255,255,.14);
 
-  font-family:inherit;
-  font-size:16px;
-  font-weight:900;
+  border-radius:15px;
 
-  color:white;
+  padding:8px 15px;
+
+  color:#fff;
 
   background:
-    rgba(20,20,20,.45);
+    rgba(20,20,20,.28);
 
-  border:
-    1px solid
-    rgba(255,255,255,.10);
+  font-family:inherit;
+
+  font-size:15px;
+  font-weight:900;
 
   cursor:pointer;
+
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
 }
 
 .btn:active{
@@ -172,40 +178,12 @@ body{
 }
 
 .lockBtn{
-  width:58px;
-  height:54px;
+  width:48px;
+  min-width:48px;
 
   padding:0;
 
-  font-size:23px;
-}
-
-
-/* =========================================================
-   CHARGEMENT
-========================================================= */
-
-.loading{
-  display:none;
-
-  padding:14px;
-  margin-bottom:16px;
-
-  border-radius:18px;
-
-  text-align:center;
-
-  background:
-    rgba(0,0,0,.55);
-
-  color:
-    rgba(255,255,255,.75);
-
-  font-weight:850;
-}
-
-.loading.show{
-  display:block;
+  font-size:21px;
 }
 
 
@@ -216,19 +194,23 @@ body{
 .adminPanel{
   display:none;
 
-  margin-bottom:18px;
-  padding:20px;
+  margin-bottom:12px;
 
-  border-radius:26px;
+  padding:15px;
+
+  border-radius:20px;
 
   background:
-    rgba(76,38,0,.62);
+    rgba(38,23,10,.67);
 
   border:
     1px solid
-    rgba(255,147,38,.25);
+    rgba(255,147,38,.20);
 
   box-shadow:var(--shadow);
+
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
 }
 
 .adminPanel.show{
@@ -236,70 +218,119 @@ body{
 }
 
 .adminTitle{
-  margin-bottom:14px;
+  margin-bottom:12px;
 
-  font-size:19px;
+  font-size:17px;
   font-weight:950;
 }
 
 .adminButtons{
   display:flex;
+  gap:8px;
   flex-wrap:wrap;
-  gap:10px;
-}
-
-.adminButtons .btn{
-  background:
-    rgba(212,106,0,.85);
 }
 
 .btnGreen{
   background:
-    var(--green)
+    rgba(22,128,57,.88)
     !important;
 }
 
 .btnRed{
   background:
-    var(--red)
+    rgba(167,31,31,.88)
     !important;
 }
 
 
 /* =========================================================
-   ACCORDÉONS
+   FORMULAIRE ANNUEL ADMIN
 ========================================================= */
 
-.accordion{
-  margin-bottom:18px;
+.annualForm{
+  display:grid;
 
-  border-radius:28px;
+  grid-template-columns:
+    1fr 1fr;
 
-  background:
-    var(--panel);
+  gap:8px;
+
+  margin-top:12px;
+}
+
+.annualForm button{
+  grid-column:1 / -1;
+}
+
+input,
+select{
+  width:100%;
+
+  min-height:46px;
+
+  padding:10px 13px;
+
+  border-radius:15px;
 
   border:
     1px solid
-    var(--stroke);
+    rgba(255,255,255,.13);
 
-  box-shadow:
-    var(--shadow);
+  background:
+    rgba(5,5,5,.72);
 
-  backdrop-filter:
-    blur(10px);
+  color:#fff;
+
+  font-family:inherit;
+
+  font-size:16px;
+  font-weight:850;
+
+  outline:none;
+
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+
+select option{
+  color:#111;
+  background:#fff;
+}
+
+
+/* =========================================================
+   ONGLETS / ACCORDÉONS
+   MÊME GABARIT QUE LA PAGE INFORMATIONS
+========================================================= */
+
+.accordion{
+  margin-bottom:12px;
+
+  border-radius:22px;
 
   overflow:hidden;
+
+  background:transparent;
+
+  border:
+    1px solid
+    rgba(255,255,255,.11);
+
+  box-shadow:var(--shadow);
 }
 
 .accordionHeader{
   width:100%;
 
+  min-height:64px;
+
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   gap:12px;
 
-  padding:18px 22px;
+  padding:11px 20px;
 
   border:0;
 
@@ -307,43 +338,52 @@ body{
 
   background:
     linear-gradient(
-      180deg,
+      90deg,
       var(--violet1),
       var(--violet2)
     );
 
   font-family:inherit;
-  font-size:22px;
-  font-weight:950;
+
+  font-size:20px;
+  font-weight:900;
 
   text-align:left;
 
   cursor:pointer;
+
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
 }
 
 .accordionHeader:active{
-  filter:brightness(.92);
+  filter:brightness(.94);
 }
 
 .accordionArrow{
   flex:0 0 auto;
 
-  font-size:22px;
+  font-size:18px;
 
   transition:
-    transform .25s ease;
+    transform .22s ease;
 }
 
 .accordion.open
 .accordionArrow{
-  transform:
-    rotate(180deg);
+  transform:rotate(180deg);
 }
 
 .accordionContent{
   display:none;
 
-  padding:20px;
+  padding:16px;
+
+  background:
+    rgba(5,5,5,.67);
+
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
 }
 
 .accordion.open
@@ -353,24 +393,35 @@ body{
 
 
 /* =========================================================
-   TEXTES
+   PETIT CHARGEMENT INTERNE
 ========================================================= */
 
-.intro{
-  margin:
-    0 0 20px;
+.sectionLoading{
+  padding:18px 8px;
+
+  text-align:center;
 
   color:
-    var(--muted);
+    rgba(255,255,255,.66);
 
-  font-size:16px;
-  font-weight:700;
+  font-size:15px;
+  font-weight:800;
 }
 
 
 /* =========================================================
-   SELECTEURS
+   MENSUEL
 ========================================================= */
+
+.intro{
+  margin:
+    0 0 14px;
+
+  color:var(--muted);
+
+  font-size:15px;
+  font-weight:700;
+}
 
 .selectGrid{
   display:grid;
@@ -378,53 +429,23 @@ body{
   grid-template-columns:
     1fr 1fr;
 
-  gap:16px;
+  gap:10px;
 
-  margin-bottom:20px;
+  margin-bottom:14px;
 }
 
 .fieldLabel{
   display:block;
 
-  margin-bottom:8px;
+  margin-bottom:6px;
 
   color:
     rgba(255,255,255,.65);
 
-  font-size:13px;
+  font-size:12px;
   font-weight:950;
 
   text-transform:uppercase;
-}
-
-select,
-input{
-  width:100%;
-
-  padding:
-    14px 16px;
-
-  border-radius:18px;
-
-  border:
-    1px solid
-    rgba(255,255,255,.12);
-
-  background:
-    rgba(4,4,4,.88);
-
-  color:white;
-
-  font-family:inherit;
-  font-size:17px;
-  font-weight:850;
-
-  outline:none;
-}
-
-select option{
-  color:#111;
-  background:white;
 }
 
 
@@ -437,12 +458,12 @@ select option{
 
   overflow:hidden;
 
-  margin-top:16px;
+  margin-top:12px;
 
-  border-radius:25px;
+  border-radius:20px;
 
   background:
-    rgba(0,0,0,.50);
+    rgba(0,0,0,.44);
 
   border:
     1px solid
@@ -451,9 +472,9 @@ select option{
 
 .captureTitle{
   padding:
-    14px 18px;
+    11px 14px;
 
-  font-size:20px;
+  font-size:17px;
   font-weight:950;
 }
 
@@ -471,36 +492,42 @@ select option{
 
   justify-content:flex-end;
 
-  padding:12px;
+  padding:9px;
 }
 
 .deleteBtn{
   border:0;
 
-  border-radius:14px;
+  border-radius:12px;
 
   padding:
-    10px 15px;
+    9px 13px;
 
   background:
     rgba(165,30,30,.90);
 
-  color:white;
+  color:#fff;
+
+  font-family:inherit;
 
   font-weight:900;
-  font-family:inherit;
 }
+
+
+/* =========================================================
+   ÉTAT VIDE
+========================================================= */
 
 .empty{
   padding:
-    28px 12px;
+    22px 8px;
 
   text-align:center;
 
   color:
     rgba(255,255,255,.48);
 
-  font-size:17px;
+  font-size:15px;
   font-weight:750;
 }
 
@@ -513,45 +540,43 @@ select option{
   display:flex;
 
   align-items:center;
+  justify-content:space-between;
 
-  justify-content:
-    space-between;
-
-  gap:12px;
+  gap:10px;
 
   padding:
-    14px 16px;
+    11px 13px;
 
-  margin-bottom:8px;
+  margin-bottom:7px;
 
-  border-radius:18px;
+  border-radius:15px;
 
   background:
     rgba(255,255,255,.055);
 }
 
 .annualYear{
-  font-size:18px;
+  font-size:17px;
   font-weight:950;
 }
 
 .annualValue{
-  font-size:20px;
-  font-weight:950;
+  font-size:17px;
+  font-weight:900;
 }
 
 .annualDelete{
+  width:35px;
+  height:35px;
+
   border:0;
 
-  width:38px;
-  height:38px;
-
-  border-radius:12px;
+  border-radius:11px;
 
   background:
     rgba(160,25,25,.90);
 
-  color:white;
+  color:#fff;
 
   font-size:17px;
   font-weight:900;
@@ -563,23 +588,23 @@ select option{
 ========================================================= */
 
 .chartBox{
-  margin-top:20px;
+  margin-top:15px;
 
-  padding:12px;
+  padding:10px;
 
-  border-radius:22px;
+  border-radius:18px;
 
   background:
-    rgba(0,0,0,.38);
+    rgba(0,0,0,.33);
 
   overflow:hidden;
 }
 
 .chartTitle{
   margin:
-    4px 6px 10px;
+    3px 5px 8px;
 
-  font-size:18px;
+  font-size:16px;
   font-weight:950;
 }
 
@@ -592,28 +617,7 @@ select option{
 
 
 /* =========================================================
-   FORMULAIRE ANNUEL
-========================================================= */
-
-.annualForm{
-  display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:10px;
-
-  margin-top:16px;
-}
-
-.annualForm button{
-  grid-column:
-    1 / -1;
-}
-
-
-/* =========================================================
-   OVERLAY UPLOAD
+   OVERLAY IMPORT
 ========================================================= */
 
 .uploadOverlay{
@@ -626,9 +630,9 @@ select option{
   z-index:9999;
 
   padding:
-    calc(env(safe-area-inset-top) + 12px)
-    12px
-    calc(env(safe-area-inset-bottom) + 12px);
+    calc(env(safe-area-inset-top) + 10px)
+    10px
+    calc(env(safe-area-inset-bottom) + 10px);
 
   background:
     rgba(0,0,0,.90);
@@ -636,7 +640,6 @@ select option{
 
 .uploadOverlay.show{
   display:flex;
-
   flex-direction:column;
 }
 
@@ -644,17 +647,15 @@ select option{
   display:flex;
 
   align-items:center;
+  justify-content:space-between;
 
-  justify-content:
-    space-between;
+  gap:8px;
 
-  gap:10px;
-
-  padding:10px 4px;
+  padding:7px 2px 10px;
 }
 
 .uploadTitle{
-  font-size:19px;
+  font-size:18px;
   font-weight:950;
 }
 
@@ -665,7 +666,7 @@ select option{
 
   overflow:hidden;
 
-  border-radius:26px;
+  border-radius:22px;
 
   background:#151515;
 
@@ -687,38 +688,33 @@ select option{
 
 
 /* =========================================================
-   RESPONSIVE
+   PETITS ÉCRANS
 ========================================================= */
 
 @media(max-width:600px){
 
-  body{
-    padding-left:10px;
-    padding-right:10px;
-  }
-
   .topbar{
+    min-height:60px;
+
     padding:
-      16px 18px;
+      8px 12px;
   }
 
   .pageTitle{
-    font-size:20px;
+    font-size:19px;
   }
 
   .accordionHeader{
-    padding:
-      17px 18px;
+    min-height:60px;
 
-    font-size:20px;
+    padding:
+      10px 16px;
+
+    font-size:19px;
   }
 
   .accordionContent{
-    padding:16px;
-  }
-
-  .selectGrid{
-    gap:10px;
+    padding:14px;
   }
 
 }
@@ -726,7 +722,6 @@ select option{
 </style>
 
 </head>
-
 
 <body>
 
@@ -737,12 +732,15 @@ select option{
 <div class="wrap">
 
 
+  <!-- =====================================================
+       EN-TÊTE
+  ====================================================== -->
+
   <header class="topbar">
 
     <h1 class="pageTitle">
       Statistiques
     </h1>
-
 
     <div class="topActions">
 
@@ -750,19 +748,14 @@ select option{
         id="adminLock"
         class="btn lockBtn"
         type="button">
-
         🔒
-
       </button>
-
 
       <button
         id="backBtn"
         class="btn"
         type="button">
-
         Retour
-
       </button>
 
     </div>
@@ -770,24 +763,17 @@ select option{
   </header>
 
 
-  <div
-    id="loading"
-    class="loading">
-
-    Chargement…
-
-  </div>
-
+  <!-- =====================================================
+       ADMIN
+  ====================================================== -->
 
   <section
     id="adminPanel"
     class="adminPanel">
 
-
     <div class="adminTitle">
       Administration
     </div>
-
 
     <div class="adminButtons">
 
@@ -802,7 +788,6 @@ select option{
 
     </div>
 
-
     <div class="annualForm">
 
       <input
@@ -812,13 +797,11 @@ select option{
         max="2200"
         placeholder="Année">
 
-
       <input
         id="annualValueInput"
         type="number"
         min="0"
         placeholder="Interventions">
-
 
       <button
         id="saveAnnualBtn"
@@ -831,14 +814,16 @@ select option{
 
     </div>
 
-
   </section>
 
+
+  <!-- =====================================================
+       STATISTIQUES MENSUELLES
+  ====================================================== -->
 
   <section
     id="monthlyAccordion"
     class="accordion">
-
 
     <button
       id="monthlyHeader"
@@ -846,82 +831,86 @@ select option{
       type="button"
       aria-expanded="false">
 
-
       <span>
         Statistiques mensuelles
       </span>
 
-
       <span class="accordionArrow">
         ▼
       </span>
-
 
     </button>
 
 
     <div class="accordionContent">
 
+      <div
+        id="monthlyLoading"
+        class="sectionLoading"
+        style="display:none;">
 
-      <p class="intro">
-        Sélectionnez une année puis un mois.
-      </p>
-
-
-      <div class="selectGrid">
-
-
-        <div>
-
-          <label
-            class="fieldLabel"
-            for="yearSelect">
-
-            Année
-
-          </label>
-
-
-          <select id="yearSelect">
-          </select>
-
-        </div>
-
-
-        <div>
-
-          <label
-            class="fieldLabel"
-            for="monthSelect">
-
-            Mois
-
-          </label>
-
-
-          <select id="monthSelect">
-          </select>
-
-        </div>
-
+        Chargement…
 
       </div>
 
 
-      <div id="capturesContainer">
-      </div>
+      <div id="monthlyBody">
 
+        <p class="intro">
+          Sélectionnez une année puis un mois.
+        </p>
+
+        <div class="selectGrid">
+
+          <div>
+
+            <label
+              class="fieldLabel"
+              for="yearSelect">
+
+              Année
+
+            </label>
+
+            <select id="yearSelect">
+            </select>
+
+          </div>
+
+          <div>
+
+            <label
+              class="fieldLabel"
+              for="monthSelect">
+
+              Mois
+
+            </label>
+
+            <select id="monthSelect">
+            </select>
+
+          </div>
+
+        </div>
+
+        <div id="capturesContainer">
+        </div>
+
+      </div>
 
     </div>
-
 
   </section>
 
 
+  <!-- =====================================================
+       ACTIVITÉ ANNUELLE
+  ====================================================== -->
+
   <section
     id="annualAccordion"
     class="accordion">
-
 
     <button
       id="annualHeader"
@@ -929,21 +918,27 @@ select option{
       type="button"
       aria-expanded="false">
 
-
       <span>
         Activité annuelle
       </span>
-
 
       <span class="accordionArrow">
         ▼
       </span>
 
-
     </button>
 
 
     <div class="accordionContent">
+
+      <div
+        id="annualLoading"
+        class="sectionLoading"
+        style="display:none;">
+
+        Chargement…
+
+      </div>
 
 
       <div id="annualContainer">
@@ -955,11 +950,9 @@ select option{
         class="chartBox"
         style="display:none;">
 
-
         <div class="chartTitle">
           Évolution de l’activité
         </div>
-
 
         <svg
           id="chartSvg"
@@ -969,12 +962,9 @@ select option{
 
         </svg>
 
-
       </div>
 
-
     </div>
-
 
   </section>
 
@@ -982,18 +972,19 @@ select option{
 </div>
 
 
+<!-- =======================================================
+     IMPORT
+======================================================= -->
+
 <div
   id="uploadOverlay"
   class="uploadOverlay">
 
-
   <div class="uploadTop">
-
 
     <div class="uploadTitle">
       Ajouter une capture
     </div>
-
 
     <button
       id="cancelUpload"
@@ -1004,35 +995,33 @@ select option{
 
     </button>
 
-
   </div>
 
-
   <div class="uploadWindow">
-
 
     <iframe
       id="uploadFrame"
       class="uploadFrame"
       src="about:blank">
-
     </iframe>
 
-
   </div>
-
 
 </div>
 
 
 <script>
 
+/* =========================================================
+   CONFIGURATION
+========================================================= */
+
 const API =
   "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
 
 const BACK_URL =
-  "index.html";
+  "informations.html";
 
 
 const EMAIL_KEY =
@@ -1062,17 +1051,12 @@ const MONTHS = [
 
 const $ =
   id =>
-    document.getElementById(
-      id
-    );
+    document.getElementById(id);
 
 
 let STATS = {
-
   captures:[],
-
   annual:[]
-
 };
 
 
@@ -1080,40 +1064,9 @@ let IS_ADMIN = false;
 
 let ADMIN_OPEN = false;
 
+let STATS_LOADED = false;
 
-/* =========================================================
-   ACCORDÉONS
-========================================================= */
-
-function toggleAccordion(
-  accordionId,
-  headerId
-){
-
-  const accordion =
-    $(accordionId);
-
-
-  const header =
-    $(headerId);
-
-
-  const isOpen =
-    accordion
-      .classList
-      .toggle("open");
-
-
-  header.setAttribute(
-    "aria-expanded",
-    isOpen
-      ?
-      "true"
-      :
-      "false"
-  );
-
-}
+let STATS_LOADING = null;
 
 
 /* =========================================================
@@ -1154,15 +1107,10 @@ function getRole(){
    JSONP
 ========================================================= */
 
-function jsonp(
-  params
-){
+function jsonp(params){
 
   return new Promise(
-    function(
-      resolve,
-      reject
-    ){
+    function(resolve,reject){
 
       const callback =
         "statsCb_"
@@ -1211,15 +1159,11 @@ function jsonp(
 
         finished = true;
 
-        clearTimeout(
-          timeout
-        );
-
+        clearTimeout(timeout);
 
         try{
           delete window[callback];
         }catch(err){}
-
 
         try{
           script.remove();
@@ -1246,9 +1190,7 @@ function jsonp(
         params || {}
       )
       .forEach(
-        function(
-          [key,value]
-        ){
+        function([key,value]){
 
           if(
             value !== undefined
@@ -1312,7 +1254,57 @@ function jsonp(
 
 
 /* =========================================================
-   CHARGEMENT
+   CHARGEMENT À LA DEMANDE
+========================================================= */
+
+async function ensureStatsLoaded(){
+
+  if(STATS_LOADED){
+    return;
+  }
+
+
+  if(STATS_LOADING){
+    return STATS_LOADING;
+  }
+
+
+  $("monthlyLoading").style.display =
+    "block";
+
+
+  $("annualLoading").style.display =
+    "block";
+
+
+  STATS_LOADING =
+    loadStats(false);
+
+
+  try{
+
+    await STATS_LOADING;
+
+    STATS_LOADED = true;
+
+  }
+  finally{
+
+    STATS_LOADING = null;
+
+    $("monthlyLoading").style.display =
+      "none";
+
+    $("annualLoading").style.display =
+      "none";
+
+  }
+
+}
+
+
+/* =========================================================
+   CHARGEMENT DONNÉES
 ========================================================= */
 
 async function loadStats(
@@ -1327,110 +1319,80 @@ async function loadStats(
     $("monthSelect").value;
 
 
-  $("loading")
-    .classList
-    .add("show");
+  const result =
+    await jsonp({
+
+      view:
+        "statistiques_list"
+
+    });
 
 
-  try{
+  if(
+    !result
+    ||
+    result.ok === false
+  ){
 
-    const result =
-      await jsonp({
-
-        view:
-          "statistiques_list"
-
-      });
-
-
-    if(
-      !result
-      ||
-      result.ok === false
-    ){
-
-      throw new Error(
-        result &&
+    throw new Error(
+      result &&
+      result.error
+        ?
         result.error
-          ?
-          result.error
-          :
-          "Chargement impossible"
-      );
+        :
+        "Chargement impossible"
+    );
 
-    }
+  }
 
 
-    STATS.captures =
-      Array.isArray(
-        result.captures
-      )
-      ?
+  STATS.captures =
+    Array.isArray(
       result.captures
-      :
-      [];
+    )
+    ?
+    result.captures
+    :
+    [];
 
 
-    STATS.annual =
-      Array.isArray(
-        result.annual
-      )
-      ?
+  STATS.annual =
+    Array.isArray(
       result.annual
-      :
-      Array.isArray(
-        result.annuel
-      )
-      ?
+    )
+    ?
+    result.annual
+    :
+    Array.isArray(
       result.annuel
+    )
+    ?
+    result.annuel
+    :
+    [];
+
+
+  buildYearSelect(
+    keepSelection
+      ?
+      oldYear
       :
-      [];
+      ""
+  );
 
 
-    buildYearSelect(
-      keepSelection
-        ?
-        oldYear
-        :
-        ""
-    );
+  buildMonthSelect(
+    keepSelection
+      ?
+      oldMonth
+      :
+      ""
+  );
 
 
-    buildMonthSelect(
-      keepSelection
-        ?
-        oldMonth
-        :
-        ""
-    );
+  renderCaptures();
 
-
-    renderCaptures();
-
-    renderAnnual();
-
-
-  }catch(err){
-
-    console.error(err);
-
-
-    $("capturesContainer")
-      .innerHTML =
-        '<div class="empty">'
-        +
-        'Impossible de charger les statistiques.'
-        +
-        '</div>';
-
-  }
-  finally{
-
-    $("loading")
-      .classList
-      .remove("show");
-
-  }
+  renderAnnual();
 
 }
 
@@ -1744,10 +1706,6 @@ function captureTitle(
     !value
     ||
     /GMT/i.test(value)
-    ||
-    /^[A-Z][a-z]{2}\s[A-Z][a-z]{2}\s\d{2}/.test(
-      value
-    )
   ){
 
     return (
@@ -1950,21 +1908,14 @@ function renderCaptures(){
           };
 
 
-        actions.appendChild(
-          del
-        );
+        actions.appendChild(del);
 
-
-        card.appendChild(
-          actions
-        );
+        card.appendChild(actions);
 
       }
 
 
-      container.appendChild(
-        card
-      );
+      container.appendChild(card);
 
     }
   );
@@ -1976,9 +1927,7 @@ function renderCaptures(){
    SUPPRESSION CAPTURE
 ========================================================= */
 
-async function deleteCapture(
-  id
-){
+async function deleteCapture(id){
 
   if(!id){
     return;
@@ -1997,13 +1946,9 @@ async function deleteCapture(
   STATS.captures =
     STATS.captures.filter(
       item =>
-        String(
-          item.id
-        )
+        String(item.id)
         !==
-        String(
-          id
-        )
+        String(id)
     );
 
 
@@ -2028,8 +1973,7 @@ async function deleteCapture(
         view:
           "statistiques_capture_delete",
 
-        id:
-          id,
+        id:id,
 
         email:
           getEmail()
@@ -2060,7 +2004,9 @@ async function deleteCapture(
     );
 
 
-    loadStats();
+    STATS_LOADED = false;
+
+    await ensureStatsLoaded();
 
   }
 
@@ -2144,10 +2090,8 @@ function renderAnnual(){
       '</div>';
 
 
-    $("chartBox")
-      .style
-      .display =
-        "none";
+    $("chartBox").style.display =
+      "none";
 
 
     return;
@@ -2201,14 +2145,9 @@ function renderAnnual(){
           " interventions";
 
 
-        row.appendChild(
-          year
-        );
+        row.appendChild(year);
 
-
-        row.appendChild(
-          value
-        );
+        row.appendChild(value);
 
 
         if(
@@ -2245,30 +2184,24 @@ function renderAnnual(){
             };
 
 
-          row.appendChild(
-            del
-          );
+          row.appendChild(del);
 
         }
 
 
-        container.appendChild(
-          row
-        );
+        container.appendChild(row);
 
       }
     );
 
 
-  renderChart(
-    list
-  );
+  renderChart(list);
 
 }
 
 
 /* =========================================================
-   SAUVEGARDE ANNUELLE
+   SAUVEGARDE ACTIVITÉ ANNUELLE
 ========================================================= */
 
 async function saveAnnual(){
@@ -2330,8 +2263,7 @@ async function saveAnnual(){
         email:
           getEmail(),
 
-        year:
-          year,
+        year:year,
 
         interventions:
           interventions
@@ -2365,7 +2297,9 @@ async function saveAnnual(){
       "";
 
 
-    await loadStats();
+    STATS_LOADED = false;
+
+    await ensureStatsLoaded();
 
 
   }catch(err){
@@ -2385,9 +2319,7 @@ async function saveAnnual(){
    SUPPRESSION ANNUELLE
 ========================================================= */
 
-async function deleteAnnual(
-  year
-){
+async function deleteAnnual(year){
 
   if(
     !confirm(
@@ -2405,13 +2337,9 @@ async function deleteAnnual(
   STATS.annual =
     STATS.annual.filter(
       item =>
-        Number(
-          item.year
-        )
+        Number(item.year)
         !==
-        Number(
-          year
-        )
+        Number(year)
     );
 
 
@@ -2429,8 +2357,7 @@ async function deleteAnnual(
         email:
           getEmail(),
 
-        year:
-          year
+        year:year
 
       });
 
@@ -2457,9 +2384,6 @@ async function deleteAnnual(
       err.message
     );
 
-
-    loadStats();
-
   }
 
 }
@@ -2469,9 +2393,7 @@ async function deleteAnnual(
    GRAPHIQUE
 ========================================================= */
 
-function renderChart(
-  list
-){
+function renderChart(list){
 
   const box =
     $("chartBox");
@@ -2503,6 +2425,7 @@ function renderChart(
 
   const W = 700;
   const H = 300;
+
   const LEFT = 65;
   const RIGHT = 30;
   const TOP = 30;
@@ -2510,19 +2433,11 @@ function renderChart(
 
 
   const chartW =
-    W
-    -
-    LEFT
-    -
-    RIGHT;
+    W - LEFT - RIGHT;
 
 
   const chartH =
-    H
-    -
-    TOP
-    -
-    BOTTOM;
+    H - TOP - BOTTOM;
 
 
   const maxValue =
@@ -2537,27 +2452,15 @@ function renderChart(
 
   function xAt(index){
 
-    if(
-      list.length === 1
-    ){
-
-      return (
-        LEFT
-        +
-        chartW / 2
-      );
-
-    }
-
-
     return (
       LEFT
       +
       (
         index
         /
-        (
-          list.length-1
+        Math.max(
+          1,
+          list.length - 1
         )
       )
       *
@@ -2595,13 +2498,11 @@ function renderChart(
     const y =
       TOP
       +
-      (
-        chartH
-        *
-        i
-        /
-        4
-      );
+      chartH
+      *
+      i
+      /
+      4;
 
 
     const line =
@@ -2641,41 +2542,29 @@ function renderChart(
     );
 
 
-    line.setAttribute(
-      "stroke-width",
-      "1"
-    );
-
-
-    svg.appendChild(
-      line
-    );
+    svg.appendChild(line);
 
   }
 
 
   const points =
-    list.map(
-      function(
-        item,
-        index
-      ){
+    list
+      .map(
+        function(item,index){
 
-        return (
-          xAt(index)
-          +
-          ","
-          +
-          yAt(
-            item.interventions
-          )
-        );
+          return (
+            xAt(index)
+            +
+            ","
+            +
+            yAt(
+              item.interventions
+            )
+          );
 
-      }
-    )
-    .join(
-      " "
-    );
+        }
+      )
+      .join(" ");
 
 
   const polyline =
@@ -2721,16 +2610,11 @@ function renderChart(
   );
 
 
-  svg.appendChild(
-    polyline
-  );
+  svg.appendChild(polyline);
 
 
   list.forEach(
-    function(
-      item,
-      index
-    ){
+    function(item,index){
 
       const x =
         xAt(index);
@@ -2785,25 +2669,23 @@ function renderChart(
       );
 
 
-      svg.appendChild(
-        circle
-      );
+      svg.appendChild(circle);
 
 
-      const valueText =
+      const value =
         document.createElementNS(
           "http://www.w3.org/2000/svg",
           "text"
         );
 
 
-      valueText.setAttribute(
+      value.setAttribute(
         "x",
         x
       );
 
 
-      valueText.setAttribute(
+      value.setAttribute(
         "y",
         Math.max(
           18,
@@ -2812,89 +2694,85 @@ function renderChart(
       );
 
 
-      valueText.setAttribute(
+      value.setAttribute(
         "text-anchor",
         "middle"
       );
 
 
-      valueText.setAttribute(
+      value.setAttribute(
         "fill",
         "#fff"
       );
 
 
-      valueText.setAttribute(
+      value.setAttribute(
         "font-size",
         "17"
       );
 
 
-      valueText.setAttribute(
+      value.setAttribute(
         "font-weight",
         "900"
       );
 
 
-      valueText.textContent =
+      value.textContent =
         item.interventions;
 
 
-      svg.appendChild(
-        valueText
-      );
+      svg.appendChild(value);
 
 
-      const yearText =
+      const year =
         document.createElementNS(
           "http://www.w3.org/2000/svg",
           "text"
         );
 
 
-      yearText.setAttribute(
+      year.setAttribute(
         "x",
         x
       );
 
 
-      yearText.setAttribute(
+      year.setAttribute(
         "y",
         H-20
       );
 
 
-      yearText.setAttribute(
+      year.setAttribute(
         "text-anchor",
         "middle"
       );
 
 
-      yearText.setAttribute(
+      year.setAttribute(
         "fill",
         "rgba(255,255,255,.72)"
       );
 
 
-      yearText.setAttribute(
+      year.setAttribute(
         "font-size",
         "16"
       );
 
 
-      yearText.setAttribute(
+      year.setAttribute(
         "font-weight",
         "800"
       );
 
 
-      yearText.textContent =
+      year.textContent =
         item.year;
 
 
-      svg.appendChild(
-        yearText
-      );
+      svg.appendChild(year);
 
     }
   );
@@ -2953,15 +2831,11 @@ function openUpload(){
     +
     "&year="
     +
-    encodeURIComponent(
-      year
-    )
+    encodeURIComponent(year)
     +
     "&month="
     +
-    encodeURIComponent(
-      month
-    )
+    encodeURIComponent(month)
     +
     "&_="
     +
@@ -3014,9 +2888,7 @@ window.addEventListener(
       "stats-upload-success"
     ){
 
-      loadStats(
-        true
-      );
+      STATS_LOADED = false;
 
     }
 
@@ -3030,15 +2902,24 @@ window.addEventListener(
       closeUpload();
 
 
-      setTimeout(
-        function(){
+      STATS_LOADED = false;
 
-          loadStats(
-            true
-          );
+
+      setTimeout(
+        async function(){
+
+          try{
+
+            await ensureStatsLoaded();
+
+          }catch(err){
+
+            console.error(err);
+
+          }
 
         },
-        300
+        250
       );
 
     }
@@ -3048,19 +2929,15 @@ window.addEventListener(
 
 
 /* =========================================================
-   MODE ADMIN
+   ADMIN
 ========================================================= */
 
 function updateAdminUi(){
 
-  if(
-    !IS_ADMIN
-  ){
+  if(!IS_ADMIN){
 
-    $("adminLock")
-      .style
-      .display =
-        "none";
+    $("adminLock").style.display =
+      "none";
 
 
     $("adminPanel")
@@ -3068,28 +2945,19 @@ function updateAdminUi(){
       .remove("show");
 
 
-    ADMIN_OPEN =
-      false;
-
-
-    renderCaptures();
-
-    renderAnnual();
+    ADMIN_OPEN = false;
 
     return;
 
   }
 
 
-  $("adminLock")
-    .style
-    .display =
-      "";
+  $("adminLock").style.display =
+    "";
 
 
-  $("adminLock")
-    .textContent =
-      ADMIN_OPEN
+  $("adminLock").textContent =
+    ADMIN_OPEN
       ?
       "🔓"
       :
@@ -3104,9 +2972,72 @@ function updateAdminUi(){
     );
 
 
-  renderCaptures();
+  if(STATS_LOADED){
 
-  renderAnnual();
+    renderCaptures();
+
+    renderAnnual();
+
+  }
+
+}
+
+
+/* =========================================================
+   ACCORDÉONS
+========================================================= */
+
+async function openAccordion(
+  accordionId,
+  headerId
+){
+
+  const accordion =
+    $(accordionId);
+
+
+  const header =
+    $(headerId);
+
+
+  const opening =
+    !accordion
+      .classList
+      .contains("open");
+
+
+  accordion
+    .classList
+    .toggle("open");
+
+
+  header.setAttribute(
+    "aria-expanded",
+    opening
+      ?
+      "true"
+      :
+      "false"
+  );
+
+
+  if(opening){
+
+    try{
+
+      await ensureStatsLoaded();
+
+    }catch(err){
+
+      console.error(err);
+
+      alert(
+        "Impossible de charger les statistiques."
+      );
+
+    }
+
+  }
 
 }
 
@@ -3129,9 +3060,7 @@ $("adminLock")
   .onclick =
     function(){
 
-      if(
-        !IS_ADMIN
-      ){
+      if(!IS_ADMIN){
         return;
       }
 
@@ -3164,7 +3093,7 @@ $("monthlyHeader")
   .onclick =
     function(){
 
-      toggleAccordion(
+      openAccordion(
         "monthlyAccordion",
         "monthlyHeader"
       );
@@ -3176,7 +3105,7 @@ $("annualHeader")
   .onclick =
     function(){
 
-      toggleAccordion(
+      openAccordion(
         "annualAccordion",
         "annualHeader"
       );
@@ -3200,11 +3129,7 @@ $("yearSelect")
 $("monthSelect")
   .addEventListener(
     "change",
-    function(){
-
-      renderCaptures();
-
-    }
+    renderCaptures
   );
 
 
@@ -3212,7 +3137,7 @@ $("monthSelect")
    DÉMARRAGE
 ========================================================= */
 
-async function init(){
+function init(){
 
   IS_ADMIN =
     getRole()
@@ -3220,22 +3145,17 @@ async function init(){
     "admin";
 
 
-  $("monthlyAccordion")
-    .classList
-    .remove("open");
-
-
-  $("annualAccordion")
-    .classList
-    .remove("open");
-
-
   updateAdminUi();
 
 
-  await loadStats(
-    false
-  );
+  /*
+    PAS D'APPEL GOOGLE ICI.
+
+    La page s'affiche immédiatement.
+    Les données sont chargées seulement
+    lorsque l'utilisateur ouvre
+    une rubrique.
+  */
 
 }
 
@@ -3245,5 +3165,4 @@ init();
 </script>
 
 </body>
-
 </html>
