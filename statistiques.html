@@ -24,12 +24,12 @@
   --violet1:rgba(104,82,139,.52);
   --violet2:rgba(61,47,84,.46);
 
-  --panel:rgba(8,8,8,.67);
+  --panel:rgba(8,8,8,.52);
 
   --green:#168039;
   --red:#a71f1f;
 
-  --shadow:0 10px 26px rgba(0,0,0,.34);
+  --shadow:0 10px 26px rgba(0,0,0,.30);
 }
 
 *{
@@ -50,7 +50,8 @@ body{
     sans-serif;
 
   color:var(--txt);
-  background:#080808;
+
+  background:transparent;
 }
 
 body{
@@ -73,8 +74,8 @@ body{
   background:
     linear-gradient(
       180deg,
-      rgba(0,0,0,.42),
-      rgba(0,0,0,.58)
+      rgba(0,0,0,.18),
+      rgba(0,0,0,.30)
     ),
     url("background.png")
       center top /
@@ -96,11 +97,10 @@ body{
 
 /* =========================================================
    BANDEAU HAUT
-   GABARIT PROCHE PAGE INFORMATIONS
 ========================================================= */
 
 .topbar{
-  min-height:64px;
+  min-height:60px;
 
   display:flex;
   align-items:center;
@@ -108,11 +108,11 @@ body{
 
   gap:10px;
 
-  padding:10px 14px;
+  padding:8px 12px;
 
-  margin-bottom:14px;
+  margin-bottom:12px;
 
-  border-radius:22px;
+  border-radius:20px;
 
   background:
     linear-gradient(
@@ -132,7 +132,7 @@ body{
 .pageTitle{
   margin:0;
 
-  font-size:20px;
+  font-size:19px;
   line-height:1;
 
   font-weight:950;
@@ -149,18 +149,18 @@ body{
 }
 
 .btn{
-  min-height:44px;
+  min-height:42px;
 
   border:1px solid rgba(255,255,255,.14);
 
-  border-radius:15px;
+  border-radius:14px;
 
-  padding:8px 15px;
+  padding:8px 14px;
 
   color:#fff;
 
   background:
-    rgba(20,20,20,.28);
+    rgba(20,20,20,.24);
 
   font-family:inherit;
 
@@ -178,12 +178,12 @@ body{
 }
 
 .lockBtn{
-  width:48px;
-  min-width:48px;
+  width:46px;
+  min-width:46px;
 
   padding:0;
 
-  font-size:21px;
+  font-size:20px;
 }
 
 
@@ -196,12 +196,12 @@ body{
 
   margin-bottom:12px;
 
-  padding:15px;
+  padding:14px;
 
   border-radius:20px;
 
   background:
-    rgba(38,23,10,.67);
+    rgba(38,23,10,.52);
 
   border:
     1px solid
@@ -266,18 +266,18 @@ input,
 select{
   width:100%;
 
-  min-height:46px;
+  min-height:44px;
 
-  padding:10px 13px;
+  padding:9px 12px;
 
-  border-radius:15px;
+  border-radius:14px;
 
   border:
     1px solid
     rgba(255,255,255,.13);
 
   background:
-    rgba(5,5,5,.72);
+    rgba(5,5,5,.58);
 
   color:#fff;
 
@@ -299,14 +299,13 @@ select option{
 
 
 /* =========================================================
-   ONGLETS / ACCORDÉONS
-   MÊME GABARIT QUE LA PAGE INFORMATIONS
+   ACCORDÉONS
 ========================================================= */
 
 .accordion{
   margin-bottom:12px;
 
-  border-radius:22px;
+  border-radius:20px;
 
   overflow:hidden;
 
@@ -322,7 +321,7 @@ select option{
 .accordionHeader{
   width:100%;
 
-  min-height:64px;
+  min-height:58px;
 
   display:flex;
   align-items:center;
@@ -330,7 +329,7 @@ select option{
 
   gap:12px;
 
-  padding:11px 20px;
+  padding:9px 16px;
 
   border:0;
 
@@ -345,7 +344,7 @@ select option{
 
   font-family:inherit;
 
-  font-size:20px;
+  font-size:18px;
   font-weight:900;
 
   text-align:left;
@@ -363,7 +362,7 @@ select option{
 .accordionArrow{
   flex:0 0 auto;
 
-  font-size:18px;
+  font-size:17px;
 
   transition:
     transform .22s ease;
@@ -377,10 +376,10 @@ select option{
 .accordionContent{
   display:none;
 
-  padding:16px;
+  padding:14px;
 
   background:
-    rgba(5,5,5,.67);
+    rgba(5,5,5,.50);
 
   backdrop-filter:blur(10px);
   -webkit-backdrop-filter:blur(10px);
@@ -393,11 +392,11 @@ select option{
 
 
 /* =========================================================
-   PETIT CHARGEMENT INTERNE
+   CHARGEMENT INTERNE
 ========================================================= */
 
 .sectionLoading{
-  padding:18px 8px;
+  padding:16px 8px;
 
   text-align:center;
 
@@ -460,10 +459,10 @@ select option{
 
   margin-top:12px;
 
-  border-radius:20px;
+  border-radius:18px;
 
   background:
-    rgba(0,0,0,.44);
+    rgba(0,0,0,.34);
 
   border:
     1px solid
@@ -472,7 +471,7 @@ select option{
 
 .captureTitle{
   padding:
-    11px 14px;
+    10px 13px;
 
   font-size:17px;
   font-weight:950;
@@ -515,7 +514,7 @@ select option{
 
 
 /* =========================================================
-   ÉTAT VIDE
+   VIDE
 ========================================================= */
 
 .empty{
@@ -595,7 +594,7 @@ select option{
   border-radius:18px;
 
   background:
-    rgba(0,0,0,.33);
+    rgba(0,0,0,.27);
 
   overflow:hidden;
 }
@@ -686,39 +685,6 @@ select option{
   background:#151515;
 }
 
-
-/* =========================================================
-   PETITS ÉCRANS
-========================================================= */
-
-@media(max-width:600px){
-
-  .topbar{
-    min-height:60px;
-
-    padding:
-      8px 12px;
-  }
-
-  .pageTitle{
-    font-size:19px;
-  }
-
-  .accordionHeader{
-    min-height:60px;
-
-    padding:
-      10px 16px;
-
-    font-size:19px;
-  }
-
-  .accordionContent{
-    padding:14px;
-  }
-
-}
-
 </style>
 
 </head>
@@ -731,10 +697,6 @@ select option{
 
 <div class="wrap">
 
-
-  <!-- =====================================================
-       EN-TÊTE
-  ====================================================== -->
 
   <header class="topbar">
 
@@ -762,10 +724,6 @@ select option{
 
   </header>
 
-
-  <!-- =====================================================
-       ADMIN
-  ====================================================== -->
 
   <section
     id="adminPanel"
@@ -816,10 +774,6 @@ select option{
 
   </section>
 
-
-  <!-- =====================================================
-       STATISTIQUES MENSUELLES
-  ====================================================== -->
 
   <section
     id="monthlyAccordion"
@@ -904,10 +858,6 @@ select option{
   </section>
 
 
-  <!-- =====================================================
-       ACTIVITÉ ANNUELLE
-  ====================================================== -->
-
   <section
     id="annualAccordion"
     class="accordion">
@@ -972,10 +922,6 @@ select option{
 </div>
 
 
-<!-- =======================================================
-     IMPORT
-======================================================= -->
-
 <div
   id="uploadOverlay"
   class="uploadOverlay">
@@ -1012,25 +958,17 @@ select option{
 
 <script>
 
-/* =========================================================
-   CONFIGURATION
-========================================================= */
-
 const API =
   "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
-
 
 const BACK_URL =
   "informations.html";
 
-
 const EMAIL_KEY =
   "cs_portail_email_v1";
 
-
 const ROLE_KEY =
   "cs_role_v1";
-
 
 const MONTHS = [
   "",
@@ -1048,17 +986,14 @@ const MONTHS = [
   "Décembre"
 ];
 
-
 const $ =
   id =>
     document.getElementById(id);
-
 
 let STATS = {
   captures:[],
   annual:[]
 };
-
 
 let IS_ADMIN = false;
 
@@ -1123,16 +1058,13 @@ function jsonp(params){
           .toString(36)
           .slice(2);
 
-
       const script =
         document.createElement(
           "script"
         );
 
-
       let finished =
         false;
-
 
       const timeout =
         setTimeout(
@@ -1149,7 +1081,6 @@ function jsonp(params){
           },
           20000
         );
-
 
       function cleanup(){
 
@@ -1171,7 +1102,6 @@ function jsonp(params){
 
       }
 
-
       window[callback] =
         function(data){
 
@@ -1181,10 +1111,8 @@ function jsonp(params){
 
         };
 
-
       const query =
         new URLSearchParams();
-
 
       Object.entries(
         params || {}
@@ -1208,18 +1136,15 @@ function jsonp(params){
         }
       );
 
-
       query.set(
         "callback",
         callback
       );
 
-
       query.set(
         "_",
         Date.now()
       );
-
 
       script.src =
         API
@@ -1227,7 +1152,6 @@ function jsonp(params){
         "?"
         +
         query.toString();
-
 
       script.onerror =
         function(){
@@ -1241,7 +1165,6 @@ function jsonp(params){
           );
 
         };
-
 
       document.body.appendChild(
         script
@@ -1263,23 +1186,18 @@ async function ensureStatsLoaded(){
     return;
   }
 
-
   if(STATS_LOADING){
     return STATS_LOADING;
   }
 
-
   $("monthlyLoading").style.display =
     "block";
-
 
   $("annualLoading").style.display =
     "block";
 
-
   STATS_LOADING =
     loadStats(false);
-
 
   try{
 
@@ -1314,10 +1232,8 @@ async function loadStats(
   const oldYear =
     $("yearSelect").value;
 
-
   const oldMonth =
     $("monthSelect").value;
-
 
   const result =
     await jsonp({
@@ -1326,7 +1242,6 @@ async function loadStats(
         "statistiques_list"
 
     });
-
 
   if(
     !result
@@ -1345,7 +1260,6 @@ async function loadStats(
 
   }
 
-
   STATS.captures =
     Array.isArray(
       result.captures
@@ -1354,7 +1268,6 @@ async function loadStats(
     result.captures
     :
     [];
-
 
   STATS.annual =
     Array.isArray(
@@ -1371,7 +1284,6 @@ async function loadStats(
     :
     [];
 
-
   buildYearSelect(
     keepSelection
       ?
@@ -1380,7 +1292,6 @@ async function loadStats(
       ""
   );
 
-
   buildMonthSelect(
     keepSelection
       ?
@@ -1388,7 +1299,6 @@ async function loadStats(
       :
       ""
   );
-
 
   renderCaptures();
 
@@ -1406,7 +1316,6 @@ function getCaptureYears(){
   const years =
     new Set();
 
-
   STATS.captures
     .forEach(
       function(item){
@@ -1416,14 +1325,12 @@ function getCaptureYears(){
             item.year
           );
 
-
         if(y){
           years.add(y);
         }
 
       }
     );
-
 
   return Array
     .from(years)
@@ -1442,14 +1349,11 @@ function buildYearSelect(
   const select =
     $("yearSelect");
 
-
   const years =
     getCaptureYears();
 
-
   select.innerHTML =
     "";
-
 
   if(
     years.length === 0
@@ -1460,26 +1364,21 @@ function buildYearSelect(
         "option"
       );
 
-
     option.value =
       "";
-
 
     option.textContent =
       "—";
 
-
     select.appendChild(
       option
     );
-
 
     buildMonthSelect();
 
     return;
 
   }
-
 
   years.forEach(
     function(year){
@@ -1489,14 +1388,11 @@ function buildYearSelect(
           "option"
         );
 
-
       option.value =
         String(year);
 
-
       option.textContent =
         String(year);
-
 
       select.appendChild(
         option
@@ -1504,7 +1400,6 @@ function buildYearSelect(
 
     }
   );
-
 
   if(
     preferredYear
@@ -1547,10 +1442,8 @@ function buildMonthSelect(
       $("yearSelect").value
     );
 
-
   const select =
     $("monthSelect");
-
 
   const months =
     Array.from(
@@ -1587,10 +1480,8 @@ function buildMonthSelect(
         b-a
     );
 
-
   select.innerHTML =
     "";
-
 
   if(
     months.length === 0
@@ -1601,24 +1492,19 @@ function buildMonthSelect(
         "option"
       );
 
-
     option.value =
       "";
 
-
     option.textContent =
       "—";
-
 
     select.appendChild(
       option
     );
 
-
     return;
 
   }
-
 
   months.forEach(
     function(month){
@@ -1628,14 +1514,11 @@ function buildMonthSelect(
           "option"
         );
 
-
       option.value =
         String(month);
 
-
       option.textContent =
         MONTHS[month];
-
 
       select.appendChild(
         option
@@ -1643,7 +1526,6 @@ function buildMonthSelect(
 
     }
   );
-
 
   if(
     preferredMonth
@@ -1686,12 +1568,10 @@ function captureTitle(
       capture.year
     );
 
-
   const month =
     Number(
       capture.month
     );
-
 
   const value =
     String(
@@ -1700,7 +1580,6 @@ function captureTitle(
       ""
     )
     .trim();
-
 
   if(
     !value
@@ -1718,7 +1597,6 @@ function captureTitle(
 
   }
 
-
   return value;
 
 }
@@ -1735,16 +1613,13 @@ function renderCaptures(){
       $("yearSelect").value
     );
 
-
   const month =
     Number(
       $("monthSelect").value
     );
 
-
   const container =
     $("capturesContainer");
-
 
   const list =
     STATS.captures
@@ -1780,10 +1655,8 @@ function renderCaptures(){
         }
       );
 
-
   container.innerHTML =
     "";
-
 
   if(
     list.length === 0
@@ -1800,7 +1673,6 @@ function renderCaptures(){
 
   }
 
-
   list.forEach(
     function(capture){
 
@@ -1809,36 +1681,29 @@ function renderCaptures(){
           "div"
         );
 
-
       card.className =
         "captureCard";
-
 
       const title =
         document.createElement(
           "div"
         );
 
-
       title.className =
         "captureTitle";
-
 
       title.textContent =
         captureTitle(
           capture
         );
 
-
       const img =
         document.createElement(
           "img"
         );
 
-
       img.className =
         "captureImage";
-
 
       img.src =
         String(
@@ -1847,22 +1712,18 @@ function renderCaptures(){
           ""
         );
 
-
       img.alt =
         captureTitle(
           capture
         );
 
-
       card.appendChild(
         title
       );
 
-
       card.appendChild(
         img
       );
-
 
       if(
         IS_ADMIN
@@ -1875,28 +1736,22 @@ function renderCaptures(){
             "div"
           );
 
-
         actions.className =
           "captureActions";
-
 
         const del =
           document.createElement(
             "button"
           );
 
-
         del.type =
           "button";
-
 
         del.className =
           "deleteBtn";
 
-
         del.textContent =
           "Supprimer";
-
 
         del.onclick =
           function(){
@@ -1907,13 +1762,11 @@ function renderCaptures(){
 
           };
 
-
         actions.appendChild(del);
 
         card.appendChild(actions);
 
       }
-
 
       container.appendChild(card);
 
@@ -1933,7 +1786,6 @@ async function deleteCapture(id){
     return;
   }
 
-
   if(
     !confirm(
       "Supprimer cette capture ?"
@@ -1941,7 +1793,6 @@ async function deleteCapture(id){
   ){
     return;
   }
-
 
   STATS.captures =
     STATS.captures.filter(
@@ -1951,19 +1802,15 @@ async function deleteCapture(id){
         String(id)
     );
 
-
   buildYearSelect(
     $("yearSelect").value
   );
-
 
   buildMonthSelect(
     $("monthSelect").value
   );
 
-
   renderCaptures();
-
 
   try{
 
@@ -1979,7 +1826,6 @@ async function deleteCapture(id){
           getEmail()
 
       });
-
 
     if(
       result
@@ -2002,7 +1848,6 @@ async function deleteCapture(id){
       +
       err.message
     );
-
 
     STATS_LOADED = false;
 
@@ -2069,14 +1914,11 @@ function renderAnnual(){
   const container =
     $("annualContainer");
 
-
   const list =
     normalizeAnnual();
 
-
   container.innerHTML =
     "";
-
 
   if(
     list.length === 0
@@ -2089,15 +1931,12 @@ function renderAnnual(){
       +
       '</div>';
 
-
     $("chartBox").style.display =
       "none";
-
 
     return;
 
   }
-
 
   list
     .slice()
@@ -2110,45 +1949,36 @@ function renderAnnual(){
             "div"
           );
 
-
         row.className =
           "annualRow";
-
 
         const year =
           document.createElement(
             "div"
           );
 
-
         year.className =
           "annualYear";
 
-
         year.textContent =
           item.year;
-
 
         const value =
           document.createElement(
             "div"
           );
 
-
         value.className =
           "annualValue";
-
 
         value.textContent =
           item.interventions
           +
           " interventions";
 
-
         row.appendChild(year);
 
         row.appendChild(value);
-
 
         if(
           IS_ADMIN
@@ -2161,18 +1991,14 @@ function renderAnnual(){
               "button"
             );
 
-
           del.type =
             "button";
-
 
           del.className =
             "annualDelete";
 
-
           del.textContent =
             "×";
-
 
           del.onclick =
             function(){
@@ -2183,17 +2009,14 @@ function renderAnnual(){
 
             };
 
-
           row.appendChild(del);
 
         }
-
 
         container.appendChild(row);
 
       }
     );
-
 
   renderChart(list);
 
@@ -2201,7 +2024,7 @@ function renderAnnual(){
 
 
 /* =========================================================
-   SAUVEGARDE ACTIVITÉ ANNUELLE
+   SAUVEGARDE ANNUELLE
 ========================================================= */
 
 async function saveAnnual(){
@@ -2211,12 +2034,10 @@ async function saveAnnual(){
       $("annualYearInput").value
     );
 
-
   const interventions =
     Number(
       $("annualValueInput").value
     );
-
 
   if(
     !Number.isInteger(year)
@@ -2234,7 +2055,6 @@ async function saveAnnual(){
 
   }
 
-
   if(
     !Number.isFinite(
       interventions
@@ -2250,7 +2070,6 @@ async function saveAnnual(){
     return;
 
   }
-
 
   try{
 
@@ -2270,7 +2089,6 @@ async function saveAnnual(){
 
       });
 
-
     if(
       !result
       ||
@@ -2288,19 +2106,15 @@ async function saveAnnual(){
 
     }
 
-
     $("annualYearInput").value =
       "";
-
 
     $("annualValueInput").value =
       "";
 
-
     STATS_LOADED = false;
 
     await ensureStatsLoaded();
-
 
   }catch(err){
 
@@ -2333,7 +2147,6 @@ async function deleteAnnual(year){
     return;
   }
 
-
   STATS.annual =
     STATS.annual.filter(
       item =>
@@ -2342,9 +2155,7 @@ async function deleteAnnual(year){
         Number(year)
     );
 
-
   renderAnnual();
-
 
   try{
 
@@ -2360,7 +2171,6 @@ async function deleteAnnual(year){
         year:year
 
       });
-
 
     if(
       result
@@ -2398,10 +2208,8 @@ function renderChart(list){
   const box =
     $("chartBox");
 
-
   const svg =
     $("chartSvg");
-
 
   if(
     list.length < 2
@@ -2414,14 +2222,11 @@ function renderChart(list){
 
   }
 
-
   box.style.display =
     "block";
 
-
   svg.innerHTML =
     "";
-
 
   const W = 700;
   const H = 300;
@@ -2431,14 +2236,11 @@ function renderChart(list){
   const TOP = 30;
   const BOTTOM = 55;
 
-
   const chartW =
     W - LEFT - RIGHT;
 
-
   const chartH =
     H - TOP - BOTTOM;
-
 
   const maxValue =
     Math.max(
@@ -2448,7 +2250,6 @@ function renderChart(list){
           item.interventions
       )
     );
-
 
   function xAt(index){
 
@@ -2469,7 +2270,6 @@ function renderChart(list){
 
   }
 
-
   function yAt(value){
 
     return (
@@ -2488,7 +2288,6 @@ function renderChart(list){
 
   }
 
-
   for(
     let i=0;
     i<=4;
@@ -2504,48 +2303,40 @@ function renderChart(list){
       /
       4;
 
-
     const line =
       document.createElementNS(
         "http://www.w3.org/2000/svg",
         "line"
       );
 
-
     line.setAttribute(
       "x1",
       LEFT
     );
-
 
     line.setAttribute(
       "x2",
       W-RIGHT
     );
 
-
     line.setAttribute(
       "y1",
       y
     );
-
 
     line.setAttribute(
       "y2",
       y
     );
 
-
     line.setAttribute(
       "stroke",
       "rgba(255,255,255,.12)"
     );
 
-
     svg.appendChild(line);
 
   }
-
 
   const points =
     list
@@ -2566,52 +2357,43 @@ function renderChart(list){
       )
       .join(" ");
 
-
   const polyline =
     document.createElementNS(
       "http://www.w3.org/2000/svg",
       "polyline"
     );
 
-
   polyline.setAttribute(
     "points",
     points
   );
-
 
   polyline.setAttribute(
     "fill",
     "none"
   );
 
-
   polyline.setAttribute(
     "stroke",
     "#f28a21"
   );
-
 
   polyline.setAttribute(
     "stroke-width",
     "5"
   );
 
-
   polyline.setAttribute(
     "stroke-linecap",
     "round"
   );
-
 
   polyline.setAttribute(
     "stroke-linejoin",
     "round"
   );
 
-
   svg.appendChild(polyline);
-
 
   list.forEach(
     function(item,index){
@@ -2619,12 +2401,10 @@ function renderChart(list){
       const x =
         xAt(index);
 
-
       const y =
         yAt(
           item.interventions
         );
-
 
       const circle =
         document.createElementNS(
@@ -2632,45 +2412,37 @@ function renderChart(list){
           "circle"
         );
 
-
       circle.setAttribute(
         "cx",
         x
       );
-
 
       circle.setAttribute(
         "cy",
         y
       );
 
-
       circle.setAttribute(
         "r",
         7
       );
-
 
       circle.setAttribute(
         "fill",
         "#fff"
       );
 
-
       circle.setAttribute(
         "stroke",
         "#f28a21"
       );
-
 
       circle.setAttribute(
         "stroke-width",
         "4"
       );
 
-
       svg.appendChild(circle);
-
 
       const value =
         document.createElementNS(
@@ -2678,12 +2450,10 @@ function renderChart(list){
           "text"
         );
 
-
       value.setAttribute(
         "x",
         x
       );
-
 
       value.setAttribute(
         "y",
@@ -2693,37 +2463,30 @@ function renderChart(list){
         )
       );
 
-
       value.setAttribute(
         "text-anchor",
         "middle"
       );
-
 
       value.setAttribute(
         "fill",
         "#fff"
       );
 
-
       value.setAttribute(
         "font-size",
         "17"
       );
-
 
       value.setAttribute(
         "font-weight",
         "900"
       );
 
-
       value.textContent =
         item.interventions;
 
-
       svg.appendChild(value);
-
 
       const year =
         document.createElementNS(
@@ -2731,46 +2494,38 @@ function renderChart(list){
           "text"
         );
 
-
       year.setAttribute(
         "x",
         x
       );
-
 
       year.setAttribute(
         "y",
         H-20
       );
 
-
       year.setAttribute(
         "text-anchor",
         "middle"
       );
-
 
       year.setAttribute(
         "fill",
         "rgba(255,255,255,.72)"
       );
 
-
       year.setAttribute(
         "font-size",
         "16"
       );
-
 
       year.setAttribute(
         "font-weight",
         "800"
       );
 
-
       year.textContent =
         item.year;
-
 
       svg.appendChild(year);
 
@@ -2791,12 +2546,10 @@ function openUpload(){
       $("yearSelect").value
     );
 
-
   let month =
     Number(
       $("monthSelect").value
     );
-
 
   if(!year){
 
@@ -2805,7 +2558,6 @@ function openUpload(){
         .getFullYear();
 
   }
-
 
   if(!month){
 
@@ -2816,7 +2568,6 @@ function openUpload(){
       1;
 
   }
-
 
   const url =
     API
@@ -2841,10 +2592,8 @@ function openUpload(){
     +
     Date.now();
 
-
   $("uploadFrame").src =
     url;
-
 
   $("uploadOverlay")
     .classList
@@ -2863,7 +2612,6 @@ function closeUpload(){
     .classList
     .remove("show");
 
-
   $("uploadFrame").src =
     "about:blank";
 
@@ -2881,7 +2629,6 @@ window.addEventListener(
     const data =
       event.data || {};
 
-
     if(
       data.type
       ===
@@ -2892,7 +2639,6 @@ window.addEventListener(
 
     }
 
-
     if(
       data.type
       ===
@@ -2901,9 +2647,7 @@ window.addEventListener(
 
       closeUpload();
 
-
       STATS_LOADED = false;
-
 
       setTimeout(
         async function(){
@@ -2939,11 +2683,9 @@ function updateAdminUi(){
     $("adminLock").style.display =
       "none";
 
-
     $("adminPanel")
       .classList
       .remove("show");
-
 
     ADMIN_OPEN = false;
 
@@ -2951,10 +2693,8 @@ function updateAdminUi(){
 
   }
 
-
   $("adminLock").style.display =
     "";
-
 
   $("adminLock").textContent =
     ADMIN_OPEN
@@ -2963,14 +2703,12 @@ function updateAdminUi(){
       :
       "🔒";
 
-
   $("adminPanel")
     .classList
     .toggle(
       "show",
       ADMIN_OPEN
     );
-
 
   if(STATS_LOADED){
 
@@ -2995,21 +2733,17 @@ async function openAccordion(
   const accordion =
     $(accordionId);
 
-
   const header =
     $(headerId);
-
 
   const opening =
     !accordion
       .classList
       .contains("open");
 
-
   accordion
     .classList
     .toggle("open");
-
 
   header.setAttribute(
     "aria-expanded",
@@ -3019,7 +2753,6 @@ async function openAccordion(
       :
       "false"
   );
-
 
   if(opening){
 
@@ -3064,10 +2797,8 @@ $("adminLock")
         return;
       }
 
-
       ADMIN_OPEN =
         !ADMIN_OPEN;
-
 
       updateAdminUi();
 
@@ -3144,18 +2875,7 @@ function init(){
     ===
     "admin";
 
-
   updateAdminUi();
-
-
-  /*
-    PAS D'APPEL GOOGLE ICI.
-
-    La page s'affiche immédiatement.
-    Les données sont chargées seulement
-    lorsque l'utilisateur ouvre
-    une rubrique.
-  */
 
 }
 
@@ -3165,4 +2885,5 @@ init();
 </script>
 
 </body>
+
 </html>
