@@ -23,6 +23,8 @@
   --orange2:#9f4f00;
   --green:#168039;
   --red:#a71f1f;
+  --violet1:rgba(103,82,138,.78);
+  --violet2:rgba(61,48,83,.72);
   --shadow:0 14px 34px rgba(0,0,0,.45);
 }
 
@@ -306,8 +308,8 @@ body{
   background:
     linear-gradient(
       180deg,
-      rgba(212,106,0,.76),
-      rgba(120,55,0,.66)
+      var(--violet1),
+      var(--violet2)
     );
 
   font-family:inherit;
@@ -735,10 +737,6 @@ select option{
 <div class="wrap">
 
 
-  <!-- =====================================================
-       HAUT
-  ====================================================== -->
-
   <header class="topbar">
 
     <h1 class="pageTitle">
@@ -780,10 +778,6 @@ select option{
 
   </div>
 
-
-  <!-- =====================================================
-       ADMIN
-  ====================================================== -->
 
   <section
     id="adminPanel"
@@ -841,10 +835,6 @@ select option{
   </section>
 
 
-  <!-- =====================================================
-       STATISTIQUES MENSUELLES
-  ====================================================== -->
-
   <section
     id="monthlyAccordion"
     class="accordion">
@@ -870,8 +860,7 @@ select option{
     </button>
 
 
-    <div
-      class="accordionContent">
+    <div class="accordionContent">
 
 
       <p class="intro">
@@ -929,10 +918,6 @@ select option{
   </section>
 
 
-  <!-- =====================================================
-       ACTIVITÉ ANNUELLE
-  ====================================================== -->
-
   <section
     id="annualAccordion"
     class="accordion">
@@ -958,8 +943,7 @@ select option{
     </button>
 
 
-    <div
-      class="accordionContent">
+    <div class="accordionContent">
 
 
       <div id="annualContainer">
@@ -997,10 +981,6 @@ select option{
 
 </div>
 
-
-<!-- =======================================================
-     FENÊTRE UPLOAD
-======================================================= -->
 
 <div
   id="uploadOverlay"
@@ -1046,10 +1026,6 @@ select option{
 
 
 <script>
-
-/* =========================================================
-   CONFIGURATION
-========================================================= */
 
 const API =
   "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
@@ -1115,23 +1091,17 @@ function toggleAccordion(
 ){
 
   const accordion =
-    $(
-      accordionId
-    );
+    $(accordionId);
 
 
   const header =
-    $(
-      headerId
-    );
+    $(headerId);
 
 
   const isOpen =
     accordion
       .classList
-      .toggle(
-        "open"
-      );
+      .toggle("open");
 
 
   header.setAttribute(
@@ -1239,9 +1209,7 @@ function jsonp(
           return;
         }
 
-        finished =
-          true;
-
+        finished = true;
 
         clearTimeout(
           timeout
@@ -1249,33 +1217,23 @@ function jsonp(
 
 
         try{
-
-          delete window[
-            callback
-          ];
-
+          delete window[callback];
         }catch(err){}
 
 
         try{
-
           script.remove();
-
         }catch(err){}
 
       }
 
 
-      window[
-        callback
-      ] =
+      window[callback] =
         function(data){
 
           cleanup();
 
-          resolve(
-            data
-          );
+          resolve(data);
 
         };
 
@@ -1371,9 +1329,7 @@ async function loadStats(
 
   $("loading")
     .classList
-    .add(
-      "show"
-    );
+    .add("show");
 
 
   try{
@@ -1456,9 +1412,7 @@ async function loadStats(
 
   }catch(err){
 
-    console.error(
-      err
-    );
+    console.error(err);
 
 
     $("capturesContainer")
@@ -1474,9 +1428,7 @@ async function loadStats(
 
     $("loading")
       .classList
-      .remove(
-        "show"
-      );
+      .remove("show");
 
   }
 
@@ -1484,7 +1436,7 @@ async function loadStats(
 
 
 /* =========================================================
-   ANNÉES DISPONIBLES
+   ANNÉES
 ========================================================= */
 
 function getCaptureYears(){
@@ -1512,9 +1464,7 @@ function getCaptureYears(){
 
 
   return Array
-    .from(
-      years
-    )
+    .from(years)
     .sort(
       (a,b) =>
         b-a
@@ -1522,10 +1472,6 @@ function getCaptureYears(){
 
 }
 
-
-/* =========================================================
-   SELECT ANNÉE
-========================================================= */
 
 function buildYearSelect(
   preferredYear
@@ -1627,7 +1573,7 @@ function buildYearSelect(
 
 
 /* =========================================================
-   MOIS DISPONIBLES
+   MOIS
 ========================================================= */
 
 function buildMonthSelect(
@@ -1726,9 +1672,7 @@ function buildMonthSelect(
 
 
       option.textContent =
-        MONTHS[
-          month
-        ];
+        MONTHS[month];
 
 
       select.appendChild(
@@ -1807,9 +1751,7 @@ function captureTitle(
   ){
 
     return (
-      MONTHS[
-        month
-      ]
+      MONTHS[month]
       +
       " "
       +
@@ -1825,7 +1767,7 @@ function captureTitle(
 
 
 /* =========================================================
-   AFFICHAGE CAPTURES
+   CAPTURES
 ========================================================= */
 
 function renderCaptures(){
@@ -1851,15 +1793,12 @@ function renderCaptures(){
 
       .filter(
         item =>
-
           Number(
             item.year
           )
           ===
           year
-
           &&
-
           Number(
             item.month
           )
@@ -2329,7 +2268,7 @@ function renderAnnual(){
 
 
 /* =========================================================
-   AJOUT / MODIFICATION ACTIVITÉ ANNUELLE
+   SAUVEGARDE ANNUELLE
 ========================================================= */
 
 async function saveAnnual(){
@@ -2443,7 +2382,7 @@ async function saveAnnual(){
 
 
 /* =========================================================
-   SUPPRESSION ACTIVITÉ ANNUELLE
+   SUPPRESSION ANNUELLE
 ========================================================= */
 
 async function deleteAnnual(
@@ -2562,28 +2501,12 @@ function renderChart(
     "";
 
 
-  const W =
-    700;
-
-
-  const H =
-    300;
-
-
-  const LEFT =
-    65;
-
-
-  const RIGHT =
-    30;
-
-
-  const TOP =
-    30;
-
-
-  const BOTTOM =
-    55;
+  const W = 700;
+  const H = 300;
+  const LEFT = 65;
+  const RIGHT = 30;
+  const TOP = 30;
+  const BOTTOM = 55;
 
 
   const chartW =
@@ -2980,7 +2903,7 @@ function renderChart(
 
 
 /* =========================================================
-   FENÊTRE UPLOAD
+   UPLOAD
 ========================================================= */
 
 function openUpload(){
@@ -3018,33 +2941,27 @@ function openUpload(){
 
 
   const url =
-
     API
-
     +
     "?view=statistiques_upload_page"
-
     +
     "&email="
     +
     encodeURIComponent(
       getEmail()
     )
-
     +
     "&year="
     +
     encodeURIComponent(
       year
     )
-
     +
     "&month="
     +
     encodeURIComponent(
       month
     )
-
     +
     "&_="
     +
@@ -3057,9 +2974,7 @@ function openUpload(){
 
   $("uploadOverlay")
     .classList
-    .add(
-      "show"
-    );
+    .add("show");
 
 }
 
@@ -3072,9 +2987,7 @@ function closeUpload(){
 
   $("uploadOverlay")
     .classList
-    .remove(
-      "show"
-    );
+    .remove("show");
 
 
   $("uploadFrame").src =
@@ -3152,9 +3065,7 @@ function updateAdminUi(){
 
     $("adminPanel")
       .classList
-      .remove(
-        "show"
-      );
+      .remove("show");
 
 
     ADMIN_OPEN =
@@ -3309,24 +3220,14 @@ async function init(){
     "admin";
 
 
-  /*
-    Les deux rubriques restent
-    volontairement repliées
-    au démarrage.
-  */
-
   $("monthlyAccordion")
     .classList
-    .remove(
-      "open"
-    );
+    .remove("open");
 
 
   $("annualAccordion")
     .classList
-    .remove(
-      "open"
-    );
+    .remove("open");
 
 
   updateAdminUi();
