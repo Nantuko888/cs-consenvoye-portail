@@ -67,6 +67,7 @@ body{
 .bg{
   position:fixed;
   inset:0;
+
   z-index:-2;
 
   background:
@@ -83,7 +84,7 @@ body{
 
 
 /* =========================================================
-   PAGE
+   CONTENEUR
 ========================================================= */
 
 .wrap{
@@ -154,7 +155,9 @@ body{
 .btn{
   min-height:42px;
 
-  border:1px solid rgba(255,255,255,.14);
+  border:
+    1px solid
+    rgba(255,255,255,.14);
 
   border-radius:14px;
 
@@ -181,7 +184,7 @@ body{
 }
 
 .btn:disabled{
-  opacity:.55;
+  opacity:.58;
 }
 
 .lockBtn{
@@ -207,7 +210,7 @@ body{
 
 
 /* =========================================================
-   ADMINISTRATION
+   ADMIN
 ========================================================= */
 
 .adminPanel{
@@ -245,13 +248,15 @@ body{
 
 .adminButtons{
   display:flex;
+
   gap:8px;
+
   flex-wrap:wrap;
 }
 
 
 /* =========================================================
-   FORMULAIRE ACTIVITÉ ANNUELLE
+   FORMULAIRE ANNUEL ADMIN
 ========================================================= */
 
 .annualForm{
@@ -274,17 +279,17 @@ body{
 
   grid-column:1 / -1;
 
-  padding:9px 12px;
+  padding:8px 10px;
 
   border-radius:12px;
 
   text-align:center;
 
-  font-size:14px;
+  font-size:13px;
   font-weight:850;
 
   background:
-    rgba(255,255,255,.07);
+    rgba(255,255,255,.08);
 }
 
 .saveStatus.show{
@@ -293,12 +298,12 @@ body{
 
 .saveStatus.ok{
   background:
-    rgba(22,128,57,.30);
+    rgba(22,128,57,.32);
 }
 
 .saveStatus.error{
   background:
-    rgba(167,31,31,.34);
+    rgba(167,31,31,.38);
 }
 
 
@@ -368,7 +373,9 @@ select option{
   min-height:58px;
 
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
 
   gap:12px;
@@ -389,17 +396,20 @@ select option{
   font-family:inherit;
 
   font-size:18px;
+
   font-weight:900;
 
   text-align:left;
 
   cursor:pointer;
 
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(7px);
+  -webkit-backdrop-filter:blur(7px);
 }
 
 .accordionArrow{
+  flex:0 0 auto;
+
   font-size:17px;
 
   transition:
@@ -417,34 +427,15 @@ select option{
   padding:14px;
 
   background:
-    rgba(5,5,5,.50);
+    rgba(5,5,5,.48);
 
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(9px);
+  -webkit-backdrop-filter:blur(9px);
 }
 
 .accordion.open
 .accordionContent{
   display:block;
-}
-
-
-/* =========================================================
-   CHARGEMENT
-========================================================= */
-
-.sectionLoading{
-  display:none;
-
-  padding:16px 8px;
-
-  text-align:center;
-
-  color:
-    rgba(255,255,255,.68);
-
-  font-size:15px;
-  font-weight:800;
 }
 
 
@@ -459,6 +450,7 @@ select option{
   color:var(--muted);
 
   font-size:15px;
+
   font-weight:700;
 }
 
@@ -482,6 +474,7 @@ select option{
     rgba(255,255,255,.65);
 
   font-size:12px;
+
   font-weight:950;
 
   text-transform:uppercase;
@@ -512,6 +505,7 @@ select option{
     10px 13px;
 
   font-size:17px;
+
   font-weight:950;
 }
 
@@ -519,6 +513,7 @@ select option{
   display:block;
 
   width:100%;
+
   height:auto;
 
   background:#fff;
@@ -557,7 +552,7 @@ select option{
 
 .empty{
   padding:
-    22px 8px;
+    20px 8px;
 
   text-align:center;
 
@@ -565,6 +560,7 @@ select option{
     rgba(255,255,255,.48);
 
   font-size:15px;
+
   font-weight:750;
 }
 
@@ -577,6 +573,7 @@ select option{
   display:flex;
 
   align-items:center;
+
   justify-content:space-between;
 
   gap:10px;
@@ -594,16 +591,19 @@ select option{
 
 .annualYear{
   font-size:17px;
+
   font-weight:950;
 }
 
 .annualValue{
   font-size:17px;
+
   font-weight:900;
 }
 
 .annualDelete{
   width:35px;
+
   height:35px;
 
   border:0;
@@ -616,12 +616,13 @@ select option{
   color:#fff;
 
   font-size:17px;
+
   font-weight:900;
 }
 
 
 /* =========================================================
-   GRAPHIQUE
+   GRAPHIQUE HORIZONTAL
 ========================================================= */
 
 .chartBox{
@@ -632,24 +633,67 @@ select option{
   border-radius:18px;
 
   background:
-    rgba(0,0,0,.27);
+    rgba(0,0,0,.34);
 
   overflow:hidden;
 }
 
 .chartTitle{
   margin:
-    3px 5px 8px;
+    3px 5px 3px;
 
   font-size:16px;
+
   font-weight:950;
+}
+
+.chartHint{
+  margin:
+    0 5px 10px;
+
+  color:
+    rgba(255,255,255,.52);
+
+  font-size:12px;
+
+  font-weight:700;
+}
+
+.chartScroller{
+  width:100%;
+
+  overflow-x:auto;
+  overflow-y:hidden;
+
+  -webkit-overflow-scrolling:touch;
+
+  scrollbar-width:thin;
+
+  touch-action:pan-x;
+
+  border-radius:14px;
+
+  background:
+    rgba(0,0,0,.12);
+}
+
+.chartScroller::-webkit-scrollbar{
+  height:5px;
+}
+
+.chartScroller::-webkit-scrollbar-thumb{
+  border-radius:99px;
+
+  background:
+    rgba(255,255,255,.25);
 }
 
 .chartSvg{
   display:block;
 
-  width:100%;
-  height:auto;
+  height:270px;
+
+  max-width:none;
 }
 
 
@@ -677,6 +721,7 @@ select option{
 
 .uploadOverlay.show{
   display:flex;
+
   flex-direction:column;
 }
 
@@ -684,15 +729,18 @@ select option{
   display:flex;
 
   align-items:center;
+
   justify-content:space-between;
 
   gap:8px;
 
-  padding:7px 2px 10px;
+  padding:
+    7px 2px 10px;
 }
 
 .uploadTitle{
   font-size:18px;
+
   font-weight:950;
 }
 
@@ -716,26 +764,10 @@ select option{
   display:block;
 
   width:100%;
+
   height:100%;
 
   border:0;
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:600px){
-
-  .pageTitle{
-    font-size:18px;
-  }
-
-  .accordionHeader{
-    font-size:18px;
-  }
-
 }
 
 </style>
@@ -786,7 +818,7 @@ select option{
 
 
   <!-- =====================================================
-       ADMINISTRATION
+       ADMIN
   ====================================================== -->
 
   <section
@@ -819,7 +851,7 @@ select option{
         id="annualYearInput"
         type="number"
         inputmode="numeric"
-        min="2000"
+        min="1900"
         max="2200"
         placeholder="Année">
 
@@ -864,8 +896,7 @@ select option{
     <button
       id="monthlyHeader"
       class="accordionHeader"
-      type="button"
-      aria-expanded="false">
+      type="button">
 
       <span>
         Statistiques mensuelles
@@ -879,15 +910,6 @@ select option{
 
 
     <div class="accordionContent">
-
-
-      <div
-        id="monthlyLoading"
-        class="sectionLoading">
-
-        Chargement…
-
-      </div>
 
 
       <p class="intro">
@@ -907,6 +929,7 @@ select option{
 
           </label>
 
+
           <select id="yearSelect">
           </select>
 
@@ -922,6 +945,7 @@ select option{
             Mois
 
           </label>
+
 
           <select id="monthSelect">
           </select>
@@ -952,8 +976,7 @@ select option{
     <button
       id="annualHeader"
       class="accordionHeader"
-      type="button"
-      aria-expanded="false">
+      type="button">
 
       <span>
         Activité annuelle
@@ -969,15 +992,6 @@ select option{
     <div class="accordionContent">
 
 
-      <div
-        id="annualLoading"
-        class="sectionLoading">
-
-        Chargement…
-
-      </div>
-
-
       <div id="annualContainer">
       </div>
 
@@ -987,16 +1001,32 @@ select option{
         class="chartBox"
         style="display:none;">
 
+
         <div class="chartTitle">
           Évolution de l’activité
         </div>
 
-        <svg
-          id="chartSvg"
-          class="chartSvg"
-          viewBox="0 0 700 300">
 
-        </svg>
+        <div class="chartHint">
+          Faites glisser le graphique vers la gauche ou la droite.
+        </div>
+
+
+        <div
+          id="chartScroller"
+          class="chartScroller">
+
+
+          <svg
+            id="chartSvg"
+            class="chartSvg"
+            preserveAspectRatio="none">
+
+          </svg>
+
+
+        </div>
+
 
       </div>
 
@@ -1074,6 +1104,10 @@ const ROLE_KEY =
   "cs_role_v1";
 
 
+const CACHE_KEY =
+  "cs_stats_cache_v1";
+
+
 const MONTHS = [
   "",
   "Janvier",
@@ -1093,7 +1127,9 @@ const MONTHS = [
 
 const $ =
   id =>
-    document.getElementById(id);
+    document.getElementById(
+      id
+    );
 
 
 let STATS = {
@@ -1108,14 +1144,6 @@ let IS_ADMIN =
 
 let ADMIN_OPEN =
   false;
-
-
-let STATS_LOADED =
-  false;
-
-
-let STATS_LOADING =
-  null;
 
 
 /* =========================================================
@@ -1153,19 +1181,96 @@ function getRole(){
 
 
 /* =========================================================
-   JSONP SIMPLE
+   CACHE LOCAL
 ========================================================= */
 
-function jsonpOnce(
-  params,
-  timeoutMs = 25000
-){
+function saveCache(){
+
+  try{
+
+    localStorage.setItem(
+      CACHE_KEY,
+      JSON.stringify({
+
+        savedAt:
+          Date.now(),
+
+        captures:
+          STATS.captures,
+
+        annual:
+          STATS.annual
+
+      })
+    );
+
+  }
+  catch(err){}
+
+}
+
+
+function loadCache(){
+
+  try{
+
+    const raw =
+      localStorage.getItem(
+        CACHE_KEY
+      );
+
+
+    if(!raw){
+      return false;
+    }
+
+
+    const cached =
+      JSON.parse(
+        raw
+      );
+
+
+    STATS.captures =
+      Array.isArray(
+        cached.captures
+      )
+        ?
+        cached.captures
+        :
+        [];
+
+
+    STATS.annual =
+      Array.isArray(
+        cached.annual
+      )
+        ?
+        cached.annual
+        :
+        [];
+
+
+    return true;
+
+  }
+  catch(err){
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================================
+   JSONP
+========================================================= */
+
+function jsonp(params){
 
   return new Promise(
-    function(
-      resolve,
-      reject
-    ){
+    function(resolve,reject){
 
       const callback =
         "statsCb_"
@@ -1202,7 +1307,7 @@ function jsonpOnce(
             );
 
           },
-          timeoutMs
+          15000
         );
 
 
@@ -1223,19 +1328,15 @@ function jsonpOnce(
 
 
         try{
-
-          delete window[
-            callback
-          ];
-
-        }catch(err){}
+          delete window[callback];
+        }
+        catch(err){}
 
 
         try{
-
           script.remove();
-
-        }catch(err){}
+        }
+        catch(err){}
 
       }
 
@@ -1292,10 +1393,6 @@ function jsonpOnce(
       query.set(
         "_",
         Date.now()
-        +
-        "-"
-        +
-        Math.random()
       );
 
 
@@ -1332,155 +1429,104 @@ function jsonpOnce(
 
 
 /* =========================================================
-   JSONP AVEC RELANCE AUTOMATIQUE
+   ACTUALISATION SILENCIEUSE
 ========================================================= */
 
-async function jsonpRetry(
-  params,
-  attempts = 3
-){
+async function refreshFromServer(){
 
-  let lastError =
-    null;
+  try{
+
+    const result =
+      await jsonp({
+
+        view:
+          "statistiques_list"
+
+      });
 
 
-  for(
-    let attempt=1;
-    attempt<=attempts;
-    attempt++
-  ){
-
-    try{
-
-      return await jsonpOnce(
-        params,
-        25000
-      );
-
+    if(
+      !result
+      ||
+      result.ok === false
+    ){
+      return;
     }
-    catch(err){
-
-      lastError =
-        err;
 
 
-      if(
-        attempt
-        <
-        attempts
-      ){
+    const oldYear =
+      $("yearSelect").value;
 
-        await new Promise(
-          resolve =>
-            setTimeout(
-              resolve,
-              700 * attempt
-            )
-        );
 
-      }
+    const oldMonth =
+      $("monthSelect").value;
 
-    }
+
+    STATS.captures =
+      Array.isArray(
+        result.captures
+      )
+        ?
+        result.captures
+        :
+        [];
+
+
+    STATS.annual =
+      Array.isArray(
+        result.annual
+      )
+        ?
+        result.annual
+
+        :
+
+        Array.isArray(
+          result.annuel
+        )
+          ?
+          result.annuel
+          :
+          [];
+
+
+    saveCache();
+
+
+    renderAll(
+      oldYear,
+      oldMonth
+    );
 
   }
+  catch(err){
 
-
-  throw lastError
-    ||
-    new Error(
-      "Connexion impossible"
+    console.log(
+      "Actualisation différée",
+      err
     );
+
+  }
 
 }
 
 
 /* =========================================================
-   CHARGEMENT
+   RENDU GLOBAL
 ========================================================= */
 
-async function loadStats(
-  keepSelection = true
+function renderAll(
+  preferredYear,
+  preferredMonth
 ){
 
-  const oldYear =
-    $("yearSelect").value;
-
-
-  const oldMonth =
-    $("monthSelect").value;
-
-
-  const result =
-    await jsonpRetry(
-      {
-        view:
-          "statistiques_list"
-      },
-      2
-    );
-
-
-  if(
-    !result
-    ||
-    result.ok === false
-  ){
-
-    throw new Error(
-      result &&
-      result.error
-        ?
-        result.error
-        :
-        "Chargement impossible"
-    );
-
-  }
-
-
-  STATS.captures =
-    Array.isArray(
-      result.captures
-    )
-      ?
-      result.captures
-      :
-      [];
-
-
-  STATS.annual =
-    Array.isArray(
-      result.annual
-    )
-      ?
-      result.annual
-
-      :
-
-      Array.isArray(
-        result.annuel
-      )
-        ?
-        result.annuel
-        :
-        [];
-
-
   buildYearSelect(
-    keepSelection
-      ?
-      oldYear
-      :
-      ""
+    preferredYear
   );
 
 
   buildMonthSelect(
-    keepSelection
-      ?
-      oldMonth
-      :
-      ""
+    preferredMonth
   );
 
 
@@ -1492,74 +1538,7 @@ async function loadStats(
 
 
 /* =========================================================
-   CHARGEMENT À LA DEMANDE
-========================================================= */
-
-async function ensureStatsLoaded(){
-
-  if(
-    STATS_LOADED
-  ){
-    return;
-  }
-
-
-  if(
-    STATS_LOADING
-  ){
-
-    return STATS_LOADING;
-
-  }
-
-
-  $("monthlyLoading")
-    .style.display =
-      "block";
-
-
-  $("annualLoading")
-    .style.display =
-      "block";
-
-
-  STATS_LOADING =
-    loadStats(
-      false
-    );
-
-
-  try{
-
-    await STATS_LOADING;
-
-
-    STATS_LOADED =
-      true;
-
-  }
-  finally{
-
-    STATS_LOADING =
-      null;
-
-
-    $("monthlyLoading")
-      .style.display =
-        "none";
-
-
-    $("annualLoading")
-      .style.display =
-        "none";
-
-  }
-
-}
-
-
-/* =========================================================
-   ANNÉES MENSUELLES
+   ANNÉES
 ========================================================= */
 
 function getCaptureYears(){
@@ -1626,9 +1605,6 @@ function buildYearSelect(
       '<option value="">—</option>';
 
 
-    buildMonthSelect();
-
-
     return;
 
   }
@@ -1644,7 +1620,9 @@ function buildYearSelect(
 
 
       option.value =
-        year;
+        String(
+          year
+        );
 
 
       option.textContent =
@@ -1670,7 +1648,9 @@ function buildYearSelect(
   ){
 
     select.value =
-      preferredYear;
+      String(
+        preferredYear
+      );
 
   }
 
@@ -1758,7 +1738,9 @@ function buildMonthSelect(
 
 
       option.value =
-        month;
+        String(
+          month
+        );
 
 
       option.textContent =
@@ -1786,7 +1768,9 @@ function buildMonthSelect(
   ){
 
     select.value =
-      preferredMonth;
+      String(
+        preferredMonth
+      );
 
   }
 
@@ -1801,7 +1785,7 @@ function captureTitle(
   capture
 ){
 
-  const value =
+  const title =
     String(
       capture.title
       ||
@@ -1811,10 +1795,10 @@ function captureTitle(
 
 
   if(
-    !value
+    !title
     ||
     /GMT/i.test(
-      value
+      title
     )
   ){
 
@@ -1835,13 +1819,13 @@ function captureTitle(
   }
 
 
-  return value;
+  return title;
 
 }
 
 
 /* =========================================================
-   AFFICHAGE CAPTURES
+   CAPTURES
 ========================================================= */
 
 function renderCaptures(){
@@ -1872,7 +1856,9 @@ function renderCaptures(){
           )
           ===
           year
+
           &&
+
           Number(
             item.month
           )
@@ -1952,6 +1938,10 @@ function renderCaptures(){
         "captureImage";
 
 
+      image.loading =
+        "lazy";
+
+
       image.src =
         capture.image_url
         ||
@@ -1999,10 +1989,13 @@ function renderCaptures(){
 
 
         button.onclick =
-          () =>
+          function(){
+
             deleteCapture(
               capture.id
             );
+
+          };
 
 
         actions.appendChild(
@@ -2031,7 +2024,7 @@ function renderCaptures(){
    SUPPRESSION CAPTURE
 ========================================================= */
 
-async function deleteCapture(
+function deleteCapture(
   id
 ){
 
@@ -2044,7 +2037,7 @@ async function deleteCapture(
   }
 
 
-  const oldCaptures =
+  const backup =
     STATS.captures.slice();
 
 
@@ -2061,75 +2054,63 @@ async function deleteCapture(
     );
 
 
-  buildYearSelect(
-    $("yearSelect").value
-  );
+  saveCache();
 
 
-  buildMonthSelect(
+  renderAll(
+    $("yearSelect").value,
     $("monthSelect").value
   );
 
 
-  renderCaptures();
+  jsonp({
+
+    view:
+      "statistiques_capture_delete",
+
+    email:
+      getEmail(),
+
+    id:
+      id
+
+  })
+  .then(
+    function(result){
+
+      if(
+        !result
+        ||
+        result.ok === false
+      ){
+
+        throw new Error();
+
+      }
 
 
-  try{
+      refreshFromServer();
 
-    const result =
-      await jsonpRetry(
-        {
+    }
+  )
+  .catch(
+    function(){
 
-          view:
-            "statistiques_capture_delete",
-
-          id:
-            id,
-
-          email:
-            getEmail()
-
-        },
-        3
-      );
+      STATS.captures =
+        backup;
 
 
-    if(
-      !result
-      ||
-      result.ok === false
-    ){
+      saveCache();
 
-      throw new Error(
-        result &&
-        result.error
-          ?
-          result.error
-          :
-          "Suppression impossible"
+      renderAll();
+
+
+      alert(
+        "La suppression n'a pas pu être synchronisée."
       );
 
     }
-
-  }
-  catch(err){
-
-    STATS.captures =
-      oldCaptures;
-
-
-    buildYearSelect();
-
-    buildMonthSelect();
-
-    renderCaptures();
-
-
-    alert(
-      "Suppression impossible après plusieurs tentatives."
-    );
-
-  }
+  );
 
 }
 
@@ -2143,25 +2124,29 @@ function normalizeAnnual(){
   return STATS.annual
 
     .map(
-      item => ({
+      function(item){
 
-        year:
-          Number(
-            item.year
-          ),
+        return {
 
-        interventions:
-          Number(
-            item.interventions
-            ??
-            item.value
-            ??
-            item.total
-            ??
-            0
-          )
+          year:
+            Number(
+              item.year
+            ),
 
-      })
+          interventions:
+            Number(
+              item.interventions
+              ??
+              item.value
+              ??
+              item.total
+              ??
+              0
+            )
+
+        };
+
+      }
     )
 
     .filter(
@@ -2180,10 +2165,6 @@ function normalizeAnnual(){
 
 }
 
-
-/* =========================================================
-   AFFICHAGE ANNUEL
-========================================================= */
 
 function renderAnnual(){
 
@@ -2298,10 +2279,13 @@ function renderAnnual(){
 
 
           button.onclick =
-            () =>
+            function(){
+
               deleteAnnual(
                 item.year
               );
+
+            };
 
 
           row.appendChild(
@@ -2327,10 +2311,10 @@ function renderAnnual(){
 
 
 /* =========================================================
-   ÉTAT ENREGISTREMENT
+   MESSAGE ADMIN
 ========================================================= */
 
-function showSaveStatus(
+function showStatus(
   text,
   type
 ){
@@ -2349,7 +2333,9 @@ function showSaveStatus(
     (
       type
         ?
-        " " + type
+        " "
+        +
+        type
         :
         ""
     );
@@ -2358,10 +2344,10 @@ function showSaveStatus(
 
 
 /* =========================================================
-   ENREGISTREMENT ANNUEL
+   AJOUT / MODIFICATION ANNUELLE
 ========================================================= */
 
-async function saveAnnual(){
+function saveAnnual(){
 
   const year =
     Number(
@@ -2380,12 +2366,12 @@ async function saveAnnual(){
       year
     )
     ||
-    year < 2000
+    year < 1900
     ||
     year > 2200
   ){
 
-    showSaveStatus(
+    showStatus(
       "Année incorrecte.",
       "error"
     );
@@ -2404,7 +2390,7 @@ async function saveAnnual(){
     interventions < 0
   ){
 
-    showSaveStatus(
+    showStatus(
       "Nombre d’interventions incorrect.",
       "error"
     );
@@ -2415,118 +2401,120 @@ async function saveAnnual(){
   }
 
 
-  const button =
-    $("saveAnnualBtn");
+  const backup =
+    STATS.annual.slice();
 
 
-  button.disabled =
-    true;
+  const found =
+    STATS.annual.find(
+      item =>
+        Number(
+          item.year
+        )
+        ===
+        year
+    );
 
 
-  button.textContent =
-    "Enregistrement…";
+  if(found){
+
+    found.interventions =
+      interventions;
+
+  }
+  else{
+
+    STATS.annual.push({
+
+      year:
+        year,
+
+      interventions:
+        interventions
+
+    });
+
+  }
 
 
-  showSaveStatus(
-    "Enregistrement en cours…",
-    ""
+  saveCache();
+
+
+  renderAnnual();
+
+
+  $("annualYearInput").value =
+    "";
+
+
+  $("annualValueInput").value =
+    "";
+
+
+  showStatus(
+    "✓ Enregistré",
+    "ok"
   );
 
 
-  try{
+  jsonp({
 
-    const result =
-      await jsonpRetry(
-        {
+    view:
+      "statistiques_annual_set",
 
-          view:
-            "statistiques_annual_set",
+    email:
+      getEmail(),
 
-          email:
-            getEmail(),
+    year:
+      year,
 
-          year:
-            year,
+    interventions:
+      interventions
 
-          interventions:
-            interventions
+  })
+  .then(
+    function(result){
 
-        },
-        3
+      if(
+        !result
+        ||
+        result.ok === false
+      ){
+
+        throw new Error();
+
+      }
+
+
+      showStatus(
+        "✓ Synchronisé",
+        "ok"
       );
 
 
-    if(
-      !result
-      ||
-      result.ok === false
-    ){
+      refreshFromServer();
 
-      throw new Error(
-        result &&
-        result.error
-          ?
-          result.error
-          :
-          "Enregistrement impossible"
+    }
+  )
+  .catch(
+    function(){
+
+      STATS.annual =
+        backup;
+
+
+      saveCache();
+
+      renderAnnual();
+
+
+      showStatus(
+        "Erreur de synchronisation.",
+        "error"
       );
 
     }
-
-
-    showSaveStatus(
-      "✓ Activité annuelle enregistrée",
-      "ok"
-    );
-
-
-    $("annualYearInput")
-      .value =
-        "";
-
-
-    $("annualValueInput")
-      .value =
-        "";
-
-
-    STATS_LOADED =
-      false;
-
-
-    await ensureStatsLoaded();
-
-
-    setTimeout(
-      function(){
-
-        $("saveStatus")
-          .className =
-            "saveStatus";
-
-      },
-      2500
-    );
-
-  }
-  catch(err){
-
-    showSaveStatus(
-      "Enregistrement impossible après 3 tentatives.",
-      "error"
-    );
-
-  }
-  finally{
-
-    button.disabled =
-      false;
-
-
-    button.textContent =
-      "Enregistrer l’activité annuelle";
-
-  }
+  );
 
 }
 
@@ -2535,7 +2523,7 @@ async function saveAnnual(){
    SUPPRESSION ANNUELLE
 ========================================================= */
 
-async function deleteAnnual(
+function deleteAnnual(
   year
 ){
 
@@ -2552,7 +2540,7 @@ async function deleteAnnual(
   }
 
 
-  const oldAnnual =
+  const backup =
     STATS.annual.slice();
 
 
@@ -2569,62 +2557,66 @@ async function deleteAnnual(
     );
 
 
+  saveCache();
+
+
   renderAnnual();
 
 
-  try{
+  jsonp({
 
-    const result =
-      await jsonpRetry(
-        {
+    view:
+      "statistiques_annual_delete",
 
-          view:
-            "statistiques_annual_delete",
+    email:
+      getEmail(),
 
-          email:
-            getEmail(),
+    year:
+      year
 
-          year:
-            year
+  })
+  .then(
+    function(result){
 
-        },
-        3
-      );
+      if(
+        !result
+        ||
+        result.ok === false
+      ){
+
+        throw new Error();
+
+      }
 
 
-    if(
-      !result
-      ||
-      result.ok === false
-    ){
+      refreshFromServer();
 
-      throw new Error(
-        "Suppression impossible"
+    }
+  )
+  .catch(
+    function(){
+
+      STATS.annual =
+        backup;
+
+
+      saveCache();
+
+      renderAnnual();
+
+
+      alert(
+        "La suppression n'a pas pu être synchronisée."
       );
 
     }
-
-  }
-  catch(err){
-
-    STATS.annual =
-      oldAnnual;
-
-
-    renderAnnual();
-
-
-    alert(
-      "Suppression impossible après plusieurs tentatives."
-    );
-
-  }
+  );
 
 }
 
 
 /* =========================================================
-   GRAPHIQUE
+   GRAPHIQUE HORIZONTAL
 ========================================================= */
 
 function renderChart(
@@ -2633,6 +2625,10 @@ function renderChart(
 
   const box =
     $("chartBox");
+
+
+  const scroller =
+    $("chartScroller");
 
 
   const svg =
@@ -2660,21 +2656,73 @@ function renderChart(
     "";
 
 
-  const W = 700;
-  const H = 300;
+  /*
+    70 pixels par année.
+    Minimum 520 px pour ne pas avoir
+    un graphique trop petit.
+  */
 
-  const LEFT = 65;
-  const RIGHT = 30;
-  const TOP = 30;
-  const BOTTOM = 55;
+  const STEP =
+    70;
 
 
-  const chartW =
+  const LEFT =
+    42;
+
+
+  const RIGHT =
+    42;
+
+
+  const TOP =
+    38;
+
+
+  const BOTTOM =
+    46;
+
+
+  const H =
+    250;
+
+
+  const W =
+    Math.max(
+      520,
+      LEFT
+      +
+      RIGHT
+      +
+      (
+        list.length - 1
+      )
+      *
+      STEP
+    );
+
+
+  svg.setAttribute(
+    "viewBox",
+    "0 0 "
+    +
     W
-    -
-    LEFT
-    -
-    RIGHT;
+    +
+    " "
+    +
+    H
+  );
+
+
+  svg.style.width =
+    W
+    +
+    "px";
+
+
+  svg.style.height =
+    H
+    +
+    "px";
 
 
   const chartH =
@@ -2695,21 +2743,25 @@ function renderChart(
     );
 
 
+  /*
+    On laisse un peu de marge
+    en haut pour les chiffres.
+  */
+
+  const maxScale =
+    maxValue
+    *
+    1.14;
+
+
   function xAt(index){
 
     return (
       LEFT
       +
-      (
-        index
-        /
-        Math.max(
-          1,
-          list.length - 1
-        )
-      )
+      index
       *
-      chartW
+      STEP
     );
 
   }
@@ -2725,7 +2777,7 @@ function renderChart(
       (
         value
         /
-        maxValue
+        maxScale
       )
       *
       chartH
@@ -2734,17 +2786,99 @@ function renderChart(
   }
 
 
+  /*
+    Lignes horizontales discrètes.
+  */
+
+  for(
+    let i=0;
+    i<=3;
+    i++
+  ){
+
+    const y =
+      TOP
+      +
+      chartH
+      *
+      i
+      /
+      3;
+
+
+    const line =
+      document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "line"
+      );
+
+
+    line.setAttribute(
+      "x1",
+      LEFT
+    );
+
+
+    line.setAttribute(
+      "x2",
+      W-RIGHT
+    );
+
+
+    line.setAttribute(
+      "y1",
+      y
+    );
+
+
+    line.setAttribute(
+      "y2",
+      y
+    );
+
+
+    line.setAttribute(
+      "stroke",
+      "rgba(255,255,255,.08)"
+    );
+
+
+    line.setAttribute(
+      "stroke-width",
+      "1"
+    );
+
+
+    svg.appendChild(
+      line
+    );
+
+  }
+
+
+  /*
+    Ligne principale.
+  */
+
   const points =
     list
       .map(
-        (item,index) =>
-          xAt(index)
-          +
-          ","
-          +
-          yAt(
-            item.interventions
-          )
+        function(
+          item,
+          index
+        ){
+
+          return (
+            xAt(index)
+            +
+            ","
+            +
+            yAt(
+              item.interventions
+            )
+          );
+
+        }
       )
       .join(" ");
 
@@ -2776,7 +2910,7 @@ function renderChart(
 
   polyline.setAttribute(
     "stroke-width",
-    "5"
+    "4"
   );
 
 
@@ -2796,6 +2930,10 @@ function renderChart(
     polyline
   );
 
+
+  /*
+    Points, valeurs et années.
+  */
 
   list.forEach(
     function(
@@ -2836,13 +2974,13 @@ function renderChart(
 
       circle.setAttribute(
         "r",
-        7
+        6
       );
 
 
       circle.setAttribute(
         "fill",
-        "#fff"
+        "#ffffff"
       );
 
 
@@ -2863,105 +3001,137 @@ function renderChart(
       );
 
 
-      const text =
+      /*
+        Valeur.
+      */
+
+      const value =
         document.createElementNS(
           "http://www.w3.org/2000/svg",
           "text"
         );
 
 
-      text.setAttribute(
+      value.setAttribute(
         "x",
         x
       );
 
 
-      text.setAttribute(
+      value.setAttribute(
         "y",
         Math.max(
-          18,
+          17,
           y - 14
         )
       );
 
 
-      text.setAttribute(
+      value.setAttribute(
         "text-anchor",
         "middle"
       );
 
 
-      text.setAttribute(
+      value.setAttribute(
         "fill",
-        "#fff"
+        "#ffffff"
       );
 
 
-      text.setAttribute(
+      value.setAttribute(
         "font-size",
-        "17"
+        "15"
       );
 
 
-      text.setAttribute(
+      value.setAttribute(
         "font-weight",
         "900"
       );
 
 
-      text.textContent =
+      value.textContent =
         item.interventions;
 
 
       svg.appendChild(
-        text
+        value
       );
 
 
-      const yearText =
+      /*
+        Année.
+      */
+
+      const year =
         document.createElementNS(
           "http://www.w3.org/2000/svg",
           "text"
         );
 
 
-      yearText.setAttribute(
+      year.setAttribute(
         "x",
         x
       );
 
 
-      yearText.setAttribute(
+      year.setAttribute(
         "y",
-        H - 20
+        H - 14
       );
 
 
-      yearText.setAttribute(
+      year.setAttribute(
         "text-anchor",
         "middle"
       );
 
 
-      yearText.setAttribute(
+      year.setAttribute(
         "fill",
-        "rgba(255,255,255,.72)"
+        "rgba(255,255,255,.76)"
       );
 
 
-      yearText.setAttribute(
+      year.setAttribute(
         "font-size",
-        "16"
+        "14"
       );
 
 
-      yearText.textContent =
+      year.setAttribute(
+        "font-weight",
+        "750"
+      );
+
+
+      year.textContent =
         item.year;
 
 
       svg.appendChild(
-        yearText
+        year
       );
+
+    }
+  );
+
+
+  /*
+    À chaque nouveau rendu,
+    on se place automatiquement
+    sur les années récentes.
+  */
+
+  requestAnimationFrame(
+    function(){
+
+      scroller.scrollLeft =
+        scroller.scrollWidth
+        -
+        scroller.clientWidth;
 
     }
   );
@@ -2970,7 +3140,7 @@ function renderChart(
 
 
 /* =========================================================
-   IMPORT PHOTO
+   IMPORT
 ========================================================= */
 
 function openUpload(){
@@ -3039,9 +3209,8 @@ function openUpload(){
     Date.now();
 
 
-  $("uploadFrame")
-    .src =
-      url;
+  $("uploadFrame").src =
+    url;
 
 
   $("uploadOverlay")
@@ -3066,15 +3235,14 @@ function closeUpload(){
     );
 
 
-  $("uploadFrame")
-    .src =
-      "about:blank";
+  $("uploadFrame").src =
+    "about:blank";
 
 }
 
 
 /* =========================================================
-   RETOUR IMPORT
+   RETOUR DE L'IMPORT
 ========================================================= */
 
 window.addEventListener(
@@ -3093,8 +3261,43 @@ window.addEventListener(
       "stats-upload-success"
     ){
 
-      STATS_LOADED =
-        false;
+      const capture =
+        data.capture;
+
+
+      if(
+        capture
+        &&
+        capture.id
+      ){
+
+        STATS.captures =
+          STATS.captures.filter(
+            item =>
+              String(
+                item.id
+              )
+              !==
+              String(
+                capture.id
+              )
+          );
+
+
+        STATS.captures.push(
+          capture
+        );
+
+
+        saveCache();
+
+
+        renderAll(
+          capture.year,
+          capture.month
+        );
+
+      }
 
     }
 
@@ -3108,29 +3311,7 @@ window.addEventListener(
       closeUpload();
 
 
-      STATS_LOADED =
-        false;
-
-
-      setTimeout(
-        async function(){
-
-          try{
-
-            await ensureStatsLoaded();
-
-          }
-          catch(err){
-
-            console.error(
-              err
-            );
-
-          }
-
-        },
-        250
-      );
+      refreshFromServer();
 
     }
 
@@ -3191,37 +3372,24 @@ function updateAdminUi(){
     );
 
 
-  if(
-    STATS_LOADED
-  ){
+  renderCaptures();
 
-    renderCaptures();
-
-    renderAnnual();
-
-  }
+  renderAnnual();
 
 }
 
 
 /* =========================================================
-   OUVERTURE ACCORDÉONS
+   ACCORDÉONS
 ========================================================= */
 
-async function toggleAccordion(
-  accordionId,
-  headerId
+function toggleAccordion(
+  accordionId
 ){
 
   const accordion =
     $(
       accordionId
-    );
-
-
-  const header =
-    $(
-      headerId
     );
 
 
@@ -3240,32 +3408,35 @@ async function toggleAccordion(
     );
 
 
-  header.setAttribute(
-    "aria-expanded",
-    opening
-      ?
-      "true"
-      :
-      "false"
-  );
-
+  /*
+    Quand on ouvre l'activité annuelle,
+    on replace le graphique sur les
+    années les plus récentes.
+  */
 
   if(
     opening
+    &&
+    accordionId
+    ===
+    "annualAccordion"
   ){
 
-    try{
+    setTimeout(
+      function(){
 
-      await ensureStatsLoaded();
+        const scroller =
+          $("chartScroller");
 
-    }
-    catch(err){
 
-      alert(
-        "Impossible de charger les statistiques."
-      );
+        scroller.scrollLeft =
+          scroller.scrollWidth
+          -
+          scroller.clientWidth;
 
-    }
+      },
+      50
+    );
 
   }
 
@@ -3323,20 +3494,24 @@ $("saveAnnualBtn")
 
 $("monthlyHeader")
   .onclick =
-    () =>
+    function(){
+
       toggleAccordion(
-        "monthlyAccordion",
-        "monthlyHeader"
+        "monthlyAccordion"
       );
+
+    };
 
 
 $("annualHeader")
   .onclick =
-    () =>
+    function(){
+
       toggleAccordion(
-        "annualAccordion",
-        "annualHeader"
+        "annualAccordion"
       );
+
+    };
 
 
 $("yearSelect")
@@ -3371,7 +3546,29 @@ function init(){
     "admin";
 
 
+  /*
+    Affichage immédiat
+    depuis le cache.
+  */
+
+  loadCache();
+
+
+  renderAll();
+
+
   updateAdminUi();
+
+
+  /*
+    Actualisation Google
+    en arrière-plan.
+  */
+
+  setTimeout(
+    refreshFromServer,
+    50
+  );
 
 }
 
@@ -3381,4 +3578,5 @@ init();
 </script>
 
 </body>
+
 </html>
