@@ -24,8 +24,6 @@
   --violet1:rgba(104,82,139,.52);
   --violet2:rgba(61,47,84,.46);
 
-  --panel:rgba(8,8,8,.52);
-
   --green:#168039;
   --red:#a71f1f;
 
@@ -85,7 +83,7 @@ body{
 
 
 /* =========================================================
-   CONTENEUR
+   PAGE
 ========================================================= */
 
 .wrap{
@@ -96,7 +94,7 @@ body{
 
 
 /* =========================================================
-   BANDEAU HAUT
+   EN-TÊTE
 ========================================================= */
 
 .topbar{
@@ -148,6 +146,11 @@ body{
   gap:7px;
 }
 
+
+/* =========================================================
+   BOUTONS
+========================================================= */
+
 .btn{
   min-height:42px;
 
@@ -177,6 +180,10 @@ body{
   transform:scale(.98);
 }
 
+.btn:disabled{
+  opacity:.55;
+}
+
 .lockBtn{
   width:46px;
   min-width:46px;
@@ -186,9 +193,21 @@ body{
   font-size:20px;
 }
 
+.btnGreen{
+  background:
+    rgba(22,128,57,.88)
+    !important;
+}
+
+.btnRed{
+  background:
+    rgba(167,31,31,.88)
+    !important;
+}
+
 
 /* =========================================================
-   ADMIN
+   ADMINISTRATION
 ========================================================= */
 
 .adminPanel{
@@ -230,21 +249,9 @@ body{
   flex-wrap:wrap;
 }
 
-.btnGreen{
-  background:
-    rgba(22,128,57,.88)
-    !important;
-}
-
-.btnRed{
-  background:
-    rgba(167,31,31,.88)
-    !important;
-}
-
 
 /* =========================================================
-   FORMULAIRE ANNUEL ADMIN
+   FORMULAIRE ACTIVITÉ ANNUELLE
 ========================================================= */
 
 .annualForm{
@@ -261,6 +268,43 @@ body{
 .annualForm button{
   grid-column:1 / -1;
 }
+
+.saveStatus{
+  display:none;
+
+  grid-column:1 / -1;
+
+  padding:9px 12px;
+
+  border-radius:12px;
+
+  text-align:center;
+
+  font-size:14px;
+  font-weight:850;
+
+  background:
+    rgba(255,255,255,.07);
+}
+
+.saveStatus.show{
+  display:block;
+}
+
+.saveStatus.ok{
+  background:
+    rgba(22,128,57,.30);
+}
+
+.saveStatus.error{
+  background:
+    rgba(167,31,31,.34);
+}
+
+
+/* =========================================================
+   CHAMPS
+========================================================= */
 
 input,
 select{
@@ -355,13 +399,7 @@ select option{
   -webkit-backdrop-filter:blur(8px);
 }
 
-.accordionHeader:active{
-  filter:brightness(.94);
-}
-
 .accordionArrow{
-  flex:0 0 auto;
-
   font-size:17px;
 
   transition:
@@ -392,16 +430,18 @@ select option{
 
 
 /* =========================================================
-   CHARGEMENT INTERNE
+   CHARGEMENT
 ========================================================= */
 
 .sectionLoading{
+  display:none;
+
   padding:16px 8px;
 
   text-align:center;
 
   color:
-    rgba(255,255,255,.66);
+    rgba(255,255,255,.68);
 
   font-size:15px;
   font-weight:800;
@@ -453,8 +493,6 @@ select option{
 ========================================================= */
 
 .captureCard{
-  position:relative;
-
   overflow:hidden;
 
   margin-top:12px;
@@ -616,7 +654,7 @@ select option{
 
 
 /* =========================================================
-   OVERLAY IMPORT
+   UPLOAD
 ========================================================= */
 
 .uploadOverlay{
@@ -681,13 +719,29 @@ select option{
   height:100%;
 
   border:0;
+}
 
-  background:#151515;
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:600px){
+
+  .pageTitle{
+    font-size:18px;
+  }
+
+  .accordionHeader{
+    font-size:18px;
+  }
+
 }
 
 </style>
 
 </head>
+
 
 <body>
 
@@ -704,20 +758,26 @@ select option{
       Statistiques
     </h1>
 
+
     <div class="topActions">
 
       <button
         id="adminLock"
         class="btn lockBtn"
         type="button">
+
         🔒
+
       </button>
+
 
       <button
         id="backBtn"
         class="btn"
         type="button">
+
         Retour
+
       </button>
 
     </div>
@@ -725,13 +785,19 @@ select option{
   </header>
 
 
+  <!-- =====================================================
+       ADMINISTRATION
+  ====================================================== -->
+
   <section
     id="adminPanel"
     class="adminPanel">
 
+
     <div class="adminTitle">
       Administration
     </div>
+
 
     <div class="adminButtons">
 
@@ -746,20 +812,25 @@ select option{
 
     </div>
 
+
     <div class="annualForm">
 
       <input
         id="annualYearInput"
         type="number"
+        inputmode="numeric"
         min="2000"
         max="2200"
         placeholder="Année">
 
+
       <input
         id="annualValueInput"
         type="number"
+        inputmode="numeric"
         min="0"
         placeholder="Interventions">
+
 
       <button
         id="saveAnnualBtn"
@@ -770,14 +841,25 @@ select option{
 
       </button>
 
+
+      <div
+        id="saveStatus"
+        class="saveStatus">
+      </div>
+
     </div>
 
   </section>
 
 
+  <!-- =====================================================
+       MENSUEL
+  ====================================================== -->
+
   <section
     id="monthlyAccordion"
     class="accordion">
+
 
     <button
       id="monthlyHeader"
@@ -798,69 +880,74 @@ select option{
 
     <div class="accordionContent">
 
+
       <div
         id="monthlyLoading"
-        class="sectionLoading"
-        style="display:none;">
+        class="sectionLoading">
 
         Chargement…
 
       </div>
 
 
-      <div id="monthlyBody">
+      <p class="intro">
+        Sélectionnez une année puis un mois.
+      </p>
 
-        <p class="intro">
-          Sélectionnez une année puis un mois.
-        </p>
 
-        <div class="selectGrid">
+      <div class="selectGrid">
 
-          <div>
+        <div>
 
-            <label
-              class="fieldLabel"
-              for="yearSelect">
+          <label
+            class="fieldLabel"
+            for="yearSelect">
 
-              Année
+            Année
 
-            </label>
+          </label>
 
-            <select id="yearSelect">
-            </select>
-
-          </div>
-
-          <div>
-
-            <label
-              class="fieldLabel"
-              for="monthSelect">
-
-              Mois
-
-            </label>
-
-            <select id="monthSelect">
-            </select>
-
-          </div>
+          <select id="yearSelect">
+          </select>
 
         </div>
 
-        <div id="capturesContainer">
+
+        <div>
+
+          <label
+            class="fieldLabel"
+            for="monthSelect">
+
+            Mois
+
+          </label>
+
+          <select id="monthSelect">
+          </select>
+
         </div>
 
       </div>
+
+
+      <div id="capturesContainer">
+      </div>
+
 
     </div>
 
   </section>
 
 
+  <!-- =====================================================
+       ANNUEL
+  ====================================================== -->
+
   <section
     id="annualAccordion"
     class="accordion">
+
 
     <button
       id="annualHeader"
@@ -881,10 +968,10 @@ select option{
 
     <div class="accordionContent">
 
+
       <div
         id="annualLoading"
-        class="sectionLoading"
-        style="display:none;">
+        class="sectionLoading">
 
         Chargement…
 
@@ -907,12 +994,12 @@ select option{
         <svg
           id="chartSvg"
           class="chartSvg"
-          viewBox="0 0 700 300"
-          preserveAspectRatio="xMidYMid meet">
+          viewBox="0 0 700 300">
 
         </svg>
 
       </div>
+
 
     </div>
 
@@ -922,15 +1009,21 @@ select option{
 </div>
 
 
+<!-- =======================================================
+     UPLOAD
+======================================================= -->
+
 <div
   id="uploadOverlay"
   class="uploadOverlay">
+
 
   <div class="uploadTop">
 
     <div class="uploadTitle">
       Ajouter une capture
     </div>
+
 
     <button
       id="cancelUpload"
@@ -943,32 +1036,43 @@ select option{
 
   </div>
 
+
   <div class="uploadWindow">
 
     <iframe
       id="uploadFrame"
       class="uploadFrame"
       src="about:blank">
+
     </iframe>
 
   </div>
+
 
 </div>
 
 
 <script>
 
+/* =========================================================
+   CONFIGURATION
+========================================================= */
+
 const API =
   "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+
 
 const BACK_URL =
   "informations.html";
 
+
 const EMAIL_KEY =
   "cs_portail_email_v1";
 
+
 const ROLE_KEY =
   "cs_role_v1";
+
 
 const MONTHS = [
   "",
@@ -986,22 +1090,32 @@ const MONTHS = [
   "Décembre"
 ];
 
+
 const $ =
   id =>
     document.getElementById(id);
+
 
 let STATS = {
   captures:[],
   annual:[]
 };
 
-let IS_ADMIN = false;
 
-let ADMIN_OPEN = false;
+let IS_ADMIN =
+  false;
 
-let STATS_LOADED = false;
 
-let STATS_LOADING = null;
+let ADMIN_OPEN =
+  false;
+
+
+let STATS_LOADED =
+  false;
+
+
+let STATS_LOADING =
+  null;
 
 
 /* =========================================================
@@ -1039,13 +1153,19 @@ function getRole(){
 
 
 /* =========================================================
-   JSONP
+   JSONP SIMPLE
 ========================================================= */
 
-function jsonp(params){
+function jsonpOnce(
+  params,
+  timeoutMs = 25000
+){
 
   return new Promise(
-    function(resolve,reject){
+    function(
+      resolve,
+      reject
+    ){
 
       const callback =
         "statsCb_"
@@ -1058,15 +1178,18 @@ function jsonp(params){
           .toString(36)
           .slice(2);
 
+
       const script =
         document.createElement(
           "script"
         );
 
+
       let finished =
         false;
 
-      const timeout =
+
+      const timer =
         setTimeout(
           function(){
 
@@ -1079,8 +1202,9 @@ function jsonp(params){
             );
 
           },
-          20000
+          timeoutMs
         );
+
 
       function cleanup(){
 
@@ -1088,37 +1212,59 @@ function jsonp(params){
           return;
         }
 
-        finished = true;
 
-        clearTimeout(timeout);
+        finished =
+          true;
+
+
+        clearTimeout(
+          timer
+        );
+
 
         try{
-          delete window[callback];
+
+          delete window[
+            callback
+          ];
+
         }catch(err){}
 
+
         try{
+
           script.remove();
+
         }catch(err){}
 
       }
 
-      window[callback] =
+
+      window[
+        callback
+      ] =
         function(data){
 
           cleanup();
 
-          resolve(data);
+          resolve(
+            data
+          );
 
         };
 
+
       const query =
         new URLSearchParams();
+
 
       Object.entries(
         params || {}
       )
       .forEach(
-        function([key,value]){
+        function(
+          [key,value]
+        ){
 
           if(
             value !== undefined
@@ -1136,15 +1282,22 @@ function jsonp(params){
         }
       );
 
+
       query.set(
         "callback",
         callback
       );
 
+
       query.set(
         "_",
         Date.now()
+        +
+        "-"
+        +
+        Math.random()
       );
+
 
       script.src =
         API
@@ -1152,6 +1305,7 @@ function jsonp(params){
         "?"
         +
         query.toString();
+
 
       script.onerror =
         function(){
@@ -1166,6 +1320,7 @@ function jsonp(params){
 
         };
 
+
       document.body.appendChild(
         script
       );
@@ -1177,52 +1332,70 @@ function jsonp(params){
 
 
 /* =========================================================
-   CHARGEMENT À LA DEMANDE
+   JSONP AVEC RELANCE AUTOMATIQUE
 ========================================================= */
 
-async function ensureStatsLoaded(){
+async function jsonpRetry(
+  params,
+  attempts = 3
+){
 
-  if(STATS_LOADED){
-    return;
+  let lastError =
+    null;
+
+
+  for(
+    let attempt=1;
+    attempt<=attempts;
+    attempt++
+  ){
+
+    try{
+
+      return await jsonpOnce(
+        params,
+        25000
+      );
+
+    }
+    catch(err){
+
+      lastError =
+        err;
+
+
+      if(
+        attempt
+        <
+        attempts
+      ){
+
+        await new Promise(
+          resolve =>
+            setTimeout(
+              resolve,
+              700 * attempt
+            )
+        );
+
+      }
+
+    }
+
   }
 
-  if(STATS_LOADING){
-    return STATS_LOADING;
-  }
 
-  $("monthlyLoading").style.display =
-    "block";
-
-  $("annualLoading").style.display =
-    "block";
-
-  STATS_LOADING =
-    loadStats(false);
-
-  try{
-
-    await STATS_LOADING;
-
-    STATS_LOADED = true;
-
-  }
-  finally{
-
-    STATS_LOADING = null;
-
-    $("monthlyLoading").style.display =
-      "none";
-
-    $("annualLoading").style.display =
-      "none";
-
-  }
+  throw lastError
+    ||
+    new Error(
+      "Connexion impossible"
+    );
 
 }
 
 
 /* =========================================================
-   CHARGEMENT DONNÉES
+   CHARGEMENT
 ========================================================= */
 
 async function loadStats(
@@ -1232,16 +1405,20 @@ async function loadStats(
   const oldYear =
     $("yearSelect").value;
 
+
   const oldMonth =
     $("monthSelect").value;
 
+
   const result =
-    await jsonp({
+    await jsonpRetry(
+      {
+        view:
+          "statistiques_list"
+      },
+      2
+    );
 
-      view:
-        "statistiques_list"
-
-    });
 
   if(
     !result
@@ -1260,29 +1437,34 @@ async function loadStats(
 
   }
 
+
   STATS.captures =
     Array.isArray(
       result.captures
     )
-    ?
-    result.captures
-    :
-    [];
+      ?
+      result.captures
+      :
+      [];
+
 
   STATS.annual =
     Array.isArray(
       result.annual
     )
-    ?
-    result.annual
-    :
-    Array.isArray(
-      result.annuel
-    )
-    ?
-    result.annuel
-    :
-    [];
+      ?
+      result.annual
+
+      :
+
+      Array.isArray(
+        result.annuel
+      )
+        ?
+        result.annuel
+        :
+        [];
+
 
   buildYearSelect(
     keepSelection
@@ -1292,6 +1474,7 @@ async function loadStats(
       ""
   );
 
+
   buildMonthSelect(
     keepSelection
       ?
@@ -1299,6 +1482,7 @@ async function loadStats(
       :
       ""
   );
+
 
   renderCaptures();
 
@@ -1308,7 +1492,74 @@ async function loadStats(
 
 
 /* =========================================================
-   ANNÉES
+   CHARGEMENT À LA DEMANDE
+========================================================= */
+
+async function ensureStatsLoaded(){
+
+  if(
+    STATS_LOADED
+  ){
+    return;
+  }
+
+
+  if(
+    STATS_LOADING
+  ){
+
+    return STATS_LOADING;
+
+  }
+
+
+  $("monthlyLoading")
+    .style.display =
+      "block";
+
+
+  $("annualLoading")
+    .style.display =
+      "block";
+
+
+  STATS_LOADING =
+    loadStats(
+      false
+    );
+
+
+  try{
+
+    await STATS_LOADING;
+
+
+    STATS_LOADED =
+      true;
+
+  }
+  finally{
+
+    STATS_LOADING =
+      null;
+
+
+    $("monthlyLoading")
+      .style.display =
+        "none";
+
+
+    $("annualLoading")
+      .style.display =
+        "none";
+
+  }
+
+}
+
+
+/* =========================================================
+   ANNÉES MENSUELLES
 ========================================================= */
 
 function getCaptureYears(){
@@ -1316,24 +1567,33 @@ function getCaptureYears(){
   const years =
     new Set();
 
+
   STATS.captures
     .forEach(
       function(item){
 
-        const y =
+        const year =
           Number(
             item.year
           );
 
-        if(y){
-          years.add(y);
+
+        if(year){
+
+          years.add(
+            year
+          );
+
         }
 
       }
     );
 
+
   return Array
-    .from(years)
+    .from(
+      years
+    )
     .sort(
       (a,b) =>
         b-a
@@ -1349,36 +1609,30 @@ function buildYearSelect(
   const select =
     $("yearSelect");
 
+
   const years =
     getCaptureYears();
+
 
   select.innerHTML =
     "";
 
+
   if(
-    years.length === 0
+    !years.length
   ){
 
-    const option =
-      document.createElement(
-        "option"
-      );
+    select.innerHTML =
+      '<option value="">—</option>';
 
-    option.value =
-      "";
-
-    option.textContent =
-      "—";
-
-    select.appendChild(
-      option
-    );
 
     buildMonthSelect();
+
 
     return;
 
   }
+
 
   years.forEach(
     function(year){
@@ -1388,11 +1642,14 @@ function buildYearSelect(
           "option"
         );
 
+
       option.value =
-        String(year);
+        year;
+
 
       option.textContent =
-        String(year);
+        year;
+
 
       select.appendChild(
         option
@@ -1400,6 +1657,7 @@ function buildYearSelect(
 
     }
   );
+
 
   if(
     preferredYear
@@ -1412,17 +1670,7 @@ function buildYearSelect(
   ){
 
     select.value =
-      String(
-        preferredYear
-      );
-
-  }
-  else{
-
-    select.value =
-      String(
-        years[0]
-      );
+      preferredYear;
 
   }
 
@@ -1442,8 +1690,10 @@ function buildMonthSelect(
       $("yearSelect").value
     );
 
+
   const select =
     $("monthSelect");
+
 
   const months =
     Array.from(
@@ -1480,31 +1730,23 @@ function buildMonthSelect(
         b-a
     );
 
+
   select.innerHTML =
     "";
 
+
   if(
-    months.length === 0
+    !months.length
   ){
 
-    const option =
-      document.createElement(
-        "option"
-      );
+    select.innerHTML =
+      '<option value="">—</option>';
 
-    option.value =
-      "";
-
-    option.textContent =
-      "—";
-
-    select.appendChild(
-      option
-    );
 
     return;
 
   }
+
 
   months.forEach(
     function(month){
@@ -1514,11 +1756,16 @@ function buildMonthSelect(
           "option"
         );
 
+
       option.value =
-        String(month);
+        month;
+
 
       option.textContent =
-        MONTHS[month];
+        MONTHS[
+          month
+        ];
+
 
       select.appendChild(
         option
@@ -1526,6 +1773,7 @@ function buildMonthSelect(
 
     }
   );
+
 
   if(
     preferredMonth
@@ -1538,17 +1786,7 @@ function buildMonthSelect(
   ){
 
     select.value =
-      String(
-        preferredMonth
-      );
-
-  }
-  else{
-
-    select.value =
-      String(
-        months[0]
-      );
+      preferredMonth;
 
   }
 
@@ -1563,16 +1801,6 @@ function captureTitle(
   capture
 ){
 
-  const year =
-    Number(
-      capture.year
-    );
-
-  const month =
-    Number(
-      capture.month
-    );
-
   const value =
     String(
       capture.title
@@ -1581,21 +1809,31 @@ function captureTitle(
     )
     .trim();
 
+
   if(
     !value
     ||
-    /GMT/i.test(value)
+    /GMT/i.test(
+      value
+    )
   ){
 
     return (
-      MONTHS[month]
+      MONTHS[
+        Number(
+          capture.month
+        )
+      ]
       +
       " "
       +
-      year
+      Number(
+        capture.year
+      )
     );
 
   }
+
 
   return value;
 
@@ -1603,7 +1841,7 @@ function captureTitle(
 
 
 /* =========================================================
-   CAPTURES
+   AFFICHAGE CAPTURES
 ========================================================= */
 
 function renderCaptures(){
@@ -1613,13 +1851,16 @@ function renderCaptures(){
       $("yearSelect").value
     );
 
+
   const month =
     Number(
       $("monthSelect").value
     );
 
+
   const container =
     $("capturesContainer");
+
 
   const list =
     STATS.captures
@@ -1640,26 +1881,23 @@ function renderCaptures(){
       )
 
       .sort(
-        function(a,b){
-
-          return (
-            Number(
-              a.order || 0
-            )
-            -
-            Number(
-              b.order || 0
-            )
-          );
-
-        }
+        (a,b) =>
+          Number(
+            a.order || 0
+          )
+          -
+          Number(
+            b.order || 0
+          )
       );
+
 
   container.innerHTML =
     "";
 
+
   if(
-    list.length === 0
+    !list.length
   ){
 
     container.innerHTML =
@@ -1669,9 +1907,11 @@ function renderCaptures(){
       +
       '</div>';
 
+
     return;
 
   }
+
 
   list.forEach(
     function(capture){
@@ -1681,49 +1921,52 @@ function renderCaptures(){
           "div"
         );
 
+
       card.className =
         "captureCard";
+
 
       const title =
         document.createElement(
           "div"
         );
 
+
       title.className =
         "captureTitle";
+
 
       title.textContent =
         captureTitle(
           capture
         );
 
-      const img =
+
+      const image =
         document.createElement(
           "img"
         );
 
-      img.className =
+
+      image.className =
         "captureImage";
 
-      img.src =
-        String(
-          capture.image_url
-          ||
-          ""
-        );
 
-      img.alt =
-        captureTitle(
-          capture
-        );
+      image.src =
+        capture.image_url
+        ||
+        "";
+
 
       card.appendChild(
         title
       );
 
+
       card.appendChild(
-        img
+        image
       );
+
 
       if(
         IS_ADMIN
@@ -1736,39 +1979,47 @@ function renderCaptures(){
             "div"
           );
 
+
         actions.className =
           "captureActions";
 
-        const del =
+
+        const button =
           document.createElement(
             "button"
           );
 
-        del.type =
-          "button";
 
-        del.className =
+        button.className =
           "deleteBtn";
 
-        del.textContent =
+
+        button.textContent =
           "Supprimer";
 
-        del.onclick =
-          function(){
 
+        button.onclick =
+          () =>
             deleteCapture(
               capture.id
             );
 
-          };
 
-        actions.appendChild(del);
+        actions.appendChild(
+          button
+        );
 
-        card.appendChild(actions);
+
+        card.appendChild(
+          actions
+        );
 
       }
 
-      container.appendChild(card);
+
+      container.appendChild(
+        card
+      );
 
     }
   );
@@ -1780,11 +2031,9 @@ function renderCaptures(){
    SUPPRESSION CAPTURE
 ========================================================= */
 
-async function deleteCapture(id){
-
-  if(!id){
-    return;
-  }
+async function deleteCapture(
+  id
+){
 
   if(
     !confirm(
@@ -1794,64 +2043,91 @@ async function deleteCapture(id){
     return;
   }
 
+
+  const oldCaptures =
+    STATS.captures.slice();
+
+
   STATS.captures =
     STATS.captures.filter(
       item =>
-        String(item.id)
+        String(
+          item.id
+        )
         !==
-        String(id)
+        String(
+          id
+        )
     );
+
 
   buildYearSelect(
     $("yearSelect").value
   );
 
+
   buildMonthSelect(
     $("monthSelect").value
   );
 
+
   renderCaptures();
+
 
   try{
 
     const result =
-      await jsonp({
+      await jsonpRetry(
+        {
 
-        view:
-          "statistiques_capture_delete",
+          view:
+            "statistiques_capture_delete",
 
-        id:id,
+          id:
+            id,
 
-        email:
-          getEmail()
+          email:
+            getEmail()
 
-      });
+        },
+        3
+      );
+
 
     if(
-      result
-      &&
+      !result
+      ||
       result.ok === false
     ){
 
       throw new Error(
+        result &&
         result.error
-        ||
-        "Suppression impossible"
+          ?
+          result.error
+          :
+          "Suppression impossible"
       );
 
     }
 
-  }catch(err){
+  }
+  catch(err){
+
+    STATS.captures =
+      oldCaptures;
+
+
+    buildYearSelect();
+
+    buildMonthSelect();
+
+    renderCaptures();
+
 
     alert(
-      "Erreur lors de la suppression : "
-      +
-      err.message
+      "Suppression impossible après plusieurs tentatives."
     );
-
-    STATS_LOADED = false;
-
-    await ensureStatsLoaded();
 
   }
 
@@ -1867,29 +2143,25 @@ function normalizeAnnual(){
   return STATS.annual
 
     .map(
-      function(item){
+      item => ({
 
-        return {
+        year:
+          Number(
+            item.year
+          ),
 
-          year:
-            Number(
-              item.year
-            ),
+        interventions:
+          Number(
+            item.interventions
+            ??
+            item.value
+            ??
+            item.total
+            ??
+            0
+          )
 
-          interventions:
-            Number(
-              item.interventions
-              ??
-              item.value
-              ??
-              item.total
-              ??
-              0
-            )
-
-        };
-
-      }
+      })
     )
 
     .filter(
@@ -1909,19 +2181,26 @@ function normalizeAnnual(){
 }
 
 
+/* =========================================================
+   AFFICHAGE ANNUEL
+========================================================= */
+
 function renderAnnual(){
 
   const container =
     $("annualContainer");
 
+
   const list =
     normalizeAnnual();
+
 
   container.innerHTML =
     "";
 
+
   if(
-    list.length === 0
+    !list.length
   ){
 
     container.innerHTML =
@@ -1931,12 +2210,16 @@ function renderAnnual(){
       +
       '</div>';
 
-    $("chartBox").style.display =
-      "none";
+
+    $("chartBox")
+      .style.display =
+        "none";
+
 
     return;
 
   }
+
 
   list
     .slice()
@@ -1949,36 +2232,50 @@ function renderAnnual(){
             "div"
           );
 
+
         row.className =
           "annualRow";
+
 
         const year =
           document.createElement(
             "div"
           );
 
+
         year.className =
           "annualYear";
 
+
         year.textContent =
           item.year;
+
 
         const value =
           document.createElement(
             "div"
           );
 
+
         value.className =
           "annualValue";
+
 
         value.textContent =
           item.interventions
           +
           " interventions";
 
-        row.appendChild(year);
 
-        row.appendChild(value);
+        row.appendChild(
+          year
+        );
+
+
+        row.appendChild(
+          value
+        );
+
 
         if(
           IS_ADMIN
@@ -1986,45 +2283,82 @@ function renderAnnual(){
           ADMIN_OPEN
         ){
 
-          const del =
+          const button =
             document.createElement(
               "button"
             );
 
-          del.type =
-            "button";
 
-          del.className =
+          button.className =
             "annualDelete";
 
-          del.textContent =
+
+          button.textContent =
             "×";
 
-          del.onclick =
-            function(){
 
+          button.onclick =
+            () =>
               deleteAnnual(
                 item.year
               );
 
-            };
 
-          row.appendChild(del);
+          row.appendChild(
+            button
+          );
 
         }
 
-        container.appendChild(row);
+
+        container.appendChild(
+          row
+        );
 
       }
     );
 
-  renderChart(list);
+
+  renderChart(
+    list
+  );
 
 }
 
 
 /* =========================================================
-   SAUVEGARDE ANNUELLE
+   ÉTAT ENREGISTREMENT
+========================================================= */
+
+function showSaveStatus(
+  text,
+  type
+){
+
+  const box =
+    $("saveStatus");
+
+
+  box.textContent =
+    text;
+
+
+  box.className =
+    "saveStatus show"
+    +
+    (
+      type
+        ?
+        " " + type
+        :
+        ""
+    );
+
+}
+
+
+/* =========================================================
+   ENREGISTREMENT ANNUEL
 ========================================================= */
 
 async function saveAnnual(){
@@ -2034,60 +2368,93 @@ async function saveAnnual(){
       $("annualYearInput").value
     );
 
+
   const interventions =
     Number(
       $("annualValueInput").value
     );
 
+
   if(
-    !Number.isInteger(year)
+    !Number.isInteger(
+      year
+    )
     ||
     year < 2000
     ||
     year > 2200
   ){
 
-    alert(
-      "Année incorrecte."
+    showSaveStatus(
+      "Année incorrecte.",
+      "error"
     );
+
 
     return;
 
   }
 
+
   if(
-    !Number.isFinite(
+    !Number.isInteger(
       interventions
     )
     ||
     interventions < 0
   ){
 
-    alert(
-      "Nombre d’interventions incorrect."
+    showSaveStatus(
+      "Nombre d’interventions incorrect.",
+      "error"
     );
+
 
     return;
 
   }
 
+
+  const button =
+    $("saveAnnualBtn");
+
+
+  button.disabled =
+    true;
+
+
+  button.textContent =
+    "Enregistrement…";
+
+
+  showSaveStatus(
+    "Enregistrement en cours…",
+    ""
+  );
+
+
   try{
 
     const result =
-      await jsonp({
+      await jsonpRetry(
+        {
 
-        view:
-          "statistiques_annual_set",
+          view:
+            "statistiques_annual_set",
 
-        email:
-          getEmail(),
+          email:
+            getEmail(),
 
-        year:year,
+          year:
+            year,
 
-        interventions:
-          interventions
+          interventions:
+            interventions
 
-      });
+        },
+        3
+      );
+
 
     if(
       !result
@@ -2106,23 +2473,58 @@ async function saveAnnual(){
 
     }
 
-    $("annualYearInput").value =
-      "";
 
-    $("annualValueInput").value =
-      "";
+    showSaveStatus(
+      "✓ Activité annuelle enregistrée",
+      "ok"
+    );
 
-    STATS_LOADED = false;
+
+    $("annualYearInput")
+      .value =
+        "";
+
+
+    $("annualValueInput")
+      .value =
+        "";
+
+
+    STATS_LOADED =
+      false;
+
 
     await ensureStatsLoaded();
 
-  }catch(err){
 
-    alert(
-      "Erreur : "
-      +
-      err.message
+    setTimeout(
+      function(){
+
+        $("saveStatus")
+          .className =
+            "saveStatus";
+
+      },
+      2500
     );
+
+  }
+  catch(err){
+
+    showSaveStatus(
+      "Enregistrement impossible après 3 tentatives.",
+      "error"
+    );
+
+  }
+  finally{
+
+    button.disabled =
+      false;
+
+
+    button.textContent =
+      "Enregistrer l’activité annuelle";
 
   }
 
@@ -2133,7 +2535,9 @@ async function saveAnnual(){
    SUPPRESSION ANNUELLE
 ========================================================= */
 
-async function deleteAnnual(year){
+async function deleteAnnual(
+  year
+){
 
   if(
     !confirm(
@@ -2147,51 +2551,71 @@ async function deleteAnnual(year){
     return;
   }
 
+
+  const oldAnnual =
+    STATS.annual.slice();
+
+
   STATS.annual =
     STATS.annual.filter(
       item =>
-        Number(item.year)
+        Number(
+          item.year
+        )
         !==
-        Number(year)
+        Number(
+          year
+        )
     );
 
+
   renderAnnual();
+
 
   try{
 
     const result =
-      await jsonp({
+      await jsonpRetry(
+        {
 
-        view:
-          "statistiques_annual_delete",
+          view:
+            "statistiques_annual_delete",
 
-        email:
-          getEmail(),
+          email:
+            getEmail(),
 
-        year:year
+          year:
+            year
 
-      });
+        },
+        3
+      );
+
 
     if(
-      result
-      &&
+      !result
+      ||
       result.ok === false
     ){
 
       throw new Error(
-        result.error
-        ||
         "Suppression impossible"
       );
 
     }
 
-  }catch(err){
+  }
+  catch(err){
+
+    STATS.annual =
+      oldAnnual;
+
+
+    renderAnnual();
+
 
     alert(
-      "Erreur lors de la suppression : "
-      +
-      err.message
+      "Suppression impossible après plusieurs tentatives."
     );
 
   }
@@ -2203,13 +2627,17 @@ async function deleteAnnual(year){
    GRAPHIQUE
 ========================================================= */
 
-function renderChart(list){
+function renderChart(
+  list
+){
 
   const box =
     $("chartBox");
 
+
   const svg =
     $("chartSvg");
+
 
   if(
     list.length < 2
@@ -2218,15 +2646,19 @@ function renderChart(list){
     box.style.display =
       "none";
 
+
     return;
 
   }
 
+
   box.style.display =
     "block";
 
+
   svg.innerHTML =
     "";
+
 
   const W = 700;
   const H = 300;
@@ -2236,11 +2668,22 @@ function renderChart(list){
   const TOP = 30;
   const BOTTOM = 55;
 
+
   const chartW =
-    W - LEFT - RIGHT;
+    W
+    -
+    LEFT
+    -
+    RIGHT;
+
 
   const chartH =
-    H - TOP - BOTTOM;
+    H
+    -
+    TOP
+    -
+    BOTTOM;
+
 
   const maxValue =
     Math.max(
@@ -2250,6 +2693,7 @@ function renderChart(list){
           item.interventions
       )
     );
+
 
   function xAt(index){
 
@@ -2270,6 +2714,7 @@ function renderChart(list){
 
   }
 
+
   function yAt(value){
 
     return (
@@ -2288,74 +2733,21 @@ function renderChart(list){
 
   }
 
-  for(
-    let i=0;
-    i<=4;
-    i++
-  ){
-
-    const y =
-      TOP
-      +
-      chartH
-      *
-      i
-      /
-      4;
-
-    const line =
-      document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "line"
-      );
-
-    line.setAttribute(
-      "x1",
-      LEFT
-    );
-
-    line.setAttribute(
-      "x2",
-      W-RIGHT
-    );
-
-    line.setAttribute(
-      "y1",
-      y
-    );
-
-    line.setAttribute(
-      "y2",
-      y
-    );
-
-    line.setAttribute(
-      "stroke",
-      "rgba(255,255,255,.12)"
-    );
-
-    svg.appendChild(line);
-
-  }
 
   const points =
     list
       .map(
-        function(item,index){
-
-          return (
-            xAt(index)
-            +
-            ","
-            +
-            yAt(
-              item.interventions
-            )
-          );
-
-        }
+        (item,index) =>
+          xAt(index)
+          +
+          ","
+          +
+          yAt(
+            item.interventions
+          )
       )
       .join(" ");
+
 
   const polyline =
     document.createElementNS(
@@ -2363,48 +2755,65 @@ function renderChart(list){
       "polyline"
     );
 
+
   polyline.setAttribute(
     "points",
     points
   );
+
 
   polyline.setAttribute(
     "fill",
     "none"
   );
 
+
   polyline.setAttribute(
     "stroke",
     "#f28a21"
   );
+
 
   polyline.setAttribute(
     "stroke-width",
     "5"
   );
 
+
   polyline.setAttribute(
     "stroke-linecap",
     "round"
   );
+
 
   polyline.setAttribute(
     "stroke-linejoin",
     "round"
   );
 
-  svg.appendChild(polyline);
+
+  svg.appendChild(
+    polyline
+  );
+
 
   list.forEach(
-    function(item,index){
+    function(
+      item,
+      index
+    ){
 
       const x =
-        xAt(index);
+        xAt(
+          index
+        );
+
 
       const y =
         yAt(
           item.interventions
         );
+
 
       const circle =
         document.createElementNS(
@@ -2412,122 +2821,147 @@ function renderChart(list){
           "circle"
         );
 
+
       circle.setAttribute(
         "cx",
         x
       );
+
 
       circle.setAttribute(
         "cy",
         y
       );
 
+
       circle.setAttribute(
         "r",
         7
       );
 
+
       circle.setAttribute(
         "fill",
         "#fff"
       );
+
 
       circle.setAttribute(
         "stroke",
         "#f28a21"
       );
 
+
       circle.setAttribute(
         "stroke-width",
         "4"
       );
 
-      svg.appendChild(circle);
 
-      const value =
+      svg.appendChild(
+        circle
+      );
+
+
+      const text =
         document.createElementNS(
           "http://www.w3.org/2000/svg",
           "text"
         );
 
-      value.setAttribute(
+
+      text.setAttribute(
         "x",
         x
       );
 
-      value.setAttribute(
+
+      text.setAttribute(
         "y",
         Math.max(
           18,
-          y-14
+          y - 14
         )
       );
 
-      value.setAttribute(
+
+      text.setAttribute(
         "text-anchor",
         "middle"
       );
 
-      value.setAttribute(
+
+      text.setAttribute(
         "fill",
         "#fff"
       );
 
-      value.setAttribute(
+
+      text.setAttribute(
         "font-size",
         "17"
       );
 
-      value.setAttribute(
+
+      text.setAttribute(
         "font-weight",
         "900"
       );
 
-      value.textContent =
+
+      text.textContent =
         item.interventions;
 
-      svg.appendChild(value);
 
-      const year =
+      svg.appendChild(
+        text
+      );
+
+
+      const yearText =
         document.createElementNS(
           "http://www.w3.org/2000/svg",
           "text"
         );
 
-      year.setAttribute(
+
+      yearText.setAttribute(
         "x",
         x
       );
 
-      year.setAttribute(
+
+      yearText.setAttribute(
         "y",
-        H-20
+        H - 20
       );
 
-      year.setAttribute(
+
+      yearText.setAttribute(
         "text-anchor",
         "middle"
       );
 
-      year.setAttribute(
+
+      yearText.setAttribute(
         "fill",
         "rgba(255,255,255,.72)"
       );
 
-      year.setAttribute(
+
+      yearText.setAttribute(
         "font-size",
         "16"
       );
 
-      year.setAttribute(
-        "font-weight",
-        "800"
-      );
 
-      year.textContent =
+      yearText.textContent =
         item.year;
 
-      svg.appendChild(year);
+
+      svg.appendChild(
+        yearText
+      );
 
     }
   );
@@ -2536,7 +2970,7 @@ function renderChart(list){
 
 
 /* =========================================================
-   UPLOAD
+   IMPORT PHOTO
 ========================================================= */
 
 function openUpload(){
@@ -2546,10 +2980,12 @@ function openUpload(){
       $("yearSelect").value
     );
 
+
   let month =
     Number(
       $("monthSelect").value
     );
+
 
   if(!year){
 
@@ -2558,6 +2994,7 @@ function openUpload(){
         .getFullYear();
 
   }
+
 
   if(!month){
 
@@ -2569,57 +3006,75 @@ function openUpload(){
 
   }
 
+
   const url =
     API
     +
     "?view=statistiques_upload_page"
+
     +
     "&email="
     +
     encodeURIComponent(
       getEmail()
     )
+
     +
     "&year="
     +
-    encodeURIComponent(year)
+    encodeURIComponent(
+      year
+    )
+
     +
     "&month="
     +
-    encodeURIComponent(month)
+    encodeURIComponent(
+      month
+    )
+
     +
     "&_="
     +
     Date.now();
 
-  $("uploadFrame").src =
-    url;
+
+  $("uploadFrame")
+    .src =
+      url;
+
 
   $("uploadOverlay")
     .classList
-    .add("show");
+    .add(
+      "show"
+    );
 
 }
 
 
 /* =========================================================
-   FERMETURE UPLOAD
+   FERMETURE IMPORT
 ========================================================= */
 
 function closeUpload(){
 
   $("uploadOverlay")
     .classList
-    .remove("show");
+    .remove(
+      "show"
+    );
 
-  $("uploadFrame").src =
-    "about:blank";
+
+  $("uploadFrame")
+    .src =
+      "about:blank";
 
 }
 
 
 /* =========================================================
-   RETOUR APRÈS IMPORT
+   RETOUR IMPORT
 ========================================================= */
 
 window.addEventListener(
@@ -2627,7 +3082,10 @@ window.addEventListener(
   function(event){
 
     const data =
-      event.data || {};
+      event.data
+      ||
+      {};
+
 
     if(
       data.type
@@ -2635,9 +3093,11 @@ window.addEventListener(
       "stats-upload-success"
     ){
 
-      STATS_LOADED = false;
+      STATS_LOADED =
+        false;
 
     }
+
 
     if(
       data.type
@@ -2647,7 +3107,10 @@ window.addEventListener(
 
       closeUpload();
 
-      STATS_LOADED = false;
+
+      STATS_LOADED =
+        false;
+
 
       setTimeout(
         async function(){
@@ -2656,9 +3119,12 @@ window.addEventListener(
 
             await ensureStatsLoaded();
 
-          }catch(err){
+          }
+          catch(err){
 
-            console.error(err);
+            console.error(
+              err
+            );
 
           }
 
@@ -2678,30 +3144,44 @@ window.addEventListener(
 
 function updateAdminUi(){
 
-  if(!IS_ADMIN){
+  if(
+    !IS_ADMIN
+  ){
 
-    $("adminLock").style.display =
-      "none";
+    $("adminLock")
+      .style.display =
+        "none";
+
 
     $("adminPanel")
       .classList
-      .remove("show");
+      .remove(
+        "show"
+      );
 
-    ADMIN_OPEN = false;
+
+    ADMIN_OPEN =
+      false;
+
 
     return;
 
   }
 
-  $("adminLock").style.display =
-    "";
 
-  $("adminLock").textContent =
-    ADMIN_OPEN
-      ?
-      "🔓"
-      :
-      "🔒";
+  $("adminLock")
+    .style.display =
+      "";
+
+
+  $("adminLock")
+    .textContent =
+      ADMIN_OPEN
+        ?
+        "🔓"
+        :
+        "🔒";
+
 
   $("adminPanel")
     .classList
@@ -2710,7 +3190,10 @@ function updateAdminUi(){
       ADMIN_OPEN
     );
 
-  if(STATS_LOADED){
+
+  if(
+    STATS_LOADED
+  ){
 
     renderCaptures();
 
@@ -2722,28 +3205,40 @@ function updateAdminUi(){
 
 
 /* =========================================================
-   ACCORDÉONS
+   OUVERTURE ACCORDÉONS
 ========================================================= */
 
-async function openAccordion(
+async function toggleAccordion(
   accordionId,
   headerId
 ){
 
   const accordion =
-    $(accordionId);
+    $(
+      accordionId
+    );
+
 
   const header =
-    $(headerId);
+    $(
+      headerId
+    );
+
 
   const opening =
     !accordion
       .classList
-      .contains("open");
+      .contains(
+        "open"
+      );
+
 
   accordion
     .classList
-    .toggle("open");
+    .toggle(
+      "open"
+    );
+
 
   header.setAttribute(
     "aria-expanded",
@@ -2754,15 +3249,17 @@ async function openAccordion(
       "false"
   );
 
-  if(opening){
+
+  if(
+    opening
+  ){
 
     try{
 
       await ensureStatsLoaded();
 
-    }catch(err){
-
-      console.error(err);
+    }
+    catch(err){
 
       alert(
         "Impossible de charger les statistiques."
@@ -2793,12 +3290,16 @@ $("adminLock")
   .onclick =
     function(){
 
-      if(!IS_ADMIN){
+      if(
+        !IS_ADMIN
+      ){
         return;
       }
 
+
       ADMIN_OPEN =
         !ADMIN_OPEN;
+
 
       updateAdminUi();
 
@@ -2822,26 +3323,20 @@ $("saveAnnualBtn")
 
 $("monthlyHeader")
   .onclick =
-    function(){
-
-      openAccordion(
+    () =>
+      toggleAccordion(
         "monthlyAccordion",
         "monthlyHeader"
       );
 
-    };
-
 
 $("annualHeader")
   .onclick =
-    function(){
-
-      openAccordion(
+    () =>
+      toggleAccordion(
         "annualAccordion",
         "annualHeader"
       );
-
-    };
 
 
 $("yearSelect")
@@ -2875,6 +3370,7 @@ function init(){
     ===
     "admin";
 
+
   updateAdminUi();
 
 }
@@ -2885,5 +3381,4 @@ init();
 </script>
 
 </body>
-
 </html>
