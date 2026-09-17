@@ -5,1922 +5,2570 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Planning — CS Consenvoye</title>
   <style>
-    :root{
-      --txt:#f4f4f4;
-      --muted:rgba(255,255,255,.70);
-      --shadow: 0 14px 34px rgba(0,0,0,.40);
-      --radius: 22px;
-      --stroke: rgba(255,255,255,.10);
-      --orange:#d46a00;
-      --orange2:#b95800;
-      --today:#fff200;
-      --note:#fff200;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--txt);
-      background:#0b0b0b;
-      overflow:hidden;
-    }
-    .bg{
-      position:fixed; inset:0;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,.52), rgba(0,0,0,.52)),
-        url("background.png") center top/cover no-repeat;
-      z-index:-2;
-      transform:translateZ(0);
-    }
-    .bg::after{
-      content:"";
-      position:absolute; inset:0;
-      background:radial-gradient(circle at 50% 10%, rgba(255,170,60,.16), rgba(0,0,0,.64) 62%);
-      z-index:-1;
-    }
-
-    .wrap{
-      height:100vh;
-      max-width:980px;
-      margin:0 auto;
-      padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);
-      display:grid;
-      grid-template-rows:auto auto 1fr auto;
-      gap:10px;
-    }
-
-    .topbar{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding:10px 12px;
-      border-radius:18px;
-      background:linear-gradient(180deg, rgba(212,106,0,.75), rgba(185,88,0,.58));
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      min-height:46px;
-    }
-    .topbar .title{
-      font-weight:950; letter-spacing:.8px; text-transform:uppercase;
-      font-size:18px; margin:0; white-space:nowrap;
-    }
-
-    .yearSelect{
-      margin-left:6px;
-      padding:5px 28px 5px 10px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.22);
-      background:rgba(0,0,0,.20);
-      color:#fff;
-      font-family:inherit;
-      font-size:18px;
-      font-weight:950;
-      outline:none;
-      cursor:pointer;
-    }
-    .yearSelect option{
-      color:#111;
-      background:#fff;
-    }
-
-    .btn{
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(0,0,0,.18);
-      color:var(--txt);
-      padding:9px 12px;
-      border-radius:14px;
-      font-weight:900;
-      cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
-    }
-    .btn:active{transform:translateY(1px)}
-
-    .monthbar{
-      display:grid;
-      grid-template-columns:52px 1fr 52px;
-      align-items:center;
-      gap:10px;
-      padding:8px 10px;
-      border-radius:18px;
-      background:linear-gradient(180deg, rgba(212,106,0,.62), rgba(185,88,0,.45));
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      min-height:50px;
-    }
-    .navbtn{
-      height:42px;
-      border-radius:16px;
-      font-size:22px;
-      font-weight:950;
-      display:flex; align-items:center; justify-content:center;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.18);
-      color:var(--txt);
-      cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
-    }
-    .navbtn:active{transform:translateY(1px)}
-    .navbtn:disabled{opacity:.35; cursor:default}
-
-    .monthname{
-      text-align:center;
-      font-weight:950;
-      font-size:22px;
-      letter-spacing:.4px;
-      margin:0;
-      white-space:nowrap;
-    }
-
-    .calCard{
-      border-radius:var(--radius);
-      background:linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.30));
-      border:1px solid var(--stroke);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      overflow:hidden;
-      padding:12px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      min-height:0;
-    }
-
-    .dow{
-      display:grid;
-      grid-template-columns:repeat(7, 1fr);
-      gap:8px;
-      padding:0 2px;
-      color:rgba(255,255,255,.72);
-      font-weight:900;
-      letter-spacing:.5px;
-      font-size:14px;
-      user-select:none;
-    }
-    .dow div{text-align:center}
-
-    .grid{
-      flex:1;
-      display:grid;
-      grid-template-columns:repeat(7, 1fr);
-      grid-auto-rows:minmax(54px, 1fr);
-      gap:8px;
-      min-height:0;
-    }
-
-    .day{
-      position:relative;
-      border-radius:18px;
-      background:rgba(0,0,0,.26);
-      border:1px solid rgba(255,255,255,.06);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:950;
-      font-size:22px;
-      color:rgba(255,255,255,.92);
-      user-select:none;
-      -webkit-tap-highlight-color:transparent;
-    }
-    .day.is-empty{opacity:.12; pointer-events:none}
-    .day.has-color::before{
-      content:"";
-      position:absolute; inset:0;
-      border-radius:18px;
-      background:var(--dayColor, transparent);
-      opacity:.78;
-      z-index:0;
-    }
-    .day span{position:relative; z-index:1}
-    .day.is-today{
-      box-shadow:inset 0 0 0 4px #ffffff, 0 0 8px rgba(0,0,0,.6);
-      border-color:#ffffff;
-    }
-    .day.has-note{cursor:pointer}
-    .day.has-note::after{
-      content:"";
-      position:absolute;
-      top:8px; right:8px;
-      width:8px; height:8px;
-      border-radius:999px;
-      background:rgba(255,242,0,.95);
-      box-shadow:0 0 8px rgba(255,242,0,.45);
-      z-index:2;
-    }
-
-    .legend{
-      border-radius:var(--radius);
-      background:linear-gradient(180deg, rgba(0,0,0,.40), rgba(0,0,0,.28));
-      border:1px solid var(--stroke);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      padding:10px;
-      overflow:hidden;
-      min-height:92px;
-    }
-    .legendGrid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:8px 10px;
-      align-items:center;
-    }
-    .legItem{
-      display:flex; align-items:center; gap:10px;
-      padding:8px 10px;
-      border-radius:16px;
-      background:rgba(0,0,0,.18);
-      border:1px solid rgba(255,255,255,.08);
-      min-height:44px;
-    }
-    .sq{
-      width:20px; height:20px;
-      border-radius:5px;
-      border:1px solid rgba(255,255,255,.18);
-      flex:0 0 auto;
-      background:rgba(255,255,255,.25);
-    }
-    .legTxt{
-      font-weight:900;
-      font-size:18px;
-      line-height:1.05;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .status{
-      position:fixed;
-      left:12px; right:12px;
-      bottom:calc(env(safe-area-inset-bottom) + 12px);
-      z-index:80;
-      display:none;
-      max-width:980px;
-      margin:0 auto;
-      pointer-events:none;
-    }
-    .status .pill{
-      pointer-events:auto;
-      display:inline-flex;
-      gap:10px;
-      align-items:center;
-      padding:10px 12px;
-      border-radius:16px;
-      background:rgba(0,0,0,.62);
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow:var(--shadow);
-      color:rgba(255,255,255,.90);
-      font-weight:900;
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-    }
-    .status .small{font-weight:800; opacity:.85; font-size:13px}
-
-    .noteOverlay, .editOverlay, .formOverlay{
-      position:fixed; inset:0;
-      display:none;
-    }
-    .noteOverlay{
-      background:rgba(0,0,0,.55);
-      backdrop-filter:blur(6px);
-      -webkit-backdrop-filter:blur(6px);
-      z-index:120;
-    }
-    .editOverlay, .formOverlay{
-      background:rgba(0,0,0,.62);
-      backdrop-filter:blur(8px);
-      -webkit-backdrop-filter:blur(8px);
-    }
-    .editOverlay{z-index:140}
-    .formOverlay{z-index:180}
-    .noteOverlay.show, .editOverlay.show, .formOverlay.show{display:block}
-
-    .noteSheet, .editSheet, .formSheet{
-      position:absolute;
-      left:12px; right:12px;
-      bottom:calc(env(safe-area-inset-bottom) + 12px);
-      max-width:980px;
-      margin:0 auto;
-      border-radius:22px;
-      background:linear-gradient(180deg, rgba(0,0,0,.78), rgba(0,0,0,.62));
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-    }
-    .noteSheet{height:min(52vh, 520px)}
-    .editSheet{height:min(62vh, 620px)}
-    .formSheet{height:min(76vh, 700px)}
-
-    .noteHead, .editHead, .formHead{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding:12px 12px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-      background:rgba(0,0,0,.22);
-    }
-
-    .noteTitle, .editTitle, .formTitle{
-      font-weight:950;
-      font-size:16px;
-      color:rgba(255,255,255,.92);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .noteClose, .iconBtn{
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(0,0,0,.18);
-      color:var(--txt);
-      padding:8px 10px;
-      border-radius:14px;
-      font-weight:950;
-      cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
-      min-width:42px;
-    }
-    .noteClose:active, .iconBtn:active{transform:translateY(1px)}
-    .iconBtn.danger{border-color:rgba(255,80,80,.35)}
-
-    .noteBody, .editBody{
-      padding:12px;
-      overflow:auto;
-      -webkit-overflow-scrolling:touch;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .formBody{
-      padding:10px;
-      overflow:auto;
-      -webkit-overflow-scrolling:touch;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-
-    .evCard, .row, .formBlock, .timeSection{
-      border-radius:18px;
-      background:rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.10);
-      padding:10px 12px;
-    }
-
-    .evTop, .rowTop{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      margin-bottom:6px;
-    }
-    .evName, .rowName{
-      font-weight:950;
-      font-size:16px;
-      line-height:1.1;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-    }
-    .evTime{
-      font-weight:900;
-      font-size:13px;
-      color:rgba(255,255,255,.78);
-      white-space:nowrap;
-      flex:0 0 auto;
-    }
-
-    .evMeta, .rowSub{
-      font-weight:850;
-      font-size:13px;
-      color:rgba(255,255,255,.78);
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:8px;
-    }
-
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-    }
-    .chipDot{
-      width:10px; height:10px;
-      border-radius:3px;
-      border:1px solid rgba(255,255,255,.20);
-      background:rgba(255,255,255,.25);
-    }
-    .evDetails{
-      font-size:15px;
-      font-weight:850;
-      color:rgba(255,255,255,.92);
-      line-height:1.25;
-      white-space:pre-wrap;
-    }
-
-    .rowBtns, .editActions, .formActions{
-      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
-    }
-
-    .formLabel{
-      display:block;
-      margin:0 0 5px 0;
-      font-size:12px;
-      font-weight:900;
-      color:rgba(255,255,255,.82);
-      text-transform:uppercase;
-      letter-spacing:.4px;
-    }
-    .fieldText, .fieldArea, .fieldSelect{
-      width:100%;
-      border:none;
-      outline:none;
-      background:rgba(0,0,0,.18);
-      color:var(--txt);
-      padding:10px 12px;
-      border-radius:14px;
-      font-weight:900;
-      border:1px solid rgba(255,255,255,.10);
-      font-family:inherit;
-      font-size:14px;
-    }
-    .fieldArea{
-      min-height:88px;
-      resize:vertical;
-      font-weight:800;
-    }
-
-    .timeSection{
-      padding:10px;
-    }
-    .timeLabel{
-      display:block;
-      margin:0 0 6px 0;
-      font-size:12px;
-      font-weight:900;
-      color:rgba(255,255,255,.82);
-      text-transform:uppercase;
-      letter-spacing:.4px;
-    }
-
-    .timePickerGroup{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:8px;
-    }
-
-    .timePickerRow{
-      display:grid;
-      grid-template-columns:1fr 18px 1fr;
-      gap:8px;
-      align-items:center;
-    }
-    .timeColon{
-      text-align:center;
-      font-size:24px;
-      font-weight:950;
-      color:rgba(255,255,255,.92);
-      transform:translateY(-1px);
-      user-select:none;
-    }
-
-    .wheel{
-      position:relative;
-      height:128px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.05);
-      overflow-y:auto;
-      scroll-snap-type:y mandatory;
-      -webkit-overflow-scrolling:touch;
-      scrollbar-width:none;
-    }
-    .wheel::-webkit-scrollbar{display:none}
-
-    .wheelPad{
-      height:42px;
-      flex:0 0 auto;
-    }
-    .wheelInner{
-      display:flex;
-      flex-direction:column;
-    }
-
-    .wheelItem{
-      height:42px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:18px;
-      font-weight:900;
-      color:rgba(255,255,255,.40);
-      scroll-snap-align:center;
-      transition:transform .12s ease, color .12s ease, opacity .12s ease;
-      opacity:.65;
-      user-select:none;
-    }
-    .wheelItem.active{
-      color:rgba(255,255,255,.98);
-      opacity:1;
-      transform:scale(1.01);
-    }
-
-    .wheelFocus{
-      position:absolute;
-      left:6px; right:6px;
-      top:42px;
-      height:42px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(255,255,255,.08);
-      pointer-events:none;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
-    }
-
-    .wheelFadeTop, .wheelFadeBottom{
-      position:absolute;
-      left:0; right:0;
-      height:26px;
-      pointer-events:none;
-      z-index:2;
-    }
-    .wheelFadeTop{
-      top:0;
-      background:linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,0));
-    }
-    .wheelFadeBottom{
-      bottom:0;
-      background:linear-gradient(0deg, rgba(0,0,0,.46), rgba(0,0,0,0));
-    }
-
-    .attachmentActions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    .attachmentHint{margin-top:7px;color:rgba(255,255,255,.60);font-size:12px;font-weight:750;line-height:1.25}
-    .attachmentPreview{display:none;margin-top:10px;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.28)}
-    .attachmentPreview.show{display:block}
-    .attachmentPreview img{display:block;width:100%;max-height:230px;object-fit:contain;background:rgba(0,0,0,.35)}
-    .attachmentPreviewBar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px}
-    .attachmentRemove{border:1px solid rgba(255,80,80,.35);background:rgba(140,20,20,.42);color:#fff;padding:8px 10px;border-radius:12px;font-family:inherit;font-weight:900;cursor:pointer}
-    .evAttachment{display:block;margin-top:10px;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.30)}
-    .evAttachment img{display:block;width:100%;max-height:360px;object-fit:contain;background:#080808}
-    .attachmentUploadOverlay{position:fixed;inset:0;z-index:240;display:none;padding:calc(env(safe-area-inset-top) + 10px) 10px calc(env(safe-area-inset-bottom) + 10px);background:rgba(0,0,0,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-    .attachmentUploadOverlay.show{display:flex;flex-direction:column}
-    .attachmentUploadTop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 2px 10px}
-    .attachmentUploadTitle{font-size:18px;font-weight:950}
-    .attachmentUploadWindow{flex:1;min-height:0;overflow:hidden;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:#151515}
-    .attachmentUploadFrame{display:block;width:100%;height:100%;border:0}
-    #btnFormSave{background:#168039;border-color:rgba(50,210,100,.35);color:#fff}
-
-    @media (max-width: 520px){
-      .timePickerGroup{grid-template-columns:1fr}
-    }
-
-    @media (max-width: 360px){
-      .monthname{font-size:20px}
-      .day{font-size:20px; border-radius:16px}
-      .day.has-color::before{border-radius:16px}
-      .grid{grid-auto-rows:minmax(50px, 1fr);}
-      .legTxt{font-size:16px}
-      .sq{width:18px;height:18px}
-      .noteSheet{height:min(56vh, 520px)}
-      .editSheet{height:min(68vh, 680px)}
-      .formSheet{height:min(80vh, 730px)}
-      .wheel{height:118px}
-      .wheelPad{height:38px}
-      .wheelFocus{top:38px; height:42px}
-      .wheelItem{font-size:17px}
-    }
+    :root{--txt:#f4f4f4;--muted:rgba(255,255,255,.70);--shadow:0 14px 34px rgba(0,0,0,.40);--radius:22px;--stroke:rgba(255,255,255,.10);--orange:#d46a00;--orange2:#b95800}
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);background:#0b0b0b;overflow:hidden}
+    .bg{position:fixed;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.52),rgba(0,0,0,.52)),url("background.png") center top/cover no-repeat;z-index:-2;transform:translateZ(0)}
+    .bg::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 10%,rgba(255,170,60,.16),rgba(0,0,0,.64) 62%);z-index:-1}
+    .wrap{height:100vh;max-width:980px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 12px);display:grid;grid-template-rows:auto auto 1fr auto;gap:10px}
+    .topbar,.monthbar,.calCard,.legend{border:1px solid var(--stroke);box-shadow:var(--shadow);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:18px;background:linear-gradient(180deg,rgba(212,106,0,.75),rgba(185,88,0,.58));min-height:46px}
+    .title{font-weight:950;letter-spacing:.8px;text-transform:uppercase;font-size:18px;margin:0;white-space:nowrap}
+    .yearSelect{margin-left:6px;padding:5px 28px 5px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.20);color:#fff;font:950 18px inherit;outline:none;cursor:pointer}.yearSelect option{color:#111;background:#fff}
+    .btn,.navbtn,.iconBtn,.noteClose{border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.18);color:var(--txt);border-radius:14px;font-weight:900;cursor:pointer;-webkit-tap-highlight-color:transparent}.btn{padding:9px 12px}.btn:active,.navbtn:active,.iconBtn:active,.noteClose:active{transform:translateY(1px)}
+    .monthbar{display:grid;grid-template-columns:52px 1fr 52px;align-items:center;gap:10px;padding:8px 10px;border-radius:18px;background:linear-gradient(180deg,rgba(212,106,0,.62),rgba(185,88,0,.45));min-height:50px}
+    .navbtn{height:42px;font-size:22px;font-weight:950;display:flex;align-items:center;justify-content:center}.navbtn:disabled{opacity:.35;cursor:default}.monthname{text-align:center;font-weight:950;font-size:22px;letter-spacing:.4px;margin:0;white-space:nowrap}
+    .calCard{border-radius:var(--radius);background:linear-gradient(180deg,rgba(0,0,0,.46),rgba(0,0,0,.30));overflow:hidden;padding:12px;display:flex;flex-direction:column;gap:10px;min-height:0}
+    .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:0 2px;color:rgba(255,255,255,.72);font-weight:900;letter-spacing:.5px;font-size:14px;user-select:none}.dow div{text-align:center}
+    .grid{flex:1;display:grid;grid-template-columns:repeat(7,1fr);grid-auto-rows:minmax(54px,1fr);gap:8px;min-height:0}
+    .day{position:relative;border-radius:18px;background:rgba(0,0,0,.26);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-weight:950;font-size:22px;color:rgba(255,255,255,.92);user-select:none;-webkit-tap-highlight-color:transparent}.day.is-empty{opacity:.12;pointer-events:none}.day.has-color::before{content:"";position:absolute;inset:0;border-radius:18px;background:var(--dayColor,transparent);opacity:.78;z-index:0}.day span{position:relative;z-index:1}.day.is-today{box-shadow:inset 0 0 0 4px #fff,0 0 8px rgba(0,0,0,.6);border-color:#fff}.day.has-note{cursor:pointer}.day.has-note::after{content:"";position:absolute;top:8px;right:8px;width:8px;height:8px;border-radius:999px;background:rgba(255,242,0,.95);box-shadow:0 0 8px rgba(255,242,0,.45);z-index:2}
+    .legend{border-radius:var(--radius);background:linear-gradient(180deg,rgba(0,0,0,.40),rgba(0,0,0,.28));padding:10px;overflow:hidden;min-height:92px}.legendGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;align-items:center}.legItem{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:16px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.08);min-height:44px}.sq{width:20px;height:20px;border-radius:5px;border:1px solid rgba(255,255,255,.18);flex:0 0 auto}.legTxt{font-weight:900;font-size:18px;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .status{position:fixed;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 12px);z-index:80;display:none;max-width:980px;margin:0 auto;pointer-events:none}.status .pill{pointer-events:auto;display:inline-flex;gap:10px;align-items:center;padding:10px 12px;border-radius:16px;background:rgba(0,0,0,.62);border:1px solid rgba(255,255,255,.14);box-shadow:var(--shadow);font-weight:900}.status .small{font-weight:800;opacity:.85;font-size:13px}
+    .noteOverlay,.editOverlay,.formOverlay{position:fixed;inset:0;display:none}.noteOverlay{background:rgba(0,0,0,.55);z-index:120}.editOverlay,.formOverlay{background:rgba(0,0,0,.62)}.editOverlay{z-index:140}.formOverlay{z-index:180}.noteOverlay.show,.editOverlay.show,.formOverlay.show{display:block}
+    .noteSheet,.editSheet,.formSheet{position:absolute;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 12px);max-width:980px;margin:0 auto;border-radius:22px;background:linear-gradient(180deg,rgba(0,0,0,.78),rgba(0,0,0,.62));border:1px solid rgba(255,255,255,.14);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}.noteSheet{height:min(52vh,520px)}.editSheet{height:min(62vh,620px)}.formSheet{height:min(76vh,700px)}
+    .noteHead,.editHead,.formHead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-bottom:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.22)}.noteTitle,.editTitle,.formTitle{font-weight:950;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.noteClose,.iconBtn{padding:8px 10px;min-width:42px}.iconBtn.danger{border-color:rgba(255,80,80,.35)}
+    .noteBody,.editBody,.formBody{padding:12px;overflow:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:10px}.formBody{padding:10px;gap:8px}.evCard,.row,.formBlock,.timeSection{border-radius:18px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.10);padding:10px 12px}
+    .evTop,.rowTop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}.evName,.rowName{font-weight:950;font-size:16px;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.evTime{font-weight:900;font-size:13px;color:rgba(255,255,255,.78);white-space:nowrap}.evMeta,.rowSub{font-weight:850;font-size:13px;color:rgba(255,255,255,.78);display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}.chip{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10)}.chipDot{width:10px;height:10px;border-radius:3px;border:1px solid rgba(255,255,255,.20)}.evDetails{font-size:15px;font-weight:850;line-height:1.25;white-space:pre-wrap}
+    .rowBtns,.editActions,.formActions,.attachmentActions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.formLabel,.timeLabel{display:block;margin:0 0 5px;font-size:12px;font-weight:900;color:rgba(255,255,255,.82);text-transform:uppercase;letter-spacing:.4px}.fieldText,.fieldArea,.fieldSelect{width:100%;outline:none;background:rgba(0,0,0,.18);color:var(--txt);padding:10px 12px;border-radius:14px;font-weight:900;border:1px solid rgba(255,255,255,.10);font-family:inherit;font-size:14px}.fieldArea{min-height:88px;resize:vertical;font-weight:800}
+    .timePickerGroup{display:grid;grid-template-columns:1fr 1fr;gap:8px}.timePickerRow{display:grid;grid-template-columns:1fr 18px 1fr;gap:8px;align-items:center}.timeColon{text-align:center;font-size:24px;font-weight:950}.wheel{position:relative;height:128px;border-radius:18px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);overflow-y:auto;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}.wheel::-webkit-scrollbar{display:none}.wheelPad{height:42px}.wheelInner{display:flex;flex-direction:column}.wheelItem{height:42px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:rgba(255,255,255,.40);scroll-snap-align:center;opacity:.65;user-select:none}.wheelItem.active{color:#fff;opacity:1}.wheelFocus{position:absolute;left:6px;right:6px;top:42px;height:42px;border-radius:16px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);pointer-events:none}
+    .attachmentHint{margin-top:7px;color:rgba(255,255,255,.60);font-size:12px;font-weight:750}.attachmentPreview{display:none;margin-top:10px;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.28)}.attachmentPreview.show{display:block}.attachmentPreview img{display:block;width:100%;max-height:230px;object-fit:contain}.attachmentPreviewBar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px}.attachmentRemove{border:1px solid rgba(255,80,80,.35);background:rgba(140,20,20,.42);color:#fff;padding:8px 10px;border-radius:12px;font:900 14px inherit;cursor:pointer}.evAttachment{display:block;margin-top:10px;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.30)}.evAttachment img{display:block;width:100%;max-height:360px;object-fit:contain;background:#080808}
+    .attachmentUploadOverlay{position:fixed;inset:0;z-index:240;display:none;padding:calc(env(safe-area-inset-top) + 10px) 10px calc(env(safe-area-inset-bottom) + 10px);background:rgba(0,0,0,.88)}.attachmentUploadOverlay.show{display:flex;flex-direction:column}.attachmentUploadTop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 2px 10px}.attachmentUploadTitle{font-size:18px;font-weight:950}.attachmentUploadWindow{flex:1;min-height:0;overflow:hidden;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:#151515}.attachmentUploadFrame{display:block;width:100%;height:100%;border:0}#btnFormSave{background:#168039;border-color:rgba(50,210,100,.35)}
+    @media(max-width:520px){.timePickerGroup{grid-template-columns:1fr}}@media(max-width:360px){.monthname{font-size:20px}.day{font-size:20px;border-radius:16px}.grid{grid-auto-rows:minmax(50px,1fr)}.legTxt{font-size:16px}.sq{width:18px;height:18px}}
   </style>
 </head>
-
 <body>
-  <div class="bg"></div>
 
-  <div class="wrap">
-    <div class="topbar">
-      <h1 class="title" id="titleYear">
-        <span>PLANNING</span>
-        <span id="yearText">2026</span>
-        <select id="yearSelect" class="yearSelect" style="display:none;">
-          <option value="2026">2026</option>
-          <option value="2027">2027</option>
-          <option value="2028">2028</option>
-        </select>
-      </h1>
-      <div style="display:flex;gap:10px;align-items:center;">
-        <span id="editLabel" style="display:none;margin-right:6px;font-weight:700;font-size:12px;color:#fff200;">MODE ÉDITION</span>
-        <button class="btn" id="btnLock" title="Mode édition" aria-pressed="false" style="display:none;">🔒</button>
-        <button class="btn" id="btnBack">Retour</button>
-      </div>
-    </div>
+<div class="bg"></div>
 
-    <div class="monthbar">
-      <button class="navbtn" id="btnPrev" aria-label="Mois précédent">‹</button>
-      <h2 class="monthname" id="monthName">—</h2>
-      <button class="navbtn" id="btnNext" aria-label="Mois suivant">›</button>
-    </div>
+<div class="wrap">
 
-    <section class="calCard">
-      <div class="dow">
-        <div>Lun</div><div>Mar</div><div>Mer</div><div>Jeu</div><div>Ven</div><div>Sam</div><div>Dim</div>
-      </div>
-      <div class="grid" id="grid"></div>
-    </section>
+  <div class="topbar">
+    <h1 class="title">
+      <span>PLANNING</span>
+      <span id="yearText">2026</span>
+      <select id="yearSelect" class="yearSelect" style="display:none"></select>
+    </h1>
 
-    <section class="legend">
-      <div class="legendGrid" id="legendGrid"></div>
-    </section>
-  </div>
-
-  <div class="status" id="status">
-    <div class="pill">
-      <span>⚠️</span>
-      <div>
-        <div id="statusTxt">Chargement…</div>
-        <div class="small" id="statusSub">Si ça reste, l’URL API est mauvaise.</div>
-      </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <span id="editLabel" style="display:none;margin-right:6px;font-weight:700;font-size:12px;color:#fff200">MODE ÉDITION</span>
+      <button class="btn" id="btnLock" style="display:none">🔒</button>
+      <button class="btn" id="btnBack">Retour</button>
     </div>
   </div>
 
-  <div class="noteOverlay" id="noteOverlay" aria-hidden="true">
-    <div class="noteSheet" role="dialog" aria-modal="true" aria-label="Note du jour">
-      <div class="noteHead">
-        <div class="noteTitle" id="noteTitle">—</div>
-        <button class="noteClose" id="noteClose">Fermer</button>
-      </div>
-      <div class="noteBody" id="noteBody"></div>
-    </div>
+  <div class="monthbar">
+    <button class="navbtn" id="btnPrev">‹</button>
+    <h2 class="monthname" id="monthName">—</h2>
+    <button class="navbtn" id="btnNext">›</button>
   </div>
 
-  <div class="editOverlay" id="editOverlay" aria-hidden="true">
-    <div class="editSheet" role="dialog" aria-modal="true" aria-label="Gestion des événements">
-      <div class="editHead">
-        <div class="editTitle" id="editTitle">—</div>
-        <div class="editActions">
-          <button class="iconBtn" id="btnAddEvent" title="Ajouter">＋</button>
-          <button class="iconBtn" id="btnCloseEdit" title="Fermer">✕</button>
-        </div>
-      </div>
-      <div class="editBody" id="editBody"></div>
+  <section class="calCard">
+    <div class="dow">
+      <div>Lun</div>
+      <div>Mar</div>
+      <div>Mer</div>
+      <div>Jeu</div>
+      <div>Ven</div>
+      <div>Sam</div>
+      <div>Dim</div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="legend">
+    <div class="legendGrid" id="legendGrid"></div>
+  </section>
+
+</div>
+
+<div class="status" id="status">
+  <div class="pill">
+    <span>⚠️</span>
+    <div>
+      <div id="statusTxt">Chargement…</div>
+      <div class="small" id="statusSub"></div>
     </div>
   </div>
+</div>
 
-  <div class="formOverlay" id="formOverlay" aria-hidden="true">
-    <div class="formSheet" role="dialog" aria-modal="true" aria-label="Formulaire événement">
-      <div class="formHead">
-        <div class="formTitle" id="formTitle">Événement</div>
-        <div class="formActions">
-          <button class="iconBtn" id="btnFormCancel">✕</button>
-        </div>
+<div class="noteOverlay" id="noteOverlay">
+  <div class="noteSheet">
+    <div class="noteHead">
+      <div class="noteTitle" id="noteTitle">—</div>
+      <button class="noteClose" id="noteClose">Fermer</button>
+    </div>
+
+    <div class="noteBody" id="noteBody"></div>
+  </div>
+</div>
+
+<div class="editOverlay" id="editOverlay">
+  <div class="editSheet">
+    <div class="editHead">
+      <div class="editTitle" id="editTitle">—</div>
+
+      <div class="editActions">
+        <button class="iconBtn" id="btnAddEvent">＋</button>
+        <button class="iconBtn" id="btnCloseEdit">✕</button>
+      </div>
+    </div>
+
+    <div class="editBody" id="editBody"></div>
+  </div>
+</div>
+
+<div class="formOverlay" id="formOverlay">
+  <div class="formSheet">
+
+    <div class="formHead">
+      <div class="formTitle" id="formTitle">Événement</div>
+      <button class="iconBtn" id="btnFormCancel">✕</button>
+    </div>
+
+    <div class="formBody">
+
+      <div class="formBlock">
+        <label class="formLabel" for="fTitle">Titre</label>
+        <input class="fieldText" id="fTitle" type="text" placeholder="Titre de l’événement">
       </div>
 
-      <div class="formBody">
-        <div class="formBlock">
-          <label class="formLabel" for="fTitle">Titre</label>
-          <input class="fieldText" id="fTitle" type="text" placeholder="Titre de l’événement" />
-        </div>
+      <div class="formBlock">
+        <label class="formLabel" for="fCategory">Catégorie</label>
+        <select class="fieldSelect" id="fCategory"></select>
+      </div>
 
-        <div class="formBlock">
-          <label class="formLabel" for="fCategory">Catégorie</label>
-          <select class="fieldSelect" id="fCategory"></select>
-        </div>
+      <div class="timePickerGroup">
 
-        <div class="timePickerGroup">
-          <div class="timeSection">
-            <label class="timeLabel">Heure début</label>
-            <div class="timePickerRow">
-              <div class="wheel" id="startHourWheel">
-                <div class="wheelFadeTop"></div>
-                <div class="wheelFadeBottom"></div>
-                <div class="wheelFocus"></div>
-                <div class="wheelInner" id="startHourInner"></div>
-              </div>
-              <div class="timeColon">:</div>
-              <div class="wheel" id="startMinuteWheel">
-                <div class="wheelFadeTop"></div>
-                <div class="wheelFadeBottom"></div>
-                <div class="wheelFocus"></div>
-                <div class="wheelInner" id="startMinuteInner"></div>
-              </div>
+        <div class="timeSection">
+          <label class="timeLabel">Heure début</label>
+
+          <div class="timePickerRow">
+            <div class="wheel" id="startHourWheel">
+              <div class="wheelFocus"></div>
+              <div class="wheelInner" id="startHourInner"></div>
             </div>
-          </div>
 
-          <div class="timeSection">
-            <label class="timeLabel">Heure fin</label>
-            <div class="timePickerRow">
-              <div class="wheel" id="endHourWheel">
-                <div class="wheelFadeTop"></div>
-                <div class="wheelFadeBottom"></div>
-                <div class="wheelFocus"></div>
-                <div class="wheelInner" id="endHourInner"></div>
-              </div>
-              <div class="timeColon">:</div>
-              <div class="wheel" id="endMinuteWheel">
-                <div class="wheelFadeTop"></div>
-                <div class="wheelFadeBottom"></div>
-                <div class="wheelFocus"></div>
-                <div class="wheelInner" id="endMinuteInner"></div>
-              </div>
+            <div class="timeColon">:</div>
+
+            <div class="wheel" id="startMinuteWheel">
+              <div class="wheelFocus"></div>
+              <div class="wheelInner" id="startMinuteInner"></div>
             </div>
           </div>
         </div>
 
-        <div class="formBlock">
-          <label class="formLabel" for="fLocation">Lieu</label>
-          <input class="fieldText" id="fLocation" type="text" placeholder="Lieu (optionnel)" />
-        </div>
+        <div class="timeSection">
+          <label class="timeLabel">Heure fin</label>
 
-        <div class="formBlock">
-          <label class="formLabel" for="fDetails">Détails / note</label>
-          <textarea class="fieldArea" id="fDetails" placeholder="Détails (optionnel)"></textarea>
-        </div>
+          <div class="timePickerRow">
+            <div class="wheel" id="endHourWheel">
+              <div class="wheelFocus"></div>
+              <div class="wheelInner" id="endHourInner"></div>
+            </div>
 
-        <div class="formBlock">
-          <label class="formLabel">Pièce jointe</label>
-          <div class="attachmentActions">
-            <button class="btn" id="btnAttachmentUpload" type="button">📎 Ajouter une image</button>
-          </div>
-          <div class="attachmentHint">Image facultative. Tu peux choisir une photo depuis ton téléphone.</div>
-          <div class="attachmentPreview" id="attachmentPreview">
-            <img id="attachmentPreviewImg" alt="Pièce jointe">
-            <div class="attachmentPreviewBar">
-              <span style="font-size:13px;font-weight:850;opacity:.82;">Image jointe</span>
-              <button class="attachmentRemove" id="btnAttachmentRemove" type="button">Supprimer</button>
+            <div class="timeColon">:</div>
+
+            <div class="wheel" id="endMinuteWheel">
+              <div class="wheelFocus"></div>
+              <div class="wheelInner" id="endMinuteInner"></div>
             </div>
           </div>
         </div>
 
-        <div class="formActions" style="justify-content:flex-end;padding-bottom:2px;">
-          <button class="btn" id="btnFormClose">Annuler</button>
-          <button class="btn" id="btnFormSave">Enregistrer</button>
+      </div>
+
+      <div class="formBlock">
+        <label class="formLabel" for="fLocation">Lieu</label>
+        <input class="fieldText" id="fLocation" type="text" placeholder="Lieu (optionnel)">
+      </div>
+
+      <div class="formBlock">
+        <label class="formLabel" for="fDetails">Détails / note</label>
+        <textarea class="fieldArea" id="fDetails" placeholder="Détails (optionnel)"></textarea>
+      </div>
+
+      <div class="formBlock">
+        <label class="formLabel">Pièce jointe</label>
+
+        <div class="attachmentActions">
+          <button class="btn" id="btnAttachmentUpload" type="button">📎 Ajouter une image</button>
+        </div>
+
+        <div class="attachmentHint">
+          Image facultative. Tu peux choisir une photo depuis ton téléphone.
+        </div>
+
+        <div class="attachmentPreview" id="attachmentPreview">
+          <img id="attachmentPreviewImg" alt="Pièce jointe">
+
+          <div class="attachmentPreviewBar">
+            <span style="font-size:13px;font-weight:850;opacity:.82">Image jointe</span>
+            <button class="attachmentRemove" id="btnAttachmentRemove" type="button">Supprimer</button>
+          </div>
         </div>
       </div>
+
+      <div class="formActions" style="justify-content:flex-end">
+        <button class="btn" id="btnFormClose">Annuler</button>
+        <button class="btn" id="btnFormSave">Enregistrer</button>
+      </div>
+
     </div>
+  </div>
+</div>
+
+<div class="attachmentUploadOverlay" id="attachmentUploadOverlay">
+
+  <div class="attachmentUploadTop">
+    <div class="attachmentUploadTitle">Pièce jointe</div>
+    <button class="btn" id="btnAttachmentUploadClose">Fermer</button>
   </div>
 
-  <div class="attachmentUploadOverlay" id="attachmentUploadOverlay" aria-hidden="true">
-    <div class="attachmentUploadTop">
-      <div class="attachmentUploadTitle">Pièce jointe</div>
-      <button class="btn" id="btnAttachmentUploadClose" type="button">Fermer</button>
-    </div>
-    <div class="attachmentUploadWindow">
-      <iframe id="attachmentUploadFrame" class="attachmentUploadFrame" src="about:blank" title="Ajouter une pièce jointe"></iframe>
-    </div>
+  <div class="attachmentUploadWindow">
+    <iframe
+      id="attachmentUploadFrame"
+      class="attachmentUploadFrame"
+      src="about:blank"
+      title="Ajouter une pièce jointe">
+    </iframe>
   </div>
+
+</div>
 
 <script>
-  const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
-  const BACK_URL = "index.html";
 
-  const PUBLIC_YEAR = 2026;
-  let ADMIN_YEARS = [PUBLIC_YEAR];
-  let ACTIVE_YEAR = PUBLIC_YEAR;
+const API="https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
-  function getCacheKey_(){
-    return `cs_planning_cache_v1_${ACTIVE_YEAR}`;
+const BACK_URL="index.html";
+const PUBLIC_YEAR=2026;
+
+const LS_EMAIL="cs_portail_email_v1";
+const LS_ROLE="cs_role_v1";
+
+const CACHE_MAX_AGE_MS=604800000;
+
+let ADMIN_YEARS=[PUBLIC_YEAR];
+
+let ACTIVE_YEAR=PUBLIC_YEAR;
+let IS_ADMIN=false;
+let EDIT_MODE=false;
+
+let events=[];
+let categoriesRaw=[];
+
+let eventsByDate=new Map();
+let catColor=new Map();
+let catLabel=new Map();
+let catOrder=new Map();
+let firstCatByDate=new Map();
+let hasNoteByDate=new Map();
+
+let currentMonth=0;
+let _editDate="";
+
+const DEFAULT_CATEGORIES=[
+  {category:"FMA centre",color:"#ff2d2d",order:1},
+  {category:"FMA équipe 1",color:"#24d36a",order:2},
+  {category:"FMA équipe 2",color:"#f6a000",order:3},
+  {category:"JSP",color:"#4aa8ff",order:4},
+  {category:"Navette",color:"#2f79ff",order:5},
+  {category:"RECSEC",color:"#a081ff",order:6},
+  {category:"Sainte Barbe",color:"#ff5a5a",order:7}
+];
+
+const OVERRIDE_COLORS={
+  "fma centre":"#ff2d2d"
+};
+
+const $=id=>document.getElementById(id);
+
+const monthsFR=[
+  "Janvier",
+  "Février",
+  "Mars",
+  "Avril",
+  "Mai",
+  "Juin",
+  "Juillet",
+  "Août",
+  "Septembre",
+  "Octobre",
+  "Novembre",
+  "Décembre"
+];
+
+const dowsFR=[
+  "Dim",
+  "Lun",
+  "Mar",
+  "Mer",
+  "Jeu",
+  "Ven",
+  "Sam"
+];
+
+const HOURS=
+  Array
+    .from(
+      {length:24},
+      (_,i)=>String(i).padStart(2,"0")
+    );
+
+const MINUTES=[
+  "00",
+  "15",
+  "30",
+  "45"
+];
+
+const TIME_PICKERS={
+
+  startHour:{
+    wheel:$("startHourWheel"),
+    inner:$("startHourInner"),
+    values:HOURS,
+    value:"08"
+  },
+
+  startMinute:{
+    wheel:$("startMinuteWheel"),
+    inner:$("startMinuteInner"),
+    values:MINUTES,
+    value:"00"
+  },
+
+  endHour:{
+    wheel:$("endHourWheel"),
+    inner:$("endHourInner"),
+    values:HOURS,
+    value:"09"
+  },
+
+  endMinute:{
+    wheel:$("endMinuteWheel"),
+    inner:$("endMinuteInner"),
+    values:MINUTES,
+    value:"00"
   }
 
-  const CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 7;
-  const LS_EMAIL = "cs_portail_email_v1";
+};
 
-  const DEFAULT_CATEGORIES = [
-    { category:"FMA centre", color:"#ff2d2d", order:1 },
-    { category:"FMA équipe 1", color:"#24d36a", order:2 },
-    { category:"FMA équipe 2", color:"#f6a000", order:3 },
-    { category:"JSP", color:"#4aa8ff", order:4 },
-    { category:"Navette", color:"#2f79ff", order:5 },
-    { category:"RECSEC", color:"#a081ff", order:6 },
-    { category:"Sainte Barbe", color:"#ff5a5a", order:7 }
-  ];
+let FORM_STATE={
+  mode:"add",
+  dateStr:"",
+  originalEvent:null
+};
 
-  const OVERRIDE_COLORS = {
-    "fma centre": "#ff2d2d"
-  };
+let FORM_ATTACHMENT_URL="";
+let FORM_ORIGINAL_ATTACHMENT_URL="";
+let FORM_NEW_UPLOAD_URL="";
 
-  const $ = (id)=>document.getElementById(id);
-  const $grid = $("grid");
-  const $monthName = $("monthName");
-  const $legendGrid = $("legendGrid");
-  const $btnPrev = $("btnPrev");
-  const $btnNext = $("btnNext");
-  const $status = $("status");
-  const $statusTxt = $("statusTxt");
-  const $statusSub = $("statusSub");
-  const $btnLock = $("btnLock");
-  const $editLabel = $("editLabel");
 
-  const $yearText = $("yearText");
-  const $yearSelect = $("yearSelect");
+function norm(s){
 
-  const $noteOverlay = $("noteOverlay");
-  const $noteTitle = $("noteTitle");
-  const $noteBody = $("noteBody");
-  const $noteClose = $("noteClose");
+  return String(s||"")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .replace(/['’]/g,"")
+    .replace(/\s+/g," ");
 
-  const $editOverlay = $("editOverlay");
-  const $editTitle = $("editTitle");
-  const $editBody = $("editBody");
-  const $btnAddEvent = $("btnAddEvent");
-  const $btnCloseEdit = $("btnCloseEdit");
+}
 
-  const $formOverlay = $("formOverlay");
-  const $formTitle = $("formTitle");
-  const $fTitle = $("fTitle");
-  const $fCategory = $("fCategory");
-  const $fLocation = $("fLocation");
-  const $fDetails = $("fDetails");
-  const $btnFormCancel = $("btnFormCancel");
-  const $btnFormClose = $("btnFormClose");
-  const $btnFormSave = $("btnFormSave");
-  const $btnAttachmentUpload = $("btnAttachmentUpload");
-  const $btnAttachmentRemove = $("btnAttachmentRemove");
-  const $attachmentPreview = $("attachmentPreview");
-  const $attachmentPreviewImg = $("attachmentPreviewImg");
-  const $attachmentUploadOverlay = $("attachmentUploadOverlay");
-  const $attachmentUploadFrame = $("attachmentUploadFrame");
-  const $btnAttachmentUploadClose = $("btnAttachmentUploadClose");
 
-  const monthsFR = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-  const dowsFR = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
+function escapeHtml(s){
 
-  let IS_ADMIN = false;
-  let EDIT_MODE = false;
-  let events = [];
-  let categoriesRaw = DEFAULT_CATEGORIES.slice();
-  let eventsByDate = new Map();
-  let catColor = new Map();
-  let catLabel = new Map();
-  let catOrder = new Map();
-  let firstCatByDate = new Map();
-  let hasNoteByDate = new Map();
-  let currentMonth = 0;
-  let _editDate = "";
+  return (s==null?"":String(s))
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
-  const HOURS = Array.from({length:24}, (_,i)=>String(i).padStart(2,"0"));
-  const MINUTES = ["00","15","30","45"];
-  const LOOP_DUPLICATES = 15;
+}
 
-  let FORM_STATE = {
-    mode: "add",
-    dateStr: "",
-    originalEvent: null
-  };
 
-  let FORM_ATTACHMENT_URL = "";
-  let FORM_ORIGINAL_ATTACHMENT_URL = "";
-  let FORM_NEW_UPLOAD_URL = "";
+function ymd(d){
 
-  const TIME_PICKERS = {
-    startHour: { wheel: $("startHourWheel"), inner: $("startHourInner"), values: HOURS, value: "08", timer: null, looping: true },
-    startMinute: { wheel: $("startMinuteWheel"), inner: $("startMinuteInner"), values: MINUTES, value: "00", timer: null, looping: true },
-    endHour: { wheel: $("endHourWheel"), inner: $("endHourInner"), values: HOURS, value: "09", timer: null, looping: true },
-    endMinute: { wheel: $("endMinuteWheel"), inner: $("endMinuteInner"), values: MINUTES, value: "00", timer: null, looping: true }
-  };
+  return (
+    d.getFullYear()
+    + "-"
+    + String(d.getMonth()+1).padStart(2,"0")
+    + "-"
+    + String(d.getDate()).padStart(2,"0")
+  );
 
-  function norm(s){
-    return String(s||"").trim().toLowerCase()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-      .replace(/['’]/g,"")
-      .replace(/\s+/g," ");
+}
+
+
+function firstMondayGrid(y,m){
+
+  const d=
+    new Date(y,m,1);
+
+  const o=
+    d.getDay()===0
+      ? 6
+      : d.getDay()-1;
+
+  d.setDate(
+    d.getDate()-o
+  );
+
+  d.setHours(
+    12,
+    0,
+    0,
+    0
+  );
+
+  return d;
+
+}
+
+
+function toFRDate(s){
+
+  const [y,m,d]=
+    String(s||"").split("-");
+
+  if(!y||!m||!d){
+    return s;
   }
 
-  function escapeHtml(s){
-    return (s==null ? "" : String(s))
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
+  const dt=
+    new Date(
+      +y,
+      +m-1,
+      +d,
+      12
+    );
+
+  return (
+    dowsFR[dt.getDay()]
+    + " "
+    + d
+    + "/"
+    + m
+    + "/"
+    + y
+  );
+
+}
+
+
+function formatTimeRange(s,e){
+
+  s=
+    String(s||"").trim();
+
+  e=
+    String(e||"").trim();
+
+  if(s && e){
+    return s+"–"+e;
   }
 
-  function ymd(d){
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,"0");
-    const dd = String(d.getDate()).padStart(2,"0");
-    return `${y}-${m}-${dd}`;
-  }
+  return s||e||"";
 
-  function firstMondayGrid(year, monthIndex){
-    const d = new Date(year, monthIndex, 1);
-    const js = d.getDay();
-    const offset = (js === 0) ? 6 : (js - 1);
-    d.setDate(d.getDate() - offset);
-    d.setHours(12,0,0,0);
-    return d;
-  }
+}
 
-  function toFRDate(ymdStr){
-    const [y,m,d] = String(ymdStr||"").split("-");
-    if(!y||!m||!d) return ymdStr;
-    const dt = new Date(Number(y), Number(m)-1, Number(d), 12,0,0,0);
-    const dow = dowsFR[dt.getDay()];
-    return `${dow} ${String(d).padStart(2,"0")}/${String(m).padStart(2,"0")}/${y}`;
-  }
 
-  function formatTimeRange(start,end){
-    const s = String(start||"").trim();
-    const e = String(end||"").trim();
-    if(s && e) return `${s}–${e}`;
-    if(s) return s;
-    if(e) return e;
-    return "";
-  }
+function getEmailLocal(){
 
-  function getEmailLocal(){
-    return (localStorage.getItem(LS_EMAIL) || "").trim().toLowerCase();
-  }
-
-  function getAttachmentUrl_(ev){
-    return String(
-      ev?.attachment_url ||
-      ev?.piece_jointe ||
-      ev?.attachment ||
-      ev?.image_url ||
-      ev?.image ||
+  return (
+    localStorage
+      .getItem(LS_EMAIL)
+      ||
       ""
-    ).trim();
-  }
+  )
+  .trim()
+  .toLowerCase();
 
-  function showStatus(txt, sub){
-    $statusTxt.textContent = txt || "";
-    $statusSub.textContent = sub || "";
-    $status.style.display = "block";
-  }
+}
 
-  function hideStatus(){
-    $status.style.display = "none";
-  }
 
-  function jsonp(url, cbName, timeoutMs=15000){
-    return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      const cleanup = () => {
+function getAttachmentUrl_(ev){
+
+  return String(
+    ev?.attachment_url
+    ||
+    ev?.piece_jointe
+    ||
+    ev?.attachment
+    ||
+    ev?.image_url
+    ||
+    ev?.image
+    ||
+    ""
+  ).trim();
+
+}
+
+
+function getCacheKey_(){
+
+  return (
+    "cs_planning_cache_v2_"
+    +
+    ACTIVE_YEAR
+  );
+
+}
+
+
+function showStatus(t,s){
+
+  $("statusTxt").textContent=
+    t||"";
+
+  $("statusSub").textContent=
+    s||"";
+
+  $("status").style.display=
+    "block";
+
+}
+
+
+function hideStatus(){
+
+  $("status").style.display=
+    "none";
+
+}
+
+
+function jsonp(
+  url,
+  cb,
+  timeout=15000
+){
+
+  return new Promise(
+    (
+      resolve,
+      reject
+    )=>{
+
+      const script=
+        document.createElement(
+          "script"
+        );
+
+      const cleanup=()=>{
+
         script.remove();
-        try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+
+        try{
+          delete window[cb];
+        }catch(e){
+          window[cb]=undefined;
+        }
+
       };
-      const timer = setTimeout(() => { cleanup(); reject(new Error("Timeout JSONP")); }, timeoutMs);
-      window[cbName] = (data) => { clearTimeout(timer); cleanup(); resolve(data); };
-      const sep = url.includes("?") ? "&" : "?";
-      script.src = url + sep + "t=" + Date.now();
-      script.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error("Erreur JSONP")); };
-      document.head.appendChild(script);
-    });
-  }
 
-  async function loadMyRole_(){
-    const email = getEmailLocal();
-    if(!email){
-      IS_ADMIN = false;
-      return;
-    }
+      const timer=
+        setTimeout(
+          ()=>{
 
-    const cb = "cb_auth_" + Math.random().toString(36).slice(2);
-    const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
-    const res = await jsonp(url, cb, 20000);
+            cleanup();
 
-    IS_ADMIN = !!(
-      res &&
-      res.ok === true &&
-      String(res.role||"").toLowerCase() === "admin"
-    );
-  }
-
-  async function loadPlanningYears_(){
-    const cb = "cb_years_" + Math.random().toString(36).slice(2);
-    const url = `${API}?view=planning_years_list&nocache=1&callback=${cb}`;
-
-    try{
-      const res = await jsonp(url, cb, 20000);
-      const rawYears = Array.isArray(res?.years) ? res.years : [];
-
-      const years = rawYears
-        .map(item => {
-          if(typeof item === "number") return item;
-          if(typeof item === "string") return Number(item);
-          return Number(item?.year);
-        })
-        .filter(y => Number.isInteger(y) && y >= 2000 && y <= 2100);
-
-      ADMIN_YEARS = [...new Set([PUBLIC_YEAR, ...years])].sort((a,b)=>a-b);
-    }catch(e){
-      ADMIN_YEARS = [PUBLIC_YEAR];
-    }
-  }
-
-  function rebuildMaps(){
-    eventsByDate = new Map();
-    hasNoteByDate = new Map();
-
-    for(const ev of events){
-      const date = String(ev.date||"").trim();
-      if(!date) continue;
-
-      if(!eventsByDate.has(date)){
-        eventsByDate.set(date, []);
-      }
-
-      eventsByDate.get(date).push(ev);
-
-      if(
-        String(ev.details||"").trim() ||
-        getAttachmentUrl_(ev)
-      ){
-        hasNoteByDate.set(date, true);
-      }
-    }
-
-    catColor = new Map();
-    catLabel = new Map();
-    catOrder = new Map();
-
-    const cats = [...categoriesRaw]
-      .map(c => ({
-        category: String(c.category||"").trim(),
-        color: String(c.color||"").trim(),
-        order: Number(c.order||9999) || 9999
-      }))
-      .filter(c => c.category);
-
-    cats.sort((a,b)=> (a.order-b.order) || a.category.localeCompare(b.category));
-
-    for(const c of cats){
-      const k = norm(c.category);
-      if(catLabel.has(k)) continue;
-
-      const forced = OVERRIDE_COLORS[k];
-      const col = forced || c.color || "rgba(255,255,255,.25)";
-
-      catLabel.set(k, c.category);
-      catColor.set(k, col);
-      catOrder.set(k, c.order);
-    }
-
-    firstCatByDate = new Map();
-
-    for(const [date, arr] of eventsByDate.entries()){
-      let best = null;
-      let bestOrder = 9999;
-
-      for(const ev of arr){
-        const k = norm(ev.category || "");
-        const o = catOrder.has(k) ? catOrder.get(k) : 9999;
-
-        if(o < bestOrder){
-          bestOrder = o;
-          best = k;
-        }
-      }
-
-      if(!best){
-        best = norm(arr[0]?.category || "");
-      }
-
-      firstCatByDate.set(date, best);
-    }
-  }
-
-  function getColorForCategory(catKey){
-    const k = norm(catKey);
-
-    if(OVERRIDE_COLORS[k]){
-      return OVERRIDE_COLORS[k];
-    }
-
-    return catColor.get(k) || "rgba(255,255,255,.25)";
-  }
-
-  function renderLegend(){
-    $legendGrid.innerHTML = "";
-
-    for(const [k,label] of catLabel.entries()){
-      const col = getColorForCategory(k);
-      const div = document.createElement("div");
-
-      div.className = "legItem";
-      div.innerHTML = `
-        <div class="sq" style="background:${escapeHtml(col)}"></div>
-        <div class="legTxt">${escapeHtml(label)}</div>
-      `;
-
-      $legendGrid.appendChild(div);
-    }
-  }
-
-  function renderMonth(){
-    $monthName.textContent = monthsFR[currentMonth];
-
-    $btnPrev.disabled = (currentMonth === 0);
-    $btnNext.disabled = (currentMonth === 11);
-
-    const start = firstMondayGrid(ACTIVE_YEAR, currentMonth);
-    const todayStr = ymd(new Date());
-
-    $grid.innerHTML = "";
-
-    for(let i=0;i<42;i++){
-      const d = new Date(start);
-      d.setDate(start.getDate()+i);
-
-      const inMonth = (d.getMonth()===currentMonth);
-      const dateStr = ymd(d);
-
-      const cell = document.createElement("div");
-      cell.className = "day" + (inMonth ? "" : " is-empty");
-
-      if(inMonth){
-        cell.dataset.date = dateStr;
-
-        const catKey = firstCatByDate.get(dateStr);
-
-        if(catKey){
-          cell.classList.add("has-color");
-          cell.style.setProperty("--dayColor", getColorForCategory(catKey));
-        }
-
-        if(dateStr===todayStr){
-          cell.classList.add("is-today");
-        }
-
-        if(hasNoteByDate.get(dateStr)===true){
-          cell.classList.add("has-note");
-        }
-      }
-
-      cell.innerHTML = `<span>${inMonth ? d.getDate() : ""}</span>`;
-      $grid.appendChild(cell);
-    }
-  }
-
-  function setEditMode(on){
-    EDIT_MODE = !!on;
-
-    $editLabel.style.display = EDIT_MODE ? "inline-block" : "none";
-
-    if($btnLock){
-      $btnLock.textContent = EDIT_MODE ? "🔓" : "🔒";
-      $btnLock.setAttribute("aria-pressed", EDIT_MODE ? "true" : "false");
-    }
-
-    if(!EDIT_MODE){
-      closeEdit();
-    }
-  }
-
-  function openNote(dateStr){
-    const arr = eventsByDate.get(dateStr) || [];
-
-    const withDetails = arr.filter(ev =>
-      String(ev.details||"").trim() ||
-      getAttachmentUrl_(ev)
-    );
-
-    if(!withDetails.length){
-      return;
-    }
-
-    $noteTitle.textContent = `Note — ${dateStr.split("-").reverse().join("/")}`;
-    $noteBody.innerHTML = "";
-
-    for(const ev of withDetails){
-      const name = String(ev.title||"").trim() || "—";
-      const time = formatTimeRange(ev.start, ev.end);
-      const catK = norm(ev.category || "");
-      const catLabelTxt = (ev.category || "").trim();
-      const loc = String(ev.location||"").trim();
-      const details = String(ev.details||"").trim();
-      const attachment = getAttachmentUrl_(ev);
-      const dotCol = getColorForCategory(catK);
-
-      const card = document.createElement("div");
-      card.className = "evCard";
-
-      card.innerHTML = `
-        <div class="evTop">
-          <div class="evName">${escapeHtml(name)}</div>
-          <div class="evTime">${escapeHtml(time)}</div>
-        </div>
-
-        <div class="evMeta">
-          ${catLabelTxt ? `
-            <div class="chip">
-              <span class="chipDot" style="background:${escapeHtml(dotCol)}"></span>
-              <span>${escapeHtml(catLabelTxt)}</span>
-            </div>
-          ` : ""}
-
-          ${loc ? `
-            <div class="chip">
-              📍 <span>${escapeHtml(loc)}</span>
-            </div>
-          ` : ""}
-        </div>
-
-        ${details ? `
-          <div class="evDetails">${escapeHtml(details)}</div>
-        ` : ""}
-
-        ${attachment ? `
-          <a
-            class="evAttachment"
-            href="${escapeHtml(attachment)}"
-            target="_blank"
-            rel="noopener"
-          >
-            <img
-              src="${escapeHtml(attachment)}"
-              alt="Pièce jointe"
-            >
-          </a>
-        ` : ""}
-      `;
-
-      $noteBody.appendChild(card);
-    }
-
-    $noteOverlay.classList.add("show");
-    $noteOverlay.setAttribute("aria-hidden","false");
-  }
-
-  function closeNote(){
-    $noteOverlay.classList.remove("show");
-    $noteOverlay.setAttribute("aria-hidden","true");
-  }
-
-  function openEdit(dateStr){
-    _editDate = dateStr;
-
-    $editTitle.textContent = `Événements — ${toFRDate(dateStr)}`;
-
-    renderEditList(dateStr);
-
-    $editOverlay.classList.add("show");
-    $editOverlay.setAttribute("aria-hidden","false");
-  }
-
-  function closeEdit(){
-    $editOverlay.classList.remove("show");
-    $editOverlay.setAttribute("aria-hidden","true");
-
-    _editDate = "";
-    $editBody.innerHTML = "";
-  }
-
-  function renderEditList(dateStr){
-    const arr = (eventsByDate.get(dateStr) || []).slice();
-
-    arr.sort((a,b)=>
-      String(a.start||"").localeCompare(String(b.start||"")) ||
-      String(a.title||"").localeCompare(String(b.title||""))
-    );
-
-    $editBody.innerHTML = "";
-
-    if(!arr.length){
-      const empty = document.createElement("div");
-
-      empty.className = "row";
-      empty.innerHTML = `<div style="font-weight:900;opacity:.9">Aucun événement ce jour.</div>`;
-
-      $editBody.appendChild(empty);
-      return;
-    }
-
-    for(const ev of arr){
-      const name = String(ev.title||"").trim() || "—";
-      const time = formatTimeRange(ev.start, ev.end);
-      const cat = String(ev.category||"").trim();
-      const loc = String(ev.location||"").trim();
-      const details = String(ev.details||"").trim();
-      const attachment = getAttachmentUrl_(ev);
-
-      const row = document.createElement("div");
-      row.className = "row";
-
-      row.innerHTML = `
-        <div class="rowTop">
-          <div class="rowName">${escapeHtml(name)}</div>
-          <div class="evTime">${escapeHtml(time)}</div>
-        </div>
-
-        <div class="rowSub">
-          ${cat ? `<span>🎨 ${escapeHtml(cat)}</span>` : ""}
-          ${loc ? `<span>📍 ${escapeHtml(loc)}</span>` : ""}
-          ${details ? `<span>📝 note</span>` : ""}
-          ${attachment ? `<span>📎 image</span>` : ""}
-        </div>
-
-        <div class="rowBtns">
-          <button class="iconBtn" data-act="view">👁</button>
-          <button class="iconBtn" data-act="edit">🖍</button>
-          <button class="iconBtn danger" data-act="del">🗑</button>
-        </div>
-      `;
-
-      row.querySelectorAll("button").forEach(b=>{
-        b.addEventListener("click", async ()=>{
-          const act = b.dataset.act;
-
-          if(act === "view"){
-            alert(
-              `📅 ${toFRDate(dateStr)}\n` +
-              `🕒 ${time || "—"}\n` +
-              `📌 ${name}\n` +
-              (cat ? `🎨 ${cat}\n` : "") +
-              (loc ? `📍 ${loc}\n` : "") +
-              (details ? `\n📝 ${details}` : "") +
-              (attachment ? `\n📎 Image jointe` : "")
-            );
-            return;
-          }
-
-          if(act === "del"){
-            const ok = confirm(
-              `Supprimer l’événement :\n\n${name}\n${time || ""}\n\nConfirmer ?`
+            reject(
+              new Error(
+                "Timeout JSONP"
+              )
             );
 
-            if(!ok){
-              return;
-            }
+          },
+          timeout
+        );
 
-            await apiDeleteEvent_(dateStr, ev);
+      window[cb]=data=>{
 
-            if(attachment){
-              apiDeleteAttachment_(attachment).catch(()=>{});
-            }
+        clearTimeout(
+          timer
+        );
 
-            await loadApi(true);
-            renderEditList(dateStr);
+        cleanup();
 
-            return;
-          }
+        resolve(data);
 
-          if(act === "edit"){
-            openEventForm("edit", dateStr, ev);
-          }
-        });
-      });
+      };
 
-      $editBody.appendChild(row);
+      script.src=
+        url
+        +
+        (
+          url.includes("?")
+            ? "&"
+            : "?"
+        )
+        +
+        "t="
+        +
+        Date.now();
+
+      script.onerror=()=>{
+
+        clearTimeout(
+          timer
+        );
+
+        cleanup();
+
+        reject(
+          new Error(
+            "Erreur JSONP"
+          )
+        );
+
+      };
+
+      document
+        .head
+        .appendChild(
+          script
+        );
+
     }
-  }
+  );
 
-  async function apiAddEvent_(dateStr, payload){
-    const email = getEmailLocal();
+}
 
-    if(!email){
-      throw new Error("Email introuvable. Reconnecte-toi sur le portail.");
-    }
 
-    const cb = "cb_add_" + Math.random().toString(36).slice(2);
+async function loadMyRole_(){
 
-    const url =
-      `${API}?view=planning_add` +
-      `&email=${encodeURIComponent(email)}` +
-      `&date=${encodeURIComponent(dateStr)}` +
-      `&start=${encodeURIComponent(payload.start||"")}` +
-      `&end=${encodeURIComponent(payload.end||"")}` +
-      `&title=${encodeURIComponent(payload.title||"")}` +
-      `&category=${encodeURIComponent(payload.category||"")}` +
-      `&location=${encodeURIComponent(payload.location||"")}` +
-      `&details=${encodeURIComponent(payload.details||"")}` +
-      `&attachment_url=${encodeURIComponent(payload.attachment_url||"")}` +
-      `&nocache=1&callback=${cb}`;
-
-    const res = await jsonp(url, cb, 20000);
-
-    if(!res || res.ok !== true){
-      throw new Error(res?.error || "Erreur ajout");
-    }
-
-    return res;
-  }
-
-  async function getFreshPlanningEvent_(dateStr, ev){
-    const cb = "cb_fresh_" + Math.random().toString(36).slice(2);
-
-    const url =
-      `${API}?view=planning_year` +
-      `&year=${ACTIVE_YEAR}` +
-      `&nocache=1` +
-      `&callback=${cb}`;
-
-    const res = await jsonp(url, cb, 20000);
-
-    const freshEvents =
-      Array.isArray(res?.events)
-        ? res.events
-        : [];
-
-    return freshEvents.find(item =>
-      String(item?.date||"").trim() === String(dateStr||"").trim() &&
-      String(item?.title||"").trim() === String(ev?.title||"").trim() &&
-      String(item?.start||"").trim() === String(ev?.start||"").trim()
-    ) || null;
-  }
-
-  async function apiDeleteEvent_(dateStr, ev){
-    const email = getEmailLocal();
-
-    if(!email){
-      throw new Error("Email introuvable. Reconnecte-toi sur le portail.");
-    }
-
-    const freshEv = await getFreshPlanningEvent_(dateStr, ev);
-
-    const eventId = String(
-      freshEv?.event_id ||
-      freshEv?.id ||
+  const savedRole=
+    String(
+      localStorage.getItem(
+        LS_ROLE
+      )
+      ||
       ""
-    ).trim();
+    )
+    .trim()
+    .toLowerCase();
 
-    if(!eventId){
-      throw new Error("Événement introuvable dans le planning actuel.");
-    }
+  IS_ADMIN=
+    savedRole==="admin"
+    ||
+    savedRole==="administrateur";
 
-    const cb = "cb_del_" + Math.random().toString(36).slice(2);
+  const email=
+    getEmailLocal();
 
-    const url =
-      `${API}?view=planning_delete` +
-      `&email=${encodeURIComponent(email)}` +
-      `&event_id=${encodeURIComponent(eventId)}` +
-      `&nocache=1&callback=${cb}`;
-
-    const res = await jsonp(url, cb, 20000);
-
-    if(!res || res.ok !== true){
-      throw new Error(res?.error || "Erreur suppression");
-    }
-
-    if(Number(res.deleted || 0) < 1){
-      throw new Error("Aucune ligne supprimée. event_id non trouvé dans Sheets.");
-    }
-
-    return res;
+  if(!email){
+    return;
   }
 
-  function buildCategoryOptions(selectedValue){
-    $fCategory.innerHTML = "";
+  const cb=
+    "cb_auth_"
+    +
+    Math.random()
+      .toString(36)
+      .slice(2);
 
-    const none = document.createElement("option");
-    none.value = "";
-    none.textContent = "Aucune";
+  try{
 
-    $fCategory.appendChild(none);
-
-    const items = [...catLabel.entries()].map(([k,label])=>({
-      k,
-      label,
-      order: catOrder.has(k) ? catOrder.get(k) : 9999
-    }));
-
-    items.sort((a,b)=> (a.order-b.order) || a.label.localeCompare(b.label));
-
-    for(const it of items){
-      const opt = document.createElement("option");
-
-      opt.value = it.label;
-      opt.textContent = it.label;
-
-      $fCategory.appendChild(opt);
-    }
-
-    $fCategory.value = selectedValue || "";
-  }
-
-  function getLoopValues(values){
-    const arr = [];
-
-    for(let i=0;i<LOOP_DUPLICATES;i++){
-      arr.push(...values);
-    }
-
-    return arr;
-  }
-
-  function buildWheel(pickerKey){
-    const picker = TIME_PICKERS[pickerKey];
-    const allValues = getLoopValues(picker.values);
-
-    picker.inner.innerHTML = "";
-    picker.loopValues = allValues;
-
-    const padTop = document.createElement("div");
-    padTop.className = "wheelPad";
-
-    picker.inner.appendChild(padTop);
-
-    allValues.forEach((v, idx)=>{
-      const item = document.createElement("div");
-
-      item.className = "wheelItem";
-      item.dataset.value = v;
-      item.dataset.index = String(idx);
-      item.textContent = v;
-
-      item.addEventListener("click", ()=>{
-        setWheelValue(pickerKey, v, true);
-      });
-
-      picker.inner.appendChild(item);
-    });
-
-    const padBottom = document.createElement("div");
-    padBottom.className = "wheelPad";
-
-    picker.inner.appendChild(padBottom);
-
-    picker.wheel.addEventListener("scroll", ()=>{
-      updateWheelActive(pickerKey);
-      keepWheelLooped(pickerKey);
-
-      clearTimeout(picker.timer);
-
-      picker.timer = setTimeout(()=>{
-        snapWheel(pickerKey);
-      }, 80);
-    });
-  }
-
-  function getWheelItems(pickerKey){
-    return [...TIME_PICKERS[pickerKey].inner.querySelectorAll(".wheelItem")];
-  }
-
-  function getNearestWheelItem(pickerKey){
-    const picker = TIME_PICKERS[pickerKey];
-
-    const center =
-      picker.wheel.scrollTop +
-      (picker.wheel.clientHeight / 2);
-
-    let bestItem = null;
-    let bestDist = Infinity;
-
-    getWheelItems(pickerKey).forEach(item=>{
-      const itemCenter =
-        item.offsetTop +
-        (item.offsetHeight / 2);
-
-      const dist =
-        Math.abs(center - itemCenter);
-
-      if(dist < bestDist){
-        bestDist = dist;
-        bestItem = item;
-      }
-    });
-
-    return bestItem;
-  }
-
-  function updateWheelActive(pickerKey){
-    const picker = TIME_PICKERS[pickerKey];
-    const bestItem = getNearestWheelItem(pickerKey);
-
-    getWheelItems(pickerKey).forEach(i=>{
-      i.classList.remove("active");
-    });
-
-    if(bestItem){
-      bestItem.classList.add("active");
-      picker.value = bestItem.dataset.value;
-    }
-  }
-
-  function keepWheelLooped(pickerKey){
-    const picker = TIME_PICKERS[pickerKey];
-
-    if(!picker.looping){
-      return;
-    }
-
-    const valuesLen = picker.values.length;
-    const itemHeight = 42;
-    const cycleHeight = valuesLen * itemHeight;
-    const minScroll = cycleHeight * 4;
-    const maxScroll = cycleHeight * (LOOP_DUPLICATES - 5);
-
-    if(picker.wheel.scrollTop < minScroll){
-      picker.wheel.scrollTop += cycleHeight * 6;
-    }else if(picker.wheel.scrollTop > maxScroll){
-      picker.wheel.scrollTop -= cycleHeight * 6;
-    }
-  }
-
-  function findBestItemForValueNearCenter(pickerKey, value){
-    const picker = TIME_PICKERS[pickerKey];
-
-    const items =
-      getWheelItems(pickerKey).filter(
-        i => i.dataset.value === value
+    const res=
+      await jsonp(
+        `${API}?view=auth_check&email=${encodeURIComponent(email)}&callback=${cb}`,
+        cb,
+        8000
       );
-
-    if(!items.length){
-      return null;
-    }
-
-    const currentCenter =
-      picker.wheel.scrollTop +
-      (picker.wheel.clientHeight / 2);
-
-    let best = items[0];
-    let bestDist = Infinity;
-
-    items.forEach(item=>{
-      const c =
-        item.offsetTop +
-        (item.offsetHeight / 2);
-
-      const dist =
-        Math.abs(c - currentCenter);
-
-      if(dist < bestDist){
-        bestDist = dist;
-        best = item;
-      }
-    });
-
-    return best;
-  }
-
-  function setWheelValue(pickerKey, value, smooth){
-    const picker = TIME_PICKERS[pickerKey];
-    const item = findBestItemForValueNearCenter(pickerKey, value);
-
-    if(!item){
-      return;
-    }
-
-    const target =
-      item.offsetTop -
-      ((picker.wheel.clientHeight - item.offsetHeight) / 2);
-
-    picker.wheel.scrollTo({
-      top: target,
-      behavior: smooth ? "smooth" : "auto"
-    });
-
-    picker.value = value;
-
-    setTimeout(()=>{
-      keepWheelLooped(pickerKey);
-      updateWheelActive(pickerKey);
-    }, smooth ? 160 : 0);
-  }
-
-  function snapWheel(pickerKey){
-    const picker = TIME_PICKERS[pickerKey];
-    const bestItem = getNearestWheelItem(pickerKey);
-
-    if(!bestItem){
-      return;
-    }
-
-    const target =
-      bestItem.offsetTop -
-      ((picker.wheel.clientHeight - bestItem.offsetHeight) / 2);
-
-    picker.wheel.scrollTo({
-      top: target,
-      behavior: "smooth"
-    });
-
-    picker.value = bestItem.dataset.value;
-
-    setTimeout(()=>{
-      keepWheelLooped(pickerKey);
-      updateWheelActive(pickerKey);
-    }, 160);
-  }
-
-  function getTimeValue(prefix){
-    return `${TIME_PICKERS[prefix + "Hour"].value}:${TIME_PICKERS[prefix + "Minute"].value}`;
-  }
-
-  function setTimeValue(prefix, hhmm){
-    const val = String(hhmm || "").trim();
-
-    const [hh, mm] =
-      val && val.includes(":")
-        ? val.split(":")
-        : ["00","00"];
-
-    const hour =
-      HOURS.includes(hh)
-        ? hh
-        : "00";
-
-    const minute =
-      MINUTES.includes(mm)
-        ? mm
-        : "00";
-
-    setWheelValue(prefix + "Hour", hour, false);
-    setWheelValue(prefix + "Minute", minute, false);
-  }
-
-  function initWheels(){
-    buildWheel("startHour");
-    buildWheel("startMinute");
-    buildWheel("endHour");
-    buildWheel("endMinute");
-
-    setTimeout(()=>{
-      setTimeValue("start", "08:00");
-      setTimeValue("end", "09:00");
-
-      ["startHour","startMinute","endHour","endMinute"].forEach(k=>{
-        keepWheelLooped(k);
-        updateWheelActive(k);
-      });
-    }, 0);
-  }
-
-  function renderAttachmentPreview_(){
-    const url = String(FORM_ATTACHMENT_URL || "").trim();
-
-    if(!url){
-      $attachmentPreview.classList.remove("show");
-      $attachmentPreviewImg.removeAttribute("src");
-      return;
-    }
-
-    $attachmentPreviewImg.src = url;
-    $attachmentPreview.classList.add("show");
-  }
-
-  function resetAttachmentForm_(ev){
-    FORM_ORIGINAL_ATTACHMENT_URL = getAttachmentUrl_(ev);
-    FORM_ATTACHMENT_URL = FORM_ORIGINAL_ATTACHMENT_URL;
-    FORM_NEW_UPLOAD_URL = "";
-
-    renderAttachmentPreview_();
-  }
-
-  function openAttachmentUpload_(){
-    const email = getEmailLocal();
-
-    if(!email){
-      alert("Email introuvable. Reconnecte-toi sur le portail.");
-      return;
-    }
-
-    $attachmentUploadFrame.src =
-      `${API}?view=planning_attachment_upload_page` +
-      `&email=${encodeURIComponent(email)}` +
-      `&t=${Date.now()}`;
-
-    $attachmentUploadOverlay.classList.add("show");
-    $attachmentUploadOverlay.setAttribute("aria-hidden","false");
-  }
-
-  function closeAttachmentUpload_(){
-    $attachmentUploadOverlay.classList.remove("show");
-    $attachmentUploadOverlay.setAttribute("aria-hidden","true");
-
-    setTimeout(()=>{
-      $attachmentUploadFrame.src = "about:blank";
-    }, 100);
-  }
-
-  async function apiDeleteAttachment_(url){
-    const email = getEmailLocal();
-    const cleanUrl = String(url || "").trim();
-
-    if(!email || !cleanUrl){
-      return;
-    }
-
-    const cb =
-      "cb_att_del_" +
-      Math.random().toString(36).slice(2);
-
-    const endpoint =
-      `${API}?view=planning_attachment_delete` +
-      `&email=${encodeURIComponent(email)}` +
-      `&url=${encodeURIComponent(cleanUrl)}` +
-      `&callback=${cb}`;
-
-    try{
-      await jsonp(endpoint, cb, 20000);
-    }catch(e){}
-  }
-
-  async function cleanupUnsavedAttachment_(){
-    const url =
-      String(FORM_NEW_UPLOAD_URL || "").trim();
-
-    if(!url){
-      return;
-    }
-
-    FORM_NEW_UPLOAD_URL = "";
-
-    await apiDeleteAttachment_(url);
-  }
-
-  function openEventForm(mode, dateStr, ev){
-    FORM_STATE.mode = mode;
-    FORM_STATE.dateStr = dateStr;
-    FORM_STATE.originalEvent = ev || null;
-
-    buildCategoryOptions(ev?.category || "");
-    resetAttachmentForm_(ev);
-
-    if(mode === "edit"){
-      $formTitle.textContent = `Modifier — ${toFRDate(dateStr)}`;
-      $fTitle.value = ev?.title || "";
-      $fLocation.value = ev?.location || "";
-      $fDetails.value = ev?.details || "";
-
-      setTimeValue("start", ev?.start || "08:00");
-      setTimeValue("end", ev?.end || "09:00");
-    }else{
-      $formTitle.textContent = `Ajouter — ${toFRDate(dateStr)}`;
-      $fTitle.value = "";
-      $fLocation.value = "";
-      $fDetails.value = "";
-      $fCategory.value = "";
-
-      setTimeValue("start", "08:00");
-      setTimeValue("end", "09:00");
-    }
-
-    $formOverlay.classList.add("show");
-    $formOverlay.setAttribute("aria-hidden","false");
-  }
-
-  async function closeEventForm(){
-    await cleanupUnsavedAttachment_();
-
-    $formOverlay.classList.remove("show");
-    $formOverlay.setAttribute("aria-hidden","true");
-
-    FORM_ATTACHMENT_URL = "";
-    FORM_ORIGINAL_ATTACHMENT_URL = "";
-    FORM_NEW_UPLOAD_URL = "";
-  }
-
-  async function saveEventForm(){
-    const title = String($fTitle.value || "").trim();
-    const category = String($fCategory.value || "").trim();
-    const location = String($fLocation.value || "").trim();
-    const details = String($fDetails.value || "").trim();
-
-    const start = getTimeValue("start");
-    const end = getTimeValue("end");
-
-    const attachment_url =
-      String(FORM_ATTACHMENT_URL || "").trim();
-
-    if(!title){
-      alert("Titre obligatoire.");
-      return;
-    }
-
-    const toMinutes = value => {
-      const [hh, mm] =
-        String(value || "00:00").split(":");
-
-      return (
-        Number(hh || 0) * 60 +
-        Number(mm || 0)
-      );
-    };
-
-    const startMinutes = toMinutes(start);
-    let endMinutes = toMinutes(end);
 
     if(
-      end === "00:00" &&
-      start !== "00:00"
+      res?.ok===true
     ){
-      endMinutes = 24 * 60;
-    }
 
-    if(endMinutes < startMinutes){
-      alert("Heure fin incorrecte.");
-      return;
-    }
+      const role=
+        String(
+          res.role||""
+        )
+        .trim()
+        .toLowerCase();
 
-    $btnFormSave.disabled = true;
-    $btnFormSave.textContent = "Enregistrement…";
+      IS_ADMIN=
+        role==="admin"
+        ||
+        role==="administrateur";
 
-    try{
-      if(
-        FORM_STATE.mode === "edit" &&
-        FORM_STATE.originalEvent
-      ){
-        await apiDeleteEvent_(
-          FORM_STATE.dateStr,
-          FORM_STATE.originalEvent
+      try{
+
+        localStorage.setItem(
+          LS_ROLE,
+          role
         );
+
+      }catch(e){}
+
+    }
+
+  }catch(e){}
+
+}
+
+
+async function loadPlanningYears_(){
+
+  const cb=
+    "cb_years_"
+    +
+    Math.random()
+      .toString(36)
+      .slice(2);
+
+  try{
+
+    const res=
+      await jsonp(
+        `${API}?view=planning_years_list&callback=${cb}`,
+        cb,
+        15000
+      );
+
+    const ys=
+      (
+        Array.isArray(
+          res?.years
+        )
+          ? res.years
+          : []
+      )
+      .map(
+        x=>
+          Number(
+            typeof x==="object"
+              ? x.year
+              : x
+          )
+      )
+      .filter(
+        y=>
+          Number.isInteger(y)
+          &&
+          y>=2000
+          &&
+          y<=2100
+      );
+
+    ADMIN_YEARS=[
+      ...new Set([
+        PUBLIC_YEAR,
+        ...ys
+      ])
+    ]
+    .sort(
+      (a,b)=>a-b
+    );
+
+  }catch(e){
+
+    ADMIN_YEARS=[
+      PUBLIC_YEAR
+    ];
+
+  }
+
+}
+
+
+function rebuildMaps(){
+
+  eventsByDate=
+    new Map();
+
+  hasNoteByDate=
+    new Map();
+
+  for(
+    const ev
+    of events
+  ){
+
+    const d=
+      String(
+        ev.date||""
+      ).trim();
+
+    if(!d){
+      continue;
+    }
+
+    if(
+      !eventsByDate.has(d)
+    ){
+
+      eventsByDate.set(
+        d,
+        []
+      );
+
+    }
+
+    eventsByDate
+      .get(d)
+      .push(ev);
+
+    if(
+      String(
+        ev.details||""
+      ).trim()
+      ||
+      getAttachmentUrl_(ev)
+    ){
+
+      hasNoteByDate.set(
+        d,
+        true
+      );
+
+    }
+
+  }
+
+
+  catColor=
+    new Map();
+
+  catLabel=
+    new Map();
+
+  catOrder=
+    new Map();
+
+
+  const cats=[
+    ...(
+      categoriesRaw.length
+        ? categoriesRaw
+        : DEFAULT_CATEGORIES
+    )
+  ]
+  .map(
+    c=>({
+
+      category:
+        String(
+          c.category||""
+        ).trim(),
+
+      color:
+        String(
+          c.color||""
+        ).trim(),
+
+      order:
+        Number(
+          c.order||9999
+        )
+        ||
+        9999
+
+    })
+  )
+  .filter(
+    c=>c.category
+  )
+  .sort(
+    (a,b)=>
+      (
+        a.order-b.order
+      )
+      ||
+      a.category.localeCompare(
+        b.category
+      )
+  );
+
+
+  for(
+    const c
+    of cats
+  ){
+
+    const k=
+      norm(
+        c.category
+      );
+
+    if(
+      catLabel.has(k)
+    ){
+      continue;
+    }
+
+    catLabel.set(
+      k,
+      c.category
+    );
+
+    catColor.set(
+      k,
+      OVERRIDE_COLORS[k]
+      ||
+      c.color
+      ||
+      "rgba(255,255,255,.25)"
+    );
+
+    catOrder.set(
+      k,
+      c.order
+    );
+
+  }
+
+
+  firstCatByDate=
+    new Map();
+
+
+  for(
+    const [d,arr]
+    of eventsByDate
+  ){
+
+    let best="";
+    let bo=9999;
+
+    for(
+      const ev
+      of arr
+    ){
+
+      const k=
+        norm(
+          ev.category||""
+        );
+
+      const o=
+        catOrder.get(k)
+        ??
+        9999;
+
+      if(
+        o<bo
+      ){
+
+        bo=o;
+        best=k;
+
       }
 
+    }
+
+    firstCatByDate.set(
+      d,
+      best
+      ||
+      norm(
+        arr[0]?.category||""
+      )
+    );
+
+  }
+
+}
+
+
+function getColorForCategory(k){
+
+  k=
+    norm(k);
+
+  return (
+    OVERRIDE_COLORS[k]
+    ||
+    catColor.get(k)
+    ||
+    "rgba(255,255,255,.25)"
+  );
+
+}
+
+
+function renderLegend(){
+
+  const g=
+    $("legendGrid");
+
+  g.innerHTML="";
+
+  for(
+    const [k,label]
+    of catLabel
+  ){
+
+    const d=
+      document.createElement(
+        "div"
+      );
+
+    d.className=
+      "legItem";
+
+    d.innerHTML=
+      `<div class="sq" style="background:${escapeHtml(getColorForCategory(k))}"></div><div class="legTxt">${escapeHtml(label)}</div>`;
+
+    g.appendChild(d);
+
+  }
+
+}
+
+
+function renderMonth(){
+
+  $("monthName").textContent=
+    monthsFR[currentMonth];
+
+  $("btnPrev").disabled=
+    currentMonth===0;
+
+  $("btnNext").disabled=
+    currentMonth===11;
+
+
+  const start=
+    firstMondayGrid(
+      ACTIVE_YEAR,
+      currentMonth
+    );
+
+  const today=
+    ymd(
+      new Date()
+    );
+
+  const g=
+    $("grid");
+
+  g.innerHTML="";
+
+
+  for(
+    let i=0;
+    i<42;
+    i++
+  ){
+
+    const d=
+      new Date(start);
+
+    d.setDate(
+      start.getDate()+i
+    );
+
+    const inMonth=
+      d.getMonth()
+      ===
+      currentMonth;
+
+    const dateStr=
+      ymd(d);
+
+    const cell=
+      document.createElement(
+        "div"
+      );
+
+    cell.className=
+      "day"
+      +
+      (
+        inMonth
+          ? ""
+          : " is-empty"
+      );
+
+
+    if(inMonth){
+
+      cell.dataset.date=
+        dateStr;
+
+      const cat=
+        firstCatByDate.get(
+          dateStr
+        );
+
+      if(cat){
+
+        cell.classList.add(
+          "has-color"
+        );
+
+        cell.style.setProperty(
+          "--dayColor",
+          getColorForCategory(
+            cat
+          )
+        );
+
+      }
+
+      if(
+        dateStr===today
+      ){
+
+        cell.classList.add(
+          "is-today"
+        );
+
+      }
+
+      if(
+        hasNoteByDate.get(
+          dateStr
+        )
+      ){
+
+        cell.classList.add(
+          "has-note"
+        );
+
+      }
+
+    }
+
+
+    cell.innerHTML=
+      `<span>${inMonth?d.getDate():""}</span>`;
+
+    g.appendChild(
+      cell
+    );
+
+  }
+
+}
+
+
+function setEditMode(on){
+
+  EDIT_MODE=
+    !!on;
+
+  $("editLabel").style.display=
+    EDIT_MODE
+      ? "inline-block"
+      : "none";
+
+  $("btnLock").textContent=
+    EDIT_MODE
+      ? "🔓"
+      : "🔒";
+
+  if(
+    !EDIT_MODE
+  ){
+
+    closeEdit();
+
+  }
+
+}
+
+
+function openNote(dateStr){
+
+  const arr=
+    (
+      eventsByDate.get(
+        dateStr
+      )
+      ||
+      []
+    )
+    .filter(
+      ev=>
+        String(
+          ev.details||""
+        ).trim()
+        ||
+        getAttachmentUrl_(ev)
+    );
+
+  if(
+    !arr.length
+  ){
+    return;
+  }
+
+
+  $("noteTitle").textContent=
+    "Note — "
+    +
+    dateStr
+      .split("-")
+      .reverse()
+      .join("/");
+
+
+  $("noteBody").innerHTML="";
+
+
+  for(
+    const ev
+    of arr
+  ){
+
+    const a=
+      getAttachmentUrl_(ev);
+
+    const card=
+      document.createElement(
+        "div"
+      );
+
+    card.className=
+      "evCard";
+
+
+    card.innerHTML=
+      `
+      <div class="evTop">
+        <div class="evName">${escapeHtml(ev.title||"—")}</div>
+        <div class="evTime">${escapeHtml(formatTimeRange(ev.start,ev.end))}</div>
+      </div>
+
+      <div class="evMeta">
+
+        ${
+          ev.category
+            ?
+            `<div class="chip">
+              <span class="chipDot" style="background:${escapeHtml(getColorForCategory(ev.category))}"></span>
+              <span>${escapeHtml(ev.category)}</span>
+            </div>`
+            :
+            ""
+        }
+
+        ${
+          ev.location
+            ?
+            `<div class="chip">
+              📍 <span>${escapeHtml(ev.location)}</span>
+            </div>`
+            :
+            ""
+        }
+
+      </div>
+
+      ${
+        ev.details
+          ?
+          `<div class="evDetails">${escapeHtml(ev.details)}</div>`
+          :
+          ""
+      }
+
+      ${
+        a
+          ?
+          `<a
+            class="evAttachment"
+            href="${escapeHtml(a)}"
+            target="_blank"
+            rel="noopener">
+
+            <img
+              src="${escapeHtml(a)}"
+              alt="Pièce jointe">
+
+          </a>`
+          :
+          ""
+      }
+      `;
+
+
+    $("noteBody")
+      .appendChild(
+        card
+      );
+
+  }
+
+
+  $("noteOverlay")
+    .classList
+    .add(
+      "show"
+    );
+
+}
+
+
+function closeNote(){
+
+  $("noteOverlay")
+    .classList
+    .remove(
+      "show"
+    );
+
+}
+
+
+function openEdit(d){
+
+  _editDate=
+    d;
+
+  $("editTitle").textContent=
+    "Événements — "
+    +
+    toFRDate(d);
+
+  renderEditList(d);
+
+  $("editOverlay")
+    .classList
+    .add(
+      "show"
+    );
+
+}
+
+
+function closeEdit(){
+
+  $("editOverlay")
+    .classList
+    .remove(
+      "show"
+    );
+
+  _editDate="";
+
+  $("editBody")
+    .innerHTML="";
+
+}
+
+
+function renderEditList(d){
+
+  const arr=
+    (
+      eventsByDate.get(d)
+      ||
+      []
+    )
+    .slice()
+    .sort(
+      (a,b)=>
+        String(a.start||"")
+          .localeCompare(
+            String(b.start||"")
+          )
+        ||
+        String(a.title||"")
+          .localeCompare(
+            String(b.title||"")
+          )
+    );
+
+  const body=
+    $("editBody");
+
+  body.innerHTML="";
+
+
+  if(
+    !arr.length
+  ){
+
+    body.innerHTML=
+      '<div class="row"><div style="font-weight:900">Aucun événement ce jour.</div></div>';
+
+    return;
+
+  }
+
+
+  for(
+    const ev
+    of arr
+  ){
+
+    const row=
+      document.createElement(
+        "div"
+      );
+
+    const att=
+      getAttachmentUrl_(ev);
+
+    row.className=
+      "row";
+
+
+    row.innerHTML=
+      `
+      <div class="rowTop">
+
+        <div class="rowName">
+          ${escapeHtml(ev.title||"—")}
+        </div>
+
+        <div class="evTime">
+          ${escapeHtml(formatTimeRange(ev.start,ev.end))}
+        </div>
+
+      </div>
+
+      <div class="rowSub">
+
+        ${
+          ev.category
+            ?
+            `<span>🎨 ${escapeHtml(ev.category)}</span>`
+            :
+            ""
+        }
+
+        ${
+          ev.location
+            ?
+            `<span>📍 ${escapeHtml(ev.location)}</span>`
+            :
+            ""
+        }
+
+        ${
+          ev.details
+            ?
+            "<span>📝 note</span>"
+            :
+            ""
+        }
+
+        ${
+          att
+            ?
+            "<span>📎 image</span>"
+            :
+            ""
+        }
+
+      </div>
+
+      <div class="rowBtns">
+
+        <button
+          class="iconBtn"
+          data-act="view">
+          👁
+        </button>
+
+        <button
+          class="iconBtn"
+          data-act="edit">
+          🖍
+        </button>
+
+        <button
+          class="iconBtn danger"
+          data-act="del">
+          🗑
+        </button>
+
+      </div>
+      `;
+
+
+    row
+      .querySelectorAll(
+        "button"
+      )
+      .forEach(
+        b=>
+          b.onclick=
+            async()=>{
+
+              if(
+                b.dataset.act==="view"
+              ){
+
+                openNote(d);
+                return;
+
+              }
+
+              if(
+                b.dataset.act==="edit"
+              ){
+
+                openEventForm(
+                  "edit",
+                  d,
+                  ev
+                );
+
+                return;
+
+              }
+
+              if(
+                b.dataset.act==="del"
+                &&
+                confirm(
+                  "Supprimer l’événement :\n\n"
+                  +
+                  (ev.title||"—")
+                  +
+                  "\n\nConfirmer ?"
+                )
+              ){
+
+                try{
+
+                  await apiDeleteEvent_(
+                    d,
+                    ev
+                  );
+
+                  events=
+                    events.filter(
+                      x=>x!==ev
+                    );
+
+                  rebuildMaps();
+                  renderMonth();
+                  renderEditList(d);
+
+                  if(att){
+
+                    apiDeleteAttachment_(
+                      att
+                    ).catch(()=>{});
+
+                  }
+
+                  saveCacheCurrent_();
+
+                }catch(err){
+
+                  alert(
+                    "Erreur : "
+                    +
+                    (
+                      err?.message
+                      ||
+                      err
+                    )
+                  );
+
+                }
+
+              }
+
+            }
+      );
+
+
+    body.appendChild(
+      row
+    );
+
+  }
+
+}
+
+
+async function apiAddEvent_(
+  dateStr,
+  p
+){
+
+  const email=
+    getEmailLocal();
+
+  if(!email){
+
+    throw new Error(
+      "Email introuvable. Reconnecte-toi sur le portail."
+    );
+
+  }
+
+
+  const cb=
+    "cb_add_"
+    +
+    Math.random()
+      .toString(36)
+      .slice(2);
+
+
+  const url=
+    `${API}?view=planning_add`
+    +
+    `&email=${encodeURIComponent(email)}`
+    +
+    `&date=${encodeURIComponent(dateStr)}`
+    +
+    `&start=${encodeURIComponent(p.start||"")}`
+    +
+    `&end=${encodeURIComponent(p.end||"")}`
+    +
+    `&title=${encodeURIComponent(p.title||"")}`
+    +
+    `&category=${encodeURIComponent(p.category||"")}`
+    +
+    `&location=${encodeURIComponent(p.location||"")}`
+    +
+    `&details=${encodeURIComponent(p.details||"")}`
+    +
+    `&attachment_url=${encodeURIComponent(p.attachment_url||"")}`
+    +
+    `&callback=${cb}`;
+
+
+  const res=
+    await jsonp(
+      url,
+      cb,
+      20000
+    );
+
+
+  if(
+    !res?.ok
+  ){
+
+    throw new Error(
+      res?.error
+      ||
+      "Erreur ajout"
+    );
+
+  }
+
+
+  return res;
+
+}
+
+
+async function apiDeleteEvent_(
+  dateStr,
+  ev
+){
+
+  const email=
+    getEmailLocal();
+
+  if(!email){
+
+    throw new Error(
+      "Email introuvable. Reconnecte-toi sur le portail."
+    );
+
+  }
+
+
+  const id=
+    String(
+      ev?.event_id
+      ||
+      ev?.id
+      ||
+      ""
+    ).trim();
+
+
+  const cb=
+    "cb_del_"
+    +
+    Math.random()
+      .toString(36)
+      .slice(2);
+
+
+  let url=
+    `${API}?view=planning_delete`
+    +
+    `&email=${encodeURIComponent(email)}`;
+
+
+  if(id){
+
+    url+=
+      `&event_id=${encodeURIComponent(id)}`;
+
+  }else{
+
+    url+=
+      `&date=${encodeURIComponent(dateStr)}`
+      +
+      `&title=${encodeURIComponent(ev?.title||"")}`
+      +
+      `&start=${encodeURIComponent(ev?.start||"")}`;
+
+  }
+
+
+  url+=
+    `&callback=${cb}`;
+
+
+  const res=
+    await jsonp(
+      url,
+      cb,
+      20000
+    );
+
+
+  if(
+    !res?.ok
+  ){
+
+    throw new Error(
+      res?.error
+      ||
+      "Erreur suppression"
+    );
+
+  }
+
+
+  if(
+    Number(
+      res.deleted||0
+    )
+    <
+    1
+  ){
+
+    throw new Error(
+      "Événement introuvable dans le planning."
+    );
+
+  }
+
+
+  return res;
+
+}
+
+
+function buildCategoryOptions(
+  selected
+){
+
+  const s=
+    $("fCategory");
+
+  s.innerHTML=
+    '<option value="">Aucune</option>';
+
+
+  const items=
+    [
+      ...catLabel.entries()
+    ]
+    .map(
+      ([k,label])=>({
+
+        k,
+        label,
+
+        order:
+          catOrder.get(k)
+          ??
+          9999
+
+      })
+    )
+    .sort(
+      (a,b)=>
+        (
+          a.order-b.order
+        )
+        ||
+        a.label.localeCompare(
+          b.label
+        )
+    );
+
+
+  for(
+    const it
+    of items
+  ){
+
+    const o=
+      document.createElement(
+        "option"
+      );
+
+    o.value=
+      it.label;
+
+    o.textContent=
+      it.label;
+
+    s.appendChild(
+      o
+    );
+
+  }
+
+
+  s.value=
+    selected||"";
+
+}
+
+
+function buildWheel(key){
+
+  const p=
+    TIME_PICKERS[key];
+
+  if(
+    !p
+    ||
+    !p.wheel
+    ||
+    !p.inner
+  ){
+    return;
+  }
+
+
+  p.inner.innerHTML=
+    '<div class="wheelPad"></div>';
+
+
+  for(
+    let r=0;
+    r<9;
+    r++
+  ){
+
+    for(
+      const v
+      of p.values
+    ){
+
+      const i=
+        document.createElement(
+          "div"
+        );
+
+      i.className=
+        "wheelItem";
+
+      i.dataset.value=
+        v;
+
+      i.textContent=
+        v;
+
+      i.onclick=
+        ()=>setWheelValue(
+          key,
+          v,
+          true
+        );
+
+      p.inner.appendChild(
+        i
+      );
+
+    }
+
+  }
+
+
+  p.inner.insertAdjacentHTML(
+    "beforeend",
+    '<div class="wheelPad"></div>'
+  );
+
+
+  p.wheel.addEventListener(
+    "scroll",
+    ()=>{
+
+      clearTimeout(
+        p.timer
+      );
+
+      p.timer=
+        setTimeout(
+          ()=>snapWheel(key),
+          70
+        );
+
+    }
+  );
+
+}
+
+
+function getWheelItems(k){
+
+  return [
+    ...TIME_PICKERS[k]
+      .inner
+      .querySelectorAll(
+        ".wheelItem"
+      )
+  ];
+
+}
+
+
+function nearest(k){
+
+  const p=
+    TIME_PICKERS[k];
+
+  const c=
+    p.wheel.scrollTop
+    +
+    p.wheel.clientHeight/2;
+
+  let best=null;
+  let dist=Infinity;
+
+
+  for(
+    const i
+    of getWheelItems(k)
+  ){
+
+    const d=
+      Math.abs(
+        c
+        -
+        (
+          i.offsetTop
+          +
+          i.offsetHeight/2
+        )
+      );
+
+    if(
+      d<dist
+    ){
+
+      dist=d;
+      best=i;
+
+    }
+
+  }
+
+
+  return best;
+
+}
+
+
+function setWheelValue(
+  k,
+  v,
+  smooth=false
+){
+
+  const p=
+    TIME_PICKERS[k];
+
+  const items=
+    getWheelItems(k)
+      .filter(
+        i=>
+          i.dataset.value===v
+      );
+
+  const target=
+    items[
+      Math.floor(
+        items.length/2
+      )
+    ];
+
+  if(!target){
+    return;
+  }
+
+
+  p.wheel.scrollTo({
+
+    top:
+      target.offsetTop
+      -
+      (
+        p.wheel.clientHeight
+        -
+        target.offsetHeight
+      )
+      /
+      2,
+
+    behavior:
+      smooth
+        ? "smooth"
+        : "auto"
+
+  });
+
+
+  p.value=
+    v;
+
+
+  setTimeout(
+    ()=>{
+
+      getWheelItems(k)
+        .forEach(
+          i=>
+            i.classList.toggle(
+              "active",
+              i===nearest(k)
+            )
+        );
+
+      const n=
+        nearest(k);
+
+      if(n){
+
+        p.value=
+          n.dataset.value;
+
+      }
+
+    },
+    smooth
+      ? 150
+      : 0
+  );
+
+}
+
+
+function snapWheel(k){
+
+  const p=
+    TIME_PICKERS[k];
+
+  const i=
+    nearest(k);
+
+  if(!i){
+    return;
+  }
+
+
+  p.wheel.scrollTo({
+
+    top:
+      i.offsetTop
+      -
+      (
+        p.wheel.clientHeight
+        -
+        i.offsetHeight
+      )
+      /
+      2,
+
+    behavior:
+      "smooth"
+
+  });
+
+
+  p.value=
+    i.dataset.value;
+
+
+  getWheelItems(k)
+    .forEach(
+      x=>
+        x.classList.toggle(
+          "active",
+          x===i
+        )
+    );
+
+}
+
+
+function getTimeValue(prefix){
+
+  return (
+    TIME_PICKERS[
+      prefix+"Hour"
+    ].value
+    +
+    ":"
+    +
+    TIME_PICKERS[
+      prefix+"Minute"
+    ].value
+  );
+
+}
+
+
+function setTimeValue(
+  prefix,
+  v
+){
+
+  const [
+    hh="00",
+    mm="00"
+  ]=
+    String(v||"")
+      .split(":");
+
+
+  setWheelValue(
+    prefix+"Hour",
+    HOURS.includes(hh)
+      ? hh
+      : "00"
+  );
+
+
+  setWheelValue(
+    prefix+"Minute",
+    MINUTES.includes(mm)
+      ? mm
+      : "00"
+  );
+
+}
+
+
+function initWheels(){
+
+  [
+    "startHour",
+    "startMinute",
+    "endHour",
+    "endMinute"
+  ]
+  .forEach(
+    buildWheel
+  );
+
+
+  setTimeout(
+    ()=>{
+
+      setTimeValue(
+        "start",
+        "08:00"
+      );
+
+      setTimeValue(
+        "end",
+        "09:00"
+      );
+
+    },
+    0
+  );
+
+}
+
+
+function renderAttachmentPreview_(){
+
+  const u=
+    String(
+      FORM_ATTACHMENT_URL||""
+    ).trim();
+
+  if(!u){
+
+    $("attachmentPreview")
+      .classList
+      .remove(
+        "show"
+      );
+
+    $("attachmentPreviewImg")
+      .removeAttribute(
+        "src"
+      );
+
+    return;
+
+  }
+
+
+  $("attachmentPreviewImg").src=
+    u;
+
+  $("attachmentPreview")
+    .classList
+    .add(
+      "show"
+    );
+
+}
+
+
+function resetAttachmentForm_(ev){
+
+  FORM_ORIGINAL_ATTACHMENT_URL=
+    getAttachmentUrl_(ev);
+
+  FORM_ATTACHMENT_URL=
+    FORM_ORIGINAL_ATTACHMENT_URL;
+
+  FORM_NEW_UPLOAD_URL=
+    "";
+
+  renderAttachmentPreview_();
+
+}
+
+
+function openAttachmentUpload_(){
+
+  const email=
+    getEmailLocal();
+
+  if(!email){
+
+    alert(
+      "Email introuvable. Reconnecte-toi sur le portail."
+    );
+
+    return;
+
+  }
+
+
+  $("attachmentUploadFrame").src=
+    `${API}?view=planning_attachment_upload_page&email=${encodeURIComponent(email)}&t=${Date.now()}`;
+
+
+  $("attachmentUploadOverlay")
+    .classList
+    .add(
+      "show"
+    );
+
+}
+
+
+function closeAttachmentUpload_(){
+
+  $("attachmentUploadOverlay")
+    .classList
+    .remove(
+      "show"
+    );
+
+
+  setTimeout(
+    ()=>{
+      $("attachmentUploadFrame").src=
+        "about:blank";
+    },
+    100
+  );
+
+}
+
+
+async function apiDeleteAttachment_(url){
+
+  const email=
+    getEmailLocal();
+
+  const u=
+    String(
+      url||""
+    ).trim();
+
+  if(
+    !email
+    ||
+    !u
+  ){
+    return;
+  }
+
+
+  const cb=
+    "cb_att_del_"
+    +
+    Math.random()
+      .toString(36)
+      .slice(2);
+
+
+  try{
+
+    await jsonp(
+      `${API}?view=planning_attachment_delete&email=${encodeURIComponent(email)}&url=${encodeURIComponent(u)}&callback=${cb}`,
+      cb,
+      20000
+    );
+
+  }catch(e){}
+
+}
+
+
+async function cleanupUnsavedAttachment_(){
+
+  const u=
+    String(
+      FORM_NEW_UPLOAD_URL||""
+    ).trim();
+
+  if(!u){
+    return;
+  }
+
+
+  FORM_NEW_UPLOAD_URL=
+    "";
+
+  await apiDeleteAttachment_(
+    u
+  );
+
+}
+
+
+function openEventForm(
+  mode,
+  dateStr,
+  ev
+){
+
+  FORM_STATE={
+
+    mode,
+    dateStr,
+    originalEvent:
+      ev||null
+
+  };
+
+
+  buildCategoryOptions(
+    ev?.category||""
+  );
+
+
+  resetAttachmentForm_(
+    ev
+  );
+
+
+  $("formTitle").textContent=
+    (
+      mode==="edit"
+        ? "Modifier"
+        : "Ajouter"
+    )
+    +
+    " — "
+    +
+    toFRDate(
+      dateStr
+    );
+
+
+  $("fTitle").value=
+    ev?.title||"";
+
+
+  $("fLocation").value=
+    ev?.location||"";
+
+
+  $("fDetails").value=
+    ev?.details||"";
+
+
+  if(
+    mode!=="edit"
+  ){
+
+    $("fCategory").value=
+      "";
+
+  }
+
+
+  setTimeValue(
+    "start",
+    ev?.start||"08:00"
+  );
+
+
+  setTimeValue(
+    "end",
+    ev?.end||"09:00"
+  );
+
+
+  $("formOverlay")
+    .classList
+    .add(
+      "show"
+    );
+
+}
+
+
+async function closeEventForm(){
+
+  await cleanupUnsavedAttachment_();
+
+
+  $("formOverlay")
+    .classList
+    .remove(
+      "show"
+    );
+
+
+  FORM_ATTACHMENT_URL="";
+  FORM_ORIGINAL_ATTACHMENT_URL="";
+  FORM_NEW_UPLOAD_URL="";
+
+}
+
+
+async function saveEventForm(){
+
+  const title=
+    $("fTitle").value.trim();
+
+  const category=
+    $("fCategory").value.trim();
+
+  const location=
+    $("fLocation").value.trim();
+
+  const details=
+    $("fDetails").value.trim();
+
+  const start=
+    getTimeValue(
+      "start"
+    );
+
+  const end=
+    getTimeValue(
+      "end"
+    );
+
+  const attachment_url=
+    String(
+      FORM_ATTACHMENT_URL||""
+    ).trim();
+
+
+  if(!title){
+
+    alert(
+      "Titre obligatoire."
+    );
+
+    return;
+
+  }
+
+
+  const min=t=>{
+
+    const [h,m]=
+      t
+        .split(":")
+        .map(Number);
+
+    return (
+      h*60
+      +
+      m
+    );
+
+  };
+
+
+  let endM=
+    end==="00:00"
+    &&
+    start!=="00:00"
+      ? 1440
+      : min(end);
+
+
+  if(
+    endM
+    <
+    min(start)
+  ){
+
+    alert(
+      "Heure fin incorrecte."
+    );
+
+    return;
+
+  }
+
+
+  const btn=
+    $("btnFormSave");
+
+  btn.disabled=
+    true;
+
+  btn.textContent=
+    "Enregistrement…";
+
+
+  try{
+
+    const old=
+      FORM_STATE.originalEvent;
+
+
+    if(
+      FORM_STATE.mode==="edit"
+      &&
+      old
+    ){
+
+      await apiDeleteEvent_(
+        FORM_STATE.dateStr,
+        old
+      );
+
+    }
+
+
+    const res=
       await apiAddEvent_(
         FORM_STATE.dateStr,
         {
@@ -1934,509 +2582,939 @@
         }
       );
 
-      const oldAttachment =
-        String(
-          FORM_ORIGINAL_ATTACHMENT_URL || ""
-        ).trim();
 
-      FORM_NEW_UPLOAD_URL = "";
+    if(old){
 
-      if(
-        oldAttachment &&
-        oldAttachment !== attachment_url
-      ){
-        apiDeleteAttachment_(oldAttachment).catch(()=>{});
-      }
+      events=
+        events.filter(
+          x=>x!==old
+        );
 
-      $btnFormSave.textContent = "✓ Enregistré";
-
-      await loadApi(true);
-
-      $formOverlay.classList.remove("show");
-      $formOverlay.setAttribute("aria-hidden","true");
-
-      FORM_ATTACHMENT_URL = "";
-      FORM_ORIGINAL_ATTACHMENT_URL = "";
-      FORM_NEW_UPLOAD_URL = "";
-
-      if(_editDate){
-        renderEditList(_editDate);
-      }
-
-    }catch(err){
-      alert(
-        "Erreur : " +
-        String(
-          err && err.message
-            ? err.message
-            : err
-        )
-      );
-    }finally{
-      $btnFormSave.disabled = false;
-
-      setTimeout(()=>{
-        $btnFormSave.textContent = "Enregistrer";
-      }, 350);
-    }
-  }
-
-  $btnAddEvent.addEventListener("click", ()=>{
-    if(!_editDate){
-      return;
     }
 
-    openEventForm("add", _editDate, null);
-  });
 
-  $btnCloseEdit.addEventListener("click", closeEdit);
+    const ev={
 
-  $editOverlay.addEventListener("click", (e)=>{
-    if(e.target === $editOverlay){
-      closeEdit();
-    }
-  });
+      event_id:
+        res.event_id||"",
 
-  $btnFormCancel.addEventListener("click", closeEventForm);
-  $btnFormClose.addEventListener("click", closeEventForm);
-  $btnFormSave.addEventListener("click", saveEventForm);
+      id:
+        res.event_id||"",
 
-  $btnAttachmentUpload.addEventListener("click", openAttachmentUpload_);
-  $btnAttachmentUploadClose.addEventListener("click", closeAttachmentUpload_);
+      date:
+        FORM_STATE.dateStr,
 
-  $btnAttachmentRemove.addEventListener("click", ()=>{
-    const current =
-      String(FORM_ATTACHMENT_URL || "").trim();
+      title,
+      start,
+      end,
+      category,
+      location,
+      details,
+      attachment_url
 
-    if(!current){
-      return;
-    }
+    };
+
+
+    events.push(ev);
+
+
+    const oldAtt=
+      String(
+        FORM_ORIGINAL_ATTACHMENT_URL||""
+      ).trim();
+
+
+    FORM_NEW_UPLOAD_URL=
+      "";
+
 
     if(
-      FORM_NEW_UPLOAD_URL &&
-      current === FORM_NEW_UPLOAD_URL
+      oldAtt
+      &&
+      oldAtt!==attachment_url
     ){
-      const tmp = FORM_NEW_UPLOAD_URL;
 
-      FORM_NEW_UPLOAD_URL = "";
+      apiDeleteAttachment_(
+        oldAtt
+      ).catch(()=>{});
 
-      apiDeleteAttachment_(tmp).catch(()=>{});
     }
 
-    FORM_ATTACHMENT_URL = "";
 
-    renderAttachmentPreview_();
+    rebuildMaps();
+
+    renderMonth();
+
+    saveCacheCurrent_();
+
+
+    $("formOverlay")
+      .classList
+      .remove(
+        "show"
+      );
+
+
+    FORM_ATTACHMENT_URL="";
+    FORM_ORIGINAL_ATTACHMENT_URL="";
+    FORM_NEW_UPLOAD_URL="";
+
+
+    if(
+      _editDate
+    ){
+
+      renderEditList(
+        _editDate
+      );
+
+    }
+
+
+    btn.textContent=
+      "✓ Enregistré";
+
+  }catch(err){
+
+    alert(
+      "Erreur : "
+      +
+      (
+        err?.message
+        ||
+        err
+      )
+    );
+
+  }finally{
+
+    btn.disabled=
+      false;
+
+
+    setTimeout(
+      ()=>{
+        btn.textContent=
+          "Enregistrer";
+      },
+      350
+    );
+
+  }
+
+}
+
+
+function saveCache_(payload){
+
+  try{
+
+    localStorage.setItem(
+      getCacheKey_(),
+      JSON.stringify({
+
+        savedAt:
+          Date.now(),
+
+        payload
+
+      })
+    );
+
+  }catch(e){}
+
+}
+
+
+function loadCache_(){
+
+  try{
+
+    const o=
+      JSON.parse(
+        localStorage.getItem(
+          getCacheKey_()
+        )
+        ||
+        "null"
+      );
+
+    return (
+      o?.payload
+      &&
+      (
+        !o.savedAt
+        ||
+        Date.now()-o.savedAt
+        <=
+        CACHE_MAX_AGE_MS
+      )
+    )
+      ? o.payload
+      : null;
+
+  }catch(e){
+
+    return null;
+
+  }
+
+}
+
+
+function saveCacheCurrent_(){
+
+  saveCache_({
+
+    py:{
+      ok:true,
+      year:ACTIVE_YEAR,
+      events
+    },
+
+    pc:{
+      ok:true,
+      categories:
+        categoriesRaw
+    }
+
   });
 
-  window.addEventListener("message", event=>{
-    const data = event.data || {};
+}
 
-    if(data.type === "planning-attachment-success"){
-      const url =
+
+function applyPlanningData_(
+  py,
+  pc
+){
+
+  events=
+    Array.isArray(
+      py?.events
+    )
+      ? py.events
+      : [];
+
+
+  categoriesRaw=
+    Array.isArray(
+      pc?.categories
+    )
+    &&
+    pc.categories.length
+      ? pc.categories
+      : DEFAULT_CATEGORIES.slice();
+
+
+  rebuildMaps();
+
+  renderLegend();
+
+  renderMonth();
+
+}
+
+
+async function loadApi(
+  forceFresh=false
+){
+
+  const cached=
+    loadCache_();
+
+
+  if(
+    !forceFresh
+    &&
+    cached?.py
+    &&
+    cached?.pc
+  ){
+
+    applyPlanningData_(
+      cached.py,
+      cached.pc
+    );
+
+    showStatus(
+      "Synchronisation…",
+      "Mise à jour en cours."
+    );
+
+  }else{
+
+    showStatus(
+      "Chargement…",
+      "Récupération du planning."
+    );
+
+  }
+
+
+  const cb1=
+    "cb_py_"
+    +
+    Math.random()
+      .toString(36)
+      .slice(2);
+
+
+  const cb2=
+    "cb_pc_"
+    +
+    Math.random()
+      .toString(36)
+      .slice(2);
+
+
+  try{
+
+    const [
+      py,
+      pc
+    ]=
+      await Promise.all([
+
+        jsonp(
+          `${API}?view=planning_year&year=${ACTIVE_YEAR}${forceFresh?"&nocache=1":""}&callback=${cb1}`,
+          cb1
+        ),
+
+        jsonp(
+          `${API}?view=planning_categories${forceFresh?"&nocache=1":""}&callback=${cb2}`,
+          cb2
+        )
+
+      ]);
+
+
+    if(
+      py?.ok===false
+    ){
+
+      throw new Error(
+        py.error
+        ||
+        "planning invalide"
+      );
+
+    }
+
+
+    if(
+      pc?.ok===false
+    ){
+
+      throw new Error(
+        pc.error
+        ||
+        "catégories invalides"
+      );
+
+    }
+
+
+    applyPlanningData_(
+      py,
+      pc
+    );
+
+
+    saveCache_({
+      py,
+      pc
+    });
+
+
+    hideStatus();
+
+  }catch(e){
+
+    if(
+      cached?.py
+      &&
+      cached?.pc
+    ){
+
+      showStatus(
+        "Hors ligne / lent",
+        "Données en cache."
+      );
+
+      setTimeout(
+        hideStatus,
+        2200
+      );
+
+      return;
+
+    }
+
+
+    events=[];
+
+    categoriesRaw=
+      DEFAULT_CATEGORIES.slice();
+
+    rebuildMaps();
+
+    renderLegend();
+
+    renderMonth();
+
+
+    showStatus(
+      "API HS / lente",
+      "Impossible de charger le planning."
+    );
+
+  }
+
+}
+
+
+function updateYearDisplay_(){
+
+  if(
+    IS_ADMIN
+  ){
+
+    $("yearText").style.display=
+      "none";
+
+    const s=
+      $("yearSelect");
+
+    s.style.display=
+      "inline-block";
+
+    s.innerHTML="";
+
+
+    for(
+      const y
+      of ADMIN_YEARS
+    ){
+
+      const o=
+        document.createElement(
+          "option"
+        );
+
+      o.value=
+        String(y);
+
+      o.textContent=
+        String(y);
+
+      o.selected=
+        y===ACTIVE_YEAR;
+
+      s.appendChild(
+        o
+      );
+
+    }
+
+  }else{
+
+    ACTIVE_YEAR=
+      PUBLIC_YEAR;
+
+    $("yearText").textContent=
+      PUBLIC_YEAR;
+
+    $("yearText").style.display=
+      "inline";
+
+    $("yearSelect").style.display=
+      "none";
+
+  }
+
+}
+
+
+$("btnBack").onclick=
+  ()=>location.href=BACK_URL;
+
+
+$("btnPrev").onclick=
+  ()=>{
+
+    if(
+      currentMonth>0
+    ){
+
+      currentMonth--;
+
+      renderMonth();
+
+    }
+
+  };
+
+
+$("btnNext").onclick=
+  ()=>{
+
+    if(
+      currentMonth<11
+    ){
+
+      currentMonth++;
+
+      renderMonth();
+
+    }
+
+  };
+
+
+$("btnLock").onclick=
+  ()=>{
+
+    if(
+      IS_ADMIN
+    ){
+
+      setEditMode(
+        !EDIT_MODE
+      );
+
+    }
+
+  };
+
+
+$("noteClose").onclick=
+  closeNote;
+
+
+$("btnCloseEdit").onclick=
+  closeEdit;
+
+
+$("btnAddEvent").onclick=
+  ()=>{
+
+    if(
+      _editDate
+    ){
+
+      openEventForm(
+        "add",
+        _editDate,
+        null
+      );
+
+    }
+
+  };
+
+
+$("btnFormCancel").onclick=
+  closeEventForm;
+
+
+$("btnFormClose").onclick=
+  closeEventForm;
+
+
+$("btnFormSave").onclick=
+  saveEventForm;
+
+
+$("btnAttachmentUpload").onclick=
+  openAttachmentUpload_;
+
+
+$("btnAttachmentUploadClose").onclick=
+  closeAttachmentUpload_;
+
+
+$("btnAttachmentRemove").onclick=
+  ()=>{
+
+    const u=
+      String(
+        FORM_ATTACHMENT_URL||""
+      ).trim();
+
+    if(!u){
+      return;
+    }
+
+
+    if(
+      FORM_NEW_UPLOAD_URL
+      &&
+      u===FORM_NEW_UPLOAD_URL
+    ){
+
+      const tmp=
+        FORM_NEW_UPLOAD_URL;
+
+      FORM_NEW_UPLOAD_URL=
+        "";
+
+      apiDeleteAttachment_(
+        tmp
+      ).catch(()=>{});
+
+    }
+
+
+    FORM_ATTACHMENT_URL=
+      "";
+
+    renderAttachmentPreview_();
+
+  };
+
+
+$("grid").onclick=
+  e=>{
+
+    const d=
+      e.target.closest(
+        ".day"
+      );
+
+    if(
+      !d
+      ||
+      d.classList.contains(
+        "is-empty"
+      )
+      ||
+      !d.dataset.date
+    ){
+      return;
+    }
+
+
+    if(
+      EDIT_MODE
+      &&
+      IS_ADMIN
+    ){
+
+      openEdit(
+        d.dataset.date
+      );
+
+    }else if(
+      d.classList.contains(
+        "has-note"
+      )
+    ){
+
+      openNote(
+        d.dataset.date
+      );
+
+    }
+
+  };
+
+
+$("noteOverlay").onclick=
+  e=>{
+
+    if(
+      e.target
+      ===
+      $("noteOverlay")
+    ){
+
+      closeNote();
+
+    }
+
+  };
+
+
+$("editOverlay").onclick=
+  e=>{
+
+    if(
+      e.target
+      ===
+      $("editOverlay")
+    ){
+
+      closeEdit();
+
+    }
+
+  };
+
+
+$("formOverlay").onclick=
+  e=>{
+
+    if(
+      e.target
+      ===
+      $("formOverlay")
+    ){
+
+      closeEventForm();
+
+    }
+
+  };
+
+
+window.addEventListener(
+  "message",
+  e=>{
+
+    const d=
+      e.data||{};
+
+
+    if(
+      d.type
+      ===
+      "planning-attachment-success"
+    ){
+
+      const u=
         String(
-          data.url ||
-          data.attachment_url ||
-          data.file_url ||
+          d.url
+          ||
+          d.attachment_url
+          ||
+          d.file_url
+          ||
           ""
         ).trim();
 
-      if(!url){
-        alert("L'image a été envoyée mais aucune URL n'a été reçue.");
+
+      if(!u){
+
+        alert(
+          "L'image a été envoyée mais aucune URL n'a été reçue."
+        );
+
         return;
+
       }
 
-      const previousNew =
-        String(FORM_NEW_UPLOAD_URL || "").trim();
+
+      const prev=
+        String(
+          FORM_NEW_UPLOAD_URL||""
+        ).trim();
+
 
       if(
-        previousNew &&
-        previousNew !== url
+        prev
+        &&
+        prev!==u
       ){
-        apiDeleteAttachment_(previousNew).catch(()=>{});
+
+        apiDeleteAttachment_(
+          prev
+        ).catch(()=>{});
+
       }
 
-      FORM_NEW_UPLOAD_URL = url;
-      FORM_ATTACHMENT_URL = url;
+
+      FORM_NEW_UPLOAD_URL=
+        u;
+
+      FORM_ATTACHMENT_URL=
+        u;
+
 
       renderAttachmentPreview_();
+
       closeAttachmentUpload_();
+
+    }else if(
+      d.type
+      ===
+      "planning-attachment-close"
+    ){
+
+      closeAttachmentUpload_();
+
     }
+
+  }
+);
+
+
+$("yearSelect").onchange=
+  async()=>{
 
     if(
-      data.type === "planning-attachment-close"
+      !IS_ADMIN
     ){
-      closeAttachmentUpload_();
-    }
-  });
-
-  $formOverlay.addEventListener("click", (e)=>{
-    if(e.target === $formOverlay){
-      closeEventForm();
-    }
-  });
-
-  $grid.addEventListener("click", (e)=>{
-    const day = e.target.closest(".day");
-
-    if(!day){
       return;
     }
 
-    if(day.classList.contains("is-empty")){
-      return;
-    }
 
-    const dateStr = day.dataset.date;
+    const y=
+      Number(
+        $("yearSelect").value
+      );
 
-    if(!dateStr){
-      return;
-    }
 
     if(
-      EDIT_MODE &&
-      IS_ADMIN
+      !ADMIN_YEARS.includes(y)
     ){
-      openEdit(dateStr);
       return;
     }
 
-    if(day.classList.contains("has-note")){
-      openNote(dateStr);
-    }
-  });
 
-  $noteClose.addEventListener("click", closeNote);
+    ACTIVE_YEAR=
+      y;
 
-  $noteOverlay.addEventListener("click", (e)=>{
-    if(e.target === $noteOverlay){
-      closeNote();
-    }
-  });
 
-  document.addEventListener("keydown", (e)=>{
-    if(e.key === "Escape"){
+    closeNote();
+
+    closeEdit();
+
+
+    events=[];
+
+
+    rebuildMaps();
+
+
+    currentMonth=
+      new Date().getFullYear()
+      ===
+      ACTIVE_YEAR
+        ? new Date().getMonth()
+        : 0;
+
+
+    renderMonth();
+
+
+    await loadApi();
+
+  };
+
+
+document.addEventListener(
+  "keydown",
+  e=>{
+
+    if(
+      e.key==="Escape"
+    ){
+
       closeNote();
       closeEdit();
       closeEventForm();
-    }
-  });
 
-  function saveCache_(payload){
-    try{
-      localStorage.setItem(
-        getCacheKey_(),
-        JSON.stringify({
-          savedAt: Date.now(),
-          payload
-        })
-      );
-    }catch(e){}
+    }
+
   }
+);
 
-  function loadCache_(){
-    try{
-      const raw =
-        localStorage.getItem(
-          getCacheKey_()
-        );
 
-      if(!raw){
-        return null;
-      }
+(async function(){
 
-      const obj =
-        JSON.parse(raw);
+  categoriesRaw=
+    DEFAULT_CATEGORIES.slice();
 
-      if(!obj || !obj.payload){
-        return null;
-      }
+  rebuildMaps();
 
-      if(
-        obj.savedAt &&
-        (Date.now() - obj.savedAt) > CACHE_MAX_AGE_MS
-      ){
-        return null;
-      }
+  renderLegend();
 
-      return obj.payload;
 
-    }catch(e){
-      return null;
-    }
-  }
+  const now=
+    new Date();
 
-  function applyPlanningData_(py, pc){
-    events =
-      Array.isArray(py?.events)
-        ? py.events
-        : [];
 
-    categoriesRaw =
-      Array.isArray(pc?.categories) &&
-      pc.categories.length
-        ? pc.categories
-        : DEFAULT_CATEGORIES.slice();
+  currentMonth=
+    now.getFullYear()
+    ===
+    PUBLIC_YEAR
+      ? now.getMonth()
+      : 0;
 
-    rebuildMaps();
-    renderLegend();
-    renderMonth();
-  }
 
-  async function loadApi(forceFresh = false){
-    if(
-      !API ||
-      API.includes("COLLE_ICI")
-    ){
-      showStatus(
-        "API manquante",
-        "Mets ton URL exec dans const API."
-      );
+  /*
+   * Le calendrier est rendu AVANT toute communication
+   * avec Apps Script.
+   */
+  renderMonth();
 
-      return;
-    }
 
-    const cached = loadCache_();
-
-    if(
-      !forceFresh &&
-      cached?.py &&
-      cached?.pc
-    ){
-      applyPlanningData_(
-        cached.py,
-        cached.pc
-      );
-
-      showStatus(
-        "Synchronisation…",
-        "Mise à jour en cours."
-      );
-    }else{
-      showStatus(
-        "Chargement…",
-        "Récupération des événements et catégories."
-      );
-    }
-
-    const cb1 =
-      "cb_py_" +
-      Math.random().toString(36).slice(2);
-
-    const cb2 =
-      "cb_pc_" +
-      Math.random().toString(36).slice(2);
-
-    try{
-      const planningUrl =
-        `${API}?view=planning_year&year=${ACTIVE_YEAR}` +
-        `${forceFresh ? "&nocache=1" : ""}` +
-        `&callback=${cb1}`;
-
-      const catsUrl =
-        `${API}?view=planning_categories` +
-        `${forceFresh ? "&nocache=1" : ""}` +
-        `&callback=${cb2}`;
-
-      const [py, pc] =
-        await Promise.all([
-          jsonp(planningUrl, cb1),
-          jsonp(catsUrl, cb2)
-        ]);
-
-      if(py?.ok===false){
-        throw new Error(
-          py?.error ||
-          "planning_year invalide"
-        );
-      }
-
-      if(pc?.ok===false){
-        throw new Error(
-          pc?.error ||
-          "planning_categories invalide"
-        );
-      }
-
-      applyPlanningData_(py, pc);
-
-      saveCache_({
-        py,
-        pc
-      });
-
-      hideStatus();
-
-    }catch(e){
-      if(
-        !forceFresh &&
-        cached?.py &&
-        cached?.pc
-      ){
-        showStatus(
-          "Hors ligne / lent",
-          "Les données affichées sont en cache."
-        );
-
-        setTimeout(
-          hideStatus,
-          2500
-        );
-
-        return;
-      }
-
-      categoriesRaw =
-        DEFAULT_CATEGORIES.slice();
-
-      events = [];
-
-      rebuildMaps();
-      renderLegend();
-      renderMonth();
-
-      showStatus(
-        "API HS / lente",
-        "La légende reste, mais pas d’événements."
-      );
-    }
-  }
-
-  $("btnBack").addEventListener("click", ()=>{
-    location.href = BACK_URL;
-  });
-
-  $btnPrev.addEventListener("click", ()=>{
-    if(currentMonth>0){
-      currentMonth--;
-      renderMonth();
-    }
-  });
-
-  $btnNext.addEventListener("click", ()=>{
-    if(currentMonth<11){
-      currentMonth++;
-      renderMonth();
-    }
-  });
-
-  $btnLock.addEventListener("click", ()=>{
-    if(!IS_ADMIN){
-      return;
-    }
-
-    setEditMode(!EDIT_MODE);
-  });
-
-  function updateYearDisplay_(){
-    if(IS_ADMIN){
-      $yearText.style.display = "none";
-      $yearSelect.style.display = "inline-block";
-      $yearSelect.innerHTML = "";
-
-      ADMIN_YEARS.forEach(year => {
-        const opt =
-          document.createElement("option");
-
-        opt.value = String(year);
-        opt.textContent = String(year);
-
-        if(year === ACTIVE_YEAR){
-          opt.selected = true;
-        }
-
-        $yearSelect.appendChild(opt);
-      });
-
-    }else{
-      ACTIVE_YEAR = PUBLIC_YEAR;
-
-      $yearText.textContent = String(PUBLIC_YEAR);
-      $yearText.style.display = "inline";
-      $yearSelect.style.display = "none";
-    }
-  }
-
-  $yearSelect.addEventListener("change", async ()=>{
-    if(!IS_ADMIN){
-      return;
-    }
-
-    const newYear =
-      Number($yearSelect.value);
-
-    if(
-      !ADMIN_YEARS.includes(newYear)
-    ){
-      return;
-    }
-
-    ACTIVE_YEAR = newYear;
-
-    closeNote();
-    closeEdit();
-    closeEventForm();
-
-    events = [];
-
-    rebuildMaps();
-
-    const now = new Date();
-
-    currentMonth =
-      now.getFullYear() === ACTIVE_YEAR
-        ? now.getMonth()
-        : 0;
-
-    renderMonth();
-
-    showStatus(
-      `Planning ${ACTIVE_YEAR}`,
-      "Chargement de l'année…"
-    );
-
-    await loadApi();
-  });
-
-  (async function(){
-    rebuildMaps();
-    renderLegend();
+  /*
+   * Une erreur dans les molettes d'heure
+   * ne peut plus empêcher le planning de démarrer.
+   */
+  try{
 
     initWheels();
 
+  }catch(e){
+
+    console.warn(
+      "Sélecteurs horaires non initialisés",
+      e
+    );
+
+  }
+
+
+  /*
+   * Le chargement du planning démarre immédiatement.
+   */
+  const planningPromise=
+    loadApi()
+      .catch(()=>{});
+
+
+  /*
+   * La détection du rôle admin est indépendante.
+   */
+  try{
+
+    await loadMyRole_();
+
+  }catch(e){}
+
+
+  if(
+    IS_ADMIN
+  ){
+
+    $("btnLock").style.display=
+      "inline-block";
+
+
     try{
-      await loadMyRole_();
-    }catch(e){
-      IS_ADMIN = false;
-    }
 
-    if(IS_ADMIN){
       await loadPlanningYears_();
-    }else{
-      ADMIN_YEARS = [PUBLIC_YEAR];
-    }
 
-    ACTIVE_YEAR = PUBLIC_YEAR;
+    }catch(e){}
 
-    updateYearDisplay_();
+  }else{
 
-    const now = new Date();
+    $("btnLock").style.display=
+      "none";
 
-    currentMonth =
-      now.getFullYear() === ACTIVE_YEAR
-        ? now.getMonth()
-        : 0;
+    setEditMode(false);
 
-    renderMonth();
+  }
 
-    await loadApi();
 
-    if(IS_ADMIN){
-      $btnLock.style.display = "inline-block";
-    }else{
-      $btnLock.style.display = "none";
-      setEditMode(false);
-    }
-  })();
+  updateYearDisplay_();
+
+
+  await planningPromise;
+
+})();
 
 </script>
 </body>
