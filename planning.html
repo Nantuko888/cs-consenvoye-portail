@@ -574,12 +574,7 @@
     .attachmentUploadTitle{font-size:18px;font-weight:950}
     .attachmentUploadWindow{flex:1;min-height:0;overflow:hidden;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:#151515}
     .attachmentUploadFrame{display:block;width:100%;height:100%;border:0}
-
-    #btnFormSave{
-      background:#168039;
-      border-color:rgba(50,210,100,.35);
-      color:#fff;
-    }
+    #btnFormSave{background:#168039;border-color:rgba(50,210,100,.35);color:#fff}
 
     @media (max-width: 520px){
       .timePickerGroup{grid-template-columns:1fr}
@@ -647,13 +642,13 @@
       <span>⚠️</span>
       <div>
         <div id="statusTxt">Chargement…</div>
-        <div class="small" id="statusSub"></div>
+        <div class="small" id="statusSub">Si ça reste, l’URL API est mauvaise.</div>
       </div>
     </div>
   </div>
 
   <div class="noteOverlay" id="noteOverlay" aria-hidden="true">
-    <div class="noteSheet">
+    <div class="noteSheet" role="dialog" aria-modal="true" aria-label="Note du jour">
       <div class="noteHead">
         <div class="noteTitle" id="noteTitle">—</div>
         <button class="noteClose" id="noteClose">Fermer</button>
@@ -663,12 +658,12 @@
   </div>
 
   <div class="editOverlay" id="editOverlay" aria-hidden="true">
-    <div class="editSheet">
+    <div class="editSheet" role="dialog" aria-modal="true" aria-label="Gestion des événements">
       <div class="editHead">
         <div class="editTitle" id="editTitle">—</div>
         <div class="editActions">
-          <button class="iconBtn" id="btnAddEvent">＋</button>
-          <button class="iconBtn" id="btnCloseEdit">✕</button>
+          <button class="iconBtn" id="btnAddEvent" title="Ajouter">＋</button>
+          <button class="iconBtn" id="btnCloseEdit" title="Fermer">✕</button>
         </div>
       </div>
       <div class="editBody" id="editBody"></div>
@@ -676,20 +671,22 @@
   </div>
 
   <div class="formOverlay" id="formOverlay" aria-hidden="true">
-    <div class="formSheet">
+    <div class="formSheet" role="dialog" aria-modal="true" aria-label="Formulaire événement">
       <div class="formHead">
         <div class="formTitle" id="formTitle">Événement</div>
-        <button class="iconBtn" id="btnFormCancel">✕</button>
+        <div class="formActions">
+          <button class="iconBtn" id="btnFormCancel">✕</button>
+        </div>
       </div>
 
       <div class="formBody">
         <div class="formBlock">
-          <label class="formLabel">Titre</label>
-          <input class="fieldText" id="fTitle" type="text">
+          <label class="formLabel" for="fTitle">Titre</label>
+          <input class="fieldText" id="fTitle" type="text" placeholder="Titre de l’événement" />
         </div>
 
         <div class="formBlock">
-          <label class="formLabel">Catégorie</label>
+          <label class="formLabel" for="fCategory">Catégorie</label>
           <select class="fieldSelect" id="fCategory"></select>
         </div>
 
@@ -734,13 +731,13 @@
         </div>
 
         <div class="formBlock">
-          <label class="formLabel">Lieu</label>
-          <input class="fieldText" id="fLocation" type="text">
+          <label class="formLabel" for="fLocation">Lieu</label>
+          <input class="fieldText" id="fLocation" type="text" placeholder="Lieu (optionnel)" />
         </div>
 
         <div class="formBlock">
-          <label class="formLabel">Détails / note</label>
-          <textarea class="fieldArea" id="fDetails"></textarea>
+          <label class="formLabel" for="fDetails">Détails / note</label>
+          <textarea class="fieldArea" id="fDetails" placeholder="Détails (optionnel)"></textarea>
         </div>
 
         <div class="formBlock">
@@ -748,21 +745,17 @@
           <div class="attachmentActions">
             <button class="btn" id="btnAttachmentUpload" type="button">📎 Ajouter une image</button>
           </div>
-
-          <div class="attachmentHint">
-            Image facultative. Tu peux choisir une photo depuis ton téléphone.
-          </div>
-
+          <div class="attachmentHint">Image facultative. Tu peux choisir une photo depuis ton téléphone.</div>
           <div class="attachmentPreview" id="attachmentPreview">
             <img id="attachmentPreviewImg" alt="Pièce jointe">
             <div class="attachmentPreviewBar">
-              <span>Image jointe</span>
+              <span style="font-size:13px;font-weight:850;opacity:.82;">Image jointe</span>
               <button class="attachmentRemove" id="btnAttachmentRemove" type="button">Supprimer</button>
             </div>
           </div>
         </div>
 
-        <div class="formActions" style="justify-content:flex-end;">
+        <div class="formActions" style="justify-content:flex-end;padding-bottom:2px;">
           <button class="btn" id="btnFormClose">Annuler</button>
           <button class="btn" id="btnFormSave">Enregistrer</button>
         </div>
@@ -770,13 +763,13 @@
     </div>
   </div>
 
-  <div class="attachmentUploadOverlay" id="attachmentUploadOverlay">
+  <div class="attachmentUploadOverlay" id="attachmentUploadOverlay" aria-hidden="true">
     <div class="attachmentUploadTop">
       <div class="attachmentUploadTitle">Pièce jointe</div>
-      <button class="btn" id="btnAttachmentUploadClose">Fermer</button>
+      <button class="btn" id="btnAttachmentUploadClose" type="button">Fermer</button>
     </div>
     <div class="attachmentUploadWindow">
-      <iframe id="attachmentUploadFrame" class="attachmentUploadFrame" src="about:blank"></iframe>
+      <iframe id="attachmentUploadFrame" class="attachmentUploadFrame" src="about:blank" title="Ajouter une pièce jointe"></iframe>
     </div>
   </div>
 
@@ -792,6 +785,7 @@
     return `cs_planning_cache_v1_${ACTIVE_YEAR}`;
   }
 
+  const CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 7;
   const LS_EMAIL = "cs_portail_email_v1";
 
   const DEFAULT_CATEGORIES = [
@@ -805,11 +799,10 @@
   ];
 
   const OVERRIDE_COLORS = {
-    "fma centre":"#ff2d2d"
+    "fma centre": "#ff2d2d"
   };
 
-  const $ = id => document.getElementById(id);
-
+  const $ = (id)=>document.getElementById(id);
   const $grid = $("grid");
   const $monthName = $("monthName");
   const $legendGrid = $("legendGrid");
@@ -820,6 +813,7 @@
   const $statusSub = $("statusSub");
   const $btnLock = $("btnLock");
   const $editLabel = $("editLabel");
+
   const $yearText = $("yearText");
   const $yearSelect = $("yearSelect");
 
@@ -843,7 +837,6 @@
   const $btnFormCancel = $("btnFormCancel");
   const $btnFormClose = $("btnFormClose");
   const $btnFormSave = $("btnFormSave");
-
   const $btnAttachmentUpload = $("btnAttachmentUpload");
   const $btnAttachmentRemove = $("btnAttachmentRemove");
   const $attachmentPreview = $("attachmentPreview");
@@ -852,11 +845,7 @@
   const $attachmentUploadFrame = $("attachmentUploadFrame");
   const $btnAttachmentUploadClose = $("btnAttachmentUploadClose");
 
-  const monthsFR = [
-    "Janvier","Février","Mars","Avril","Mai","Juin",
-    "Juillet","Août","Septembre","Octobre","Novembre","Décembre"
-  ];
-
+  const monthsFR = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
   const dowsFR = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
 
   let IS_ADMIN = false;
@@ -872,14 +861,14 @@
   let currentMonth = 0;
   let _editDate = "";
 
-  const HOURS = Array.from({length:24},(_,i)=>String(i).padStart(2,"0"));
+  const HOURS = Array.from({length:24}, (_,i)=>String(i).padStart(2,"0"));
   const MINUTES = ["00","15","30","45"];
   const LOOP_DUPLICATES = 15;
 
   let FORM_STATE = {
-    mode:"add",
-    dateStr:"",
-    originalEvent:null
+    mode: "add",
+    dateStr: "",
+    originalEvent: null
   };
 
   let FORM_ATTACHMENT_URL = "";
@@ -887,24 +876,21 @@
   let FORM_NEW_UPLOAD_URL = "";
 
   const TIME_PICKERS = {
-    startHour:{wheel:$("startHourWheel"),inner:$("startHourInner"),values:HOURS,value:"08",timer:null,looping:true},
-    startMinute:{wheel:$("startMinuteWheel"),inner:$("startMinuteInner"),values:MINUTES,value:"00",timer:null,looping:true},
-    endHour:{wheel:$("endHourWheel"),inner:$("endHourInner"),values:HOURS,value:"09",timer:null,looping:true},
-    endMinute:{wheel:$("endMinuteWheel"),inner:$("endMinuteInner"),values:MINUTES,value:"00",timer:null,looping:true}
+    startHour: { wheel: $("startHourWheel"), inner: $("startHourInner"), values: HOURS, value: "08", timer: null, looping: true },
+    startMinute: { wheel: $("startMinuteWheel"), inner: $("startMinuteInner"), values: MINUTES, value: "00", timer: null, looping: true },
+    endHour: { wheel: $("endHourWheel"), inner: $("endHourInner"), values: HOURS, value: "09", timer: null, looping: true },
+    endMinute: { wheel: $("endMinuteWheel"), inner: $("endMinuteInner"), values: MINUTES, value: "00", timer: null, looping: true }
   };
 
   function norm(s){
-    return String(s||"")
-      .trim()
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g,"")
+    return String(s||"").trim().toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
       .replace(/['’]/g,"")
       .replace(/\s+/g," ");
   }
 
   function escapeHtml(s){
-    return (s==null?"":String(s))
+    return (s==null ? "" : String(s))
       .replaceAll("&","&amp;")
       .replaceAll("<","&lt;")
       .replaceAll(">","&gt;")
@@ -913,37 +899,40 @@
   }
 
   function ymd(d){
-    const y=d.getFullYear();
-    const m=String(d.getMonth()+1).padStart(2,"0");
-    const dd=String(d.getDate()).padStart(2,"0");
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const dd = String(d.getDate()).padStart(2,"0");
     return `${y}-${m}-${dd}`;
   }
 
-  function firstMondayGrid(year,monthIndex){
-    const d=new Date(year,monthIndex,1);
-    const js=d.getDay();
-    const offset=js===0?6:js-1;
-    d.setDate(d.getDate()-offset);
+  function firstMondayGrid(year, monthIndex){
+    const d = new Date(year, monthIndex, 1);
+    const js = d.getDay();
+    const offset = (js === 0) ? 6 : (js - 1);
+    d.setDate(d.getDate() - offset);
     d.setHours(12,0,0,0);
     return d;
   }
 
   function toFRDate(ymdStr){
-    const [y,m,d]=String(ymdStr||"").split("-");
+    const [y,m,d] = String(ymdStr||"").split("-");
     if(!y||!m||!d) return ymdStr;
-    const dt=new Date(Number(y),Number(m)-1,Number(d),12,0,0,0);
-    return `${dowsFR[dt.getDay()]} ${String(d).padStart(2,"0")}/${String(m).padStart(2,"0")}/${y}`;
+    const dt = new Date(Number(y), Number(m)-1, Number(d), 12,0,0,0);
+    const dow = dowsFR[dt.getDay()];
+    return `${dow} ${String(d).padStart(2,"0")}/${String(m).padStart(2,"0")}/${y}`;
   }
 
   function formatTimeRange(start,end){
-    const s=String(start||"").trim();
-    const e=String(end||"").trim();
-    if(s&&e) return `${s}–${e}`;
-    return s||e||"";
+    const s = String(start||"").trim();
+    const e = String(end||"").trim();
+    if(s && e) return `${s}–${e}`;
+    if(s) return s;
+    if(e) return e;
+    return "";
   }
 
   function getEmailLocal(){
-    return (localStorage.getItem(LS_EMAIL)||"").trim().toLowerCase();
+    return (localStorage.getItem(LS_EMAIL) || "").trim().toLowerCase();
   }
 
   function getAttachmentUrl_(ev){
@@ -957,101 +946,82 @@
     ).trim();
   }
 
-  function showStatus(txt,sub){
-    $statusTxt.textContent=txt||"";
-    $statusSub.textContent=sub||"";
-    $status.style.display="block";
+  function showStatus(txt, sub){
+    $statusTxt.textContent = txt || "";
+    $statusSub.textContent = sub || "";
+    $status.style.display = "block";
   }
 
   function hideStatus(){
-    $status.style.display="none";
+    $status.style.display = "none";
   }
 
-  function jsonp(url,cbName,timeoutMs=15000){
-    return new Promise((resolve,reject)=>{
-      const script=document.createElement("script");
-
-      const cleanup=()=>{
+  function jsonp(url, cbName, timeoutMs=15000){
+    return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      const cleanup = () => {
         script.remove();
-        try{delete window[cbName];}
-        catch(e){window[cbName]=undefined;}
+        try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
       };
-
-      const timer=setTimeout(()=>{
-        cleanup();
-        reject(new Error("Timeout JSONP"));
-      },timeoutMs);
-
-      window[cbName]=data=>{
-        clearTimeout(timer);
-        cleanup();
-        resolve(data);
-      };
-
-      const sep=url.includes("?")?"&":"?";
-      script.src=url+sep+"t="+Date.now();
-
-      script.onerror=()=>{
-        clearTimeout(timer);
-        cleanup();
-        reject(new Error("Erreur JSONP"));
-      };
-
+      const timer = setTimeout(() => { cleanup(); reject(new Error("Timeout JSONP")); }, timeoutMs);
+      window[cbName] = (data) => { clearTimeout(timer); cleanup(); resolve(data); };
+      const sep = url.includes("?") ? "&" : "?";
+      script.src = url + sep + "t=" + Date.now();
+      script.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error("Erreur JSONP")); };
       document.head.appendChild(script);
     });
   }
 
   async function loadMyRole_(){
-    const email=getEmailLocal();
-
+    const email = getEmailLocal();
     if(!email){
-      IS_ADMIN=false;
+      IS_ADMIN = false;
       return;
     }
 
-    const cb="cb_auth_"+Math.random().toString(36).slice(2);
-    const url=`${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
-    const res=await jsonp(url,cb,20000);
+    const cb = "cb_auth_" + Math.random().toString(36).slice(2);
+    const url = `${API}?view=auth_check&email=${encodeURIComponent(email)}&nocache=1&callback=${cb}`;
+    const res = await jsonp(url, cb, 20000);
 
-    IS_ADMIN=!!(
+    IS_ADMIN = !!(
       res &&
-      res.ok===true &&
-      String(res.role||"").toLowerCase()==="admin"
+      res.ok === true &&
+      String(res.role||"").toLowerCase() === "admin"
     );
   }
 
   async function loadPlanningYears_(){
-    const cb="cb_years_"+Math.random().toString(36).slice(2);
-    const url=`${API}?view=planning_years_list&nocache=1&callback=${cb}`;
+    const cb = "cb_years_" + Math.random().toString(36).slice(2);
+    const url = `${API}?view=planning_years_list&nocache=1&callback=${cb}`;
 
     try{
-      const res=await jsonp(url,cb,20000);
-      const rawYears=Array.isArray(res?.years)?res.years:[];
+      const res = await jsonp(url, cb, 20000);
+      const rawYears = Array.isArray(res?.years) ? res.years : [];
 
-      const years=rawYears
-        .map(item=>{
-          if(typeof item==="number") return item;
-          if(typeof item==="string") return Number(item);
+      const years = rawYears
+        .map(item => {
+          if(typeof item === "number") return item;
+          if(typeof item === "string") return Number(item);
           return Number(item?.year);
         })
-        .filter(y=>Number.isInteger(y)&&y>=2000&&y<=2100);
+        .filter(y => Number.isInteger(y) && y >= 2000 && y <= 2100);
 
-      ADMIN_YEARS=[...new Set([PUBLIC_YEAR,...years])].sort((a,b)=>a-b);
+      ADMIN_YEARS = [...new Set([PUBLIC_YEAR, ...years])].sort((a,b)=>a-b);
     }catch(e){
-      ADMIN_YEARS=[PUBLIC_YEAR];
+      ADMIN_YEARS = [PUBLIC_YEAR];
     }
   }
 
   function rebuildMaps(){
-    eventsByDate=new Map();
-    hasNoteByDate=new Map();
+    eventsByDate = new Map();
+    hasNoteByDate = new Map();
 
     for(const ev of events){
-      const date=String(ev.date||"").trim();
+      const date = String(ev.date||"").trim();
       if(!date) continue;
 
       if(!eventsByDate.has(date)){
-        eventsByDate.set(date,[]);
+        eventsByDate.set(date, []);
       }
 
       eventsByDate.get(date).push(ev);
@@ -1060,80 +1030,79 @@
         String(ev.details||"").trim() ||
         getAttachmentUrl_(ev)
       ){
-        hasNoteByDate.set(date,true);
+        hasNoteByDate.set(date, true);
       }
     }
 
-    catColor=new Map();
-    catLabel=new Map();
-    catOrder=new Map();
+    catColor = new Map();
+    catLabel = new Map();
+    catOrder = new Map();
 
-    const cats=[...categoriesRaw]
-      .map(c=>({
-        category:String(c.category||"").trim(),
-        color:String(c.color||"").trim(),
-        order:Number(c.order||9999)||9999
+    const cats = [...categoriesRaw]
+      .map(c => ({
+        category: String(c.category||"").trim(),
+        color: String(c.color||"").trim(),
+        order: Number(c.order||9999) || 9999
       }))
-      .filter(c=>c.category);
+      .filter(c => c.category);
 
-    cats.sort((a,b)=>(a.order-b.order)||a.category.localeCompare(b.category));
+    cats.sort((a,b)=> (a.order-b.order) || a.category.localeCompare(b.category));
 
     for(const c of cats){
-      const k=norm(c.category);
+      const k = norm(c.category);
       if(catLabel.has(k)) continue;
 
-      const forced=OVERRIDE_COLORS[k];
-      const col=forced||c.color||"rgba(255,255,255,.25)";
+      const forced = OVERRIDE_COLORS[k];
+      const col = forced || c.color || "rgba(255,255,255,.25)";
 
-      catLabel.set(k,c.category);
-      catColor.set(k,col);
-      catOrder.set(k,c.order);
+      catLabel.set(k, c.category);
+      catColor.set(k, col);
+      catOrder.set(k, c.order);
     }
 
-    firstCatByDate=new Map();
+    firstCatByDate = new Map();
 
-    for(const [date,arr] of eventsByDate.entries()){
-      let best=null;
-      let bestOrder=9999;
+    for(const [date, arr] of eventsByDate.entries()){
+      let best = null;
+      let bestOrder = 9999;
 
       for(const ev of arr){
-        const k=norm(ev.category||"");
-        const o=catOrder.has(k)?catOrder.get(k):9999;
+        const k = norm(ev.category || "");
+        const o = catOrder.has(k) ? catOrder.get(k) : 9999;
 
-        if(o<bestOrder){
-          bestOrder=o;
-          best=k;
+        if(o < bestOrder){
+          bestOrder = o;
+          best = k;
         }
       }
 
       if(!best){
-        best=norm(arr[0]?.category||"");
+        best = norm(arr[0]?.category || "");
       }
 
-      firstCatByDate.set(date,best);
+      firstCatByDate.set(date, best);
     }
   }
 
   function getColorForCategory(catKey){
-    const k=norm(catKey);
+    const k = norm(catKey);
 
     if(OVERRIDE_COLORS[k]){
       return OVERRIDE_COLORS[k];
     }
 
-    return catColor.get(k)||"rgba(255,255,255,.25)";
+    return catColor.get(k) || "rgba(255,255,255,.25)";
   }
 
   function renderLegend(){
-    $legendGrid.innerHTML="";
+    $legendGrid.innerHTML = "";
 
     for(const [k,label] of catLabel.entries()){
-      const col=getColorForCategory(k);
-      const div=document.createElement("div");
+      const col = getColorForCategory(k);
+      const div = document.createElement("div");
 
-      div.className="legItem";
-
-      div.innerHTML=`
+      div.className = "legItem";
+      div.innerHTML = `
         <div class="sq" style="background:${escapeHtml(col)}"></div>
         <div class="legTxt">${escapeHtml(label)}</div>
       `;
@@ -1143,34 +1112,34 @@
   }
 
   function renderMonth(){
-    $monthName.textContent=monthsFR[currentMonth];
+    $monthName.textContent = monthsFR[currentMonth];
 
-    $btnPrev.disabled=currentMonth===0;
-    $btnNext.disabled=currentMonth===11;
+    $btnPrev.disabled = (currentMonth === 0);
+    $btnNext.disabled = (currentMonth === 11);
 
-    const start=firstMondayGrid(ACTIVE_YEAR,currentMonth);
-    const todayStr=ymd(new Date());
+    const start = firstMondayGrid(ACTIVE_YEAR, currentMonth);
+    const todayStr = ymd(new Date());
 
-    $grid.innerHTML="";
+    $grid.innerHTML = "";
 
     for(let i=0;i<42;i++){
-      const d=new Date(start);
+      const d = new Date(start);
       d.setDate(start.getDate()+i);
 
-      const inMonth=d.getMonth()===currentMonth;
-      const dateStr=ymd(d);
+      const inMonth = (d.getMonth()===currentMonth);
+      const dateStr = ymd(d);
 
-      const cell=document.createElement("div");
-      cell.className="day"+(inMonth?"":" is-empty");
+      const cell = document.createElement("div");
+      cell.className = "day" + (inMonth ? "" : " is-empty");
 
       if(inMonth){
-        cell.dataset.date=dateStr;
+        cell.dataset.date = dateStr;
 
-        const catKey=firstCatByDate.get(dateStr);
+        const catKey = firstCatByDate.get(dateStr);
 
         if(catKey){
           cell.classList.add("has-color");
-          cell.style.setProperty("--dayColor",getColorForCategory(catKey));
+          cell.style.setProperty("--dayColor", getColorForCategory(catKey));
         }
 
         if(dateStr===todayStr){
@@ -1182,19 +1151,20 @@
         }
       }
 
-      cell.innerHTML=`<span>${inMonth?d.getDate():""}</span>`;
-
+      cell.innerHTML = `<span>${inMonth ? d.getDate() : ""}</span>`;
       $grid.appendChild(cell);
     }
   }
 
   function setEditMode(on){
-    EDIT_MODE=!!on;
+    EDIT_MODE = !!on;
 
-    $editLabel.style.display=EDIT_MODE?"inline-block":"none";
+    $editLabel.style.display = EDIT_MODE ? "inline-block" : "none";
 
-    $btnLock.textContent=EDIT_MODE?"🔓":"🔒";
-    $btnLock.setAttribute("aria-pressed",EDIT_MODE?"true":"false");
+    if($btnLock){
+      $btnLock.textContent = EDIT_MODE ? "🔓" : "🔒";
+      $btnLock.setAttribute("aria-pressed", EDIT_MODE ? "true" : "false");
+    }
 
     if(!EDIT_MODE){
       closeEdit();
@@ -1202,64 +1172,71 @@
   }
 
   function openNote(dateStr){
-    const arr=eventsByDate.get(dateStr)||[];
+    const arr = eventsByDate.get(dateStr) || [];
 
-    const withDetails=arr.filter(ev=>
+    const withDetails = arr.filter(ev =>
       String(ev.details||"").trim() ||
       getAttachmentUrl_(ev)
     );
 
-    if(!withDetails.length) return;
+    if(!withDetails.length){
+      return;
+    }
 
-    $noteTitle.textContent=`Note — ${dateStr.split("-").reverse().join("/")}`;
-    $noteBody.innerHTML="";
+    $noteTitle.textContent = `Note — ${dateStr.split("-").reverse().join("/")}`;
+    $noteBody.innerHTML = "";
 
     for(const ev of withDetails){
-      const name=String(ev.title||"").trim()||"—";
-      const time=formatTimeRange(ev.start,ev.end);
-      const catK=norm(ev.category||"");
-      const catLabelTxt=String(ev.category||"").trim();
-      const loc=String(ev.location||"").trim();
-      const details=String(ev.details||"").trim();
-      const attachment=getAttachmentUrl_(ev);
-      const dotCol=getColorForCategory(catK);
+      const name = String(ev.title||"").trim() || "—";
+      const time = formatTimeRange(ev.start, ev.end);
+      const catK = norm(ev.category || "");
+      const catLabelTxt = (ev.category || "").trim();
+      const loc = String(ev.location||"").trim();
+      const details = String(ev.details||"").trim();
+      const attachment = getAttachmentUrl_(ev);
+      const dotCol = getColorForCategory(catK);
 
-      const card=document.createElement("div");
-      card.className="evCard";
+      const card = document.createElement("div");
+      card.className = "evCard";
 
-      card.innerHTML=`
+      card.innerHTML = `
         <div class="evTop">
           <div class="evName">${escapeHtml(name)}</div>
           <div class="evTime">${escapeHtml(time)}</div>
         </div>
 
         <div class="evMeta">
-          ${catLabelTxt?`
+          ${catLabelTxt ? `
             <div class="chip">
               <span class="chipDot" style="background:${escapeHtml(dotCol)}"></span>
               <span>${escapeHtml(catLabelTxt)}</span>
             </div>
-          `:""}
+          ` : ""}
 
-          ${loc?`
+          ${loc ? `
             <div class="chip">
               📍 <span>${escapeHtml(loc)}</span>
             </div>
-          `:""}
+          ` : ""}
         </div>
 
-        ${details?`
+        ${details ? `
           <div class="evDetails">${escapeHtml(details)}</div>
-        `:""}
+        ` : ""}
 
-        ${attachment?`
-          <a class="evAttachment"
-             href="${escapeHtml(attachment)}"
-             target="_blank"
-             rel="noopener">
-            <img src="${escapeHtml(attachment)}" alt="Pièce jointe">
+        ${attachment ? `
+          <a
+            class="evAttachment"
+            href="${escapeHtml(attachment)}"
+            target="_blank"
+            rel="noopener"
+          >
+            <img
+              src="${escapeHtml(attachment)}"
+              alt="Pièce jointe"
+            >
           </a>
-        `:""}
+        ` : ""}
       `;
 
       $noteBody.appendChild(card);
@@ -1275,8 +1252,9 @@
   }
 
   function openEdit(dateStr){
-    _editDate=dateStr;
-    $editTitle.textContent=`Événements — ${toFRDate(dateStr)}`;
+    _editDate = dateStr;
+
+    $editTitle.textContent = `Événements — ${toFRDate(dateStr)}`;
 
     renderEditList(dateStr);
 
@@ -1287,50 +1265,53 @@
   function closeEdit(){
     $editOverlay.classList.remove("show");
     $editOverlay.setAttribute("aria-hidden","true");
-    _editDate="";
-    $editBody.innerHTML="";
+
+    _editDate = "";
+    $editBody.innerHTML = "";
   }
 
   function renderEditList(dateStr){
-    const arr=(eventsByDate.get(dateStr)||[]).slice();
+    const arr = (eventsByDate.get(dateStr) || []).slice();
 
     arr.sort((a,b)=>
       String(a.start||"").localeCompare(String(b.start||"")) ||
       String(a.title||"").localeCompare(String(b.title||""))
     );
 
-    $editBody.innerHTML="";
+    $editBody.innerHTML = "";
 
     if(!arr.length){
-      const empty=document.createElement("div");
-      empty.className="row";
-      empty.innerHTML=`<div style="font-weight:900;opacity:.9">Aucun événement ce jour.</div>`;
+      const empty = document.createElement("div");
+
+      empty.className = "row";
+      empty.innerHTML = `<div style="font-weight:900;opacity:.9">Aucun événement ce jour.</div>`;
+
       $editBody.appendChild(empty);
       return;
     }
 
     for(const ev of arr){
-      const name=String(ev.title||"").trim()||"—";
-      const time=formatTimeRange(ev.start,ev.end);
-      const cat=String(ev.category||"").trim();
-      const loc=String(ev.location||"").trim();
-      const details=String(ev.details||"").trim();
-      const attachment=getAttachmentUrl_(ev);
+      const name = String(ev.title||"").trim() || "—";
+      const time = formatTimeRange(ev.start, ev.end);
+      const cat = String(ev.category||"").trim();
+      const loc = String(ev.location||"").trim();
+      const details = String(ev.details||"").trim();
+      const attachment = getAttachmentUrl_(ev);
 
-      const row=document.createElement("div");
-      row.className="row";
+      const row = document.createElement("div");
+      row.className = "row";
 
-      row.innerHTML=`
+      row.innerHTML = `
         <div class="rowTop">
           <div class="rowName">${escapeHtml(name)}</div>
           <div class="evTime">${escapeHtml(time)}</div>
         </div>
 
         <div class="rowSub">
-          ${cat?`<span>🎨 ${escapeHtml(cat)}</span>`:""}
-          ${loc?`<span>📍 ${escapeHtml(loc)}</span>`:""}
-          ${details?`<span>📝 note</span>`:""}
-          ${attachment?`<span>📎 image</span>`:""}
+          ${cat ? `<span>🎨 ${escapeHtml(cat)}</span>` : ""}
+          ${loc ? `<span>📍 ${escapeHtml(loc)}</span>` : ""}
+          ${details ? `<span>📝 note</span>` : ""}
+          ${attachment ? `<span>📎 image</span>` : ""}
         </div>
 
         <div class="rowBtns">
@@ -1341,30 +1322,32 @@
       `;
 
       row.querySelectorAll("button").forEach(b=>{
-        b.addEventListener("click",async()=>{
-          const act=b.dataset.act;
+        b.addEventListener("click", async ()=>{
+          const act = b.dataset.act;
 
-          if(act==="view"){
+          if(act === "view"){
             alert(
-              `📅 ${toFRDate(dateStr)}\n`+
-              `🕒 ${time||"—"}\n`+
-              `📌 ${name}\n`+
-              (cat?`🎨 ${cat}\n`:"")+
-              (loc?`📍 ${loc}\n`:"")+
-              (details?`\n📝 ${details}`:"")+
-              (attachment?`\n📎 Image jointe`:"")
+              `📅 ${toFRDate(dateStr)}\n` +
+              `🕒 ${time || "—"}\n` +
+              `📌 ${name}\n` +
+              (cat ? `🎨 ${cat}\n` : "") +
+              (loc ? `📍 ${loc}\n` : "") +
+              (details ? `\n📝 ${details}` : "") +
+              (attachment ? `\n📎 Image jointe` : "")
             );
             return;
           }
 
-          if(act==="del"){
-            const ok=confirm(
-              `Supprimer l’événement :\n\n${name}\n${time||""}\n\nConfirmer ?`
+          if(act === "del"){
+            const ok = confirm(
+              `Supprimer l’événement :\n\n${name}\n${time || ""}\n\nConfirmer ?`
             );
 
-            if(!ok) return;
+            if(!ok){
+              return;
+            }
 
-            await apiDeleteEvent_(dateStr,ev);
+            await apiDeleteEvent_(dateStr, ev);
 
             if(attachment){
               apiDeleteAttachment_(attachment).catch(()=>{});
@@ -1372,11 +1355,12 @@
 
             await loadApi(true);
             renderEditList(dateStr);
+
             return;
           }
 
-          if(act==="edit"){
-            openEventForm("edit",dateStr,ev);
+          if(act === "edit"){
+            openEventForm("edit", dateStr, ev);
           }
         });
       });
@@ -1385,73 +1369,70 @@
     }
   }
 
-  async function apiAddEvent_(dateStr,payload){
-    const email=getEmailLocal();
+  async function apiAddEvent_(dateStr, payload){
+    const email = getEmailLocal();
 
     if(!email){
       throw new Error("Email introuvable. Reconnecte-toi sur le portail.");
     }
 
-    const cb="cb_add_"+Math.random().toString(36).slice(2);
+    const cb = "cb_add_" + Math.random().toString(36).slice(2);
 
-    const url=
-      `${API}?view=planning_add`+
-      `&email=${encodeURIComponent(email)}`+
-      `&date=${encodeURIComponent(dateStr)}`+
-      `&start=${encodeURIComponent(payload.start||"")}`+
-      `&end=${encodeURIComponent(payload.end||"")}`+
-      `&title=${encodeURIComponent(payload.title||"")}`+
-      `&category=${encodeURIComponent(payload.category||"")}`+
-      `&location=${encodeURIComponent(payload.location||"")}`+
-      `&details=${encodeURIComponent(payload.details||"")}`+
-      `&attachment_url=${encodeURIComponent(payload.attachment_url||"")}`+
+    const url =
+      `${API}?view=planning_add` +
+      `&email=${encodeURIComponent(email)}` +
+      `&date=${encodeURIComponent(dateStr)}` +
+      `&start=${encodeURIComponent(payload.start||"")}` +
+      `&end=${encodeURIComponent(payload.end||"")}` +
+      `&title=${encodeURIComponent(payload.title||"")}` +
+      `&category=${encodeURIComponent(payload.category||"")}` +
+      `&location=${encodeURIComponent(payload.location||"")}` +
+      `&details=${encodeURIComponent(payload.details||"")}` +
+      `&attachment_url=${encodeURIComponent(payload.attachment_url||"")}` +
       `&nocache=1&callback=${cb}`;
 
-    const res=await jsonp(url,cb,20000);
+    const res = await jsonp(url, cb, 20000);
 
-    if(!res||res.ok!==true){
-      throw new Error(res?.error||"Erreur ajout");
+    if(!res || res.ok !== true){
+      throw new Error(res?.error || "Erreur ajout");
     }
 
     return res;
   }
 
-  function samePlanningEvent_(a,b,dateStr){
-    return (
-      String(a?.date||"").trim()===String(dateStr||"").trim() &&
-      String(a?.title||"").trim()===String(b?.title||"").trim() &&
-      String(a?.start||"").trim()===String(b?.start||"").trim()
-    );
-  }
+  async function getFreshPlanningEvent_(dateStr, ev){
+    const cb = "cb_fresh_" + Math.random().toString(36).slice(2);
 
-  async function getFreshPlanningEvent_(dateStr,ev){
-    const cb="cb_fresh_"+Math.random().toString(36).slice(2);
-
-    const url=
-      `${API}?view=planning_year`+
-      `&year=${ACTIVE_YEAR}`+
-      `&nocache=1`+
+    const url =
+      `${API}?view=planning_year` +
+      `&year=${ACTIVE_YEAR}` +
+      `&nocache=1` +
       `&callback=${cb}`;
 
-    const res=await jsonp(url,cb,20000);
+    const res = await jsonp(url, cb, 20000);
 
-    const freshEvents=Array.isArray(res?.events)?res.events:[];
+    const freshEvents =
+      Array.isArray(res?.events)
+        ? res.events
+        : [];
 
-    return freshEvents.find(item=>
-      samePlanningEvent_(item,ev,dateStr)
-    )||null;
+    return freshEvents.find(item =>
+      String(item?.date||"").trim() === String(dateStr||"").trim() &&
+      String(item?.title||"").trim() === String(ev?.title||"").trim() &&
+      String(item?.start||"").trim() === String(ev?.start||"").trim()
+    ) || null;
   }
 
-  async function apiDeleteEvent_(dateStr,ev){
-    const email=getEmailLocal();
+  async function apiDeleteEvent_(dateStr, ev){
+    const email = getEmailLocal();
 
     if(!email){
       throw new Error("Email introuvable. Reconnecte-toi sur le portail.");
     }
 
-    const freshEv=await getFreshPlanningEvent_(dateStr,ev);
+    const freshEv = await getFreshPlanningEvent_(dateStr, ev);
 
-    const eventId=String(
+    const eventId = String(
       freshEv?.event_id ||
       freshEv?.id ||
       ""
@@ -1461,21 +1442,21 @@
       throw new Error("Événement introuvable dans le planning actuel.");
     }
 
-    const cb="cb_del_"+Math.random().toString(36).slice(2);
+    const cb = "cb_del_" + Math.random().toString(36).slice(2);
 
-    const url=
-      `${API}?view=planning_delete`+
-      `&email=${encodeURIComponent(email)}`+
-      `&event_id=${encodeURIComponent(eventId)}`+
+    const url =
+      `${API}?view=planning_delete` +
+      `&email=${encodeURIComponent(email)}` +
+      `&event_id=${encodeURIComponent(eventId)}` +
       `&nocache=1&callback=${cb}`;
 
-    const res=await jsonp(url,cb,20000);
+    const res = await jsonp(url, cb, 20000);
 
-    if(!res||res.ok!==true){
-      throw new Error(res?.error||"Erreur suppression");
+    if(!res || res.ok !== true){
+      throw new Error(res?.error || "Erreur suppression");
     }
 
-    if(Number(res.deleted||0)<1){
+    if(Number(res.deleted || 0) < 1){
       throw new Error("Aucune ligne supprimée. event_id non trouvé dans Sheets.");
     }
 
@@ -1483,36 +1464,36 @@
   }
 
   function buildCategoryOptions(selectedValue){
-    $fCategory.innerHTML="";
+    $fCategory.innerHTML = "";
 
-    const none=document.createElement("option");
-    none.value="";
-    none.textContent="Aucune";
+    const none = document.createElement("option");
+    none.value = "";
+    none.textContent = "Aucune";
 
     $fCategory.appendChild(none);
 
-    const items=[...catLabel.entries()].map(([k,label])=>({
+    const items = [...catLabel.entries()].map(([k,label])=>({
       k,
       label,
-      order:catOrder.has(k)?catOrder.get(k):9999
+      order: catOrder.has(k) ? catOrder.get(k) : 9999
     }));
 
-    items.sort((a,b)=>(a.order-b.order)||a.label.localeCompare(b.label));
+    items.sort((a,b)=> (a.order-b.order) || a.label.localeCompare(b.label));
 
     for(const it of items){
-      const opt=document.createElement("option");
+      const opt = document.createElement("option");
 
-      opt.value=it.label;
-      opt.textContent=it.label;
+      opt.value = it.label;
+      opt.textContent = it.label;
 
       $fCategory.appendChild(opt);
     }
 
-    $fCategory.value=selectedValue||"";
+    $fCategory.value = selectedValue || "";
   }
 
   function getLoopValues(values){
-    const arr=[];
+    const arr = [];
 
     for(let i=0;i<LOOP_DUPLICATES;i++){
       arr.push(...values);
@@ -1522,45 +1503,46 @@
   }
 
   function buildWheel(pickerKey){
-    const picker=TIME_PICKERS[pickerKey];
-    const allValues=getLoopValues(picker.values);
+    const picker = TIME_PICKERS[pickerKey];
+    const allValues = getLoopValues(picker.values);
 
-    picker.inner.innerHTML="";
-    picker.loopValues=allValues;
+    picker.inner.innerHTML = "";
+    picker.loopValues = allValues;
 
-    const padTop=document.createElement("div");
-    padTop.className="wheelPad";
+    const padTop = document.createElement("div");
+    padTop.className = "wheelPad";
+
     picker.inner.appendChild(padTop);
 
-    allValues.forEach((v,idx)=>{
-      const item=document.createElement("div");
+    allValues.forEach((v, idx)=>{
+      const item = document.createElement("div");
 
-      item.className="wheelItem";
-      item.dataset.value=v;
-      item.dataset.index=String(idx);
-      item.textContent=v;
+      item.className = "wheelItem";
+      item.dataset.value = v;
+      item.dataset.index = String(idx);
+      item.textContent = v;
 
-      item.addEventListener("click",()=>{
-        setWheelValue(pickerKey,v,true);
+      item.addEventListener("click", ()=>{
+        setWheelValue(pickerKey, v, true);
       });
 
       picker.inner.appendChild(item);
     });
 
-    const padBottom=document.createElement("div");
-    padBottom.className="wheelPad";
+    const padBottom = document.createElement("div");
+    padBottom.className = "wheelPad";
 
     picker.inner.appendChild(padBottom);
 
-    picker.wheel.addEventListener("scroll",()=>{
+    picker.wheel.addEventListener("scroll", ()=>{
       updateWheelActive(pickerKey);
       keepWheelLooped(pickerKey);
 
       clearTimeout(picker.timer);
 
-      picker.timer=setTimeout(()=>{
+      picker.timer = setTimeout(()=>{
         snapWheel(pickerKey);
-      },80);
+      }, 80);
     });
   }
 
@@ -1569,19 +1551,26 @@
   }
 
   function getNearestWheelItem(pickerKey){
-    const picker=TIME_PICKERS[pickerKey];
-    const center=picker.wheel.scrollTop+(picker.wheel.clientHeight/2);
+    const picker = TIME_PICKERS[pickerKey];
 
-    let bestItem=null;
-    let bestDist=Infinity;
+    const center =
+      picker.wheel.scrollTop +
+      (picker.wheel.clientHeight / 2);
+
+    let bestItem = null;
+    let bestDist = Infinity;
 
     getWheelItems(pickerKey).forEach(item=>{
-      const itemCenter=item.offsetTop+(item.offsetHeight/2);
-      const dist=Math.abs(center-itemCenter);
+      const itemCenter =
+        item.offsetTop +
+        (item.offsetHeight / 2);
 
-      if(dist<bestDist){
-        bestDist=dist;
-        bestItem=item;
+      const dist =
+        Math.abs(center - itemCenter);
+
+      if(dist < bestDist){
+        bestDist = dist;
+        bestItem = item;
       }
     });
 
@@ -1589,127 +1578,149 @@
   }
 
   function updateWheelActive(pickerKey){
-    const picker=TIME_PICKERS[pickerKey];
-    const bestItem=getNearestWheelItem(pickerKey);
+    const picker = TIME_PICKERS[pickerKey];
+    const bestItem = getNearestWheelItem(pickerKey);
 
-    getWheelItems(pickerKey).forEach(i=>i.classList.remove("active"));
+    getWheelItems(pickerKey).forEach(i=>{
+      i.classList.remove("active");
+    });
 
     if(bestItem){
       bestItem.classList.add("active");
-      picker.value=bestItem.dataset.value;
+      picker.value = bestItem.dataset.value;
     }
   }
 
   function keepWheelLooped(pickerKey){
-    const picker=TIME_PICKERS[pickerKey];
+    const picker = TIME_PICKERS[pickerKey];
 
-    if(!picker.looping) return;
+    if(!picker.looping){
+      return;
+    }
 
-    const valuesLen=picker.values.length;
-    const itemHeight=42;
-    const cycleHeight=valuesLen*itemHeight;
-    const minScroll=cycleHeight*4;
-    const maxScroll=cycleHeight*(LOOP_DUPLICATES-5);
+    const valuesLen = picker.values.length;
+    const itemHeight = 42;
+    const cycleHeight = valuesLen * itemHeight;
+    const minScroll = cycleHeight * 4;
+    const maxScroll = cycleHeight * (LOOP_DUPLICATES - 5);
 
-    if(picker.wheel.scrollTop<minScroll){
-      picker.wheel.scrollTop+=cycleHeight*6;
-    }else if(picker.wheel.scrollTop>maxScroll){
-      picker.wheel.scrollTop-=cycleHeight*6;
+    if(picker.wheel.scrollTop < minScroll){
+      picker.wheel.scrollTop += cycleHeight * 6;
+    }else if(picker.wheel.scrollTop > maxScroll){
+      picker.wheel.scrollTop -= cycleHeight * 6;
     }
   }
 
-  function findBestItemForValueNearCenter(pickerKey,value){
-    const picker=TIME_PICKERS[pickerKey];
+  function findBestItemForValueNearCenter(pickerKey, value){
+    const picker = TIME_PICKERS[pickerKey];
 
-    const items=getWheelItems(pickerKey).filter(
-      i=>i.dataset.value===value
-    );
+    const items =
+      getWheelItems(pickerKey).filter(
+        i => i.dataset.value === value
+      );
 
-    if(!items.length) return null;
+    if(!items.length){
+      return null;
+    }
 
-    const currentCenter=
-      picker.wheel.scrollTop+
-      (picker.wheel.clientHeight/2);
+    const currentCenter =
+      picker.wheel.scrollTop +
+      (picker.wheel.clientHeight / 2);
 
-    let best=items[0];
-    let bestDist=Infinity;
+    let best = items[0];
+    let bestDist = Infinity;
 
     items.forEach(item=>{
-      const c=item.offsetTop+(item.offsetHeight/2);
-      const dist=Math.abs(c-currentCenter);
+      const c =
+        item.offsetTop +
+        (item.offsetHeight / 2);
 
-      if(dist<bestDist){
-        bestDist=dist;
-        best=item;
+      const dist =
+        Math.abs(c - currentCenter);
+
+      if(dist < bestDist){
+        bestDist = dist;
+        best = item;
       }
     });
 
     return best;
   }
 
-  function setWheelValue(pickerKey,value,smooth){
-    const picker=TIME_PICKERS[pickerKey];
-    const item=findBestItemForValueNearCenter(pickerKey,value);
+  function setWheelValue(pickerKey, value, smooth){
+    const picker = TIME_PICKERS[pickerKey];
+    const item = findBestItemForValueNearCenter(pickerKey, value);
 
-    if(!item) return;
+    if(!item){
+      return;
+    }
 
-    const target=
-      item.offsetTop-
-      ((picker.wheel.clientHeight-item.offsetHeight)/2);
+    const target =
+      item.offsetTop -
+      ((picker.wheel.clientHeight - item.offsetHeight) / 2);
 
     picker.wheel.scrollTo({
-      top:target,
-      behavior:smooth?"smooth":"auto"
+      top: target,
+      behavior: smooth ? "smooth" : "auto"
     });
 
-    picker.value=value;
+    picker.value = value;
 
     setTimeout(()=>{
       keepWheelLooped(pickerKey);
       updateWheelActive(pickerKey);
-    },smooth?160:0);
+    }, smooth ? 160 : 0);
   }
 
   function snapWheel(pickerKey){
-    const picker=TIME_PICKERS[pickerKey];
-    const bestItem=getNearestWheelItem(pickerKey);
+    const picker = TIME_PICKERS[pickerKey];
+    const bestItem = getNearestWheelItem(pickerKey);
 
-    if(!bestItem) return;
+    if(!bestItem){
+      return;
+    }
 
-    const target=
-      bestItem.offsetTop-
-      ((picker.wheel.clientHeight-bestItem.offsetHeight)/2);
+    const target =
+      bestItem.offsetTop -
+      ((picker.wheel.clientHeight - bestItem.offsetHeight) / 2);
 
     picker.wheel.scrollTo({
-      top:target,
-      behavior:"smooth"
+      top: target,
+      behavior: "smooth"
     });
 
-    picker.value=bestItem.dataset.value;
+    picker.value = bestItem.dataset.value;
 
     setTimeout(()=>{
       keepWheelLooped(pickerKey);
       updateWheelActive(pickerKey);
-    },160);
+    }, 160);
   }
 
   function getTimeValue(prefix){
-    return `${TIME_PICKERS[prefix+"Hour"].value}:${TIME_PICKERS[prefix+"Minute"].value}`;
+    return `${TIME_PICKERS[prefix + "Hour"].value}:${TIME_PICKERS[prefix + "Minute"].value}`;
   }
 
-  function setTimeValue(prefix,hhmm){
-    const val=String(hhmm||"").trim();
+  function setTimeValue(prefix, hhmm){
+    const val = String(hhmm || "").trim();
 
-    const [hh,mm]=
-      val&&val.includes(":")
+    const [hh, mm] =
+      val && val.includes(":")
         ? val.split(":")
         : ["00","00"];
 
-    const hour=HOURS.includes(hh)?hh:"00";
-    const minute=MINUTES.includes(mm)?mm:"00";
+    const hour =
+      HOURS.includes(hh)
+        ? hh
+        : "00";
 
-    setWheelValue(prefix+"Hour",hour,false);
-    setWheelValue(prefix+"Minute",minute,false);
+    const minute =
+      MINUTES.includes(mm)
+        ? mm
+        : "00";
+
+    setWheelValue(prefix + "Hour", hour, false);
+    setWheelValue(prefix + "Minute", minute, false);
   }
 
   function initWheels(){
@@ -1719,18 +1730,18 @@
     buildWheel("endMinute");
 
     setTimeout(()=>{
-      setTimeValue("start","08:00");
-      setTimeValue("end","09:00");
+      setTimeValue("start", "08:00");
+      setTimeValue("end", "09:00");
 
       ["startHour","startMinute","endHour","endMinute"].forEach(k=>{
         keepWheelLooped(k);
         updateWheelActive(k);
       });
-    },0);
+    }, 0);
   }
 
   function renderAttachmentPreview_(){
-    const url=String(FORM_ATTACHMENT_URL||"").trim();
+    const url = String(FORM_ATTACHMENT_URL || "").trim();
 
     if(!url){
       $attachmentPreview.classList.remove("show");
@@ -1738,195 +1749,170 @@
       return;
     }
 
-    $attachmentPreviewImg.src=url;
+    $attachmentPreviewImg.src = url;
     $attachmentPreview.classList.add("show");
   }
 
   function resetAttachmentForm_(ev){
-    FORM_ORIGINAL_ATTACHMENT_URL=getAttachmentUrl_(ev);
-    FORM_ATTACHMENT_URL=FORM_ORIGINAL_ATTACHMENT_URL;
-    FORM_NEW_UPLOAD_URL="";
+    FORM_ORIGINAL_ATTACHMENT_URL = getAttachmentUrl_(ev);
+    FORM_ATTACHMENT_URL = FORM_ORIGINAL_ATTACHMENT_URL;
+    FORM_NEW_UPLOAD_URL = "";
+
     renderAttachmentPreview_();
   }
 
   function openAttachmentUpload_(){
-    const email=getEmailLocal();
+    const email = getEmailLocal();
 
     if(!email){
       alert("Email introuvable. Reconnecte-toi sur le portail.");
       return;
     }
 
-    $attachmentUploadFrame.src=
-      `${API}?view=planning_attachment_upload_page`+
-      `&email=${encodeURIComponent(email)}`+
+    $attachmentUploadFrame.src =
+      `${API}?view=planning_attachment_upload_page` +
+      `&email=${encodeURIComponent(email)}` +
       `&t=${Date.now()}`;
 
     $attachmentUploadOverlay.classList.add("show");
+    $attachmentUploadOverlay.setAttribute("aria-hidden","false");
   }
 
   function closeAttachmentUpload_(){
     $attachmentUploadOverlay.classList.remove("show");
+    $attachmentUploadOverlay.setAttribute("aria-hidden","true");
 
     setTimeout(()=>{
-      $attachmentUploadFrame.src="about:blank";
-    },100);
+      $attachmentUploadFrame.src = "about:blank";
+    }, 100);
   }
 
   async function apiDeleteAttachment_(url){
-    const email=getEmailLocal();
-    const cleanUrl=String(url||"").trim();
+    const email = getEmailLocal();
+    const cleanUrl = String(url || "").trim();
 
-    if(!email||!cleanUrl) return;
+    if(!email || !cleanUrl){
+      return;
+    }
 
-    const cb="cb_att_del_"+Math.random().toString(36).slice(2);
+    const cb =
+      "cb_att_del_" +
+      Math.random().toString(36).slice(2);
 
-    const endpoint=
-      `${API}?view=planning_attachment_delete`+
-      `&email=${encodeURIComponent(email)}`+
-      `&url=${encodeURIComponent(cleanUrl)}`+
+    const endpoint =
+      `${API}?view=planning_attachment_delete` +
+      `&email=${encodeURIComponent(email)}` +
+      `&url=${encodeURIComponent(cleanUrl)}` +
       `&callback=${cb}`;
 
     try{
-      await jsonp(endpoint,cb,20000);
+      await jsonp(endpoint, cb, 20000);
     }catch(e){}
   }
 
   async function cleanupUnsavedAttachment_(){
-    const url=String(FORM_NEW_UPLOAD_URL||"").trim();
+    const url =
+      String(FORM_NEW_UPLOAD_URL || "").trim();
 
-    if(!url) return;
+    if(!url){
+      return;
+    }
 
-    FORM_NEW_UPLOAD_URL="";
+    FORM_NEW_UPLOAD_URL = "";
 
     await apiDeleteAttachment_(url);
   }
 
-  window.addEventListener("message",event=>{
-    const data=event.data||{};
+  function openEventForm(mode, dateStr, ev){
+    FORM_STATE.mode = mode;
+    FORM_STATE.dateStr = dateStr;
+    FORM_STATE.originalEvent = ev || null;
 
-    if(data.type==="planning-attachment-success"){
-      const url=String(
-        data.url ||
-        data.attachment_url ||
-        data.file_url ||
-        ""
-      ).trim();
-
-      if(!url){
-        alert("L'image a été envoyée mais aucune URL n'a été reçue.");
-        return;
-      }
-
-      const previousNew=String(FORM_NEW_UPLOAD_URL||"").trim();
-
-      if(previousNew&&previousNew!==url){
-        apiDeleteAttachment_(previousNew).catch(()=>{});
-      }
-
-      FORM_NEW_UPLOAD_URL=url;
-      FORM_ATTACHMENT_URL=url;
-
-      renderAttachmentPreview_();
-      closeAttachmentUpload_();
-    }
-
-    if(data.type==="planning-attachment-close"){
-      closeAttachmentUpload_();
-    }
-  });
-
-  function openEventForm(mode,dateStr,ev){
-    FORM_STATE.mode=mode;
-    FORM_STATE.dateStr=dateStr;
-    FORM_STATE.originalEvent=ev||null;
-
-    buildCategoryOptions(ev?.category||"");
+    buildCategoryOptions(ev?.category || "");
     resetAttachmentForm_(ev);
 
-    if(mode==="edit"){
-      $formTitle.textContent=`Modifier — ${toFRDate(dateStr)}`;
-      $fTitle.value=ev?.title||"";
-      $fLocation.value=ev?.location||"";
-      $fDetails.value=ev?.details||"";
+    if(mode === "edit"){
+      $formTitle.textContent = `Modifier — ${toFRDate(dateStr)}`;
+      $fTitle.value = ev?.title || "";
+      $fLocation.value = ev?.location || "";
+      $fDetails.value = ev?.details || "";
 
-      setTimeValue("start",ev?.start||"08:00");
-      setTimeValue("end",ev?.end||"09:00");
+      setTimeValue("start", ev?.start || "08:00");
+      setTimeValue("end", ev?.end || "09:00");
     }else{
-      $formTitle.textContent=`Ajouter — ${toFRDate(dateStr)}`;
+      $formTitle.textContent = `Ajouter — ${toFRDate(dateStr)}`;
+      $fTitle.value = "";
+      $fLocation.value = "";
+      $fDetails.value = "";
+      $fCategory.value = "";
 
-      $fTitle.value="";
-      $fLocation.value="";
-      $fDetails.value="";
-      $fCategory.value="";
-
-      setTimeValue("start","08:00");
-      setTimeValue("end","09:00");
+      setTimeValue("start", "08:00");
+      setTimeValue("end", "09:00");
     }
 
     $formOverlay.classList.add("show");
+    $formOverlay.setAttribute("aria-hidden","false");
   }
 
   async function closeEventForm(){
     await cleanupUnsavedAttachment_();
 
     $formOverlay.classList.remove("show");
+    $formOverlay.setAttribute("aria-hidden","true");
 
-    FORM_ATTACHMENT_URL="";
-    FORM_ORIGINAL_ATTACHMENT_URL="";
-    FORM_NEW_UPLOAD_URL="";
+    FORM_ATTACHMENT_URL = "";
+    FORM_ORIGINAL_ATTACHMENT_URL = "";
+    FORM_NEW_UPLOAD_URL = "";
   }
 
   async function saveEventForm(){
-    const title=String($fTitle.value||"").trim();
-    const category=String($fCategory.value||"").trim();
-    const location=String($fLocation.value||"").trim();
-    const details=String($fDetails.value||"").trim();
+    const title = String($fTitle.value || "").trim();
+    const category = String($fCategory.value || "").trim();
+    const location = String($fLocation.value || "").trim();
+    const details = String($fDetails.value || "").trim();
 
-    const start=getTimeValue("start");
-    const end=getTimeValue("end");
+    const start = getTimeValue("start");
+    const end = getTimeValue("end");
 
-    const attachment_url=String(FORM_ATTACHMENT_URL||"").trim();
+    const attachment_url =
+      String(FORM_ATTACHMENT_URL || "").trim();
 
     if(!title){
       alert("Titre obligatoire.");
       return;
     }
 
-    const toMinutes=value=>{
-      const [hh,mm]=String(value||"00:00").split(":");
+    const toMinutes = value => {
+      const [hh, mm] =
+        String(value || "00:00").split(":");
 
       return (
-        Number(hh||0)*60+
-        Number(mm||0)
+        Number(hh || 0) * 60 +
+        Number(mm || 0)
       );
     };
 
-    const startMinutes=toMinutes(start);
-    let endMinutes=toMinutes(end);
+    const startMinutes = toMinutes(start);
+    let endMinutes = toMinutes(end);
 
-    /*
-     * 00:00 en heure de fin = minuit.
-     * Exemple 23:45 → 00:00 est donc valide.
-     */
-    if(end==="00:00"&&start!=="00:00"){
-      endMinutes=24*60;
+    if(
+      end === "00:00" &&
+      start !== "00:00"
+    ){
+      endMinutes = 24 * 60;
     }
 
-    if(endMinutes<startMinutes){
+    if(endMinutes < startMinutes){
       alert("Heure fin incorrecte.");
       return;
     }
 
-    $btnFormSave.disabled=true;
-
-    const originalButtonText=$btnFormSave.textContent;
-
-    $btnFormSave.textContent="Enregistrement…";
+    $btnFormSave.disabled = true;
+    $btnFormSave.textContent = "Enregistrement…";
 
     try{
       if(
-        FORM_STATE.mode==="edit" &&
+        FORM_STATE.mode === "edit" &&
         FORM_STATE.originalEvent
       ){
         await apiDeleteEvent_(
@@ -1948,33 +1934,30 @@
         }
       );
 
-      const oldAttachment=
+      const oldAttachment =
         String(
-          FORM_ORIGINAL_ATTACHMENT_URL||""
+          FORM_ORIGINAL_ATTACHMENT_URL || ""
         ).trim();
 
-      /*
-       * L'image uploadée est maintenant utilisée :
-       * elle ne doit plus être supprimée à la fermeture.
-       */
-      FORM_NEW_UPLOAD_URL="";
+      FORM_NEW_UPLOAD_URL = "";
 
       if(
         oldAttachment &&
-        oldAttachment!==attachment_url
+        oldAttachment !== attachment_url
       ){
         apiDeleteAttachment_(oldAttachment).catch(()=>{});
       }
 
-      $btnFormSave.textContent="✓ Enregistré";
+      $btnFormSave.textContent = "✓ Enregistré";
 
       await loadApi(true);
 
       $formOverlay.classList.remove("show");
+      $formOverlay.setAttribute("aria-hidden","true");
 
-      FORM_ATTACHMENT_URL="";
-      FORM_ORIGINAL_ATTACHMENT_URL="";
-      FORM_NEW_UPLOAD_URL="";
+      FORM_ATTACHMENT_URL = "";
+      FORM_ORIGINAL_ATTACHMENT_URL = "";
+      FORM_NEW_UPLOAD_URL = "";
 
       if(_editDate){
         renderEditList(_editDate);
@@ -1982,82 +1965,137 @@
 
     }catch(err){
       alert(
-        "Erreur : "+
+        "Erreur : " +
         String(
-          err&&err.message
+          err && err.message
             ? err.message
             : err
         )
       );
     }finally{
-      $btnFormSave.disabled=false;
+      $btnFormSave.disabled = false;
 
       setTimeout(()=>{
-        $btnFormSave.textContent=
-          originalButtonText||
-          "Enregistrer";
-      },400);
+        $btnFormSave.textContent = "Enregistrer";
+      }, 350);
     }
   }
 
-  $btnAddEvent.addEventListener("click",()=>{
-    if(!_editDate) return;
-    openEventForm("add",_editDate,null);
+  $btnAddEvent.addEventListener("click", ()=>{
+    if(!_editDate){
+      return;
+    }
+
+    openEventForm("add", _editDate, null);
   });
 
-  $btnCloseEdit.addEventListener("click",closeEdit);
+  $btnCloseEdit.addEventListener("click", closeEdit);
 
-  $editOverlay.addEventListener("click",e=>{
-    if(e.target===$editOverlay){
+  $editOverlay.addEventListener("click", (e)=>{
+    if(e.target === $editOverlay){
       closeEdit();
     }
   });
 
-  $btnFormCancel.addEventListener("click",closeEventForm);
-  $btnFormClose.addEventListener("click",closeEventForm);
-  $btnFormSave.addEventListener("click",saveEventForm);
+  $btnFormCancel.addEventListener("click", closeEventForm);
+  $btnFormClose.addEventListener("click", closeEventForm);
+  $btnFormSave.addEventListener("click", saveEventForm);
 
-  $btnAttachmentUpload.addEventListener("click",openAttachmentUpload_);
-  $btnAttachmentUploadClose.addEventListener("click",closeAttachmentUpload_);
+  $btnAttachmentUpload.addEventListener("click", openAttachmentUpload_);
+  $btnAttachmentUploadClose.addEventListener("click", closeAttachmentUpload_);
 
-  $btnAttachmentRemove.addEventListener("click",()=>{
-    const current=String(FORM_ATTACHMENT_URL||"").trim();
+  $btnAttachmentRemove.addEventListener("click", ()=>{
+    const current =
+      String(FORM_ATTACHMENT_URL || "").trim();
 
-    if(!current) return;
+    if(!current){
+      return;
+    }
 
     if(
       FORM_NEW_UPLOAD_URL &&
-      current===FORM_NEW_UPLOAD_URL
+      current === FORM_NEW_UPLOAD_URL
     ){
-      const tmp=FORM_NEW_UPLOAD_URL;
+      const tmp = FORM_NEW_UPLOAD_URL;
 
-      FORM_NEW_UPLOAD_URL="";
+      FORM_NEW_UPLOAD_URL = "";
 
       apiDeleteAttachment_(tmp).catch(()=>{});
     }
 
-    FORM_ATTACHMENT_URL="";
+    FORM_ATTACHMENT_URL = "";
 
     renderAttachmentPreview_();
   });
 
-  $formOverlay.addEventListener("click",e=>{
-    if(e.target===$formOverlay){
+  window.addEventListener("message", event=>{
+    const data = event.data || {};
+
+    if(data.type === "planning-attachment-success"){
+      const url =
+        String(
+          data.url ||
+          data.attachment_url ||
+          data.file_url ||
+          ""
+        ).trim();
+
+      if(!url){
+        alert("L'image a été envoyée mais aucune URL n'a été reçue.");
+        return;
+      }
+
+      const previousNew =
+        String(FORM_NEW_UPLOAD_URL || "").trim();
+
+      if(
+        previousNew &&
+        previousNew !== url
+      ){
+        apiDeleteAttachment_(previousNew).catch(()=>{});
+      }
+
+      FORM_NEW_UPLOAD_URL = url;
+      FORM_ATTACHMENT_URL = url;
+
+      renderAttachmentPreview_();
+      closeAttachmentUpload_();
+    }
+
+    if(
+      data.type === "planning-attachment-close"
+    ){
+      closeAttachmentUpload_();
+    }
+  });
+
+  $formOverlay.addEventListener("click", (e)=>{
+    if(e.target === $formOverlay){
       closeEventForm();
     }
   });
 
-  $grid.addEventListener("click",e=>{
-    const day=e.target.closest(".day");
+  $grid.addEventListener("click", (e)=>{
+    const day = e.target.closest(".day");
 
-    if(!day) return;
-    if(day.classList.contains("is-empty")) return;
+    if(!day){
+      return;
+    }
 
-    const dateStr=day.dataset.date;
+    if(day.classList.contains("is-empty")){
+      return;
+    }
 
-    if(!dateStr) return;
+    const dateStr = day.dataset.date;
 
-    if(EDIT_MODE&&IS_ADMIN){
+    if(!dateStr){
+      return;
+    }
+
+    if(
+      EDIT_MODE &&
+      IS_ADMIN
+    ){
       openEdit(dateStr);
       return;
     }
@@ -2067,16 +2105,16 @@
     }
   });
 
-  $noteClose.addEventListener("click",closeNote);
+  $noteClose.addEventListener("click", closeNote);
 
-  $noteOverlay.addEventListener("click",e=>{
-    if(e.target===$noteOverlay){
+  $noteOverlay.addEventListener("click", (e)=>{
+    if(e.target === $noteOverlay){
       closeNote();
     }
   });
 
-  document.addEventListener("keydown",e=>{
-    if(e.key==="Escape"){
+  document.addEventListener("keydown", (e)=>{
+    if(e.key === "Escape"){
       closeNote();
       closeEdit();
       closeEventForm();
@@ -2088,41 +2126,54 @@
       localStorage.setItem(
         getCacheKey_(),
         JSON.stringify({
-          savedAt:Date.now(),
+          savedAt: Date.now(),
           payload
         })
       );
     }catch(e){}
   }
 
-  /*
-   * On garde le dernier cache sans limite de 7 jours.
-   * Il sert uniquement à afficher le planning immédiatement.
-   * Les données fraîches sont ensuite récupérées derrière.
-   */
   function loadCache_(){
     try{
-      const raw=localStorage.getItem(getCacheKey_());
+      const raw =
+        localStorage.getItem(
+          getCacheKey_()
+        );
 
-      if(!raw) return null;
+      if(!raw){
+        return null;
+      }
 
-      const obj=JSON.parse(raw);
+      const obj =
+        JSON.parse(raw);
 
-      if(!obj||!obj.payload){
+      if(!obj || !obj.payload){
+        return null;
+      }
+
+      if(
+        obj.savedAt &&
+        (Date.now() - obj.savedAt) > CACHE_MAX_AGE_MS
+      ){
         return null;
       }
 
       return obj.payload;
+
     }catch(e){
       return null;
     }
   }
 
-  function applyPlanningData_(py,pc){
-    events=Array.isArray(py?.events)?py.events:[];
+  function applyPlanningData_(py, pc){
+    events =
+      Array.isArray(py?.events)
+        ? py.events
+        : [];
 
-    categoriesRaw=
-      Array.isArray(pc?.categories)&&pc.categories.length
+    categoriesRaw =
+      Array.isArray(pc?.categories) &&
+      pc.categories.length
         ? pc.categories
         : DEFAULT_CATEGORIES.slice();
 
@@ -2131,44 +2182,82 @@
     renderMonth();
   }
 
-  async function loadApi(forceFresh=false){
-    const cached=loadCache_();
+  async function loadApi(forceFresh = false){
+    if(
+      !API ||
+      API.includes("COLLE_ICI")
+    ){
+      showStatus(
+        "API manquante",
+        "Mets ton URL exec dans const API."
+      );
 
-    if(!forceFresh&&cached?.py&&cached?.pc){
-      applyPlanningData_(cached.py,cached.pc);
-      hideStatus();
-    }else if(!cached){
-      showStatus("Chargement…","Récupération du planning.");
+      return;
     }
 
-    const cb1="cb_py_"+Math.random().toString(36).slice(2);
-    const cb2="cb_pc_"+Math.random().toString(36).slice(2);
+    const cached = loadCache_();
+
+    if(
+      !forceFresh &&
+      cached?.py &&
+      cached?.pc
+    ){
+      applyPlanningData_(
+        cached.py,
+        cached.pc
+      );
+
+      showStatus(
+        "Synchronisation…",
+        "Mise à jour en cours."
+      );
+    }else{
+      showStatus(
+        "Chargement…",
+        "Récupération des événements et catégories."
+      );
+    }
+
+    const cb1 =
+      "cb_py_" +
+      Math.random().toString(36).slice(2);
+
+    const cb2 =
+      "cb_pc_" +
+      Math.random().toString(36).slice(2);
 
     try{
-      const planningUrl=
-        `${API}?view=planning_year&year=${ACTIVE_YEAR}`+
-        `${forceFresh?"&nocache=1":""}`+
+      const planningUrl =
+        `${API}?view=planning_year&year=${ACTIVE_YEAR}` +
+        `${forceFresh ? "&nocache=1" : ""}` +
         `&callback=${cb1}`;
 
-      const catsUrl=
-        `${API}?view=planning_categories`+
-        `${forceFresh?"&nocache=1":""}`+
+      const catsUrl =
+        `${API}?view=planning_categories` +
+        `${forceFresh ? "&nocache=1" : ""}` +
         `&callback=${cb2}`;
 
-      const [py,pc]=await Promise.all([
-        jsonp(planningUrl,cb1),
-        jsonp(catsUrl,cb2)
-      ]);
+      const [py, pc] =
+        await Promise.all([
+          jsonp(planningUrl, cb1),
+          jsonp(catsUrl, cb2)
+        ]);
 
       if(py?.ok===false){
-        throw new Error(py?.error||"planning_year invalide");
+        throw new Error(
+          py?.error ||
+          "planning_year invalide"
+        );
       }
 
       if(pc?.ok===false){
-        throw new Error(pc?.error||"planning_categories invalide");
+        throw new Error(
+          pc?.error ||
+          "planning_categories invalide"
+        );
       }
 
-      applyPlanningData_(py,pc);
+      applyPlanningData_(py, pc);
 
       saveCache_({
         py,
@@ -2178,14 +2267,28 @@
       hideStatus();
 
     }catch(e){
-      if(!forceFresh&&cached?.py&&cached?.pc){
-        applyPlanningData_(cached.py,cached.pc);
-        hideStatus();
+      if(
+        !forceFresh &&
+        cached?.py &&
+        cached?.pc
+      ){
+        showStatus(
+          "Hors ligne / lent",
+          "Les données affichées sont en cache."
+        );
+
+        setTimeout(
+          hideStatus,
+          2500
+        );
+
         return;
       }
 
-      categoriesRaw=DEFAULT_CATEGORIES.slice();
-      events=[];
+      categoriesRaw =
+        DEFAULT_CATEGORIES.slice();
+
+      events = [];
 
       rebuildMaps();
       renderLegend();
@@ -2193,159 +2296,146 @@
 
       showStatus(
         "API HS / lente",
-        "Impossible de récupérer le planning."
+        "La légende reste, mais pas d’événements."
       );
     }
   }
 
-  $("btnBack").addEventListener("click",()=>{
-    location.href=BACK_URL;
+  $("btnBack").addEventListener("click", ()=>{
+    location.href = BACK_URL;
   });
 
-  $btnPrev.addEventListener("click",()=>{
+  $btnPrev.addEventListener("click", ()=>{
     if(currentMonth>0){
       currentMonth--;
       renderMonth();
     }
   });
 
-  $btnNext.addEventListener("click",()=>{
+  $btnNext.addEventListener("click", ()=>{
     if(currentMonth<11){
       currentMonth++;
       renderMonth();
     }
   });
 
-  $btnLock.addEventListener("click",()=>{
-    if(!IS_ADMIN) return;
+  $btnLock.addEventListener("click", ()=>{
+    if(!IS_ADMIN){
+      return;
+    }
 
     setEditMode(!EDIT_MODE);
   });
 
   function updateYearDisplay_(){
     if(IS_ADMIN){
-      $yearText.style.display="none";
-      $yearSelect.style.display="inline-block";
-      $yearSelect.innerHTML="";
+      $yearText.style.display = "none";
+      $yearSelect.style.display = "inline-block";
+      $yearSelect.innerHTML = "";
 
-      ADMIN_YEARS.forEach(year=>{
-        const opt=document.createElement("option");
+      ADMIN_YEARS.forEach(year => {
+        const opt =
+          document.createElement("option");
 
-        opt.value=String(year);
-        opt.textContent=String(year);
+        opt.value = String(year);
+        opt.textContent = String(year);
 
-        if(year===ACTIVE_YEAR){
-          opt.selected=true;
+        if(year === ACTIVE_YEAR){
+          opt.selected = true;
         }
 
         $yearSelect.appendChild(opt);
       });
 
     }else{
-      ACTIVE_YEAR=PUBLIC_YEAR;
+      ACTIVE_YEAR = PUBLIC_YEAR;
 
-      $yearText.textContent=String(PUBLIC_YEAR);
-      $yearText.style.display="inline";
-      $yearSelect.style.display="none";
+      $yearText.textContent = String(PUBLIC_YEAR);
+      $yearText.style.display = "inline";
+      $yearSelect.style.display = "none";
     }
   }
 
-  $yearSelect.addEventListener("change",async()=>{
-    if(!IS_ADMIN) return;
-
-    const newYear=Number($yearSelect.value);
-
-    if(!ADMIN_YEARS.includes(newYear)){
+  $yearSelect.addEventListener("change", async ()=>{
+    if(!IS_ADMIN){
       return;
     }
 
-    ACTIVE_YEAR=newYear;
+    const newYear =
+      Number($yearSelect.value);
+
+    if(
+      !ADMIN_YEARS.includes(newYear)
+    ){
+      return;
+    }
+
+    ACTIVE_YEAR = newYear;
 
     closeNote();
     closeEdit();
     closeEventForm();
 
-    /*
-     * On regarde d'abord le cache de la nouvelle année.
-     */
-    const cached=loadCache_();
+    events = [];
 
-    if(cached?.py&&cached?.pc){
-      applyPlanningData_(cached.py,cached.pc);
-    }else{
-      events=[];
-      rebuildMaps();
-      renderMonth();
+    rebuildMaps();
+
+    const now = new Date();
+
+    currentMonth =
+      now.getFullYear() === ACTIVE_YEAR
+        ? now.getMonth()
+        : 0;
+
+    renderMonth();
+
+    showStatus(
+      `Planning ${ACTIVE_YEAR}`,
+      "Chargement de l'année…"
+    );
+
+    await loadApi();
+  });
+
+  (async function(){
+    rebuildMaps();
+    renderLegend();
+
+    initWheels();
+
+    try{
+      await loadMyRole_();
+    }catch(e){
+      IS_ADMIN = false;
     }
 
-    const now=new Date();
+    if(IS_ADMIN){
+      await loadPlanningYears_();
+    }else{
+      ADMIN_YEARS = [PUBLIC_YEAR];
+    }
 
-    currentMonth=
-      now.getFullYear()===ACTIVE_YEAR
+    ACTIVE_YEAR = PUBLIC_YEAR;
+
+    updateYearDisplay_();
+
+    const now = new Date();
+
+    currentMonth =
+      now.getFullYear() === ACTIVE_YEAR
         ? now.getMonth()
         : 0;
 
     renderMonth();
 
     await loadApi();
-  });
 
-  /*
-   * DÉMARRAGE :
-   * le planning/cache se charge sans attendre
-   * la vérification admin.
-   */
-  (async function(){
-    ACTIVE_YEAR=PUBLIC_YEAR;
-
-    const now=new Date();
-
-    currentMonth=
-      now.getFullYear()===ACTIVE_YEAR
-        ? now.getMonth()
-        : 0;
-
-    rebuildMaps();
-    renderLegend();
-    renderMonth();
-
-    initWheels();
-
-    /*
-     * Affichage immédiat du cache.
-     */
-    const planningPromise=loadApi();
-
-    /*
-     * Vérification admin et années en parallèle.
-     */
-    const adminPromise=(async()=>{
-      try{
-        await loadMyRole_();
-      }catch(e){
-        IS_ADMIN=false;
-      }
-
-      if(IS_ADMIN){
-        await loadPlanningYears_();
-      }else{
-        ADMIN_YEARS=[PUBLIC_YEAR];
-      }
-
-      updateYearDisplay_();
-
-      if(IS_ADMIN){
-        $btnLock.style.display="inline-block";
-      }else{
-        $btnLock.style.display="none";
-        setEditMode(false);
-      }
-    })();
-
-    await Promise.allSettled([
-      planningPromise,
-      adminPromise
-    ]);
+    if(IS_ADMIN){
+      $btnLock.style.display = "inline-block";
+    }else{
+      $btnLock.style.display = "none";
+      setEditMode(false);
+    }
   })();
 
 </script>
