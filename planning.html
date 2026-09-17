@@ -34,646 +34,111 @@
     .attachmentHint{margin-top:7px;color:rgba(255,255,255,.60);font-size:12px;font-weight:750}.attachmentPreview{display:none;margin-top:10px;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.28)}.attachmentPreview.show{display:block}.attachmentPreview img{display:block;width:100%;max-height:230px;object-fit:contain}.attachmentPreviewBar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px}.attachmentRemove{border:1px solid rgba(255,80,80,.35);background:rgba(140,20,20,.42);color:#fff;padding:8px 10px;border-radius:12px;font:900 14px inherit;cursor:pointer}.evAttachment{display:block;margin-top:10px;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.30)}.evAttachment img{display:block;width:100%;max-height:360px;object-fit:contain;background:#080808}
     .attachmentUploadOverlay{position:fixed;inset:0;z-index:240;display:none;padding:calc(env(safe-area-inset-top) + 10px) 10px calc(env(safe-area-inset-bottom) + 10px);background:rgba(0,0,0,.88)}.attachmentUploadOverlay.show{display:flex;flex-direction:column}.attachmentUploadTop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 2px 10px}.attachmentUploadTitle{font-size:18px;font-weight:950}.attachmentUploadWindow{flex:1;min-height:0;overflow:hidden;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:#151515}.attachmentUploadFrame{display:block;width:100%;height:100%;border:0}#btnFormSave{background:#168039;border-color:rgba(50,210,100,.35)}
     @media(max-width:520px){.timePickerGroup{grid-template-columns:1fr}}@media(max-width:360px){.monthname{font-size:20px}.day{font-size:20px;border-radius:16px}.grid{grid-auto-rows:minmax(50px,1fr)}.legTxt{font-size:16px}.sq{width:18px;height:18px}}
+
+    .imageViewer{position:fixed;inset:0;z-index:400;display:none;flex-direction:column;background:rgba(0,0,0,.96);padding:calc(env(safe-area-inset-top) + 12px) 12px calc(env(safe-area-inset-bottom) + 12px)}
+    .imageViewer.show{display:flex}.imageViewerTop{display:flex;justify-content:flex-end;margin-bottom:10px}.imageViewerClose{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.10);color:#fff;border-radius:14px;padding:10px 16px;font:900 16px system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}.imageViewerBody{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}.imageViewerImg{display:block;max-width:100%;max-height:100%;object-fit:contain;border-radius:12px}.evAttachmentBtn{width:100%;padding:0;border:0;cursor:pointer;color:inherit}
   </style>
 </head>
 <body>
-
 <div class="bg"></div>
-
 <div class="wrap">
-
   <div class="topbar">
-    <h1 class="title">
-      <span>PLANNING</span>
-      <span id="yearText">2026</span>
-      <select id="yearSelect" class="yearSelect" style="display:none"></select>
-    </h1>
-
-    <div style="display:flex;gap:10px;align-items:center">
-      <span id="editLabel" style="display:none;margin-right:6px;font-weight:700;font-size:12px;color:#fff200">MODE ÉDITION</span>
-      <button class="btn" id="btnLock" style="display:none">🔒</button>
-      <button class="btn" id="btnBack">Retour</button>
-    </div>
+    <h1 class="title"><span>PLANNING</span> <span id="yearText">2026</span><select id="yearSelect" class="yearSelect" style="display:none"></select></h1>
+    <div style="display:flex;gap:10px;align-items:center"><span id="editLabel" style="display:none;margin-right:6px;font-weight:700;font-size:12px;color:#fff200">MODE ÉDITION</span><button class="btn" id="btnLock" style="display:none">🔒</button><button class="btn" id="btnBack">Retour</button></div>
   </div>
-
-  <div class="monthbar">
-    <button class="navbtn" id="btnPrev">‹</button>
-    <h2 class="monthname" id="monthName">—</h2>
-    <button class="navbtn" id="btnNext">›</button>
-  </div>
-
-  <section class="calCard">
-    <div class="dow">
-      <div>Lun</div>
-      <div>Mar</div>
-      <div>Mer</div>
-      <div>Jeu</div>
-      <div>Ven</div>
-      <div>Sam</div>
-      <div>Dim</div>
-    </div>
-
-    <div class="grid" id="grid"></div>
-  </section>
-
-  <section class="legend">
-    <div class="legendGrid" id="legendGrid"></div>
-  </section>
-
+  <div class="monthbar"><button class="navbtn" id="btnPrev">‹</button><h2 class="monthname" id="monthName">—</h2><button class="navbtn" id="btnNext">›</button></div>
+  <section class="calCard"><div class="dow"><div>Lun</div><div>Mar</div><div>Mer</div><div>Jeu</div><div>Ven</div><div>Sam</div><div>Dim</div></div><div class="grid" id="grid"></div></section>
+  <section class="legend"><div class="legendGrid" id="legendGrid"></div></section>
 </div>
+<div class="status" id="status"><div class="pill"><span>⚠️</span><div><div id="statusTxt">Chargement…</div><div class="small" id="statusSub"></div></div></div></div>
+<div class="noteOverlay" id="noteOverlay"><div class="noteSheet"><div class="noteHead"><div class="noteTitle" id="noteTitle">—</div><button class="noteClose" id="noteClose">Fermer</button></div><div class="noteBody" id="noteBody"></div></div></div>
+<div class="editOverlay" id="editOverlay"><div class="editSheet"><div class="editHead"><div class="editTitle" id="editTitle">—</div><div class="editActions"><button class="iconBtn" id="btnAddEvent">＋</button><button class="iconBtn" id="btnCloseEdit">✕</button></div></div><div class="editBody" id="editBody"></div></div></div>
+<div class="formOverlay" id="formOverlay"><div class="formSheet"><div class="formHead"><div class="formTitle" id="formTitle">Événement</div><button class="iconBtn" id="btnFormCancel">✕</button></div><div class="formBody">
+  <div class="formBlock"><label class="formLabel" for="fTitle">Titre</label><input class="fieldText" id="fTitle" type="text" placeholder="Titre de l’événement"></div>
+  <div class="formBlock"><label class="formLabel" for="fCategory">Catégorie</label><select class="fieldSelect" id="fCategory"></select></div>
+  <div class="timePickerGroup"><div class="timeSection"><label class="timeLabel">Heure début</label><div class="timePickerRow"><div class="wheel" id="startHourWheel"><div class="wheelFocus"></div><div class="wheelInner" id="startHourInner"></div></div><div class="timeColon">:</div><div class="wheel" id="startMinuteWheel"><div class="wheelFocus"></div><div class="wheelInner" id="startMinuteInner"></div></div></div></div><div class="timeSection"><label class="timeLabel">Heure fin</label><div class="timePickerRow"><div class="wheel" id="endHourWheel"><div class="wheelFocus"></div><div class="wheelInner" id="endHourInner"></div></div><div class="timeColon">:</div><div class="wheel" id="endMinuteWheel"><div class="wheelFocus"></div><div class="wheelInner" id="endMinuteInner"></div></div></div></div></div>
+  <div class="formBlock"><label class="formLabel" for="fLocation">Lieu</label><input class="fieldText" id="fLocation" type="text" placeholder="Lieu (optionnel)"></div>
+  <div class="formBlock"><label class="formLabel" for="fDetails">Détails / note</label><textarea class="fieldArea" id="fDetails" placeholder="Détails (optionnel)"></textarea></div>
+  <div class="formBlock"><label class="formLabel">Pièce jointe</label><div class="attachmentActions"><button class="btn" id="btnAttachmentUpload" type="button">📎 Ajouter une image</button></div><div class="attachmentHint">Image facultative. Tu peux choisir une photo depuis ton téléphone.</div><div class="attachmentPreview" id="attachmentPreview"><img id="attachmentPreviewImg" alt="Pièce jointe"><div class="attachmentPreviewBar"><span style="font-size:13px;font-weight:850;opacity:.82">Image jointe</span><button class="attachmentRemove" id="btnAttachmentRemove" type="button">Supprimer</button></div></div></div>
+  <div class="formActions" style="justify-content:flex-end"><button class="btn" id="btnFormClose">Annuler</button><button class="btn" id="btnFormSave">Enregistrer</button></div>
+</div></div></div>
+<div class="attachmentUploadOverlay" id="attachmentUploadOverlay"><div class="attachmentUploadTop"><div class="attachmentUploadTitle">Pièce jointe</div><button class="btn" id="btnAttachmentUploadClose">Fermer</button></div><div class="attachmentUploadWindow"><iframe id="attachmentUploadFrame" class="attachmentUploadFrame" src="about:blank" title="Ajouter une pièce jointe"></iframe></div></div>
 
-<div class="status" id="status">
-  <div class="pill">
-    <span>⚠️</span>
-    <div>
-      <div id="statusTxt">Chargement…</div>
-      <div class="small" id="statusSub"></div>
-    </div>
-  </div>
-</div>
-
-<div class="noteOverlay" id="noteOverlay">
-  <div class="noteSheet">
-    <div class="noteHead">
-      <div class="noteTitle" id="noteTitle">—</div>
-      <button class="noteClose" id="noteClose">Fermer</button>
-    </div>
-
-    <div class="noteBody" id="noteBody"></div>
-  </div>
-</div>
-
-<div class="editOverlay" id="editOverlay">
-  <div class="editSheet">
-    <div class="editHead">
-      <div class="editTitle" id="editTitle">—</div>
-
-      <div class="editActions">
-        <button class="iconBtn" id="btnAddEvent">＋</button>
-        <button class="iconBtn" id="btnCloseEdit">✕</button>
-      </div>
-    </div>
-
-    <div class="editBody" id="editBody"></div>
-  </div>
-</div>
-
-<div class="formOverlay" id="formOverlay">
-  <div class="formSheet">
-
-    <div class="formHead">
-      <div class="formTitle" id="formTitle">Événement</div>
-      <button class="iconBtn" id="btnFormCancel">✕</button>
-    </div>
-
-    <div class="formBody">
-
-      <div class="formBlock">
-        <label class="formLabel" for="fTitle">Titre</label>
-        <input class="fieldText" id="fTitle" type="text" placeholder="Titre de l’événement">
-      </div>
-
-      <div class="formBlock">
-        <label class="formLabel" for="fCategory">Catégorie</label>
-        <select class="fieldSelect" id="fCategory"></select>
-      </div>
-
-      <div class="timePickerGroup">
-
-        <div class="timeSection">
-          <label class="timeLabel">Heure début</label>
-
-          <div class="timePickerRow">
-            <div class="wheel" id="startHourWheel">
-              <div class="wheelFocus"></div>
-              <div class="wheelInner" id="startHourInner"></div>
-            </div>
-
-            <div class="timeColon">:</div>
-
-            <div class="wheel" id="startMinuteWheel">
-              <div class="wheelFocus"></div>
-              <div class="wheelInner" id="startMinuteInner"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="timeSection">
-          <label class="timeLabel">Heure fin</label>
-
-          <div class="timePickerRow">
-            <div class="wheel" id="endHourWheel">
-              <div class="wheelFocus"></div>
-              <div class="wheelInner" id="endHourInner"></div>
-            </div>
-
-            <div class="timeColon">:</div>
-
-            <div class="wheel" id="endMinuteWheel">
-              <div class="wheelFocus"></div>
-              <div class="wheelInner" id="endMinuteInner"></div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="formBlock">
-        <label class="formLabel" for="fLocation">Lieu</label>
-        <input class="fieldText" id="fLocation" type="text" placeholder="Lieu (optionnel)">
-      </div>
-
-      <div class="formBlock">
-        <label class="formLabel" for="fDetails">Détails / note</label>
-        <textarea class="fieldArea" id="fDetails" placeholder="Détails (optionnel)"></textarea>
-      </div>
-
-      <div class="formBlock">
-        <label class="formLabel">Pièce jointe</label>
-
-        <div class="attachmentActions">
-          <button class="btn" id="btnAttachmentUpload" type="button">📎 Ajouter une image</button>
-        </div>
-
-        <div class="attachmentHint">
-          Image facultative. Tu peux choisir une photo depuis ton téléphone.
-        </div>
-
-        <div class="attachmentPreview" id="attachmentPreview">
-          <img id="attachmentPreviewImg" alt="Pièce jointe">
-
-          <div class="attachmentPreviewBar">
-            <span style="font-size:13px;font-weight:850;opacity:.82">Image jointe</span>
-            <button class="attachmentRemove" id="btnAttachmentRemove" type="button">Supprimer</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="formActions" style="justify-content:flex-end">
-        <button class="btn" id="btnFormClose">Annuler</button>
-        <button class="btn" id="btnFormSave">Enregistrer</button>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<div class="attachmentUploadOverlay" id="attachmentUploadOverlay">
-
-  <div class="attachmentUploadTop">
-    <div class="attachmentUploadTitle">Pièce jointe</div>
-    <button class="btn" id="btnAttachmentUploadClose">Fermer</button>
-  </div>
-
-  <div class="attachmentUploadWindow">
-    <iframe
-      id="attachmentUploadFrame"
-      class="attachmentUploadFrame"
-      src="about:blank"
-      title="Ajouter une pièce jointe">
-    </iframe>
-  </div>
-
+<div class="imageViewer" id="imageViewer">
+  <div class="imageViewerTop"><button type="button" class="imageViewerClose" id="imageViewerClose">Fermer</button></div>
+  <div class="imageViewerBody"><img id="imageViewerImg" class="imageViewerImg" alt="Pièce jointe"></div>
 </div>
 
 <script>
-
 const API="https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+const BACK_URL="index.html",PUBLIC_YEAR=2026,LS_EMAIL="cs_portail_email_v1",LS_ROLE="cs_role_v1",CACHE_MAX_AGE_MS=604800000;
+let ADMIN_YEARS=[PUBLIC_YEAR],ACTIVE_YEAR=PUBLIC_YEAR,IS_ADMIN=false,EDIT_MODE=false,events=[],categoriesRaw=[],eventsByDate=new Map(),catColor=new Map(),catLabel=new Map(),catOrder=new Map(),firstCatByDate=new Map(),hasNoteByDate=new Map(),currentMonth=0,_editDate="";
+const DEFAULT_CATEGORIES=[{category:"FMA centre",color:"#ff2d2d",order:1},{category:"FMA équipe 1",color:"#24d36a",order:2},{category:"FMA équipe 2",color:"#f6a000",order:3},{category:"JSP",color:"#4aa8ff",order:4},{category:"Navette",color:"#2f79ff",order:5},{category:"RECSEC",color:"#a081ff",order:6},{category:"Sainte Barbe",color:"#ff5a5a",order:7}],OVERRIDE_COLORS={"fma centre":"#ff2d2d"};
+const $=id=>document.getElementById(id),monthsFR=["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"],dowsFR=["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
+const HOURS=Array.from({length:24},(_,i)=>String(i).padStart(2,"0")),MINUTES=["00","15","30","45"];
+const TIME_PICKERS={startHour:{wheel:$("startHourWheel"),inner:$("startHourInner"),values:HOURS,value:"08"},startMinute:{wheel:$("startMinuteWheel"),inner:$("startMinuteInner"),values:MINUTES,value:"00"},endHour:{wheel:$("endHourWheel"),inner:$("endHourInner"),values:HOURS,value:"09"},endMinute:{wheel:$("endMinuteWheel"),inner:$("endMinuteInner"),values:MINUTES,value:"00"}};
+let FORM_STATE={mode:"add",dateStr:"",originalEvent:null},FORM_ATTACHMENT_URL="",FORM_ORIGINAL_ATTACHMENT_URL="",FORM_NEW_UPLOAD_URL="";
 
-const BACK_URL="index.html";
-const PUBLIC_YEAR=2026;
+function norm(s){return String(s||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/['’]/g,"").replace(/\s+/g," ")}
+function escapeHtml(s){return(s==null?"":String(s)).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function ymd(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function firstMondayGrid(y,m){const d=new Date(y,m,1),o=d.getDay()===0?6:d.getDay()-1;d.setDate(d.getDate()-o);d.setHours(12,0,0,0);return d}
+function toFRDate(s){const[y,m,d]=String(s||"").split("-");if(!y||!m||!d)return s;const dt=new Date(+y,+m-1,+d,12);return`${dowsFR[dt.getDay()]} ${d}/${m}/${y}`}
+function formatTimeRange(s,e){s=String(s||"").trim();e=String(e||"").trim();return s&&e?`${s}–${e}`:s||e||""}
+function getEmailLocal(){return(localStorage.getItem(LS_EMAIL)||"").trim().toLowerCase()}
+function getAttachmentUrl_(ev){return String(ev?.attachment_url||ev?.piece_jointe||ev?.attachment||ev?.image_url||ev?.image||"").trim()}
+function getCacheKey_(){return`cs_planning_cache_v2_${ACTIVE_YEAR}`}
+function showStatus(t,s){$("statusTxt").textContent=t||"";$("statusSub").textContent=s||"";$("status").style.display="block"}
+function hideStatus(){$("status").style.display="none"}
 
-const LS_EMAIL="cs_portail_email_v1";
-const LS_ROLE="cs_role_v1";
+function jsonp(url,cb,timeout=15000){
+  return new Promise((resolve,reject)=>{
+    const script=document.createElement("script");
+    const cleanup=()=>{
+      script.remove();
+      try{delete window[cb]}catch(e){window[cb]=undefined}
+    };
+    const timer=setTimeout(()=>{
+      cleanup();
+      reject(new Error("Timeout JSONP"));
+    },timeout);
 
-const CACHE_MAX_AGE_MS=604800000;
+    window[cb]=data=>{
+      clearTimeout(timer);
+      cleanup();
+      resolve(data);
+    };
 
-let ADMIN_YEARS=[PUBLIC_YEAR];
+    script.src=url+(url.includes("?")?"&":"?")+"t="+Date.now();
 
-let ACTIVE_YEAR=PUBLIC_YEAR;
-let IS_ADMIN=false;
-let EDIT_MODE=false;
+    script.onerror=()=>{
+      clearTimeout(timer);
+      cleanup();
+      reject(new Error("Erreur JSONP"));
+    };
 
-let events=[];
-let categoriesRaw=[];
-
-let eventsByDate=new Map();
-let catColor=new Map();
-let catLabel=new Map();
-let catOrder=new Map();
-let firstCatByDate=new Map();
-let hasNoteByDate=new Map();
-
-let currentMonth=0;
-let _editDate="";
-
-const DEFAULT_CATEGORIES=[
-  {category:"FMA centre",color:"#ff2d2d",order:1},
-  {category:"FMA équipe 1",color:"#24d36a",order:2},
-  {category:"FMA équipe 2",color:"#f6a000",order:3},
-  {category:"JSP",color:"#4aa8ff",order:4},
-  {category:"Navette",color:"#2f79ff",order:5},
-  {category:"RECSEC",color:"#a081ff",order:6},
-  {category:"Sainte Barbe",color:"#ff5a5a",order:7}
-];
-
-const OVERRIDE_COLORS={
-  "fma centre":"#ff2d2d"
-};
-
-const $=id=>document.getElementById(id);
-
-const monthsFR=[
-  "Janvier",
-  "Février",
-  "Mars",
-  "Avril",
-  "Mai",
-  "Juin",
-  "Juillet",
-  "Août",
-  "Septembre",
-  "Octobre",
-  "Novembre",
-  "Décembre"
-];
-
-const dowsFR=[
-  "Dim",
-  "Lun",
-  "Mar",
-  "Mer",
-  "Jeu",
-  "Ven",
-  "Sam"
-];
-
-const HOURS=
-  Array
-    .from(
-      {length:24},
-      (_,i)=>String(i).padStart(2,"0")
-    );
-
-const MINUTES=[
-  "00",
-  "15",
-  "30",
-  "45"
-];
-
-const TIME_PICKERS={
-
-  startHour:{
-    wheel:$("startHourWheel"),
-    inner:$("startHourInner"),
-    values:HOURS,
-    value:"08"
-  },
-
-  startMinute:{
-    wheel:$("startMinuteWheel"),
-    inner:$("startMinuteInner"),
-    values:MINUTES,
-    value:"00"
-  },
-
-  endHour:{
-    wheel:$("endHourWheel"),
-    inner:$("endHourInner"),
-    values:HOURS,
-    value:"09"
-  },
-
-  endMinute:{
-    wheel:$("endMinuteWheel"),
-    inner:$("endMinuteInner"),
-    values:MINUTES,
-    value:"00"
-  }
-
-};
-
-let FORM_STATE={
-  mode:"add",
-  dateStr:"",
-  originalEvent:null
-};
-
-let FORM_ATTACHMENT_URL="";
-let FORM_ORIGINAL_ATTACHMENT_URL="";
-let FORM_NEW_UPLOAD_URL="";
-
-
-function norm(s){
-
-  return String(s||"")
-    .trim()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g,"")
-    .replace(/['’]/g,"")
-    .replace(/\s+/g," ");
-
+    document.head.appendChild(script);
+  });
 }
-
-
-function escapeHtml(s){
-
-  return (s==null?"":String(s))
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-
-function ymd(d){
-
-  return (
-    d.getFullYear()
-    + "-"
-    + String(d.getMonth()+1).padStart(2,"0")
-    + "-"
-    + String(d.getDate()).padStart(2,"0")
-  );
-
-}
-
-
-function firstMondayGrid(y,m){
-
-  const d=
-    new Date(y,m,1);
-
-  const o=
-    d.getDay()===0
-      ? 6
-      : d.getDay()-1;
-
-  d.setDate(
-    d.getDate()-o
-  );
-
-  d.setHours(
-    12,
-    0,
-    0,
-    0
-  );
-
-  return d;
-
-}
-
-
-function toFRDate(s){
-
-  const [y,m,d]=
-    String(s||"").split("-");
-
-  if(!y||!m||!d){
-    return s;
-  }
-
-  const dt=
-    new Date(
-      +y,
-      +m-1,
-      +d,
-      12
-    );
-
-  return (
-    dowsFR[dt.getDay()]
-    + " "
-    + d
-    + "/"
-    + m
-    + "/"
-    + y
-  );
-
-}
-
-
-function formatTimeRange(s,e){
-
-  s=
-    String(s||"").trim();
-
-  e=
-    String(e||"").trim();
-
-  if(s && e){
-    return s+"–"+e;
-  }
-
-  return s||e||"";
-
-}
-
-
-function getEmailLocal(){
-
-  return (
-    localStorage
-      .getItem(LS_EMAIL)
-      ||
-      ""
-  )
-  .trim()
-  .toLowerCase();
-
-}
-
-
-function getAttachmentUrl_(ev){
-
-  return String(
-    ev?.attachment_url
-    ||
-    ev?.piece_jointe
-    ||
-    ev?.attachment
-    ||
-    ev?.image_url
-    ||
-    ev?.image
-    ||
-    ""
-  ).trim();
-
-}
-
-
-function getCacheKey_(){
-
-  return (
-    "cs_planning_cache_v2_"
-    +
-    ACTIVE_YEAR
-  );
-
-}
-
-
-function showStatus(t,s){
-
-  $("statusTxt").textContent=
-    t||"";
-
-  $("statusSub").textContent=
-    s||"";
-
-  $("status").style.display=
-    "block";
-
-}
-
-
-function hideStatus(){
-
-  $("status").style.display=
-    "none";
-
-}
-
-
-function jsonp(
-  url,
-  cb,
-  timeout=15000
-){
-
-  return new Promise(
-    (
-      resolve,
-      reject
-    )=>{
-
-      const script=
-        document.createElement(
-          "script"
-        );
-
-      const cleanup=()=>{
-
-        script.remove();
-
-        try{
-          delete window[cb];
-        }catch(e){
-          window[cb]=undefined;
-        }
-
-      };
-
-      const timer=
-        setTimeout(
-          ()=>{
-
-            cleanup();
-
-            reject(
-              new Error(
-                "Timeout JSONP"
-              )
-            );
-
-          },
-          timeout
-        );
-
-      window[cb]=data=>{
-
-        clearTimeout(
-          timer
-        );
-
-        cleanup();
-
-        resolve(data);
-
-      };
-
-      script.src=
-        url
-        +
-        (
-          url.includes("?")
-            ? "&"
-            : "?"
-        )
-        +
-        "t="
-        +
-        Date.now();
-
-      script.onerror=()=>{
-
-        clearTimeout(
-          timer
-        );
-
-        cleanup();
-
-        reject(
-          new Error(
-            "Erreur JSONP"
-          )
-        );
-
-      };
-
-      document
-        .head
-        .appendChild(
-          script
-        );
-
-    }
-  );
-
-}
-
 
 async function loadMyRole_(){
-
-  const savedRole=
-    String(
-      localStorage.getItem(
-        LS_ROLE
-      )
-      ||
-      ""
-    )
-    .trim()
-    .toLowerCase();
+  const savedRole=String(localStorage.getItem(LS_ROLE)||"").trim().toLowerCase();
 
   IS_ADMIN=
     savedRole==="admin"
     ||
     savedRole==="administrateur";
 
-  const email=
-    getEmailLocal();
+  const email=getEmailLocal();
 
-  if(!email){
-    return;
-  }
+  if(!email)return;
 
   const cb=
     "cb_auth_"
     +
-    Math.random()
-      .toString(36)
-      .slice(2);
+    Math.random().toString(36).slice(2);
 
   try{
-
     const res=
       await jsonp(
         `${API}?view=auth_check&email=${encodeURIComponent(email)}&callback=${cb}`,
@@ -681,16 +146,11 @@ async function loadMyRole_(){
         8000
       );
 
-    if(
-      res?.ok===true
-    ){
-
+    if(res?.ok===true){
       const role=
-        String(
-          res.role||""
-        )
-        .trim()
-        .toLowerCase();
+        String(res.role||"")
+          .trim()
+          .toLowerCase();
 
       IS_ADMIN=
         role==="admin"
@@ -698,341 +158,118 @@ async function loadMyRole_(){
         role==="administrateur";
 
       try{
-
         localStorage.setItem(
           LS_ROLE,
           role
         );
-
       }catch(e){}
-
     }
-
   }catch(e){}
-
 }
-
 
 async function loadPlanningYears_(){
+  const currentYear=
+    new Date().getFullYear();
 
-  const cb=
-    "cb_years_"
-    +
-    Math.random()
-      .toString(36)
-      .slice(2);
-
-  try{
-
-    const res=
-      await jsonp(
-        `${API}?view=planning_years_list&callback=${cb}`,
-        cb,
-        15000
-      );
-
-    const ys=
-      (
-        Array.isArray(
-          res?.years
-        )
-          ? res.years
-          : []
-      )
-      .map(
-        x=>
-          Number(
-            typeof x==="object"
-              ? x.year
-              : x
-          )
-      )
-      .filter(
-        y=>
-          Number.isInteger(y)
-          &&
-          y>=2000
-          &&
-          y<=2100
-      );
-
-    ADMIN_YEARS=[
-      ...new Set([
-        PUBLIC_YEAR,
-        ...ys
-      ])
-    ]
-    .sort(
-      (a,b)=>a-b
-    );
-
-  }catch(e){
-
-    ADMIN_YEARS=[
-      PUBLIC_YEAR
-    ];
-
-  }
-
+  ADMIN_YEARS=[
+    currentYear,
+    currentYear+1
+  ];
 }
 
-
 function rebuildMaps(){
+  eventsByDate=new Map();
+  hasNoteByDate=new Map();
 
-  eventsByDate=
-    new Map();
+  for(const ev of events){
+    const d=String(ev.date||"").trim();
 
-  hasNoteByDate=
-    new Map();
+    if(!d)continue;
 
-  for(
-    const ev
-    of events
-  ){
-
-    const d=
-      String(
-        ev.date||""
-      ).trim();
-
-    if(!d){
-      continue;
+    if(!eventsByDate.has(d)){
+      eventsByDate.set(d,[]);
     }
 
-    if(
-      !eventsByDate.has(d)
-    ){
-
-      eventsByDate.set(
-        d,
-        []
-      );
-
-    }
-
-    eventsByDate
-      .get(d)
-      .push(ev);
+    eventsByDate.get(d).push(ev);
 
     if(
-      String(
-        ev.details||""
-      ).trim()
+      String(ev.details||"").trim()
       ||
       getAttachmentUrl_(ev)
     ){
-
-      hasNoteByDate.set(
-        d,
-        true
-      );
-
+      hasNoteByDate.set(d,true);
     }
-
   }
 
-
-  catColor=
-    new Map();
-
-  catLabel=
-    new Map();
-
-  catOrder=
-    new Map();
-
+  catColor=new Map();
+  catLabel=new Map();
+  catOrder=new Map();
 
   const cats=[
-    ...(
-      categoriesRaw.length
-        ? categoriesRaw
-        : DEFAULT_CATEGORIES
-    )
+    ...(categoriesRaw.length?categoriesRaw:DEFAULT_CATEGORIES)
   ]
-  .map(
-    c=>({
+  .map(c=>({
+    category:String(c.category||"").trim(),
+    color:String(c.color||"").trim(),
+    order:Number(c.order||9999)||9999
+  }))
+  .filter(c=>c.category)
+  .sort((a,b)=>(a.order-b.order)||a.category.localeCompare(b.category));
 
-      category:
-        String(
-          c.category||""
-        ).trim(),
+  for(const c of cats){
+    const k=norm(c.category);
 
-      color:
-        String(
-          c.color||""
-        ).trim(),
+    if(catLabel.has(k))continue;
 
-      order:
-        Number(
-          c.order||9999
-        )
-        ||
-        9999
-
-    })
-  )
-  .filter(
-    c=>c.category
-  )
-  .sort(
-    (a,b)=>
-      (
-        a.order-b.order
-      )
-      ||
-      a.category.localeCompare(
-        b.category
-      )
-  );
-
-
-  for(
-    const c
-    of cats
-  ){
-
-    const k=
-      norm(
-        c.category
-      );
-
-    if(
-      catLabel.has(k)
-    ){
-      continue;
-    }
-
-    catLabel.set(
-      k,
-      c.category
-    );
-
-    catColor.set(
-      k,
-      OVERRIDE_COLORS[k]
-      ||
-      c.color
-      ||
-      "rgba(255,255,255,.25)"
-    );
-
-    catOrder.set(
-      k,
-      c.order
-    );
-
+    catLabel.set(k,c.category);
+    catColor.set(k,OVERRIDE_COLORS[k]||c.color||"rgba(255,255,255,.25)");
+    catOrder.set(k,c.order);
   }
 
+  firstCatByDate=new Map();
 
-  firstCatByDate=
-    new Map();
-
-
-  for(
-    const [d,arr]
-    of eventsByDate
-  ){
-
+  for(const[d,arr]of eventsByDate){
     let best="";
     let bo=9999;
 
-    for(
-      const ev
-      of arr
-    ){
+    for(const ev of arr){
+      const k=norm(ev.category||"");
+      const o=catOrder.get(k)??9999;
 
-      const k=
-        norm(
-          ev.category||""
-        );
-
-      const o=
-        catOrder.get(k)
-        ??
-        9999;
-
-      if(
-        o<bo
-      ){
-
+      if(o<bo){
         bo=o;
         best=k;
-
       }
-
     }
 
     firstCatByDate.set(
       d,
-      best
-      ||
-      norm(
-        arr[0]?.category||""
-      )
+      best||norm(arr[0]?.category||"")
     );
-
   }
-
 }
-
 
 function getColorForCategory(k){
-
-  k=
-    norm(k);
-
-  return (
-    OVERRIDE_COLORS[k]
-    ||
-    catColor.get(k)
-    ||
-    "rgba(255,255,255,.25)"
-  );
-
+  k=norm(k);
+  return OVERRIDE_COLORS[k]||catColor.get(k)||"rgba(255,255,255,.25)";
 }
-
 
 function renderLegend(){
-
-  const g=
-    $("legendGrid");
-
+  const g=$("legendGrid");
   g.innerHTML="";
 
-  for(
-    const [k,label]
-    of catLabel
-  ){
-
-    const d=
-      document.createElement(
-        "div"
-      );
-
-    d.className=
-      "legItem";
-
-    d.innerHTML=
-      `<div class="sq" style="background:${escapeHtml(getColorForCategory(k))}"></div><div class="legTxt">${escapeHtml(label)}</div>`;
-
+  for(const[k,label]of catLabel){
+    const d=document.createElement("div");
+    d.className="legItem";
+    d.innerHTML=`<div class="sq" style="background:${escapeHtml(getColorForCategory(k))}"></div><div class="legTxt">${escapeHtml(label)}</div>`;
     g.appendChild(d);
-
   }
-
 }
 
-
 function renderMonth(){
-
-  $("monthName").textContent=
-    monthsFR[currentMonth];
-
-  $("btnPrev").disabled=
-    currentMonth===0;
-
-  $("btnNext").disabled=
-    currentMonth===11;
-
+  $("monthName").textContent=monthsFR[currentMonth];
+  $("btnPrev").disabled=currentMonth===0;
+  $("btnNext").disabled=currentMonth===11;
 
   const start=
     firstMondayGrid(
@@ -1041,574 +278,292 @@ function renderMonth(){
     );
 
   const today=
-    ymd(
-      new Date()
-    );
+    ymd(new Date());
 
-  const g=
-    $("grid");
+  const g=$("grid");
 
   g.innerHTML="";
 
-
-  for(
-    let i=0;
-    i<42;
-    i++
-  ){
-
-    const d=
-      new Date(start);
+  for(let i=0;i<42;i++){
+    const d=new Date(start);
 
     d.setDate(
       start.getDate()+i
     );
 
     const inMonth=
-      d.getMonth()
-      ===
-      currentMonth;
+      d.getMonth()===currentMonth;
 
-    const dateStr=
-      ymd(d);
+    const dateStr=ymd(d);
 
     const cell=
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
     cell.className=
       "day"
       +
-      (
-        inMonth
-          ? ""
-          : " is-empty"
-      );
-
+      (inMonth?"":" is-empty");
 
     if(inMonth){
-
-      cell.dataset.date=
-        dateStr;
+      cell.dataset.date=dateStr;
 
       const cat=
-        firstCatByDate.get(
-          dateStr
-        );
+        firstCatByDate.get(dateStr);
 
       if(cat){
-
-        cell.classList.add(
-          "has-color"
-        );
-
-        cell.style.setProperty(
-          "--dayColor",
-          getColorForCategory(
-            cat
-          )
-        );
-
+        cell.classList.add("has-color");
+        cell.style.setProperty("--dayColor",getColorForCategory(cat));
       }
 
-      if(
-        dateStr===today
-      ){
-
-        cell.classList.add(
-          "is-today"
-        );
-
+      if(dateStr===today){
+        cell.classList.add("is-today");
       }
 
-      if(
-        hasNoteByDate.get(
-          dateStr
-        )
-      ){
-
-        cell.classList.add(
-          "has-note"
-        );
-
+      if(hasNoteByDate.get(dateStr)){
+        cell.classList.add("has-note");
       }
-
     }
-
 
     cell.innerHTML=
       `<span>${inMonth?d.getDate():""}</span>`;
 
-    g.appendChild(
-      cell
-    );
-
+    g.appendChild(cell);
   }
-
 }
 
-
 function setEditMode(on){
-
-  EDIT_MODE=
-    !!on;
+  EDIT_MODE=!!on;
 
   $("editLabel").style.display=
     EDIT_MODE
-      ? "inline-block"
-      : "none";
+      ?"inline-block"
+      :"none";
 
   $("btnLock").textContent=
     EDIT_MODE
-      ? "🔓"
-      : "🔒";
+      ?"🔓"
+      :"🔒";
 
-  if(
-    !EDIT_MODE
-  ){
-
+  if(!EDIT_MODE){
     closeEdit();
-
   }
-
 }
 
-
 function openNote(dateStr){
-
   const arr=
-    (
-      eventsByDate.get(
-        dateStr
-      )
-      ||
-      []
-    )
-    .filter(
-      ev=>
-        String(
-          ev.details||""
-        ).trim()
+    (eventsByDate.get(dateStr)||[])
+      .filter(ev=>
+        String(ev.details||"").trim()
         ||
         getAttachmentUrl_(ev)
-    );
+      );
 
-  if(
-    !arr.length
-  ){
-    return;
-  }
-
+  if(!arr.length)return;
 
   $("noteTitle").textContent=
-    "Note — "
-    +
-    dateStr
-      .split("-")
-      .reverse()
-      .join("/");
-
+    `Note — ${dateStr.split("-").reverse().join("/")}`;
 
   $("noteBody").innerHTML="";
 
-
-  for(
-    const ev
-    of arr
-  ){
-
-    const a=
-      getAttachmentUrl_(ev);
+  for(const ev of arr){
+    const a=getAttachmentUrl_(ev);
 
     const card=
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
-    card.className=
-      "evCard";
-
+    card.className="evCard";
 
     card.innerHTML=
-      `
-      <div class="evTop">
+      `<div class="evTop">
         <div class="evName">${escapeHtml(ev.title||"—")}</div>
         <div class="evTime">${escapeHtml(formatTimeRange(ev.start,ev.end))}</div>
       </div>
-
       <div class="evMeta">
-
-        ${
-          ev.category
-            ?
-            `<div class="chip">
-              <span class="chipDot" style="background:${escapeHtml(getColorForCategory(ev.category))}"></span>
-              <span>${escapeHtml(ev.category)}</span>
-            </div>`
-            :
-            ""
-        }
-
-        ${
-          ev.location
-            ?
-            `<div class="chip">
-              📍 <span>${escapeHtml(ev.location)}</span>
-            </div>`
-            :
-            ""
-        }
-
+        ${ev.category?`<div class="chip"><span class="chipDot" style="background:${escapeHtml(getColorForCategory(ev.category))}"></span><span>${escapeHtml(ev.category)}</span></div>`:""}
+        ${ev.location?`<div class="chip">📍 <span>${escapeHtml(ev.location)}</span></div>`:""}
       </div>
+      ${ev.details?`<div class="evDetails">${escapeHtml(ev.details)}</div>`:""}
+      ${a?`<button type="button" class="evAttachment evAttachmentBtn"><img src="${escapeHtml(a)}" alt="Pièce jointe"></button>`:""}`;
 
-      ${
-        ev.details
-          ?
-          `<div class="evDetails">${escapeHtml(ev.details)}</div>`
-          :
-          ""
+    if(a){
+      const btn=
+        card.querySelector(".evAttachmentBtn");
+
+      if(btn){
+        btn.onclick=
+          ()=>openImageViewer_(a);
       }
+    }
 
-      ${
-        a
-          ?
-          `<a
-            class="evAttachment"
-            href="${escapeHtml(a)}"
-            target="_blank"
-            rel="noopener">
-
-            <img
-              src="${escapeHtml(a)}"
-              alt="Pièce jointe">
-
-          </a>`
-          :
-          ""
-      }
-      `;
-
-
-    $("noteBody")
-      .appendChild(
-        card
-      );
-
+    $("noteBody").appendChild(card);
   }
 
-
-  $("noteOverlay")
-    .classList
-    .add(
-      "show"
-    );
-
+  $("noteOverlay").classList.add("show");
 }
 
+function openImageViewer_(url){
+  const u=
+    String(url||"").trim();
+
+  if(!u)return;
+
+  $("imageViewerImg").src=u;
+
+  $("imageViewer")
+    .classList
+    .add("show");
+}
+
+function closeImageViewer_(){
+  $("imageViewer")
+    .classList
+    .remove("show");
+
+  $("imageViewerImg")
+    .removeAttribute("src");
+}
 
 function closeNote(){
-
   $("noteOverlay")
     .classList
-    .remove(
-      "show"
-    );
-
+    .remove("show");
 }
 
-
 function openEdit(d){
-
-  _editDate=
-    d;
+  _editDate=d;
 
   $("editTitle").textContent=
-    "Événements — "
-    +
-    toFRDate(d);
+    `Événements — ${toFRDate(d)}`;
 
   renderEditList(d);
 
   $("editOverlay")
     .classList
-    .add(
-      "show"
-    );
-
+    .add("show");
 }
-
 
 function closeEdit(){
-
   $("editOverlay")
     .classList
-    .remove(
-      "show"
-    );
+    .remove("show");
 
   _editDate="";
-
-  $("editBody")
-    .innerHTML="";
-
+  $("editBody").innerHTML="";
 }
 
-
 function renderEditList(d){
-
   const arr=
-    (
-      eventsByDate.get(d)
-      ||
-      []
-    )
-    .slice()
-    .sort(
-      (a,b)=>
-        String(a.start||"")
-          .localeCompare(
-            String(b.start||"")
-          )
-        ||
-        String(a.title||"")
-          .localeCompare(
-            String(b.title||"")
-          )
-    );
+    (eventsByDate.get(d)||[])
+      .slice()
+      .sort(
+        (a,b)=>
+          String(a.start||"").localeCompare(String(b.start||""))
+          ||
+          String(a.title||"").localeCompare(String(b.title||""))
+      );
 
-  const body=
-    $("editBody");
+  const body=$("editBody");
 
   body.innerHTML="";
 
-
-  if(
-    !arr.length
-  ){
-
+  if(!arr.length){
     body.innerHTML=
       '<div class="row"><div style="font-weight:900">Aucun événement ce jour.</div></div>';
-
     return;
-
   }
 
-
-  for(
-    const ev
-    of arr
-  ){
-
+  for(const ev of arr){
     const row=
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
     const att=
       getAttachmentUrl_(ev);
 
-    row.className=
-      "row";
-
+    row.className="row";
 
     row.innerHTML=
-      `
-      <div class="rowTop">
-
-        <div class="rowName">
-          ${escapeHtml(ev.title||"—")}
-        </div>
-
-        <div class="evTime">
-          ${escapeHtml(formatTimeRange(ev.start,ev.end))}
-        </div>
-
+      `<div class="rowTop">
+        <div class="rowName">${escapeHtml(ev.title||"—")}</div>
+        <div class="evTime">${escapeHtml(formatTimeRange(ev.start,ev.end))}</div>
       </div>
-
       <div class="rowSub">
-
-        ${
-          ev.category
-            ?
-            `<span>🎨 ${escapeHtml(ev.category)}</span>`
-            :
-            ""
-        }
-
-        ${
-          ev.location
-            ?
-            `<span>📍 ${escapeHtml(ev.location)}</span>`
-            :
-            ""
-        }
-
-        ${
-          ev.details
-            ?
-            "<span>📝 note</span>"
-            :
-            ""
-        }
-
-        ${
-          att
-            ?
-            "<span>📎 image</span>"
-            :
-            ""
-        }
-
+        ${ev.category?`<span>🎨 ${escapeHtml(ev.category)}</span>`:""}
+        ${ev.location?`<span>📍 ${escapeHtml(ev.location)}</span>`:""}
+        ${ev.details?"<span>📝 note</span>":""}
+        ${att?"<span>📎 image</span>":""}
       </div>
-
       <div class="rowBtns">
+        <button class="iconBtn" data-act="view">👁</button>
+        <button class="iconBtn" data-act="edit">🖍</button>
+        <button class="iconBtn danger" data-act="del">🗑</button>
+      </div>`;
 
-        <button
-          class="iconBtn"
-          data-act="view">
-          👁
-        </button>
-
-        <button
-          class="iconBtn"
-          data-act="edit">
-          🖍
-        </button>
-
-        <button
-          class="iconBtn danger"
-          data-act="del">
-          🗑
-        </button>
-
-      </div>
-      `;
-
-
-    row
-      .querySelectorAll(
-        "button"
-      )
+    row.querySelectorAll("button")
       .forEach(
         b=>
           b.onclick=
             async()=>{
-
-              if(
-                b.dataset.act==="view"
-              ){
-
+              if(b.dataset.act==="view"){
                 openNote(d);
                 return;
-
               }
 
-              if(
-                b.dataset.act==="edit"
-              ){
-
-                openEventForm(
-                  "edit",
-                  d,
-                  ev
-                );
-
+              if(b.dataset.act==="edit"){
+                openEventForm("edit",d,ev);
                 return;
-
               }
 
               if(
                 b.dataset.act==="del"
                 &&
                 confirm(
-                  "Supprimer l’événement :\n\n"
-                  +
-                  (ev.title||"—")
-                  +
-                  "\n\nConfirmer ?"
+                  `Supprimer l’événement :\n\n${ev.title||"—"}\n\nConfirmer ?`
                 )
               ){
-
                 try{
-
-                  await apiDeleteEvent_(
-                    d,
-                    ev
-                  );
+                  await apiDeleteEvent_(d,ev);
 
                   events=
-                    events.filter(
-                      x=>x!==ev
-                    );
+                    events.filter(x=>x!==ev);
 
                   rebuildMaps();
                   renderMonth();
                   renderEditList(d);
 
                   if(att){
-
-                    apiDeleteAttachment_(
-                      att
-                    ).catch(()=>{});
-
+                    apiDeleteAttachment_(att).catch(()=>{});
                   }
 
                   saveCacheCurrent_();
 
                 }catch(err){
-
                   alert(
                     "Erreur : "
                     +
-                    (
-                      err?.message
-                      ||
-                      err
-                    )
+                    (err?.message||err)
                   );
-
                 }
-
               }
-
             }
       );
 
-
-    body.appendChild(
-      row
-    );
-
+    body.appendChild(row);
   }
-
 }
 
-
-async function apiAddEvent_(
-  dateStr,
-  p
-){
-
-  const email=
-    getEmailLocal();
+async function apiAddEvent_(dateStr,p){
+  const email=getEmailLocal();
 
   if(!email){
-
     throw new Error(
       "Email introuvable. Reconnecte-toi sur le portail."
     );
-
   }
-
 
   const cb=
     "cb_add_"
     +
-    Math.random()
-      .toString(36)
-      .slice(2);
-
+    Math.random().toString(36).slice(2);
 
   const url=
     `${API}?view=planning_add`
@@ -1633,7 +588,6 @@ async function apiAddEvent_(
     +
     `&callback=${cb}`;
 
-
   const res=
     await jsonp(
       url,
@@ -1641,41 +595,23 @@ async function apiAddEvent_(
       20000
     );
 
-
-  if(
-    !res?.ok
-  ){
-
+  if(!res?.ok){
     throw new Error(
-      res?.error
-      ||
-      "Erreur ajout"
+      res?.error||"Erreur ajout"
     );
-
   }
 
-
   return res;
-
 }
 
-
-async function apiDeleteEvent_(
-  dateStr,
-  ev
-){
-
-  const email=
-    getEmailLocal();
+async function apiDeleteEvent_(dateStr,ev){
+  const email=getEmailLocal();
 
   if(!email){
-
     throw new Error(
       "Email introuvable. Reconnecte-toi sur le portail."
     );
-
   }
-
 
   const id=
     String(
@@ -1686,41 +622,23 @@ async function apiDeleteEvent_(
       ""
     ).trim();
 
-
   const cb=
     "cb_del_"
     +
-    Math.random()
-      .toString(36)
-      .slice(2);
-
+    Math.random().toString(36).slice(2);
 
   let url=
     `${API}?view=planning_delete`
     +
     `&email=${encodeURIComponent(email)}`;
 
-
-  if(id){
-
-    url+=
-      `&event_id=${encodeURIComponent(id)}`;
-
-  }else{
-
-    url+=
-      `&date=${encodeURIComponent(dateStr)}`
-      +
-      `&title=${encodeURIComponent(ev?.title||"")}`
-      +
-      `&start=${encodeURIComponent(ev?.start||"")}`;
-
-  }
-
+  url+=
+    id
+      ?`&event_id=${encodeURIComponent(id)}`
+      :`&date=${encodeURIComponent(dateStr)}&title=${encodeURIComponent(ev?.title||"")}&start=${encodeURIComponent(ev?.start||"")}`;
 
   url+=
     `&callback=${cb}`;
-
 
   const res=
     await jsonp(
@@ -1729,111 +647,56 @@ async function apiDeleteEvent_(
       20000
     );
 
-
-  if(
-    !res?.ok
-  ){
-
+  if(!res?.ok){
     throw new Error(
-      res?.error
-      ||
-      "Erreur suppression"
+      res?.error||"Erreur suppression"
     );
-
   }
 
-
-  if(
-    Number(
-      res.deleted||0
-    )
-    <
-    1
-  ){
-
+  if(Number(res.deleted||0)<1){
     throw new Error(
       "Événement introuvable dans le planning."
     );
-
   }
 
-
   return res;
-
 }
 
-
-function buildCategoryOptions(
-  selected
-){
-
-  const s=
-    $("fCategory");
+function buildCategoryOptions(selected){
+  const s=$("fCategory");
 
   s.innerHTML=
     '<option value="">Aucune</option>';
 
-
   const items=
-    [
-      ...catLabel.entries()
-    ]
-    .map(
-      ([k,label])=>({
-
+    [...catLabel.entries()]
+      .map(([k,label])=>({
         k,
         label,
-
-        order:
-          catOrder.get(k)
-          ??
-          9999
-
-      })
-    )
-    .sort(
-      (a,b)=>
-        (
-          a.order-b.order
-        )
-        ||
-        a.label.localeCompare(
-          b.label
-        )
-    );
-
-
-  for(
-    const it
-    of items
-  ){
-
-    const o=
-      document.createElement(
-        "option"
+        order:catOrder.get(k)??9999
+      }))
+      .sort(
+        (a,b)=>
+          (a.order-b.order)
+          ||
+          a.label.localeCompare(b.label)
       );
 
-    o.value=
-      it.label;
+  for(const it of items){
+    const o=
+      document.createElement("option");
 
-    o.textContent=
-      it.label;
+    o.value=it.label;
+    o.textContent=it.label;
 
-    s.appendChild(
-      o
-    );
-
+    s.appendChild(o);
   }
-
 
   s.value=
     selected||"";
-
 }
 
-
 function buildWheel(key){
-
   const p=
     TIME_PICKERS[key];
 
@@ -1843,97 +706,55 @@ function buildWheel(key){
     !p.wheel
     ||
     !p.inner
-  ){
-    return;
-  }
-
+  )return;
 
   p.inner.innerHTML=
     '<div class="wheelPad"></div>';
 
-
-  for(
-    let r=0;
-    r<9;
-    r++
-  ){
-
-    for(
-      const v
-      of p.values
-    ){
-
+  for(let r=0;r<9;r++){
+    for(const v of p.values){
       const i=
-        document.createElement(
-          "div"
-        );
+        document.createElement("div");
 
-      i.className=
-        "wheelItem";
-
-      i.dataset.value=
-        v;
-
-      i.textContent=
-        v;
+      i.className="wheelItem";
+      i.dataset.value=v;
+      i.textContent=v;
 
       i.onclick=
-        ()=>setWheelValue(
-          key,
-          v,
-          true
-        );
+        ()=>setWheelValue(key,v,true);
 
-      p.inner.appendChild(
-        i
-      );
-
+      p.inner.appendChild(i);
     }
-
   }
-
 
   p.inner.insertAdjacentHTML(
     "beforeend",
     '<div class="wheelPad"></div>'
   );
 
-
   p.wheel.addEventListener(
     "scroll",
     ()=>{
-
-      clearTimeout(
-        p.timer
-      );
+      clearTimeout(p.timer);
 
       p.timer=
         setTimeout(
           ()=>snapWheel(key),
           70
         );
-
     }
   );
-
 }
-
 
 function getWheelItems(k){
-
-  return [
+  return[
     ...TIME_PICKERS[k]
       .inner
-      .querySelectorAll(
-        ".wheelItem"
-      )
+      .querySelectorAll(".wheelItem")
   ];
-
 }
 
-
 function nearest(k){
-
   const p=
     TIME_PICKERS[k];
 
@@ -1945,12 +766,7 @@ function nearest(k){
   let best=null;
   let dist=Infinity;
 
-
-  for(
-    const i
-    of getWheelItems(k)
-  ){
-
+  for(const i of getWheelItems(k)){
     const d=
       Math.abs(
         c
@@ -1962,53 +778,33 @@ function nearest(k){
         )
       );
 
-    if(
-      d<dist
-    ){
-
+    if(d<dist){
       dist=d;
       best=i;
-
     }
-
   }
 
-
   return best;
-
 }
 
-
-function setWheelValue(
-  k,
-  v,
-  smooth=false
-){
-
+function setWheelValue(k,v,smooth=false){
   const p=
     TIME_PICKERS[k];
 
   const items=
     getWheelItems(k)
       .filter(
-        i=>
-          i.dataset.value===v
+        i=>i.dataset.value===v
       );
 
   const target=
     items[
-      Math.floor(
-        items.length/2
-      )
+      Math.floor(items.length/2)
     ];
 
-  if(!target){
-    return;
-  }
-
+  if(!target)return;
 
   p.wheel.scrollTo({
-
     top:
       target.offsetTop
       -
@@ -2016,25 +812,14 @@ function setWheelValue(
         p.wheel.clientHeight
         -
         target.offsetHeight
-      )
-      /
-      2,
-
-    behavior:
-      smooth
-        ? "smooth"
-        : "auto"
-
+      )/2,
+    behavior:smooth?"smooth":"auto"
   });
 
-
-  p.value=
-    v;
-
+  p.value=v;
 
   setTimeout(
     ()=>{
-
       getWheelItems(k)
         .forEach(
           i=>
@@ -2048,36 +833,23 @@ function setWheelValue(
         nearest(k);
 
       if(n){
-
-        p.value=
-          n.dataset.value;
-
+        p.value=n.dataset.value;
       }
-
     },
-    smooth
-      ? 150
-      : 0
+    smooth?150:0
   );
-
 }
 
-
 function snapWheel(k){
-
   const p=
     TIME_PICKERS[k];
 
   const i=
     nearest(k);
 
-  if(!i){
-    return;
-  }
-
+  if(!i)return;
 
   p.wheel.scrollTo({
-
     top:
       i.offsetTop
       -
@@ -2085,19 +857,11 @@ function snapWheel(k){
         p.wheel.clientHeight
         -
         i.offsetHeight
-      )
-      /
-      2,
-
-    behavior:
-      "smooth"
-
+      )/2,
+    behavior:"smooth"
   });
 
-
-  p.value=
-    i.dataset.value;
-
+  p.value=i.dataset.value;
 
   getWheelItems(k)
     .forEach(
@@ -2107,359 +871,208 @@ function snapWheel(k){
           x===i
         )
     );
-
 }
-
 
 function getTimeValue(prefix){
-
-  return (
-    TIME_PICKERS[
-      prefix+"Hour"
-    ].value
-    +
-    ":"
-    +
-    TIME_PICKERS[
-      prefix+"Minute"
-    ].value
-  );
-
+  return`${TIME_PICKERS[prefix+"Hour"].value}:${TIME_PICKERS[prefix+"Minute"].value}`;
 }
 
-
-function setTimeValue(
-  prefix,
-  v
-){
-
-  const [
+function setTimeValue(prefix,v){
+  const[
     hh="00",
     mm="00"
   ]=
-    String(v||"")
-      .split(":");
-
+    String(v||"").split(":");
 
   setWheelValue(
     prefix+"Hour",
-    HOURS.includes(hh)
-      ? hh
-      : "00"
+    HOURS.includes(hh)?hh:"00"
   );
-
 
   setWheelValue(
     prefix+"Minute",
-    MINUTES.includes(mm)
-      ? mm
-      : "00"
+    MINUTES.includes(mm)?mm:"00"
   );
-
 }
 
-
 function initWheels(){
-
   [
     "startHour",
     "startMinute",
     "endHour",
     "endMinute"
-  ]
-  .forEach(
-    buildWheel
-  );
-
+  ].forEach(buildWheel);
 
   setTimeout(
     ()=>{
-
-      setTimeValue(
-        "start",
-        "08:00"
-      );
-
-      setTimeValue(
-        "end",
-        "09:00"
-      );
-
+      setTimeValue("start","08:00");
+      setTimeValue("end","09:00");
     },
     0
   );
-
 }
 
-
 function renderAttachmentPreview_(){
-
   const u=
     String(
       FORM_ATTACHMENT_URL||""
     ).trim();
 
   if(!u){
-
     $("attachmentPreview")
       .classList
-      .remove(
-        "show"
-      );
+      .remove("show");
 
     $("attachmentPreviewImg")
-      .removeAttribute(
-        "src"
-      );
+      .removeAttribute("src");
 
     return;
-
   }
 
-
-  $("attachmentPreviewImg").src=
-    u;
+  $("attachmentPreviewImg").src=u;
 
   $("attachmentPreview")
     .classList
-    .add(
-      "show"
-    );
-
+    .add("show");
 }
 
-
 function resetAttachmentForm_(ev){
-
   FORM_ORIGINAL_ATTACHMENT_URL=
     getAttachmentUrl_(ev);
 
   FORM_ATTACHMENT_URL=
     FORM_ORIGINAL_ATTACHMENT_URL;
 
-  FORM_NEW_UPLOAD_URL=
-    "";
+  FORM_NEW_UPLOAD_URL="";
 
   renderAttachmentPreview_();
-
 }
 
-
 function openAttachmentUpload_(){
-
   const email=
     getEmailLocal();
 
   if(!email){
-
     alert(
       "Email introuvable. Reconnecte-toi sur le portail."
     );
 
     return;
-
   }
-
 
   $("attachmentUploadFrame").src=
     `${API}?view=planning_attachment_upload_page&email=${encodeURIComponent(email)}&t=${Date.now()}`;
 
-
   $("attachmentUploadOverlay")
     .classList
-    .add(
-      "show"
-    );
-
+    .add("show");
 }
-
 
 function closeAttachmentUpload_(){
-
   $("attachmentUploadOverlay")
     .classList
-    .remove(
-      "show"
-    );
-
+    .remove("show");
 
   setTimeout(
-    ()=>{
-      $("attachmentUploadFrame").src=
-        "about:blank";
-    },
+    ()=>
+      $("attachmentUploadFrame").src="about:blank",
     100
   );
-
 }
 
-
 async function apiDeleteAttachment_(url){
-
   const email=
     getEmailLocal();
 
   const u=
-    String(
-      url||""
-    ).trim();
+    String(url||"").trim();
 
-  if(
-    !email
-    ||
-    !u
-  ){
-    return;
-  }
-
+  if(!email||!u)return;
 
   const cb=
     "cb_att_del_"
     +
-    Math.random()
-      .toString(36)
-      .slice(2);
-
+    Math.random().toString(36).slice(2);
 
   try{
-
     await jsonp(
       `${API}?view=planning_attachment_delete&email=${encodeURIComponent(email)}&url=${encodeURIComponent(u)}&callback=${cb}`,
       cb,
       20000
     );
-
   }catch(e){}
-
 }
 
-
 async function cleanupUnsavedAttachment_(){
-
   const u=
     String(
       FORM_NEW_UPLOAD_URL||""
     ).trim();
 
-  if(!u){
-    return;
-  }
+  if(!u)return;
 
+  FORM_NEW_UPLOAD_URL="";
 
-  FORM_NEW_UPLOAD_URL=
-    "";
-
-  await apiDeleteAttachment_(
-    u
-  );
-
+  await apiDeleteAttachment_(u);
 }
 
-
-function openEventForm(
-  mode,
-  dateStr,
-  ev
-){
-
+function openEventForm(mode,dateStr,ev){
   FORM_STATE={
-
     mode,
     dateStr,
-    originalEvent:
-      ev||null
-
+    originalEvent:ev||null
   };
-
 
   buildCategoryOptions(
     ev?.category||""
   );
 
-
-  resetAttachmentForm_(
-    ev
-  );
-
+  resetAttachmentForm_(ev);
 
   $("formTitle").textContent=
-    (
-      mode==="edit"
-        ? "Modifier"
-        : "Ajouter"
-    )
-    +
-    " — "
-    +
-    toFRDate(
-      dateStr
-    );
-
+    `${mode==="edit"?"Modifier":"Ajouter"} — ${toFRDate(dateStr)}`;
 
   $("fTitle").value=
     ev?.title||"";
 
-
   $("fLocation").value=
     ev?.location||"";
-
 
   $("fDetails").value=
     ev?.details||"";
 
-
-  if(
-    mode!=="edit"
-  ){
-
-    $("fCategory").value=
-      "";
-
+  if(mode!=="edit"){
+    $("fCategory").value="";
   }
-
 
   setTimeValue(
     "start",
     ev?.start||"08:00"
   );
 
-
   setTimeValue(
     "end",
     ev?.end||"09:00"
   );
 
-
   $("formOverlay")
     .classList
-    .add(
-      "show"
-    );
-
+    .add("show");
 }
 
-
 async function closeEventForm(){
-
   await cleanupUnsavedAttachment_();
-
 
   $("formOverlay")
     .classList
-    .remove(
-      "show"
-    );
-
+    .remove("show");
 
   FORM_ATTACHMENT_URL="";
   FORM_ORIGINAL_ATTACHMENT_URL="";
   FORM_NEW_UPLOAD_URL="";
-
 }
 
-
 async function saveEventForm(){
-
   const title=
     $("fTitle").value.trim();
 
@@ -2473,100 +1086,60 @@ async function saveEventForm(){
     $("fDetails").value.trim();
 
   const start=
-    getTimeValue(
-      "start"
-    );
+    getTimeValue("start");
 
   const end=
-    getTimeValue(
-      "end"
-    );
+    getTimeValue("end");
 
   const attachment_url=
     String(
       FORM_ATTACHMENT_URL||""
     ).trim();
 
-
   if(!title){
-
-    alert(
-      "Titre obligatoire."
-    );
-
+    alert("Titre obligatoire.");
     return;
-
   }
 
-
   const min=t=>{
+    const[h,m]=
+      t.split(":").map(Number);
 
-    const [h,m]=
-      t
-        .split(":")
-        .map(Number);
-
-    return (
-      h*60
-      +
-      m
-    );
-
+    return h*60+m;
   };
-
 
   let endM=
     end==="00:00"
     &&
     start!=="00:00"
-      ? 1440
-      : min(end);
+      ?1440
+      :min(end);
 
-
-  if(
-    endM
-    <
-    min(start)
-  ){
-
-    alert(
-      "Heure fin incorrecte."
-    );
-
+  if(endM<min(start)){
+    alert("Heure fin incorrecte.");
     return;
-
   }
-
 
   const btn=
     $("btnFormSave");
 
-  btn.disabled=
-    true;
-
-  btn.textContent=
-    "Enregistrement…";
-
+  btn.disabled=true;
+  btn.textContent="Enregistrement…";
 
   try{
-
     const old=
       FORM_STATE.originalEvent;
-
 
     if(
       FORM_STATE.mode==="edit"
       &&
       old
     ){
-
       await apiDeleteEvent_(
         FORM_STATE.dateStr,
         old
       );
-
     }
-
 
     const res=
       await apiAddEvent_(
@@ -2582,28 +1155,17 @@ async function saveEventForm(){
         }
       );
 
-
     if(old){
-
       events=
         events.filter(
           x=>x!==old
         );
-
     }
 
-
     const ev={
-
-      event_id:
-        res.event_id||"",
-
-      id:
-        res.event_id||"",
-
-      date:
-        FORM_STATE.dateStr,
-
+      event_id:res.event_id||"",
+      id:res.event_id||"",
+      date:FORM_STATE.dateStr,
       title,
       start,
       end,
@@ -2611,125 +1173,75 @@ async function saveEventForm(){
       location,
       details,
       attachment_url
-
     };
 
-
     events.push(ev);
-
 
     const oldAtt=
       String(
         FORM_ORIGINAL_ATTACHMENT_URL||""
       ).trim();
 
-
-    FORM_NEW_UPLOAD_URL=
-      "";
-
+    FORM_NEW_UPLOAD_URL="";
 
     if(
       oldAtt
       &&
       oldAtt!==attachment_url
     ){
-
       apiDeleteAttachment_(
         oldAtt
       ).catch(()=>{});
-
     }
 
-
     rebuildMaps();
-
     renderMonth();
-
     saveCacheCurrent_();
-
 
     $("formOverlay")
       .classList
-      .remove(
-        "show"
-      );
-
+      .remove("show");
 
     FORM_ATTACHMENT_URL="";
     FORM_ORIGINAL_ATTACHMENT_URL="";
     FORM_NEW_UPLOAD_URL="";
 
-
-    if(
-      _editDate
-    ){
-
-      renderEditList(
-        _editDate
-      );
-
+    if(_editDate){
+      renderEditList(_editDate);
     }
 
-
-    btn.textContent=
-      "✓ Enregistré";
+    btn.textContent="✓ Enregistré";
 
   }catch(err){
-
     alert(
       "Erreur : "
       +
-      (
-        err?.message
-        ||
-        err
-      )
+      (err?.message||err)
     );
-
   }finally{
-
-    btn.disabled=
-      false;
-
+    btn.disabled=false;
 
     setTimeout(
-      ()=>{
-        btn.textContent=
-          "Enregistrer";
-      },
+      ()=>btn.textContent="Enregistrer",
       350
     );
-
   }
-
 }
 
-
 function saveCache_(payload){
-
   try{
-
     localStorage.setItem(
       getCacheKey_(),
       JSON.stringify({
-
-        savedAt:
-          Date.now(),
-
+        savedAt:Date.now(),
         payload
-
       })
     );
-
   }catch(e){}
-
 }
 
-
 function loadCache_(){
-
   try{
-
     const o=
       JSON.parse(
         localStorage.getItem(
@@ -2739,89 +1251,58 @@ function loadCache_(){
         "null"
       );
 
-    return (
+    return(
       o?.payload
       &&
       (
         !o.savedAt
         ||
-        Date.now()-o.savedAt
-        <=
-        CACHE_MAX_AGE_MS
+        Date.now()-o.savedAt<=CACHE_MAX_AGE_MS
       )
     )
-      ? o.payload
-      : null;
+      ?o.payload
+      :null;
 
   }catch(e){
-
     return null;
-
   }
-
 }
 
-
 function saveCacheCurrent_(){
-
   saveCache_({
-
     py:{
       ok:true,
       year:ACTIVE_YEAR,
       events
     },
-
     pc:{
       ok:true,
-      categories:
-        categoriesRaw
+      categories:categoriesRaw
     }
-
   });
-
 }
 
-
-function applyPlanningData_(
-  py,
-  pc
-){
-
+function applyPlanningData_(py,pc){
   events=
-    Array.isArray(
-      py?.events
-    )
-      ? py.events
-      : [];
-
+    Array.isArray(py?.events)
+      ?py.events
+      :[];
 
   categoriesRaw=
-    Array.isArray(
-      pc?.categories
-    )
+    Array.isArray(pc?.categories)
     &&
     pc.categories.length
-      ? pc.categories
-      : DEFAULT_CATEGORIES.slice();
-
+      ?pc.categories
+      :DEFAULT_CATEGORIES.slice();
 
   rebuildMaps();
-
   renderLegend();
-
   renderMonth();
-
 }
 
-
-async function loadApi(
-  forceFresh=false
-){
-
+async function loadApi(forceFresh=false){
   const cached=
     loadCache_();
-
 
   if(
     !forceFresh
@@ -2830,7 +1311,6 @@ async function loadApi(
     &&
     cached?.pc
   ){
-
     applyPlanningData_(
       cached.py,
       cached.pc
@@ -2842,100 +1322,62 @@ async function loadApi(
     );
 
   }else{
-
     showStatus(
       "Chargement…",
       "Récupération du planning."
     );
-
   }
-
 
   const cb1=
     "cb_py_"
     +
-    Math.random()
-      .toString(36)
-      .slice(2);
-
+    Math.random().toString(36).slice(2);
 
   const cb2=
     "cb_pc_"
     +
-    Math.random()
-      .toString(36)
-      .slice(2);
-
+    Math.random().toString(36).slice(2);
 
   try{
-
-    const [
-      py,
-      pc
-    ]=
+    const[py,pc]=
       await Promise.all([
-
         jsonp(
           `${API}?view=planning_year&year=${ACTIVE_YEAR}${forceFresh?"&nocache=1":""}&callback=${cb1}`,
           cb1
         ),
-
         jsonp(
           `${API}?view=planning_categories${forceFresh?"&nocache=1":""}&callback=${cb2}`,
           cb2
         )
-
       ]);
 
-
-    if(
-      py?.ok===false
-    ){
-
+    if(py?.ok===false){
       throw new Error(
-        py.error
-        ||
-        "planning invalide"
+        py.error||"planning invalide"
       );
-
     }
 
-
-    if(
-      pc?.ok===false
-    ){
-
+    if(pc?.ok===false){
       throw new Error(
-        pc.error
-        ||
-        "catégories invalides"
+        pc.error||"catégories invalides"
       );
-
     }
 
-
-    applyPlanningData_(
-      py,
-      pc
-    );
-
+    applyPlanningData_(py,pc);
 
     saveCache_({
       py,
       pc
     });
 
-
     hideStatus();
 
   }catch(e){
-
     if(
       cached?.py
       &&
       cached?.pc
     ){
-
       showStatus(
         "Hors ligne / lent",
         "Données en cache."
@@ -2947,38 +1389,25 @@ async function loadApi(
       );
 
       return;
-
     }
 
-
     events=[];
-
     categoriesRaw=
       DEFAULT_CATEGORIES.slice();
 
     rebuildMaps();
-
     renderLegend();
-
     renderMonth();
-
 
     showStatus(
       "API HS / lente",
       "Impossible de charger le planning."
     );
-
   }
-
 }
 
-
 function updateYearDisplay_(){
-
-  if(
-    IS_ADMIN
-  ){
-
+  if(IS_ADMIN){
     $("yearText").style.display=
       "none";
 
@@ -2990,16 +1419,9 @@ function updateYearDisplay_(){
 
     s.innerHTML="";
 
-
-    for(
-      const y
-      of ADMIN_YEARS
-    ){
-
+    for(const y of ADMIN_YEARS){
       const o=
-        document.createElement(
-          "option"
-        );
+        document.createElement("option");
 
       o.value=
         String(y);
@@ -3010,14 +1432,10 @@ function updateYearDisplay_(){
       o.selected=
         y===ACTIVE_YEAR;
 
-      s.appendChild(
-        o
-      );
-
+      s.appendChild(o);
     }
 
   }else{
-
     ACTIVE_YEAR=
       PUBLIC_YEAR;
 
@@ -3029,258 +1447,149 @@ function updateYearDisplay_(){
 
     $("yearSelect").style.display=
       "none";
-
   }
-
 }
-
 
 $("btnBack").onclick=
   ()=>location.href=BACK_URL;
 
-
 $("btnPrev").onclick=
   ()=>{
-
-    if(
-      currentMonth>0
-    ){
-
+    if(currentMonth>0){
       currentMonth--;
-
       renderMonth();
-
     }
-
   };
-
 
 $("btnNext").onclick=
   ()=>{
-
-    if(
-      currentMonth<11
-    ){
-
+    if(currentMonth<11){
       currentMonth++;
-
       renderMonth();
-
     }
-
   };
-
 
 $("btnLock").onclick=
-  ()=>{
-
-    if(
-      IS_ADMIN
-    ){
-
-      setEditMode(
-        !EDIT_MODE
-      );
-
-    }
-
-  };
-
+  ()=>IS_ADMIN&&setEditMode(!EDIT_MODE);
 
 $("noteClose").onclick=
   closeNote;
 
-
 $("btnCloseEdit").onclick=
   closeEdit;
 
-
 $("btnAddEvent").onclick=
-  ()=>{
-
-    if(
-      _editDate
-    ){
-
-      openEventForm(
-        "add",
-        _editDate,
-        null
-      );
-
-    }
-
-  };
-
+  ()=>_editDate&&openEventForm("add",_editDate,null);
 
 $("btnFormCancel").onclick=
   closeEventForm;
 
-
 $("btnFormClose").onclick=
   closeEventForm;
-
 
 $("btnFormSave").onclick=
   saveEventForm;
 
-
 $("btnAttachmentUpload").onclick=
   openAttachmentUpload_;
-
 
 $("btnAttachmentUploadClose").onclick=
   closeAttachmentUpload_;
 
-
 $("btnAttachmentRemove").onclick=
   ()=>{
-
     const u=
       String(
         FORM_ATTACHMENT_URL||""
       ).trim();
 
-    if(!u){
-      return;
-    }
-
+    if(!u)return;
 
     if(
       FORM_NEW_UPLOAD_URL
       &&
       u===FORM_NEW_UPLOAD_URL
     ){
-
       const tmp=
         FORM_NEW_UPLOAD_URL;
 
-      FORM_NEW_UPLOAD_URL=
-        "";
+      FORM_NEW_UPLOAD_URL="";
 
-      apiDeleteAttachment_(
-        tmp
-      ).catch(()=>{});
-
+      apiDeleteAttachment_(tmp)
+        .catch(()=>{});
     }
 
-
-    FORM_ATTACHMENT_URL=
-      "";
+    FORM_ATTACHMENT_URL="";
 
     renderAttachmentPreview_();
-
   };
-
 
 $("grid").onclick=
   e=>{
-
     const d=
-      e.target.closest(
-        ".day"
-      );
+      e.target.closest(".day");
 
     if(
       !d
       ||
-      d.classList.contains(
-        "is-empty"
-      )
+      d.classList.contains("is-empty")
       ||
       !d.dataset.date
-    ){
-      return;
-    }
-
+    )return;
 
     if(
       EDIT_MODE
       &&
       IS_ADMIN
     ){
-
-      openEdit(
-        d.dataset.date
-      );
-
+      openEdit(d.dataset.date);
     }else if(
-      d.classList.contains(
-        "has-note"
-      )
+      d.classList.contains("has-note")
     ){
-
-      openNote(
-        d.dataset.date
-      );
-
+      openNote(d.dataset.date);
     }
-
   };
-
 
 $("noteOverlay").onclick=
-  e=>{
-
-    if(
-      e.target
-      ===
-      $("noteOverlay")
-    ){
-
-      closeNote();
-
-    }
-
-  };
-
+  e=>
+    e.target===$("noteOverlay")
+    &&
+    closeNote();
 
 $("editOverlay").onclick=
-  e=>{
-
-    if(
-      e.target
-      ===
-      $("editOverlay")
-    ){
-
-      closeEdit();
-
-    }
-
-  };
-
+  e=>
+    e.target===$("editOverlay")
+    &&
+    closeEdit();
 
 $("formOverlay").onclick=
+  e=>
+    e.target===$("formOverlay")
+    &&
+    closeEventForm();
+
+$("imageViewerClose").onclick=
+  closeImageViewer_;
+
+$("imageViewer").onclick=
   e=>{
-
     if(
-      e.target
-      ===
-      $("formOverlay")
+      e.target===$("imageViewer")
+      ||
+      e.target.classList.contains("imageViewerBody")
     ){
-
-      closeEventForm();
-
+      closeImageViewer_();
     }
-
   };
-
 
 window.addEventListener(
   "message",
   e=>{
-
-    const d=
-      e.data||{};
-
+    const d=e.data||{};
 
     if(
-      d.type
-      ===
-      "planning-attachment-success"
+      d.type==="planning-attachment-success"
     ){
-
       const u=
         String(
           d.url
@@ -3292,230 +1601,135 @@ window.addEventListener(
           ""
         ).trim();
 
-
       if(!u){
-
         alert(
           "L'image a été envoyée mais aucune URL n'a été reçue."
         );
-
         return;
-
       }
-
 
       const prev=
         String(
           FORM_NEW_UPLOAD_URL||""
         ).trim();
 
-
       if(
         prev
         &&
         prev!==u
       ){
-
-        apiDeleteAttachment_(
-          prev
-        ).catch(()=>{});
-
+        apiDeleteAttachment_(prev)
+          .catch(()=>{});
       }
 
-
-      FORM_NEW_UPLOAD_URL=
-        u;
-
-      FORM_ATTACHMENT_URL=
-        u;
-
+      FORM_NEW_UPLOAD_URL=u;
+      FORM_ATTACHMENT_URL=u;
 
       renderAttachmentPreview_();
-
       closeAttachmentUpload_();
 
     }else if(
-      d.type
-      ===
-      "planning-attachment-close"
+      d.type==="planning-attachment-close"
     ){
-
       closeAttachmentUpload_();
-
     }
-
   }
 );
 
-
 $("yearSelect").onchange=
   async()=>{
-
-    if(
-      !IS_ADMIN
-    ){
-      return;
-    }
-
+    if(!IS_ADMIN)return;
 
     const y=
       Number(
         $("yearSelect").value
       );
 
+    if(!ADMIN_YEARS.includes(y))return;
 
-    if(
-      !ADMIN_YEARS.includes(y)
-    ){
-      return;
-    }
-
-
-    ACTIVE_YEAR=
-      y;
-
+    ACTIVE_YEAR=y;
 
     closeNote();
-
     closeEdit();
-
 
     events=[];
 
-
     rebuildMaps();
 
-
     currentMonth=
-      new Date().getFullYear()
-      ===
-      ACTIVE_YEAR
-        ? new Date().getMonth()
-        : 0;
-
+      new Date().getFullYear()===ACTIVE_YEAR
+        ?new Date().getMonth()
+        :0;
 
     renderMonth();
 
-
     await loadApi();
-
   };
-
 
 document.addEventListener(
   "keydown",
   e=>{
-
-    if(
-      e.key==="Escape"
-    ){
-
+    if(e.key==="Escape"){
+      closeImageViewer_();
       closeNote();
       closeEdit();
       closeEventForm();
-
     }
-
   }
 );
 
-
 (async function(){
-
   categoriesRaw=
     DEFAULT_CATEGORIES.slice();
 
   rebuildMaps();
-
   renderLegend();
-
 
   const now=
     new Date();
 
-
   currentMonth=
-    now.getFullYear()
-    ===
-    PUBLIC_YEAR
-      ? now.getMonth()
-      : 0;
+    now.getFullYear()===PUBLIC_YEAR
+      ?now.getMonth()
+      :0;
 
-
-  /*
-   * Le calendrier est rendu AVANT toute communication
-   * avec Apps Script.
-   */
   renderMonth();
 
-
-  /*
-   * Une erreur dans les molettes d'heure
-   * ne peut plus empêcher le planning de démarrer.
-   */
   try{
-
     initWheels();
-
   }catch(e){
-
     console.warn(
       "Sélecteurs horaires non initialisés",
       e
     );
-
   }
 
-
-  /*
-   * Le chargement du planning démarre immédiatement.
-   */
   const planningPromise=
-    loadApi()
-      .catch(()=>{});
+    loadApi().catch(()=>{});
 
-
-  /*
-   * La détection du rôle admin est indépendante.
-   */
   try{
-
     await loadMyRole_();
-
   }catch(e){}
 
-
-  if(
-    IS_ADMIN
-  ){
-
+  if(IS_ADMIN){
     $("btnLock").style.display=
       "inline-block";
 
-
     try{
-
       await loadPlanningYears_();
-
     }catch(e){}
 
   }else{
-
     $("btnLock").style.display=
       "none";
 
     setEditMode(false);
-
   }
-
 
   updateYearDisplay_();
 
-
   await planningPromise;
-
 })();
-
 </script>
 </body>
 </html>
