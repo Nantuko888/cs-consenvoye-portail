@@ -12,7 +12,7 @@
 <body>
 <main class="tvwrap">
   <header class="top"><h1>📺 Écran TV</h1><a class="back" href="admin.html">← Administration</a></header>
-  <div class="notice"><strong>Page en préparation.</strong> Tu peux tester les réglages et enregistrer un brouillon dans ce navigateur. La publication sur la télévision sera activée après connexion à Google Apps Script et au Raspberry.</div>
+  <div class="notice"><strong>Gestion en ligne.</strong> Les réglages sont enregistrés dans Google Sheets. La diffusion sur la télévision sera activée après la mise à jour du Raspberry.</div>
   <section class="card">
     <h2>📅 Prochains événements</h2><p class="sub">Choisis combien d'événements présenter et sur quelle période.</p>
     <div class="two">
@@ -33,27 +33,53 @@
 <script>
 (function(){
 'use strict';
-const ids=['period','max','dates','message','endDate'];
+const API='https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec';
 const get=id=>document.getElementById(id);
-const key='cs_consenvoye_ecran_tv_brouillon_v1';
-const examples=[['28/09','Manœuvre mensuelle'],['02/10','Réunion des responsables'],['05/10','Formation JSP'],['09/10','Recyclage SAP'],['12/10','Entretien des véhicules'],['16/10','Réunion de l’amicale']];
+const fields=['period','max','dates','message','endDate'];
+const examples=[['28/09','Manœuvre mensuelle'],['02/10','Réunion des responsables'],['05/10','Formation JSP'],['09/10','Recyclage SAP']];
+function status(t,error){ get('status').textContent=t; get('status').style.color=error?'#ffb4ae':'#b4d9b5'; }
+function jsonp(params){
+  return new Promise((resolve,reject)=>{
+    const cb='csTvCb_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+    const s=document.createElement('script');
+    const timer=setTimeout(()=>finish(new Error('Délai dépassé : vérifie ta connexion et le déploiement Apps Script.')),25000);
+    let done=false;
+    function finish(err,data){if(done)return;done=true;clearTimeout(timer);delete window[cb];s.remove();err?reject(err):resolve(data);}
+    window[cb]=data=>finish(null,data);
+    s.onerror=()=>finish(new Error('Connexion impossible à Apps Script.'));
+    s.src=API+'?'+new URLSearchParams({...params,callback:cb,_:Date.now()});
+    document.head.append(s);
+  });
+}
 function render(){
   get('eventsPreview').replaceChildren();
   examples.slice(0,Number(get('max').value)).forEach(([date,name])=>{
     const line=document.createElement('div');line.className='event';
-    if(get('dates').checked){const time=document.createElement('time');time.textContent=date;line.append(time);}
-    const title=document.createElement('span');title.textContent=name;line.append(title);get('eventsPreview').append(line);
+    if(get('dates').checked){const t=document.createElement('time');t.textContent=date;line.append(t);}
+    const span=document.createElement('span');span.textContent=name;line.append(span);get('eventsPreview').append(line);
   });
   get('infoPreview').textContent=get('message').value.trim()||'Aucun message saisi.';
 }
-try{const saved=JSON.parse(localStorage.getItem(key)||'null');if(saved){ids.forEach(id=>{if(saved[id]!==undefined){if(id==='dates')get(id).checked=!!saved[id];else get(id).value=String(saved[id]);}});}}catch(e){get('status').textContent='Impossible de relire le brouillon local.';}
-ids.forEach(id=>get(id).addEventListener('input',render));
-get('save').addEventListener('click',()=>{
-  const draft={};ids.forEach(id=>draft[id]=id==='dates'?get(id).checked:get(id).value);
-  try{localStorage.setItem(key,JSON.stringify(draft));get('status').textContent='Brouillon enregistré sur cet appareil.';}
-  catch(e){get('status').textContent='Enregistrement local impossible.';}
-});
-render();
+async function load(){
+  status('Chargement des réglages…');
+  try {
+    const r=await jsonp({view:'tv_get'});
+    if(!r.ok)throw Error(r.error||'Erreur Apps Script');
+    const c=r.config||{};
+    for(const id of fields)if(c[id]!==undefined){if(id==='dates')get(id).checked=!!c[id];else get(id).value=String(c[id]);}
+    render();status(r.initialized===false?'Initialise d’abord le module dans Apps Script.':'Réglages en ligne chargés.');
+  }catch(e){status(e.message,true);}
+}
+async function save(){
+  const key=get('key').value.trim();if(!key){status('Indique ta clé administrateur TV.',true);return;}
+  const data={view:'tv_save',key,period:get('period').value,max:get('max').value,dates:String(get('dates').checked),message:get('message').value,endDate:get('endDate').value};
+  get('save').disabled=true;status('Enregistrement…');
+  try{const r=await jsonp(data);if(!r.ok)throw Error(r.error||'Échec de publication');status('Réglages publiés dans Google Sheets.');get('key').value='';}
+  catch(e){status(e.message,true);}finally{get('save').disabled=false;}
+}
+fields.forEach(id=>get(id).addEventListener('input',render));
+get('save').addEventListener('click',save);get('reload').addEventListener('click',load);
+render();load();
 })();
 </script>
 </body>
