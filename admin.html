@@ -4,217 +4,53 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Administration — CS Consenvoye</title>
-
   <link rel="stylesheet" href="cs-theme.css">
-
   <style>
-    .adminWrap{
-      max-width:980px;
-      margin:0 auto;
-      padding:14px;
-    }
-
-    .dashboard{
-      padding:14px 16px;
-      margin-bottom:16px;
-      border-radius:18px;
-      background:linear-gradient(180deg, rgba(255,140,40,.28), rgba(255,140,40,.14));
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      font-weight:900;
-      color:rgba(255,255,255,.95);
-    }
-
-    .dashboardSmall{
-      margin-top:8px;
-      font-size:13px;
-      font-weight:800;
-      color:rgba(255,255,255,.78);
-      line-height:1.35;
-    }
-
-    .menuBlock{
-      border-radius:20px;
-      overflow:hidden;
-      margin-bottom:14px;
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-    }
-
-    .menuHeader{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:16px;
-      font-weight:900;
-      cursor:pointer;
-      user-select:none;
-      -webkit-tap-highlight-color:transparent;
-    }
-
-    .menuHeader:active{
-      transform:translateY(1px);
-    }
-
-    .menuTitle{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-      flex:1 1 auto;
-      color:rgba(255,255,255,.96);
-      font-size:18px;
-      letter-spacing:.2px;
-    }
-
-    .emoji{
-      font-size:22px;
-      line-height:1;
-      flex:0 0 auto;
-    }
-
-    .menuArrow{
-      font-size:18px;
-      color:rgba(255,255,255,.88);
-      transition:transform .18s ease;
-      flex:0 0 auto;
-    }
-
-    .menuBlock.open .menuArrow{
-      transform:rotate(180deg);
-    }
-
-    .subMenu{
-      display:none;
-      padding:10px;
-      background:rgba(0,0,0,.10);
-    }
-
-    .menuBlock.open .subMenu{
-      display:block;
-    }
-
-    .subGrid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:8px;
-    }
-
-    .subBtn{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:12px 14px;
-      border-radius:14px;
-      font-weight:850;
-      cursor:pointer;
-      color:rgba(255,255,255,.95);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:0 10px 24px rgba(0,0,0,.18);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      -webkit-tap-highlight-color:transparent;
-      text-decoration:none;
-      min-height:50px;
-    }
-
-    .subBtn:active{
-      transform:translateY(1px);
-    }
-
-    .subBtn span:last-child{
-      min-width:0;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-    }
-
-    .sectionHint{
-      margin-top:10px;
-      padding:10px 12px;
-      border-radius:14px;
-      background:rgba(255,255,255,.05);
-      border:1px dashed rgba(255,255,255,.10);
-      color:rgba(255,255,255,.78);
-      font-weight:800;
-      line-height:1.35;
-      font-size:13px;
-    }
-
-    /* Catégories principales */
-    .contenuHeader{
-      background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18));
-    }
-
-    .orgaHeader{
-      background:linear-gradient(180deg, rgba(212,106,0,.34), rgba(212,106,0,.18));
-    }
-
-    .paramHeader{
-      background:linear-gradient(180deg, rgba(47,158,91,.34), rgba(47,158,91,.18));
-    }
-
-    .testsHeader{
-      background:linear-gradient(180deg, rgba(220,90,170,.28), rgba(220,90,170,.14));
-    }
-
-    /* Sous-catégories */
-    .contenuSub{
-      background:linear-gradient(180deg, rgba(145,90,220,.28), rgba(145,90,220,.14));
-    }
-
-    .orgaSub{
-      background:linear-gradient(180deg, rgba(255,190,60,.26), rgba(255,190,60,.13));
-    }
-
-    .paramSub{
-      background:linear-gradient(180deg, rgba(70,170,170,.26), rgba(70,170,170,.13));
-    }
-
-    .testsSub{
-      background:linear-gradient(180deg, rgba(90,170,105,.26), rgba(90,170,105,.13));
-    }
-
-    @media (max-width: 700px){
-      .subGrid{
-        grid-template-columns:1fr;
-      }
-    }
+    .adminWrap{max-width:980px;margin:0 auto;padding:14px}
+    .dashboard{padding:14px 16px;margin-bottom:16px;border-radius:18px;background:linear-gradient(180deg, rgba(255,140,40,.28), rgba(255,140,40,.14));border:1px solid rgba(255,255,255,.12);box-shadow:var(--shadow);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-weight:900;color:rgba(255,255,255,.95)}
+    .dashboardSmall{margin-top:8px;font-size:13px;font-weight:800;color:rgba(255,255,255,.78);line-height:1.35}
+    .menuBlock{border-radius:20px;overflow:hidden;margin-bottom:14px;border:1px solid rgba(255,255,255,.10);box-shadow:var(--shadow);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+    .menuHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;font-weight:900;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+    .menuHeader:active{transform:translateY(1px)}
+    .menuTitle{display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto;color:rgba(255,255,255,.96);font-size:18px;letter-spacing:.2px}
+    .emoji{font-size:22px;line-height:1;flex:0 0 auto}
+    .menuArrow{font-size:18px;color:rgba(255,255,255,.88);transition:transform .18s ease;flex:0 0 auto}
+    .menuBlock.open .menuArrow{transform:rotate(180deg)}
+    .subMenu{display:none;padding:10px;background:rgba(0,0,0,.10)}
+    .menuBlock.open .subMenu{display:block}
+    .subGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .subBtn{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;font-weight:850;cursor:pointer;color:rgba(255,255,255,.95);border:1px solid rgba(255,255,255,.10);box-shadow:0 10px 24px rgba(0,0,0,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);-webkit-tap-highlight-color:transparent;text-decoration:none;min-height:50px}
+    .subBtn:active{transform:translateY(1px)}
+    .subBtn span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .sectionHint{margin-top:10px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.10);color:rgba(255,255,255,.78);font-weight:800;line-height:1.35;font-size:13px}
+    .contenuHeader{background:linear-gradient(180deg, rgba(47,111,212,.34), rgba(47,111,212,.18))}
+    .orgaHeader{background:linear-gradient(180deg, rgba(212,106,0,.34), rgba(212,106,0,.18))}
+    .paramHeader{background:linear-gradient(180deg, rgba(47,158,91,.34), rgba(47,158,91,.18))}
+    .testsHeader{background:linear-gradient(180deg, rgba(220,90,170,.28), rgba(220,90,170,.14))}
+    .contenuSub{background:linear-gradient(180deg, rgba(145,90,220,.28), rgba(145,90,220,.14))}
+    .orgaSub{background:linear-gradient(180deg, rgba(255,190,60,.26), rgba(255,190,60,.13))}
+    .paramSub{background:linear-gradient(180deg, rgba(70,170,170,.26), rgba(70,170,170,.13))}
+    .testsSub{background:linear-gradient(180deg, rgba(90,170,105,.26), rgba(90,170,105,.13))}
+    @media (max-width:700px){.subGrid{grid-template-columns:1fr}}
   </style>
 </head>
-
 <body>
   <div class="bg"></div>
-
   <div class="wrap">
     <div class="topbar">
       <div class="title">🛠️ Administration</div>
       <button class="btn" onclick="window.location.href='index.html'">Retour</button>
     </div>
-
     <div class="adminWrap">
-      <div class="dashboard">
-        📊 Tableau de bord administration
-        <div class="dashboardSmall">
-          Centre de gestion du portail CS Consenvoye
-        </div>
+      <div class="dashboard">📊 Tableau de bord administration
+        <div class="dashboardSmall">Centre de gestion du portail CS Consenvoye</div>
       </div>
-
       <!-- Gestion contenu -->
       <div class="menuBlock">
         <div class="menuHeader contenuHeader" onclick="toggleMenu(this)">
-          <div class="menuTitle">
-            <span class="emoji">📝</span>
-            <span>Gestion contenu</span>
-          </div>
+          <div class="menuTitle"><span class="emoji">📝</span><span>Gestion contenu</span></div>
           <span class="menuArrow">▾</span>
         </div>
-
         <div class="subMenu">
           <div class="subGrid">
             <a class="subBtn contenuSub" href="contacts-admin.html"><span>📞</span><span>Contacts</span></a>
@@ -223,24 +59,17 @@
             <a class="subBtn contenuSub" href="amicale-admin.html"><span>🤝</span><span>Amicale</span></a>
             <a class="subBtn contenuSub" href="documents-admin.html"><span>📄</span><span>Documents</span></a>
             <a class="subBtn contenuSub" href="informations.html"><span>ℹ️</span><span>Informations (aperçu)</span></a>
+            <a class="subBtn contenuSub" href="ecran-tv.html"><span>📺</span><span>Écran TV</span></a>
           </div>
-
-          <div class="sectionHint">
-            Cette zone doit servir à modifier les contenus publics du portail.
-          </div>
+          <div class="sectionHint">Cette zone doit servir à modifier les contenus publics du portail.</div>
         </div>
       </div>
-
       <!-- Organisation -->
       <div class="menuBlock">
         <div class="menuHeader orgaHeader" onclick="toggleMenu(this)">
-          <div class="menuTitle">
-            <span class="emoji">🧰</span>
-            <span>Organisation</span>
-          </div>
+          <div class="menuTitle"><span class="emoji">🧰</span><span>Organisation</span></div>
           <span class="menuArrow">▾</span>
         </div>
-
         <div class="subMenu">
           <div class="subGrid">
             <a class="subBtn orgaSub" href="organigramme-admin.html"><span>🧭</span><span>Organigramme</span></a>
@@ -249,23 +78,15 @@
             <a class="subBtn orgaSub" href="planning.html"><span>🗓️</span><span>Planning</span></a>
             <a class="subBtn orgaSub" href="gardes-postees.html"><span>👨‍🚒</span><span>Gardes postées</span></a>
           </div>
-
-          <div class="sectionHint">
-            Partie dédiée à l’organisation opérationnelle et au fonctionnement interne du centre.
-          </div>
+          <div class="sectionHint">Partie dédiée à l’organisation opérationnelle et au fonctionnement interne du centre.</div>
         </div>
       </div>
-
       <!-- Paramètres -->
       <div class="menuBlock">
         <div class="menuHeader paramHeader" onclick="toggleMenu(this)">
-          <div class="menuTitle">
-            <span class="emoji">⚙️</span>
-            <span>Paramètres</span>
-          </div>
+          <div class="menuTitle"><span class="emoji">⚙️</span><span>Paramètres</span></div>
           <span class="menuArrow">▾</span>
         </div>
-
         <div class="subMenu">
           <div class="subGrid">
             <a class="subBtn paramSub" href="acces-admin.html"><span>🔑</span><span>Accès</span></a>
@@ -273,23 +94,15 @@
             <a class="subBtn paramSub" href="#"><span>🎨</span><span>Apparence</span></a>
             <a class="subBtn paramSub" href="#"><span>🔗</span><span>Liens / navigation</span></a>
           </div>
-
-          <div class="sectionHint">
-            Réglages globaux du portail : accès, affichage, structure et comportement général.
-          </div>
+          <div class="sectionHint">Réglages globaux du portail : accès, affichage, structure et comportement général.</div>
         </div>
       </div>
-
       <!-- Tests -->
       <div class="menuBlock">
         <div class="menuHeader testsHeader" onclick="toggleMenu(this)">
-          <div class="menuTitle">
-            <span class="emoji">🧪</span>
-            <span>Tests</span>
-          </div>
+          <div class="menuTitle"><span class="emoji">🧪</span><span>Tests</span></div>
           <span class="menuArrow">▾</span>
         </div>
-
         <div class="subMenu">
           <div class="subGrid">
             <a class="subBtn testsSub" href="informations.html"><span>ℹ️</span><span>Informations</span></a>
@@ -297,20 +110,13 @@
             <a class="subBtn testsSub" href="book.html"><span>📘</span><span>Book</span></a>
             <a class="subBtn testsSub" href="#"><span>🧱</span><span>Pages en préparation</span></a>
           </div>
-
-          <div class="sectionHint">
-            Zone d’aperçu et d’essai avant mise en service définitive.
-          </div>
+          <div class="sectionHint">Zone d’aperçu et d’essai avant mise en service définitive.</div>
         </div>
       </div>
     </div>
   </div>
-
   <script>
-    function toggleMenu(el){
-      const block = el.parentElement;
-      block.classList.toggle("open");
-    }
+    function toggleMenu(el){const block=el.parentElement;block.classList.toggle("open")}
   </script>
 </body>
 </html>
