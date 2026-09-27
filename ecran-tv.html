@@ -28,7 +28,14 @@
     <div class="field"><label for="endDate">Afficher jusqu'au (facultatif)</label><input id="endDate" type="date"><p class="muted">L'expiration automatique sera appliquée une fois la connexion réalisée.</p></div>
     <div class="preview"><h3>APERÇU — INFORMATIONS</h3><div class="infoPreview" id="infoPreview">Aucun message saisi.</div></div>
   </section>
-  <section class="card"><div class="actions"><button type="button" class="save" id="save">Enregistrer le brouillon</button><span class="status" id="status" role="status"></span></div><p class="muted">Ce bouton enregistre les choix uniquement sur l'appareil utilisé. Il ne modifie pas encore l'écran TV.</p></section>
+  <section class="card">
+    <h2>🔐 Publication</h2>
+    <p class="sub">Renseigne ta clé administrateur TV pour enregistrer les réglages dans Google Sheets. Ne la partage pas.</p>
+    <div class="field"><label for="key">Clé administrateur TV</label><input id="key" type="password" autocomplete="off" placeholder="Clé personnelle" style="width:100%;background:#142237;border:1px solid #71839b;border-radius:10px;color:white;padding:11px"></div>
+    <div class="actions"><button type="button" class="save" id="save">Publier sur Google Sheets</button><button type="button" class="back" id="reload">Recharger les réglages</button></div>
+    <p class="status" id="status" role="status"></p>
+    <p class="muted">La télévision utilisera ces réglages après la mise à jour du Raspberry.</p>
+  </section>
 </main>
 <script>
 (function(){
