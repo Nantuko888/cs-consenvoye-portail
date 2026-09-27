@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Écran TV — Administration CS Consenvoye</title>
+<link rel="stylesheet" href="cs-theme.css">
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#111c2c;color:#f3f6fb;font:16px system-ui,-apple-system,Segoe UI,Arial,sans-serif}button,input,textarea,select{font:inherit}.tvwrap{max-width:900px;margin:0 auto;padding:16px 14px 36px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.top h1{font-size:23px;margin:0}.back{color:white;text-decoration:none;background:#31445f;border:1px solid #60708a;border-radius:11px;padding:9px 12px}.notice{background:#372f21;border:1px solid #bc944d;color:#ffe5b0;padding:13px;border-radius:13px;line-height:1.4;margin-bottom:18px}.card{background:#202e42;border:1px solid #43546c;border-radius:18px;padding:17px;margin-bottom:16px;box-shadow:0 10px 28px #0003}.card h2{margin:0 0 6px;font-size:20px}.sub{color:#b6c7db;font-size:14px;margin:0 0 17px}.field{margin:16px 0}.field label,.field .lab{display:block;font-weight:750;margin-bottom:8px}.field select,.field textarea,.field input[type=date]{width:100%;background:#142237;border:1px solid #71839b;border-radius:10px;color:white;padding:11px}.field textarea{min-height:126px;resize:vertical}.check{display:flex;align-items:center;gap:10px;font-weight:700}.check input{width:21px;height:21px;accent-color:#f5bd54}.preview{background:#101b29;border:1px solid #53657d;border-radius:13px;padding:14px;margin-top:15px}.preview h3{font-size:15px;color:#f3c766;letter-spacing:.4px;margin:0 0 11px}.event{padding:6px 0;border-bottom:1px solid #334154}.event:last-child{border:0}.event time{font-weight:800;color:#f3c766;margin-right:8px}.infoPreview{white-space:pre-wrap;overflow-wrap:anywhere;color:#fff}.muted{color:#b5c2d2;font-size:13px}.actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.save{background:#e5aa3c;border:0;color:#192335;font-weight:850;padding:12px 17px;border-radius:10px;cursor:pointer}.status{font-size:14px;color:#b4d9b5}.line{border:0;border-top:1px solid #43546c;margin:16px 0}@media(min-width:760px){.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.two .field{margin:6px 0 12px}}
+</style>
+</head>
+<body>
+<main class="tvwrap">
+  <header class="top"><h1>📺 Écran TV</h1><a class="back" href="admin.html">← Administration</a></header>
+  <div class="notice"><strong>Page en préparation.</strong> Tu peux tester les réglages et enregistrer un brouillon dans ce navigateur. La publication sur la télévision sera activée après connexion à Google Apps Script et au Raspberry.</div>
+  <section class="card">
+    <h2>📅 Prochains événements</h2><p class="sub">Choisis combien d'événements présenter et sur quelle période.</p>
+    <div class="two">
+      <div class="field"><label for="period">Période à partir d'aujourd'hui</label><select id="period"><option value="7">7 jours</option><option value="15" selected>15 jours</option><option value="30">30 jours</option><option value="60">60 jours</option></select></div>
+      <div class="field"><label for="max">Nombre maximum d'événements</label><select id="max"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option></select></div>
+    </div>
+    <label class="check"><input id="dates" type="checkbox" checked> Afficher la date devant les événements</label>
+    <div class="preview"><h3>APERÇU — PROCHAINS ÉVÉNEMENTS</h3><div id="eventsPreview"></div><p class="muted">Exemple fictif pour visualiser la présentation, et non tes vrais événements.</p></div>
+  </section>
+  <section class="card">
+    <h2>📢 Informations du centre</h2><p class="sub">Rédige les informations qui devront apparaître en bas de la télévision.</p>
+    <div class="field"><label for="message">Texte du message</label><textarea id="message" maxlength="1500" placeholder="Ex. : Pensez à renseigner vos disponibilités pour le mois prochain."></textarea></div>
+    <div class="field"><label for="endDate">Afficher jusqu'au (facultatif)</label><input id="endDate" type="date"><p class="muted">L'expiration automatique sera appliquée une fois la connexion réalisée.</p></div>
+    <div class="preview"><h3>APERÇU — INFORMATIONS</h3><div class="infoPreview" id="infoPreview">Aucun message saisi.</div></div>
+  </section>
+  <section class="card"><div class="actions"><button type="button" class="save" id="save">Enregistrer le brouillon</button><span class="status" id="status" role="status"></span></div><p class="muted">Ce bouton enregistre les choix uniquement sur l'appareil utilisé. Il ne modifie pas encore l'écran TV.</p></section>
+</main>
+<script>
+(function(){
+'use strict';
+const ids=['period','max','dates','message','endDate'];
+const get=id=>document.getElementById(id);
+const key='cs_consenvoye_ecran_tv_brouillon_v1';
+const examples=[['28/09','Manœuvre mensuelle'],['02/10','Réunion des responsables'],['05/10','Formation JSP'],['09/10','Recyclage SAP'],['12/10','Entretien des véhicules'],['16/10','Réunion de l’amicale']];
+function render(){
+  get('eventsPreview').replaceChildren();
+  examples.slice(0,Number(get('max').value)).forEach(([date,name])=>{
+    const line=document.createElement('div');line.className='event';
+    if(get('dates').checked){const time=document.createElement('time');time.textContent=date;line.append(time);}
+    const title=document.createElement('span');title.textContent=name;line.append(title);get('eventsPreview').append(line);
+  });
+  get('infoPreview').textContent=get('message').value.trim()||'Aucun message saisi.';
+}
+try{const saved=JSON.parse(localStorage.getItem(key)||'null');if(saved){ids.forEach(id=>{if(saved[id]!==undefined){if(id==='dates')get(id).checked=!!saved[id];else get(id).value=String(saved[id]);}});}}catch(e){get('status').textContent='Impossible de relire le brouillon local.';}
+ids.forEach(id=>get(id).addEventListener('input',render));
+get('save').addEventListener('click',()=>{
+  const draft={};ids.forEach(id=>draft[id]=id==='dates'?get(id).checked:get(id).value);
+  try{localStorage.setItem(key,JSON.stringify(draft));get('status').textContent='Brouillon enregistré sur cet appareil.';}
+  catch(e){get('status').textContent='Enregistrement local impossible.';}
+});
+render();
+})();
+</script>
+</body>
+</html>
