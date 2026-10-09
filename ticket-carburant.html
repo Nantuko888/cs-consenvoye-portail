@@ -1,1015 +1,3049 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ticket carburant — CS Consenvoye</title>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  >
+
+  <title>
+    Tickets carburants — CS Consenvoye
+  </title>
 
   <style>
+
     :root{
-      --bg:#0f0f12;
-      --panel:#16161b;
-      --card:#1d1e25;
-      --text:#f2f2f4;
-      --muted:#a8a9b3;
+      color-scheme:dark;
 
-      /* Couleur bandeau (comme tes autres pages) */
-      --orange:#d97a1f;
-      --orange2:#b86416;
+      --bg1:#0b1523;
+      --bg2:#111c2c;
 
-      --shadow: 0 10px 28px rgba(0,0,0,.45);
-      --radius: 18px;
+      --glass1:rgba(37,55,78,.76);
+      --glass2:rgba(18,31,48,.74);
 
-      /* Véhicules (translucide) */
-      --vsav: rgba( 24,120,255,.32);
-      --ccr : rgba(255, 60, 60,.32);
-      --vtul: rgba( 0,190,110,.32);
-      --vtp : rgba(255,160, 0,.32);
+      --border:rgba(255,255,255,.11);
 
-      --vsavSolid: rgb( 24,120,255);
-      --ccrSolid : rgb(255, 60, 60);
-      --vtulSolid: rgb( 0,190,110);
-      --vtpSolid : rgb(255,160, 0);
+      --text:#f3f6fb;
+      --muted:#aebdd0;
+
+      --orange:#dc8734;
+      --orange2:#a85b21;
+
+      --blue:#397dbe;
+      --blue2:#24517c;
+
+      --green:#31935c;
+      --red:#b84b46;
+
+      --shadow:
+        0 16px 38px rgba(0,0,0,.30);
     }
 
-    *{ box-sizing:border-box; }
+
+    *{
+      box-sizing:border-box;
+    }
+
+
+    html,
     body{
       margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 700px at 50% -10%, rgba(255,140,0,.18), transparent 60%),
-                  radial-gradient(900px 600px at 20% 10%, rgba(30,144,255,.12), transparent 55%),
-                  var(--bg);
+      min-height:100%;
+    }
+
+
+    body{
+
+      min-height:100vh;
+
+      font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
       color:var(--text);
+
+      background:
+
+        radial-gradient(
+          circle at 10% 0%,
+          rgba(55,111,170,.20),
+          transparent 34%
+        ),
+
+        radial-gradient(
+          circle at 100% 20%,
+          rgba(219,129,44,.10),
+          transparent 28%
+        ),
+
+        linear-gradient(
+          160deg,
+          var(--bg1),
+          var(--bg2)
+        );
     }
 
-    .wrap{
-      max-width: 520px;
-      margin: 0 auto;
-      padding: 14px 12px 28px;
+
+    button,
+    input{
+      font:inherit;
     }
 
-    /* Bandeau haut */
+
+    a{
+      -webkit-tap-highlight-color:transparent;
+    }
+
+
+    /* =====================================================
+       PAGE
+    ===================================================== */
+
+    .page{
+
+      width:min(
+        760px,
+        100%
+      );
+
+      margin:0 auto;
+
+      padding:
+        calc(15px + env(safe-area-inset-top))
+        13px
+        calc(35px + env(safe-area-inset-bottom));
+
+    }
+
+
+    /* =====================================================
+       BARRE HAUTE
+    ===================================================== */
+
     .topbar{
-      background: linear-gradient(180deg, var(--orange), var(--orange2));
-      border-radius: 18px;
-      padding: 10px 10px;
-      box-shadow: var(--shadow);
+
       display:flex;
+
       align-items:center;
-      gap:10px;
+
+      justify-content:space-between;
+
+      gap:12px;
+
+      margin-bottom:17px;
+
     }
-    .titleBlock{
-      flex:1;
+
+
+    .topTitle{
+
       min-width:0;
-      display:flex;
-      flex-direction:column;
-      gap:2px;
+
     }
+
+
     .title{
-      font-weight: 900;
-      letter-spacing:.6px;
-      text-transform: uppercase;
-      font-size: 15px;
-      line-height: 1.05;
-      white-space: normal; /* autorise 2 lignes */
-      overflow: hidden;
-      text-overflow: ellipsis;
+
+      font-size:23px;
+
+      font-weight:950;
+
+      letter-spacing:.2px;
+
     }
+
+
     .subtitle{
-      font-size: 12px;
-      opacity:.92;
-      color: rgba(255,255,255,.92);
-      display:flex;
-      gap:8px;
-      align-items:center;
-      flex-wrap: wrap;
-    }
-    .pill{
-      background: rgba(0,0,0,.22);
-      border: 1px solid rgba(255,255,255,.18);
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-size:12px;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-    }
-    .btnIcon{
-      border:none;
-      background: rgba(0,0,0,.22);
-      border: 1px solid rgba(255,255,255,.18);
-      color: white;
-      border-radius: 12px;
-      padding: 8px 10px;
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      gap:8px;
-      white-space:nowrap;
-    }
-    .btnIcon:active{ transform: translateY(1px); }
 
-    .adminBadge{
-      display:none;
-      background: rgba(255,235,59,.18);
-      border: 1px solid rgba(255,235,59,.55);
-      color: #ffe96a;
-      padding: 6px 10px;
-      border-radius: 12px;
-      font-weight: 800;
-      font-size: 12px;
-      white-space:nowrap;
-    }
-    .adminOn .adminBadge{ display:inline-flex; }
+      margin-top:3px;
 
-    /* Tabs */
+      color:var(--muted);
+
+      font-size:13px;
+
+      font-weight:700;
+
+    }
+
+
+    .backBtn{
+
+      flex:0 0 auto;
+
+      padding:
+        9px
+        12px;
+
+      border-radius:12px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.13);
+
+      background:
+        rgba(255,255,255,.06);
+
+      color:#fff;
+
+      text-decoration:none;
+
+      font-weight:850;
+
+      backdrop-filter:
+        blur(10px);
+
+      -webkit-backdrop-filter:
+        blur(10px);
+
+    }
+
+
+    /* =====================================================
+       ONGLETS
+    ===================================================== */
+
     .tabs{
-      display:flex;
-      gap:10px;
-      margin-top: 12px;
+
+      display:grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap:7px;
+
+      padding:6px;
+
+      margin-bottom:14px;
+
+      border-radius:18px;
+
+      background:
+        rgba(0,0,0,.18);
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+
+      backdrop-filter:
+        blur(12px);
+
+      -webkit-backdrop-filter:
+        blur(12px);
+
     }
+
+
     .tab{
-      flex:1;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 14px;
-      padding: 10px 12px;
-      font-weight: 800;
-      letter-spacing:.3px;
+
+      appearance:none;
+
+      border:0;
+
+      min-height:58px;
+
+      padding:
+        9px
+        8px;
+
+      border-radius:14px;
+
+      background:
+        transparent;
+
+      color:
+        rgba(255,255,255,.67);
+
+      font-size:14px;
+
+      font-weight:900;
+
       cursor:pointer;
-      text-align:center;
-      color: rgba(255,255,255,.9);
-    }
-    .tab.active{
-      background: rgba(0,0,0,.22);
-      border-color: rgba(255,255,255,.22);
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.18);
+
+      transition:
+        transform .15s ease,
+        background .18s ease,
+        color .18s ease;
+
     }
 
-    /* Cards */
-    .card{
-      margin-top: 12px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .cardHead{
-      padding: 12px 14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      background: rgba(0,0,0,.18);
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .cardHead h2{
-      margin:0;
-      font-size: 14px;
-      letter-spacing:.5px;
-      text-transform:uppercase;
-    }
-    .cardBody{
-      padding: 14px;
+
+    .tab:active{
+
+      transform:
+        scale(.98);
+
     }
 
-    /* Sélection véhicule (cellule) */
-    .vehCell{
-      width:100%;
-      border-radius: 16px;
-      padding: 14px 12px;
-      text-align:center;
-      font-weight: 900;
-      letter-spacing:.6px;
-      text-transform: uppercase;
-      background: rgba(255,255,255,.06);
-      border: 1px dashed rgba(255,255,255,.22);
-      color: rgba(255,255,255,.88);
-      margin-bottom: 12px;
-      user-select:none;
+
+    .tab.ticket.active{
+
+      color:#fff;
+
+      background:
+
+        linear-gradient(
+          180deg,
+          rgba(219,129,44,.48),
+          rgba(160,78,25,.38)
+        );
+
+      box-shadow:
+
+        inset
+        0 0 0 1px
+        rgba(255,184,89,.20),
+
+        0 8px 20px
+        rgba(0,0,0,.20);
+
     }
-    .vehCell .hint{
+
+
+    .tab.vehicle.active{
+
+      color:#fff;
+
+      background:
+
+        linear-gradient(
+          180deg,
+          rgba(54,120,183,.50),
+          rgba(30,71,110,.40)
+        );
+
+      box-shadow:
+
+        inset
+        0 0 0 1px
+        rgba(121,187,244,.20),
+
+        0 8px 20px
+        rgba(0,0,0,.20);
+
+    }
+
+
+    /* =====================================================
+       PANNEAUX
+    ===================================================== */
+
+    .panel{
+
+      display:none;
+
+    }
+
+
+    .panel.active{
+
       display:block;
-      margin-top:6px;
-      font-weight: 600;
-      letter-spacing: 0;
-      text-transform:none;
-      color: rgba(255,255,255,.7);
-      font-size: 12px;
+
     }
 
-    /* Boutons véhicules (plus petits + discrets) */
-    .vehGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-    .vehBtn{
-      border:none;
-      border-radius: 14px;
-      padding: 10px 10px;
-      font-weight: 900;
-      letter-spacing:.7px;
-      text-transform: uppercase;
-      cursor:pointer;
-      color: rgba(255,255,255,.92);
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.07);
-      box-shadow: 0 6px 18px rgba(0,0,0,.25);
-    }
-    .vehBtn:active{ transform: translateY(1px); }
-    .vehBtn.selected{
-      outline: 2px solid rgba(255,255,255,.32);
-      box-shadow: 0 10px 22px rgba(0,0,0,.35);
-    }
 
-    .vehBtn.vsav{ background: var(--vsav); }
-    .vehBtn.ccr { background: var(--ccr); }
-    .vehBtn.vtul{ background: var(--vtul); }
-    .vehBtn.vtp { background: var(--vtp); }
+    .glass{
 
-    /* Actions */
-    .actions{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-      margin-top: 6px;
-    }
-    .btn{
-      border:none;
-      border-radius: 14px;
-      padding: 12px 12px;
-      font-weight: 900;
-      cursor:pointer;
-      background: rgba(255,255,255,.09);
-      border: 1px solid rgba(255,255,255,.12);
-      color: rgba(255,255,255,.92);
-    }
-    .btn.primary{
-      background: rgba(217,122,31,.28);
-      border-color: rgba(217,122,31,.55);
-    }
-    .btn.danger{
-      background: rgba(255,70,70,.18);
-      border-color: rgba(255,70,70,.35);
-    }
-    .btn:disabled{
-      opacity:.45;
-      cursor:not-allowed;
-    }
+      position:relative;
 
-    /* Preview photo */
-    .preview{
-      margin-top:12px;
-      display:none;
-      gap:10px;
-      flex-direction:column;
-    }
-    .preview img{
-      width:100%;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.25);
-    }
-    .preview .row{
-      display:flex;
-      gap:10px;
-    }
-    .mini{
-      flex:1;
-      padding: 10px 10px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.08);
-      font-weight: 900;
-      cursor:pointer;
-      color: rgba(255,255,255,.92);
-    }
-
-    /* Historique */
-    .month{
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.10);
       overflow:hidden;
-      margin-bottom: 10px;
-      background: rgba(60, 200, 120, .10);
-    }
-    .monthHead{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding: 12px 12px;
-      cursor:pointer;
-      user-select:none;
-      background: rgba(0,0,0,.12);
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      font-weight: 900;
-    }
-    .monthHead .count{
-      opacity:.9;
-      font-weight: 800;
-      font-size: 12px;
-      background: rgba(0,0,0,.18);
-      border: 1px solid rgba(255,255,255,.10);
-      padding: 4px 8px;
-      border-radius: 999px;
-    }
-    .monthBody{
-      display:none;
-      padding: 10px 12px 12px;
+
+      padding:18px;
+
+      border-radius:21px;
+
+      background:
+
+        linear-gradient(
+          145deg,
+          var(--glass1),
+          var(--glass2)
+        );
+
+      border:
+        1px solid
+        var(--border);
+
+      box-shadow:
+        var(--shadow);
+
+      backdrop-filter:
+        blur(15px);
+
+      -webkit-backdrop-filter:
+        blur(15px);
+
     }
 
-    .hItem{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding: 10px 10px;
-      border-radius: 14px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.08);
-      margin-top: 8px;
+
+    .glass::before{
+
+      content:"";
+
+      position:absolute;
+
+      inset:0;
+
+      pointer-events:none;
+
+      background:
+
+        linear-gradient(
+          130deg,
+          rgba(255,255,255,.045),
+          transparent 40%
+        );
+
     }
-    .hLeft{
-      min-width:0;
+
+
+    .sectionTitle{
+
+      position:relative;
+
+      font-size:20px;
+
+      font-weight:950;
+
+      margin-bottom:6px;
+
+    }
+
+
+    .sectionSub{
+
+      position:relative;
+
+      margin-bottom:18px;
+
+      color:var(--muted);
+
+      font-size:13px;
+
+      line-height:1.45;
+
+    }
+
+
+    /* =====================================================
+       PIANA
+    ===================================================== */
+
+    .pianaArea{
+
+      position:relative;
+
       display:flex;
+
       flex-direction:column;
-      gap:2px;
-    }
-    .hMeta{
-      font-size: 12px;
-      color: rgba(255,255,255,.78);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .hVeh{
-      display:inline-flex;
+
       align-items:center;
-      gap:8px;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-    .dot{
-      width:10px; height:10px;
-      border-radius: 99px;
-      border: 1px solid rgba(255,255,255,.25);
-      flex: 0 0 auto;
-    }
-    .photoIcon{
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.08);
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size: 18px;
+
+      text-align:center;
+
     }
 
-    /* Toast */
-    .toast{
-      position: fixed;
-      left:50%;
-      bottom: 18px;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,.78);
-      border: 1px solid rgba(255,255,255,.12);
-      padding: 10px 12px;
-      border-radius: 14px;
-      color: white;
-      display:none;
-      max-width: 92vw;
-      text-align:center;
-      box-shadow: var(--shadow);
-      z-index: 1000;
+
+    .pianaLogoLink{
+
+      display:inline-block;
+
+      text-decoration:none;
+
+      border-radius:18px;
+
+      transition:
+        transform .15s ease,
+        filter .15s ease;
+
     }
+
+
+    .pianaLogoLink:active{
+
+      transform:
+        scale(.97);
+
+    }
+
+
+    .pianaLogo{
+
+      display:block;
+
+      /*
+        Logo volontairement contenu.
+        Pas une image plein écran.
+      */
+
+      width:
+        min(
+          245px,
+          68vw
+        );
+
+      height:auto;
+
+      border-radius:18px;
+
+      box-shadow:
+        0 14px 30px
+        rgba(0,0,0,.28);
+
+    }
+
+
+    /* =====================================================
+       IDENTIFIANT PIANA
+    ===================================================== */
+
+    .loginBox{
+
+      position:relative;
+
+      width:100%;
+
+      max-width:520px;
+
+      margin-top:18px;
+
+      padding:13px;
+
+      border-radius:16px;
+
+      background:
+        rgba(0,0,0,.20);
+
+      border:
+        1px solid
+        rgba(255,255,255,.09);
+
+    }
+
+
+    .loginLabel{
+
+      margin-bottom:7px;
+
+      color:#9fb0c3;
+
+      font-size:11px;
+
+      font-weight:900;
+
+      text-transform:uppercase;
+
+      letter-spacing:.4px;
+
+      text-align:left;
+
+    }
+
+
+    .loginRow{
+
+      display:flex;
+
+      align-items:center;
+
+      gap:8px;
+
+    }
+
+
+    .loginValue{
+
+      flex:1;
+
+      min-width:0;
+
+      min-height:45px;
+
+      display:flex;
+
+      align-items:center;
+
+      padding:
+        10px
+        12px;
+
+      border-radius:12px;
+
+      background:
+        rgba(8,17,28,.68);
+
+      border:
+        1px solid
+        rgba(255,255,255,.10);
+
+      color:#fff;
+
+      font-size:15px;
+
+      font-weight:850;
+
+      text-align:left;
+
+      overflow:hidden;
+
+      text-overflow:ellipsis;
+
+      white-space:nowrap;
+
+    }
+
+
+    .copyBtn{
+
+      min-height:45px;
+
+      border:0;
+
+      padding:
+        10px
+        13px;
+
+      border-radius:12px;
+
+      background:
+        rgba(54,120,183,.42);
+
+      color:white;
+
+      font-weight:900;
+
+      cursor:pointer;
+
+    }
+
+
+    .passwordHint{
+
+      margin-top:9px;
+
+      color:#91a3b7;
+
+      font-size:12px;
+
+      line-height:1.4;
+
+      text-align:left;
+
+    }
+
+
+    /* =====================================================
+       VEHICULES
+    ===================================================== */
+
+    .vehicleGrid{
+
+      position:relative;
+
+      display:grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap:10px;
+
+    }
+
+
+    .vehicleCard{
+
+      position:relative;
+
+      min-height:132px;
+
+      padding:14px;
+
+      display:flex;
+
+      flex-direction:column;
+
+      justify-content:space-between;
+
+      overflow:hidden;
+
+      border-radius:18px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.10);
+
+      background:
+
+        linear-gradient(
+          145deg,
+          rgba(38,57,82,.74),
+          rgba(15,28,44,.78)
+        );
+
+      box-shadow:
+        0 10px 25px
+        rgba(0,0,0,.20);
+
+      color:#fff;
+
+      text-decoration:none;
+
+      transition:
+        transform .15s ease,
+        border-color .15s ease;
+
+    }
+
+
+    .vehicleCard::before{
+
+      content:"";
+
+      position:absolute;
+
+      width:110px;
+
+      height:110px;
+
+      top:-40px;
+
+      right:-40px;
+
+      border-radius:50%;
+
+      background:
+
+        radial-gradient(
+          circle,
+          rgba(255,255,255,.08),
+          transparent 68%
+        );
+
+      pointer-events:none;
+
+    }
+
+
+    .vehicleCard.available{
+
+      cursor:pointer;
+
+    }
+
+
+    .vehicleCard.available:active{
+
+      transform:
+        scale(.98);
+
+    }
+
+
+    .vehicleCard.unavailable{
+
+      opacity:.43;
+
+      pointer-events:none;
+
+    }
+
+
+    .vehicleEmoji{
+
+      font-size:28px;
+
+      position:relative;
+
+    }
+
+
+    .vehicleName{
+
+      position:relative;
+
+      font-size:22px;
+
+      font-weight:1000;
+
+    }
+
+
+    .vehicleSub{
+
+      position:relative;
+
+      margin-top:2px;
+
+      color:#a7bdd4;
+
+      font-size:12px;
+
+      font-weight:750;
+
+    }
+
+
+    .vehicleBadge{
+
+      position:absolute;
+
+      top:10px;
+
+      right:10px;
+
+      padding:
+        4px
+        7px;
+
+      border-radius:999px;
+
+      font-size:9px;
+
+      font-weight:950;
+
+      text-transform:uppercase;
+
+      letter-spacing:.2px;
+
+    }
+
+
+    .available
+    .vehicleBadge{
+
+      background:
+        rgba(44,139,86,.23);
+
+      color:#b8efcc;
+
+      border:
+        1px solid
+        rgba(77,207,126,.21);
+
+    }
+
+
+    .unavailable
+    .vehicleBadge{
+
+      background:
+        rgba(255,255,255,.06);
+
+      color:#ccc;
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    }
+
+
+    /* =====================================================
+       ADMIN
+    ===================================================== */
+
+    .adminBtn{
+
+      display:none;
+
+      width:100%;
+
+      margin-top:14px;
+
+      padding:
+        12px
+        14px;
+
+      border-radius:14px;
+
+      border:
+        1px solid
+        rgba(255,183,83,.22);
+
+      background:
+
+        linear-gradient(
+          180deg,
+          rgba(222,131,43,.28),
+          rgba(143,72,22,.20)
+        );
+
+      color:#ffdcae;
+
+      font-weight:950;
+
+      cursor:pointer;
+
+    }
+
+
+    .adminBtn.show{
+
+      display:block;
+
+    }
+
+
+    .adminPanel{
+
+      display:none;
+
+      margin-top:14px;
+
+      padding:16px;
+
+      border-radius:19px;
+
+      background:
+
+        linear-gradient(
+          180deg,
+          rgba(222,131,43,.15),
+          rgba(66,43,25,.14)
+        );
+
+      border:
+        1px solid
+        rgba(255,173,73,.18);
+
+      backdrop-filter:
+        blur(12px);
+
+      -webkit-backdrop-filter:
+        blur(12px);
+
+    }
+
+
+    .adminPanel.show{
+
+      display:block;
+
+    }
+
+
+    .adminTitle{
+
+      margin-bottom:15px;
+
+      font-size:18px;
+
+      font-weight:950;
+
+    }
+
+
+    .field{
+
+      margin-bottom:14px;
+
+    }
+
+
+    .field label{
+
+      display:block;
+
+      margin-bottom:6px;
+
+      color:#c4d0dd;
+
+      font-size:11px;
+
+      font-weight:900;
+
+      text-transform:uppercase;
+
+    }
+
+
+    .field input{
+
+      width:100%;
+
+      min-height:45px;
+
+      padding:
+        10px
+        12px;
+
+      border-radius:12px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.12);
+
+      background:
+        rgba(7,15,24,.70);
+
+      color:#fff;
+
+      outline:none;
+
+    }
+
+
+    .field input:focus{
+
+      border-color:
+        rgba(236,158,70,.52);
+
+      box-shadow:
+        0 0 0 3px
+        rgba(224,129,40,.10);
+
+    }
+
+
+    .adminSeparator{
+
+      height:1px;
+
+      margin:
+        18px 0;
+
+      background:
+        rgba(255,255,255,.08);
+
+    }
+
+
+    .adminSubtitle{
+
+      margin-bottom:12px;
+
+      font-size:15px;
+
+      font-weight:950;
+
+    }
+
+
+    .vehicleAdmin{
+
+      padding:12px;
+
+      margin-bottom:10px;
+
+      border-radius:15px;
+
+      background:
+        rgba(0,0,0,.15);
+
+      border:
+        1px solid
+        rgba(255,255,255,.07);
+
+    }
+
+
+    .vehicleAdminTitle{
+
+      margin-bottom:8px;
+
+      font-weight:950;
+
+    }
+
+
+    .vehicleAdmin input[type="url"]{
+
+      width:100%;
+
+      min-height:44px;
+
+      padding:
+        10px
+        11px;
+
+      border-radius:11px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.11);
+
+      background:
+        rgba(7,15,24,.65);
+
+      color:#fff;
+
+      outline:none;
+
+    }
+
+
+    .vehicleAdmin input[type="file"]{
+
+      width:100%;
+
+      margin-top:9px;
+
+      color:#cbd7e4;
+
+      font-size:13px;
+
+    }
+
+
+    .qrInfo{
+
+      margin-top:7px;
+
+      color:#9fb0c3;
+
+      font-size:11px;
+
+      line-height:1.35;
+
+    }
+
+
+    .saveBtn{
+
+      width:100%;
+
+      min-height:48px;
+
+      margin-top:8px;
+
+      border:0;
+
+      border-radius:14px;
+
+      background:
+
+        linear-gradient(
+          180deg,
+          #dc8734,
+          #ad5e21
+        );
+
+      color:#fff;
+
+      font-weight:950;
+
+      cursor:pointer;
+
+    }
+
+
+    .saveBtn:disabled{
+
+      opacity:.55;
+
+    }
+
+
+    .adminStatus{
+
+      display:none;
+
+      margin-top:11px;
+
+      padding:
+        10px
+        12px;
+
+      border-radius:12px;
+
+      font-size:13px;
+
+      font-weight:850;
+
+    }
+
+
+    .adminStatus.show{
+
+      display:block;
+
+    }
+
+
+    .adminStatus.ok{
+
+      background:
+        rgba(42,148,84,.18);
+
+      color:#bfeace;
+
+      border:
+        1px solid
+        rgba(70,200,115,.20);
+
+    }
+
+
+    .adminStatus.error{
+
+      background:
+        rgba(188,71,66,.18);
+
+      color:#ffc0bc;
+
+      border:
+        1px solid
+        rgba(225,91,84,.21);
+
+    }
+
+
+    /* =====================================================
+       MOBILE
+    ===================================================== */
+
+    @media(
+      max-width:520px
+    ){
+
+      .page{
+
+        padding-left:11px;
+
+        padding-right:11px;
+
+      }
+
+
+      .title{
+
+        font-size:21px;
+
+      }
+
+
+      .tab{
+
+        font-size:13px;
+
+      }
+
+
+      .vehicleGrid{
+
+        gap:8px;
+
+      }
+
+
+      .vehicleCard{
+
+        min-height:122px;
+
+        padding:12px;
+
+      }
+
+
+      .vehicleName{
+
+        font-size:20px;
+
+      }
+
+    }
+
   </style>
+
 </head>
 
+
 <body>
-  <div class="wrap" id="root">
 
-    <!-- Bandeau -->
-    <div class="topbar" id="topbar">
-      <div class="titleBlock">
-        <div class="title">TICKET CARBURANT</div>
-        <div class="subtitle">
-          <span class="pill" id="whoPill">👤 <span id="whoName">Agent</span></span>
-          <span class="adminBadge" id="adminBadge">MODE ADMIN</span>
-        </div>
+<div class="page">
+
+
+  <!-- ===================================================
+       HAUT
+  ==================================================== -->
+
+  <div class="topbar">
+
+    <div class="topTitle">
+
+      <div class="title">
+        ⛽ Tickets carburants
       </div>
 
-      <button class="btnIcon" id="btnAdmin" title="Basculer mode admin">🔒</button>
-      <button class="btnIcon" id="btnBack" title="Retour">↩ Retour</button>
-    </div>
-
-    <!-- Onglets -->
-    <div class="tabs">
-      <button class="tab active" id="tabTicket">Ticket</button>
-      <button class="tab" id="tabHist">Historique</button>
-    </div>
-
-    <!-- Vue Ticket -->
-    <div class="card" id="viewTicket">
-      <div class="cardHead">
-        <h2>Prise de photo</h2>
-        <span style="font-size:12px;color:rgba(255,255,255,.75)">Pompe carburant</span>
+      <div class="subtitle">
+        Centre de Secours de Consenvoye
       </div>
 
-      <div class="cardBody">
-        <!-- Cellule véhicule -->
-        <div class="vehCell" id="vehCell">
-          Sélectionner le véhicule
-          <span class="hint">Choisis un véhicule ci-dessous</span>
-        </div>
-
-        <!-- Boutons véhicules -->
-        <div class="vehGrid">
-          <button class="vehBtn vsav" data-veh="VSAV">VSAV</button>
-          <button class="vehBtn ccr" data-veh="CCR">CCR</button>
-          <button class="vehBtn vtul" data-veh="VTUL">VTUL</button>
-          <button class="vehBtn vtp" data-veh="VTP">VTP</button>
-        </div>
-
-        <div class="actions">
-          <button class="btn primary" id="btnTake">📷 Prendre une photo</button>
-          <button class="btn danger" id="btnReset">Réinitialiser</button>
-        </div>
-
-        <!-- Preview -->
-        <div class="preview" id="preview">
-          <img id="imgPreview" alt="Aperçu photo" />
-          <div class="row">
-            <button class="mini" id="btnRetake">Reprendre</button>
-            <button class="mini" id="btnSend">Envoyer</button>
-          </div>
-        </div>
-
-        <input id="fileCam" type="file" accept="image/*" capture="environment" hidden>
-      </div>
     </div>
 
-    <!-- Vue Historique -->
-    <div class="card" id="viewHist" style="display:none">
-      <div class="cardHead">
-        <h2>Historique</h2>
-        <span style="font-size:12px;color:rgba(255,255,255,.75)">Par mois</span>
-      </div>
 
-      <div class="cardBody" id="histContainer"></div>
-    </div>
+    <a
+      class="backBtn"
+      href="index.html"
+    >
+      Retour
+    </a>
+
   </div>
 
-  <div class="toast" id="toast"></div>
-
-<script>
-  // ====== CONFIG ======
-  const API_URL = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
-  const LS_EMAIL_KEYS = ["cs_portail_email_v1","cs_portail_email","email"];
-  const LS_ADMIN = "cs_ticket_admin_v1"; // juste pour UI
-
-  const VEH = {
-    VSAV: { cell:"var(--vsav)", dot:"var(--vsavSolid)" },
-    CCR : { cell:"var(--ccr)",  dot:"var(--ccrSolid)"  },
-    VTUL:{ cell:"var(--vtul)", dot:"var(--vtulSolid)" },
-    VTP : { cell:"var(--vtp)",  dot:"var(--vtpSolid)"  },
-  };
-
-  const VEH_ICON = {
-    VSAV: "🚑",
-    CCR: "🚒",
-    VTUL: "🚗",
-    VTP: "🚗"
-  };
-
-  // ====== UI refs ======
-  const root = document.getElementById("root");
-
-  const whoName = document.getElementById("whoName");
-  const btnAdmin = document.getElementById("btnAdmin");
-  const adminBadge = document.getElementById("adminBadge");
-  const btnBack = document.getElementById("btnBack");
-
-  const tabTicket = document.getElementById("tabTicket");
-  const tabHist = document.getElementById("tabHist");
-  const viewTicket = document.getElementById("viewTicket");
-  const viewHist = document.getElementById("viewHist");
-
-  const vehCell = document.getElementById("vehCell");
-  const vehBtns = [...document.querySelectorAll(".vehBtn")];
-  const btnTake = document.getElementById("btnTake");
-  const btnReset = document.getElementById("btnReset");
-
-  const fileCam = document.getElementById("fileCam");
-  const preview = document.getElementById("preview");
-  const imgPreview = document.getElementById("imgPreview");
-  const btnRetake = document.getElementById("btnRetake");
-  const btnSend = document.getElementById("btnSend");
-
-  const histContainer = document.getElementById("histContainer");
-  const toastEl = document.getElementById("toast");
-
-  // ====== State ======
-  let selectedVeh = "";
-  let photoDataUrl = "";
-  let isSending = false;
-  let histLoaded = false;
-
-  function toast(msg){
-    toastEl.textContent = msg;
-    toastEl.style.display = "block";
-    clearTimeout(toastEl._t);
-    toastEl._t = setTimeout(()=> toastEl.style.display="none", 1700);
-  }
-
-  function getStoredEmail(){
-    for(const k of LS_EMAIL_KEYS){
-      const v = (localStorage.getItem(k) || "").trim();
-      if(v) return v;
-    }
-    return "";
-  }
-
-  function guessFirstNameFromEmail(email){
-    if(!email) return "Agent";
-    const left = email.split("@")[0] || "";
-    const first = left.split(/[._-]/)[0] || left;
-    if(!first) return "Agent";
-    return first.charAt(0).toUpperCase() + first.slice(1).toLowerCase();
-  }
-
-  function setAdminUI(on){
-    if(on){
-      root.classList.add("adminOn");
-      btnAdmin.textContent = "🔓";
-      adminBadge.style.display = "inline-flex";
-    }else{
-      root.classList.remove("adminOn");
-      btnAdmin.textContent = "🔒";
-      adminBadge.style.display = "none";
-    }
-    localStorage.setItem(LS_ADMIN, on ? "1":"0");
-  }
-
-  function currentIsAdmin(){
-    return (localStorage.getItem(LS_ADMIN) || "0") === "1";
-  }
-
-  function getCssVar(v){
-    if(!v.startsWith("var(")) return v;
-    const name = v.slice(4,-1).trim();
-    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-  }
-
-  function setVeh(veh){
-    selectedVeh = veh;
-
-    vehBtns.forEach(b => b.classList.toggle("selected", b.dataset.veh === veh));
-
-    if(!veh){
-      vehCell.style.background = "rgba(255,255,255,.06)";
-      vehCell.style.borderStyle = "dashed";
-      vehCell.innerHTML = `Sélectionner le véhicule<span class="hint">Choisis un véhicule ci-dessous</span>`;
-      return;
-    }
-
-    vehCell.style.borderStyle = "solid";
-    vehCell.style.background = `linear-gradient(180deg, ${getCssVar(VEH[veh].cell)}, rgba(0,0,0,.10))`;
-    vehCell.innerHTML = `${veh}<span class="hint">OK — tu peux prendre la photo</span>`;
-  }
-
-  function resetAll(){
-    selectedVeh = "";
-    photoDataUrl = "";
-    setVeh("");
-    preview.style.display = "none";
-    imgPreview.src = "";
-    btnTake.disabled = false;
-  }
-
-  // ====== Tabs ======
-  function showTicket(){
-    tabTicket.classList.add("active");
-    tabHist.classList.remove("active");
-    viewTicket.style.display = "";
-    viewHist.style.display = "none";
-  }
-
-  function showHist(){
-    tabHist.classList.add("active");
-    tabTicket.classList.remove("active");
-    viewHist.style.display = "";
-    viewTicket.style.display = "none";
-    loadTickets();
-  }
-
-  tabTicket.addEventListener("click", showTicket);
-  tabHist.addEventListener("click", showHist);
-
-  // ====== Véhicules ======
-  vehBtns.forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      setVeh(btn.dataset.veh);
-    });
-  });
-
-  // ====== Photo ======
-  btnTake.addEventListener("click", ()=>{
-    if(!selectedVeh){
-      toast("Choisis un véhicule d’abord");
-      return;
-    }
-    fileCam.value = "";
-    fileCam.click();
-  });
-
-  fileCam.addEventListener("change", ()=>{
-    const f = fileCam.files && fileCam.files[0];
-    if(!f) return;
-
-    const reader = new FileReader();
-    reader.onload = ()=>{
-      photoDataUrl = String(reader.result || "");
-      imgPreview.src = photoDataUrl;
-      preview.style.display = "flex";
-      toast("Aperçu prêt");
-    };
-    reader.readAsDataURL(f);
-  });
-
-  btnRetake.addEventListener("click", ()=>{
-    fileCam.value = "";
-    fileCam.click();
-  });
-
-  btnReset.addEventListener("click", ()=>{
-    resetAll();
-    toast("Réinitialisé");
-  });
-
-  async function makePreviewBase64(dataUrl, maxWidth = 1000, quality = 0.55){
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      const ratio = img.width > maxWidth ? (maxWidth / img.width) : 1;
-      const w = Math.round(img.width * ratio);
-      const h = Math.round(img.height * ratio);
-
-      const canvas = document.createElement("canvas");
-      canvas.width = w;
-      canvas.height = h;
-
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, w, h);
-
-      const previewDataUrl = canvas.toDataURL("image/jpeg", quality);
-      const previewBase64 = previewDataUrl.split(",")[1] || "";
-      resolve(previewBase64);
-    };
-    img.onerror = reject;
-    img.src = dataUrl;
-  });
-}
-
-
-  // ====== Envoi ======
-  btnSend.addEventListener("click", async () => {
-    const btn = btnSend;
-
-    if(!selectedVeh){ toast("Sélectionner un véhicule"); return; }
-    if(!photoDataUrl){ toast("Prendre une photo"); return; }
-    if(isSending) return;
-
-    isSending = true;
-    const prevText = btn.innerHTML;
-    const prevBg = btn.style.background;
-
-    btn.disabled = true;
-    btn.style.background = "#28a745";
-    btn.innerHTML = "⏳ Envoi du ticket...";
-
-    try{
-      const email = getStoredEmail();
-const agent = guessFirstNameFromEmail(email);
-const base64 = photoDataUrl.split(",")[1] || "";
-const previewBase64 = await makePreviewBase64(photoDataUrl);
-
-const res = await fetch(API_URL + "?view=ticket_carburant_upload", {
-  method: "POST",
-  body: JSON.stringify({
-    vehicle: selectedVeh,
-    agent,
-    image: base64,
-    preview: previewBase64
-  })
-});
-      const text = await res.text();
-      let data = null;
-      try { data = JSON.parse(text); } catch(e){}
-
-      if(data && data.ok){
-        toast("Ticket envoyé ✅");
-        resetAll();
-
-        // refresh historique si onglet ouvert
-        if(viewHist.style.display !== "none"){
-          histLoaded = false;
-          await loadTickets();
-        }
-      }else{
-        toast("ERREUR API ❌ (voir console)");
-        console.log("UPLOAD TEXT:", text);
-      }
-
-    }catch(err){
-      console.error(err);
-      toast("Erreur réseau / CORS (voir console)");
-    }finally{
-      btn.disabled = false;
-      btn.style.background = prevBg;
-      btn.innerHTML = prevText;
-      isSending = false;
-    }
-  });
-
-  // ====== Admin + Retour ======
-  btnAdmin.addEventListener("click", ()=>{
-  setAdminUI(!currentIsAdmin());
-
-  if(viewHist.style.display !== "none"){
-    histLoaded = false;
-    loadTickets();
-  }
-});
-
-
-  btnBack.addEventListener("click", ()=>{
-    window.location.href = "index.html";
-  });
-
-  // ====== Helpers Historique ======
-
-  function parseMaybeJsonp(text){
-    const t = (text || "").trim();
-    // JSON direct
-    if(t.startsWith("{") || t.startsWith("[")) return JSON.parse(t);
-    // JSONP: callback(....);
-    const m = t.match(/^[a-zA-Z_$][\w$]*\(\s*([\s\S]*)\s*\)\s*;?\s*$/);
-    if(m && m[1]) return JSON.parse(m[1]);
-    // Dernier recours: on essaie d'extraire {...}
-    const i = t.indexOf("{");
-    const j = t.lastIndexOf("}");
-    if(i !== -1 && j !== -1 && j > i) return JSON.parse(t.slice(i, j+1));
-    throw new Error("Réponse API non JSON/JSONP");
-  }
-
-  function pad2(n){ return String(n).padStart(2,"0"); }
-
-  function safeDateFromParts(ymd){
-    // ymd = "2026-03-06"
-    if(!ymd || !/^\d{4}-\d{2}-\d{2}$/.test(ymd)) return null;
-    const [y,m,d] = ymd.split("-").map(Number);
-    return new Date(y, m-1, d);
-  }
-
-  function monthKeyFromItem(f){
-    // priorité: dateFromName (YYYY-MM-DD), sinon created, sinon fallback
-    const d1 = safeDateFromParts(f.dateFromName || "");
-    if(d1) return `${d1.getFullYear()}-${pad2(d1.getMonth()+1)}`;
-
-    const d2 = f.created ? new Date(f.created) : null;
-    if(d2 && !isNaN(d2)) return `${d2.getFullYear()}-${pad2(d2.getMonth()+1)}`;
-
-    // fallback extrême
-    const d3 = new Date();
-    return `${d3.getFullYear()}-${pad2(d3.getMonth()+1)}`;
-  }
-
-  function displayDateTime(f){
-    // Date affichée: dateFromName si possible
-    let d = safeDateFromParts(f.dateFromName || "");
-    if(!d) {
-      const c = f.created ? new Date(f.created) : null;
-      if(c && !isNaN(c)) d = c;
-    }
-    if(!d) d = new Date();
-
-    const dateTxt = d.toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"numeric"});
-
-    // Heure affichée: f.time ("HH:mm") sinon heure de created
-    let hourTxt = "";
-    if(f.time && /^\d{2}:\d{2}$/.test(String(f.time))) {
-      hourTxt = String(f.time);
-    } else {
-      hourTxt = d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
-    }
-
-    return { dateTxt, hourTxt, d };
-  }
-
-  async function loadTickets(){
-  if(histLoaded) return;
-  histLoaded = true;
-
-  histContainer.innerHTML = `<div style="color:rgba(255,255,255,.75);font-size:13px">Chargement de l'historique...</div>`;
-
-  try{
-    const res = await fetch(API_URL + "?view=ticket_carburant_list", { cache: "no-store" });
-    const data = await res.json();
-
-    const files = (data && data.files) ? data.files : [];
-    if(!files.length){
-      histContainer.innerHTML = `<div style="color:rgba(255,255,255,.75);font-size:13px">Aucun ticket pour l’instant.</div>`;
-      return;
-    }
-
-    const byMonth = {};
-
-    files.forEach(f=>{
-      let d = null;
-
-      if(f.dateFromName && /^\d{4}-\d{2}-\d{2}$/.test(f.dateFromName)){
-        const [y,m,day] = f.dateFromName.split("-").map(Number);
-        d = new Date(y, m - 1, day);
-      } else if(f.created){
-        d = new Date(f.created);
-      } else {
-        d = new Date();
-      }
-
-      const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
-      (byMonth[key] ||= []).push({ ...f, _d:d });
-    });
-
-    const monthKeys = Object.keys(byMonth).sort((a,b)=> b.localeCompare(a));
-    histContainer.innerHTML = "";
-
-    monthKeys.forEach(key=>{
-      const [y,m] = key.split("-");
-      const monthLabel = new Date(Number(y), Number(m)-1, 1)
-        .toLocaleString("fr-FR",{month:"long",year:"numeric"});
-
-      const list = byMonth[key];
-
-      list.sort((a,b)=>{
-        const ad = (a.dateFromName || "") + " " + (a.time || "");
-        const bd = (b.dateFromName || "") + " " + (b.time || "");
-        return bd.localeCompare(ad);
-      });
-
-      const month = document.createElement("div");
-      month.className = "month";
-
-      const head = document.createElement("div");
-      head.className = "monthHead";
-      head.innerHTML = `<div>${monthLabel}</div><div class="count">${list.length}</div>`;
-
-      const body = document.createElement("div");
-      body.className = "monthBody";
-      body.style.display = "none";
-
-      list.forEach(f=>{
-        const veh = String(f.veh || "").trim().toUpperCase();
-        const agent = String(f.agent || "").trim();
-        const url = f.url || "#";
-        const id = f.id || "";
-
-        let dateTxt = "";
-        if(f.dateFromName && /^\d{4}-\d{2}-\d{2}$/.test(f.dateFromName)){
-          const [yy,mm,dd] = f.dateFromName.split("-");
-          dateTxt = `${dd}/${mm}/${yy}`;
-        } else if(f.created){
-          const d = new Date(f.created);
-          dateTxt = d.toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"numeric"});
-        } else {
-          dateTxt = "";
-        }
-
-        const hourTxt = String(f.time || "").trim();
-        const icon = VEH_ICON[veh] || "";
-        const dotColor = (VEH[veh] && VEH[veh].dot) ? getCssVar(VEH[veh].dot) : "rgba(255,255,255,.35)";
-
-        const item = document.createElement("div");
-        item.className = "hItem";
-
-        item.innerHTML = `
-          <div class="hLeft">
-            <div class="hVeh">
-              <span class="dot" style="background:${dotColor}"></span>
-              <span>${icon ? icon + " " : ""}${veh || "—"} — ${agent || "—"}</span>
+
+
+  <!-- ===================================================
+       ONGLETS
+  ==================================================== -->
+
+  <div class="tabs">
+
+    <button
+      id="tabTicket"
+      class="tab ticket active"
+      type="button"
+    >
+      🧾 Rentrée ticket
+    </button>
+
+
+    <button
+      id="tabVehicle"
+      class="tab vehicle"
+      type="button"
+    >
+      🔓 Débloquer carte véhicule
+    </button>
+
+  </div>
+
+
+
+  <!-- ===================================================
+       ONGLET PIANA
+  ==================================================== -->
+
+  <section
+    id="panelTicket"
+    class="panel active"
+  >
+
+    <div class="glass">
+
+
+      <div class="sectionTitle">
+        🧾 Rentrée ticket
+      </div>
+
+
+      <div class="sectionSub">
+        Accès au service Piana pour enregistrer le plein du véhicule.
+      </div>
+
+
+      <div class="pianaArea">
+
+
+        <a
+          id="pianaLink"
+          class="pianaLogoLink"
+          href="#"
+        >
+
+          <img
+            class="pianaLogo"
+            src="ticket-carburant-logo.png"
+            alt="Ticket carburant"
+          >
+
+        </a>
+
+
+        <div class="loginBox">
+
+
+          <div class="loginLabel">
+            Identifiant Piana
+          </div>
+
+
+          <div class="loginRow">
+
+
+            <div
+              id="pianaLogin"
+              class="loginValue"
+            >
+              Non renseigné
             </div>
-            <div class="hMeta">${dateTxt}${hourTxt ? " — " + hourTxt : ""}</div>
+
+
+            <button
+              id="copyLogin"
+              class="copyBtn"
+              type="button"
+            >
+              Copier
+            </button>
+
+
           </div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <button class="photoIcon" type="button" onclick="openTicketPreview('${id}')" title="Voir la photo">📄</button>
 
 
-            ${currentIsAdmin() ? `<a class="photoIcon" href="${url}" target="_blank" rel="noopener" title="Ouvrir dans Drive">🔗</a>` : ``}
+          <div class="passwordHint">
+            Le mot de passe n'est pas enregistré dans le portail.
+            Utilisez le gestionnaire de mots de passe du téléphone
+            ou du navigateur.
           </div>
-        `;
-
-        body.appendChild(item);
-      });
-
-      head.addEventListener("click", ()=>{
-        body.style.display = (body.style.display === "none" || !body.style.display) ? "block" : "none";
-      });
-
-      month.appendChild(head);
-      month.appendChild(body);
-      histContainer.appendChild(month);
-    });
-
-  }catch(err){
-    console.error(err);
-    histContainer.innerHTML = "<div style=\"color:rgba(255,120,120,.95);font-size:13px\">Erreur chargement historique (voir console).</div>";
-  }
-}
-
-async function openTicketPreview(id){
-  const viewer = document.getElementById("photoViewer");
-  const img = document.getElementById("photoViewerImg");
-
-  try{
-    viewer.style.display = "flex";
-    img.src = "";
-
-    const res = await fetch(API_URL + "?view=ticket_carburant_preview&id=" + encodeURIComponent(id));
-    const base64 = await res.text();
-
-    if(!base64 || base64 === "ID manquant" || base64.startsWith("preview error:")){
-      throw new Error(base64 || "Preview vide");
-    }
-
-    img.src = "data:image/jpeg;base64," + base64;
-
-  }catch(err){
-    console.error(err);
-    toast("Erreur chargement image");
-    closeTicketPreview();
-  }
-}
-
-function closeTicketPreview(){
-  const viewer = document.getElementById("photoViewer");
-  const img = document.getElementById("photoViewerImg");
-
-  viewer.style.display = "none";
-  img.src = "";
-}
-  const photoViewerEl = document.getElementById("photoViewer");
-if(photoViewerEl){
-  photoViewerEl.addEventListener("click", function(e){
-    if(e.target.id === "photoViewer"){
-      closeTicketPreview();
-    }
-  });
-}
 
 
-// ====== Init ======
-(function init(){
-  const email = getStoredEmail();
-  whoName.textContent = guessFirstNameFromEmail(email);
-  setAdminUI(currentIsAdmin());
-  setVeh("");
-  showTicket();
-})();
-</script>
+        </div>
 
-<div id="photoViewer" style="
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.95);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:9999;
-  padding:12px;
-">
-  <button onclick="closeTicketPreview()" style="
-position:absolute;
-top:14px;
-right:14px;
-z-index:10000;
-border:none;
-border-radius:12px;
-padding:10px 12px;
-background:rgba(0,0,0,.65);
-color:#fff;
-font-size:20px;
-cursor:pointer;
-">
-✕
-</button>
-  
-  <img id="photoViewerImg" style="max-width:95%;max-height:95%;border-radius:12px;">
+
+      </div>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ===================================================
+       ONGLET VEHICULES
+  ==================================================== -->
+
+  <section
+    id="panelVehicle"
+    class="panel"
+  >
+
+    <div class="glass">
+
+
+      <div class="sectionTitle">
+        🔓 Débloquer carte véhicule
+      </div>
+
+
+      <div class="sectionSub">
+        Sélectionnez le véhicule concerné avant d'effectuer le plein.
+      </div>
+
+
+      <div class="vehicleGrid">
+
+
+        <!-- VSAV -->
+
+        <a
+          id="vehicleVSAV"
+          class="vehicleCard unavailable"
+          href="#"
+        >
+
+          <span class="vehicleBadge">
+            À configurer
+          </span>
+
+          <div class="vehicleEmoji">
+            🚑
+          </div>
+
+          <div>
+
+            <div class="vehicleName">
+              VSAV
+            </div>
+
+            <div class="vehicleSub">
+              Carte carburant
+            </div>
+
+          </div>
+
+        </a>
+
+
+
+        <!-- CCR -->
+
+        <a
+          id="vehicleCCR"
+          class="vehicleCard unavailable"
+          href="#"
+        >
+
+          <span class="vehicleBadge">
+            À configurer
+          </span>
+
+          <div class="vehicleEmoji">
+            🚒
+          </div>
+
+          <div>
+
+            <div class="vehicleName">
+              CCR
+            </div>
+
+            <div class="vehicleSub">
+              Carte carburant
+            </div>
+
+          </div>
+
+        </a>
+
+
+
+        <!-- VTUL -->
+
+        <a
+          id="vehicleVTUL"
+          class="vehicleCard available"
+          href="https://qr.getpiana.com/x34knskcyh"
+        >
+
+          <span class="vehicleBadge">
+            Disponible
+          </span>
+
+          <div class="vehicleEmoji">
+            🚐
+          </div>
+
+          <div>
+
+            <div class="vehicleName">
+              VTUL
+            </div>
+
+            <div class="vehicleSub">
+              CZ-948-EG
+            </div>
+
+          </div>
+
+        </a>
+
+
+
+        <!-- VTP -->
+
+        <a
+          id="vehicleVTP"
+          class="vehicleCard unavailable"
+          href="#"
+        >
+
+          <span class="vehicleBadge">
+            À configurer
+          </span>
+
+          <div class="vehicleEmoji">
+            🚐
+          </div>
+
+          <div>
+
+            <div class="vehicleName">
+              VTP
+            </div>
+
+            <div class="vehicleSub">
+              Carte carburant
+            </div>
+
+          </div>
+
+        </a>
+
+
+      </div>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ===================================================
+       BOUTON ADMIN
+  ==================================================== -->
+
+  <button
+    id="adminBtn"
+    class="adminBtn"
+    type="button"
+  >
+    ⚙️ Administration tickets carburants
+  </button>
+
+
+
+  <!-- ===================================================
+       PANNEAU ADMIN
+  ==================================================== -->
+
+  <div
+    id="adminPanel"
+    class="adminPanel"
+  >
+
+
+    <div class="adminTitle">
+      ⚙️ Configuration
+    </div>
+
+
+
+    <!-- PIANA -->
+
+    <div class="field">
+
+      <label for="adminPianaUrl">
+        Lien Piana
+      </label>
+
+      <input
+        id="adminPianaUrl"
+        type="url"
+        placeholder="https://..."
+      >
+
+    </div>
+
+
+
+    <div class="field">
+
+      <label for="adminPianaLogin">
+        Identifiant Piana
+      </label>
+
+      <input
+        id="adminPianaLogin"
+        type="text"
+        placeholder="Identifiant Piana"
+      >
+
+    </div>
+
+
+
+    <div class="adminSeparator"></div>
+
+
+
+    <div class="adminSubtitle">
+      🔓 Cartes véhicules
+    </div>
+
+
+
+    <!-- VSAV -->
+
+    <div class="vehicleAdmin">
+
+      <div class="vehicleAdminTitle">
+        🚑 VSAV
+      </div>
+
+
+      <input
+        id="urlVSAV"
+        type="url"
+        placeholder="Lien du QR code VSAV"
+      >
+
+
+      <input
+        id="qrVSAV"
+        type="file"
+        accept="image/*"
+      >
+
+
+      <div
+        id="infoVSAV"
+        class="qrInfo"
+      >
+        Sélectionnez une photo du QR code ou collez directement son lien.
+      </div>
+
+    </div>
+
+
+
+    <!-- CCR -->
+
+    <div class="vehicleAdmin">
+
+      <div class="vehicleAdminTitle">
+        🚒 CCR
+      </div>
+
+
+      <input
+        id="urlCCR"
+        type="url"
+        placeholder="Lien du QR code CCR"
+      >
+
+
+      <input
+        id="qrCCR"
+        type="file"
+        accept="image/*"
+      >
+
+
+      <div
+        id="infoCCR"
+        class="qrInfo"
+      >
+        Sélectionnez une photo du QR code ou collez directement son lien.
+      </div>
+
+    </div>
+
+
+
+    <!-- VTUL -->
+
+    <div class="vehicleAdmin">
+
+      <div class="vehicleAdminTitle">
+        🚐 VTUL
+      </div>
+
+
+      <input
+        id="urlVTUL"
+        type="url"
+        value="https://qr.getpiana.com/x34knskcyh"
+      >
+
+
+      <input
+        id="qrVTUL"
+        type="file"
+        accept="image/*"
+      >
+
+
+      <div
+        id="infoVTUL"
+        class="qrInfo"
+      >
+        QR code VTUL actuellement configuré.
+      </div>
+
+    </div>
+
+
+
+    <!-- VTP -->
+
+    <div class="vehicleAdmin">
+
+      <div class="vehicleAdminTitle">
+        🚐 VTP
+      </div>
+
+
+      <input
+        id="urlVTP"
+        type="url"
+        placeholder="Lien du QR code VTP"
+      >
+
+
+      <input
+        id="qrVTP"
+        type="file"
+        accept="image/*"
+      >
+
+
+      <div
+        id="infoVTP"
+        class="qrInfo"
+      >
+        Sélectionnez une photo du QR code ou collez directement son lien.
+      </div>
+
+    </div>
+
+
+
+    <button
+      id="saveAdmin"
+      class="saveBtn"
+      type="button"
+    >
+      Enregistrer la configuration
+    </button>
+
+
+
+    <div
+      id="adminStatus"
+      class="adminStatus"
+    ></div>
+
+
+  </div>
+
+
 </div>
 
-</body>
-</html>
+
+
+<script>
+
+
+/* =========================================================
+   CONFIGURATION
+========================================================= */
+
+const API =
+  "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
+
+
+const LS_EMAIL =
+  "cs_portail_email_v1";
+
+
+
+/*
+  LIEN PIANA ACTUEL
+*/
+
+const DEFAULT_PIANA_URL =
+  "https://auth.getpiana.com/login?state=hKFo2SBTMUhEOFp1aEg1MEdlVWlxSlFyX0kyQU1Yb0JzYmhnV6FupWxvZ2luo3RpZNkgQzI4WHJRM2FnaUhNSW5CRG0tM2F2U09TQW5hbjlDX2yjY2lk2SBhR3kxSU1UdnppY05lUEpZZWJnNGdUWlFYRWFsQ2JqcQ&client=aGy1IMTvzicNePJYebg4gTZQXEalCbjq&protocol=oauth2&audience=https%3A%2F%2Fapi.getpiana.com%2F&scope=openid%20profile%20email%20offline_access&redirect_uri=https%3A%2F%2Fapp.getpiana.com%2Fauth%2Fcallback&response_type=code&code_challenge=i1a-7VGwihqBHQarJKKsy43mV3I8aV60bEyoTKM-OgY&code_challenge_method=S256&nonce=0aZFaPLVU2MF87rZNIgemSOaJcTvb8pWDQmx4CtQqZA";
+
+
+
+let CONFIG = {
+
+  piana_url:
+    DEFAULT_PIANA_URL,
+
+  piana_login:
+    "",
+
+  vsav_url:
+    "",
+
+  ccr_url:
+    "",
+
+  vtul_url:
+    "https://qr.getpiana.com/x34knskcyh",
+
+  vtp_url:
+    ""
+
+};
+
+
+
+/* =========================================================
+   JSONP
+========================================================= */
+
+function jsonp(
+  url,
+  timeout = 15000
+){
+
+  return new Promise(
+    function(
+      resolve,
+      reject
+    ){
+
+      const callback =
+        "cb_" +
+        Date.now() +
+        "_" +
+        Math.random()
+          .toString(36)
+          .slice(2);
+
+
+      const script =
+        document.createElement(
+          "script"
+        );
+
+
+      let timer;
+
+
+
+      function cleanup(){
+
+        clearTimeout(
+          timer
+        );
+
+
+        script.remove();
+
+
+        try{
+
+          delete window[
+            callback
+          ];
+
+        }catch(e){
+
+          window[
+            callback
+          ] =
+            undefined;
+
+        }
+
+      }
+
+
+
+      window[
+        callback
+      ] =
+        function(data){
+
+          cleanup();
+
+          resolve(
+            data
+          );
+
+        };
+
+
+
+      const separator =
+        url.includes("?")
+          ? "&"
+          : "?";
+
+
+
+      script.src =
+        url +
+        separator +
+        "callback=" +
+        encodeURIComponent(
+          callback
+        ) +
+        "&t=" +
+        Date.now();
+
+
+
+      script.onerror =
+        function(){
+
+          cleanup();
+
+          reject(
+            new Error(
+              "Erreur de connexion"
+            )
+          );
+
+        };
+
+
+
+      timer =
+        setTimeout(
+          function(){
+
+            cleanup();
+
+            reject(
+              new Error(
+                "Délai dépassé"
+              )
+            );
+
+          },
+          timeout
+        );
+
+
+
+      document
+        .head
+        .appendChild(
+          script
+        );
+
+    }
+  );
+
+}
+
+
+
+/* =========================================================
+   ONGLETS
+========================================================= */
+
+const tabTicket =
+  document.getElementById(
+    "tabTicket"
+  );
+
+
+const tabVehicle =
+  document.getElementById(
+    "tabVehicle"
+  );
+
+
+const panelTicket =
+  document.getElementById(
+    "panelTicket"
+  );
+
+
+const panelVehicle =
+  document.getElementById(
+    "panelVehicle"
+  );
+
+
+
+function openTab(
+  name
+){
+
+  const isTicket =
+    name ===
+    "ticket";
+
+
+  tabTicket
+    .classList
+    .toggle(
+      "active",
+      isTicket
+    );
+
+
+  tabVehicle
+    .classList
+    .toggle(
+      "active",
+      !isTicket
+    );
+
+
+  panelTicket
+    .classList
+    .toggle(
+      "active",
+      isTicket
+    );
+
+
+  panelVehicle
+    .classList
+    .toggle(
+      "active",
+      !isTicket
+    );
+
+}
+
+
+
+tabTicket
+  .addEventListener(
+    "click",
+    function(){
+
+      openTab(
+        "ticket"
+      );
+
+    }
+  );
+
+
+
+tabVehicle
+  .addEventListener(
+    "click",
+    function(){
+
+      openTab(
+        "vehicle"
+      );
+
+    }
+  );
+
+
+
+/* =========================================================
+   VEHICULE
+========================================================= */
+
+function setVehicle(
+  id,
+  url
+){
+
+  const vehicle =
+    document.getElementById(
+      id
+    );
+
+
+  if(!vehicle){
+
+    return;
+
+  }
+
+
+  const badge =
+    vehicle.querySelector(
+      ".vehicleBadge"
+    );
+
+
+  const cleanUrl =
+    String(
+      url || ""
+    )
+    .trim();
+
+
+
+  if(cleanUrl){
+
+    vehicle.href =
+      cleanUrl;
+
+
+    vehicle
+      .classList
+      .remove(
+        "unavailable"
+      );
+
+
+    vehicle
+      .classList
+      .add(
+        "available"
+      );
+
+
+    if(badge){
+
+      badge.textContent =
+        "Disponible";
+
+    }
+
+
+  }else{
+
+
+    vehicle.href =
+      "#";
+
+
+    vehicle
+      .classList
+      .remove(
+        "available"
+      );
+
+
+    vehicle
+      .classList
+      .add(
+        "unavailable"
+      );
+
+
+    if(badge){
+
+      badge.textContent =
+        "À configurer";
+
+    }
+
+  }
+
+}
+
+
+
+/* =========================================================
+   AFFICHAGE CONFIGURATION
+========================================================= */
+
+function applyConfig(){
+
+
+  const pianaUrl =
+    String(
+      CONFIG.piana_url ||
+      DEFAULT_PIANA_URL
+    )
+    .trim();
+
+
+
+  document
+    .getElementById(
+      "pianaLink"
+    )
+    .href =
+      pianaUrl;
+
+
+
+  const login =
+    String(
+      CONFIG.piana_login ||
+      ""
+    )
+    .trim();
+
+
+
+  document
+    .getElementById(
+      "pianaLogin"
+    )
+    .textContent =
+      login ||
+      "Non renseigné";
+
+
+
+  setVehicle(
+    "vehicleVSAV",
+    CONFIG.vsav_url
+  );
+
+
+  setVehicle(
+    "vehicleCCR",
+    CONFIG.ccr_url
+  );
+
+
+  setVehicle(
+    "vehicleVTUL",
+    CONFIG.vtul_url
+  );
+
+
+  setVehicle(
+    "vehicleVTP",
+    CONFIG.vtp_url
+  );
+
+
+
+  document
+    .getElementById(
+      "adminPianaUrl"
+    )
+    .value =
+      pianaUrl;
+
+
+
+  document
+    .getElementById(
+      "adminPianaLogin"
+    )
+    .value =
+      CONFIG.piana_login ||
+      "";
+
+
+
+  document
+    .getElementById(
+      "urlVSAV"
+    )
+    .value =
+      CONFIG.vsav_url ||
+      "";
+
+
+
+  document
+    .getElementById(
+      "urlCCR"
+    )
+    .value =
+      CONFIG.ccr_url ||
+      "";
+
+
+
+  document
+    .getElementById(
+      "urlVTUL"
+    )
+    .value =
+      CONFIG.vtul_url ||
+      "";
+
+
+
+  document
+    .getElementById(
+      "urlVTP"
+    )
+    .value =
+      CONFIG.vtp_url ||
+      "";
+
+}
+
+
+
+/* =========================================================
+   CHARGER CONFIG DEPUIS APPS SCRIPT
+========================================================= */
+
+async function loadConfig(){
+
+  try{
+
+    const result =
+      await jsonp(
+
+        API +
+        "?view=ticket_carburant_config"
+
+      );
+
+
+    if(
+      result &&
+      result.ok === true &&
+      result.config
+    ){
+
+      CONFIG = {
+
+        ...CONFIG,
+        ...result.config
+
+      };
+
+    }
+
+  }catch(e){
+
+    /*
+      Tant que le module Apps Script
+      n'est pas ajouté,
+      le lien Piana et le VTUL
+      restent utilisables grâce aux
+      valeurs par défaut.
+    */
+
+  }
+
+
+  applyConfig();
+
+}
+
+
+
+/* =========================================================
+   COPIER IDENTIFIANT
+========================================================= */
+
+document
+  .getElementById(
+    "copyLogin"
+  )
+  .addEventListener(
+    "click",
+    async function(){
+
+      const login =
+        String(
+          CONFIG.piana_login ||
+          ""
+        )
+        .trim();
+
+
+      if(!login){
+
+        return;
+
+      }
+
+
+      try{
+
+        await navigator
+          .clipboard
+          .writeText(
+            login
+          );
+
+
+        const button =
+          this;
+
+
+        button.textContent =
+          "Copié ✓";
+
+
+        setTimeout(
+          function(){
+
+            button.textContent =
+              "Copier";
+
+          },
+          1400
+        );
+
+
+      }catch(e){
+
+        /*
+          Rien si le navigateur
+          interdit le presse-papiers.
+        */
+
+      }
+
+    }
+  );
+
+
+
+/* =========================================================
+   ADMIN
+========================================================= */
+
+const adminBtn =
+  document.getElementById(
+    "adminBtn"
+  );
+
+
+const adminPanel =
+  document.getElementById(
+    "adminPanel"
+  );
+
+
+
+adminBtn
+  .addEventListener(
+    "click",
+    function(){
+
+      adminPanel
+        .classList
+        .toggle(
+          "show"
+        );
+
+    }
+  );
+
+
+
+async function checkAdmin(){
+
+
+  const email =
+    String(
+
+      localStorage
+        .getItem(
+          LS_EMAIL
+        ) || ""
+
+    )
+    .trim()
+    .toLowerCase();
+
+
+
+  if(!email){
+
+    return;
+
+  }
+
+
+  try{
+
+
+    const result =
+      await jsonp(
+
+        API +
+        "?view=auth_check" +
+        "&email=" +
+        encodeURIComponent(
+          email
+        ) +
+        "&nocache=1"
+
+      );
+
+
+
+    const isAdmin =
+      !!(
+
+        result &&
+
+        result.ok === true &&
+
+        String(
+          result.role ||
+          ""
+        )
+        .toLowerCase() ===
+        "admin"
+
+      );
+
+
+
+    if(isAdmin){
+
+      adminBtn
+        .classList
+        .add(
+          "show"
+        );
+
+    }
+
+
+  }catch(e){
+
+    /*
+      Pas d'affichage admin
+      en cas d'erreur.
+    */
+
+  }
+
+}
+
+
+
+/* =========================================================
+   LECTURE QR CODE
+========================================================= */
+
+function installQrReader(
+  fileInputId,
+  urlInputId,
+  infoId
+){
+
+  const fileInput =
+    document.getElementById(
+      fileInputId
+    );
+
+
+  const urlInput =
+    document.getElementById(
+      urlInputId
+    );
+
+
+  const info =
+    document.getElementById(
+      infoId
+    );
+
+
+
+  fileInput
+    .addEventListener(
+      "change",
+      async function(){
+
+
+        const file =
+          fileInput.files &&
+          fileInput.files[
+            0
+          ];
+
+
+        if(!file){
+
+          return;
+
+        }
+
+
+
+        if(
+          !(
+            "BarcodeDetector"
+            in window
+          )
+        ){
+
+          info.textContent =
+            "Lecture automatique non disponible. Collez le lien du QR code dans le champ ci-dessus.";
+
+          return;
+
+        }
+
+
+
+        try{
+
+
+          info.textContent =
+            "Lecture du QR code…";
+
+
+          const bitmap =
+            await createImageBitmap(
+              file
+            );
+
+
+          const detector =
+            new BarcodeDetector({
+
+              formats:[
+                "qr_code"
+              ]
+
+            });
+
+
+
+          const codes =
+            await detector
+              .detect(
+                bitmap
+              );
+
+
+
+          if(
+            !codes ||
+            !codes.length
+          ){
+
+            info.textContent =
+              "QR code non reconnu.";
+
+            return;
+
+          }
+
+
+
+          const value =
+            String(
+              codes[
+                0
+              ].rawValue ||
+              ""
+            )
+            .trim();
+
+
+
+          if(!value){
+
+            info.textContent =
+              "QR code vide.";
+
+            return;
+
+          }
+
+
+
+          urlInput.value =
+            value;
+
+
+
+          info.textContent =
+            "QR code lu ✓";
+
+
+        }catch(err){
+
+
+          info.textContent =
+            "Impossible de lire automatiquement ce QR code. Vous pouvez coller son lien manuellement.";
+
+
+        }
+
+      }
+    );
+
+}
+
+
+
+installQrReader(
+  "qrVSAV",
+  "urlVSAV",
+  "infoVSAV"
+);
+
+
+installQrReader(
+  "qrCCR",
+  "urlCCR",
+  "infoCCR"
+);
+
+
+installQrReader(
+  "qrVTUL",
+  "urlVTUL",
+  "infoVTUL"
+);
+
+
+installQrReader(
+  "qrVTP",
+  "urlVTP",
+  "infoVTP"
+);
+
+
+
+/* =========================================================
+   STATUT ADMIN
+========================================================= */
+
+function showAdminStatus(
+  message,
+  type
+){
+
+  const box =
+    document.getElementById(
+      "adminStatus"
+    );
+
+
+  box.textContent =
+    message;
+
+
+  box.className =
+    "adminStatus show " +
+    type;
+
+}
+
+
+
+/* =========================================================
+   SAUVEGARDE ADMIN
+========================================================= */
+
+async function saveConfigField(
+  email,
+  field,
+  value
+){
+
+  return jsonp(
+
+    API +
+    "?view=ticket_carburant_config_save" +
+
+    "&email=" +
+    encodeURIComponent(
+      email
+    ) +
+
+    "&field=" +
+    encodeURIComponent(
+      field
+    ) +
+
+    "&value=" +
+    encodeURIComponent(
+      value
+    )
+
+  );
+
+}
+
+
+
+document
+  .getElementById(
+    "saveAdmin"
+  )
+  .addEventListener(
+    "click",
+    async function(){
+
+
+      const email =
+        String(
+
+          localStorage
+            .getItem(
+              LS_EMAIL
+            ) || ""
+
+        )
+        .trim()
+        .toLowerCase();
+
+
+
+      if(!email){
+
+        showAdminStatus(
+          "Utilisateur non identifié.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+
+      const values = {
+
+
+        piana_url:
+
+          document
+            .getElementById(
+              "adminPianaUrl"
+            )
+            .value
+            .trim(),
+
+
+
+        piana_login:
+
+          document
+            .getElementById(
+              "adminPianaLogin"
+            )
+            .value
+            .trim(),
+
+
+
+        vsav_url:
+
+          document
+            .getElementById(
+              "urlVSAV"
+            )
+            .value
+            .trim(),
+
+
+
+        ccr_url:
+
+          document
+            .getElementById(
+              "urlCCR"
+            )
+            .value
+            .trim(),
+
+
+
+        vtul_url:
+
+          document
+            .getElementById(
+              "urlVTUL"
+            )
+            .value
+            .trim(),
+
+
+
+        vtp_url:
+
+          document
+            .getElementById(
+              "urlVTP"
+            )
+            .value
+            .trim()
+
+
+      };
+
+
+
+      const button =
+        this;
+
+
+
+      button.disabled =
+        true;
+
+
+      button.textContent =
+        "Enregistrement…";
+
+
+
+      try{
+
+
+        for(
+          const [
+            field,
+            value
+          ]
+          of Object.entries(
+            values
+          )
+        ){
+
+
+          const result =
+            await saveConfigField(
+              email,
+              field,
+              value
+            );
+
+
+
+          if(
+            !result ||
+            result.ok !== true
+          ){
+
+            throw new Error(
+
+              result &&
+              result.error
+
+                ? result.error
+
+                : "Erreur d'enregistrement"
+
+            );
+
+          }
+
+        }
+
+
+
+        CONFIG = {
+
+          ...CONFIG,
+          ...values
+
+        };
+
+
+
+        applyConfig();
+
+
+
+        showAdminStatus(
+          "Configuration enregistrée ✓",
+          "ok"
+        );
+
+
+      }catch(err){
+
+
+        showAdminStatus(
+
+          "Erreur : " +
+
+          (
+            err &&
+            err.message
+
+              ? err.message
+
+              : err
+          ),
+
+          "error"
+
+        );
+
+
+      }finally{
+
+
+        button.disabled =
+          false;
+
+
+        button.textContent =
+          "Enregistrer la configuration";
+
+
+      }
+
+    }
+  );
+
+
+
+/* =========================================================
+   DEMARRAGE
+========================================================= */
+
+applyConfig();
+
+loadConfig();
+
+checkAdmin();
+
+
+</script>
