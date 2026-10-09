@@ -2,1271 +2,1062 @@
 <html lang="fr">
 
 <head>
-  <meta charset="utf-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1,viewport-fit=cover"
-  >
+<meta charset="utf-8">
 
-  <title>
-    Tickets carburants — CS Consenvoye
-  </title>
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,viewport-fit=cover"
+>
 
-  <style>
+<title>Tickets carburants — CS Consenvoye</title>
 
-    :root{
-      color-scheme:dark;
+<style>
 
-      --bg1:#0b1523;
-      --bg2:#111c2c;
+:root{
+  color-scheme:dark;
 
-      --glass1:rgba(37,55,78,.76);
-      --glass2:rgba(18,31,48,.74);
+  --bg1:#0b1523;
+  --bg2:#111c2c;
 
-      --border:rgba(255,255,255,.11);
+  --glass1:rgba(37,55,78,.76);
+  --glass2:rgba(18,31,48,.74);
 
-      --text:#f3f6fb;
-      --muted:#aebdd0;
+  --border:rgba(255,255,255,.11);
 
-      --orange:#dc8734;
-      --orange2:#a85b21;
+  --text:#f3f6fb;
+  --muted:#aebdd0;
 
-      --blue:#397dbe;
-      --blue2:#24517c;
+  --orange:#dc8734;
+  --orange2:#a85b21;
 
-      --green:#31935c;
-      --red:#b84b46;
+  --blue:#397dbe;
+  --blue2:#24517c;
 
-      --shadow:
-        0 16px 38px rgba(0,0,0,.30);
-    }
+  --green:#31935c;
+  --red:#b84b46;
 
+  --shadow:
+    0 16px 38px rgba(0,0,0,.30);
+}
 
-    *{
-      box-sizing:border-box;
-    }
 
+*{
+  box-sizing:border-box;
+}
 
-    html,
-    body{
-      margin:0;
-      min-height:100%;
-    }
 
+html,
+body{
+  margin:0;
+  min-height:100%;
+}
 
-    body{
 
-      min-height:100vh;
+body{
 
-      font-family:
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
+  min-height:100vh;
 
-      color:var(--text);
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
 
-      background:
+  color:var(--text);
 
-        radial-gradient(
-          circle at 10% 0%,
-          rgba(55,111,170,.20),
-          transparent 34%
-        ),
+  background:
 
-        radial-gradient(
-          circle at 100% 20%,
-          rgba(219,129,44,.10),
-          transparent 28%
-        ),
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(55,111,170,.20),
+      transparent 34%
+    ),
 
-        linear-gradient(
-          160deg,
-          var(--bg1),
-          var(--bg2)
-        );
-    }
+    radial-gradient(
+      circle at 100% 20%,
+      rgba(219,129,44,.10),
+      transparent 28%
+    ),
 
+    linear-gradient(
+      160deg,
+      var(--bg1),
+      var(--bg2)
+    );
+}
 
-    button,
-    input{
-      font:inherit;
-    }
 
+button,
+input{
+  font:inherit;
+}
 
-    a{
-      -webkit-tap-highlight-color:transparent;
-    }
 
+a{
+  -webkit-tap-highlight-color:transparent;
+}
 
-    /* =====================================================
-       PAGE
-    ===================================================== */
 
-    .page{
+/* =====================================================
+   PAGE
+===================================================== */
 
-      width:min(
-        760px,
-        100%
-      );
+.page{
 
-      margin:0 auto;
+  width:min(760px,100%);
 
-      padding:
-        calc(15px + env(safe-area-inset-top))
-        13px
-        calc(35px + env(safe-area-inset-bottom));
+  margin:0 auto;
 
-    }
+  padding:
+    calc(15px + env(safe-area-inset-top))
+    13px
+    calc(35px + env(safe-area-inset-bottom));
 
+}
 
-    /* =====================================================
-       BARRE HAUTE
-    ===================================================== */
 
-    .topbar{
+/* =====================================================
+   BARRE HAUTE
+===================================================== */
 
-      display:flex;
+.topbar{
 
-      align-items:center;
+  display:flex;
 
-      justify-content:space-between;
+  align-items:center;
 
-      gap:12px;
+  justify-content:space-between;
 
-      margin-bottom:17px;
+  gap:12px;
 
-    }
+  margin-bottom:17px;
 
+}
 
-    .topTitle{
 
-      min-width:0;
+.title{
 
-    }
+  font-size:23px;
 
+  font-weight:950;
 
-    .title{
+}
 
-      font-size:23px;
 
-      font-weight:950;
+.subtitle{
 
-      letter-spacing:.2px;
+  margin-top:3px;
 
-    }
+  color:var(--muted);
 
+  font-size:13px;
 
-    .subtitle{
+  font-weight:700;
 
-      margin-top:3px;
+}
 
-      color:var(--muted);
 
-      font-size:13px;
+.backBtn{
 
-      font-weight:700;
+  flex:0 0 auto;
 
-    }
+  padding:
+    9px
+    12px;
 
+  border-radius:12px;
 
-    .backBtn{
+  border:
+    1px solid
+    rgba(255,255,255,.13);
 
-      flex:0 0 auto;
+  background:
+    rgba(255,255,255,.06);
 
-      padding:
-        9px
-        12px;
+  color:#fff;
 
-      border-radius:12px;
+  text-decoration:none;
 
-      border:
-        1px solid
-        rgba(255,255,255,.13);
+  font-weight:850;
 
-      background:
-        rgba(255,255,255,.06);
+  backdrop-filter:blur(10px);
 
-      color:#fff;
+  -webkit-backdrop-filter:blur(10px);
 
-      text-decoration:none;
+}
 
-      font-weight:850;
 
-      backdrop-filter:
-        blur(10px);
+/* =====================================================
+   ONGLETS
+===================================================== */
 
-      -webkit-backdrop-filter:
-        blur(10px);
+.tabs{
 
-    }
+  display:grid;
 
+  grid-template-columns:
+    1fr 1fr;
 
-    /* =====================================================
-       ONGLETS
-    ===================================================== */
+  gap:7px;
 
-    .tabs{
+  padding:6px;
 
-      display:grid;
+  margin-bottom:14px;
 
-      grid-template-columns:
-        1fr 1fr;
+  border-radius:18px;
 
-      gap:7px;
+  background:
+    rgba(0,0,0,.18);
 
-      padding:6px;
+  border:
+    1px solid
+    rgba(255,255,255,.08);
 
-      margin-bottom:14px;
+  backdrop-filter:blur(12px);
 
-      border-radius:18px;
+}
 
-      background:
-        rgba(0,0,0,.18);
 
-      border:
-        1px solid
-        rgba(255,255,255,.08);
+.tab{
 
-      backdrop-filter:
-        blur(12px);
+  border:0;
 
-      -webkit-backdrop-filter:
-        blur(12px);
+  min-height:58px;
 
-    }
+  padding:9px;
 
+  border-radius:14px;
 
-    .tab{
+  background:transparent;
 
-      appearance:none;
+  color:
+    rgba(255,255,255,.68);
 
-      border:0;
+  font-size:14px;
 
-      min-height:58px;
+  font-weight:900;
 
-      padding:
-        9px
-        8px;
+  cursor:pointer;
 
-      border-radius:14px;
+}
 
-      background:
-        transparent;
 
-      color:
-        rgba(255,255,255,.67);
+.tab:active{
+  transform:scale(.98);
+}
 
-      font-size:14px;
 
-      font-weight:900;
+.tab.ticket.active{
 
-      cursor:pointer;
+  color:#fff;
 
-      transition:
-        transform .15s ease,
-        background .18s ease,
-        color .18s ease;
+  background:
 
-    }
+    linear-gradient(
+      180deg,
+      rgba(219,129,44,.48),
+      rgba(160,78,25,.38)
+    );
 
+  box-shadow:
 
-    .tab:active{
+    inset
+    0 0 0 1px
+    rgba(255,184,89,.20),
 
-      transform:
-        scale(.98);
+    0 8px 20px
+    rgba(0,0,0,.20);
 
-    }
+}
 
 
-    .tab.ticket.active{
+.tab.vehicle.active{
 
-      color:#fff;
+  color:#fff;
 
-      background:
+  background:
 
-        linear-gradient(
-          180deg,
-          rgba(219,129,44,.48),
-          rgba(160,78,25,.38)
-        );
+    linear-gradient(
+      180deg,
+      rgba(54,120,183,.50),
+      rgba(30,71,110,.40)
+    );
 
-      box-shadow:
+  box-shadow:
 
-        inset
-        0 0 0 1px
-        rgba(255,184,89,.20),
+    inset
+    0 0 0 1px
+    rgba(121,187,244,.20),
 
-        0 8px 20px
-        rgba(0,0,0,.20);
+    0 8px 20px
+    rgba(0,0,0,.20);
 
-    }
+}
 
 
-    .tab.vehicle.active{
+/* =====================================================
+   PANNEAUX
+===================================================== */
 
-      color:#fff;
+.panel{
+  display:none;
+}
 
-      background:
 
-        linear-gradient(
-          180deg,
-          rgba(54,120,183,.50),
-          rgba(30,71,110,.40)
-        );
+.panel.active{
+  display:block;
+}
 
-      box-shadow:
 
-        inset
-        0 0 0 1px
-        rgba(121,187,244,.20),
+.glass{
 
-        0 8px 20px
-        rgba(0,0,0,.20);
+  position:relative;
 
-    }
+  overflow:hidden;
 
+  padding:18px;
 
-    /* =====================================================
-       PANNEAUX
-    ===================================================== */
+  border-radius:21px;
 
-    .panel{
+  background:
 
-      display:none;
+    linear-gradient(
+      145deg,
+      var(--glass1),
+      var(--glass2)
+    );
 
-    }
+  border:
+    1px solid
+    var(--border);
 
+  box-shadow:
+    var(--shadow);
 
-    .panel.active{
+  backdrop-filter:blur(15px);
 
-      display:block;
+  -webkit-backdrop-filter:blur(15px);
 
-    }
+}
 
 
-    .glass{
+.glass::before{
 
-      position:relative;
+  content:"";
 
-      overflow:hidden;
+  position:absolute;
 
-      padding:18px;
+  inset:0;
 
-      border-radius:21px;
+  pointer-events:none;
 
-      background:
+  background:
 
-        linear-gradient(
-          145deg,
-          var(--glass1),
-          var(--glass2)
-        );
+    linear-gradient(
+      130deg,
+      rgba(255,255,255,.045),
+      transparent 40%
+    );
 
-      border:
-        1px solid
-        var(--border);
+}
 
-      box-shadow:
-        var(--shadow);
 
-      backdrop-filter:
-        blur(15px);
+.sectionTitle{
 
-      -webkit-backdrop-filter:
-        blur(15px);
+  position:relative;
 
-    }
+  font-size:20px;
 
+  font-weight:950;
 
-    .glass::before{
+  margin-bottom:6px;
 
-      content:"";
+}
 
-      position:absolute;
 
-      inset:0;
+.sectionSub{
 
-      pointer-events:none;
+  position:relative;
 
-      background:
+  margin-bottom:18px;
 
-        linear-gradient(
-          130deg,
-          rgba(255,255,255,.045),
-          transparent 40%
-        );
+  color:var(--muted);
 
-    }
+  font-size:13px;
 
+  line-height:1.45;
 
-    .sectionTitle{
+}
 
-      position:relative;
 
-      font-size:20px;
+/* =====================================================
+   LOGO PIANA
+===================================================== */
 
-      font-weight:950;
+.pianaArea{
 
-      margin-bottom:6px;
+  position:relative;
 
-    }
+  display:flex;
 
+  justify-content:center;
 
-    .sectionSub{
+  align-items:center;
 
-      position:relative;
+  padding:
+    8px
+    0
+    10px;
 
-      margin-bottom:18px;
+}
 
-      color:var(--muted);
 
-      font-size:13px;
+.pianaLogoLink{
 
-      line-height:1.45;
+  display:inline-block;
 
-    }
+  text-decoration:none;
 
+  border-radius:20px;
 
-    /* =====================================================
-       PIANA
-    ===================================================== */
+  transition:
+    transform .15s ease,
+    filter .15s ease;
 
-    .pianaArea{
+}
 
-      position:relative;
 
-      display:flex;
+.pianaLogoLink:active{
 
-      flex-direction:column;
+  transform:
+    scale(.97);
 
-      align-items:center;
+}
 
-      text-align:center;
 
-    }
+.pianaLogo{
 
+  display:block;
 
-    .pianaLogoLink{
+  width:
+    min(
+      245px,
+      68vw
+    );
 
-      display:inline-block;
+  height:auto;
 
-      text-decoration:none;
+  border-radius:18px;
 
-      border-radius:18px;
+  box-shadow:
+    0 14px 30px
+    rgba(0,0,0,.28);
 
-      transition:
-        transform .15s ease,
-        filter .15s ease;
+}
 
-    }
 
+/* =====================================================
+   VEHICULES
+===================================================== */
 
-    .pianaLogoLink:active{
+.vehicleGrid{
 
-      transform:
-        scale(.97);
+  position:relative;
 
-    }
+  display:grid;
 
+  grid-template-columns:
+    1fr 1fr;
 
-    .pianaLogo{
+  gap:10px;
 
-      display:block;
+}
 
-      /*
-        Logo volontairement contenu.
-        Pas une image plein écran.
-      */
 
-      width:
-        min(
-          245px,
-          68vw
-        );
+.vehicleCard{
 
-      height:auto;
+  position:relative;
 
-      border-radius:18px;
+  min-height:132px;
 
-      box-shadow:
-        0 14px 30px
-        rgba(0,0,0,.28);
+  padding:14px;
 
-    }
+  display:flex;
 
+  flex-direction:column;
 
-    /* =====================================================
-       IDENTIFIANT PIANA
-    ===================================================== */
+  justify-content:space-between;
 
-    .loginBox{
+  overflow:hidden;
 
-      position:relative;
+  border-radius:18px;
 
-      width:100%;
+  border:
+    1px solid
+    rgba(255,255,255,.10);
 
-      max-width:520px;
+  background:
 
-      margin-top:18px;
+    linear-gradient(
+      145deg,
+      rgba(38,57,82,.74),
+      rgba(15,28,44,.78)
+    );
 
-      padding:13px;
+  box-shadow:
+    0 10px 25px
+    rgba(0,0,0,.20);
 
-      border-radius:16px;
+  color:#fff;
 
-      background:
-        rgba(0,0,0,.20);
+  text-decoration:none;
 
-      border:
-        1px solid
-        rgba(255,255,255,.09);
+  transition:
+    transform .15s ease,
+    border-color .15s ease;
 
-    }
+}
 
 
-    .loginLabel{
+.vehicleCard::before{
 
-      margin-bottom:7px;
+  content:"";
 
-      color:#9fb0c3;
+  position:absolute;
 
-      font-size:11px;
+  width:110px;
 
-      font-weight:900;
+  height:110px;
 
-      text-transform:uppercase;
+  top:-40px;
 
-      letter-spacing:.4px;
+  right:-40px;
 
-      text-align:left;
+  border-radius:50%;
 
-    }
+  background:
 
+    radial-gradient(
+      circle,
+      rgba(255,255,255,.08),
+      transparent 68%
+    );
 
-    .loginRow{
+}
 
-      display:flex;
 
-      align-items:center;
+.vehicleCard.available{
+  cursor:pointer;
+}
 
-      gap:8px;
 
-    }
+.vehicleCard.available:active{
+  transform:scale(.98);
+}
 
 
-    .loginValue{
+.vehicleCard.unavailable{
 
-      flex:1;
+  opacity:.43;
 
-      min-width:0;
+  pointer-events:none;
 
-      min-height:45px;
+}
 
-      display:flex;
 
-      align-items:center;
+.vehicleEmoji{
 
-      padding:
-        10px
-        12px;
+  position:relative;
 
-      border-radius:12px;
+  font-size:28px;
 
-      background:
-        rgba(8,17,28,.68);
+}
 
-      border:
-        1px solid
-        rgba(255,255,255,.10);
 
-      color:#fff;
+.vehicleName{
 
-      font-size:15px;
+  position:relative;
 
-      font-weight:850;
+  font-size:22px;
 
-      text-align:left;
+  font-weight:1000;
 
-      overflow:hidden;
+}
 
-      text-overflow:ellipsis;
 
-      white-space:nowrap;
+.vehicleSub{
 
-    }
+  position:relative;
 
+  margin-top:2px;
 
-    .copyBtn{
+  color:#a7bdd4;
 
-      min-height:45px;
+  font-size:12px;
 
-      border:0;
+  font-weight:750;
 
-      padding:
-        10px
-        13px;
+}
 
-      border-radius:12px;
 
-      background:
-        rgba(54,120,183,.42);
+.vehicleBadge{
 
-      color:white;
+  position:absolute;
 
-      font-weight:900;
+  top:10px;
 
-      cursor:pointer;
+  right:10px;
 
-    }
+  padding:
+    4px
+    7px;
 
+  border-radius:999px;
 
-    .passwordHint{
+  font-size:9px;
 
-      margin-top:9px;
+  font-weight:950;
 
-      color:#91a3b7;
+  text-transform:uppercase;
 
-      font-size:12px;
+}
 
-      line-height:1.4;
 
-      text-align:left;
+.available .vehicleBadge{
 
-    }
+  background:
+    rgba(44,139,86,.23);
 
+  color:#b8efcc;
 
-    /* =====================================================
-       VEHICULES
-    ===================================================== */
+  border:
+    1px solid
+    rgba(77,207,126,.21);
 
-    .vehicleGrid{
+}
 
-      position:relative;
 
-      display:grid;
+.unavailable .vehicleBadge{
 
-      grid-template-columns:
-        1fr 1fr;
+  background:
+    rgba(255,255,255,.06);
 
-      gap:10px;
+  color:#ccc;
 
-    }
+  border:
+    1px solid
+    rgba(255,255,255,.08);
 
+}
 
-    .vehicleCard{
 
-      position:relative;
+/* =====================================================
+   ADMIN
+===================================================== */
 
-      min-height:132px;
+.adminBtn{
 
-      padding:14px;
+  display:none;
 
-      display:flex;
+  width:100%;
 
-      flex-direction:column;
+  margin-top:14px;
 
-      justify-content:space-between;
+  padding:
+    12px
+    14px;
 
-      overflow:hidden;
+  border-radius:14px;
 
-      border-radius:18px;
+  border:
+    1px solid
+    rgba(255,183,83,.22);
 
-      border:
-        1px solid
-        rgba(255,255,255,.10);
+  background:
 
-      background:
+    linear-gradient(
+      180deg,
+      rgba(222,131,43,.28),
+      rgba(143,72,22,.20)
+    );
 
-        linear-gradient(
-          145deg,
-          rgba(38,57,82,.74),
-          rgba(15,28,44,.78)
-        );
+  color:#ffdcae;
 
-      box-shadow:
-        0 10px 25px
-        rgba(0,0,0,.20);
+  font-weight:950;
 
-      color:#fff;
+  cursor:pointer;
 
-      text-decoration:none;
+}
 
-      transition:
-        transform .15s ease,
-        border-color .15s ease;
 
-    }
+.adminBtn.show{
+  display:block;
+}
 
 
-    .vehicleCard::before{
+.adminPanel{
 
-      content:"";
+  display:none;
 
-      position:absolute;
+  margin-top:14px;
 
-      width:110px;
+  padding:16px;
 
-      height:110px;
+  border-radius:19px;
 
-      top:-40px;
+  background:
 
-      right:-40px;
+    linear-gradient(
+      180deg,
+      rgba(222,131,43,.15),
+      rgba(66,43,25,.14)
+    );
 
-      border-radius:50%;
+  border:
+    1px solid
+    rgba(255,173,73,.18);
 
-      background:
+  backdrop-filter:blur(12px);
 
-        radial-gradient(
-          circle,
-          rgba(255,255,255,.08),
-          transparent 68%
-        );
+}
 
-      pointer-events:none;
 
-    }
+.adminPanel.show{
+  display:block;
+}
 
 
-    .vehicleCard.available{
+.adminTitle{
 
-      cursor:pointer;
+  margin-bottom:15px;
 
-    }
+  font-size:18px;
 
+  font-weight:950;
 
-    .vehicleCard.available:active{
+}
 
-      transform:
-        scale(.98);
 
-    }
+.adminSubTitle{
 
+  margin:
+    18px
+    0
+    11px;
 
-    .vehicleCard.unavailable{
+  font-size:15px;
 
-      opacity:.43;
+  font-weight:950;
 
-      pointer-events:none;
+}
 
-    }
 
+.field{
 
-    .vehicleEmoji{
+  margin-bottom:14px;
 
-      font-size:28px;
+}
 
-      position:relative;
 
-    }
+.field label{
 
+  display:block;
 
-    .vehicleName{
+  margin-bottom:6px;
 
-      position:relative;
+  color:#c4d0dd;
 
-      font-size:22px;
+  font-size:11px;
 
-      font-weight:1000;
+  font-weight:900;
 
-    }
+  text-transform:uppercase;
 
+}
 
-    .vehicleSub{
 
-      position:relative;
+.field input{
 
-      margin-top:2px;
+  width:100%;
 
-      color:#a7bdd4;
+  min-height:45px;
 
-      font-size:12px;
+  padding:
+    10px
+    12px;
 
-      font-weight:750;
+  border-radius:12px;
 
-    }
+  border:
+    1px solid
+    rgba(255,255,255,.12);
 
+  background:
+    rgba(7,15,24,.70);
 
-    .vehicleBadge{
+  color:#fff;
 
-      position:absolute;
+  outline:none;
 
-      top:10px;
+}
 
-      right:10px;
 
-      padding:
-        4px
-        7px;
+.field input:focus{
 
-      border-radius:999px;
+  border-color:
+    rgba(236,158,70,.52);
 
-      font-size:9px;
+}
 
-      font-weight:950;
 
-      text-transform:uppercase;
+.adminNote{
 
-      letter-spacing:.2px;
+  margin-top:-6px;
 
-    }
+  margin-bottom:14px;
 
+  color:#9facbc;
 
-    .available
-    .vehicleBadge{
+  font-size:11px;
 
-      background:
-        rgba(44,139,86,.23);
+  line-height:1.4;
 
-      color:#b8efcc;
+}
 
-      border:
-        1px solid
-        rgba(77,207,126,.21);
 
-    }
+.vehicleAdmin{
 
+  padding:12px;
 
-    .unavailable
-    .vehicleBadge{
+  margin-bottom:10px;
 
-      background:
-        rgba(255,255,255,.06);
+  border-radius:15px;
 
-      color:#ccc;
+  background:
+    rgba(0,0,0,.15);
 
-      border:
-        1px solid
-        rgba(255,255,255,.08);
+  border:
+    1px solid
+    rgba(255,255,255,.07);
 
-    }
+}
 
 
-    /* =====================================================
-       ADMIN
-    ===================================================== */
+.vehicleAdminTitle{
 
-    .adminBtn{
+  margin-bottom:8px;
 
-      display:none;
+  font-weight:950;
 
-      width:100%;
+}
 
-      margin-top:14px;
 
-      padding:
-        12px
-        14px;
+.vehicleAdmin input[type="url"]{
 
-      border-radius:14px;
+  width:100%;
 
-      border:
-        1px solid
-        rgba(255,183,83,.22);
+  min-height:44px;
 
-      background:
+  padding:
+    10px
+    11px;
 
-        linear-gradient(
-          180deg,
-          rgba(222,131,43,.28),
-          rgba(143,72,22,.20)
-        );
+  border-radius:11px;
 
-      color:#ffdcae;
+  border:
+    1px solid
+    rgba(255,255,255,.11);
 
-      font-weight:950;
+  background:
+    rgba(7,15,24,.65);
 
-      cursor:pointer;
+  color:#fff;
 
-    }
+  outline:none;
 
+}
 
-    .adminBtn.show{
 
-      display:block;
+.vehicleAdmin input[type="file"]{
 
-    }
+  width:100%;
 
+  margin-top:9px;
 
-    .adminPanel{
+  color:#cbd7e4;
 
-      display:none;
+  font-size:13px;
 
-      margin-top:14px;
+}
 
-      padding:16px;
 
-      border-radius:19px;
+.qrInfo{
 
-      background:
+  margin-top:7px;
 
-        linear-gradient(
-          180deg,
-          rgba(222,131,43,.15),
-          rgba(66,43,25,.14)
-        );
+  color:#9fb0c3;
 
-      border:
-        1px solid
-        rgba(255,173,73,.18);
+  font-size:11px;
 
-      backdrop-filter:
-        blur(12px);
+  line-height:1.35;
 
-      -webkit-backdrop-filter:
-        blur(12px);
+}
 
-    }
 
+.saveBtn{
 
-    .adminPanel.show{
+  width:100%;
 
-      display:block;
+  min-height:48px;
 
-    }
+  margin-top:8px;
 
+  border:0;
 
-    .adminTitle{
+  border-radius:14px;
 
-      margin-bottom:15px;
+  background:
 
-      font-size:18px;
+    linear-gradient(
+      180deg,
+      #dc8734,
+      #ad5e21
+    );
 
-      font-weight:950;
+  color:#fff;
 
-    }
+  font-weight:950;
 
+  cursor:pointer;
 
-    .field{
+}
 
-      margin-bottom:14px;
 
-    }
+.saveBtn:disabled{
+  opacity:.55;
+}
 
 
-    .field label{
+.adminStatus{
 
-      display:block;
+  display:none;
 
-      margin-bottom:6px;
+  margin-top:11px;
 
-      color:#c4d0dd;
+  padding:
+    10px
+    12px;
 
-      font-size:11px;
+  border-radius:12px;
 
-      font-weight:900;
+  font-size:13px;
 
-      text-transform:uppercase;
+  font-weight:850;
 
-    }
+}
 
 
-    .field input{
+.adminStatus.show{
+  display:block;
+}
 
-      width:100%;
 
-      min-height:45px;
+.adminStatus.ok{
 
-      padding:
-        10px
-        12px;
+  background:
+    rgba(42,148,84,.18);
 
-      border-radius:12px;
+  color:#bfeace;
 
-      border:
-        1px solid
-        rgba(255,255,255,.12);
+  border:
+    1px solid
+    rgba(70,200,115,.20);
 
-      background:
-        rgba(7,15,24,.70);
+}
 
-      color:#fff;
 
-      outline:none;
+.adminStatus.error{
 
-    }
+  background:
+    rgba(188,71,66,.18);
 
+  color:#ffc0bc;
 
-    .field input:focus{
+  border:
+    1px solid
+    rgba(225,91,84,.21);
 
-      border-color:
-        rgba(236,158,70,.52);
+}
 
-      box-shadow:
-        0 0 0 3px
-        rgba(224,129,40,.10);
 
-    }
+/* =====================================================
+   MOBILE
+===================================================== */
 
+@media(max-width:520px){
 
-    .adminSeparator{
+  .page{
 
-      height:1px;
+    padding-left:11px;
 
-      margin:
-        18px 0;
+    padding-right:11px;
 
-      background:
-        rgba(255,255,255,.08);
+  }
 
-    }
 
+  .title{
+    font-size:21px;
+  }
 
-    .adminSubtitle{
 
-      margin-bottom:12px;
+  .tab{
+    font-size:13px;
+  }
 
-      font-size:15px;
 
-      font-weight:950;
+  .vehicleGrid{
+    gap:8px;
+  }
 
-    }
 
+  .vehicleCard{
 
-    .vehicleAdmin{
+    min-height:122px;
 
-      padding:12px;
+    padding:12px;
 
-      margin-bottom:10px;
+  }
 
-      border-radius:15px;
 
-      background:
-        rgba(0,0,0,.15);
+  .vehicleName{
+    font-size:20px;
+  }
 
-      border:
-        1px solid
-        rgba(255,255,255,.07);
+}
 
-    }
-
-
-    .vehicleAdminTitle{
-
-      margin-bottom:8px;
-
-      font-weight:950;
-
-    }
-
-
-    .vehicleAdmin input[type="url"]{
-
-      width:100%;
-
-      min-height:44px;
-
-      padding:
-        10px
-        11px;
-
-      border-radius:11px;
-
-      border:
-        1px solid
-        rgba(255,255,255,.11);
-
-      background:
-        rgba(7,15,24,.65);
-
-      color:#fff;
-
-      outline:none;
-
-    }
-
-
-    .vehicleAdmin input[type="file"]{
-
-      width:100%;
-
-      margin-top:9px;
-
-      color:#cbd7e4;
-
-      font-size:13px;
-
-    }
-
-
-    .qrInfo{
-
-      margin-top:7px;
-
-      color:#9fb0c3;
-
-      font-size:11px;
-
-      line-height:1.35;
-
-    }
-
-
-    .saveBtn{
-
-      width:100%;
-
-      min-height:48px;
-
-      margin-top:8px;
-
-      border:0;
-
-      border-radius:14px;
-
-      background:
-
-        linear-gradient(
-          180deg,
-          #dc8734,
-          #ad5e21
-        );
-
-      color:#fff;
-
-      font-weight:950;
-
-      cursor:pointer;
-
-    }
-
-
-    .saveBtn:disabled{
-
-      opacity:.55;
-
-    }
-
-
-    .adminStatus{
-
-      display:none;
-
-      margin-top:11px;
-
-      padding:
-        10px
-        12px;
-
-      border-radius:12px;
-
-      font-size:13px;
-
-      font-weight:850;
-
-    }
-
-
-    .adminStatus.show{
-
-      display:block;
-
-    }
-
-
-    .adminStatus.ok{
-
-      background:
-        rgba(42,148,84,.18);
-
-      color:#bfeace;
-
-      border:
-        1px solid
-        rgba(70,200,115,.20);
-
-    }
-
-
-    .adminStatus.error{
-
-      background:
-        rgba(188,71,66,.18);
-
-      color:#ffc0bc;
-
-      border:
-        1px solid
-        rgba(225,91,84,.21);
-
-    }
-
-
-    /* =====================================================
-       MOBILE
-    ===================================================== */
-
-    @media(
-      max-width:520px
-    ){
-
-      .page{
-
-        padding-left:11px;
-
-        padding-right:11px;
-
-      }
-
-
-      .title{
-
-        font-size:21px;
-
-      }
-
-
-      .tab{
-
-        font-size:13px;
-
-      }
-
-
-      .vehicleGrid{
-
-        gap:8px;
-
-      }
-
-
-      .vehicleCard{
-
-        min-height:122px;
-
-        padding:12px;
-
-      }
-
-
-      .vehicleName{
-
-        font-size:20px;
-
-      }
-
-    }
-
-  </style>
+</style>
 
 </head>
 
 
 <body>
 
+
 <div class="page">
 
 
-  <!-- ===================================================
-       HAUT
-  ==================================================== -->
+  <!-- ==================================================
+       ENTETE
+  =================================================== -->
 
   <div class="topbar">
 
-    <div class="topTitle">
+
+    <div>
 
       <div class="title">
         ⛽ Tickets carburants
@@ -1286,15 +1077,17 @@
       Retour
     </a>
 
+
   </div>
 
 
 
-  <!-- ===================================================
+  <!-- ==================================================
        ONGLETS
-  ==================================================== -->
+  =================================================== -->
 
   <div class="tabs">
+
 
     <button
       id="tabTicket"
@@ -1313,18 +1106,20 @@
       🔓 Débloquer carte véhicule
     </button>
 
+
   </div>
 
 
 
-  <!-- ===================================================
-       ONGLET PIANA
-  ==================================================== -->
+  <!-- ==================================================
+       RENTREE TICKET
+  =================================================== -->
 
   <section
     id="panelTicket"
     class="panel active"
   >
+
 
     <div class="glass">
 
@@ -1335,7 +1130,7 @@
 
 
       <div class="sectionSub">
-        Accès au service Piana pour enregistrer le plein du véhicule.
+        Cliquez sur le logo pour accéder à Piana.
       </div>
 
 
@@ -1357,64 +1152,25 @@
         </a>
 
 
-        <div class="loginBox">
-
-
-          <div class="loginLabel">
-            Identifiant Piana
-          </div>
-
-
-          <div class="loginRow">
-
-
-            <div
-              id="pianaLogin"
-              class="loginValue"
-            >
-              Non renseigné
-            </div>
-
-
-            <button
-              id="copyLogin"
-              class="copyBtn"
-              type="button"
-            >
-              Copier
-            </button>
-
-
-          </div>
-
-
-          <div class="passwordHint">
-            Le mot de passe n'est pas enregistré dans le portail.
-            Utilisez le gestionnaire de mots de passe du téléphone
-            ou du navigateur.
-          </div>
-
-
-        </div>
-
-
       </div>
 
 
     </div>
 
+
   </section>
 
 
 
-  <!-- ===================================================
-       ONGLET VEHICULES
-  ==================================================== -->
+  <!-- ==================================================
+       VEHICULES
+  =================================================== -->
 
   <section
     id="panelVehicle"
     class="panel"
   >
+
 
     <div class="glass">
 
@@ -1425,14 +1181,13 @@
 
 
       <div class="sectionSub">
-        Sélectionnez le véhicule concerné avant d'effectuer le plein.
+        Sélectionnez le véhicule concerné.
       </div>
+
 
 
       <div class="vehicleGrid">
 
-
-        <!-- VSAV -->
 
         <a
           id="vehicleVSAV"
@@ -1464,8 +1219,6 @@
 
 
 
-        <!-- CCR -->
-
         <a
           id="vehicleCCR"
           class="vehicleCard unavailable"
@@ -1496,8 +1249,6 @@
 
 
 
-        <!-- VTUL -->
-
         <a
           id="vehicleVTUL"
           class="vehicleCard available"
@@ -1527,8 +1278,6 @@
         </a>
 
 
-
-        <!-- VTP -->
 
         <a
           id="vehicleVTP"
@@ -1564,13 +1313,14 @@
 
     </div>
 
+
   </section>
 
 
 
-  <!-- ===================================================
+  <!-- ==================================================
        BOUTON ADMIN
-  ==================================================== -->
+  =================================================== -->
 
   <button
     id="adminBtn"
@@ -1582,9 +1332,9 @@
 
 
 
-  <!-- ===================================================
-       PANNEAU ADMIN
-  ==================================================== -->
+  <!-- ==================================================
+       ADMINISTRATION
+  =================================================== -->
 
   <div
     id="adminPanel"
@@ -1593,12 +1343,16 @@
 
 
     <div class="adminTitle">
-      ⚙️ Configuration
+      ⚙️ Administration tickets carburants
     </div>
 
 
 
-    <!-- PIANA -->
+    <div class="adminSubTitle">
+      🧾 Accès Piana
+    </div>
+
+
 
     <div class="field">
 
@@ -1625,18 +1379,20 @@
       <input
         id="adminPianaLogin"
         type="text"
-        placeholder="Identifiant Piana"
+        placeholder="Identifiant à utiliser"
       >
 
     </div>
 
 
+    <div class="adminNote">
+      L'identifiant est conservé uniquement dans la configuration administrateur.
+      Le mot de passe n'est pas enregistré.
+    </div>
 
-    <div class="adminSeparator"></div>
 
 
-
-    <div class="adminSubtitle">
+    <div class="adminSubTitle">
       🔓 Cartes véhicules
     </div>
 
@@ -1645,6 +1401,7 @@
     <!-- VSAV -->
 
     <div class="vehicleAdmin">
+
 
       <div class="vehicleAdminTitle">
         🚑 VSAV
@@ -1669,8 +1426,9 @@
         id="infoVSAV"
         class="qrInfo"
       >
-        Sélectionnez une photo du QR code ou collez directement son lien.
+        Ajoutez une photo du QR code ou collez directement son lien.
       </div>
+
 
     </div>
 
@@ -1679,6 +1437,7 @@
     <!-- CCR -->
 
     <div class="vehicleAdmin">
+
 
       <div class="vehicleAdminTitle">
         🚒 CCR
@@ -1703,8 +1462,9 @@
         id="infoCCR"
         class="qrInfo"
       >
-        Sélectionnez une photo du QR code ou collez directement son lien.
+        Ajoutez une photo du QR code ou collez directement son lien.
       </div>
+
 
     </div>
 
@@ -1713,6 +1473,7 @@
     <!-- VTUL -->
 
     <div class="vehicleAdmin">
+
 
       <div class="vehicleAdminTitle">
         🚐 VTUL
@@ -1740,6 +1501,7 @@
         QR code VTUL actuellement configuré.
       </div>
 
+
     </div>
 
 
@@ -1747,6 +1509,7 @@
     <!-- VTP -->
 
     <div class="vehicleAdmin">
+
 
       <div class="vehicleAdminTitle">
         🚐 VTP
@@ -1771,8 +1534,9 @@
         id="infoVTP"
         class="qrInfo"
       >
-        Sélectionnez une photo du QR code ou collez directement son lien.
+        Ajoutez une photo du QR code ou collez directement son lien.
       </div>
+
 
     </div>
 
@@ -1785,7 +1549,6 @@
     >
       Enregistrer la configuration
     </button>
-
 
 
     <div
@@ -1805,7 +1568,7 @@
 
 
 /* =========================================================
-   CONFIGURATION
+   API
 ========================================================= */
 
 const API =
@@ -1817,13 +1580,12 @@ const LS_EMAIL =
 
 
 
-/*
-  LIEN PIANA ACTUEL
-*/
+/* =========================================================
+   VALEURS PAR DEFAUT
+========================================================= */
 
 const DEFAULT_PIANA_URL =
   "https://auth.getpiana.com/login?state=hKFo2SBTMUhEOFp1aEg1MEdlVWlxSlFyX0kyQU1Yb0JzYmhnV6FupWxvZ2luo3RpZNkgQzI4WHJRM2FnaUhNSW5CRG0tM2F2U09TQW5hbjlDX2yjY2lk2SBhR3kxSU1UdnppY05lUEpZZWJnNGdUWlFYRWFsQ2JqcQ&client=aGy1IMTvzicNePJYebg4gTZQXEalCbjq&protocol=oauth2&audience=https%3A%2F%2Fapi.getpiana.com%2F&scope=openid%20profile%20email%20offline_access&redirect_uri=https%3A%2F%2Fapp.getpiana.com%2Fauth%2Fcallback&response_type=code&code_challenge=i1a-7VGwihqBHQarJKKsy43mV3I8aV60bEyoTKM-OgY&code_challenge_method=S256&nonce=0aZFaPLVU2MF87rZNIgemSOaJcTvb8pWDQmx4CtQqZA";
-
 
 
 let CONFIG = {
@@ -1860,10 +1622,7 @@ function jsonp(
 ){
 
   return new Promise(
-    function(
-      resolve,
-      reject
-    ){
+    function(resolve,reject){
 
       const callback =
         "cb_" +
@@ -1883,16 +1642,13 @@ function jsonp(
       let timer;
 
 
-
       function cleanup(){
 
         clearTimeout(
           timer
         );
 
-
         script.remove();
-
 
         try{
 
@@ -1912,7 +1668,6 @@ function jsonp(
       }
 
 
-
       window[
         callback
       ] =
@@ -1927,12 +1682,10 @@ function jsonp(
         };
 
 
-
       const separator =
         url.includes("?")
           ? "&"
           : "?";
-
 
 
       script.src =
@@ -1944,7 +1697,6 @@ function jsonp(
         ) +
         "&t=" +
         Date.now();
-
 
 
       script.onerror =
@@ -1959,7 +1711,6 @@ function jsonp(
           );
 
         };
-
 
 
       timer =
@@ -1977,7 +1728,6 @@ function jsonp(
           },
           timeout
         );
-
 
 
       document
@@ -2066,36 +1816,29 @@ function openTab(
 
 
 
-tabTicket
-  .addEventListener(
-    "click",
-    function(){
+tabTicket.onclick =
+  function(){
 
-      openTab(
-        "ticket"
-      );
+    openTab(
+      "ticket"
+    );
 
-    }
-  );
+  };
 
 
+tabVehicle.onclick =
+  function(){
 
-tabVehicle
-  .addEventListener(
-    "click",
-    function(){
+    openTab(
+      "vehicle"
+    );
 
-      openTab(
-        "vehicle"
-      );
-
-    }
-  );
+  };
 
 
 
 /* =========================================================
-   VEHICULE
+   AFFICHAGE VEHICULE
 ========================================================= */
 
 function setVehicle(
@@ -2103,48 +1846,40 @@ function setVehicle(
   url
 ){
 
-  const vehicle =
+  const el =
     document.getElementById(
       id
     );
 
 
-  if(!vehicle){
-
+  if(!el){
     return;
-
   }
 
 
   const badge =
-    vehicle.querySelector(
+    el.querySelector(
       ".vehicleBadge"
     );
 
 
-  const cleanUrl =
+  url =
     String(
       url || ""
-    )
-    .trim();
+    ).trim();
 
 
+  if(url){
 
-  if(cleanUrl){
+    el.href =
+      url;
 
-    vehicle.href =
-      cleanUrl;
-
-
-    vehicle
-      .classList
+    el.classList
       .remove(
         "unavailable"
       );
 
-
-    vehicle
-      .classList
+    el.classList
       .add(
         "available"
       );
@@ -2160,20 +1895,15 @@ function setVehicle(
 
   }else{
 
-
-    vehicle.href =
+    el.href =
       "#";
 
-
-    vehicle
-      .classList
+    el.classList
       .remove(
         "available"
       );
 
-
-    vehicle
-      .classList
+    el.classList
       .add(
         "unavailable"
       );
@@ -2193,19 +1923,10 @@ function setVehicle(
 
 
 /* =========================================================
-   AFFICHAGE CONFIGURATION
+   APPLIQUER CONFIG
 ========================================================= */
 
 function applyConfig(){
-
-
-  const pianaUrl =
-    String(
-      CONFIG.piana_url ||
-      DEFAULT_PIANA_URL
-    )
-    .trim();
-
 
 
   document
@@ -2213,26 +1934,8 @@ function applyConfig(){
       "pianaLink"
     )
     .href =
-      pianaUrl;
-
-
-
-  const login =
-    String(
-      CONFIG.piana_login ||
-      ""
-    )
-    .trim();
-
-
-
-  document
-    .getElementById(
-      "pianaLogin"
-    )
-    .textContent =
-      login ||
-      "Non renseigné";
+      CONFIG.piana_url ||
+      DEFAULT_PIANA_URL;
 
 
 
@@ -2266,7 +1969,8 @@ function applyConfig(){
       "adminPianaUrl"
     )
     .value =
-      pianaUrl;
+      CONFIG.piana_url ||
+      DEFAULT_PIANA_URL;
 
 
 
@@ -2323,7 +2027,7 @@ function applyConfig(){
 
 
 /* =========================================================
-   CHARGER CONFIG DEPUIS APPS SCRIPT
+   CHARGER CONFIG
 ========================================================= */
 
 async function loadConfig(){
@@ -2354,91 +2058,12 @@ async function loadConfig(){
 
     }
 
-  }catch(e){
-
-    /*
-      Tant que le module Apps Script
-      n'est pas ajouté,
-      le lien Piana et le VTUL
-      restent utilisables grâce aux
-      valeurs par défaut.
-    */
-
-  }
+  }catch(e){}
 
 
   applyConfig();
 
 }
-
-
-
-/* =========================================================
-   COPIER IDENTIFIANT
-========================================================= */
-
-document
-  .getElementById(
-    "copyLogin"
-  )
-  .addEventListener(
-    "click",
-    async function(){
-
-      const login =
-        String(
-          CONFIG.piana_login ||
-          ""
-        )
-        .trim();
-
-
-      if(!login){
-
-        return;
-
-      }
-
-
-      try{
-
-        await navigator
-          .clipboard
-          .writeText(
-            login
-          );
-
-
-        const button =
-          this;
-
-
-        button.textContent =
-          "Copié ✓";
-
-
-        setTimeout(
-          function(){
-
-            button.textContent =
-              "Copier";
-
-          },
-          1400
-        );
-
-
-      }catch(e){
-
-        /*
-          Rien si le navigateur
-          interdit le presse-papiers.
-        */
-
-      }
-
-    }
-  );
 
 
 
@@ -2459,19 +2084,16 @@ const adminPanel =
 
 
 
-adminBtn
-  .addEventListener(
-    "click",
-    function(){
+adminBtn.onclick =
+  function(){
 
-      adminPanel
-        .classList
-        .toggle(
-          "show"
-        );
+    adminPanel
+      .classList
+      .toggle(
+        "show"
+      );
 
-    }
-  );
+  };
 
 
 
@@ -2491,16 +2113,12 @@ async function checkAdmin(){
     .toLowerCase();
 
 
-
   if(!email){
-
     return;
-
   }
 
 
   try{
-
 
     const result =
       await jsonp(
@@ -2516,7 +2134,6 @@ async function checkAdmin(){
       );
 
 
-
     const isAdmin =
       !!(
 
@@ -2525,14 +2142,12 @@ async function checkAdmin(){
         result.ok === true &&
 
         String(
-          result.role ||
-          ""
+          result.role || ""
         )
         .toLowerCase() ===
         "admin"
 
       );
-
 
 
     if(isAdmin){
@@ -2546,14 +2161,7 @@ async function checkAdmin(){
     }
 
 
-  }catch(e){
-
-    /*
-      Pas d'affichage admin
-      en cas d'erreur.
-    */
-
-  }
+  }catch(e){}
 
 }
 
@@ -2596,17 +2204,12 @@ function installQrReader(
 
         const file =
           fileInput.files &&
-          fileInput.files[
-            0
-          ];
+          fileInput.files[0];
 
 
         if(!file){
-
           return;
-
         }
-
 
 
         if(
@@ -2617,12 +2220,11 @@ function installQrReader(
         ){
 
           info.textContent =
-            "Lecture automatique non disponible. Collez le lien du QR code dans le champ ci-dessus.";
+            "Lecture automatique indisponible. Collez le lien du QR code manuellement.";
 
           return;
 
         }
-
 
 
         try{
@@ -2640,21 +2242,16 @@ function installQrReader(
 
           const detector =
             new BarcodeDetector({
-
               formats:[
                 "qr_code"
               ]
-
             });
 
 
-
           const codes =
-            await detector
-              .detect(
-                bitmap
-              );
-
+            await detector.detect(
+              bitmap
+            );
 
 
           if(
@@ -2670,16 +2267,13 @@ function installQrReader(
           }
 
 
-
           const value =
             String(
-              codes[
-                0
-              ].rawValue ||
+              codes[0]
+                .rawValue ||
               ""
             )
             .trim();
-
 
 
           if(!value){
@@ -2692,10 +2286,8 @@ function installQrReader(
           }
 
 
-
           urlInput.value =
             value;
-
 
 
           info.textContent =
@@ -2704,10 +2296,8 @@ function installQrReader(
 
         }catch(err){
 
-
           info.textContent =
-            "Impossible de lire automatiquement ce QR code. Vous pouvez coller son lien manuellement.";
-
+            "Impossible de lire automatiquement ce QR code.";
 
         }
 
@@ -2775,10 +2365,10 @@ function showAdminStatus(
 
 
 /* =========================================================
-   SAUVEGARDE ADMIN
+   SAUVEGARDE
 ========================================================= */
 
-async function saveConfigField(
+async function saveField(
   email,
   field,
   value
@@ -2814,8 +2404,7 @@ document
   .getElementById(
     "saveAdmin"
   )
-  .addEventListener(
-    "click",
+  .onclick =
     async function(){
 
 
@@ -2832,7 +2421,6 @@ document
         .toLowerCase();
 
 
-
       if(!email){
 
         showAdminStatus(
@@ -2843,7 +2431,6 @@ document
         return;
 
       }
-
 
 
       const values = {
@@ -2859,7 +2446,6 @@ document
             .trim(),
 
 
-
         piana_login:
 
           document
@@ -2868,7 +2454,6 @@ document
             )
             .value
             .trim(),
-
 
 
         vsav_url:
@@ -2881,7 +2466,6 @@ document
             .trim(),
 
 
-
         ccr_url:
 
           document
@@ -2890,7 +2474,6 @@ document
             )
             .value
             .trim(),
-
 
 
         vtul_url:
@@ -2903,7 +2486,6 @@ document
             .trim(),
 
 
-
         vtp_url:
 
           document
@@ -2913,23 +2495,19 @@ document
             .value
             .trim()
 
-
       };
 
 
-
-      const button =
+      const btn =
         this;
 
 
-
-      button.disabled =
+      btn.disabled =
         true;
 
 
-      button.textContent =
+      btn.textContent =
         "Enregistrement…";
-
 
 
       try{
@@ -2947,12 +2525,11 @@ document
 
 
           const result =
-            await saveConfigField(
+            await saveField(
               email,
               field,
               value
             );
-
 
 
           if(
@@ -2976,7 +2553,6 @@ document
         }
 
 
-
         CONFIG = {
 
           ...CONFIG,
@@ -2985,9 +2561,7 @@ document
         };
 
 
-
         applyConfig();
-
 
 
         showAdminStatus(
@@ -3020,18 +2594,17 @@ document
       }finally{
 
 
-        button.disabled =
+        btn.disabled =
           false;
 
 
-        button.textContent =
+        btn.textContent =
           "Enregistrer la configuration";
 
 
       }
 
-    }
-  );
+    };
 
 
 
@@ -3047,3 +2620,8 @@ checkAdmin();
 
 
 </script>
+
+
+</body>
+
+</html>
