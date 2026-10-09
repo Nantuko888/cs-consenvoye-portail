@@ -78,6 +78,10 @@ input{
   font:inherit;
 }
 
+button{
+  cursor:pointer;
+}
+
 a{
   -webkit-tap-highlight-color:transparent;
 }
@@ -118,9 +122,7 @@ a{
 
 .subtitle{
   margin-top:3px;
-
   color:var(--muted);
-
   font-size:13px;
   font-weight:700;
 }
@@ -144,8 +146,6 @@ a{
   text-decoration:none;
 
   font-weight:850;
-
-  backdrop-filter:blur(10px);
 }
 
 
@@ -155,14 +155,11 @@ a{
 
 .tabs{
   display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
+  grid-template-columns:1fr 1fr;
 
   gap:7px;
 
   padding:6px;
-
   margin-bottom:14px;
 
   border-radius:18px;
@@ -173,8 +170,6 @@ a{
   border:
     1px solid
     rgba(255,255,255,.08);
-
-  backdrop-filter:blur(12px);
 }
 
 .tab{
@@ -193,12 +188,6 @@ a{
 
   font-size:14px;
   font-weight:900;
-
-  cursor:pointer;
-}
-
-.tab:active{
-  transform:scale(.98);
 }
 
 .tab.ticket.active{
@@ -210,14 +199,6 @@ a{
       rgba(219,129,44,.48),
       rgba(160,78,25,.38)
     );
-
-  box-shadow:
-    inset
-    0 0 0 1px
-    rgba(255,184,89,.20),
-
-    0 8px 20px
-    rgba(0,0,0,.20);
 }
 
 .tab.vehicle.active{
@@ -229,14 +210,6 @@ a{
       rgba(54,120,183,.50),
       rgba(30,71,110,.40)
     );
-
-  box-shadow:
-    inset
-    0 0 0 1px
-    rgba(121,187,244,.20),
-
-    0 8px 20px
-    rgba(0,0,0,.20);
 }
 
 
@@ -274,30 +247,9 @@ a{
 
   box-shadow:
     var(--shadow);
-
-  backdrop-filter:blur(15px);
-}
-
-.glass::before{
-  content:"";
-
-  position:absolute;
-
-  inset:0;
-
-  pointer-events:none;
-
-  background:
-    linear-gradient(
-      130deg,
-      rgba(255,255,255,.045),
-      transparent 40%
-    );
 }
 
 .sectionTitle{
-  position:relative;
-
   font-size:20px;
   font-weight:950;
 
@@ -305,8 +257,6 @@ a{
 }
 
 .sectionSub{
-  position:relative;
-
   margin-bottom:18px;
 
   color:var(--muted);
@@ -317,30 +267,34 @@ a{
 
 
 /* =====================================================
-   LOGO PIANA
+   PIANA : LOGO + IDENTIFIANTS
 ===================================================== */
 
-.pianaArea{
-  position:relative;
+.pianaContent{
+  display:grid;
 
+  grid-template-columns:
+    auto
+    minmax(0,1fr);
+
+  gap:20px;
+
+  align-items:center;
+}
+
+.pianaLogoArea{
   display:flex;
 
   justify-content:center;
   align-items:center;
-
-  padding:8px 0 10px;
 }
 
 .pianaLogoLink{
   display:inline-block;
 
-  text-decoration:none;
-
   border-radius:20px;
 
-  transition:
-    transform .15s ease,
-    filter .15s ease;
+  text-decoration:none;
 }
 
 .pianaLogoLink:active{
@@ -351,8 +305,8 @@ a{
   display:block;
 
   width:min(
-    245px,
-    68vw
+    235px,
+    58vw
   );
 
   height:auto;
@@ -366,12 +320,152 @@ a{
 
 
 /* =====================================================
+   IDENTIFIANTS
+===================================================== */
+
+.credentials{
+  min-width:0;
+
+  padding:15px;
+
+  border-radius:17px;
+
+  background:
+    rgba(5,14,24,.38);
+
+  border:
+    1px solid
+    rgba(255,255,255,.09);
+}
+
+.credentialsTitle{
+  margin-bottom:14px;
+
+  font-size:16px;
+  font-weight:950;
+}
+
+.credLabel{
+  margin-bottom:5px;
+
+  color:#9fb0c3;
+
+  font-size:10px;
+  font-weight:900;
+
+  text-transform:uppercase;
+}
+
+.identifierBox{
+  width:100%;
+
+  padding:10px 11px;
+
+  margin-bottom:13px;
+
+  border-radius:11px;
+
+  background:
+    rgba(0,0,0,.25);
+
+  border:
+    1px solid
+    rgba(255,255,255,.08);
+
+  color:#fff;
+
+  font-size:13px;
+  font-weight:850;
+
+  word-break:break-all;
+}
+
+.passwordRow{
+  display:grid;
+
+  grid-template-columns:
+    minmax(0,1fr)
+    auto
+    auto;
+
+  gap:6px;
+}
+
+.passwordInput{
+  width:100%;
+  min-width:0;
+
+  padding:10px 10px;
+
+  border-radius:11px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.10);
+
+  background:
+    rgba(0,0,0,.27);
+
+  color:#fff;
+
+  font-weight:850;
+
+  outline:none;
+}
+
+.smallBtn{
+  min-width:43px;
+
+  padding:8px 10px;
+
+  border-radius:11px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.10);
+
+  background:
+    rgba(255,255,255,.07);
+
+  color:#fff;
+
+  font-weight:900;
+}
+
+.copyBtn{
+  min-width:72px;
+
+  color:#ffd8a9;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(220,135,52,.30),
+      rgba(155,75,25,.22)
+    );
+
+  border:
+    1px solid
+    rgba(255,172,73,.18);
+}
+
+.copyInfo{
+  min-height:18px;
+
+  margin-top:7px;
+
+  color:#9fd8ae;
+
+  font-size:11px;
+  font-weight:800;
+}
+
+
+/* =====================================================
    VEHICULES
 ===================================================== */
 
 .vehicleGrid{
-  position:relative;
-
   display:grid;
 
   grid-template-columns:
@@ -408,17 +502,9 @@ a{
       rgba(15,28,44,.78)
     );
 
-  box-shadow:
-    0 10px 25px
-    rgba(0,0,0,.20);
-
   color:#fff;
 
   text-decoration:none;
-}
-
-.vehicleCard.available{
-  cursor:pointer;
 }
 
 .vehicleCard.available:active{
@@ -427,7 +513,6 @@ a{
 
 .vehicleCard.unavailable{
   opacity:.43;
-
   pointer-events:none;
 }
 
@@ -470,10 +555,6 @@ a{
     rgba(44,139,86,.23);
 
   color:#b8efcc;
-
-  border:
-    1px solid
-    rgba(77,207,126,.21);
 }
 
 .unavailable .vehicleBadge{
@@ -481,15 +562,11 @@ a{
     rgba(255,255,255,.06);
 
   color:#ccc;
-
-  border:
-    1px solid
-    rgba(255,255,255,.08);
 }
 
 
 /* =====================================================
-   ADMIN
+   ADMINISTRATION
 ===================================================== */
 
 .adminBtn{
@@ -517,8 +594,6 @@ a{
   color:#ffdcae;
 
   font-weight:950;
-
-  cursor:pointer;
 }
 
 .adminBtn.show{
@@ -544,8 +619,6 @@ a{
   border:
     1px solid
     rgba(255,173,73,.18);
-
-  backdrop-filter:blur(12px);
 }
 
 .adminPanel.show{
@@ -606,19 +679,16 @@ a{
 
 .adminNote{
   margin-top:-6px;
-
   margin-bottom:14px;
 
   color:#9facbc;
 
   font-size:11px;
-
   line-height:1.4;
 }
 
 .vehicleAdmin{
   padding:12px;
-
   margin-bottom:10px;
 
   border-radius:15px;
@@ -672,8 +742,6 @@ a{
   color:#9fb0c3;
 
   font-size:11px;
-
-  line-height:1.35;
 }
 
 .saveBtn{
@@ -697,8 +765,6 @@ a{
   color:#fff;
 
   font-weight:950;
-
-  cursor:pointer;
 }
 
 .adminStatus{
@@ -737,6 +803,21 @@ a{
    MOBILE
 ===================================================== */
 
+@media(max-width:620px){
+
+  .pianaContent{
+    grid-template-columns:1fr;
+  }
+
+  .pianaLogo{
+    width:min(
+      245px,
+      70vw
+    );
+  }
+
+}
+
 @media(max-width:520px){
 
   .page{
@@ -758,7 +839,6 @@ a{
 
   .vehicleCard{
     min-height:122px;
-
     padding:12px;
   }
 
@@ -779,7 +859,9 @@ a{
 <div class="page">
 
 
-  <!-- ENTETE -->
+  <!-- ==================================================
+       ENTETE
+  =================================================== -->
 
   <div class="topbar">
 
@@ -807,7 +889,9 @@ a{
 
 
 
-  <!-- ONGLETS -->
+  <!-- ==================================================
+       ONGLETS
+  =================================================== -->
 
   <div class="tabs">
 
@@ -832,7 +916,9 @@ a{
 
 
 
-  <!-- RENTREE TICKET -->
+  <!-- ==================================================
+       RENTREE TICKET
+  =================================================== -->
 
   <section
     id="panelTicket"
@@ -852,22 +938,104 @@ a{
       </div>
 
 
-      <div class="pianaArea">
+
+      <div class="pianaContent">
 
 
-        <a
-          id="pianaLink"
-          class="pianaLogoLink"
-          href="https://auth.getpiana.com/login?state=hKFo2SBTMUhEOFp1aEg1MEdlVWlxSlFyX0kyQU1Yb0JzYmhnV6FupWxvZ2luo3RpZNkgQzI4WHJRM2FnaUhNSW5CRG0tM2F2U09TQW5hbjlDX2yjY2lk2SBhR3kxSU1UdnppY05lUEpZZWJnNGdUWlFYRWFsQ2JqcQ&client=aGy1IMTvzicNePJYebg4gTZQXEalCbjq&protocol=oauth2&audience=https%3A%2F%2Fapi.getpiana.com%2F&scope=openid%20profile%20email%20offline_access&redirect_uri=https%3A%2F%2Fapp.getpiana.com%2Fauth%2Fcallback&response_type=code&code_challenge=i1a-7VGwihqBHQarJKKsy43mV3I8aV60bEyoTKM-OgY&code_challenge_method=S256&nonce=0aZFaPLVU2MF87rZNIgemSOaJcTvb8pWDQmx4CtQqZA"
-        >
+        <!-- LOGO -->
 
-          <img
-            class="pianaLogo"
-            src="ticket-carburant-logo%20(3).png"
-            alt="Ticket carburant"
+        <div class="pianaLogoArea">
+
+          <a
+            id="pianaLink"
+            class="pianaLogoLink"
+            href="#"
           >
 
-        </a>
+            <img
+              class="pianaLogo"
+              src="ticket-carburant-logo%20(3).png"
+              alt="Ticket carburant"
+            >
+
+          </a>
+
+        </div>
+
+
+
+        <!-- IDENTIFIANTS -->
+
+        <div class="credentials">
+
+
+          <div class="credentialsTitle">
+            🔑 Identifiants Piana
+          </div>
+
+
+
+          <div class="credLabel">
+            Identifiant
+          </div>
+
+
+          <div
+            id="publicLogin"
+            class="identifierBox"
+          >
+            Chargement…
+          </div>
+
+
+
+          <div class="credLabel">
+            Mot de passe
+          </div>
+
+
+
+          <div class="passwordRow">
+
+
+            <input
+              id="publicPassword"
+              class="passwordInput"
+              type="password"
+              value=""
+              readonly
+            >
+
+
+            <button
+              id="togglePassword"
+              class="smallBtn"
+              type="button"
+              title="Afficher le mot de passe"
+            >
+              👁️
+            </button>
+
+
+            <button
+              id="copyPassword"
+              class="smallBtn copyBtn"
+              type="button"
+            >
+              Copier
+            </button>
+
+
+          </div>
+
+
+          <div
+            id="copyInfo"
+            class="copyInfo"
+          ></div>
+
+
+        </div>
 
 
       </div>
@@ -879,7 +1047,9 @@ a{
 
 
 
-  <!-- VEHICULES -->
+  <!-- ==================================================
+       VEHICULES
+  =================================================== -->
 
   <section
     id="panelVehicle"
@@ -897,6 +1067,7 @@ a{
       <div class="sectionSub">
         Sélectionnez le véhicule concerné.
       </div>
+
 
 
       <div class="vehicleGrid">
@@ -965,7 +1136,7 @@ a{
         <a
           id="vehicleVTUL"
           class="vehicleCard available"
-          href="https://qr.getpiana.com/x34knskcyh"
+          href="#"
         >
 
           <span class="vehicleBadge">
@@ -1030,7 +1201,9 @@ a{
 
 
 
-  <!-- ADMIN -->
+  <!-- ==================================================
+       ADMIN
+  =================================================== -->
 
   <button
     id="adminBtn"
@@ -1069,6 +1242,7 @@ a{
       <input
         id="adminPianaUrl"
         type="url"
+        placeholder="https://..."
       >
 
     </div>
@@ -1084,16 +1258,25 @@ a{
       <input
         id="adminPianaLogin"
         type="text"
-        placeholder="Identifiant Piana"
+        placeholder="Identifiant"
       >
 
     </div>
 
 
 
-    <div class="adminNote">
-      L'identifiant est uniquement visible dans l'administration.
-      Aucun mot de passe n'est enregistré dans le portail.
+    <div class="field">
+
+      <label for="adminPianaPassword">
+        Mot de passe Piana
+      </label>
+
+      <input
+        id="adminPianaPassword"
+        type="password"
+        placeholder="Mot de passe"
+      >
+
     </div>
 
 
@@ -1171,7 +1354,7 @@ a{
       <input
         id="urlVTUL"
         type="url"
-        value="https://qr.getpiana.com/x34knskcyh"
+        placeholder="Lien du QR code VTUL"
       >
 
       <input
@@ -1244,6 +1427,11 @@ a{
 
 <script>
 
+
+/* =========================================================
+   API
+========================================================= */
+
 const API =
   "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 
@@ -1264,6 +1452,9 @@ let CONFIG = {
   piana_login:
     "",
 
+  piana_password:
+    "",
+
   vsav_url:
     "",
 
@@ -1279,125 +1470,145 @@ let CONFIG = {
 };
 
 
-/* =====================================================
+/* =========================================================
    JSONP
-===================================================== */
+========================================================= */
 
-function jsonp(url,timeout=15000){
+function jsonp(
+  url,
+  timeout=15000
+){
 
-  return new Promise((resolve,reject)=>{
+  return new Promise(
+    (resolve,reject)=>{
 
-    const cb =
-      "cb_" +
-      Date.now() +
-      "_" +
-      Math.random()
-        .toString(36)
-        .slice(2);
-
-    const script =
-      document.createElement("script");
-
-    let timer;
-
-
-    function cleanup(){
-
-      clearTimeout(timer);
-
-      script.remove();
-
-      try{
-        delete window[cb];
-      }catch(e){
-        window[cb]=undefined;
-      }
-
-    }
+      const cb =
+        "cb_" +
+        Date.now() +
+        "_" +
+        Math.random()
+          .toString(36)
+          .slice(2);
 
 
-    window[cb] =
-      function(data){
-
-        cleanup();
-
-        resolve(data);
-
-      };
-
-
-    const sep =
-      url.includes("?")
-        ? "&"
-        : "?";
-
-
-    script.src =
-      url +
-      sep +
-      "callback=" +
-      encodeURIComponent(cb) +
-      "&t=" +
-      Date.now();
-
-
-    script.onerror =
-      function(){
-
-        cleanup();
-
-        reject(
-          new Error(
-            "Erreur de connexion"
-          )
+      const script =
+        document.createElement(
+          "script"
         );
 
-      };
+
+      let timer;
 
 
-    timer =
-      setTimeout(
+      function cleanup(){
+
+        clearTimeout(timer);
+
+        script.remove();
+
+        try{
+
+          delete window[cb];
+
+        }catch(e){
+
+          window[cb] =
+            undefined;
+
+        }
+
+      }
+
+
+      window[cb] =
+        function(data){
+
+          cleanup();
+
+          resolve(data);
+
+        };
+
+
+      const sep =
+        url.includes("?")
+          ? "&"
+          : "?";
+
+
+      script.src =
+        url +
+        sep +
+        "callback=" +
+        encodeURIComponent(cb) +
+        "&t=" +
+        Date.now();
+
+
+      script.onerror =
         function(){
 
           cleanup();
 
           reject(
             new Error(
-              "Délai dépassé"
+              "Erreur de connexion"
             )
           );
 
-        },
-        timeout
-      );
+        };
 
 
-    document.head
-      .appendChild(script);
+      timer =
+        setTimeout(
+          function(){
 
-  });
+            cleanup();
+
+            reject(
+              new Error(
+                "Délai dépassé"
+              )
+            );
+
+          },
+          timeout
+        );
+
+
+      document
+        .head
+        .appendChild(
+          script
+        );
+
+    }
+  );
 
 }
 
 
-/* =====================================================
+/* =========================================================
    ONGLETS
-===================================================== */
+========================================================= */
 
 const tabTicket =
   document.getElementById(
     "tabTicket"
   );
 
+
 const tabVehicle =
   document.getElementById(
     "tabVehicle"
   );
 
+
 const panelTicket =
   document.getElementById(
     "panelTicket"
   );
+
 
 const panelVehicle =
   document.getElementById(
@@ -1408,7 +1619,8 @@ const panelVehicle =
 function openTab(name){
 
   const ticket =
-    name === "ticket";
+    name ===
+    "ticket";
 
 
   tabTicket
@@ -1453,14 +1665,150 @@ tabVehicle.onclick =
   ()=>openTab("vehicle");
 
 
-/* =====================================================
-   VEHICULES
-===================================================== */
+/* =========================================================
+   MOT DE PASSE
+========================================================= */
 
-function setVehicle(id,url){
+const publicPassword =
+  document.getElementById(
+    "publicPassword"
+  );
+
+
+const togglePassword =
+  document.getElementById(
+    "togglePassword"
+  );
+
+
+const copyPassword =
+  document.getElementById(
+    "copyPassword"
+  );
+
+
+const copyInfo =
+  document.getElementById(
+    "copyInfo"
+  );
+
+
+togglePassword.onclick =
+  function(){
+
+    if(
+      publicPassword.type ===
+      "password"
+    ){
+
+      publicPassword.type =
+        "text";
+
+      togglePassword.textContent =
+        "🙈";
+
+      togglePassword.title =
+        "Masquer le mot de passe";
+
+    }else{
+
+      publicPassword.type =
+        "password";
+
+      togglePassword.textContent =
+        "👁️";
+
+      togglePassword.title =
+        "Afficher le mot de passe";
+
+    }
+
+  };
+
+
+copyPassword.onclick =
+  async function(){
+
+    const password =
+      publicPassword.value;
+
+
+    if(!password){
+
+      copyInfo.textContent =
+        "Mot de passe indisponible.";
+
+      return;
+
+    }
+
+
+    try{
+
+      await navigator
+        .clipboard
+        .writeText(
+          password
+        );
+
+
+      copyInfo.textContent =
+        "Mot de passe copié ✓";
+
+
+      setTimeout(
+        ()=>{
+
+          copyInfo.textContent =
+            "";
+
+        },
+        2500
+      );
+
+
+    }catch(e){
+
+
+      publicPassword.type =
+        "text";
+
+
+      publicPassword.select();
+
+
+      document.execCommand(
+        "copy"
+      );
+
+
+      publicPassword.type =
+        "password";
+
+
+      copyInfo.textContent =
+        "Mot de passe copié ✓";
+
+
+    }
+
+  };
+
+
+/* =========================================================
+   VEHICULES
+========================================================= */
+
+function setVehicle(
+  id,
+  url
+){
 
   const el =
-    document.getElementById(id);
+    document.getElementById(
+      id
+    );
+
 
   if(!el){
     return;
@@ -1484,33 +1832,41 @@ function setVehicle(id,url){
     el.href =
       url;
 
+
     el.classList
       .remove(
         "unavailable"
       );
 
+
     el.classList
       .add(
         "available"
       );
+
 
     badge.textContent =
       "Disponible";
 
+
   }else{
+
 
     el.href =
       "#";
+
 
     el.classList
       .remove(
         "available"
       );
 
+
     el.classList
       .add(
         "unavailable"
       );
+
 
     badge.textContent =
       "À configurer";
@@ -1520,11 +1876,12 @@ function setVehicle(id,url){
 }
 
 
-/* =====================================================
-   CONFIG
-===================================================== */
+/* =========================================================
+   CONFIGURATION
+========================================================= */
 
 function applyConfig(){
+
 
   document
     .getElementById(
@@ -1535,25 +1892,46 @@ function applyConfig(){
       DEFAULT_PIANA_URL;
 
 
+
+  document
+    .getElementById(
+      "publicLogin"
+    )
+    .textContent =
+      CONFIG.piana_login ||
+      "Non configuré";
+
+
+
+  publicPassword.value =
+    CONFIG.piana_password ||
+    "";
+
+
+
   setVehicle(
     "vehicleVSAV",
     CONFIG.vsav_url
   );
+
 
   setVehicle(
     "vehicleCCR",
     CONFIG.ccr_url
   );
 
+
   setVehicle(
     "vehicleVTUL",
     CONFIG.vtul_url
   );
 
+
   setVehicle(
     "vehicleVTP",
     CONFIG.vtp_url
   );
+
 
 
   document
@@ -1565,6 +1943,7 @@ function applyConfig(){
       DEFAULT_PIANA_URL;
 
 
+
   document
     .getElementById(
       "adminPianaLogin"
@@ -1572,6 +1951,17 @@ function applyConfig(){
     .value =
       CONFIG.piana_login ||
       "";
+
+
+
+  document
+    .getElementById(
+      "adminPianaPassword"
+    )
+    .value =
+      CONFIG.piana_password ||
+      "";
+
 
 
   document
@@ -1583,6 +1973,7 @@ function applyConfig(){
       "";
 
 
+
   document
     .getElementById(
       "urlCCR"
@@ -1592,6 +1983,7 @@ function applyConfig(){
       "";
 
 
+
   document
     .getElementById(
       "urlVTUL"
@@ -1599,6 +1991,7 @@ function applyConfig(){
     .value =
       CONFIG.vtul_url ||
       "";
+
 
 
   document
@@ -1612,19 +2005,36 @@ function applyConfig(){
 }
 
 
-/* =====================================================
-   CHARGE CONFIG APPS SCRIPT
-===================================================== */
+/* =========================================================
+   CHARGEMENT CONFIG
+========================================================= */
 
 async function loadConfig(){
 
   try{
 
+    const email =
+      String(
+
+        localStorage
+          .getItem(
+            LS_EMAIL
+          ) || ""
+
+      )
+      .trim()
+      .toLowerCase();
+
+
     const res =
       await jsonp(
 
         API +
-        "?view=ticket_carburant_config"
+        "?view=ticket_carburant_config" +
+        "&email=" +
+        encodeURIComponent(
+          email
+        )
 
       );
 
@@ -1636,8 +2046,10 @@ async function loadConfig(){
     ){
 
       CONFIG = {
+
         ...CONFIG,
         ...res.config
+
       };
 
     }
@@ -1650,14 +2062,15 @@ async function loadConfig(){
 }
 
 
-/* =====================================================
+/* =========================================================
    ADMIN
-===================================================== */
+========================================================= */
 
 const adminBtn =
   document.getElementById(
     "adminBtn"
   );
+
 
 const adminPanel =
   document.getElementById(
@@ -1682,9 +2095,10 @@ async function checkAdmin(){
   const email =
     String(
 
-      localStorage.getItem(
-        LS_EMAIL
-      ) || ""
+      localStorage
+        .getItem(
+          LS_EMAIL
+        ) || ""
 
     )
     .trim()
@@ -1717,7 +2131,8 @@ async function checkAdmin(){
       res.ok === true &&
       String(
         res.role || ""
-      ).toLowerCase() ===
+      )
+      .toLowerCase() ===
       "admin"
     ){
 
@@ -1734,9 +2149,9 @@ async function checkAdmin(){
 }
 
 
-/* =====================================================
-   LECTURE QR
-===================================================== */
+/* =========================================================
+   QR CODE
+========================================================= */
 
 function installQrReader(
   fileInputId,
@@ -1749,10 +2164,12 @@ function installQrReader(
       fileInputId
     );
 
+
   const urlInput =
     document.getElementById(
       urlInputId
     );
+
 
   const info =
     document.getElementById(
@@ -1865,17 +2282,20 @@ installQrReader(
   "infoVSAV"
 );
 
+
 installQrReader(
   "qrCCR",
   "urlCCR",
   "infoCCR"
 );
 
+
 installQrReader(
   "qrVTUL",
   "urlVTUL",
   "infoVTUL"
 );
+
 
 installQrReader(
   "qrVTP",
@@ -1884,9 +2304,9 @@ installQrReader(
 );
 
 
-/* =====================================================
-   SAUVEGARDE ADMIN
-===================================================== */
+/* =========================================================
+   SAUVEGARDE
+========================================================= */
 
 function showAdminStatus(
   message,
@@ -1898,8 +2318,10 @@ function showAdminStatus(
       "adminStatus"
     );
 
+
   box.textContent =
     message;
+
 
   box.className =
     "adminStatus show " +
@@ -1949,9 +2371,10 @@ document
       const email =
         String(
 
-          localStorage.getItem(
-            LS_EMAIL
-          ) || ""
+          localStorage
+            .getItem(
+              LS_EMAIL
+            ) || ""
 
         )
         .trim()
@@ -1972,7 +2395,9 @@ document
 
       const values = {
 
+
         piana_url:
+
           document
             .getElementById(
               "adminPianaUrl"
@@ -1980,7 +2405,9 @@ document
             .value
             .trim(),
 
+
         piana_login:
+
           document
             .getElementById(
               "adminPianaLogin"
@@ -1988,7 +2415,18 @@ document
             .value
             .trim(),
 
+
+        piana_password:
+
+          document
+            .getElementById(
+              "adminPianaPassword"
+            )
+            .value,
+
+
         vsav_url:
+
           document
             .getElementById(
               "urlVSAV"
@@ -1996,7 +2434,9 @@ document
             .value
             .trim(),
 
+
         ccr_url:
+
           document
             .getElementById(
               "urlCCR"
@@ -2004,7 +2444,9 @@ document
             .value
             .trim(),
 
+
         vtul_url:
+
           document
             .getElementById(
               "urlVTUL"
@@ -2012,7 +2454,9 @@ document
             .value
             .trim(),
 
+
         vtp_url:
+
           document
             .getElementById(
               "urlVTP"
@@ -2023,7 +2467,20 @@ document
       };
 
 
+      const btn =
+        this;
+
+
+      btn.disabled =
+        true;
+
+
+      btn.textContent =
+        "Enregistrement…";
+
+
       try{
+
 
         for(
           const [
@@ -2034,6 +2491,7 @@ document
             values
           )
         ){
+
 
           const res =
             await saveField(
@@ -2049,10 +2507,14 @@ document
           ){
 
             throw new Error(
+
               res &&
               res.error
+
                 ? res.error
-                : "Erreur"
+
+                : "Erreur d'enregistrement"
+
             );
 
           }
@@ -2061,8 +2523,10 @@ document
 
 
         CONFIG = {
+
           ...CONFIG,
           ...values
+
         };
 
 
@@ -2077,31 +2541,51 @@ document
 
       }catch(err){
 
+
         showAdminStatus(
+
           "Erreur : " +
+
           (
             err &&
             err.message
+
               ? err.message
+
               : err
           ),
+
           "error"
+
         );
+
+
+      }finally{
+
+
+        btn.disabled =
+          false;
+
+
+        btn.textContent =
+          "Enregistrer la configuration";
+
 
       }
 
     };
 
 
-/* =====================================================
+/* =========================================================
    DEMARRAGE
-===================================================== */
+========================================================= */
 
 applyConfig();
 
 loadConfig();
 
 checkAdmin();
+
 
 </script>
 
