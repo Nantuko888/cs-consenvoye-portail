@@ -1120,5 +1120,291 @@ document.addEventListener("click", (e) => {
 })();
 </script>
 
+  
+<!-- SIMULATEUR VSAV — PAGE 2 DU PORTAIL -->
+<style>
+#portal .vsav-pages {
+  width: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+#portal .vsav-pages::-webkit-scrollbar {
+  display: none;
+}
+#portal .vsav-page {
+  width: 100%;
+  min-width: 100%;
+  flex: 0 0 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  overflow: hidden;
+}
+#portal .vsav-page .grid {
+  flex-shrink: 0;
+}
+#portal .vsav-menu-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 7px 14px 9px;
+  min-height: 31px;
+  z-index: 2;
+}
+#portal .vsav-menu-dots button {
+  appearance: none;
+  width: 11px;
+  height: 11px;
+  min-width: 11px;
+  min-height: 11px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,.42);
+  cursor: pointer;
+}
+#portal .vsav-menu-dots button[aria-current="page"] {
+  background: #fff;
+  box-shadow: 0 0 8px #fff8;
+}
+#vsav-sim-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  background: #0f1014;
+}
+#vsav-sim-screen[aria-hidden="false"] {
+  display: block;
+}
+#vsav-sim-screen iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #0f1014;
+}
+#vsav-sim-close {
+  position: absolute;
+  z-index: 2;
+  top: calc(env(safe-area-inset-top) + 7px);
+  right: 8px;
+  border: 1px solid #ffffff70;
+  border-radius: 7px;
+  background: #1c2334dd;
+  color: white;
+  font: bold 12px system-ui, sans-serif;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  const SIMULATOR_VERSION = '28';
+  const ICON = 'simulateur-vsav/icone_simulateur_vsav.png';
+  const SIMULATOR = 'simulateur-vsav/simulateur.html?v='
+    + SIMULATOR_VERSION;
+
+  function init() {
+    const portal = document.getElementById('portal');
+    if (!portal || portal.querySelector('.vsav-pages')) return;
+
+    const grid = portal.querySelector('section.grid[aria-label="Menu"]');
+    if (!grid) return;
+
+    const currentItems = grid.querySelectorAll(':scope > a.btn');
+    if (currentItems.length !== 12) {
+      console.warn('VSAV : 12 liens attendus.');
+      return;
+    }
+
+    const pages = document.createElement('div');
+    pages.className = 'vsav-pages';
+    pages.id = 'vsav-pages';
+    pages.setAttribute('aria-label', 'Pages du menu');
+
+    const first = document.createElement('div');
+    first.className = 'vsav-page';
+    first.setAttribute('aria-label', 'Page 1 sur 2, accueil');
+
+    const second = document.createElement('div');
+    second.className = 'vsav-page';
+    second.setAttribute('aria-label', 'Page 2 sur 2, simulateur VSAV');
+
+    grid.before(pages);
+    first.appendChild(grid);
+    pages.append(first, second);
+
+    const grid2 = document.createElement('section');
+    grid2.className = 'grid';
+    grid2.setAttribute('aria-label', 'Autres modules');
+
+    const link = document.createElement('a');
+    link.className = 'btn';
+    link.href = SIMULATOR;
+    link.title = 'Simulateur VSAV — entraînement fictif';
+    link.setAttribute('aria-label', 'Ouvrir le simulateur VSAV');
+
+    const icon = document.createElement('img');
+    icon.src = ICON;
+    icon.alt = 'Simulateur VSAV';
+    icon.draggable = false;
+
+    link.appendChild(icon);
+    grid2.appendChild(link);
+    second.appendChild(grid2);
+
+    const dots = document.createElement('nav');
+    dots.className = 'vsav-menu-dots';
+    dots.setAttribute('aria-label', 'Navigation entre les pages');
+
+    const buttons = [0, 1].map(n => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Page ' + (n + 1));
+
+      b.addEventListener('click', () => {
+        pages.scrollTo({
+          left: n * pages.clientWidth,
+          behavior: 'smooth'
+        });
+      });
+
+      dots.appendChild(b);
+      return b;
+    });
+
+    portal.appendChild(dots);
+
+    let scheduled = false;
+
+    pages.addEventListener('scroll', () => {
+      if (scheduled) return;
+      scheduled = true;
+
+      requestAnimationFrame(() => {
+        const current = Math.max(0, Math.min(1,
+          Math.round(pages.scrollLeft /
+            Math.max(1, pages.clientWidth))
+        ));
+
+        buttons.forEach((b, n) => {
+          if (n === current) {
+            b.setAttribute('aria-current', 'page');
+          } else {
+            b.removeAttribute('aria-current');
+          }
+        });
+
+        scheduled = false;
+      });
+    }, { passive: true });
+
+    buttons[0].setAttribute('aria-current', 'page');
+
+    window.addEventListener('resize', () => {
+      const n =
+        buttons[1].getAttribute('aria-current') === 'page'
+          ? 1 : 0;
+      pages.scrollLeft = n * pages.clientWidth;
+    }, { passive: true });
+
+    const screen = document.createElement('section');
+    screen.id = 'vsav-sim-screen';
+    screen.setAttribute('aria-label', 'Simulateur VSAV');
+    screen.setAttribute('aria-hidden', 'true');
+
+    const back = document.createElement('button');
+    back.id = 'vsav-sim-close';
+    back.type = 'button';
+    back.textContent = '← Portail';
+
+    const frame = document.createElement('iframe');
+    frame.title = 'Simulateur VSAV — entraînement fictif';
+    frame.setAttribute('allow', 'fullscreen');
+    frame.setAttribute('loading', 'lazy');
+
+    screen.append(frame, back);
+    document.body.appendChild(screen);
+
+    let opened = false;
+    let pushInProgress = false;
+
+    function close(withBack) {
+      if (!opened) return;
+
+      opened = false;
+      screen.setAttribute('aria-hidden', 'true');
+      frame.removeAttribute('src');
+
+      if (withBack &&
+          history.state &&
+          history.state.vsavSimulation) {
+        pushInProgress = true;
+        history.back();
+      }
+    }
+
+    function open(e) {
+      if (e) e.preventDefault();
+
+      if (portal.style.display === 'none') return;
+      if (opened) return;
+
+      frame.src = SIMULATOR;
+      screen.setAttribute('aria-hidden', 'false');
+      opened = true;
+
+      history.pushState(
+        { vsavSimulation: true },
+        '',
+        '#simulateur-vsav'
+      );
+    }
+
+    link.addEventListener('click', open);
+    back.addEventListener('click', () => close(true));
+
+    window.addEventListener('popstate', () => {
+      if (pushInProgress) {
+        pushInProgress = false;
+        return;
+      }
+
+      if (opened &&
+          (!history.state || !history.state.vsavSimulation)) {
+        close(false);
+      }
+    });
+
+    document.getElementById('logoutBtnPortal')
+      ?.addEventListener('click', () => close(false));
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+<!-- FIN SIMULATEUR VSAV -->
+
+
 </body>
 </html>
