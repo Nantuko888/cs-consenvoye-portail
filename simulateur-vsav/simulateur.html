@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Simulateur bilan VSAV — V17 écran fixe</title><style>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Simulateur tablette VSAV — V29 responsive</title><style>
 :root{font-family:Arial,Helvetica,sans-serif;color:#32363d;background:#f6f7f8}*{box-sizing:border-box}body{margin:0}.app{max-width:900px;margin:auto;background:white;min-height:100dvh;box-shadow:0 0 26px #0001}.top{height:52px;background:#d75b12;color:white;display:flex;align-items:center;justify-content:space-between;padding:5px 12px;gap:8px}.title{font-size:16px;font-weight:bold}.top small{display:block;font-size:10px;opacity:.9;font-weight:normal}.toolbtn{border:0;background:transparent;color:inherit;padding:7px;font-size:20px}.notice{background:#fff1d9;color:#784313;padding:7px 11px;font-size:12px;border-bottom:1px solid #e9bd83}.home{padding:18px}.home h1{font-size:24px;margin:12px 0 22px}.primary,.secondary,.orange,.navbtn{border:0;border-radius:3px;padding:12px 16px;font-weight:bold;cursor:pointer}.primary{background:#161b58;color:#fff}.secondary{background:#e8edf3;color:#253352}.orange{background:#ec751b;color:#fff}.wide{width:100%;margin:6px 0}input,select,textarea{font-family:inherit;font-size:15px;width:100%;border:1px solid #d7dce1;border-radius:3px;padding:10px;background:white;color:#27303a}textarea{min-height:70px}label{display:block;margin:10px 0 6px;color:#555;font-size:13px}.entry{background:#f8f8f8;border:1px solid #ddd;padding:12px;margin:12px 0;border-radius:4px}.layout{display:flex;min-height:calc(100dvh - 84px)}.rail{width:52px;flex:none;background:#d75b12;display:flex;flex-direction:column;align-items:stretch}.rail button{border:0;background:transparent;color:#fff;min-height:47px;font-size:16px;font-weight:bold;border-bottom:1px solid #ffffff44}.rail button.sel{background:#7f3208;box-shadow:inset 4px 0 white}.main{flex:1;min-width:0;padding:10px 12px 78px}.screen-title{font-size:16px;font-weight:bold;margin:5px 0 13px;color:#95400a}.tabs{display:flex;gap:5px;margin-bottom:12px;overflow-x:auto}.tabs button{flex:1;padding:10px 8px;border:1px solid #dedede;background:#f6f6f6;font-weight:600;color:#565656;white-space:nowrap}.tabs button.sel{background:#f8dfcc;color:#a34f0e;border-bottom:3px solid #d75b12}.field{border-bottom:1px solid #ddd;padding:10px 0}.field>span{display:block;font-size:13px;font-weight:bold;margin-bottom:7px}.tri{display:flex;gap:5px}.tri button{flex:1;min-height:39px;border-radius:4px;border:1px solid #d7d7d7;background:#f4f4f4;color:#555}.tri button.good{background:#b8e8c7;border-color:#65c489;color:#135d2d;font-weight:bold}.tri button.bad{background:#f7bcbc;border-color:#d86b6b;color:#842020;font-weight:bold}.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(900px,100%);background:#fff;border-top:1px solid #ddd;padding:10px;display:flex;gap:10px}.bottom button{flex:1}.hidden{display:none!important}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}.muted{font-size:12px;color:#777}.section{background:#f6f6f6;padding:10px;margin:10px 0;border-left:4px solid #e67920;font-size:14px;font-weight:bold}.pill{font-size:12px;background:#fff0df;color:#a34a0a;padding:4px 8px;border-radius:12px}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.history{border:1px solid #ddd;border-radius:5px;padding:12px;margin-top:15px}.small{font-size:12px}@media(min-width:750px){.app{border-left:1px solid #ddd;border-right:1px solid #ddd}.rail{width:65px}.rail button{min-height:51px}.main{padding:15px 25px 80px}}
 
 /* V2 : présentation inspirée des écrans de formation présentés pages 12-20 du livret SDIS 55 */
@@ -499,6 +499,98 @@ body.anatomy-screen-lock .main:has(.vs24-e-screen) .section, body.anatomy-screen
 .quit-mini{margin-left:8px;background:#1f2330;border:1px solid #555b70;color:#fff;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:700}
 .top .title small{display:block;padding-left:34px}
 
+
+/* V29 — adaptation tactile aux tablettes Android (portrait / paysage).
+   CSS uniquement : logique des bilans, dessins et menus préservée. */
+@media (min-width:700px) {
+  html,body{font-size:18px!important;}
+  .app{width:100%!important;max-width:none!important;}
+  .training-banner{height:25px!important;font-size:12px!important;flex-shrink:0;}
+  .top{height:70px!important;min-height:70px!important;padding:10px 18px!important;}
+  .top .title{font-size:22px!important;line-height:1.2!important;white-space:nowrap;}
+  .top .title small{font-size:14px!important;padding-left:42px!important;margin-top:3px;}
+  .top .sim-mark{width:33px!important;height:33px!important;font-size:20px!important;}
+  .header-tools{gap:clamp(9px,1.5vw,21px)!important;padding-right:8px!important;}
+  .iconbtn-svg{width:37px!important;height:40px!important;}
+  .iconbtn-svg svg{width:29px!important;height:29px!important;}
+  .iconbtn-svg .notif-dot{width:9px!important;height:9px!important;}
+  .quit-mini{font-size:14px!important;min-height:37px;padding:8px 12px!important;}
+  .notice{font-size:12px!important;padding:6px 10px!important;min-height:27px!important;flex-shrink:0;}
+  #editor:not(.hidden){flex:1!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;}
+  .layout{flex:1 1 auto!important;min-height:0!important;overflow:hidden!important;}
+  .rail{width:64px!important;min-width:64px!important;flex:0 0 64px!important;}
+  .rail button{font-size:24px!important;min-height:0!important;flex:1 1 0!important;padding:4px!important;}
+  .rail button.sel{border-left-width:5px!important;}
+  .main{flex:1 1 auto!important;min-height:0!important;padding:0 16px 0!important;overflow:hidden!important;}
+  .sim-toolbar{display:none!important;}
+  .screen-heading{min-height:60px!important;padding:9px 15px!important;}
+  .screen-heading .screen-title{font-size:20px!important;}
+  .screen-heading .ras{font-size:16px!important;min-height:40px!important;min-width:94px!important;}
+  #panel{padding:9px 14px 15px!important;overflow-y:auto!important;min-height:0!important;flex:1 1 auto!important;scrollbar-width:thin;}
+  .section{font-size:19px!important;margin:14px 0 10px!important;padding:7px 5px!important;}
+  #panel label{font-size:17px!important;margin:13px 0 7px!important;line-height:1.2;}
+  #panel input:not([type=range]):not([type=checkbox]),
+  #panel select,#panel textarea{font-size:19px!important;padding:13px 15px!important;min-height:56px!important;border-radius:5px!important;}
+  #panel textarea{min-height:110px!important;line-height:1.5!important;}
+  #panel .field{padding:5px 0!important;}
+  #panel .field .tri{min-height:60px!important;}
+  #panel .tri .field-name{font-size:17px!important;padding:12px 15px!important;}
+  #panel .tri button{font-size:16px!important;min-height:60px!important;}
+  .tabs{min-height:60px!important;margin:0 -12px 12px!important;overflow-x:auto!important;}
+  .tabs button{font-size:17px!important;min-height:60px!important;padding:13px 10px!important;}
+  .bottom{width:100%!important;max-width:none!important;min-height:72px!important;padding:9px 20px!important;gap:13px!important;}
+  .bottom button{font-size:17px!important;max-width:330px!important;padding:14px 10px!important;min-height:52px!important;}
+  .home.sy-home{padding:25px 35px 35px!important;}
+  .sy-welcome strong{font-size:23px!important;}.sy-welcome small{font-size:15px!important;}
+  .sy-home-status strong{font-size:23px!important;}.sy-home-status #sy-current-case{font-size:18px!important;}
+  .sy-home-actions button{height:70px!important;font-size:22px!important;}
+  .sy-home-actions{max-width:740px!important;}
+  .sy-quit{font-size:15px!important;padding:11px 14px!important;}
+  /* Onglet E : proportions et commandes adaptées, dessin non décalé. */
+  body.anatomy-screen-lock .main{padding-bottom:0!important;}
+  body.anatomy-screen-lock #panel{padding:0!important;overflow:hidden!important;}
+  .vs24-side-switch button{min-width:48px!important;min-height:48px!important;font-size:15px!important;}
+  .vs24-side-switch{right:12px!important;top:15px!important;}
+  .vs24-e-body .vs24-sheet{max-width:calc(100% - 75px)!important;}
+  .vs24-dialog{width:min(440px,90vw)!important;font-size:18px!important;}
+  .vs24-choice{min-height:57px!important;font-size:18px!important;}
+  .vs24-choice input{width:26px!important;height:26px!important;min-height:26px!important;}
+  .vs24-dialog-title{font-size:16px!important;}
+  .vs24-photo,.vs24-cancel{font-size:18px!important;min-height:50px!important;}
+  .burn-v25-screen{grid-template-columns:clamp(210px,29%,320px) minmax(0,1fr)!important;}
+  .burn-v25-sidebar{padding:13px 10px!important;gap:12px!important;}
+  .burn-v25-box{padding:13px!important;gap:11px!important;}
+  .burn-v25-box-title{font-size:17px!important;}
+  .burn-v25-alert,.burn-v25-sub,.burn-v25-degree{font-size:15px!important;}
+  .burn-v25-add,.burn-v25-tool{font-size:15px!important;min-height:48px!important;}
+  .burn-v25-side-switch button{font-size:15px!important;min-width:76px!important;min-height:45px!important;}
+  .burn-v25-figure{min-height:0!important;}
+  .burn-v25-warning{font-size:13px!important;padding:7px!important;}
+  /* Mannequin de brûlures : conserver toute la silhouette à l'écran. */
+  .burn-v25-figure .burn-v27-body{max-height:100%!important;max-width:100%!important;}
+}
+@media (min-width:700px) and (orientation:landscape){
+  .top{height:56px!important;min-height:56px!important;padding:5px 15px!important;}
+  .top .title{font-size:19px!important;}.top .title small{font-size:12px!important;}
+  .notice{min-height:22px!important;padding:3px!important;}
+  .training-banner{height:19px!important;}
+  .rail{width:58px!important;min-width:58px!important;flex-basis:58px!important;}
+  .rail button{font-size:20px!important;}
+  .screen-heading{min-height:45px!important;}
+  .tabs{min-height:46px!important;}.tabs button{min-height:46px!important;padding:8px!important;}
+  #panel label{margin:8px 0 4px!important;}
+  #panel input:not([type=range]):not([type=checkbox]),#panel select{min-height:46px!important;padding:8px 13px!important;}
+  .bottom{min-height:58px!important;padding:5px 15px!important;}
+  .bottom button{min-height:46px!important;padding:9px!important;}
+  .burn-v25-sidebar{padding:5px 8px!important;gap:7px!important;}
+  .burn-v25-box{padding:8px!important;gap:6px!important;}
+  .burn-v25-box-title{font-size:15px!important;}
+  .burn-v25-alert,.burn-v25-sub,.burn-v25-degree{font-size:13px!important;}
+  .burn-v25-add,.burn-v25-tool{min-height:32px!important;font-size:13px!important;}
+  .burn-v25-brush-preview{max-height:38px!important;max-width:38px!important;}
+  .burn-v25-side-switch button{font-size:14px!important;min-height:36px!important;}
+}
+
 </style></head><body><div id="vs20-splash" role="presentation"><div class="vs-icon">S</div><button style="padding:15px 35px;border:1px solid #94b6ff;background:#17449f;border-radius:7px;color:#fff;font-size:17px;font-weight:700" onclick="vs20Login()">Ouvrir le simulateur VSAV</button><small>SIMULATEUR INDÉPENDANT · DONNÉES FICTIVES</small></div>
 <div id="vs20-login"><div class="vs-login-inner"><div class="vs-logo">S</div><div class="vs-sub">SIMULATEUR DE BILAN — <b>MODE FORMATION FICTIF</b></div><label>Identifiant utilisateur d'entraînement</label><input id="vs20-id" autocomplete="off" autocapitalize="none" placeholder="Exemple : pdupontsdis55"><label>Mot de passe de démonstration</label><input id="vs20-pass" type="password" autocomplete="off" placeholder="Saisissez n'importe quel mot de passe fictif"><button onclick="vs20Enter()">Connexion</button><button class="vs-demo" onclick="vs20Enter(true)">Mode hors connexion — Démonstration</button><div class="vs-login-help"><b>Consigne (format réel de l'identifiant) :</b> première lettre du prénom + nom + sdis55, sans espace.<br>Sur le véritable Syopé, utilisez le mot de passe que vous avez créé.<br><b>Ici, n'entrez jamais votre vrai mot de passe :</b> tous les identifiants sont fictifs et ne sont pas transmis.</div></div></div>
 <div id="vs20-new"><div class="vs-modal"><h2>Créer un nouveau bilan</h2><label>Véhicule (simulation)</label><select id="vs20-vehicle"><option>VSAV — Formation</option><option>VSAV 1 — Exercice</option><option>Sans véhicule (exercice)</option></select><label>Ticket / Intervention fictive</label><select id="vs20-ticket"><option>Sans ticket — saisie manuelle</option><option>Exercice : Malaise</option><option>Exercice : Accident de circulation</option><option>Exercice : Chute</option></select><button onclick="vs20Create()">Valider</button><button class="vs-cancel" onclick="document.getElementById('vs20-new').style.display='none'">Annuler</button></div></div>
@@ -520,7 +612,7 @@ body.anatomy-screen-lock .main:has(.vs24-e-screen) .section, body.anatomy-screen
 <svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7"></circle><path d="M12 9v4l2.8 1.6"></path></svg>
 </button>
 <button class="quit-mini" onclick="show('home')" title="Quitter le simulateur">Quitter</button>
-</div></header><div class="notice">V21 TEST · FORMATION FICTIVE · AUCUNE TRANSMISSION RÉELLE</div>
+</div></header><div class="notice">V29 · FORMATION FICTIVE · AUCUNE TRANSMISSION RÉELLE</div>
 <span id="victimTag" style="display:none"></span><section class="home sy-home" id="home">
   <div class="sy-welcome"><span class="sy-round-logo">S</span><div><strong id="sy-welcome-name">Bienvenue · Formation</strong><small>VSAV EN FORMATION · DONNÉES FICTIVES</small></div></div>
   <div class="sy-home-status"><strong>Interventions actives</strong><span class="sy-dot"></span><div id="sy-current-case">Aucune intervention en cours</div><span id="caseLabel" style="display:none"></span><button id="sy-resume" class="sy-resume hidden" onclick="loadSaved()">Reprendre le bilan fictif</button></div>
