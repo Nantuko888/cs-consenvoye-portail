@@ -1155,13 +1155,31 @@ function rtnCredentialEmail(credential){
 }
 function rtnConnectFresh(credential,email) {
   rtnConnecting=true;
-  formationBridge('connect',{credential}).then(result=>{
-    rtnConnecting=false;
-    if(!result || !result.ok || !result.session){rtnLock('Connexion refusée');return;}
+  // Le serveur retourne autorisation + questionnaires + progression en une seule requête.
+  formationBridge('bootstrap',{credential}).then(result=>{
+    if(!result || !result.session || !result.dashboard)throw Error('Réponse de connexion incomplète');
     rtnSession=result.session;
     if(email) sessionStorage.setItem(FORMATION_SESSION_KEY,JSON.stringify({email,session:rtnSession,expires:Date.now()+55*60*1000}));
-    refresh(()=>{rtnUnlock();});
+    dashboard=result.dashboard;
+    bank=dashboard.questions;
+    renderDashboard();
+    rtnConnecting=false;
+    rtnUnlock();
   }).catch(err=>{
+    // Pendant la transition, l'ancien déploiement Apps Script connaît connect
+    // et dashboard mais pas encore bootstrap. Ne pas bloquer les utilisateurs.
+    if(/Action non prise en charge/.test(String(err && err.message || err))){
+      formationBridge('connect',{credential}).then(result=>{
+        if(!result || !result.ok || !result.session)throw Error('Connexion refusée');
+        rtnSession=result.session;
+        if(email) sessionStorage.setItem(FORMATION_SESSION_KEY,JSON.stringify({email,session:rtnSession,expires:Date.now()+55*60*1000}));
+        refresh(()=>{rtnConnecting=false;rtnUnlock();});
+      }).catch(fallbackErr=>{
+        rtnConnecting=false;
+        rtnLock('Accès Formation refusé : '+(fallbackErr && fallbackErr.message || fallbackErr));
+      });
+      return;
+    }
     rtnConnecting=false;
     rtnLock('Accès Formation refusé : '+(err && err.message || err));
   });
