@@ -687,6 +687,34 @@ select{background:#182c44;color:white;border-color:#45607b}.field label{color:#d
  .masthead{margin:0 -14px 16px}
 }
 
+
+/* RTN : casque et zone personnelle immobiles ; seul le contenu central défile. */
+html,body{height:100%;overflow:hidden}
+.app{height:100dvh;min-height:0;overflow:hidden}
+.app > .main{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden;padding-bottom:0}
+.app > .main > .masthead{flex:0 0 216px;position:relative;top:auto;z-index:2;margin-bottom:0}
+.app > .main > .topline{flex:0 0 auto;position:relative;top:auto;z-index:2;margin-bottom:0}
+.rtn-content{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:18px 0 55px;scrollbar-gutter:stable}
+.quick-actions{grid-template-columns:repeat(4,minmax(0,1fr))}
+.action-chapters{background:linear-gradient(125deg,#194d48,#103332)}
+.action-chapters:before{background:radial-gradient(circle at 100% 0%,#37a89d55,transparent 65%)}
+#home .home-welcome{margin:7px 0 24px}
+.rtn-subview-back{margin:0 0 18px}
+.rtn-subview>h1{margin:4px 0 18px}
+@media(max-width:1100px){
+ .app > .main > .masthead{flex-basis:188px}
+ .quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+ .app > .main{padding-bottom:0}
+ .app > .main > .masthead{flex-basis:155px;margin:0 -14px}
+ .rtn-content{padding:12px 0 35px;scrollbar-gutter:auto}
+ .quick-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .action-tile{min-height:138px}
+}
+@media(max-width:400px){.action-tile{padding-left:70px}.action-tile strong{font-size:17px}}
+@media(max-height:540px){.app > .main > .masthead{flex-basis:110px}.masthead-description{display:none}}
+
 </style>
  </head>
  <body>
@@ -705,17 +733,26 @@ select{background:#182c44;color:white;border-color:#45607b}.field label{color:#d
    <main class="main">
      <header class="masthead"><div class="masthead-picture" aria-hidden="true"></div><div class="masthead-content"><div class="masthead-title"><span class="masthead-accent">▰</span> RTN <span class="pulse">⌁</span></div><div class="masthead-subtitle">Références Techniques Nationales</div><div class="masthead-description">SIMULATEUR D’ENTRAÎNEMENT ET DE RÉVISION</div></div></header>
      <div class="topline"><span class="eyebrow">ESPACE PERSONNEL DE RÉVISION</span><div class="user-actions"><span class="profile" id="profile">Bonjour</span><button class="logout-btn" id="leaveApp" type="button">← Mes Révisions</button></div></div>
+     <div class="rtn-content" id="rtnContent">
      <section id="home">
       <div class="home-welcome"><div><h1>Bienvenue sur ton <em>simulateur RTN</em></h1><p>Entraîne-toi, évalue tes connaissances et progresse dans les Références Techniques Nationales.</p></div><span class="training-marker">✚ &nbsp; Formation · Révision · Progression</span></div>
       <div class="quick-actions">
-       <button class="action-tile action-red" id="quickStart" type="button"><span class="tile-icon">▷</span><strong>Commencer<br>une séance</strong><small>Des questions aléatoires pour t'entraîner</small><span class="tile-arrow">›</span></button>
+       <button class="action-tile action-red" id="quickStart" type="button"><span class="tile-icon">▷</span><strong>Commencer<br>une séance</strong><small>Un chapitre au hasard et des questions mélangées</small><span class="tile-arrow">›</span></button>
        <button class="action-tile action-blue" id="tileDashboard" type="button"><span class="tile-icon">▥</span><strong>Tableau<br>de bord</strong><small>Résultats, scores et domaines à renforcer</small><span class="tile-arrow">›</span></button>
        <button class="action-tile action-slate" id="tileProgress" type="button"><span class="tile-icon">↗</span><strong>Ma<br>progression</strong><small>Ton évolution, chapitre par chapitre</small><span class="tile-arrow">›</span></button>
+       <button class="action-tile action-chapters" id="tileChapters" type="button"><span class="tile-icon">▦</span><strong>Les 13<br>chapitres</strong><small>Choisir un thème à réviser</small><span class="tile-arrow">›</span></button>
       </div>
-      <div class="summary-bar"><div class="summary-title"><span>◉</span><div><strong>Ma progression globale</strong><small>Couverture des questions disponibles</small></div></div><div class="summary-progress"><div class="summary-track"><div id="homeProgressFill"></div></div><strong id="homeProgressPct">0 %</strong></div><div class="summary-mini"><span id="homeSessions">0</span> séances · <span id="homeAnswered">0</span> réponses</div></div>
+     </section>
+     <section class="hidden rtn-subview" id="dashboardView">
+       <button class="btn text rtn-subview-back" id="backDashboard" type="button">← Accueil RTN</button>
+       <h1>Tableau de bord</h1>
+       <div class="summary-bar"><div class="summary-title"><span>◉</span><div><strong>Ma progression globale</strong><small>Couverture des questions disponibles</small></div></div><div class="summary-progress"><div class="summary-track"><div id="homeProgressFill"></div></div><strong id="homeProgressPct">0 %</strong></div><div class="summary-mini"><span id="homeSessions">0</span> séances · <span id="homeAnswered">0</span> réponses</div></div>
       <div class="last-session"><div class="last-session-heading"><h2>◷ &nbsp; Dernière séance</h2><span id="lastSessionStatus">Historique personnel</span></div><div id="lastSessionInfo">Aucune séance terminée pour le moment. Lance ta première session !</div><button class="btn ghost" id="lastSessionGo" type="button">Voir ma progression →</button></div>
      <div class="metrics" id="metrics">
      </div>
+    </section>
+    <section class="hidden rtn-subview" id="chaptersView">
+     <button class="btn text rtn-subview-back" id="backChapters" type="button">← Accueil RTN</button>
      <div class="section-top">
       <h2>
        Les 13 chapitres
@@ -765,7 +802,7 @@ select{background:#182c44;color:white;border-color:#45607b}.field label{color:#d
          <option value="Documentaire">
           Documentaire · lecture des fiches
          </option>
-         <option value="Tout">
+         <option value="Tout" selected>
           Mixte · tous types
          </option>
         </select>
@@ -915,6 +952,7 @@ select{background:#182c44;color:white;border-color:#45607b}.field label{color:#d
       </div>
      </div>
     </section>
+     </div>
    </main>
   </div>
   <script>
@@ -1029,8 +1067,8 @@ function renderDashboard() { let st = dashboard.stats, all = CHAPTERS.map(c => s
     el.querySelector('button').onclick = () => setup(c.id);
     $('chapters').append(el);
 } renderStats(); }
-function view(id) { for (const x of ['home', 'setupView', 'quizView', 'resultsView', 'statsView'])
-    $(x).classList.toggle('hidden', id !== x); $('navHome').classList.toggle('active', id === 'home'); $('navStats').classList.toggle('active', id === 'statsView'); window.scrollTo(0, 0); }
+function view(id) { for (const x of ['home', 'dashboardView', 'chaptersView', 'setupView', 'quizView', 'resultsView', 'statsView'])
+    $(x).classList.toggle('hidden', id !== x); $('navHome').classList.toggle('active', id === 'home'); $('navStats').classList.toggle('active', id === 'statsView'); $('rtnContent').scrollTop=0; }
 function setup(id) { chapter = id; $('setupTitle').textContent = chaptersMap[id].name; updateAvailability(); view('setupView'); }
 function updateAvailability() { let lv = $('level').value, mode = $('mode').value, pool = bank.filter(q => q.chap === chapter && (lv === 'Mixte' || q.level === lv) && (mode === 'Tout' || q.mode === mode)); $('setupAvailable').textContent = pool.length + ' questions disponibles dans ce parcours et ce niveau. La séance s’adaptera automatiquement au nombre existant.'; $('start').disabled = !pool.length; }
 function shuffle(a) { a = [...a]; for (let i = a.length - 1; i > 0; i--) {
@@ -1084,10 +1122,20 @@ function renderStats() { const st = dashboard.stats, ss = dashboard.sessions, ar
 } $('history').innerHTML = ''; ss.slice(0, 20).forEach(s => { let div = document.createElement('div'); div.className = 'history-row'; let date = new Date(s.date), d = isNaN(date) ? String(s.date) : date.toLocaleDateString('fr-FR'); div.textContent = d + ' · ' + (chaptersMap[s.chap]?.name || s.chap) + ' · ' + s.level; let b = document.createElement('b'); b.textContent = s.correct + '/' + s.n + ' · ' + s.pct + ' %'; div.append(b); $('history').append(div); }); let points = ss.slice(0, 12).reverse(), svg = points.length > 1 ? `<svg class="chart" viewBox="0 0 600 170" preserveAspectRatio="none" role="img" aria-label="Graphique des pourcentages de réussite"><path d="M0 150 H600" stroke="#d8e6ef"/><path d="M0 83 H600" stroke="#e6edf4"/><path d="M0 16 H600" stroke="#e6edf4"/><polyline fill="none" stroke="#2289bb" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" points="${points.map((p, i) => `${20 + i * 560 / (points.length - 1)},${150 - p.pct * 1.34}`).join(' ')}"/></svg>` : '<p class="muted small">La courbe apparaîtra après deux séances.</p>'; $('chartWrap').innerHTML = svg; }
 $('navHome').onclick = () => view('home');
 $('navStats').onclick = () => { renderStats(); view('statsView'); };
-$('quickStart').onclick = () => setup('04');
-$('sideStart').onclick = () => setup('04');
-$('sideChapters').onclick = () => { view('home'); $('chapters').scrollIntoView({behavior:'smooth',block:'start'}); };
-$('tileDashboard').onclick = () => { view('home'); $('metrics').scrollIntoView({behavior:'smooth',block:'start'}); };
+$('quickStart').onclick = () => {
+  // Séance rapide : sélectionner au hasard un chapitre contenant des questions.
+  const chaptersAvailable=CHAPTERS.filter(c=>bank.some(q=>q.chap===c.id));
+  if(!chaptersAvailable.length){alert('Aucune question disponible.');return;}
+  const selected=chaptersAvailable[Math.floor(Math.random()*chaptersAvailable.length)];
+  $('level').value='Mixte';$('mode').value='Tout';
+  setup(selected.id);
+};
+$('sideStart').onclick = () => $('quickStart').click();
+$('sideChapters').onclick = () => view('chaptersView');
+$('tileDashboard').onclick = () => view('dashboardView');
+$('tileChapters').onclick = () => view('chaptersView');
+$('backDashboard').onclick = () => view('home');
+$('backChapters').onclick = () => view('home');
 $('tileProgress').onclick = () => { renderStats(); view('statsView'); };
 $('lastSessionGo').onclick = () => { renderStats(); view('statsView'); };
 $('sidePdf').href = PDF_FILE;
@@ -1099,7 +1147,7 @@ $('leaveApp').onclick = () => {
   // Le module est intégré au portail : window.close() ne ferme pas une iframe.
 };
 
-$('backSetup').onclick = () => view('home');
+$('backSetup').onclick = () => view('chaptersView');
 $('level').onchange = updateAvailability;
 $('mode').onchange = updateAvailability;
 $('start').onclick = start;
