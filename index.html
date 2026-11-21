@@ -1272,11 +1272,19 @@ document.addEventListener("click", (e) => {
   const RTN_WEBAPP_URL = new URL('formation.html', location.href).href;
   // RTN s'ouvre hors iframe Apps Script ; aucun jeton Google dans l'URL.
   let rtnTab=null, rtnFrameLayer=null, rtnNonce='', rtnOpened=false, rtnPending=false;
+  let rtnFrameAccount='', rtnFrameBornAt=0;
+  const RTN_REUSE_MS=5*60*1000; // Reprise rapide, sans conserver indéfiniment une vue sensible.
   const allowedGASOrigin=origin=>origin===location.origin;
-  function closeRtn(){
-    rtnOpened=false; rtnPending=false; rtnNonce='';
-    if(rtnFrameLayer){rtnFrameLayer.remove();rtnFrameLayer=null;}
-    rtnTab=null;
+  function closeRtn(destroy=false){
+    rtnOpened=false; rtnPending=false;
+    if(destroy){
+      rtnNonce='';
+      if(rtnFrameLayer){rtnFrameLayer.remove();rtnFrameLayer=null;}
+      rtnTab=null; rtnFrameAccount='';rtnFrameBornAt=0;
+    }else if(rtnFrameLayer){
+      // On masque simplement Formation : son état reste prêt pour le prochain retour.
+      rtnFrameLayer.style.display='none';
+    }
   }
   function requestGoogleForRtn(){
     if(document.getElementById('rtn-google-verify'))return;
@@ -1308,14 +1316,27 @@ document.addEventListener("click", (e) => {
   }
   function openRtn(){
     if(rtnOpened && rtnTab && rtnFrameLayer){rtnTab.focus();return;}
-    // Ce contrôle client améliore l'interface : il ne remplace PAS le contrôle
-    // obligatoire de la colonne formation dans le serveur RTN.
-    if(sessionStorage.getItem('cs_formation_v1') === '0'){
-      alert('Accès aux formations non autorisé. Contacte le responsable du portail.');
+    // Même vérification d'accès locale à chaque ouverture, y compris la reprise rapide.
+    if(sessionStorage.getItem('cs_formation_v1') !== '1'){
+      alert('Accès aux formations non autorisé ou non vérifié. Recharge le portail si nécessaire.');
       return;
     }
     const token=sessionStorage.getItem(RTN_TOKEN_KEY);
-    if(!hasValidRtnToken(token)){sessionStorage.removeItem(RTN_TOKEN_KEY);requestGoogleForRtn();return;}
+    if(!hasValidRtnToken(token)){
+      closeRtn(true);
+      sessionStorage.removeItem(RTN_TOKEN_KEY);
+      requestGoogleForRtn();return;
+    }
+    const account=parseJwtEmail(token);
+    if(rtnFrameLayer && rtnTab && rtnFrameAccount===account &&
+       Date.now()-rtnFrameBornAt<RTN_REUSE_MS){
+      rtnFrameLayer.style.display='block';
+      rtnOpened=true;
+      rtnTab.focus();
+      return;
+    }
+    // Changement de compte, expiration ou ancienne instance : forcer une nouvelle vérification serveur.
+    closeRtn(true);
     rtnNonce=Array.from(crypto.getRandomValues(new Uint8Array(24)),x=>x.toString(16).padStart(2,'0')).join('');
     // Le compte est choisi à la connexion Google du portail.
     // authuser est uniquement un indice de routage pour Google (pas une autorisation).
@@ -1343,6 +1364,8 @@ document.addEventListener("click", (e) => {
     document.body.appendChild(layer);
     rtnFrameLayer=layer;
     rtnTab=frame.contentWindow;
+    rtnFrameAccount=account;
+    rtnFrameBornAt=Date.now();
     rtnOpened=true;rtnPending=true;
     try{rtnTab.focus()}catch(e){}
   }
@@ -1361,12 +1384,12 @@ document.addEventListener("click", (e) => {
     if(e.data.nonce!==rtnNonce)return;
     if(e.data.type==='rtn:hello'){
       const token=sessionStorage.getItem(RTN_TOKEN_KEY)||'';
-      if(!hasValidRtnToken(token)){closeRtn();requestGoogleForRtn();return;}
+      if(!hasValidRtnToken(token)){closeRtn(true);requestGoogleForRtn();return;}
       e.source.postMessage({type:'rtn:credential',nonce:rtnNonce,credential:token},e.origin);
       rtnPending=false;
     }else if(e.data.type==='rtn:exit'){closeRtn();}
   });
-  document.getElementById('logoutBtnPortal')?.addEventListener('click',closeRtn);
+  document.getElementById('logoutBtnPortal')?.addEventListener('click',()=>closeRtn(true));
 
   const SIMULATOR_VERSION = '28';
   const ICON = 'simulateur-vsav/icone_simulateur_vsav.png';
