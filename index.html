@@ -714,6 +714,7 @@ function doLogout(){
   localStorage.removeItem(LS_KEY);
   sessionStorage.removeItem(RTN_TOKEN_KEY);
   localStorage.removeItem("cs_role_v1");
+  sessionStorage.removeItem("cs_formation_v1");
   localStorage.removeItem("cs_online_badge_cache_v1");
   showLogin();
   showMsg("Déconnecté.");
@@ -731,6 +732,7 @@ async function checkAndShow_(email){
     if(res && res.ok === true){
       localStorage.setItem(LS_KEY, email);
       localStorage.setItem("cs_role_v1", String(res.role || "").trim().toLowerCase());
+      sessionStorage.setItem("cs_formation_v1", res.formation === true ? "1" : res.formation === false ? "0" : "inconnu");
 
       hideChecking();
       showPortal();
@@ -792,6 +794,7 @@ async function handleCredentialResponse(response){
 
       if(res && res.ok === true){
         localStorage.setItem("cs_role_v1", String(res.role || "").trim().toLowerCase());
+        sessionStorage.setItem("cs_formation_v1", res.formation === true ? "1" : res.formation === false ? "0" : "inconnu");
         hideSync();
         return;
       }
@@ -1306,6 +1309,12 @@ document.addEventListener("click", (e) => {
   }
   function openRtn(){
     if(rtnOpened && rtnTab && !rtnTab.closed){rtnTab.focus();return;}
+    // Ce contrôle client améliore l'interface : il ne remplace PAS le contrôle
+    // obligatoire de la colonne formation dans le serveur RTN.
+    if(sessionStorage.getItem('cs_formation_v1') === '0'){
+      alert('Accès aux formations non autorisé. Contacte le responsable du portail.');
+      return;
+    }
     const token=sessionStorage.getItem(RTN_TOKEN_KEY);
     if(!hasValidRtnToken(token)){sessionStorage.removeItem(RTN_TOKEN_KEY);requestGoogleForRtn();return;}
     rtnNonce=Array.from(crypto.getRandomValues(new Uint8Array(24)),x=>x.toString(16).padStart(2,'0')).join('');

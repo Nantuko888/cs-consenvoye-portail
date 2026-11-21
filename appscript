@@ -1145,8 +1145,11 @@ function authCheck_(e){
     if(!sh) return { ok:false, error:"onglet Acces introuvable", spreadsheetId: SPREADSHEET_ID };
 
     const data = sh.getDataRange().getValues();
+    // La colonne formation est recherchée par en-tête, pas par position.
+    const formationIndex = (data[0] || []).findIndex(h => String(h || '').trim().toLowerCase() === 'formation');
     let found = false;
     let foundRole = "";
+    let foundFormation = false;
     let foundRow = -1;
 
     for(let i=1;i<data.length;i++){
@@ -1155,6 +1158,7 @@ function authCheck_(e){
       if(eMail && eMail === email){
         found = true;
         foundRole = role;
+        foundFormation = formationIndex !== -1 && String(data[i][formationIndex] ?? '').trim() === '1';
         foundRow = i+1; // numéro de ligne Sheets
         break;
       }
@@ -1164,6 +1168,7 @@ function authCheck_(e){
       ok: found,
       email,
       role: foundRole,
+      formation: found && foundFormation,
       debug: {
         spreadsheetId: SPREADSHEET_ID,
         spreadsheetName: ss.getName(),
