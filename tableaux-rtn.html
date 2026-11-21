@@ -38,7 +38,6 @@ const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>'
 const shuffle=arr=>{const out=[...arr];for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]]}return out};
 let queue=[],at=0,correct=0,total=0,results=[],corrected=false;
 function goBack(){
-  if(window.parent!==window){try{window.parent.postMessage({type:'tableaux:exit'},location.origin);return}catch(e){}}
   location.href='revisions.html';
 }
 el('back').onclick=goBack;
