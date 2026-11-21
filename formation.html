@@ -715,6 +715,48 @@ html,body{height:100%;overflow:hidden}
 @media(max-width:400px){.action-tile{padding-left:70px}.action-tile strong{font-size:17px}}
 @media(max-height:540px){.app > .main > .masthead{flex-basis:110px}.masthead-description{display:none}}
 
+
+/* Correctif visuel des quatre cartes RTN : alignement net sur mobile.
+   Les précédentes règles de cartes horizontales comprimaient le texte
+   dans deux colonnes et créaient des chevauchements. */
+@media(max-width:760px){
+ .quick-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:stretch}
+ .quick-actions .action-tile{
+   min-width:0;min-height:202px;height:auto;padding:17px 11px 33px;
+   display:flex;flex-direction:column;justify-content:flex-start;
+   align-items:center;gap:9px;text-align:center;border-radius:17px;
+ }
+ .quick-actions .action-tile .tile-icon{
+   position:static;left:auto;top:auto;transform:none;flex:0 0 48px;
+   width:48px;height:48px;margin:0;font-size:27px;
+ }
+ .quick-actions .action-tile strong{
+   display:block;flex:0 0 auto;font-size:clamp(16px,4.4vw,20px);
+   line-height:1.12;letter-spacing:-.02em;max-width:100%;
+   overflow-wrap:normal;
+ }
+ .quick-actions .action-tile strong br{display:none}
+ .quick-actions .action-tile small{
+   display:block;max-width:100%;font-size:11px;line-height:1.35;
+   color:#e7edf6;overflow-wrap:break-word;
+ }
+ .quick-actions .action-tile .tile-arrow{
+   position:absolute;right:11px;bottom:6px;font-size:27px;line-height:1;
+   opacity:.9;
+ }
+ .quick-actions .action-red:before{
+   background:linear-gradient(130deg,#8c1423,#731626 72%,#4c152a);
+ }
+ .quick-actions .action-slate:before{
+   background:linear-gradient(130deg,#25455d,#102a42);
+ }
+}
+@media(max-width:400px){
+ .quick-actions .action-tile{padding:14px 9px 30px;min-height:204px}
+ .quick-actions .action-tile strong{font-size:16px}
+ .quick-actions .action-tile small{font-size:10.5px}
+}
+
 </style>
  </head>
  <body>
