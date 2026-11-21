@@ -1349,7 +1349,14 @@ document.addEventListener("click", (e) => {
     history.pushState({rtnSimulation:true},'', '#rtn');
   }
   window.addEventListener('message', e=>{
-    if(!rtnOpened || !allowedGASOrigin(e.origin) || !e.data || e.data.nonce!==rtnNonce) return;
+    if(!rtnOpened || !allowedGASOrigin(e.origin) || !e.data) return;
+    // Secours : Apps Script peut ne pas conserver launch_nonce lors du chargement.
+    // On transmet alors le nonce directement à l'iframe RTN, jamais le jeton Google.
+    if(e.data.type==='rtn:ready') {
+      e.source.postMessage({type:'rtn:init',nonce:rtnNonce},e.origin);
+      return;
+    }
+    if(e.data.nonce!==rtnNonce) return;
     if(e.data.type==='rtn:hello'){
       // Réponse à l'iframe GAS ayant émis le message (iframe imbriquée possible).
       e.source.postMessage({type:'rtn:credential',nonce:rtnNonce,
