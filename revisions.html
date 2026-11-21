@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Révisions — CS Consenvoye</title>
+<meta name="theme-color" content="#101c30">
+<style>
+:root{color-scheme:dark;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;--bg:#0a1425;--panel:#13253b;--line:#ffffff1e;--light:#e6eef8;--red:#d93432}
+*{box-sizing:border-box}body{margin:0;min-height:100dvh;background:radial-gradient(circle at 85% 5%,#6f242b60 0,transparent 38%),radial-gradient(circle at 5% 65%,#11527055 0,transparent 40%),var(--bg);color:#fff}
+main{max-width:1130px;margin:auto;padding:clamp(32px,6vw,80px) 20px 65px}.overline{color:#f39c88;font-weight:850;letter-spacing:.2em;font-size:12px;text-transform:uppercase}
+.hero{border:1px solid var(--line);border-radius:24px;padding:clamp(25px,5vw,54px);background:linear-gradient(120deg,#152945 0%,#102338 55%,#5c2025 100%);box-shadow:0 18px 50px #0005;position:relative;overflow:hidden}
+.hero::after{content:'+';position:absolute;right:4%;top:-28%;font-size:clamp(180px,28vw,330px);font-weight:900;color:#ffffff09;pointer-events:none}h1{font-size:clamp(38px,5.7vw,66px);line-height:1.04;margin:15px 0;letter-spacing:-.045em}.intro{max-width:620px;color:#c5d5e7;font-size:clamp(15px,2vw,18px);line-height:1.7;margin:0}
+.sectionHead{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:34px 0 18px}.sectionHead h2{font-size:22px;margin:0}.sectionHead span{font-size:13px;color:#91a9c3}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card{border:1px solid #45607c88;border-radius:22px;padding:24px;background:linear-gradient(155deg,#193047 0%,#101d30 100%);box-shadow:0 12px 26px #0004;min-height:270px;display:flex;flex-direction:column}.card.feature{border-color:#df665966;background:linear-gradient(160deg,#3b252e,#18283e 65%,#111f32)}.cardIcon{width:66px;height:66px;border-radius:18px;background:linear-gradient(140deg,#b72d31,#ff7a45);display:grid;place-items:center;font-size:32px;box-shadow:0 8px 22px #d92e3444}.card h3{font-size:22px;margin:22px 0 8px;line-height:1.2}.card p{color:#adbed1;font-size:14px;line-height:1.6;margin:0 0 22px}.status{margin-top:auto;display:inline-flex;align-items:center;gap:8px;color:#e8b5a5;font-size:12px;font-weight:800}.status::before{content:'';width:7px;height:7px;border-radius:50%;background:#e8b5a5}.mutedCard{opacity:.67}.mutedCard .cardIcon{background:#39516a;box-shadow:none}
+.note{color:#9bafc6;font-size:13px;line-height:1.6;margin:26px 4px 0}.badge{display:inline-block;border:1px solid #ffffff3b;padding:7px 12px;border-radius:999px;font-size:12px;color:#e7eff9;font-weight:700;margin-top:18px}
+@media(max-width:850px){.cards{grid-template-columns:1fr 1fr}.card{min-height:245px}}@media(max-width:570px){main{padding:24px 15px 45px}.hero{padding:27px 22px}.cards{grid-template-columns:1fr}.card{min-height:218px}.sectionHead{margin-top:28px}.sectionHead h2{font-size:20px}}
+</style>
+</head>
+<body>
+<main>
+<header class="hero">
+<div class="overline">CS Consenvoye · Espace formation</div>
+<h1>Révisions</h1>
+<p class="intro">Choisis ton thème pour t'entraîner, réviser tes connaissances et suivre ta progression.</p>
+<div class="badge">Un espace qui évoluera avec les nouvelles formations</div>
+</header>
+<div class="sectionHead"><h2>Choisir un thème</h2><span>1 module préparé</span></div>
+<div class="cards">
+<article class="card feature"><div class="cardIcon" aria-hidden="true">✚</div><h3>Références Techniques Nationales</h3><p>Premiers secours en équipe : questionnaires, corrections détaillées et accès aux fiches.</p><div class="status">Connexion sécurisée à finaliser</div></article>
+<article class="card mutedCard"><div class="cardIcon" aria-hidden="true">▦</div><h3>Tableaux à compléter</h3><p>Fréquences, paramètres vitaux et classification ATLS. Exercices à intégrer prochainement.</p><div class="status">À venir</div></article>
+<article class="card mutedCard"><div class="cardIcon" aria-hidden="true">▤</div><h3>Autres formations</h3><p>Un emplacement prévu pour de nouveaux fascicules ou thèmes de révision.</p><div class="status">À venir</div></article>
+</div>
+<p class="note">Le simulateur RTN existant n'est pas supprimé. Son ouverture depuis GitHub sera activée après validation des accès et de l'enregistrement individuel. Aucun questionnaire n'est modifié ici.</p>
+</main>
+</body>
+</html>
