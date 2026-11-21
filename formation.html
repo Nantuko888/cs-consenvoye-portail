@@ -672,7 +672,15 @@ select{background:#182c44;color:white;border-color:#45607b}.field label{color:#d
 .app > aside{display:none!important}
 .app > .main{max-width:1650px;margin:0 auto;padding:0 clamp(15px,3.2vw,48px) 60px}
 .masthead{margin-top:0}
-.topline{position:static;z-index:auto}
+/* Bandeau RTN permanent : casque + informations de session.
+   Seul le contenu sous le bandeau défile. */
+.masthead{position:sticky;top:0;z-index:40}
+.topline{position:sticky;top:216px;z-index:39;background:#0b1728;
+  margin-top:0;padding:12px 0 14px;box-shadow:0 6px 12px #071221aa;
+  border-bottom:1px solid #3b526a}
+@media(max-width:1100px){.topline{top:188px}}
+@media(max-width:760px){.topline{top:155px;padding:9px 0 11px}}
+
 @media(max-width:760px){
  .app{display:block}
  .app > .main{padding:0 14px 40px}
