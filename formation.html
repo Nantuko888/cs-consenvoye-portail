@@ -757,6 +757,10 @@ html,body{height:100%;overflow:hidden}
  .quick-actions .action-tile small{font-size:10.5px}
 }
 
+/* Actions de préparation, placées juste sous le bandeau personnel fixe. */
+.setup-navigation{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.setup-navigation .btn{min-height:43px}
+@media(max-width:430px){.setup-navigation{gap:6px}.setup-navigation .btn{padding:9px 10px;font-size:12px}}
 </style>
  </head>
  <body>
@@ -821,9 +825,10 @@ html,body{height:100%;overflow:hidden}
      </div>
     </section>
     <section class="hidden" id="setupView">
-     <button class="btn text" id="backSetup">
-      ← Retour aux chapitres
-     </button>
+     <div class="setup-navigation">
+      <button class="btn text" id="backSetup" type="button">← Retour accueil</button>
+      <button class="btn ghost hidden" id="newRandomChapter" type="button" title="Tirer un autre chapitre pour la séance">↻ Autre chapitre</button>
+     </div>
      <div class="panel" style="max-width:780px;margin:15px auto">
       <div class="eyebrow">
        CONFIGURER MA SÉANCE
@@ -1112,7 +1117,24 @@ function renderDashboard() { let st = dashboard.stats, all = CHAPTERS.map(c => s
 } renderStats(); }
 function view(id) { for (const x of ['home', 'dashboardView', 'chaptersView', 'setupView', 'quizView', 'resultsView', 'statsView'])
     $(x).classList.toggle('hidden', id !== x); $('navHome').classList.toggle('active', id === 'home'); $('navStats').classList.toggle('active', id === 'statsView'); $('rtnContent').scrollTop=0; }
-function setup(id) { chapter = id; $('setupTitle').textContent = chaptersMap[id].name; updateAvailability(); view('setupView'); }
+let setupReturnView='chaptersView';
+function setup(id, origin='chaptersView') {
+  chapter=id;
+  setupReturnView=origin;
+  $('backSetup').textContent=origin==='home'?'← Retour accueil':'← Retour aux chapitres';
+  $('newRandomChapter').classList.toggle('hidden',origin!=='home');
+  $('setupTitle').textContent=chaptersMap[id].name;
+  updateAvailability();
+  view('setupView');
+}
+function randomChapter(excludeCurrent=false) {
+  const all=CHAPTERS.filter(c=>bank.some(q=>q.chap===c.id));
+  const candidates=excludeCurrent&&all.length>1?all.filter(c=>c.id!==chapter):all;
+  if(!candidates.length){alert('Aucune question disponible.');return;}
+  const chosen=candidates[Math.floor(Math.random()*candidates.length)];
+  $('level').value='Mixte';$('mode').value='Tout';
+  setup(chosen.id,'home');
+}
 function updateAvailability() { let lv = $('level').value, mode = $('mode').value, pool = bank.filter(q => q.chap === chapter && (lv === 'Mixte' || q.level === lv) && (mode === 'Tout' || q.mode === mode)); $('setupAvailable').textContent = pool.length + ' questions disponibles dans ce parcours et ce niveau. La séance s’adaptera automatiquement au nombre existant.'; $('start').disabled = !pool.length; }
 function shuffle(a) { a = [...a]; for (let i = a.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
@@ -1165,14 +1187,8 @@ function renderStats() { const st = dashboard.stats, ss = dashboard.sessions, ar
 } $('history').innerHTML = ''; ss.slice(0, 20).forEach(s => { let div = document.createElement('div'); div.className = 'history-row'; let date = new Date(s.date), d = isNaN(date) ? String(s.date) : date.toLocaleDateString('fr-FR'); div.textContent = d + ' · ' + (chaptersMap[s.chap]?.name || s.chap) + ' · ' + s.level; let b = document.createElement('b'); b.textContent = s.correct + '/' + s.n + ' · ' + s.pct + ' %'; div.append(b); $('history').append(div); }); let points = ss.slice(0, 12).reverse(), svg = points.length > 1 ? `<svg class="chart" viewBox="0 0 600 170" preserveAspectRatio="none" role="img" aria-label="Graphique des pourcentages de réussite"><path d="M0 150 H600" stroke="#d8e6ef"/><path d="M0 83 H600" stroke="#e6edf4"/><path d="M0 16 H600" stroke="#e6edf4"/><polyline fill="none" stroke="#2289bb" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" points="${points.map((p, i) => `${20 + i * 560 / (points.length - 1)},${150 - p.pct * 1.34}`).join(' ')}"/></svg>` : '<p class="muted small">La courbe apparaîtra après deux séances.</p>'; $('chartWrap').innerHTML = svg; }
 $('navHome').onclick = () => view('home');
 $('navStats').onclick = () => { renderStats(); view('statsView'); };
-$('quickStart').onclick = () => {
-  // Séance rapide : sélectionner au hasard un chapitre contenant des questions.
-  const chaptersAvailable=CHAPTERS.filter(c=>bank.some(q=>q.chap===c.id));
-  if(!chaptersAvailable.length){alert('Aucune question disponible.');return;}
-  const selected=chaptersAvailable[Math.floor(Math.random()*chaptersAvailable.length)];
-  $('level').value='Mixte';$('mode').value='Tout';
-  setup(selected.id);
-};
+$('quickStart').onclick = () => randomChapter(false);
+$('newRandomChapter').onclick = () => randomChapter(true);
 $('sideStart').onclick = () => $('quickStart').click();
 $('sideChapters').onclick = () => view('chaptersView');
 $('tileDashboard').onclick = () => view('dashboardView');
@@ -1190,7 +1206,7 @@ $('leaveApp').onclick = () => {
   // Le module est intégré au portail : window.close() ne ferme pas une iframe.
 };
 
-$('backSetup').onclick = () => view('chaptersView');
+$('backSetup').onclick = () => view(setupReturnView);
 $('level').onchange = updateAvailability;
 $('mode').onchange = updateAvailability;
 $('start').onclick = start;
