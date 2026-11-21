@@ -69,6 +69,12 @@
   // L'ouverture du simulateur RTN passe par le portail, qui détient
   // le jeton Google et qui communique avec Apps Script en toute sécurité.
   if(b.dataset.module==='rtn' && window.parent!==window){
+    // Appel direct, depuis le clic, pour éviter le bloqueur de fenêtres surgissantes.
+    try {
+      if (typeof window.parent.__openRtnFromRevisions === 'function') {
+        window.parent.__openRtnFromRevisions(); return;
+      }
+    } catch (_) {}
     window.parent.postMessage({type:'revisions:open-rtn'}, window.location.origin);
     return;
   }
