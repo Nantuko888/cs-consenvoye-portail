@@ -1398,9 +1398,8 @@ document.addEventListener("click", (e) => {
     }else if(e.data.type==='rtn:loaded'){
       rtnFrameLayer?.querySelector('[role="status"]')?.remove();
     }else if(e.data.type==='rtn:load-error'){
-      const caption=rtnFrameLayer?.querySelector('.rtn-loading-caption');
-      if(caption)caption.textContent='Impossible de charger Formation. Vérifie ta connexion puis réessaie.';
-      rtnFrameLayer?.querySelector('[role="status"] span')?.remove();
+      // Montrer l'erreur produite par Formation plutôt qu'un chargement infini.
+      rtnFrameLayer?.querySelector('[role="status"]')?.remove();
     }else if(e.data.type==='rtn:exit'){closeRtn();}
   });
   document.getElementById('logoutBtnPortal')?.addEventListener('click',()=>closeRtn(true));
