@@ -79,7 +79,6 @@ function rtnTableauxHistory_(session){
    r.answers[index]=given;r.correct+=Number(good);r.total++;
    if(!good)r.mistakes.push({index,given:given||'Non renseigné',expected});
  }
- }
  return {sessions:rows.map(r=>({
    sid:String(r[0]),date:r[3] instanceof Date?r[3].toISOString():String(r[3]),
    n:Number(r[4]),total:Number(r[5]),correct:Number(r[6]),
