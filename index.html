@@ -1157,18 +1157,6 @@ document.addEventListener("click", (e) => {
 #portal .vsav-page .grid {
   flex-shrink: 0;
 }
-#portal .rtn-page-nav {
-  display:flex; justify-content:center; gap:12px; align-items:center;
-  width:100%; padding:6px 12px 0; flex-shrink:0;
-}
-#portal .rtn-page-nav button {
-  border:1px solid rgba(255,255,255,.42); border-radius:999px;
-  padding:8px 15px; background:rgba(10,20,35,.8);color:white;
-  font:700 12px system-ui,sans-serif;cursor:pointer;
-}
-#portal .rtn-page-nav button[aria-current="page"] {
-  background:#b32635;border-color:#e96772;
-}
 #portal .vsav-menu-dots {
   display: flex;
   align-items: center;
@@ -1411,27 +1399,7 @@ document.addEventListener("click", (e) => {
       return b;
     });
 
-    // Barre de navigation explicite : utilisable même si le balayage tactile échoue.
-    const pageNav = document.createElement('div');
-    pageNav.className = 'rtn-page-nav';
-    pageNav.setAttribute('aria-label', 'Choisir une page du portail');
-    const pageOne = document.createElement('button');
-    pageOne.type = 'button';
-    pageOne.textContent = '⌂ Accueil';
-    pageOne.setAttribute('aria-label', 'Afficher la première page du portail');
-    const pageTwo = document.createElement('button');
-    pageTwo.type = 'button';
-    pageTwo.textContent = 'Simulateurs →';
-    pageTwo.setAttribute('aria-label', 'Afficher Syopé et RTN sur la deuxième page');
-    pageNav.append(pageOne, pageTwo);
-    portal.appendChild(pageNav);
     portal.appendChild(dots);
-    const navigateTo = (n) => pages.scrollTo({
-      left: n * pages.clientWidth,
-      behavior: 'smooth'
-    });
-    pageOne.addEventListener('click', () => navigateTo(0));
-    pageTwo.addEventListener('click', () => navigateTo(1));
 
     let scheduled = false;
 
@@ -1453,14 +1421,11 @@ document.addEventListener("click", (e) => {
           }
         });
 
-        pageOne.toggleAttribute('aria-current', current === 0);
-        pageTwo.toggleAttribute('aria-current', current === 1);
         scheduled = false;
       });
     }, { passive: true });
 
     buttons[0].setAttribute('aria-current', 'page');
-    pageOne.setAttribute('aria-current','page');
 
     window.addEventListener('resize', () => {
       const n =
