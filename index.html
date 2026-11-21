@@ -1343,7 +1343,7 @@ document.addEventListener("click", (e) => {
     rtnFrame=document.createElement('iframe');rtnFrame.title='RTN — Références Techniques Nationales';
     rtnFrame.style.cssText='border:0;width:100%;height:100%;display:block';
     rtnFrame.src=RTN_WEBAPP_URL+(RTN_WEBAPP_URL.includes('?')?'&':'?')+'launch_nonce='+rtnNonce;
-    const back=document.createElement('button');back.type='button';back.textContent='← Portail';back.className='rtn-back';
+    const back=document.createElement('button');back.type='button';back.textContent='← Révisions';back.className='rtn-back';
     back.onclick=()=>closeRtn(true);
     rtnScreen.append(rtnFrame,back);document.body.appendChild(rtnScreen);rtnOpened=true;
     history.pushState({rtnSimulation:true},'', '#rtn');
@@ -1461,6 +1461,14 @@ document.addEventListener("click", (e) => {
       revisionsOpened = true;
       history.pushState({ revisionsOpen: true }, '', '#revisions');
     }
+    // Le module RTN de revisions.html demande l'ouverture au portail parent.
+    // Un message est accepté uniquement depuis NOTRE iframe Révisions, sur la même origine.
+    window.addEventListener('message', (event) => {
+      if (!revisionsOpened || event.origin !== location.origin ||
+          event.source !== revisionsFrame.contentWindow ||
+          !event.data || event.data.type !== 'revisions:open-rtn') return;
+      openRtn(); // vérification Google et droits RTN assurés par le système existant
+    });
     rtnLink.addEventListener('click', openRevisions);
     revisionsBack.addEventListener('click', () => closeRevisions(true));
     window.addEventListener('popstate', () => {
