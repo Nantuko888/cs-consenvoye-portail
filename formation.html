@@ -811,11 +811,20 @@ html,body{height:100%;overflow:hidden}
 #leaveApp.rtn-standard-control:hover{background:#ba3041!important}
 #home,#dashboardView,#setupView{overflow:visible}
 #chaptersView,#statsView{min-height:100%}
-#chaptersView>.rtn-subview-back,
-#statsView>.rtn-subview-back{
- position:sticky;top:0;z-index:25;display:inline-flex;
- margin:0 0 13px;padding:8px 11px!important;
- box-shadow:0 6px 12px #071221d9!important;
+/* Bandeau opaque sur toute la largeur : le contenu qui défile
+   est entièrement masqué derrière le retour, sans transparence. */
+#chaptersView>.rtn-sticky-return,
+#statsView>.rtn-sticky-return{
+ position:sticky;top:0;z-index:25;
+ display:flex;align-items:center;min-height:64px;
+ width:100%;padding:4px 0 12px;margin:0 0 9px;
+ background:#0b1728;
+ border-bottom:1px solid #30465e;
+ box-shadow:0 7px 12px #071221d9;
+}
+#chaptersView>.rtn-sticky-return>.rtn-subview-back,
+#statsView>.rtn-sticky-return>.rtn-subview-back{
+ position:static;margin:0;flex:0 0 auto;
 }
 .rtn-content[data-active-view="home"],
 .rtn-content[data-active-view="setupView"],
@@ -934,7 +943,7 @@ html,body{height:100%;overflow:hidden}
      </div>
     </section>
     <section class="hidden rtn-subview" id="chaptersView">
-     <button class="btn text rtn-subview-back rtn-standard-control rtn-return-control" id="backChapters" type="button">← Retour accueil</button>
+     <div class="rtn-sticky-return"><button class="btn text rtn-subview-back rtn-standard-control rtn-return-control" id="backChapters" type="button">← Retour accueil</button></div>
      <div class="section-top">
       <h2>
        Les 13 chapitres
@@ -1107,7 +1116,7 @@ html,body{height:100%;overflow:hidden}
      </div>
     </section>
     <section class="hidden rtn-subview" id="statsView">
-     <button class="btn text rtn-subview-back rtn-standard-control rtn-return-control" id="backStats" type="button">← Retour accueil</button>
+     <div class="rtn-sticky-return"><button class="btn text rtn-subview-back rtn-standard-control rtn-return-control" id="backStats" type="button">← Retour accueil</button></div>
      <div class="eyebrow">
       ANALYSE PERSONNELLE
      </div>
