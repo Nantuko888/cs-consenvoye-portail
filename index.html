@@ -1330,9 +1330,10 @@ document.addEventListener("click", (e) => {
   window.addEventListener('message',e=>{
     if(!rtnOpened||!allowedGASOrigin(e.origin)||!e.data||!rtnNonce)return;
     // Dans Apps Script, la page est parfois dans une iframe interne au nouvel onglet.
-    let sourceMatches=false;
-    try{sourceMatches=e.source===rtnTab||e.source.top===rtnTab;}catch(err){}
-    if(!sourceMatches)return;
+    // Dans Apps Script la fenêtre fille contient une iframe googleusercontent.
+    // Le navigateur interdit de lire sa hiérarchie entre origines ; le nonce
+    // imprévisible et l'origine GAS sont vérifiés avant d'envoyer un jeton.
+    if(!e.source)return;
     if(e.data.type==='rtn:ready'){
       e.source.postMessage({type:'rtn:init',nonce:rtnNonce},e.origin);return;
     }
