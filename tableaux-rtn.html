@@ -28,13 +28,13 @@ h1{font-size:clamp(23px,4vw,32px);margin:10px 0}h2{margin:8px 0;font-size:clamp(
 <header class="header"><div class="headrow"><div><div class="brand"><b>RTN</b> · Tableaux</div><div class="subtitle">RÉFÉRENCES TECHNIQUES NATIONALES · ENTRAÎNEMENT</div></div><button class="btn green" id="back">← Mes Révisions</button></div></header>
 <main>
 <section id="home" class="panel"><span class="badge">21 tableaux et exercices · RTN édition 2026</span><h1>Tableaux à compléter</h1><p class="muted">Complète les cases sans connaître les réponses à l’avance. Tu obtiendras une correction et une référence au document RTN.</p>
-<div class="grid"><button class="mode" id="random"><strong>▷ Commencer une séance</strong>Choisis le nombre de tableaux. Tirage aléatoire.</button><button class="mode" id="choose"><strong>▦ Choisir un tableau</strong>Travaille un tableau précis du référentiel.</button><button class="mode" id="openHistory"><strong>↗ Mes dernières séances</strong>Consulte tes résultats et reprends tes erreurs sur cet appareil.</button><button class="mode" id="mistakesPractice"><strong>↺ Revoir mes erreurs</strong>Révise les tableaux ratés lors de ta dernière séance.</button></div><p class="small muted">Résultats enregistrés seulement sur cet appareil, pas dans Google Sheets. Ce module n’utilise pas encore le suivi de compte RTN. Classification ATLS : à venir après réception de tes documents.</p></section>
+<p class="small muted" id="connectionStatus" role="status">Vérification de la connexion Google RTN…</p><div class="grid"><button class="mode" id="random"><strong>▷ Commencer une séance</strong>Choisis le nombre de tableaux. Tirage aléatoire.</button><button class="mode" id="choose"><strong>▦ Choisir un tableau</strong>Travaille un tableau précis du référentiel.</button><button class="mode" id="openHistory"><strong>↗ Mes dernières séances</strong>Consulte tes résultats et reprends tes erreurs sur cet appareil.</button><button class="mode" id="mistakesPractice"><strong>↺ Revoir mes erreurs</strong>Révise les tableaux ratés lors de ta dernière séance.</button></div><p class="small muted">Les séances restent disponibles sur cet appareil. La synchronisation individuelle avec Google Sheets s’active dès que le module serveur Formation est déployé. Classification ATLS : à venir après réception de ton document.</p></section>
 <section id="setup" class="panel" hidden><h1>Configurer ma séance</h1><p class="muted">Tableaux aléatoires, proposés un par un.</p><div class="controls"><label for="count"><b>Nombre de tableaux</b></label><select id="count"><option>5</option><option selected>10</option><option>20</option><option>40</option></select><button class="btn primary" id="start">Démarrer →</button><button class="btn" id="setupBack">← Retour accueil</button></div><p class="small muted">Avec 40 exercices, des modèles reviendront après le premier passage car 21 modèles existent actuellement.</p></section>
 <section id="catalog" class="panel" hidden><h1>Choisir un tableau</h1><p class="muted">15 tableaux numérotés dans le RTN et 6 exercices complémentaires issus du texte.</p><div class="controls"><label for="filterCat"><b>Filtrer :</b></label><select id="filterCat" class="filter"></select></div><div id="list" class="catalog"></div><button class="btn green" id="catalogBack">← Retour accueil</button></section>
 <section id="history" class="panel" hidden><h1>Mes dernières séances</h1><p class="muted">Historique conservé uniquement dans ce navigateur. Les données ne sont pas synchronisées entre tes appareils.</p><div id="historyList"></div><div class="actions"><button class="btn green" id="historyBack">← Retour accueil</button><button class="btn" id="clearHistory">Effacer cet historique local</button></div></section>
 <section id="exercise" class="panel" hidden><div class="controls"><button class="btn green" id="quit">← Retour accueil</button><span id="step" class="badge"></span></div><div class="progress"><div id="fill" style="width:0"></div></div>
 <span id="category" class="badge"></span><h1 id="title"></h1><p id="description" class="muted"></p><div class="fields" id="fields"></div><div class="controls"><button class="btn primary" id="validate">Valider mes réponses</button><button class="btn primary" id="next" hidden>Tableau suivant →</button></div><div id="feedback" hidden aria-live="polite"></div><p id="source" class="small muted"></p><a id="pdfExercise" class="pdfLink" href="#" target="_blank" rel="noopener noreferrer">📖 Consulter la page du RTN ↗</a></section>
-<section id="finished" class="panel" hidden><span class="badge">Séance terminée</span><h1>Bilan de ta séance</h1><p class="score" id="result"></p><p id="detail" class="muted"></p><div id="review" aria-live="polite"></div><div class="controls"><button class="btn primary" id="again">Nouvelle séance</button><button class="btn" id="retryErrors">Recommencer les tableaux ratés</button><button class="btn green" id="finishBack">← Retour accueil</button></div><p class="small muted">Ce bilan est mémorisé localement pour tester l’interface. Il n’est pas associé à un compte personnel.</p></section>
+<section id="finished" class="panel" hidden><span class="badge">Séance terminée</span><h1>Bilan de ta séance</h1><p class="score" id="result"></p><p id="detail" class="muted"></p><div id="review" aria-live="polite"></div><div class="controls"><button class="btn primary" id="again">Nouvelle séance</button><button class="btn" id="retryErrors">Recommencer les tableaux ratés</button><button class="btn green" id="finishBack">← Retour accueil</button></div><p id="syncStatus" role="status" class="muted">Enregistrement local…</p><button class="btn" type="button" id="retrySync" hidden>↻ Réessayer la synchronisation</button><p class="small muted">Le résultat reste enregistré sur cet appareil. La synchronisation Google Sheets nécessite le module serveur Formation RTN.</p></section>
 </main><footer class="footer">CS Consenvoye · Exercice pédagogique fondé sur le référentiel RTN 2026. En intervention, suivre les procédures en vigueur et les consignes médicales applicables.</footer></div>
 <script>
 'use strict';
@@ -46,6 +46,103 @@ const view=id=>{for(const name of ['home','setup','catalog','history','exercise'
 const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const shuffle=arr=>{const out=[...arr];for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]]}return out};
 const HISTORY_KEY='cs_tableaux_rtn_demo_v1';
+const FORMATION_API='https://script.google.com/macros/s/AKfycby73AKPhdJ67nJncQuRm771Qc9ldEfdI7CJLRqbY0Op6BTpmEHur_ZEv_g448dk0pHG/exec';
+const FORMATION_SESSION_KEY='cs_formation_session_v2',GOOGLE_TOKEN_KEY='cs_rtn_google_credential_v1';
+let googleSession='',connectionPromise=null,activeSavedId='',remoteHistoryCache=[];
+function secureSessionCache(){
+ try{
+  const cached=JSON.parse(sessionStorage.getItem(FORMATION_SESSION_KEY)||'null');
+  if(cached&&cached.expires>Date.now()&&cached.session)return cached.session;
+ }catch(e){}
+ return '';
+}
+function googleCredential(){
+ try{
+  const token=sessionStorage.getItem(GOOGLE_TOKEN_KEY)||'';
+  if(!token||!token.includes('.'))return '';
+  const middle=token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+  const claims=JSON.parse(atob(middle));
+  if(Number(claims.exp)*1000>Date.now()+30000)return token;
+ }catch(e){}
+ return '';
+}
+function formationBridge(action,fields={}){
+ return new Promise((resolve,reject)=>{
+  const requestId=Array.from(crypto.getRandomValues(new Uint8Array(16)),x=>x.toString(16).padStart(2,'0')).join('');
+  const iframe=document.createElement('iframe');iframe.name='tableaux_bridge_'+requestId;iframe.style.display='none';iframe.setAttribute('aria-hidden','true');
+  const form=document.createElement('form');form.method='POST';form.action=FORMATION_API;form.target=iframe.name;form.style.display='none';
+  const params={formation_bridge:'1',request_id:requestId,action,...fields};
+  Object.entries(params).forEach(([name,value])=>{const i=document.createElement('input');i.type='hidden';i.name=name;i.value=String(value??'');form.appendChild(i)});
+  let settled=false,timer;
+  function clean(){clearTimeout(timer);window.removeEventListener('message',onMessage);form.remove();iframe.remove()}
+  function fail(err){if(settled)return;settled=true;clean();reject(err instanceof Error?err:new Error(String(err)))}
+  function onMessage(event){
+   if(event.origin!=='https://script.google.com'&&!/^https:\/\/[^/]+\.googleusercontent\.com$/.test(event.origin))return;
+   const data=event.data;if(!data||data.type!=='formation:bridge'||data.request_id!==requestId)return;
+   if(settled)return;settled=true;clean();if(data.ok===true)resolve(data.data);else reject(Error(String(data.error||'Erreur de connexion Google Sheets')));
+  }
+  window.addEventListener('message',onMessage);document.body.append(iframe,form);
+  timer=setTimeout(()=>fail(Error('Le serveur Formation RTN ne répond pas')),30000);
+  try{form.submit()}catch(e){fail(e)}
+ });
+}
+async function connectGoogle(){
+ if(googleSession)return googleSession;
+ if(connectionPromise)return connectionPromise;
+ connectionPromise=(async()=>{
+  let session=secureSessionCache();
+  if(session){
+   try{await formationBridge('dashboard',{session});googleSession=session;return session}
+   catch(e){sessionStorage.removeItem(FORMATION_SESSION_KEY)}
+  }
+  const credential=googleCredential();
+  if(!credential)throw Error('Ouvre ton compte RTN depuis le portail pour autoriser la synchronisation.');
+  let response;
+  try{response=await formationBridge('bootstrap',{credential})}
+  catch(e){
+   if(!/Action non prise en charge/.test(String(e.message||e)))throw e;
+   response=await formationBridge('connect',{credential});
+  }
+  if(!response||!response.session)throw Error('Le serveur RTN n’a pas retourné de session');
+  googleSession=response.session;
+  const email=(()=>{try{return String(JSON.parse(atob(credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))).email||'').toLowerCase()}catch(e){return ''}})();
+  if(email)sessionStorage.setItem(FORMATION_SESSION_KEY,JSON.stringify({email,session:googleSession,expires:Date.now()+55*60*1000}));
+  return googleSession;
+ })().finally(()=>{connectionPromise=null});
+ return connectionPromise;
+}
+async function checkGoogleStatus(){
+ const status=el('connectionStatus');
+ if(!status)return;
+ status.textContent='Connexion RTN sécurisée : vérification…';
+ try{
+  await connectGoogle();
+  status.textContent='✓ Compte RTN connecté. Synchronisation Google Sheets disponible après activation de la partie serveur.';
+ }catch(e){status.textContent='Mode local : '+String(e.message||e)}
+}
+checkGoogleStatus();
+function saveLocalSession(data){
+ const list=readHistory(),index=list.findIndex(x=>x.client_id===data.client_id);
+ if(index>=0)list[index]={...list[index],...data};else list.unshift(data);
+ try{localStorage.setItem(HISTORY_KEY,JSON.stringify(list.slice(0,30)))}catch(e){}
+}
+async function sendToSheets(local){
+ const status=el('syncStatus'),retry=el('retrySync');
+ if(status)status.textContent='Synchronisation avec Google Sheets en cours…';
+ if(retry){retry.hidden=true;retry.disabled=true}
+ try{
+  const session=await connectGoogle();
+  const payload={client_id:local.client_id,results:local.results.map(r=>({id:r.id,answers:r.answers||[]}))};
+  const response=await formationBridge('tableaux_save',{session,payload:JSON.stringify(payload)});
+  if(!response||response.saved!==true||!response.sid)throw Error('Réponse d’enregistrement incomplète');
+  local.synced=true;local.sid=response.sid;saveLocalSession(local);
+  if(status)status.textContent='✓ Séance enregistrée dans Google Sheets, sur ton compte personnel RTN.';
+  if(retry)retry.hidden=true;
+ }catch(e){
+  if(status)status.textContent='⚠ Séance conservée sur cet appareil, mais non synchronisée : '+String(e.message||e);
+  if(retry){retry.hidden=false;retry.disabled=false}
+ }
+}
 const readHistory=()=>{try{const a=JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]');return Array.isArray(a)?a:[]}catch(e){return []}};
 let queue=[],at=0,correct=0,total=0,results=[],corrected=false;
 const byId=id=>BANK.find(b=>b[0]===id);
@@ -68,10 +165,28 @@ function lastMistakes(){
  return (last.results||[]).filter(r=>(r.mistakes?.length||0)>0).map(r=>byId(r.id)).filter(b=>b&&!seen.has(b[0])&&seen.add(b[0]));
 }
 el('mistakesPractice').onclick=()=>{const items=lastMistakes();if(items.length)startQueue(shuffle(items));else{el('historyList').innerHTML='<p class="noResults">Aucun tableau raté dans ta dernière séance enregistrée sur cet appareil. Termine une séance pour commencer à suivre tes erreurs.</p>';view('history')}};
-function renderHistory(){
+async function renderHistory(){
  const h=readHistory();
- el('historyList').innerHTML=h.length?h.map((v,i)=>'<div class="historyItem"><strong>'+escapeHtml(new Date(v.date).toLocaleString('fr-FR'))+' · '+(v.total?Math.round(v.correct*100/v.total):0)+' %</strong><p>'+v.correct+' / '+v.total+' bonnes réponses · '+(v.results||[]).length+' tableaux</p><button class="btn" data-review="'+i+'">Voir les erreurs</button></div>').join(''):'<p class="noResults">Aucune séance enregistrée sur cet appareil.</p>';
- el('historyList').querySelectorAll('[data-review]').forEach(b=>b.onclick=()=>showPastReview(h[Number(b.dataset.review)]));
+ const localHtml=h.length?h.map((v,i)=>'<div class="historyItem"><strong>'+escapeHtml(new Date(v.date).toLocaleString('fr-FR'))+' · '+(v.total?Math.round(v.correct*100/v.total):0)+' %</strong><p>'+v.correct+' / '+v.total+' bonnes réponses · '+(v.results||[]).length+' tableaux · '+(v.synced?'✓ synchronisé':'local')+'</p><button class="btn" data-local-review="'+i+'">Voir les erreurs</button></div>').join(''):'<p class="noResults">Aucune séance enregistrée sur cet appareil.</p>';
+ el('historyList').innerHTML='<h2>Sur cet appareil</h2>'+localHtml+'<h2>Mes séances Google Sheets</h2><p class="muted" id="remoteLoading">Chargement du compte personnel…</p><div id="remoteList"></div>';
+ el('historyList').querySelectorAll('[data-local-review]').forEach(b=>b.onclick=()=>showPastReview(h[Number(b.dataset.localReview)]));
+ try{
+  const session=await connectGoogle(),data=await formationBridge('tableaux_history',{session});
+  remoteHistoryCache=Array.isArray(data?.sessions)?data.sessions:[];
+  if(el('history').hidden)return;
+  el('remoteLoading').textContent=remoteHistoryCache.length?'Historique individuel synchronisé.':'Aucune séance synchronisée disponible.';
+  el('remoteList').innerHTML=remoteHistoryCache.map((v,i)=>'<div class="historyItem"><strong>'+escapeHtml(new Date(v.date).toLocaleString('fr-FR'))+' · '+(v.total?Math.round(v.correct*100/v.total):0)+' %</strong><p>'+v.correct+' / '+v.total+' bonnes réponses · '+v.n+' tableaux</p><button class="btn" data-remote-review="'+i+'">Consulter les erreurs</button></div>').join('');
+  el('remoteList').querySelectorAll('[data-remote-review]').forEach(b=>b.onclick=()=>{
+   const remote=remoteHistoryCache[Number(b.dataset.remoteReview)];
+   const rs=(remote.results||[]).map(r=>{
+    const model=byId(r.id);if(!model)return null;
+    return {id:r.id,title:model[1],page:model[2],correct:r.correct,total:r.total,
+      mistakes:(r.mistakes||[]).map(m=>({label:model[5][m.index]?.[0]||'Case '+m.index,given:m.given,expected:m.expected}))};
+   }).filter(Boolean);
+   showPastReview({results:rs,correct:remote.correct,total:remote.total});
+  });
+ }catch(e){if(!el('history').hidden)el('remoteLoading').textContent='Historique Google indisponible : '+String(e.message||e)}
+
 }
 function showPastReview(entry){
  results=entry.results||[];correct=entry.correct||0;total=entry.total||0;queue=results.map(r=>byId(r.id)).filter(Boolean);renderFinish(true);
@@ -97,13 +212,13 @@ function showExercise(){
 }
 function check(){
   if(corrected)return;
-  const q=queue[at];let scored=0;const fields=[...el('fields').children],mistakes=[];
+  const q=queue[at];let scored=0;const fields=[...el('fields').children],mistakes=[],answers=[];
   q[5].forEach((f,i)=>{
     const container=fields[i],input=el('f_'+i),value=String(input.value||'').trim(),ok=value!==''&&(f[2]?value===f[1]:Number(value)===Number(f[1]));
-    scored+=Number(ok);if(!ok)mistakes.push({label:f[0],given:value||'Non renseigné',expected:f[1]});container.classList.add(ok?'good':'bad');input.disabled=true;
+    answers.push(value);scored+=Number(ok);if(!ok)mistakes.push({label:f[0],given:value||'Non renseigné',expected:f[1]});container.classList.add(ok?'good':'bad');input.disabled=true;
     const hint=container.querySelector('.correction');hint.hidden=false;hint.textContent=ok?'✓ Bonne réponse':'Réponse attendue : '+f[1]
   });
-  corrected=true;correct+=scored;total+=q[5].length;results.push({id:q[0],title:q[1],page:q[2],correct:scored,total:q[5].length,mistakes});
+  corrected=true;correct+=scored;total+=q[5].length;results.push({id:q[0],title:q[1],page:q[2],correct:scored,total:q[5].length,mistakes,answers});
   el('feedback').hidden=false;el('feedback').innerHTML='<p><b>'+scored+' / '+q[5].length+' réponses correctes</b></p>'+(mistakes.length?'<p class="muted">Les cases rouges indiquent tes erreurs et la bonne réponse. Tu retrouveras toutes tes erreurs dans le bilan final.</p>':'<p class="correctAnswer">✓ Aucune erreur sur ce tableau !</p>');
   el('validate').hidden=true;el('next').hidden=false;el('next').textContent=at===queue.length-1?'Voir le bilan →':'Tableau suivant →';
 }
@@ -124,9 +239,13 @@ function renderFinish(fromHistory=false){
   view('finished');
 }
 function finish(){
- try{const arr=readHistory();arr.unshift({date:new Date().toISOString(),correct,total,results});localStorage.setItem(HISTORY_KEY,JSON.stringify(arr.slice(0,30)))}catch(e){}
+ const clientId='TABLEAUX_'+Array.from(crypto.getRandomValues(new Uint8Array(16)),v=>v.toString(16).padStart(2,'0')).join('');
+ const local={client_id:clientId,date:new Date().toISOString(),correct,total,results,synced:false};
+ activeSavedId=clientId;saveLocalSession(local);
  renderFinish(false);
+ sendToSheets(local);
 }
+el('retrySync').onclick=()=>{const local=readHistory().find(x=>x.client_id===activeSavedId);if(local)sendToSheets(local)};
 el('retryErrors').onclick=()=>{const seen=new Set();const items=results.filter(r=>r.mistakes?.length).map(r=>byId(r.id)).filter(b=>b&&!seen.has(b[0])&&seen.add(b[0]));if(items.length)startQueue(shuffle(items))};
 el('again').onclick=()=>view('setup');
 </script></body></html>
