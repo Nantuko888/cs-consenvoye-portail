@@ -91,10 +91,7 @@ async function connectGoogle(){
  if(connectionPromise)return connectionPromise;
  connectionPromise=(async()=>{
   let session=secureSessionCache();
-  if(session){
-   try{await formationBridge('dashboard',{session});googleSession=session;return session}
-   catch(e){sessionStorage.removeItem(FORMATION_SESSION_KEY)}
-  }
+  if(session){googleSession=session;return session}
   const credential=googleCredential();
   if(!credential)throw Error('Ouvre ton compte RTN depuis le portail pour autoriser la synchronisation.');
   let response;
@@ -190,6 +187,9 @@ async function renderHistory(){
 }
 function showPastReview(entry){
  results=entry.results||[];correct=entry.correct||0;total=entry.total||0;queue=results.map(r=>byId(r.id)).filter(Boolean);renderFinish(true);
+ activeSavedId=entry.client_id||'';
+ el('retrySync').hidden=true;
+ el('syncStatus').textContent=entry.synced?'✓ Cette séance a été synchronisée avec Google Sheets.':entry.sid?'✓ Cette séance provient de Google Sheets.':'Séance archivée sur cet appareil ; synchronisation non confirmée.';
 }
 el('openHistory').onclick=()=>{renderHistory();view('history')};
 el('historyBack').onclick=()=>view('home');
