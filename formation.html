@@ -664,7 +664,22 @@ select{background:#182c44;color:white;border-color:#45607b}.field label{color:#d
 @media(max-width:760px){.app{display:block}.main{padding:0 14px 40px}aside{height:auto;position:relative;display:flex;flex-direction:row;flex-wrap:wrap;padding:10px 12px;align-items:center;gap:4px}.brand{flex:1 1 100%;margin:0;padding:5px 0 8px;border-bottom:1px solid #31445a}.brand strong{font-size:23px}.brand small{font-size:10px}.nav{width:auto;flex:1 1 auto;justify-content:center;font-size:11px;padding:9px 6px;min-height:45px}.nav-symbol{font-size:17px;min-width:18px;width:18px}.side-menu-label,.aside-bottom{display:none}.masthead{height:155px;margin:0 -14px 16px}.masthead-picture{width:47%}.masthead-content{margin-left:22%}.masthead-title{font-size:59px}.masthead-subtitle{font-size:16px}.masthead-description{font-size:9px;letter-spacing:.07em;margin-top:10px}.topline{align-items:start;flex-direction:column;gap:10px;margin-bottom:14px}.user-actions{width:100%;justify-content:space-between}.home-welcome{margin:10px 0 17px}.home-welcome h1{font-size:25px}.home-welcome p{font-size:12px}.quick-actions{grid-template-columns:1fr;gap:10px}.action-tile{min-height:122px;padding:13px 18px 13px 85px;justify-content:center}.action-tile .tile-icon{position:absolute;left:19px;top:50%;transform:translateY(-50%);height:45px;width:45px;font-size:25px;margin:0}.action-tile strong{font-size:20px}.action-tile strong br{display:none}.action-tile small{max-width:210px}.tile-arrow{right:12px;bottom:37px}.last-session{grid-template-columns:1fr}.last-session button{justify-self:start}.last-session-heading{align-items:start}.summary-bar{padding:18px}.summary-title strong{font-size:16px}.summary-mini{font-size:11px}}
 @media(max-width:400px){.nav{font-size:10px}.masthead-title{font-size:45px}.masthead-subtitle{font-size:13px}.masthead-description{font-size:8px}.action-tile{padding-left:75px}.last-session-heading{flex-direction:column}}
 
-  </style>
+  
+/* Ergonomie Formation : le grand visuel devient le premier élément de la page.
+   L'ancien menu latéral (qui doublonnait les tuiles) n'est plus affiché.
+   Les commandes de séance et progression conservent leurs identifiants JS. */
+.app{display:block;grid-template-columns:unset;max-width:none}
+.app > aside{display:none!important}
+.app > .main{max-width:1650px;margin:0 auto;padding:0 clamp(15px,3.2vw,48px) 60px}
+.masthead{margin-top:0}
+.topline{position:static;z-index:auto}
+@media(max-width:760px){
+ .app{display:block}
+ .app > .main{padding:0 14px 40px}
+ .masthead{margin:0 -14px 16px}
+}
+
+</style>
  </head>
  <body>
    <div class="app">
@@ -681,7 +696,7 @@ select{background:#182c44;color:white;border-color:#45607b}.field label{color:#d
     </aside>
    <main class="main">
      <header class="masthead"><div class="masthead-picture" aria-hidden="true"></div><div class="masthead-content"><div class="masthead-title"><span class="masthead-accent">▰</span> RTN <span class="pulse">⌁</span></div><div class="masthead-subtitle">Références Techniques Nationales</div><div class="masthead-description">SIMULATEUR D’ENTRAÎNEMENT ET DE RÉVISION</div></div></header>
-     <div class="topline"><span class="eyebrow">ESPACE PERSONNEL DE RÉVISION</span><div class="user-actions"><span class="profile" id="profile">Bonjour</span><button class="logout-btn" id="leaveApp" type="button">⎋ Quitter</button></div></div>
+     <div class="topline"><span class="eyebrow">ESPACE PERSONNEL DE RÉVISION</span><div class="user-actions"><span class="profile" id="profile">Bonjour</span><button class="logout-btn" id="leaveApp" type="button">← Mes Révisions</button></div></div>
      <section id="home">
       <div class="home-welcome"><div><h1>Bienvenue sur ton <em>simulateur RTN</em></h1><p>Entraîne-toi, évalue tes connaissances et progresse dans les Références Techniques Nationales.</p></div><span class="training-marker">✚ &nbsp; Formation · Révision · Progression</span></div>
       <div class="quick-actions">

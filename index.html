@@ -1354,13 +1354,9 @@ document.addEventListener("click", (e) => {
     frame.title='Formation — Références Techniques Nationales';
     frame.style.cssText='display:block;width:100%;height:100%;border:0';
     frame.src=url;
-    const back=document.createElement('button');
-    back.type='button';
-    back.textContent='← Mes Révisions';
-    back.setAttribute('aria-label','Fermer Formation');
-    back.style.cssText='position:absolute;top:calc(env(safe-area-inset-top) + 8px);right:12px;z-index:3;background:#13283b;color:white;padding:9px 14px;border:1px solid #fff5;border-radius:10px;font-weight:800;cursor:pointer';
-    back.addEventListener('click',closeRtn);
-    layer.append(frame,back);
+    // Le bouton « Mes Révisions » est intégré dans Formation elle-même.
+    // Aucun bouton flottant par-dessus les menus lors du défilement.
+    layer.append(frame);
     document.body.appendChild(layer);
     rtnFrameLayer=layer;
     rtnTab=frame.contentWindow;
@@ -1466,12 +1462,8 @@ document.addEventListener("click", (e) => {
     const revisionsFrame = document.createElement('iframe');
     revisionsFrame.title = 'Révisions — choix des thèmes';
     revisionsFrame.style.cssText = 'width:100%;height:100%;border:0;display:block;';
-    const revisionsBack = document.createElement('button');
-    revisionsBack.type = 'button';
-    revisionsBack.textContent = '← Portail';
-    revisionsBack.setAttribute('aria-label', 'Retour au portail');
-    revisionsBack.style.cssText = 'position:absolute;top:calc(env(safe-area-inset-top) + 10px);right:12px;z-index:2;border:1px solid #ffffff77;border-radius:10px;background:#14243de8;color:#fff;font:700 13px system-ui;padding:10px 14px;cursor:pointer;';
-    revisionsScreen.append(revisionsFrame, revisionsBack);
+    // Le bouton « Retour au portail » est déjà situé en bas de revisions.html.
+    revisionsScreen.append(revisionsFrame);
     document.body.appendChild(revisionsScreen);
 
     function closeRevisions() {
@@ -1502,7 +1494,6 @@ document.addEventListener("click", (e) => {
       openRtn(); // vérification Google et droits RTN assurés par le système existant
     });
     rtnLink.addEventListener('click', openRevisions);
-    revisionsBack.addEventListener('click', closeRevisions);
     window.addEventListener('popstate', () => {
       if (revisionsOpened && (!history.state || !history.state.revisionsOpen)) closeRevisions();
     });
