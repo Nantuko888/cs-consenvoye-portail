@@ -1402,8 +1402,21 @@ function rtnLock(message) {
   const waiting=/^(Vérification|Connexion au portail)/.test(String(message));
   box.textContent=waiting?'':message;
   box.style.display='flex';
+  // Avertir le portail uniquement d'un échec réel afin qu'il n'affiche
+  // pas indéfiniment son animation par-dessus le message d'erreur.
+  if(!waiting)rtnNotifyPortal_('rtn:load-error');
 }
-function rtnUnlock(){ const b=document.getElementById('rtn-lock'); if(b)b.style.display='none'; }
+function rtnUnlock(){
+  const b=document.getElementById('rtn-lock');
+  if(b)b.style.display='none';
+  // Les données ont été vérifiées et l'interface est réellement prête.
+  rtnNotifyPortal_('rtn:loaded');
+}
+function rtnNotifyPortal_(type){
+  if(!RTN_LAUNCH_NONCE)return;
+  const portal=rtnPortalWindow();
+  if(portal)portal.postMessage({type,nonce:RTN_LAUNCH_NONCE},RTN_PORTAL_ORIGIN);
+}
 // Dans un onglet séparé, Google Apps Script encapsule Index.html dans une iframe.
 // Le portail ayant ouvert l'onglet reste accessible via la fenêtre parente.
 function rtnPortalWindow() {
