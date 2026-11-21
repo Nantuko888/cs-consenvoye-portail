@@ -1309,7 +1309,14 @@ document.addEventListener("click", (e) => {
     const token=sessionStorage.getItem(RTN_TOKEN_KEY);
     if(!hasValidRtnToken(token)){sessionStorage.removeItem(RTN_TOKEN_KEY);requestGoogleForRtn();return;}
     rtnNonce=Array.from(crypto.getRandomValues(new Uint8Array(24)),x=>x.toString(16).padStart(2,'0')).join('');
-    const url=RTN_WEBAPP_URL+(RTN_WEBAPP_URL.includes('?')?'&':'?')+'launch_nonce='+rtnNonce;
+    // Le compte est choisi à la connexion Google du portail.
+    // authuser est uniquement un indice de routage pour Google (pas une autorisation).
+    // Le serveur RTN conserve sa validation complète du credential et des droits.
+    const accountEmail=parseJwtEmail(token);
+    const rtnUrl=new URL(RTN_WEBAPP_URL);
+    rtnUrl.searchParams.set('launch_nonce',rtnNonce);
+    if(accountEmail)rtnUrl.searchParams.set('authuser',accountEmail);
+    const url=rtnUrl.href;
     // Lors d'un clic direct dans revisions.html, l'activation utilisateur est conservée.
     rtnTab=window.open(url,'_blank');
     if(!rtnTab){
