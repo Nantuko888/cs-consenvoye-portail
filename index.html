@@ -435,6 +435,22 @@ body.mode-portal{
   color:rgba(255,255,255,.70);
 }
 
+/* iPhone en application installée : les commandes restent sous la
+   Dynamic Island et la barre d'état. Ne touche pas à Android/ordinateur. */
+@supports (-webkit-touch-callout: none) {
+  @media (display-mode: standalone) {
+    .refreshBtn, .onlineBadge {
+      top: calc(env(safe-area-inset-top, 0px) + 12px);
+    }
+    .onlinePanel {
+      top: calc(env(safe-area-inset-top, 0px) + 62px);
+      max-height: min(50dvh, 340px);
+    }
+  }
+}
+/* Respecter l'attribut hidden même avec display:flex déclaré. */
+.onlineBadge[hidden], .onlinePanel[hidden] {display:none!important;}
+
 @media (max-width:420px){
   .refreshBtn{
     width:56px;
@@ -1066,9 +1082,11 @@ document.addEventListener("click", (e) => {
 
     const onlineCount = res.items.filter(x => Number(x.en_ligne) === 1).length;
 
+    // Zéro agent en ligne est une information utile : laisser le badge visible.
+    // Ne pas le masquer simplement parce qu'il n'y a pas d'historique.
     if(onlineCount <= 0 && allWithHistory.length <= 0){
-      badge.hidden = true;
-      closePanel();
+      badge.hidden = false;
+      text.textContent = '0 agent en ligne';
       renderPanel([]);
       return;
     }
