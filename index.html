@@ -1269,14 +1269,13 @@ document.addEventListener("click", (e) => {
   'use strict';
 
   // À définir après déploiement du nouvel Apps Script RTN.
-  const RTN_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycby73AKPhdJ67nJncQuRm771Qc9ldEfdI7CJLRqbY0Op6BTpmEHur_ZEv_g448dk0pHG/exec';
+  const RTN_WEBAPP_URL = new URL('formation.html', location.href).href;
   // RTN s'ouvre hors iframe Apps Script ; aucun jeton Google dans l'URL.
-  let rtnTab=null, rtnNonce='', rtnOpened=false, rtnPending=false;
-  const allowedGASOrigin=origin=>origin==='https://script.google.com' ||
-    /^https:\/\/[^/]+\.googleusercontent\.com$/.test(origin);
+  let rtnTab=null, rtnFrameLayer=null, rtnNonce='', rtnOpened=false, rtnPending=false;
+  const allowedGASOrigin=origin=>origin===location.origin;
   function closeRtn(){
     rtnOpened=false; rtnPending=false; rtnNonce='';
-    if(rtnTab && !rtnTab.closed){try{rtnTab.close()}catch(e){}}
+    if(rtnFrameLayer){rtnFrameLayer.remove();rtnFrameLayer=null;}
     rtnTab=null;
   }
   function requestGoogleForRtn(){
@@ -1308,7 +1307,7 @@ document.addEventListener("click", (e) => {
       return Number(payload.exp||0)*1000>Date.now()+30000;}catch(e){return false;}
   }
   function openRtn(){
-    if(rtnOpened && rtnTab && !rtnTab.closed){rtnTab.focus();return;}
+    if(rtnOpened && rtnTab && rtnFrameLayer){rtnTab.focus();return;}
     // Ce contrôle client améliore l'interface : il ne remplace PAS le contrôle
     // obligatoire de la colonne formation dans le serveur RTN.
     if(sessionStorage.getItem('cs_formation_v1') === '0'){
@@ -1324,20 +1323,26 @@ document.addEventListener("click", (e) => {
     const accountEmail=parseJwtEmail(token);
     const rtnUrl=new URL(RTN_WEBAPP_URL);
     rtnUrl.searchParams.set('launch_nonce',rtnNonce);
-    if(accountEmail)rtnUrl.searchParams.set('authuser',accountEmail);
+    // Aucun paramètre authuser : GitHub héberge l'interface, Google ne choisit pas un compte pour ouvrir la page.
     const url=rtnUrl.href;
-    // Lors d'un clic direct dans revisions.html, l'activation utilisateur est conservée.
-    rtnTab=window.open(url,'_blank');
-    if(!rtnTab){
-      // Éviter un faux succès : l'utilisateur doit autoriser l'ouverture.
-      const modal=document.createElement('div');modal.id='rtn-popup-blocked';
-      modal.style.cssText='position:fixed;inset:0;z-index:30003;background:#000d;display:grid;place-items:center;padding:20px';
-      modal.innerHTML='<div style="max-width:380px;background:#14263e;color:white;padding:24px;border-radius:16px;font:600 15px system-ui"><p>Ton navigateur a bloqué le nouvel onglet RTN.</p><button type="button" id="rtn-popup-retry" style="padding:12px;border:0;border-radius:9px;background:#e8323c;color:white;font-weight:bold;cursor:pointer">Ouvrir RTN</button> <button type="button" id="rtn-popup-cancel" style="padding:12px;cursor:pointer">Annuler</button></div>';
-      document.body.appendChild(modal);
-      modal.querySelector('#rtn-popup-retry').onclick=()=>{modal.remove();openRtn();};
-      modal.querySelector('#rtn-popup-cancel').onclick=()=>{modal.remove();rtnNonce='';};
-      return;
-    }
+    // Écran intégré : pas de pop-up et pas de page Apps Script à ouvrir.
+    const layer=document.createElement('section');
+    layer.id='formation-screen';
+    layer.style.cssText='position:fixed;inset:0;z-index:30005;background:#091526;display:block';
+    const frame=document.createElement('iframe');
+    frame.title='Formation — Références Techniques Nationales';
+    frame.style.cssText='display:block;width:100%;height:100%;border:0';
+    frame.src=url;
+    const back=document.createElement('button');
+    back.type='button';
+    back.textContent='← Mes Révisions';
+    back.setAttribute('aria-label','Fermer Formation');
+    back.style.cssText='position:absolute;top:calc(env(safe-area-inset-top) + 8px);right:12px;z-index:3;background:#13283b;color:white;padding:9px 14px;border:1px solid #fff5;border-radius:10px;font-weight:800;cursor:pointer';
+    back.addEventListener('click',closeRtn);
+    layer.append(frame,back);
+    document.body.appendChild(layer);
+    rtnFrameLayer=layer;
+    rtnTab=frame.contentWindow;
     rtnOpened=true;rtnPending=true;
     try{rtnTab.focus()}catch(e){}
   }
