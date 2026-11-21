@@ -800,6 +800,103 @@ html,body{height:100%;overflow:hidden}
  .rtn-standard-control{padding:6px 7px!important}
 }
 
+
+/* RTN : navigation cohérente et écrans ajustés à la hauteur réelle.
+   Les questionnaires restent librement défilables. */
+#leaveApp.rtn-standard-control{
+ background:linear-gradient(145deg,#a82939,#79202e)!important;
+ border:1px solid #df5260!important;color:#fff!important;
+ box-shadow:0 2px 9px #24000855!important;
+}
+#leaveApp.rtn-standard-control:hover{background:#ba3041!important}
+#home,#dashboardView,#setupView{overflow:visible}
+#chaptersView,#statsView{min-height:100%}
+#chaptersView>.rtn-subview-back,
+#statsView>.rtn-subview-back{
+ position:sticky;top:0;z-index:25;display:inline-flex;
+ margin:0 0 13px;padding:8px 11px!important;
+ box-shadow:0 6px 12px #071221d9!important;
+}
+.rtn-content[data-active-view="home"],
+.rtn-content[data-active-view="setupView"],
+.rtn-content[data-active-view="dashboardView"]{
+ overflow-y:hidden;overscroll-behavior:none;
+}
+#home .quick-actions{margin:0 auto}
+#home .home-welcome{margin:4px 0 16px}
+#home .home-welcome h1{font-size:clamp(22px,2.4vw,32px)}
+#home .home-welcome p{font-size:13px}
+#home .action-tile{min-height:160px;padding:14px 14px 25px}
+#home .action-tile .tile-icon{width:40px;height:40px;font-size:24px}
+#home .action-tile strong{font-size:clamp(16px,1.8vw,23px)}
+#home .action-tile small{font-size:11px;line-height:1.3}
+#dashboardView .rtn-subview-back{margin-bottom:9px}
+#dashboardView>h1{font-size:clamp(20px,2.5vw,27px);margin:2px 0 10px}
+#dashboardView .summary-bar,#dashboardView .last-session{
+ padding:11px 15px;margin-bottom:9px;border-radius:12px
+}
+#dashboardView .summary-bar{grid-template-columns:1fr 1.2fr auto;gap:12px}
+#dashboardView .summary-title strong{font-size:14px}
+#dashboardView .summary-title small{font-size:10px}
+#dashboardView .summary-progress>strong{font-size:20px}
+#dashboardView .summary-mini{font-size:11px;min-width:0}
+#dashboardView .last-session{gap:8px}
+#dashboardView .last-session-heading{padding-bottom:7px}
+#dashboardView .last-session-heading h2{font-size:15px}
+#dashboardView .last-session button{padding:8px 11px;font-size:12px}
+#dashboardView .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:8px 0}
+#dashboardView .metric{padding:12px}
+#dashboardView .metric .number{font-size:23px}
+#dashboardView .metric .label,#dashboardView .metric .detail{font-size:10px}
+#setupView .setup-navigation{margin-bottom:9px}
+#setupView>.panel{max-width:780px;margin:0 auto!important;padding:18px}
+#setupView>.panel h1{font-size:clamp(20px,3vw,28px);margin:6px 0}
+#setupView>.panel .setup{margin:13px 0!important;gap:12px}
+#setupView>.panel select{padding:10px}
+#setupView>.panel .footnote{margin:8px 0}
+@media(max-width:760px){
+ .app>.main>.masthead{flex-basis:clamp(96px,14dvh,132px)}
+ .masthead-title{font-size:clamp(35px,10vw,55px)}
+ .masthead-subtitle{font-size:clamp(12px,4vw,17px)}
+ .masthead-description{margin-top:5px}
+ .topline{padding:6px 0 8px!important;gap:5px;margin-bottom:0!important}
+ .topline .eyebrow{font-size:10px}
+ .topline .user-actions{gap:8px}
+ .topline .rtn-standard-control{min-height:40px;height:40px;font-size:12px!important}
+ .rtn-content{padding-top:9px}
+ #home .home-welcome{margin:0 0 11px}
+ #home .home-welcome h1{font-size:clamp(18px,5.5vw,24px);margin:0 0 4px}
+ #home .home-welcome p{font-size:11px;line-height:1.35}
+ #home .quick-actions{gap:8px}
+ #home .action-tile{
+  min-height:135px;max-height:none;padding:9px 8px 22px;gap:5px;border-radius:12px
+ }
+ #home .action-tile .tile-icon{width:34px;height:34px;flex:0 0 34px;font-size:20px}
+ #home .action-tile strong{font-size:clamp(13px,3.7vw,17px);line-height:1.1}
+ #home .action-tile small{font-size:10px;line-height:1.25}
+ #dashboardView .summary-bar{grid-template-columns:1fr 1fr;gap:8px}
+ #dashboardView .summary-mini{grid-column:1/-1;padding:0;border:0}
+ #dashboardView .last-session{padding:9px 12px}
+ #dashboardView .metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ #dashboardView .metric{padding:9px}
+ #dashboardView .metric .number{font-size:21px;margin-top:4px}
+ #setupView>.panel{padding:13px!important}
+ #setupView>.panel .setup{grid-template-columns:1fr;gap:7px;margin:8px 0!important}
+ #setupView>.panel .field label{margin-bottom:3px}
+ #setupView>.panel select{padding:7px 9px}
+ #setupView>.panel .footnote{font-size:10px;line-height:1.25}
+}
+@media(max-height:650px){
+ .app>.main>.masthead{flex-basis:90px}
+ .masthead-description{display:none}
+ .topline .rtn-standard-control{height:38px;min-height:38px}
+ #home .home-welcome p{font-size:10px}
+ #home .action-tile{min-height:108px}
+ #home .action-tile small{font-size:9px}
+ #dashboardView .last-session button{padding:5px 9px}
+ #setupView>.panel select{padding:5px}
+}
+
 </style>
  </head>
  <body>
@@ -1153,9 +1250,31 @@ function renderDashboard() { let st = dashboard.stats, all = CHAPTERS.map(c => s
     el.querySelector('.chapter-title').textContent = c.name;
     el.querySelector('button').onclick = () => setup(c.id);
     $('chapters').append(el);
-} renderStats(); }
-function view(id) { for (const x of ['home', 'dashboardView', 'chaptersView', 'setupView', 'quizView', 'resultsView', 'statsView'])
-    $(x).classList.toggle('hidden', id !== x); $('navHome').classList.toggle('active', id === 'home'); $('navStats').classList.toggle('active', id === 'statsView'); $('rtnContent').scrollTop=0; }
+} renderStats(); requestAnimationFrame(fitRtnFixedView_); }
+function view(id) {
+  for(const x of ['home','dashboardView','chaptersView','setupView','quizView','resultsView','statsView'])
+    $(x).classList.toggle('hidden',id!==x);
+  $('navHome').classList.toggle('active',id==='home');
+  $('navStats').classList.toggle('active',id==='statsView');
+  $('rtnContent').dataset.activeView=id;
+  $('rtnContent').scrollTop=0;
+  requestAnimationFrame(fitRtnFixedView_);
+}
+window.addEventListener('resize',()=>requestAnimationFrame(fitRtnFixedView_));
+function fitRtnFixedView_(){
+  const id=$('rtnContent').dataset.activeView;
+  for(const name of ['home','dashboardView','setupView'])$(name).style.zoom='';
+  if(!['home','dashboardView','setupView'].includes(id))return;
+  const el=$(id), scroller=$('rtnContent');
+  if(el.classList.contains('hidden')||scroller.clientHeight<1)return;
+  // Adapter uniquement les trois écrans sans scroll, en gardant le bandeau non réduit.
+  const available=Math.max(1,scroller.clientHeight-6);
+  const natural=el.scrollHeight;
+  if(natural>available){
+    const zoom=Math.max(.35,Math.min(1,available/natural));
+    el.style.zoom=String(zoom);
+  }
+}
 let setupReturnView='chaptersView';
 function setup(id, origin='chaptersView') {
   chapter=id;
