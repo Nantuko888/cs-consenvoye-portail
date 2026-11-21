@@ -923,7 +923,8 @@ html,body{height:100%;overflow:hidden}
       </div>
      </div>
     </section>
-    <section class="hidden" id="statsView">
+    <section class="hidden rtn-subview" id="statsView">
+     <button class="btn text rtn-subview-back" id="backStats" type="button">← Accueil RTN</button>
      <div class="eyebrow">
       ANALYSE PERSONNELLE
      </div>
@@ -1136,6 +1137,7 @@ $('tileDashboard').onclick = () => view('dashboardView');
 $('tileChapters').onclick = () => view('chaptersView');
 $('backDashboard').onclick = () => view('home');
 $('backChapters').onclick = () => view('home');
+$('backStats').onclick = () => view('home');
 $('tileProgress').onclick = () => { renderStats(); view('statsView'); };
 $('lastSessionGo').onclick = () => { renderStats(); view('statsView'); };
 $('sidePdf').href = PDF_FILE;
