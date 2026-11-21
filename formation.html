@@ -1123,14 +1123,14 @@ window.addEventListener('message', ev=>{
   if(ev.origin!==RTN_PORTAL_ORIGIN || !ev.data) return;
   if (ev.data.type==='rtn:init' && !RTN_LAUNCH_NONCE && /^[a-zA-Z0-9_-]{16,100}$/.test(String(ev.data.nonce||''))) {
     RTN_LAUNCH_NONCE=ev.data.nonce;
-    rtnLock('Vérification de votre accès RTN…');
+    rtnLock('Vérification de l’accès…');
     rtnRequestCredential();
     return;
   }
   if(ev.data.type!=='rtn:credential' || !RTN_LAUNCH_NONCE || ev.data.nonce!==RTN_LAUNCH_NONCE || rtnConnecting) return;
   if(!online) {rtnLock('L’application doit être ouverte depuis Apps Script.');return;}
   rtnConnecting=true;
-  rtnLock('Vérification des droits RTN…');
+  rtnLock('Vérification de l’accès…');
   const email=rtnCredentialEmail(ev.data.credential);
   let cached=null;
   try{cached=JSON.parse(sessionStorage.getItem(FORMATION_SESSION_KEY)||'null');}catch(e){}
@@ -1159,7 +1159,6 @@ function rtnConnectFresh(credential,email) {
     rtnConnecting=false;
     if(!result || !result.ok || !result.session){rtnLock('Connexion refusée');return;}
     rtnSession=result.session;
-    const email=rtnCredentialEmail(ev.data.credential);
     if(email) sessionStorage.setItem(FORMATION_SESSION_KEY,JSON.stringify({email,session:rtnSession,expires:Date.now()+55*60*1000}));
     refresh(()=>{rtnUnlock();});
   }).catch(err=>{
@@ -1168,7 +1167,7 @@ function rtnConnectFresh(credential,email) {
   });
 }
 if (RTN_LAUNCH_NONCE) {
-  rtnLock('Vérification de votre accès RTN…');
+  rtnLock('Vérification de l’accès…');
   rtnRequestCredential();
 } else {
   rtnLock('Connexion au portail CS Consenvoye…');
