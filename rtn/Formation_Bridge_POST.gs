@@ -25,6 +25,14 @@ function doPost(e) {
     const action = String(p.action || '');
     let data;
     switch (action) {
+      case 'bootstrap': {
+        // Vérification Google + autorisation Formation + chargement
+        // en une seule requête HTTP, sans exposer les données avant contrôle.
+        const identity = rtnConnect(String(p.credential || ''));
+        const dashboard = pseDashboard(identity.session);
+        data = {session:identity.session, profile:identity.profile, dashboard:dashboard};
+        break;
+      }
       case 'connect':
         data = rtnConnect(String(p.credential || ''));
         break;
