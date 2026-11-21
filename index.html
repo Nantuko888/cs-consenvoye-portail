@@ -1353,10 +1353,20 @@ document.addEventListener("click", (e) => {
     const frame=document.createElement('iframe');
     frame.title='Formation — Références Techniques Nationales';
     frame.style.cssText='display:block;width:100%;height:100%;border:0';
+    // Chargement immédiatement visible, sans annoncer un faux pourcentage.
+    const loader=document.createElement('div');
+    loader.setAttribute('role','status');
+    loader.setAttribute('aria-live','polite');
+    loader.style.cssText='position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:linear-gradient(150deg,#091526,#183653);color:#fff;text-align:center;padding:22px;font-family:system-ui,sans-serif';
+    loader.innerHTML='<div style="font-size:clamp(24px,7vw,46px);font-style:italic;font-weight:1000;letter-spacing:.04em">RTN</div><div style="font-size:16px;font-weight:750">Références Techniques Nationales</div><div style="width:min(320px,80vw);height:8px;overflow:hidden;border-radius:12px;background:#ffffff32"><span style="display:block;width:35%;height:100%;border-radius:12px;background:linear-gradient(90deg,#d3273c,#ff6374);animation:rtn-load 1.7s ease-in-out infinite alternate"></span></div><div class="rtn-loading-caption" style="font-size:13px;color:#c8dae8">Ouverture du simulateur…</div><style>@keyframes rtn-load{from{transform:translateX(0)}to{transform:translateX(190%)}}</style>';
+    frame.addEventListener('load',()=>{
+      const caption=loader.querySelector('.rtn-loading-caption');
+      if(caption)caption.textContent='Connexion sécurisée et préparation de votre espace…';
+    },{once:true});
     frame.src=url;
     // Le bouton « Mes Révisions » est intégré dans Formation elle-même.
     // Aucun bouton flottant par-dessus les menus lors du défilement.
-    layer.append(frame);
+    layer.append(frame,loader);
     document.body.appendChild(layer);
     rtnFrameLayer=layer;
     rtnTab=frame.contentWindow;
@@ -1379,10 +1389,18 @@ document.addEventListener("click", (e) => {
     }
     if(e.data.nonce!==rtnNonce)return;
     if(e.data.type==='rtn:hello'){
+      const caption=rtnFrameLayer?.querySelector('.rtn-loading-caption');
+      if(caption)caption.textContent='Récupération de votre progression…';
       const token=sessionStorage.getItem(RTN_TOKEN_KEY)||'';
       if(!hasValidRtnToken(token)){closeRtn(true);requestGoogleForRtn();return;}
       e.source.postMessage({type:'rtn:credential',nonce:rtnNonce,credential:token},e.origin);
       rtnPending=false;
+    }else if(e.data.type==='rtn:loaded'){
+      rtnFrameLayer?.querySelector('[role="status"]')?.remove();
+    }else if(e.data.type==='rtn:load-error'){
+      const caption=rtnFrameLayer?.querySelector('.rtn-loading-caption');
+      if(caption)caption.textContent='Impossible de charger Formation. Vérifie ta connexion puis réessaie.';
+      rtnFrameLayer?.querySelector('[role="status"] span')?.remove();
     }else if(e.data.type==='rtn:exit'){closeRtn();}
   });
   document.getElementById('logoutBtnPortal')?.addEventListener('click',()=>closeRtn(true));
