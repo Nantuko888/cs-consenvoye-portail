@@ -7,7 +7,7 @@ const RTN_TABLEAUX_SOURCE='RTN-PSE-07-2026';
 const RTN_TABLEAUX_ANSWERS=[["T01",["Rouge","Bleu","Bleu"]],["T02",["Nature et circonstances","Nombre de victimes","Moyens complémentaires"]],["T03",["Arrêter l’hémorragie","Libérer les voies aériennes","RCP"]],["T04",["12","20","20","30","30","40","40","60"]],["T05",["60","100","70","140","100","160","120","160"]],["T06",["Membre supérieur droit","Membre inférieur droit","Membre supérieur gauche","Membre inférieur gauche"]],["T07",["4","3","2","1","5","4","6","4","3","15"]],["T08",["Rectale","Rectale","Buccale"]],["T09",["Tête","Cou","Thorax"]],["T10",["5","3","15","4","7"]],["T11",["9","15","15","6","9","9","1","6"]],["T12",["94","98","89","94"]],["T13",["En avant","10","Traumatisme du crâne","Traumatisme de la face"]],["T14",["PLS","RCP","Insufflations"]],["T15",["18","26","350","500","8","12","200","350","6","8","200","250","6","120","150"]],["E01",["5","10","15"]],["E02",["Asymétrie faciale","Faiblesse d’un membre supérieur","Trouble de la parole","10"]],["E03",["0","4","0","10"]],["E04",["100","120"]],["E05",["30","120","15"]],["E06",["10","5"]]];
 const RTN_TABLEAUX_COLUMNS={
  TableauxSeances:['seance_id','utilisateur_id','date_debut','date_fin','nombre_tableaux','nombre_reponses','bonnes_reponses','taux_reussite','version_source','client_id'],
- TableauxReponses:['reponse_id','seance_id','utilisateur_id','tableau_id','index_case','reponse_donnee','reponse_attendue','correcte','horodatage']
+ TableauxReponses:['reponse_id','seance_id','utilisateur_id','tableau_id','index_case','reponse_donnee','reponse_attendue','correcte','horodatage','ordre_tableau']
 };
 function rtnTableauxSheet_(name){
  const ss=SpreadsheetApp.getActiveSpreadsheet();
@@ -46,7 +46,7 @@ function rtnTableauxSave_(payloadJson,session){
      const val=String(table.answers[j]??'').slice(0,300);
      const ok=rtnTableauxCorrect_(val,exp);
      score+=Number(ok);right+=Number(ok);total++;
-     entries.push([Utilities.getUuid(),sid,userId,table.id,j,val,String(exp),ok,now]);
+     entries.push([Utilities.getUuid(),sid,userId,table.id,j,val,String(exp),ok,now,i]);
    });
    scores.push({id:table.id,correct:score,total:expected.length});
  });
@@ -70,11 +70,11 @@ function rtnTableauxHistory_(session){
  const groups=new Map();
  for(const row of rtnTableauxRows_('TableauxReponses')){
    if(String(row[2])!==userId||!ids.has(String(row[1])))continue;
-   const sid=String(row[1]),itemId=String(row[3]);
+   const sid=String(row[1]),itemId=String(row[3]),order=Number(row[9])||0;
    if(!groups.has(sid))groups.set(sid,new Map());
    const byTable=groups.get(sid);
-   if(!byTable.has(itemId))byTable.set(itemId,{id:itemId,answers:[],mistakes:[],correct:0,total:0});
-   const r=byTable.get(itemId),index=Number(row[4]),given=String(row[5]??''),expected=String(row[6]??'');
+   if(!byTable.has(order))byTable.set(order,{id:itemId,order,answers:[],mistakes:[],correct:0,total:0});
+   const r=byTable.get(order),index=Number(row[4]),given=String(row[5]??''),expected=String(row[6]??'');
    const good=row[7]===true||String(row[7]).toLowerCase()==='true';
    r.answers[index]=given;r.correct+=Number(good);r.total++;
    if(!good)r.mistakes.push({index,given:given||'Non renseigné',expected});
@@ -84,6 +84,6 @@ function rtnTableauxHistory_(session){
    sid:String(r[0]),date:r[3] instanceof Date?r[3].toISOString():String(r[3]),
    n:Number(r[4]),total:Number(r[5]),correct:Number(r[6]),
    client_id:String(r[9]||''),
-   results:Array.from((groups.get(String(r[0]))||new Map()).values())
+   results:Array.from((groups.get(String(r[0]))||new Map()).values()).sort((a,b)=>a.order-b.order)
  }))};
 }
