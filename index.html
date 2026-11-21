@@ -544,6 +544,9 @@ const GOOGLE_CLIENT_ID = "690765229829-6m73boc7cn4lhkvjel8aa2vo96e83f0t.apps.goo
 const API = "https://script.google.com/macros/s/AKfycbzPHCDdW7wkFCVkMOL_2srZmdnjZ1QKmToUFtqIZBPjSUNtOwM-Ac7ua0w9dhCv3oI/exec";
 const LS_KEY = "cs_portail_email_v1";
 const RTN_TOKEN_KEY = "cs_rtn_google_credential_v1";
+// E-mail dont les droits ont réellement été contrôlés dans Google Sheets
+// au cours de cette navigation. L'email mémorisé seul ne suffit jamais.
+let portalValidatedEmail = '';
 
 /* DOM */
 const $loginBox = document.getElementById("loginBox");
@@ -595,6 +598,7 @@ function showPortal(){
   markPortalUrl_();
 }
 function showLogin(){
+  portalValidatedEmail = '';
   document.body.classList.remove("mode-portal");
   document.body.classList.add("mode-login");
   $portal.style.display = "none";
@@ -733,6 +737,7 @@ async function checkAndShow_(email){
       localStorage.setItem(LS_KEY, email);
       localStorage.setItem("cs_role_v1", String(res.role || "").trim().toLowerCase());
       sessionStorage.setItem("cs_formation_v1", res.formation === true ? "1" : res.formation === false ? "0" : "inconnu");
+      portalValidatedEmail = email.trim().toLowerCase();
 
       hideChecking();
       showPortal();
@@ -775,7 +780,12 @@ async function handleCredentialResponse(response){
     return;
   }
 
-  const portalAllowed = await checkAndShow_(email);
+  // Après une vérification de droits récente pour le même compte dans
+  // cette page, l'identité Google peut être transmise sans relire Sheets.
+  // Le serveur Formation continuera de valider la session et les données.
+  const previouslyAuthorized = portalValidatedEmail === email
+    && sessionStorage.getItem('cs_formation_v1') === '1';
+  const portalAllowed = previouslyAuthorized ? true : await checkAndShow_(email);
   if (portalAllowed && typeof window.__rtnResumeAfterGoogle === 'function') {
     window.__rtnResumeAfterGoogle();
   }
@@ -795,6 +805,7 @@ async function handleCredentialResponse(response){
       if(res && res.ok === true){
         localStorage.setItem("cs_role_v1", String(res.role || "").trim().toLowerCase());
         sessionStorage.setItem("cs_formation_v1", res.formation === true ? "1" : res.formation === false ? "0" : "inconnu");
+        portalValidatedEmail = saved;
         hideSync();
         return;
       }
@@ -1303,8 +1314,12 @@ document.addEventListener("click", (e) => {
     window.__rtnResumeAfterGoogle=()=>{window.__rtnResumeAfterGoogle=null;layer.remove();openRtn();};
     try{
       if(!window.google||!google.accounts||!google.accounts.id)throw Error('Connexion Google indisponible. Recharge la page du portail.');
-      google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleCredentialResponse,auto_select:false});
+      // Google peut reconnecter automatiquement le compte précédemment choisi
+      // si ses paramètres et le navigateur l'autorisent. Le bouton reste
+      // disponible quand une interaction est exigée par Google.
+      google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleCredentialResponse,auto_select:true});
       google.accounts.id.renderButton(layer.querySelector('#rtn-google-host'),{type:'standard',theme:'outline',size:'large',text:'continue_with',shape:'rectangular'});
+      google.accounts.id.prompt();
     }catch(err){
       const error=layer.querySelector('#rtn-google-error');
       error.textContent=err.message||'Impossible de charger la connexion Google';error.style.display='block';
