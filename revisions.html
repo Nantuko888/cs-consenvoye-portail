@@ -57,7 +57,7 @@
  'use strict';
  const modal=document.getElementById('modal');
  const messages={
-  rtn:['Références Techniques Nationales','Le simulateur RTN existe déjà, mais son ouverture depuis GitHub est en cours de sécurisation. Ce bouton sera activé lorsque la connexion et les résultats individuels auront été vérifiés.'],
+  rtn:['Références Techniques Nationales','Pour accéder au simulateur RTN, ouvre cette page depuis le portail CS Consenvoye.'],
   tableaux:['Tableaux à compléter','Ce type de question sera intégré aux révisions : fréquences cardiaques et respiratoires, classification ATLS, paramètres et autres exercices.'],
   autres:['Autres formations','Cet espace accueillera prochainement les autres fascicules et thèmes de formation.'],
   reprendre:['Reprendre une révision','La reprise des séances sera disponible après raccordement du simulateur et de la progression individuelle.'],
@@ -66,6 +66,12 @@
  };
  function close(){modal.classList.remove('open');modal.hidden=true;}
  document.querySelectorAll('[data-module]').forEach(b=>b.addEventListener('click',()=>{
+  // L'ouverture du simulateur RTN passe par le portail, qui détient
+  // le jeton Google et qui communique avec Apps Script en toute sécurité.
+  if(b.dataset.module==='rtn' && window.parent!==window){
+    window.parent.postMessage({type:'revisions:open-rtn'}, window.location.origin);
+    return;
+  }
   const m=messages[b.dataset.module];if(!m)return;
   document.getElementById('modalTitle').textContent=m[0];
   document.getElementById('modalText').textContent=m[1];
