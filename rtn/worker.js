@@ -61,7 +61,7 @@ export default {
       const upstream=await fetch(env.RTN_SCRIPT_URL,{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({action,secret:env.RTN_BRIDGE_SECRET,...body}),
+        body:JSON.stringify({...body,action,secret:env.RTN_BRIDGE_SECRET}),
         redirect:'follow',
         signal:AbortSignal.timeout(25000)
       });
