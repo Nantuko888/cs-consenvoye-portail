@@ -773,7 +773,10 @@ async function handleCredentialResponse(response){
     return;
   }
 
-  await checkAndShow_(email);
+  const portalAllowed = await checkAndShow_(email);
+  if (portalAllowed && typeof window.__rtnResumeAfterGoogle === 'function') {
+    window.__rtnResumeAfterGoogle();
+  }
 }
 
 /* Boot */
@@ -1230,31 +1233,32 @@ document.addEventListener("click", (e) => {
   background:#182c46ea;color:#fff;padding:9px 12px;
   font:700 13px system-ui;cursor:pointer;
 }
-/* Icône RTN intégrée, sans fichier image supplémentaire. */
-#portal .rtn-launch {
-  border: 0;
-  background: transparent;
-  padding: 0;
+/* Icône RTN assortie aux autres icônes du portail. */
+#portal .rtn-launch { border:0; background:transparent; padding:0; }
+#portal .rtn-launch img {
+  display:block;
+  width:100%; height:100%;
+  max-width:100%; max-height:100%; object-fit:contain;
 }
-#portal .rtn-logo {
-  width: 86%;
-  height: 86%;
-  border-radius: 20%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1px;
-  color: white;
-  background: linear-gradient(145deg, #24354b 0%, #111b2c 58%, #9f1e2c 100%);
-  border: 1px solid rgba(255,255,255,.45);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 7px 21px rgba(0,0,0,.4);
-  text-align: center;
+#rtn-google-verify {
+  position:fixed; inset:0; z-index:30001;
+  background:rgba(0,0,0,.80);
+  display:flex; align-items:center; justify-content:center;
+  padding:20px; color:white;
 }
-#portal .rtn-logo-cross { color: #f6404b; font-size: clamp(19px, 4vw, 30px); line-height:1; }
-#portal .rtn-logo strong { font-size: clamp(22px, 5vw, 40px); letter-spacing: .06em; line-height: 1; }
-#portal .rtn-logo small { font-size: clamp(6px, 1.2vw, 10px); line-height: 1.18; letter-spacing: .05em; }
-#portal .rtn-launch:focus-visible .rtn-logo { outline: 3px solid white; outline-offset: 3px; }
+#rtn-google-verify .rtn-google-card {
+  width:min(100%,390px); padding:26px 22px;
+  border-radius:20px; background:#111e30;
+  border:1px solid #ffffff40; text-align:center;
+  box-shadow:0 16px 60px #000a;
+}
+#rtn-google-verify h2 { margin:0 0 12px; font-size:21px; }
+#rtn-google-verify p { line-height:1.5; font-size:14px; color:#d7e4f0; }
+#rtn-google-verify .rtn-google-host { display:flex; justify-content:center; margin:22px auto; min-height:44px; }
+#rtn-google-verify .rtn-google-cancel {
+  padding:10px 18px; border-radius:10px; border:1px solid #ffffff55;
+  background:transparent; color:white; font-weight:700; cursor:pointer;
+}
 </style>
 
 <script>
@@ -1273,6 +1277,54 @@ document.addEventListener("click", (e) => {
     rtnScreen=null; rtnFrame=null; rtnNonce='';
     if(goBack && history.state && history.state.rtnSimulation) history.back();
   }
+  function requestGoogleForRtn() {
+    if (document.getElementById('rtn-google-verify')) return;
+    const layer=document.createElement('section');
+    layer.id='rtn-google-verify';
+    layer.setAttribute('aria-label','Vérifier le compte Google pour RTN');
+    layer.innerHTML=`<div class="rtn-google-card">
+      <h2>Accès au simulateur RTN</h2>
+      <p>Confirme ton compte Google pour ouvrir RTN. Tu n’as pas besoin de te déconnecter du portail.</p>
+      <div class="rtn-google-host" id="rtn-google-host"></div>
+      <p id="rtn-google-error" role="alert" style="color:#ffccaf;display:none"></p>
+      <button class="rtn-google-cancel" type="button">Annuler</button>
+    </div>`;
+    layer.querySelector('.rtn-google-cancel').onclick=()=>{
+      window.__rtnResumeAfterGoogle=null;
+      layer.remove();
+    };
+    document.body.appendChild(layer);
+    window.__rtnResumeAfterGoogle=()=>{
+      window.__rtnResumeAfterGoogle=null;
+      layer.remove();
+      openRtn();
+    };
+    try {
+      if (!window.google || !google.accounts || !google.accounts.id) {
+        throw Error('Connexion Google indisponible. Recharge la page du portail.');
+      }
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleCredentialResponse,
+        auto_select: false
+      });
+      google.accounts.id.renderButton(
+        layer.querySelector('#rtn-google-host'),
+        {type:'standard',theme:'outline',size:'large',text:'continue_with',shape:'rectangular'}
+      );
+    } catch(err) {
+      const error=layer.querySelector('#rtn-google-error');
+      error.textContent=err.message||'Impossible de charger la connexion Google';
+      error.style.display='block';
+    }
+  }
+  function hasValidRtnToken(token) {
+    try {
+      if(!token) return false;
+      const payload=JSON.parse(b64urlToUtf8(token.split('.')[1]));
+      return Number(payload.exp||0)*1000>Date.now()+30000;
+    } catch(e){return false;}
+  }
   function openRtn(e) {
     if(e)e.preventDefault();
     if(rtnOpened)return;
@@ -1280,8 +1332,10 @@ document.addEventListener("click", (e) => {
       alert('RTN : l’adresse de déploiement Apps Script doit être renseignée avant ouverture.'); return;
     }
     const token=sessionStorage.getItem(RTN_TOKEN_KEY);
-    if(!token){
-      alert('Pour ouvrir RTN en sécurité, déconnecte-toi du portail puis reconnecte-toi avec Google.'); return;
+    if(!hasValidRtnToken(token)){
+      sessionStorage.removeItem(RTN_TOKEN_KEY);
+      requestGoogleForRtn();
+      return;
     }
     rtnNonce=Array.from(crypto.getRandomValues(new Uint8Array(24)),x=>x.toString(16).padStart(2,'0')).join('');
     rtnScreen=document.createElement('section');rtnScreen.id='rtn-sim-screen';
@@ -1365,14 +1419,13 @@ document.addEventListener("click", (e) => {
     const rtnLink = document.createElement('button');
     rtnLink.type = 'button';
     rtnLink.className = 'btn rtn-launch';
-    rtnLink.title = 'RTN — Références Techniques Nationales';
-    rtnLink.setAttribute('aria-label', 'Références Techniques Nationales');
-    rtnLink.innerHTML = `
-      <span class="rtn-logo" aria-hidden="true">
-        <span class="rtn-logo-cross">✚</span>
-        <strong>RTN</strong>
-        <small>RÉFÉRENCES<br>TECHNIQUES<br>NATIONALES</small>
-      </span>`;
+    rtnLink.title = 'Révisions';
+    rtnLink.setAttribute('aria-label', 'Révisions');
+    const rtnIcon=document.createElement('img');
+    rtnIcon.src='icone-revisions.png';
+    rtnIcon.alt='Révisions';
+    rtnIcon.draggable=false;
+    rtnLink.appendChild(rtnIcon);
     rtnLink.addEventListener('click', openRtn);
 
     grid2.appendChild(rtnLink);
