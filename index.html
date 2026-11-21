@@ -1451,13 +1451,15 @@ document.addEventListener("click", (e) => {
     revisionsScreen.append(revisionsFrame, revisionsBack);
     document.body.appendChild(revisionsScreen);
 
-    function closeRevisions(useBack) {
+    function closeRevisions() {
       if (!revisionsOpened) return;
       revisionsOpened = false;
       revisionsScreen.style.display = 'none';
       revisionsScreen.setAttribute('aria-hidden', 'true');
       revisionsFrame.removeAttribute('src');
-      if (useBack && history.state && history.state.revisionsOpen) history.back();
+      // Ne jamais déclencher history.back() : selon la PWA, cela peut sortir du portail.
+      // On rétablit l'URL du portail sans rechargement ni navigation externe.
+      history.replaceState({page:'portal'}, '', location.pathname + '?portal=1');
     }
     function openRevisions(e) {
       if (e) e.preventDefault();
@@ -1477,11 +1479,11 @@ document.addEventListener("click", (e) => {
       openRtn(); // vérification Google et droits RTN assurés par le système existant
     });
     rtnLink.addEventListener('click', openRevisions);
-    revisionsBack.addEventListener('click', () => closeRevisions(true));
+    revisionsBack.addEventListener('click', closeRevisions);
     window.addEventListener('popstate', () => {
-      if (revisionsOpened && (!history.state || !history.state.revisionsOpen)) closeRevisions(false);
+      if (revisionsOpened && (!history.state || !history.state.revisionsOpen)) closeRevisions();
     });
-    document.getElementById('logoutBtnPortal')?.addEventListener('click', () => closeRevisions(false));
+    document.getElementById('logoutBtnPortal')?.addEventListener('click', closeRevisions);
 
 
     grid2.appendChild(rtnLink);
