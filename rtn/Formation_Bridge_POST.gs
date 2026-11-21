@@ -55,7 +55,8 @@ function doPost(e) {
     '(function(){try{var binary=atob('+JSON.stringify(base64)+');'+
     'var bytes=Uint8Array.from(binary,function(x){return x.charCodeAt(0)});'+
     'var msg=JSON.parse(new TextDecoder().decode(bytes));'+
-    'window.parent.postMessage(msg,'+JSON.stringify(targetOrigin)+');'+
+    'var a=window;for(var i=0;i<5;i++){if(!a.parent||a.parent===a)break;a=a.parent;'+
+    'try{a.postMessage(msg,'+JSON.stringify(targetOrigin)+');}catch(ignore){}}'+
     '}catch(e){}})();'+
     '<\/script></body></html>';
   return HtmlService.createHtmlOutput(html)
