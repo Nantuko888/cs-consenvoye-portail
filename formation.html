@@ -931,7 +931,8 @@ function formationBridge(action, fields={}) {
     function cleanup() { clearTimeout(timer);window.removeEventListener('message',receive);form.remove();iframe.remove(); }
     function fail(error) {if(settled)return;settled=true;cleanup();reject(error instanceof Error?error:new Error(String(error))); }
     function receive(event) {
-      if(event.source!==iframe.contentWindow)return;
+      // Apps Script peut encapsuler sa réponse dans une iframe Google interne.
+      // L'origine et l'identifiant aléatoire sont contrôlés ci-dessous.
       if(event.origin!=='https://script.google.com'&&!/^https:\/\/[^/]+\.googleusercontent\.com$/.test(event.origin))return;
       const msg=event.data;
       if(!msg||msg.type!=='formation:bridge'||msg.request_id!==requestId)return;
