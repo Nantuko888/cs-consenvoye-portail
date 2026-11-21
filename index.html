@@ -733,6 +733,7 @@ function hideChecking(){
 function doLogout(){
   localStorage.removeItem(LS_KEY);
   sessionStorage.removeItem(RTN_TOKEN_KEY);
+  sessionStorage.removeItem("cs_formation_session_v2");
   localStorage.removeItem("cs_role_v1");
   sessionStorage.removeItem("cs_formation_v1");
   localStorage.removeItem("cs_online_badge_cache_v1");
