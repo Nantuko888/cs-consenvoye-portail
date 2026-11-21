@@ -18,18 +18,23 @@ h1{font-size:clamp(23px,4vw,32px);margin:10px 0}h2{margin:8px 0;font-size:clamp(
 .progress{height:8px;border-radius:99px;background:#24435f;overflow:hidden;margin:13px 0}.progress>div{height:100%;background:linear-gradient(90deg,#db324d,#ff7480);transition:width .2s}.score{font-size:34px;font-weight:950}.catalog{max-height:58dvh;overflow:auto}.footer{font-size:12px;color:#a8c8e4;margin-top:18px}
 .pdfLink{display:inline-flex;align-items:center;gap:7px;color:#fff;background:#1d4e7d;border:1px solid #6aa7dd;border-radius:9px;padding:10px 13px;text-decoration:none;font-size:14px;font-weight:800}.pdfLink:hover{text-decoration:underline;background:#286392}
 .reviewItem{background:#102c4c;border:1px solid #37699c;border-radius:13px;padding:15px;margin:12px 0}.reviewItem h3{margin:3px 0 8px;font-size:18px}.reviewLine{border-top:1px solid #2e5276;padding:10px 0;font-size:14px;line-height:1.45}.reviewLine strong{display:block;margin-bottom:4px}.userAnswer{color:#ff9cab}.correctAnswer{color:#a6f5cf}.reviewActions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}.reviewActions .btn{font-size:13px}.detailsSummary{font-weight:850;cursor:pointer;color:#b4ddff;padding:12px 0}
+.historyItem{background:#102f51;border:1px solid #386c9f;border-radius:12px;padding:13px 15px;margin:9px 0}
+.historyItem strong{display:block;margin-bottom:5px}.historyItem p{margin:5px 0}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.actions .btn{flex:1 1 185px}
+.filter{background:#f0f7ff;color:#173655;min-width:180px;border-radius:10px;border:1px solid #7baddd;padding:10px;font-weight:800}.noResults{padding:20px;border:1px dashed #537daa;border-radius:12px;color:#b8d8ef}
+@media(max-width:650px){.historyItem{padding:12px}.actions .btn{width:100%}}
 [hidden]{display:none!important}
 @media(max-width:650px){.header{padding-top:max(10px,env(safe-area-inset-top))}.headrow .btn{font-size:12px;padding:9px 7px}.subtitle{font-size:9px}.grid,.fields{grid-template-columns:1fr}.mode{min-height:105px;padding:14px}.controls .btn{flex:1 1 auto}.field{padding:10px}}
 </style></head><body><div class="shell">
 <header class="header"><div class="headrow"><div><div class="brand"><b>RTN</b> · Tableaux</div><div class="subtitle">RÉFÉRENCES TECHNIQUES NATIONALES · ENTRAÎNEMENT</div></div><button class="btn green" id="back">← Mes Révisions</button></div></header>
 <main>
-<section id="home" class="panel"><span class="badge">Version d’essai · 21 modèles de tableaux</span><h1>Tableaux à compléter</h1><p class="muted">Complète les cases sans connaître les réponses à l’avance. Tu obtiendras une correction et une référence au document RTN.</p>
-<div class="grid"><button class="mode" id="random"><strong>▷ Commencer une séance</strong>Choisis le nombre de tableaux. Tirage aléatoire.</button><button class="mode" id="choose"><strong>▦ Choisir un tableau</strong>Travaille un tableau précis du référentiel.</button></div><p class="small muted">Mode de test : résultats enregistrés uniquement dans ce navigateur, pas encore dans Google Sheets. ATLS sera ajouté après réception de ton document.</p></section>
+<section id="home" class="panel"><span class="badge">21 tableaux et exercices · RTN édition 2026</span><h1>Tableaux à compléter</h1><p class="muted">Complète les cases sans connaître les réponses à l’avance. Tu obtiendras une correction et une référence au document RTN.</p>
+<div class="grid"><button class="mode" id="random"><strong>▷ Commencer une séance</strong>Choisis le nombre de tableaux. Tirage aléatoire.</button><button class="mode" id="choose"><strong>▦ Choisir un tableau</strong>Travaille un tableau précis du référentiel.</button><button class="mode" id="openHistory"><strong>↗ Mes dernières séances</strong>Consulte tes résultats et reprends tes erreurs sur cet appareil.</button><button class="mode" id="mistakesPractice"><strong>↺ Revoir mes erreurs</strong>Révise les tableaux ratés lors de ta dernière séance.</button></div><p class="small muted">Résultats enregistrés seulement sur cet appareil, pas dans Google Sheets. Ce module n’utilise pas encore le suivi de compte RTN. Classification ATLS : à venir après réception de tes documents.</p></section>
 <section id="setup" class="panel" hidden><h1>Configurer ma séance</h1><p class="muted">Tableaux aléatoires, proposés un par un.</p><div class="controls"><label for="count"><b>Nombre de tableaux</b></label><select id="count"><option>5</option><option selected>10</option><option>20</option><option>40</option></select><button class="btn primary" id="start">Démarrer →</button><button class="btn" id="setupBack">← Retour accueil</button></div><p class="small muted">Avec 40 exercices, des modèles reviendront après le premier passage car 21 modèles existent actuellement.</p></section>
-<section id="catalog" class="panel" hidden><h1>Choisir un tableau</h1><p class="muted">15 tableaux numérotés dans le RTN et 6 exercices complémentaires issus du texte.</p><div id="list" class="catalog"></div><button class="btn green" id="catalogBack">← Retour accueil</button></section>
+<section id="catalog" class="panel" hidden><h1>Choisir un tableau</h1><p class="muted">15 tableaux numérotés dans le RTN et 6 exercices complémentaires issus du texte.</p><div class="controls"><label for="filterCat"><b>Filtrer :</b></label><select id="filterCat" class="filter"></select></div><div id="list" class="catalog"></div><button class="btn green" id="catalogBack">← Retour accueil</button></section>
+<section id="history" class="panel" hidden><h1>Mes dernières séances</h1><p class="muted">Historique conservé uniquement dans ce navigateur. Les données ne sont pas synchronisées entre tes appareils.</p><div id="historyList"></div><div class="actions"><button class="btn green" id="historyBack">← Retour accueil</button><button class="btn" id="clearHistory">Effacer cet historique local</button></div></section>
 <section id="exercise" class="panel" hidden><div class="controls"><button class="btn green" id="quit">← Retour accueil</button><span id="step" class="badge"></span></div><div class="progress"><div id="fill" style="width:0"></div></div>
 <span id="category" class="badge"></span><h1 id="title"></h1><p id="description" class="muted"></p><div class="fields" id="fields"></div><div class="controls"><button class="btn primary" id="validate">Valider mes réponses</button><button class="btn primary" id="next" hidden>Tableau suivant →</button></div><div id="feedback" hidden aria-live="polite"></div><p id="source" class="small muted"></p><a id="pdfExercise" class="pdfLink" href="#" target="_blank" rel="noopener noreferrer">📖 Consulter la page du RTN ↗</a></section>
-<section id="finished" class="panel" hidden><span class="badge">Séance terminée</span><h1>Bilan de ta séance</h1><p class="score" id="result"></p><p id="detail" class="muted"></p><div id="review" aria-live="polite"></div><div class="controls"><button class="btn primary" id="again">Nouvelle séance</button><button class="btn green" id="finishBack">← Retour accueil</button></div><p class="small muted">Ce bilan est mémorisé localement pour tester l’interface. Il n’est pas associé à un compte personnel.</p></section>
+<section id="finished" class="panel" hidden><span class="badge">Séance terminée</span><h1>Bilan de ta séance</h1><p class="score" id="result"></p><p id="detail" class="muted"></p><div id="review" aria-live="polite"></div><div class="controls"><button class="btn primary" id="again">Nouvelle séance</button><button class="btn" id="retryErrors">Recommencer les tableaux ratés</button><button class="btn green" id="finishBack">← Retour accueil</button></div><p class="small muted">Ce bilan est mémorisé localement pour tester l’interface. Il n’est pas associé à un compte personnel.</p></section>
 </main><footer class="footer">CS Consenvoye · Exercice pédagogique fondé sur le référentiel RTN 2026. En intervention, suivre les procédures en vigueur et les consignes médicales applicables.</footer></div>
 <script>
 'use strict';
@@ -37,16 +42,44 @@ const BANK=[["T01","Technique des deux seaux",59,"Hygiène","Complète la métho
 const el=id=>document.getElementById(id);
 const PDF_URL="https://nantuko888.github.io/cs-consenvoye-portail/R%C3%A9f%C3%A9rences%20techniques%20nationales%20-%20Premiers%20Secours%20Citoyen.pdf";
 const pdfPage=p=>PDF_URL+'#page='+encodeURIComponent(p);
-const view=id=>{for(const name of ['home','setup','catalog','exercise','finished'])el(name).hidden=name!==id;window.scrollTo(0,0)};
+const view=id=>{for(const name of ['home','setup','catalog','history','exercise','finished'])el(name).hidden=name!==id;window.scrollTo(0,0)};
 const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const shuffle=arr=>{const out=[...arr];for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]]}return out};
+const HISTORY_KEY='cs_tableaux_rtn_demo_v1';
+const readHistory=()=>{try{const a=JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]');return Array.isArray(a)?a:[]}catch(e){return []}};
 let queue=[],at=0,correct=0,total=0,results=[],corrected=false;
+const byId=id=>BANK.find(b=>b[0]===id);
 function goBack(){
   location.href='revisions.html';
 }
 el('back').onclick=goBack;
 el('random').onclick=()=>view('setup');
-el('choose').onclick=()=>{el('list').innerHTML=BANK.map((b,i)=>'<button class="pick" data-id="'+i+'">'+escapeHtml(b[1])+'<span>'+escapeHtml(b[3])+' · page '+b[2]+' · '+b[4].length+' réponses</span></button>').join('');el('list').querySelectorAll('button').forEach(b=>b.onclick=()=>startQueue([BANK[Number(b.dataset.id)]]));view('catalog')};
+function renderCatalog(){
+ const cat=el('filterCat').value;
+ el('list').innerHTML=BANK.map((b,i)=>({b,i})).filter(o=>!cat||o.b[3]===cat).map(({b,i})=>'<button class="pick" data-id="'+i+'">'+escapeHtml(b[1])+'<span>'+escapeHtml(b[3])+' · page '+b[2]+' · '+b[5].length+' réponses</span></button>').join('');
+ el('list').querySelectorAll('button').forEach(b=>b.onclick=()=>startQueue([BANK[Number(b.dataset.id)]]));
+}
+el('choose').onclick=()=>{const cats=[...new Set(BANK.map(b=>b[3]))].sort((a,b)=>a.localeCompare(b,'fr'));el('filterCat').innerHTML='<option value="">Tous les thèmes</option>'+cats.map(c=>'<option value="'+escapeHtml(c)+'">'+escapeHtml(c)+'</option>').join('');renderCatalog();view('catalog')};
+el('filterCat').onchange=renderCatalog;
+function lastMistakes(){
+ const h=readHistory();
+ if(!h.length)return [];
+ const last=h[0],seen=new Set();
+ return (last.results||[]).filter(r=>(r.mistakes?.length||0)>0).map(r=>byId(r.id)).filter(b=>b&&!seen.has(b[0])&&seen.add(b[0]));
+}
+el('mistakesPractice').onclick=()=>{const items=lastMistakes();if(items.length)startQueue(shuffle(items));else{el('historyList').innerHTML='<p class="noResults">Aucun tableau raté dans ta dernière séance enregistrée sur cet appareil. Termine une séance pour commencer à suivre tes erreurs.</p>';view('history')}};
+function renderHistory(){
+ const h=readHistory();
+ el('historyList').innerHTML=h.length?h.map((v,i)=>'<div class="historyItem"><strong>'+escapeHtml(new Date(v.date).toLocaleString('fr-FR'))+' · '+(v.total?Math.round(v.correct*100/v.total):0)+' %</strong><p>'+v.correct+' / '+v.total+' bonnes réponses · '+(v.results||[]).length+' tableaux</p><button class="btn" data-review="'+i+'">Voir les erreurs</button></div>').join(''):'<p class="noResults">Aucune séance enregistrée sur cet appareil.</p>';
+ el('historyList').querySelectorAll('[data-review]').forEach(b=>b.onclick=()=>showPastReview(h[Number(b.dataset.review)]));
+}
+function showPastReview(entry){
+ results=entry.results||[];correct=entry.correct||0;total=entry.total||0;queue=results.map(r=>byId(r.id)).filter(Boolean);renderFinish(true);
+}
+el('openHistory').onclick=()=>{renderHistory();view('history')};
+el('historyBack').onclick=()=>view('home');
+el('clearHistory').onclick=()=>{if(confirm('Effacer tout l’historique des tableaux sur cet appareil ? Cette opération est définitive.')){try{localStorage.removeItem(HISTORY_KEY)}catch(e){}renderHistory()}};
+
 el('setupBack').onclick=el('catalogBack').onclick=el('quit').onclick=el('finishBack').onclick=()=>view('home');
 el('start').onclick=()=>{const n=Number(el('count').value);let out=[];while(out.length<n)out.push(...shuffle(BANK));startQueue(out.slice(0,n))};
 function startQueue(items){queue=items;at=0;correct=0;total=0;results=[];showExercise()}
@@ -78,15 +111,22 @@ el('validate').onclick=check;
 el('next').onclick=()=>{if(!corrected)return;at++;if(at<queue.length){showExercise();return}finish()};
 function errorLines(items){return items.map(m=>'<div class="reviewLine"><strong>'+escapeHtml(m.label)+'</strong><span class="userAnswer">Ta réponse : '+escapeHtml(m.given)+'</span><br><span class="correctAnswer">Bonne réponse : '+escapeHtml(m.expected)+'</span></div>').join('')}
 function reviewCard(item,index){return '<div class="reviewItem"><h3>Tableau '+(index+1)+' — '+escapeHtml(item.title)+'</h3><p class="small muted">'+item.mistakes.length+' erreur(s) sur '+item.total+' réponses</p>'+errorLines(item.mistakes)+'<div class="reviewActions"><a class="pdfLink" target="_blank" rel="noopener noreferrer" href="'+pdfPage(item.page)+'">📖 Ouvrir le RTN · page '+item.page+' ↗</a></div></div>'}
-function finish(){
+function renderFinish(fromHistory=false){
   el('result').textContent=correct+' / '+total+' · '+(total?Math.round(100*correct/total):0)+' %';
-  el('detail').textContent=queue.length+' tableaux proposés · '+results.filter(r=>r.correct===r.total).length+' tableaux sans erreur.';
+  el('detail').textContent=results.length+' tableaux proposés · '+results.filter(r=>r.correct===r.total).length+' tableaux sans erreur.';
   const withMistakes=results.map((r,i)=>({...r,number:i})).filter(r=>r.mistakes.length);
   const good=results.filter(r=>!r.mistakes.length);
   const successCards=good.map(r=>'<div class="reviewItem">✓ '+escapeHtml(r.title)+' · '+r.correct+'/'+r.total+' — <a class="pdfLink" target="_blank" rel="noopener noreferrer" href="'+pdfPage(r.page)+'">RTN page '+r.page+' ↗</a></div>').join('');
   el('review').innerHTML=withMistakes.length?'<h2>Mes erreurs · '+withMistakes.length+' tableau(x) à revoir</h2><p class="muted">Retrouve ta saisie, la bonne réponse et la page du référentiel.</p>'+withMistakes.map(r=>reviewCard(r,r.number)).join('')+(good.length?'<details><summary class="detailsSummary">Voir aussi les '+good.length+' tableaux réussis</summary>'+successCards+'</details>':''):'<h2 class="correctAnswer">✓ Tout est juste !</h2><p class="muted">Aucune erreur dans cette séance.</p><details><summary class="detailsSummary">Afficher les tableaux réussis et leurs sources</summary>'+successCards+'</details>';
-  try{const key='cs_tableaux_rtn_demo_v1',arr=JSON.parse(localStorage.getItem(key)||'[]');arr.unshift({date:new Date().toISOString(),correct,total,results});localStorage.setItem(key,JSON.stringify(arr.slice(0,10)))}catch(e){}
+  el('retryErrors').disabled=!results.some(r=>r.mistakes?.length);
+  el('retryErrors').hidden=!results.some(r=>r.mistakes?.length);
+  el('again').textContent=fromHistory?'Démarrer une séance':'Nouvelle séance';
   view('finished');
 }
+function finish(){
+ try{const arr=readHistory();arr.unshift({date:new Date().toISOString(),correct,total,results});localStorage.setItem(HISTORY_KEY,JSON.stringify(arr.slice(0,30)))}catch(e){}
+ renderFinish(false);
+}
+el('retryErrors').onclick=()=>{const seen=new Set();const items=results.filter(r=>r.mistakes?.length).map(r=>byId(r.id)).filter(b=>b&&!seen.has(b[0])&&seen.add(b[0]));if(items.length)startQueue(shuffle(items))};
 el('again').onclick=()=>view('setup');
 </script></body></html>
