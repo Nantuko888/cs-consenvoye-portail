@@ -1250,7 +1250,7 @@ function renderDashboard() { let st = dashboard.stats, all = CHAPTERS.map(c => s
     el.querySelector('.chapter-title').textContent = c.name;
     el.querySelector('button').onclick = () => setup(c.id);
     $('chapters').append(el);
-} renderStats(); }
+} renderStats(); requestAnimationFrame(fitRtnFixedView_); }
 function view(id) {
   for(const x of ['home','dashboardView','chaptersView','setupView','quizView','resultsView','statsView'])
     $(x).classList.toggle('hidden',id!==x);
@@ -1260,6 +1260,7 @@ function view(id) {
   $('rtnContent').scrollTop=0;
   requestAnimationFrame(fitRtnFixedView_);
 }
+window.addEventListener('resize',()=>requestAnimationFrame(fitRtnFixedView_));
 function fitRtnFixedView_(){
   const id=$('rtnContent').dataset.activeView;
   for(const name of ['home','dashboardView','setupView'])$(name).style.zoom='';
