@@ -761,6 +761,45 @@ html,body{height:100%;overflow:hidden}
 .setup-navigation{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .setup-navigation .btn{min-height:43px}
 @media(max-width:430px){.setup-navigation{gap:6px}.setup-navigation .btn{padding:9px 10px;font-size:12px}}
+
+/* RTN — gabarit unique pour tous les bandeaux de navigation.
+   Même hauteur, corps de texte et largeur, sur accueil et sous-pages. */
+:root{--rtn-control-height:48px;--rtn-control-width:clamp(130px,42vw,180px);--rtn-control-font:13px}
+.rtn-standard-control{
+ box-sizing:border-box!important;display:inline-flex;align-items:center;justify-content:center;
+ width:var(--rtn-control-width);min-width:0;max-width:100%;
+ height:var(--rtn-control-height);min-height:var(--rtn-control-height);
+ padding:8px 11px!important;border-radius:12px!important;
+ font-family:inherit;font-size:var(--rtn-control-font)!important;
+ font-weight:800!important;line-height:1.2!important;letter-spacing:normal!important;
+ text-align:center;white-space:normal;
+}
+.rtn-return-control,.btn.text.rtn-return-control{
+ background:linear-gradient(145deg,#147b59,#0c5742)!important;
+ border:1px solid #3abf92!important;color:#fff!important;
+ box-shadow:0 2px 9px #001d1630!important;text-decoration:none;
+}
+.rtn-return-control:hover,.btn.text.rtn-return-control:hover{background:#19926a!important}
+.rtn-secondary-control,.btn.ghost.rtn-secondary-control{
+ background:#1b496c!important;border:1px solid #428db2!important;
+ color:white!important;
+}
+.rtn-profile{background:#192b43;border:1px solid #3a526d;color:#e9f0f8}
+.topline .user-actions{display:flex;gap:10px;flex-wrap:nowrap;align-items:center}
+.setup-navigation{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:nowrap}
+.rtn-subview-back{margin-bottom:18px}
+@media(max-width:760px){
+ .topline .user-actions{width:100%;justify-content:space-between}
+ .topline .rtn-standard-control{flex:1 1 0;width:0;min-width:0}
+ .setup-navigation .rtn-standard-control{flex:1 1 0;width:0;min-width:0}
+ .topline .profile{max-width:none}
+}
+@media(max-width:360px){
+ :root{--rtn-control-font:12px}
+ .topline .user-actions,.setup-navigation{gap:7px}
+ .rtn-standard-control{padding:6px 7px!important}
+}
+
 </style>
  </head>
  <body>
@@ -778,7 +817,7 @@ html,body{height:100%;overflow:hidden}
     </aside>
    <main class="main">
      <header class="masthead"><div class="masthead-picture" aria-hidden="true"></div><div class="masthead-content"><div class="masthead-title"><span class="masthead-accent">▰</span> RTN <span class="pulse">⌁</span></div><div class="masthead-subtitle">Références Techniques Nationales</div><div class="masthead-description">SIMULATEUR D’ENTRAÎNEMENT ET DE RÉVISION</div></div></header>
-     <div class="topline"><span class="eyebrow">ESPACE PERSONNEL DE RÉVISION</span><div class="user-actions"><span class="profile" id="profile">Bonjour</span><button class="logout-btn" id="leaveApp" type="button">← Mes Révisions</button></div></div>
+     <div class="topline"><span class="eyebrow">ESPACE PERSONNEL DE RÉVISION</span><div class="user-actions"><span class="profile rtn-standard-control rtn-profile" id="profile">Bonjour</span><button class="logout-btn rtn-standard-control rtn-return-control" id="leaveApp" type="button">← Mes Révisions</button></div></div>
      <div class="rtn-content" id="rtnContent">
      <section id="home">
       <div class="home-welcome"><div><h1>Bienvenue sur ton <em>simulateur RTN</em></h1><p>Entraîne-toi, évalue tes connaissances et progresse dans les Références Techniques Nationales.</p></div><span class="training-marker">✚ &nbsp; Formation · Révision · Progression</span></div>
@@ -790,7 +829,7 @@ html,body{height:100%;overflow:hidden}
       </div>
      </section>
      <section class="hidden rtn-subview" id="dashboardView">
-       <button class="btn text rtn-subview-back" id="backDashboard" type="button">← Accueil RTN</button>
+       <button class="btn text rtn-subview-back rtn-standard-control rtn-return-control" id="backDashboard" type="button">← Retour accueil</button>
        <h1>Tableau de bord</h1>
        <div class="summary-bar"><div class="summary-title"><span>◉</span><div><strong>Ma progression globale</strong><small>Couverture des questions disponibles</small></div></div><div class="summary-progress"><div class="summary-track"><div id="homeProgressFill"></div></div><strong id="homeProgressPct">0 %</strong></div><div class="summary-mini"><span id="homeSessions">0</span> séances · <span id="homeAnswered">0</span> réponses</div></div>
       <div class="last-session"><div class="last-session-heading"><h2>◷ &nbsp; Dernière séance</h2><span id="lastSessionStatus">Historique personnel</span></div><div id="lastSessionInfo">Aucune séance terminée pour le moment. Lance ta première session !</div><button class="btn ghost" id="lastSessionGo" type="button">Voir ma progression →</button></div>
@@ -798,7 +837,7 @@ html,body{height:100%;overflow:hidden}
      </div>
     </section>
     <section class="hidden rtn-subview" id="chaptersView">
-     <button class="btn text rtn-subview-back" id="backChapters" type="button">← Accueil RTN</button>
+     <button class="btn text rtn-subview-back rtn-standard-control rtn-return-control" id="backChapters" type="button">← Retour accueil</button>
      <div class="section-top">
       <h2>
        Les 13 chapitres
@@ -826,8 +865,8 @@ html,body{height:100%;overflow:hidden}
     </section>
     <section class="hidden" id="setupView">
      <div class="setup-navigation">
-      <button class="btn text" id="backSetup" type="button">← Retour accueil</button>
-      <button class="btn ghost hidden" id="newRandomChapter" type="button" title="Tirer un autre chapitre pour la séance">↻ Autre chapitre</button>
+      <button class="btn text rtn-standard-control rtn-return-control" id="backSetup" type="button">← Retour accueil</button>
+      <button class="btn ghost hidden rtn-standard-control rtn-secondary-control" id="newRandomChapter" type="button" title="Tirer un autre chapitre pour la séance">↻ Autre chapitre</button>
      </div>
      <div class="panel" style="max-width:780px;margin:15px auto">
       <div class="eyebrow">
@@ -971,7 +1010,7 @@ html,body{height:100%;overflow:hidden}
      </div>
     </section>
     <section class="hidden rtn-subview" id="statsView">
-     <button class="btn text rtn-subview-back" id="backStats" type="button">← Accueil RTN</button>
+     <button class="btn text rtn-subview-back rtn-standard-control rtn-return-control" id="backStats" type="button">← Retour accueil</button>
      <div class="eyebrow">
       ANALYSE PERSONNELLE
      </div>
