@@ -903,6 +903,7 @@ const PDF_FILE = 'https://nantuko888.github.io/cs-consenvoye-portail/R%C3%A9f%C3
 const $ = x => document.getElementById(x), online = true;
 let RTN_LAUNCH_NONCE = new URL(location.href).searchParams.get('launch_nonce') || '';
 let rtnSession = '';
+const FORMATION_SESSION_KEY='cs_formation_session_v2';
 const RTN_PORTAL_ORIGIN = 'https://nantuko888.github.io';
 
 /* Pont de communication sécurisé : POST dans une iframe éphémère.
@@ -1072,7 +1073,7 @@ $('leaveApp').onclick = () => {
   if (!confirm('Retourner aux révisions ?')) return;
   const portal = rtnPortalWindow();
   if (portal && RTN_LAUNCH_NONCE) portal.postMessage({type:'rtn:exit',nonce:RTN_LAUNCH_NONCE}, RTN_PORTAL_ORIGIN);
-  window.close();
+  // Le module est intégré au portail : window.close() ne ferme pas une iframe.
 };
 
 $('backSetup').onclick = () => view('home');
@@ -1093,7 +1094,10 @@ function rtnLock(message) {
     box.style.cssText='position:fixed;inset:0;z-index:99999;background:#0c192c;color:white;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;font:700 17px system-ui';
     document.body.appendChild(box);
   }
-  box.textContent=message;
+  // Conserver la vérification serveur, sans afficher un écran RTN à chaque ouverture.
+  // Les erreurs et refus restent visibles pour ne jamais masquer un problème d'accès.
+  const waiting=/^(Vérification|Connexion au portail)/.test(String(message));
+  box.textContent=waiting?'':message;
   box.style.display='flex';
 }
 function rtnUnlock(){ const b=document.getElementById('rtn-lock'); if(b)b.style.display='none'; }
@@ -1127,16 +1131,42 @@ window.addEventListener('message', ev=>{
   if(!online) {rtnLock('L’application doit être ouverte depuis Apps Script.');return;}
   rtnConnecting=true;
   rtnLock('Vérification des droits RTN…');
-  formationBridge('connect',{credential:ev.data.credential}).then(result=>{
+  const email=rtnCredentialEmail(ev.data.credential);
+  let cached=null;
+  try{cached=JSON.parse(sessionStorage.getItem(FORMATION_SESSION_KEY)||'null');}catch(e){}
+  if(cached && cached.email===email && cached.expires>Date.now() && cached.session){
+    rtnSession=cached.session;
+    formationBridge('dashboard',{session:rtnSession}).then(data=>{
+      dashboard=data;bank=data.questions;renderDashboard();rtnConnecting=false;rtnUnlock();
+    }).catch(()=>{
+      sessionStorage.removeItem(FORMATION_SESSION_KEY);
+      rtnSession='';rtnConnecting=false;
+      rtnConnectFresh(ev.data.credential,email);
+    });
+    return;
+  }
+  rtnConnectFresh(ev.data.credential,email);
+});
+function rtnCredentialEmail(credential){
+  try{
+    const p=credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    return String(JSON.parse(atob(p)).email||'').toLowerCase();
+  }catch(e){return '';}
+}
+function rtnConnectFresh(credential,email) {
+  rtnConnecting=true;
+  formationBridge('connect',{credential}).then(result=>{
     rtnConnecting=false;
     if(!result || !result.ok || !result.session){rtnLock('Connexion refusée');return;}
     rtnSession=result.session;
+    const email=rtnCredentialEmail(ev.data.credential);
+    if(email) sessionStorage.setItem(FORMATION_SESSION_KEY,JSON.stringify({email,session:rtnSession,expires:Date.now()+55*60*1000}));
     refresh(()=>{rtnUnlock();});
   }).catch(err=>{
     rtnConnecting=false;
     rtnLock('Accès Formation refusé : '+(err && err.message || err));
   });
-});
+}
 if (RTN_LAUNCH_NONCE) {
   rtnLock('Vérification de votre accès RTN…');
   rtnRequestCredential();
