@@ -1185,7 +1185,6 @@ $('lastSessionGo').onclick = () => { renderStats(); view('statsView'); };
 $('sidePdf').href = PDF_FILE;
 $('sideHelp').onclick = () => alert('Choisis un chapitre, puis ton niveau et ton parcours. Les corrections et les liens vers le référentiel apparaissent à la fin de chaque séance.');
 $('leaveApp').onclick = () => {
-  if (!confirm('Retourner aux révisions ?')) return;
   const portal = rtnPortalWindow();
   if (portal && RTN_LAUNCH_NONCE) portal.postMessage({type:'rtn:exit',nonce:RTN_LAUNCH_NONCE}, RTN_PORTAL_ORIGIN);
   // Le module est intégré au portail : window.close() ne ferme pas une iframe.
