@@ -813,6 +813,12 @@ html,body{height:100%;overflow:hidden}
 #chaptersView,#statsView{min-height:100%}
 /* Bandeau opaque sur toute la largeur : le contenu qui défile
    est entièrement masqué derrière le retour, sans transparence. */
+/* Aucune bande libre entre le profil fixe et la barre de retour :
+   le padding du conteneur provoquait un jour (9 à 18 px selon l'écran). */
+.rtn-content[data-active-view="chaptersView"],
+.rtn-content[data-active-view="statsView"]{
+ padding-top:0!important;
+}
 #chaptersView>.rtn-sticky-return,
 #statsView>.rtn-sticky-return{
  position:sticky;top:0;z-index:25;
