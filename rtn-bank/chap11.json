@@ -1,0 +1,130 @@
+[
+  {
+    "page": 373,
+    "ref": "11AC01",
+    "level": "Facile",
+    "q": "À ton arrivée, plusieurs blessés sont signalés et la situation peut encore évoluer. Quelle organisation est nécessaire ?",
+    "options": [
+      "Adapter l'organisation des secours à une situation à nombreuses victimes",
+      "Traiter tous les blessés dans l'ordre de leur nom",
+      "Ne transmettre aucune information avant la fin des soins",
+      "Faire transporter immédiatement la première personne qui parle"
+    ],
+    "answer": 0,
+    "why": "Une situation à nombreuses victimes demande une organisation spécifique et une évaluation des priorités.",
+    "mode": "Opérationnel",
+    "id": "RTN26-11-001"
+  },
+  {
+    "page": 375,
+    "ref": "11FT01",
+    "level": "Moyen",
+    "q": "Quand le repérage initial des victimes est-il particulièrement indiqué ?",
+    "options": [
+      "Quand les victimes apparemment graves sont plus nombreuses que les secouristes disponibles",
+      "Quand il n'y a aucune victime",
+      "Uniquement lorsque tous les transports sont terminés",
+      "À chaque simple consultation"
+    ],
+    "answer": 0,
+    "why": "Le repérage permet d'identifier les urgences en attente des renforts.",
+    "mode": "Opérationnel",
+    "id": "RTN26-11-002"
+  },
+  {
+    "page": 375,
+    "ref": "11FT01",
+    "level": "Facile",
+    "q": "Quel est un objectif du repérage lors d'un événement avec de nombreuses victimes ?",
+    "options": [
+      "Localiser les victimes et repérer celles nécessitant des gestes immédiats",
+      "Calculer le coût du matériel",
+      "Dresser la liste des véhicules stationnés",
+      "Supprimer les transmissions"
+    ],
+    "answer": 0,
+    "why": "La localisation et la hiérarchisation des urgences guident l'action.",
+    "mode": "Opérationnel",
+    "id": "RTN26-11-003"
+  },
+  {
+    "page": 375,
+    "ref": "11FT01",
+    "level": "Moyen",
+    "q": "Lors du repérage, une victime présente une hémorragie majeure. Que faut-il rechercher en priorité ?",
+    "options": [
+      "La réalisation rapide du geste vital approprié",
+      "Son numéro de téléphone",
+      "La marque de ses vêtements",
+      "Le récit détaillé de ses vacances"
+    ],
+    "answer": 0,
+    "why": "Le repérage permet d'identifier les gestes de sauvegarde immédiats.",
+    "mode": "Opérationnel",
+    "id": "RTN26-11-004"
+  },
+  {
+    "page": 373,
+    "ref": "11AC01",
+    "level": "Expert",
+    "q": "Pourquoi une situation avec de nombreuses victimes peut-elle nécessiter une méthode différente ?",
+    "options": [
+      "Parce que le nombre de victimes et l'évolution possible peuvent dépasser les moyens présents",
+      "Parce que les bilans n'ont plus d'utilité",
+      "Parce que la sécurité des secouristes devient secondaire",
+      "Parce que toutes les victimes ont nécessairement la même gravité"
+    ],
+    "answer": 0,
+    "why": "L'ampleur et le potentiel évolutif exigent une organisation adaptée.",
+    "mode": "Opérationnel",
+    "id": "RTN26-11-005"
+  },
+  {
+    "page": 375,
+    "ref": "11FT01",
+    "level": "Expert",
+    "q": "Quel est un autre objectif du repérage au-delà des gestes immédiats ?",
+    "options": [
+      "Déterminer les victimes qui devront être examinées en priorité par un médecin",
+      "Déclarer systématiquement toutes les victimes indemnes",
+      "Éviter l'arrivée de renforts",
+      "Remplacer intégralement tous les bilans"
+    ],
+    "answer": 0,
+    "why": "Le repérage aide à préparer les priorités médicales.",
+    "mode": "Opérationnel",
+    "id": "RTN26-11-006"
+  },
+  {
+    "page": 373,
+    "ref": "11AC01",
+    "level": "Moyen",
+    "q": "Une situation accidentelle comporte peu de blessés visibles mais un risque de nombreuses victimes supplémentaires. Peut-elle relever d'une situation à nombreuses victimes ?",
+    "options": [
+      "Oui, le potentiel évolutif compte aussi",
+      "Non, jamais",
+      "Seulement après le départ de tous les secours",
+      "Seulement si l'événement a lieu de nuit"
+    ],
+    "answer": 0,
+    "why": "La définition inclut le potentiel évolutif susceptible d'augmenter le nombre de victimes.",
+    "mode": "Opérationnel",
+    "id": "RTN26-11-007"
+  },
+  {
+    "page": 375,
+    "ref": "11FT01",
+    "level": "Expert",
+    "q": "Plusieurs victimes requièrent des actions urgentes et les renforts sont en route. Quelle conduite est cohérente ?",
+    "options": [
+      "Repérer, prioriser les gestes vitaux possibles et communiquer les besoins",
+      "Effectuer un quatrième regard complet pour toutes avant tout geste",
+      "Désigner les victimes au hasard",
+      "Cesser toute surveillance"
+    ],
+    "answer": 0,
+    "why": "Le repérage identifie les victimes et gestes urgents en attendant des ressources supplémentaires.",
+    "mode": "Opérationnel",
+    "id": "RTN26-11-008"
+  }
+]
