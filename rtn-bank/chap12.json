@@ -1,0 +1,130 @@
+[
+  {
+    "page": 380,
+    "ref": "12AC02",
+    "level": "Facile",
+    "q": "Lorsqu'une personne est victime d'une urgence, quelle est la finalité de l'alerte ?",
+    "options": [
+      "Informer rapidement les services d'urgence de la situation et de l'aide apportée",
+      "Prévenir uniquement les voisins",
+      "Publier une photo de l'intervention",
+      "Attendre le transport avant de communiquer"
+    ],
+    "answer": 0,
+    "why": "Une alerte rapide et précise permet une réponse adaptée.",
+    "mode": "Opérationnel",
+    "id": "RTN26-12-001"
+  },
+  {
+    "page": 380,
+    "ref": "12AC02",
+    "level": "Moyen",
+    "q": "Que doit contenir une alerte utile ?",
+    "options": [
+      "Lieu précis, nature de l'événement, nombre de victimes et détresses constatées",
+      "Uniquement le prénom du témoin",
+      "Seulement la météo",
+      "Un message sans localisation"
+    ],
+    "answer": 0,
+    "why": "Une alerte exploitable décrit la situation et permet l'engagement des secours.",
+    "mode": "Opérationnel",
+    "id": "RTN26-12-002"
+  },
+  {
+    "page": 380,
+    "ref": "12AC02",
+    "level": "Moyen",
+    "q": "Après avoir transmis une alerte, l'opérateur donne des consignes. Que faire ?",
+    "options": [
+      "Les écouter et les appliquer dans la mesure des possibilités et en sécurité",
+      "Raccrocher immédiatement sans écouter",
+      "Les remplacer par une improvisation sans raison",
+      "Couper tout moyen de communication"
+    ],
+    "answer": 0,
+    "why": "La prise en compte des consignes reçues fait partie de l'alerte.",
+    "mode": "Opérationnel",
+    "id": "RTN26-12-003"
+  },
+  {
+    "page": 382,
+    "ref": "12AC03",
+    "level": "Facile",
+    "q": "Une alerte officielle signale un danger majeur dans ta commune. Quelle première attitude adopter ?",
+    "options": [
+      "Suivre les consignes des autorités et se mettre à l'abri selon le risque",
+      "Se rendre systématiquement sur les lieux du danger",
+      "Ignorer les messages officiels",
+      "Diffuser des rumeurs sans vérification"
+    ],
+    "answer": 0,
+    "why": "L'alerte aux populations vise à déclencher un comportement de protection.",
+    "mode": "Opérationnel",
+    "id": "RTN26-12-004"
+  },
+  {
+    "page": 382,
+    "ref": "12AC03",
+    "level": "Expert",
+    "q": "Pourquoi les consignes en cas d'alerte aux populations peuvent-elles varier ?",
+    "options": [
+      "Parce qu'elles dépendent du danger et des mesures de protection adaptées",
+      "Parce qu'elles n'ont aucune utilité",
+      "Parce qu'elles doivent toujours imposer de sortir",
+      "Parce qu'elles concernent uniquement les intervenants"
+    ],
+    "answer": 0,
+    "why": "La protection des populations est adaptée à la nature du risque.",
+    "mode": "Opérationnel",
+    "id": "RTN26-12-005"
+  },
+  {
+    "page": 380,
+    "ref": "12AC02",
+    "level": "Expert",
+    "q": "Tu alertes pour une situation qui s'aggrave rapidement. Quelle communication est la plus pertinente ?",
+    "options": [
+      "Transmettre sans délai l'évolution et les nouvelles détresses",
+      "Attendre la fin de l'intervention",
+      "Ne donner que les informations initiales",
+      "Cesser toute communication"
+    ],
+    "answer": 0,
+    "why": "L'information utile doit rester rapide, précise et actualisée.",
+    "mode": "Opérationnel",
+    "id": "RTN26-12-006"
+  },
+  {
+    "page": 378,
+    "ref": "12AC01",
+    "level": "Moyen",
+    "q": "Un témoin veut aider mais s'exposerait à un danger. Quelle priorité rappeler ?",
+    "options": [
+      "Sa propre sécurité et l'absence de suraccident",
+      "L'obligation de s'exposer",
+      "L'importance de filmer",
+      "L'interdiction absolue de prévenir les secours"
+    ],
+    "answer": 0,
+    "why": "Les principes généraux des premiers secours incluent la protection de soi et d'autrui.",
+    "mode": "Opérationnel",
+    "id": "RTN26-12-007"
+  },
+  {
+    "page": 382,
+    "ref": "12AC03",
+    "level": "Moyen",
+    "q": "Une information officielle demande à la population de rester à l'abri. Que doit privilégier un citoyen ?",
+    "options": [
+      "Appliquer les consignes et consulter les informations officielles",
+      "Se déplacer vers la zone dangereuse",
+      "Ouvrir systématiquement toutes les fenêtres",
+      "Ignorer les mises à jour"
+    ],
+    "answer": 0,
+    "why": "Les consignes de protection doivent être suivies selon le risque concerné.",
+    "mode": "Opérationnel",
+    "id": "RTN26-12-008"
+  }
+]
