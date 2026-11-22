@@ -1,0 +1,162 @@
+[
+  {
+    "page": 177,
+    "ref": "06PR01",
+    "level": "Facile",
+    "q": "Une victime consciente présente un malaise sans détresse vitale apparente. Quelle est la bonne démarche ?",
+    "options": [
+      "L'installer confortablement, poursuivre le bilan et surveiller",
+      "La faire marcher pour la tester",
+      "Interrompre l'interrogatoire",
+      "La laisser seule"
+    ],
+    "answer": 0,
+    "why": "La procédure de malaise repose sur l'installation, le bilan et la surveillance.",
+    "mode": "Opérationnel",
+    "id": "RTN26-06-001"
+  },
+  {
+    "page": 177,
+    "ref": "06PR01",
+    "level": "Moyen",
+    "q": "Une victime ayant un malaise est gênée pour respirer. Quelle position peut être préférée ?",
+    "options": [
+      "Assise ou celle dans laquelle elle respire le mieux",
+      "Debout sans appui",
+      "Ventrale imposée",
+      "Tête en bas"
+    ],
+    "answer": 0,
+    "why": "La position d'attente est adaptée au confort respiratoire de la victime.",
+    "mode": "Opérationnel",
+    "id": "RTN26-06-002"
+  },
+  {
+    "page": 186,
+    "ref": "06PR02",
+    "level": "Moyen",
+    "q": "Une victime a une douleur thoracique non traumatique sans détresse évidente. Quelle démarche complémentaire est prévue en PSE2 ?",
+    "options": [
+      "Réaliser un électrocardiogramme selon les compétences et le matériel disponibles",
+      "Lui demander de faire des pompes",
+      "Massager systématiquement la poitrine",
+      "Attendre que la douleur passe sans bilan"
+    ],
+    "answer": 0,
+    "why": "La procédure ajoute un ECG à la conduite à tenir devant un malaise.",
+    "mode": "Opérationnel",
+    "id": "RTN26-06-003"
+  },
+  {
+    "page": 189,
+    "ref": "06PR03",
+    "level": "Moyen",
+    "q": "Une victime présente soudain une asymétrie du visage et des troubles de la parole. Que suspecter ?",
+    "options": [
+      "Un accident vasculaire cérébral",
+      "Une simple fatigue sans conséquence",
+      "Une fracture du bras",
+      "Un traumatisme isolé du pied"
+    ],
+    "answer": 0,
+    "why": "Des signes neurologiques focaux soudains font évoquer un AVC ou un AIT.",
+    "mode": "Opérationnel",
+    "id": "RTN26-06-004"
+  },
+  {
+    "page": 189,
+    "ref": "06PR03",
+    "level": "Expert",
+    "q": "Une victime consciente suspecte d'AVC présente des vomissements. Quelle position la procédure peut-elle indiquer ?",
+    "options": [
+      "La position latérale de sécurité",
+      "La station debout",
+      "La position assise sur un tabouret",
+      "La position ventrale"
+    ],
+    "answer": 0,
+    "why": "Le RTN prévoit une installation latérale en présence de nausées et vomissements.",
+    "mode": "Opérationnel",
+    "id": "RTN26-06-005"
+  },
+  {
+    "page": 192,
+    "ref": "06PR04",
+    "level": "Facile",
+    "q": "Une victime est en pleine crise convulsive généralisée. Quel geste convient pendant les secousses ?",
+    "options": [
+      "Protéger sa tête et écarter les objets dangereux",
+      "La maintenir de force",
+      "Introduire un objet dans sa bouche",
+      "Lui faire boire de l'eau"
+    ],
+    "answer": 0,
+    "why": "La protection de la victime prime ; on ne bloque pas les mouvements convulsifs.",
+    "mode": "Opérationnel",
+    "id": "RTN26-06-006"
+  },
+  {
+    "page": 192,
+    "ref": "06PR04",
+    "level": "Moyen",
+    "q": "Les convulsions viennent de cesser. Que faut-il vérifier sans délai ?",
+    "options": [
+      "La liberté des voies aériennes et la respiration",
+      "La mémoire de son code postal",
+      "Sa capacité à courir",
+      "La température des objets au sol"
+    ],
+    "answer": 0,
+    "why": "Après les convulsions, il faut contrôler les fonctions vitales.",
+    "mode": "Opérationnel",
+    "id": "RTN26-06-007"
+  },
+  {
+    "page": 194,
+    "ref": "06PR05",
+    "level": "Expert",
+    "q": "Une victime consciente présente une crise d'asthme. Quel paramètre surveiller particulièrement ?",
+    "options": [
+      "L'évolution de sa respiration",
+      "Son acuité auditive uniquement",
+      "La longueur de son trajet domicile-travail",
+      "La couleur de ses vêtements"
+    ],
+    "answer": 0,
+    "why": "Le bilan et la surveillance respiratoires sont essentiels lors d'une crise d'asthme.",
+    "mode": "Opérationnel",
+    "id": "RTN26-06-008"
+  },
+  {
+    "page": 197,
+    "ref": "06PR06",
+    "level": "Expert",
+    "q": "Une personne diabétique a un malaise et une glycémie capillaire a été mesurée. Quelle transmission est essentielle ?",
+    "options": [
+      "Communiquer le résultat lors de la demande d'avis médical",
+      "Ne jamais signaler la valeur",
+      "Remplacer le bilan par la seule glycémie",
+      "Effacer la mesure après l'avoir lue"
+    ],
+    "answer": 0,
+    "why": "La mesure de glycémie fait partie des informations utiles au bilan transmis.",
+    "mode": "Opérationnel",
+    "id": "RTN26-06-009"
+  },
+  {
+    "page": 177,
+    "ref": "06PR01",
+    "level": "Facile",
+    "q": "Face à une victime consciente qui présente un malaise, que faut-il rechercher lors du bilan ?",
+    "options": [
+      "Les plaintes, circonstances, antécédents et traitements",
+      "Uniquement la couleur de ses vêtements",
+      "Le nombre de personnes présentes dans la rue",
+      "Exclusivement son métier"
+    ],
+    "answer": 0,
+    "why": "L'interrogatoire aide à caractériser le malaise et son contexte.",
+    "mode": "Opérationnel",
+    "id": "RTN26-06-010"
+  }
+]
