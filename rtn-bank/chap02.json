@@ -1,0 +1,146 @@
+[
+  {
+    "page": 37,
+    "ref": "02PR01",
+    "level": "Facile",
+    "q": "À l'arrivée sur un accident de circulation, quelle est la première priorité ?",
+    "options": [
+      "Examiner immédiatement le blessé",
+      "Reconnaître les dangers et sécuriser l'intervention",
+      "Déplacer tous les véhicules",
+      "Prendre des photographies"
+    ],
+    "answer": 1,
+    "why": "Le premier regard comporte la recherche des dangers pour victimes, témoins et secouristes.",
+    "mode": "Opérationnel",
+    "id": "RTN26-02-001"
+  },
+  {
+    "page": 38,
+    "ref": "02FT01",
+    "level": "Facile",
+    "q": "Dans quel cas un dégagement d'urgence peut-il être indiqué ?",
+    "options": [
+      "Victime confortable mais difficile à atteindre",
+      "Danger vital immédiat non contrôlable",
+      "Victime qui refuse la couverture",
+      "Absence de brancard"
+    ],
+    "answer": 1,
+    "why": "Le dégagement d'urgence soustrait une victime à un danger réel, vital, immédiat et non contrôlable.",
+    "mode": "Opérationnel",
+    "id": "RTN26-02-002"
+  },
+  {
+    "page": 40,
+    "ref": "02PR02",
+    "level": "Moyen",
+    "q": "Une personne est au sol près d'un câble électrique tombé. Quelle conduite tenir ?",
+    "options": [
+      "S'approcher pour vérifier le pouls",
+      "Rester à distance et faire supprimer le danger par les services compétents",
+      "Tirer la victime par le bras",
+      "Arroser la zone pour refroidir"
+    ],
+    "answer": 1,
+    "why": "Ne pas toucher une victime potentiellement en contact avec un conducteur sous tension.",
+    "mode": "Opérationnel",
+    "id": "RTN26-02-003"
+  },
+  {
+    "page": 37,
+    "ref": "02PR01",
+    "level": "Moyen",
+    "q": "Un témoin veut entrer dans une zone dangereuse pour aider. Que fais-tu ?",
+    "options": [
+      "Le laisser passer",
+      "L'éloigner et mettre en place une protection adaptée",
+      "Lui donner un brassard",
+      "Lui demander simplement de courir"
+    ],
+    "answer": 1,
+    "why": "La protection concerne également les témoins exposés.",
+    "mode": "Opérationnel",
+    "id": "RTN26-02-004"
+  },
+  {
+    "page": 38,
+    "ref": "02FT01",
+    "level": "Moyen",
+    "q": "Un blessé est coincé dans un environnement dont le danger est contrôlé. Que privilégier ?",
+    "options": [
+      "Un dégagement d'urgence systématique",
+      "Un bilan et une prise en charge sans déplacement inutile",
+      "Une extraction par les membres",
+      "Le déplacer uniquement pour gagner du temps"
+    ],
+    "answer": 1,
+    "why": "Le dégagement d'urgence ne remplace pas un relevage ordinaire lorsque le danger est maîtrisé.",
+    "mode": "Opérationnel",
+    "id": "RTN26-02-005"
+  },
+  {
+    "page": 40,
+    "ref": "02PR02",
+    "level": "Expert",
+    "q": "Dans un local fermé, tu suspectes une atmosphère toxique. Quelle décision convient ?",
+    "options": [
+      "Entrer rapidement sans équipement",
+      "Ne pas s'exposer et solliciter des moyens adaptés",
+      "Ouvrir la bouche de la victime en entrant",
+      "Envoyer un témoin sans protection"
+    ],
+    "answer": 1,
+    "why": "Une intervention particulière impose la reconnaissance du danger et la protection de l'équipe.",
+    "mode": "Opérationnel",
+    "id": "RTN26-02-006"
+  },
+  {
+    "page": 35,
+    "ref": "02AC01",
+    "level": "Facile",
+    "q": "Avant d'entrer dans une zone d'intervention présentant des risques identifiés, que dois-tu vérifier ?",
+    "options": [
+      "L'adaptation de tes équipements de protection",
+      "La charge de ton téléphone personnel",
+      "La disponibilité de ton repas",
+      "Le nombre de photographies prises"
+    ],
+    "answer": 0,
+    "why": "L'équipement de protection individuelle est choisi en fonction des risques.",
+    "mode": "Opérationnel",
+    "id": "RTN26-02-007"
+  },
+  {
+    "page": 37,
+    "ref": "02PR01",
+    "level": "Expert",
+    "q": "Plusieurs victimes sont présentes à proximité d'une source de danger persistante. Quelle logique appliquer ?",
+    "options": [
+      "Protéger l'équipe, contrôler ou éviter le danger et organiser l'accès aux victimes",
+      "Répartir immédiatement les secouristes dans la zone sans reconnaissance",
+      "Déplacer les victimes à l'aveugle",
+      "Attendre sans alerter"
+    ],
+    "answer": 0,
+    "why": "La sécurité de la zone et des intervenants conditionne les gestes de secours.",
+    "mode": "Opérationnel",
+    "id": "RTN26-02-008"
+  },
+  {
+    "page": 38,
+    "ref": "02FT01",
+    "level": "Expert",
+    "q": "Une victime inconsciente se trouve à l'intérieur d'un véhicule qui commence à brûler. Le danger ne peut être contrôlé immédiatement. Quel objectif prime ?",
+    "options": [
+      "Réaliser un examen complet avant tout déplacement",
+      "La soustraire d'urgence au danger si l'action est possible sans exposer les sauveteurs",
+      "Chercher son identité",
+      "Prendre sa température"
+    ],
+    "answer": 1,
+    "why": "Face à un danger vital immédiat non contrôlable, le dégagement d'urgence peut primer.",
+    "mode": "Opérationnel",
+    "id": "RTN26-02-009"
+  }
+]
