@@ -1,0 +1,146 @@
+[
+  {
+    "page": 17,
+    "ref": "01PR01",
+    "level": "Facile",
+    "q": "Une victime consciente est très angoissée après un accident. Quelle attitude adopter en premier ?",
+    "options": [
+      "Lui parler calmement et se présenter",
+      "Lui imposer de raconter l'accident",
+      "Éviter tout échange",
+      "Lui promettre qu'elle n'a aucune blessure"
+    ],
+    "answer": 0,
+    "why": "L'abord relationnel vise à établir le contact, le dialogue et à favoriser l'apaisement.",
+    "mode": "Opérationnel",
+    "id": "RTN26-01-001"
+  },
+  {
+    "page": 17,
+    "ref": "01PR01",
+    "level": "Moyen",
+    "q": "Pendant le bilan, une victime hésite à répondre. Quel comportement favorise son expression ?",
+    "options": [
+      "Multiplier les questions fermées sans pause",
+      "Pratiquer une écoute attentive et laisser le temps de répondre",
+      "Terminer ses phrases à sa place",
+      "Parler uniquement à son accompagnant"
+    ],
+    "answer": 1,
+    "why": "L'écoute et le dialogue aident à recueillir les éléments du bilan.",
+    "mode": "Opérationnel",
+    "id": "RTN26-01-002"
+  },
+  {
+    "page": 19,
+    "ref": "01PR02",
+    "level": "Facile",
+    "q": "Tu prends en charge un enfant conscient. Comment adapter ta communication ?",
+    "options": [
+      "S'adresser seulement aux adultes",
+      "Utiliser des mots simples adaptés à son âge",
+      "Éviter de lui expliquer les gestes",
+      "Employer systématiquement un vocabulaire médical"
+    ],
+    "answer": 1,
+    "why": "L'enfant est un interlocuteur à part entière ; le langage doit être adapté.",
+    "mode": "Opérationnel",
+    "id": "RTN26-01-003"
+  },
+  {
+    "page": 19,
+    "ref": "01PR02",
+    "level": "Moyen",
+    "q": "Un enfant est inquiet pendant que tu effectues son bilan. Que privilégier ?",
+    "options": [
+      "Des explications simples et rassurantes sur ce que tu fais",
+      "L'ignorer pour ne pas l'effrayer",
+      "Lui annoncer un diagnostic définitif",
+      "Lui demander de ne plus parler"
+    ],
+    "answer": 0,
+    "why": "Expliquer les actions et adapter l'abord relationnel favorise la coopération.",
+    "mode": "Opérationnel",
+    "id": "RTN26-01-004"
+  },
+  {
+    "page": 28,
+    "ref": "01FT03",
+    "level": "Moyen",
+    "q": "Une victime raconte plusieurs fois les circonstances d'un événement choquant. Comment réagir ?",
+    "options": [
+      "La couper et changer de sujet",
+      "L'écouter sans jugement et reformuler si nécessaire",
+      "Chercher à la contredire",
+      "L'obliger à se concentrer sur les détails traumatisants"
+    ],
+    "answer": 1,
+    "why": "L'écoute active repose sur une attitude disponible, non jugeante.",
+    "mode": "Opérationnel",
+    "id": "RTN26-01-005"
+  },
+  {
+    "page": 30,
+    "ref": "01FT04",
+    "level": "Expert",
+    "q": "Une victime très anxieuse respire rapidement mais reste consciente et accessible. Quelle proposition peut contribuer à son apaisement ?",
+    "options": [
+      "Une respiration contrôlée accompagnée, si elle l'accepte",
+      "La retenir physiquement sans nécessité",
+      "Lui demander de retenir sa respiration le plus longtemps possible",
+      "La laisser seule d'emblée"
+    ],
+    "answer": 0,
+    "why": "La respiration contrôlée est une technique de stabilisation psychophysiologique.",
+    "mode": "Opérationnel",
+    "id": "RTN26-01-006"
+  },
+  {
+    "page": 25,
+    "ref": "01FT01",
+    "level": "Expert",
+    "q": "Après une intervention difficile, un coéquipier paraît inhabituellement isolé et perturbé. Quelle démarche est la plus adaptée ?",
+    "options": [
+      "Minimiser l'événement",
+      "Repérer les signes de retentissement et proposer un échange ou un soutien",
+      "Le sanctionner pour son émotion",
+      "L'obliger à raconter la scène devant l'équipe"
+    ],
+    "answer": 1,
+    "why": "La préservation du potentiel mental comprend le repérage des signes de souffrance.",
+    "mode": "Opérationnel",
+    "id": "RTN26-01-007"
+  },
+  {
+    "page": 17,
+    "ref": "01PR01",
+    "level": "Facile",
+    "q": "En arrivant auprès d'une victime éveillée, que fais-tu pour établir le contact ?",
+    "options": [
+      "Tu te présentes et expliques ton rôle",
+      "Tu commences les gestes sans lui adresser la parole",
+      "Tu interroges seulement les témoins",
+      "Tu laisses la radio répondre à ta place"
+    ],
+    "answer": 0,
+    "why": "Se présenter et entrer en relation favorisent la confiance.",
+    "mode": "Opérationnel",
+    "id": "RTN26-01-008"
+  },
+  {
+    "page": 21,
+    "ref": "01AC04",
+    "level": "Expert",
+    "q": "Un secouriste reste affecté plusieurs jours après une scène traumatisante. Quelle réponse est la plus appropriée ?",
+    "options": [
+      "L'encourager à solliciter un soutien adapté",
+      "Lui expliquer qu'un professionnel ne doit rien ressentir",
+      "Exiger qu'il garde cela pour lui",
+      "Attendre une nouvelle intervention pour juger"
+    ],
+    "answer": 0,
+    "why": "La préservation du potentiel mental implique de reconnaître les répercussions possibles et de demander de l'aide.",
+    "mode": "Opérationnel",
+    "id": "RTN26-01-009"
+  }
+]
