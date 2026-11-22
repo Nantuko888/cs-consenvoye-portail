@@ -1,0 +1,162 @@
+[
+  {
+    "page": 203,
+    "ref": "07PR01",
+    "level": "Facile",
+    "q": "Une victime présente une plaie grave avec un corps étranger profondément fiché. Que faut-il faire ?",
+    "options": [
+      "Laisser l'objet en place et protéger la plaie",
+      "Retirer immédiatement l'objet",
+      "Faire marcher la victime",
+      "Essayer de refermer la plaie avec les doigts"
+    ],
+    "answer": 0,
+    "why": "Le retrait d'un corps étranger peut aggraver les lésions et le saignement.",
+    "mode": "Opérationnel",
+    "id": "RTN26-07-001"
+  },
+  {
+    "page": 207,
+    "ref": "07PR02",
+    "level": "Facile",
+    "q": "Une victime présente une brûlure thermique récente. Quel geste initial est adapté ?",
+    "options": [
+      "Refroidir la brûlure selon la procédure",
+      "Appliquer du beurre",
+      "Percer les cloques",
+      "Retirer la peau décollée"
+    ],
+    "answer": 0,
+    "why": "Le refroidissement est un geste de première intention pour une brûlure thermique.",
+    "mode": "Opérationnel",
+    "id": "RTN26-07-002"
+  },
+  {
+    "page": 215,
+    "ref": "07PR03",
+    "level": "Moyen",
+    "q": "Après un choc violent au thorax, une victime se plaint d'une difficulté respiratoire. Quelle priorité ?",
+    "options": [
+      "Rechercher et traiter une détresse vitale",
+      "Tester sa capacité à courir",
+      "Faire d'abord un bilan administratif",
+      "La faire inspirer au maximum contre sa douleur"
+    ],
+    "answer": 0,
+    "why": "Les traumatismes imposent la recherche prioritaire d'une menace vitale.",
+    "mode": "Opérationnel",
+    "id": "RTN26-07-003"
+  },
+  {
+    "page": 225,
+    "ref": "07PR07",
+    "level": "Facile",
+    "q": "Une victime présente une déformation douloureuse de l'avant-bras. Quel conseil donner ?",
+    "options": [
+      "Ne pas mobiliser le membre blessé",
+      "Faire plusieurs mouvements pour vérifier",
+      "Le masser vigoureusement",
+      "Le redresser sans immobilisation"
+    ],
+    "answer": 0,
+    "why": "Le membre blessé doit être mobilisé le moins possible.",
+    "mode": "Opérationnel",
+    "id": "RTN26-07-004"
+  },
+  {
+    "page": 225,
+    "ref": "07PR07",
+    "level": "Moyen",
+    "q": "Une victime suspecte de fracture de jambe est consciente sans détresse vitale. Quelle installation est généralement recommandée ?",
+    "options": [
+      "Allongée en limitant les mouvements du membre",
+      "Debout en appui sur la jambe",
+      "Assise jambes pendantes systématiquement",
+      "En marche assistée"
+    ],
+    "answer": 0,
+    "why": "La procédure prévoit une installation allongée pour un traumatisme de membre inférieur.",
+    "mode": "Opérationnel",
+    "id": "RTN26-07-005"
+  },
+  {
+    "page": 225,
+    "ref": "07PR07",
+    "level": "Moyen",
+    "q": "Un membre traumatisé doit être immobilisé. Comment choisir le moyen ?",
+    "options": [
+      "Utiliser l'attelle appropriée à la lésion et aux circonstances",
+      "Toujours la plus courte sans évaluer",
+      "Ne jamais immobiliser",
+      "Employer une attelle sur le membre sain uniquement"
+    ],
+    "answer": 0,
+    "why": "Le choix de l'attelle dépend de la localisation et du traumatisme.",
+    "mode": "Opérationnel",
+    "id": "RTN26-07-006"
+  },
+  {
+    "page": 241,
+    "ref": "07PR08",
+    "level": "Expert",
+    "q": "Une victime après chute présente une douleur du cou. Quel principe appliquer dès le bilan ?",
+    "options": [
+      "Limiter les mouvements du rachis et rechercher les menaces vitales",
+      "Lui faire tourner la tête pour tester sa mobilité",
+      "La relever immédiatement",
+      "Lui demander de retirer seule son casque"
+    ],
+    "answer": 0,
+    "why": "En cas de suspicion de lésion du rachis, limiter les mouvements et traiter d'abord les menaces vitales.",
+    "mode": "Opérationnel",
+    "id": "RTN26-07-007"
+  },
+  {
+    "page": 262,
+    "ref": "07PR09",
+    "level": "Expert",
+    "q": "Un blessé présente un traumatisme crânien sans détresse apparente. Que faut-il surveiller ?",
+    "options": [
+      "L'évolution de l'état neurologique et l'apparition de signes de gravité",
+      "Uniquement l'aspect de ses chaussures",
+      "Seulement le véhicule ayant causé l'accident",
+      "Rien si la victime parle"
+    ],
+    "answer": 0,
+    "why": "Un traumatisme crânien nécessite bilan, transmission et surveillance.",
+    "mode": "Opérationnel",
+    "id": "RTN26-07-008"
+  },
+  {
+    "page": 264,
+    "ref": "07PR10",
+    "level": "Expert",
+    "q": "Une victime présente une douleur du bassin après choc violent. Quelle position privilégier ?",
+    "options": [
+      "Une position allongée stricte si possible",
+      "La station debout",
+      "Une marche d'essai",
+      "La position assise jambes croisées"
+    ],
+    "answer": 0,
+    "why": "La procédure recommande de laisser la victime allongée strictement si possible.",
+    "mode": "Opérationnel",
+    "id": "RTN26-07-009"
+  },
+  {
+    "page": 223,
+    "ref": "07AC07",
+    "level": "Expert",
+    "q": "Une plaie située au cou doit être considérée comment ?",
+    "options": [
+      "Comme potentiellement grave compte tenu de sa localisation",
+      "Comme superficielle par définition",
+      "Comme une simple brûlure",
+      "Comme sans risque si elle est petite"
+    ],
+    "answer": 0,
+    "why": "La localisation face/cou peut justifier une prise en charge de plaie grave.",
+    "mode": "Opérationnel",
+    "id": "RTN26-07-010"
+  }
+]
