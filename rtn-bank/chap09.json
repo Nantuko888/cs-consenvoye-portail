@@ -80,18 +80,18 @@
     "id": "RTN26-09-005"
   },
   {
-    "page": 328,
+    "page": 332,
     "ref": "09PR01",
     "level": "Expert",
-    "q": "Une personne en crise refuse de parler mais reste sous surveillance. Quelle posture convient ?",
+    "q": "Un individu devient violent et l'abord relationnel n'est plus possible en sécurité. Quelle conduite la procédure prévoit-elle ?",
     "options": [
-      "Respecter son rythme tout en préservant la sécurité et en cherchant le dialogue",
-      "L'obliger à parler immédiatement",
-      "La ridiculiser",
-      "Quitter les lieux sans alerter"
+      "Se retirer et alerter",
+      "Le maîtriser systématiquement par la force",
+      "L'insulter pour lui imposer le calme",
+      "Fermer la sortie derrière soi"
     ],
     "answer": 0,
-    "why": "La communication doit rester non coercitive et compatible avec la sécurité.",
+    "why": "En cas de crise dangereuse rendant le dialogue impossible, les secouristes doivent se retirer et alerter.",
     "mode": "Opérationnel",
     "id": "RTN26-09-006"
   },
@@ -112,18 +112,18 @@
     "id": "RTN26-09-007"
   },
   {
-    "page": 328,
+    "page": 331,
     "ref": "09PR01",
     "level": "Expert",
-    "q": "Un membre de l'entourage est très agité et perturbe la prise en charge. Quelle réponse est adaptée ?",
+    "q": "Une personne agressive approche et commence à jeter des objets. Que doit organiser l'équipe ?",
     "options": [
-      "Organiser la sécurité des personnes et l'environnement de la victime",
-      "Le laisser intervenir dans tous les gestes",
-      "Faire semblant de ne pas le voir",
-      "L'inviter à manipuler le matériel"
+      "Évaluer les objets dangereux, garder une échappatoire et assurer sa sécurité",
+      "Se placer dos à la sortie",
+      "La laisser seule sans renfort",
+      "S'approcher tous ensemble sans coordination"
     ],
     "answer": 0,
-    "why": "La sécurisation porte sur la victime, les intervenants et l'entourage.",
+    "why": "La procédure prévoit la sécurisation du lieu, une voie de repli et un positionnement réfléchi des intervenants.",
     "mode": "Opérationnel",
     "id": "RTN26-09-008"
   }
