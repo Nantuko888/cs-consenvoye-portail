@@ -1211,6 +1211,22 @@ function formationBridge(action, fields={}) {
 let dashboard = null, bank = INITIAL_BANK, chapter = '04', current = [], answers = [], index = 0, startTime = 0, questionStart = 0, level = 'Mixte';
 const escapeText = s => String(s ?? '');
 const chaptersMap = Object.fromEntries(CHAPTERS.map(c => [c.id, c]));
+/* RTN — banque opérationnelle : mise en service progressive après migration Sheets.
+   La banque historique reste disponible tant que l'import serveur n'a pas eu lieu. */
+function rtnSetBank_(items) {
+  const incoming=Array.isArray(items)?items:[];
+  bank=incoming.map(q=>({...q,mode:q.mode||'Opérationnel'}));
+  const active2026=incoming.length>0&&incoming.every(q=>/^RTN26-(0[1-9]|1[0-3])-\d{3}$/.test(String(q.id||'')));
+  const modeControl=$('mode'), modeField=modeControl?.closest('.field');
+  if(active2026) {
+    modeControl.innerHTML='<option value="Opérationnel">Opérationnel · conduite à tenir</option>';
+    modeControl.value='Opérationnel';
+    if(modeField)modeField.style.display='none';
+    const info=document.querySelector('#chaptersView .notice');
+    if(info)info.textContent='Questions opérationnelles autonomes : conduites à tenir, situations et gestes de secours. Les fiches du référentiel ne sont consultées qu’en correction. La maîtrise est une estimation de révision, non une certification.';
+  }
+}
+
 function store() { try {
     return JSON.parse(localStorage.getItem('pse_v3_offline') || '{"sessions":[],"responses":[]}');
 }
@@ -1234,7 +1250,7 @@ function statsFromLocal() { const d = store(), stats = {}; for (const c of CHAPT
 } return stats; }
 function localDashboard() { return { profile: 'Pierre', chapters: CHAPTERS, stats: statsFromLocal(), sessions: store().sessions, pdfUrl: '', questions: bank }; }
 function refresh(done) { if (!rtnSession) return; if (online) {
-    formationBridge('dashboard',{session:rtnSession}).then(data=>{dashboard=data;bank=data.questions;renderDashboard();if(done)done();}).catch(err=>{rtnLock('Erreur de connexion : '+err.message);});
+    formationBridge('dashboard',{session:rtnSession}).then(data=>{dashboard=data;rtnSetBank_(data.questions);renderDashboard();if(done)done();}).catch(err=>{rtnLock('Erreur de connexion : '+err.message);});
 }
 else {
     dashboard = localDashboard();
@@ -1453,7 +1469,7 @@ window.addEventListener('message', ev=>{
   if(cached && cached.email===email && cached.expires>Date.now() && cached.session){
     rtnSession=cached.session;
     formationBridge('dashboard',{session:rtnSession}).then(data=>{
-      dashboard=data;bank=data.questions;renderDashboard();rtnConnecting=false;rtnUnlock();
+      dashboard=data;rtnSetBank_(data.questions);renderDashboard();rtnConnecting=false;rtnUnlock();
     }).catch(()=>{
       sessionStorage.removeItem(FORMATION_SESSION_KEY);
       rtnSession='';rtnConnecting=false;
@@ -1477,7 +1493,7 @@ function rtnConnectFresh(credential,email) {
     rtnSession=result.session;
     if(email) sessionStorage.setItem(FORMATION_SESSION_KEY,JSON.stringify({email,session:rtnSession,expires:Date.now()+55*60*1000}));
     dashboard=result.dashboard;
-    bank=dashboard.questions;
+    rtnSetBank_(dashboard.questions);
     renderDashboard();
     rtnConnecting=false;
     rtnUnlock();
