@@ -1,0 +1,1912 @@
+{
+  "version": "RTN-PSE-07-2026",
+  "revision": "2026-11-22",
+  "description": "Questions autonomes de secourisme, opérationnelles, fiches citées uniquement en correction",
+  "total": 119,
+  "questions": [
+    {
+      "page": 17,
+      "ref": "01PR01",
+      "level": "Facile",
+      "q": "Une victime consciente est très angoissée après un accident. Quelle attitude adopter en premier ?",
+      "options": [
+        "Lui parler calmement et se présenter",
+        "Lui imposer de raconter l'accident",
+        "Éviter tout échange",
+        "Lui promettre qu'elle n'a aucune blessure"
+      ],
+      "answer": 0,
+      "why": "L'abord relationnel vise à établir le contact, le dialogue et à favoriser l'apaisement.",
+      "mode": "Opérationnel",
+      "id": "RTN26-01-001"
+    },
+    {
+      "page": 17,
+      "ref": "01PR01",
+      "level": "Moyen",
+      "q": "Pendant le bilan, une victime hésite à répondre. Quel comportement favorise son expression ?",
+      "options": [
+        "Multiplier les questions fermées sans pause",
+        "Pratiquer une écoute attentive et laisser le temps de répondre",
+        "Terminer ses phrases à sa place",
+        "Parler uniquement à son accompagnant"
+      ],
+      "answer": 1,
+      "why": "L'écoute et le dialogue aident à recueillir les éléments du bilan.",
+      "mode": "Opérationnel",
+      "id": "RTN26-01-002"
+    },
+    {
+      "page": 19,
+      "ref": "01PR02",
+      "level": "Facile",
+      "q": "Tu prends en charge un enfant conscient. Comment adapter ta communication ?",
+      "options": [
+        "S'adresser seulement aux adultes",
+        "Utiliser des mots simples adaptés à son âge",
+        "Éviter de lui expliquer les gestes",
+        "Employer systématiquement un vocabulaire médical"
+      ],
+      "answer": 1,
+      "why": "L'enfant est un interlocuteur à part entière ; le langage doit être adapté.",
+      "mode": "Opérationnel",
+      "id": "RTN26-01-003"
+    },
+    {
+      "page": 19,
+      "ref": "01PR02",
+      "level": "Moyen",
+      "q": "Un enfant est inquiet pendant que tu effectues son bilan. Que privilégier ?",
+      "options": [
+        "Des explications simples et rassurantes sur ce que tu fais",
+        "L'ignorer pour ne pas l'effrayer",
+        "Lui annoncer un diagnostic définitif",
+        "Lui demander de ne plus parler"
+      ],
+      "answer": 0,
+      "why": "Expliquer les actions et adapter l'abord relationnel favorise la coopération.",
+      "mode": "Opérationnel",
+      "id": "RTN26-01-004"
+    },
+    {
+      "page": 28,
+      "ref": "01FT03",
+      "level": "Moyen",
+      "q": "Une victime raconte plusieurs fois les circonstances d'un événement choquant. Comment réagir ?",
+      "options": [
+        "La couper et changer de sujet",
+        "L'écouter sans jugement et reformuler si nécessaire",
+        "Chercher à la contredire",
+        "L'obliger à se concentrer sur les détails traumatisants"
+      ],
+      "answer": 1,
+      "why": "L'écoute active repose sur une attitude disponible, non jugeante.",
+      "mode": "Opérationnel",
+      "id": "RTN26-01-005"
+    },
+    {
+      "page": 30,
+      "ref": "01FT04",
+      "level": "Expert",
+      "q": "Une victime très anxieuse respire rapidement mais reste consciente et accessible. Quelle proposition peut contribuer à son apaisement ?",
+      "options": [
+        "Une respiration contrôlée accompagnée, si elle l'accepte",
+        "La retenir physiquement sans nécessité",
+        "Lui demander de retenir sa respiration le plus longtemps possible",
+        "La laisser seule d'emblée"
+      ],
+      "answer": 0,
+      "why": "La respiration contrôlée est une technique de stabilisation psychophysiologique.",
+      "mode": "Opérationnel",
+      "id": "RTN26-01-006"
+    },
+    {
+      "page": 25,
+      "ref": "01FT01",
+      "level": "Expert",
+      "q": "Après une intervention difficile, un coéquipier paraît inhabituellement isolé et perturbé. Quelle démarche est la plus adaptée ?",
+      "options": [
+        "Minimiser l'événement",
+        "Repérer les signes de retentissement et proposer un échange ou un soutien",
+        "Le sanctionner pour son émotion",
+        "L'obliger à raconter la scène devant l'équipe"
+      ],
+      "answer": 1,
+      "why": "La préservation du potentiel mental comprend le repérage des signes de souffrance.",
+      "mode": "Opérationnel",
+      "id": "RTN26-01-007"
+    },
+    {
+      "page": 17,
+      "ref": "01PR01",
+      "level": "Facile",
+      "q": "En arrivant auprès d'une victime éveillée, que fais-tu pour établir le contact ?",
+      "options": [
+        "Tu te présentes et expliques ton rôle",
+        "Tu commences les gestes sans lui adresser la parole",
+        "Tu interroges seulement les témoins",
+        "Tu laisses la radio répondre à ta place"
+      ],
+      "answer": 0,
+      "why": "Se présenter et entrer en relation favorisent la confiance.",
+      "mode": "Opérationnel",
+      "id": "RTN26-01-008"
+    },
+    {
+      "page": 21,
+      "ref": "01AC04",
+      "level": "Expert",
+      "q": "Un secouriste reste affecté plusieurs jours après une scène traumatisante. Quelle réponse est la plus appropriée ?",
+      "options": [
+        "L'encourager à solliciter un soutien adapté",
+        "Lui expliquer qu'un professionnel ne doit rien ressentir",
+        "Exiger qu'il garde cela pour lui",
+        "Attendre une nouvelle intervention pour juger"
+      ],
+      "answer": 0,
+      "why": "La préservation du potentiel mental implique de reconnaître les répercussions possibles et de demander de l'aide.",
+      "mode": "Opérationnel",
+      "id": "RTN26-01-009"
+    },
+    {
+      "page": 37,
+      "ref": "02PR01",
+      "level": "Facile",
+      "q": "À l'arrivée sur un accident de circulation, quelle est la première priorité ?",
+      "options": [
+        "Examiner immédiatement le blessé",
+        "Reconnaître les dangers et sécuriser l'intervention",
+        "Déplacer tous les véhicules",
+        "Prendre des photographies"
+      ],
+      "answer": 1,
+      "why": "Le premier regard comporte la recherche des dangers pour victimes, témoins et secouristes.",
+      "mode": "Opérationnel",
+      "id": "RTN26-02-001"
+    },
+    {
+      "page": 38,
+      "ref": "02FT01",
+      "level": "Facile",
+      "q": "Dans quel cas un dégagement d'urgence peut-il être indiqué ?",
+      "options": [
+        "Victime confortable mais difficile à atteindre",
+        "Danger vital immédiat non contrôlable",
+        "Victime qui refuse la couverture",
+        "Absence de brancard"
+      ],
+      "answer": 1,
+      "why": "Le dégagement d'urgence soustrait une victime à un danger réel, vital, immédiat et non contrôlable.",
+      "mode": "Opérationnel",
+      "id": "RTN26-02-002"
+    },
+    {
+      "page": 40,
+      "ref": "02PR02",
+      "level": "Moyen",
+      "q": "Une personne est au sol près d'un câble électrique tombé. Quelle conduite tenir ?",
+      "options": [
+        "S'approcher pour vérifier le pouls",
+        "Rester à distance et faire supprimer le danger par les services compétents",
+        "Tirer la victime par le bras",
+        "Arroser la zone pour refroidir"
+      ],
+      "answer": 1,
+      "why": "Ne pas toucher une victime potentiellement en contact avec un conducteur sous tension.",
+      "mode": "Opérationnel",
+      "id": "RTN26-02-003"
+    },
+    {
+      "page": 37,
+      "ref": "02PR01",
+      "level": "Moyen",
+      "q": "Un témoin veut entrer dans une zone dangereuse pour aider. Que fais-tu ?",
+      "options": [
+        "Le laisser passer",
+        "L'éloigner et mettre en place une protection adaptée",
+        "Lui donner un brassard",
+        "Lui demander simplement de courir"
+      ],
+      "answer": 1,
+      "why": "La protection concerne également les témoins exposés.",
+      "mode": "Opérationnel",
+      "id": "RTN26-02-004"
+    },
+    {
+      "page": 38,
+      "ref": "02FT01",
+      "level": "Moyen",
+      "q": "Un blessé est coincé dans un environnement dont le danger est contrôlé. Que privilégier ?",
+      "options": [
+        "Un dégagement d'urgence systématique",
+        "Un bilan et une prise en charge sans déplacement inutile",
+        "Une extraction par les membres",
+        "Le déplacer uniquement pour gagner du temps"
+      ],
+      "answer": 1,
+      "why": "Le dégagement d'urgence ne remplace pas un relevage ordinaire lorsque le danger est maîtrisé.",
+      "mode": "Opérationnel",
+      "id": "RTN26-02-005"
+    },
+    {
+      "page": 40,
+      "ref": "02PR02",
+      "level": "Expert",
+      "q": "Dans un local fermé, tu suspectes une atmosphère toxique. Quelle décision convient ?",
+      "options": [
+        "Entrer rapidement sans équipement",
+        "Ne pas s'exposer et solliciter des moyens adaptés",
+        "Ouvrir la bouche de la victime en entrant",
+        "Envoyer un témoin sans protection"
+      ],
+      "answer": 1,
+      "why": "Une intervention particulière impose la reconnaissance du danger et la protection de l'équipe.",
+      "mode": "Opérationnel",
+      "id": "RTN26-02-006"
+    },
+    {
+      "page": 35,
+      "ref": "02AC01",
+      "level": "Facile",
+      "q": "Avant d'entrer dans une zone d'intervention présentant des risques identifiés, que dois-tu vérifier ?",
+      "options": [
+        "L'adaptation de tes équipements de protection",
+        "La charge de ton téléphone personnel",
+        "La disponibilité de ton repas",
+        "Le nombre de photographies prises"
+      ],
+      "answer": 0,
+      "why": "L'équipement de protection individuelle est choisi en fonction des risques.",
+      "mode": "Opérationnel",
+      "id": "RTN26-02-007"
+    },
+    {
+      "page": 37,
+      "ref": "02PR01",
+      "level": "Expert",
+      "q": "Plusieurs victimes sont présentes à proximité d'une source de danger persistante. Quelle logique appliquer ?",
+      "options": [
+        "Protéger l'équipe, contrôler ou éviter le danger et organiser l'accès aux victimes",
+        "Répartir immédiatement les secouristes dans la zone sans reconnaissance",
+        "Déplacer les victimes à l'aveugle",
+        "Attendre sans alerter"
+      ],
+      "answer": 0,
+      "why": "La sécurité de la zone et des intervenants conditionne les gestes de secours.",
+      "mode": "Opérationnel",
+      "id": "RTN26-02-008"
+    },
+    {
+      "page": 38,
+      "ref": "02FT01",
+      "level": "Expert",
+      "q": "Une victime inconsciente se trouve à l'intérieur d'un véhicule qui commence à brûler. Le danger ne peut être contrôlé immédiatement. Quel objectif prime ?",
+      "options": [
+        "Réaliser un examen complet avant tout déplacement",
+        "La soustraire d'urgence au danger si l'action est possible sans exposer les sauveteurs",
+        "Chercher son identité",
+        "Prendre sa température"
+      ],
+      "answer": 1,
+      "why": "Face à un danger vital immédiat non contrôlable, le dégagement d'urgence peut primer.",
+      "mode": "Opérationnel",
+      "id": "RTN26-02-009"
+    },
+    {
+      "page": 47,
+      "ref": "03PR02",
+      "level": "Facile",
+      "q": "Après avoir retiré des gants souillés, que faut-il faire ?",
+      "options": [
+        "Réaliser une hygiène des mains",
+        "Enfiler de nouveaux gants sans autre geste",
+        "Essuyer les mains sur la tenue",
+        "Réutiliser les gants si aucune déchirure"
+      ],
+      "answer": 0,
+      "why": "Les gants ne remplacent pas l'hygiène des mains.",
+      "mode": "Opérationnel",
+      "id": "RTN26-03-001"
+    },
+    {
+      "page": 52,
+      "ref": "03FT04",
+      "level": "Moyen",
+      "q": "Quand faut-il retirer des gants de protection à usage unique ?",
+      "options": [
+        "Seulement à la fin de la garde",
+        "Après chaque action de secours ou dès qu'ils sont souillés",
+        "Lorsque le véhicule rentre au centre",
+        "Après la troisième victime"
+      ],
+      "answer": 1,
+      "why": "Le retrait est requis à la fin de chaque action et quand les gants sont souillés.",
+      "mode": "Opérationnel",
+      "id": "RTN26-03-002"
+    },
+    {
+      "page": 50,
+      "ref": "03FT02",
+      "level": "Facile",
+      "q": "Un secouriste a les mains visiblement souillées. Quelle méthode privilégier ?",
+      "options": [
+        "Un lavage à l'eau et au savon",
+        "Une friction sur les gants",
+        "Un essuyage à sec",
+        "Aucun soin si les mains sont sèches"
+      ],
+      "answer": 0,
+      "why": "Le lavage des mains est indiqué en cas de souillure visible.",
+      "mode": "Opérationnel",
+      "id": "RTN26-03-003"
+    },
+    {
+      "page": 51,
+      "ref": "03FT03",
+      "level": "Moyen",
+      "q": "L'eau n'est pas disponible et tes mains ne sont pas visiblement souillées. Quel geste d'hygiène peut être utilisé ?",
+      "options": [
+        "Une friction avec une solution hydroalcoolique",
+        "Un rinçage avec l'eau de la bouteille d'oxygène",
+        "Un simple essuyage sur du papier",
+        "Un port prolongé des gants"
+      ],
+      "answer": 0,
+      "why": "La friction hydroalcoolique est indiquée lorsque le lavage à l'eau n'est pas possible, sous conditions adaptées.",
+      "mode": "Opérationnel",
+      "id": "RTN26-03-004"
+    },
+    {
+      "page": 44,
+      "ref": "03PR01",
+      "level": "Expert",
+      "q": "Tu viens de subir une piqûre accidentelle avec du matériel potentiellement contaminé. Quelle est la bonne démarche ?",
+      "options": [
+        "Ignorer l'accident si la plaie est petite",
+        "Appliquer immédiatement la conduite prévue pour un accident d'exposition et le signaler",
+        "Attendre le prochain service",
+        "Couvrir la plaie sans prévenir"
+      ],
+      "answer": 1,
+      "why": "Un accident d'exposition virale exige une conduite immédiate et une évaluation adaptée.",
+      "mode": "Opérationnel",
+      "id": "RTN26-03-005"
+    },
+    {
+      "page": 48,
+      "ref": "03FT01",
+      "level": "Moyen",
+      "q": "Une aiguille usagée doit être éliminée. Dans quel contenant ?",
+      "options": [
+        "Un collecteur adapté aux objets piquants et tranchants",
+        "Une poubelle ordinaire",
+        "Un sac textile",
+        "Un bac de recyclage papier"
+      ],
+      "answer": 0,
+      "why": "Les objets piquants et tranchants nécessitent un emballage spécifique.",
+      "mode": "Opérationnel",
+      "id": "RTN26-03-006"
+    },
+    {
+      "page": 54,
+      "ref": "03FT06",
+      "level": "Expert",
+      "q": "Un dispositif réutilisable est souillé après prise en charge. Quelle démarche appliquer ?",
+      "options": [
+        "Suivre la procédure de nettoyage puis de désinfection adaptée au matériel",
+        "Le ranger aussitôt",
+        "Le frotter avec un tissu sec uniquement",
+        "Le laisser sécher dans le VSAV"
+      ],
+      "answer": 0,
+      "why": "L'hygiène du matériel impose nettoyage et désinfection selon les recommandations.",
+      "mode": "Opérationnel",
+      "id": "RTN26-03-007"
+    },
+    {
+      "page": 47,
+      "ref": "03PR02",
+      "level": "Facile",
+      "q": "Lors de la prise en charge successive de deux victimes, que doit faire le secouriste ?",
+      "options": [
+        "Changer ses gants et assurer l'hygiène des mains entre les prises en charge",
+        "Conserver les mêmes gants",
+        "Utiliser seulement une paire pour l'équipe",
+        "Se laver les mains uniquement à la fin du service"
+      ],
+      "answer": 0,
+      "why": "Les précautions standard évitent les transmissions croisées.",
+      "mode": "Opérationnel",
+      "id": "RTN26-03-008"
+    },
+    {
+      "page": 61,
+      "ref": "03PR03",
+      "level": "Expert",
+      "q": "Une victime présente un risque infectieux particulier identifié. Quelle attitude adopter ?",
+      "options": [
+        "Appliquer les précautions standards et les précautions complémentaires adaptées",
+        "Écarter toutes les mesures d'hygiène ordinaires",
+        "Utiliser les protections uniquement après le transport",
+        "Se fier exclusivement à l'absence de fièvre"
+      ],
+      "answer": 0,
+      "why": "Les précautions particulières complètent, sans remplacer, les précautions standards.",
+      "mode": "Opérationnel",
+      "id": "RTN26-03-009"
+    },
+    {
+      "page": 66,
+      "ref": "04PR01",
+      "level": "Facile",
+      "q": "À ton arrivée sur intervention, quel est l'objectif du premier regard ?",
+      "options": [
+        "Évaluer globalement la situation, les dangers et le nombre de victimes",
+        "Calculer la pression artérielle",
+        "Établir le diagnostic médical définitif",
+        "Mesurer la température de chaque témoin"
+      ],
+      "answer": 0,
+      "why": "Le premier regard organise la reconnaissance initiale.",
+      "mode": "Opérationnel",
+      "id": "RTN26-04-001"
+    },
+    {
+      "page": 67,
+      "ref": "04PR02",
+      "level": "Moyen",
+      "q": "Une victime présente un saignement très abondant visible dès l'abord. Que fais-tu ?",
+      "options": [
+        "Tu traites immédiatement cette menace vitale",
+        "Tu attends d'avoir terminé l'interrogatoire",
+        "Tu commences par mesurer la température",
+        "Tu recherches d'abord ses antécédents familiaux"
+      ],
+      "answer": 0,
+      "why": "Le deuxième regard recherche les menaces vitales et impose les gestes urgents.",
+      "mode": "Opérationnel",
+      "id": "RTN26-04-002"
+    },
+    {
+      "page": 68,
+      "ref": "04PR03",
+      "level": "Facile",
+      "q": "Quelles fonctions sont appréciées lors du troisième regard ?",
+      "options": [
+        "Neurologique, respiratoire et circulatoire",
+        "Digestive, rénale et hépatique",
+        "Auditive, visuelle et olfactive",
+        "Musculaire, articulaire et osseuse seulement"
+      ],
+      "answer": 0,
+      "why": "Le troisième regard évalue les trois fonctions vitales.",
+      "mode": "Opérationnel",
+      "id": "RTN26-04-003"
+    },
+    {
+      "page": 69,
+      "ref": "04PR04",
+      "level": "Moyen",
+      "q": "Une victime consciente décrit une douleur thoracique. Que complète le quatrième regard ?",
+      "options": [
+        "Interrogatoire, examen et mesures des paramètres",
+        "Uniquement le comptage des témoins",
+        "Seulement le rangement du matériel",
+        "La liste des véhicules intervenants"
+      ],
+      "answer": 0,
+      "why": "Le quatrième regard précise les plaintes et complète l'examen.",
+      "mode": "Opérationnel",
+      "id": "RTN26-04-004"
+    },
+    {
+      "page": 82,
+      "ref": "04FT07",
+      "level": "Moyen",
+      "q": "Un adulte au repos présente 28 mouvements respiratoires par minute. Comment qualifier ce chiffre au regard de la plage habituelle du RTN ?",
+      "options": [
+        "Au-dessus de la plage habituelle",
+        "Dans la plage habituelle",
+        "En dessous de la plage habituelle",
+        "Sans intérêt pour le bilan"
+      ],
+      "answer": 0,
+      "why": "La fréquence respiratoire habituelle d'un adulte est de 12 à 20/min.",
+      "mode": "Opérationnel",
+      "id": "RTN26-04-005"
+    },
+    {
+      "page": 86,
+      "ref": "04FT09",
+      "level": "Expert",
+      "q": "Un adulte au repos a un pouls à 125/min. Quelle conclusion retenir ?",
+      "options": [
+        "Une fréquence supérieure aux valeurs usuelles adultes",
+        "Une fréquence toujours normale",
+        "Une absence de circulation",
+        "Une mesure impossible à transmettre"
+      ],
+      "answer": 0,
+      "why": "La plage usuelle indiquée pour l'adulte est de 60 à 100 battements/min.",
+      "mode": "Opérationnel",
+      "id": "RTN26-04-006"
+    },
+    {
+      "page": 71,
+      "ref": "04PR05",
+      "level": "Moyen",
+      "q": "Après un premier bilan rassurant, que doit devenir la surveillance ?",
+      "options": [
+        "Elle se poursuit et recherche toute évolution",
+        "Elle cesse jusqu'à l'hôpital",
+        "Elle est uniquement réalisée si le témoin le demande",
+        "Elle remplace toute transmission"
+      ],
+      "answer": 0,
+      "why": "La surveillance est continue depuis l'évaluation initiale jusqu'à la transmission.",
+      "mode": "Opérationnel",
+      "id": "RTN26-04-007"
+    },
+    {
+      "page": 72,
+      "ref": "04PR06",
+      "level": "Expert",
+      "q": "Lors de la transmission, que dois-tu communiquer au minimum pour permettre une décision adaptée ?",
+      "options": [
+        "Contexte, état de la victime, évolution et gestes réalisés",
+        "Seulement l'âge estimé",
+        "Uniquement le nombre de secouristes",
+        "Seulement la durée du trajet"
+      ],
+      "answer": 0,
+      "why": "Le bilan transmis reprend la situation, les constatations et la prise en charge.",
+      "mode": "Opérationnel",
+      "id": "RTN26-04-008"
+    },
+    {
+      "page": 105,
+      "ref": "04FT16",
+      "level": "Expert",
+      "q": "Une victime évalue sa douleur à 8/10. Quel est l'intérêt de renouveler la mesure pendant la surveillance ?",
+      "options": [
+        "Suivre l'évolution de la douleur et l'effet des actions menées",
+        "Obtenir obligatoirement la valeur zéro",
+        "Remplacer l'examen respiratoire",
+        "Éviter de réinterroger la victime"
+      ],
+      "answer": 0,
+      "why": "La mesure répétée aide à suivre l'évolution et l'efficacité des gestes.",
+      "mode": "Opérationnel",
+      "id": "RTN26-04-009"
+    },
+    {
+      "page": 117,
+      "ref": "05PR01",
+      "level": "Facile",
+      "q": "Une victime présente une hémorragie externe abondante. Quel geste est prioritaire ?",
+      "options": [
+        "Comprimer immédiatement la zone qui saigne",
+        "Mesurer d'abord sa température",
+        "Attendre l'avis médical sans intervenir",
+        "La faire marcher"
+      ],
+      "answer": 0,
+      "why": "L'arrêt immédiat de l'hémorragie prime sur la poursuite du bilan.",
+      "mode": "Opérationnel",
+      "id": "RTN26-05-001"
+    },
+    {
+      "page": 123,
+      "ref": "05FT04",
+      "level": "Moyen",
+      "q": "Une hémorragie d'un membre reste incontrôlable malgré la compression directe. Quel matériel peut être indiqué ?",
+      "options": [
+        "Un garrot sur le membre concerné",
+        "Un collier cervical",
+        "Une attelle seule",
+        "Un oxymètre"
+      ],
+      "answer": 0,
+      "why": "Le garrot est indiqué sur un membre quand la compression directe est impossible ou inefficace.",
+      "mode": "Opérationnel",
+      "id": "RTN26-05-002"
+    },
+    {
+      "page": 129,
+      "ref": "05PR03",
+      "level": "Facile",
+      "q": "Une personne s'étouffe mais parle et tousse efficacement. Que fais-tu ?",
+      "options": [
+        "L'encourager à tousser et surveiller",
+        "Faire immédiatement des compressions abdominales",
+        "L'allonger sur le dos",
+        "Introduire les doigts dans sa bouche"
+      ],
+      "answer": 0,
+      "why": "Une toux efficace doit être encouragée et surveillée.",
+      "mode": "Opérationnel",
+      "id": "RTN26-05-003"
+    },
+    {
+      "page": 129,
+      "ref": "05PR03",
+      "level": "Moyen",
+      "q": "Une victime consciente ne peut plus parler ni tousser à cause d'une obstruction. Quelle première technique essayer ?",
+      "options": [
+        "De une à cinq claques dans le dos",
+        "Une boisson",
+        "Une ventilation au ballon immédiate",
+        "Un massage cardiaque debout"
+      ],
+      "answer": 0,
+      "why": "L'obstruction sévère chez une personne consciente appelle des claques dans le dos en première intention.",
+      "mode": "Opérationnel",
+      "id": "RTN26-05-004"
+    },
+    {
+      "page": 138,
+      "ref": "05PR04",
+      "level": "Facile",
+      "q": "Un adulte inconscient ne respire pas normalement. Quel rapport compressions-insufflations appliquer en RCP en équipe ?",
+      "options": [
+        "30 compressions pour 2 insufflations",
+        "5 compressions pour 1 insufflation",
+        "15 compressions pour 2 insufflations",
+        "10 compressions pour 5 insufflations"
+      ],
+      "answer": 0,
+      "why": "La RCP d'un adulte en équipe suit un cycle 30/2.",
+      "mode": "Opérationnel",
+      "id": "RTN26-05-005"
+    },
+    {
+      "page": 138,
+      "ref": "05PR04",
+      "level": "Moyen",
+      "q": "Un enfant est en arrêt cardiaque, pris en charge par une équipe formée et équipée. Quel cycle utiliser ?",
+      "options": [
+        "15 compressions pour 2 insufflations",
+        "30 compressions pour 1 insufflation",
+        "5 compressions pour 5 insufflations",
+        "10 compressions pour 2 insufflations"
+      ],
+      "answer": 0,
+      "why": "Le RTN prévoit le cycle 15/2 chez l'enfant et le nourrisson en équipe.",
+      "mode": "Opérationnel",
+      "id": "RTN26-05-006"
+    },
+    {
+      "page": 159,
+      "ref": "05PR06",
+      "level": "Moyen",
+      "q": "Une victime inconsciente respire après un malaise sans traumatisme. Quelle position est adaptée en équipe ?",
+      "options": [
+        "Une position latérale de sécurité stable",
+        "Une position debout",
+        "Une position assise sans surveillance",
+        "Une position ventrale forcée"
+      ],
+      "answer": 0,
+      "why": "Après un événement non traumatique, la victime inconsciente qui respire est placée en PLS.",
+      "mode": "Opérationnel",
+      "id": "RTN26-05-007"
+    },
+    {
+      "page": 159,
+      "ref": "05PR06",
+      "level": "Expert",
+      "q": "Une victime inconsciente respire après un traumatisme. Dans l'attente de l'avis médical, quelle conduite est indiquée en équipe ?",
+      "options": [
+        "La laisser sur le dos en stabilisant sa tête et en garantissant la liberté des voies aériennes",
+        "La mettre systématiquement debout",
+        "La déplacer seule en position assise",
+        "La faire boire"
+      ],
+      "answer": 0,
+      "why": "La procédure distingue perte de connaissance traumatique et non traumatique.",
+      "mode": "Opérationnel",
+      "id": "RTN26-05-008"
+    },
+    {
+      "page": 167,
+      "ref": "05PR08",
+      "level": "Moyen",
+      "q": "Une victime consciente a une détresse respiratoire et préfère rester assise. Quelle attitude adopter ?",
+      "options": [
+        "Respecter la position confortable et surveiller sa respiration",
+        "L'imposer strictement à plat malgré sa gêne",
+        "La faire marcher pour augmenter sa ventilation",
+        "La faire boire rapidement"
+      ],
+      "answer": 0,
+      "why": "La position assise ou demi-assise est proposée à une victime consciente en détresse respiratoire.",
+      "mode": "Opérationnel",
+      "id": "RTN26-05-009"
+    },
+    {
+      "page": 170,
+      "ref": "05PR09",
+      "level": "Expert",
+      "q": "Une victime consciente présente des signes de détresse circulatoire. Quelle installation privilégier ?",
+      "options": [
+        "L'allonger horizontalement et la protéger du froid",
+        "La mettre debout",
+        "La placer systématiquement assise jambes pendantes",
+        "Lui demander de courir"
+      ],
+      "answer": 0,
+      "why": "La procédure de détresse circulatoire préconise l'installation horizontale et la prévention du refroidissement.",
+      "mode": "Opérationnel",
+      "id": "RTN26-05-010"
+    },
+    {
+      "page": 173,
+      "ref": "05PR10",
+      "level": "Expert",
+      "q": "Une victime consciente présente une détresse neurologique. Que faut-il surveiller avec une attention particulière ?",
+      "options": [
+        "L'évolution de son état neurologique",
+        "La couleur de son téléphone",
+        "La marque de ses chaussures",
+        "La température extérieure seule"
+      ],
+      "answer": 0,
+      "why": "La surveillance neurologique est une priorité dans cette situation.",
+      "mode": "Opérationnel",
+      "id": "RTN26-05-011"
+    },
+    {
+      "page": 177,
+      "ref": "06PR01",
+      "level": "Facile",
+      "q": "Une victime consciente présente un malaise sans détresse vitale apparente. Quelle est la bonne démarche ?",
+      "options": [
+        "L'installer confortablement, poursuivre le bilan et surveiller",
+        "La faire marcher pour la tester",
+        "Interrompre l'interrogatoire",
+        "La laisser seule"
+      ],
+      "answer": 0,
+      "why": "La procédure de malaise repose sur l'installation, le bilan et la surveillance.",
+      "mode": "Opérationnel",
+      "id": "RTN26-06-001"
+    },
+    {
+      "page": 177,
+      "ref": "06PR01",
+      "level": "Moyen",
+      "q": "Une victime ayant un malaise est gênée pour respirer. Quelle position peut être préférée ?",
+      "options": [
+        "Assise ou celle dans laquelle elle respire le mieux",
+        "Debout sans appui",
+        "Ventrale imposée",
+        "Tête en bas"
+      ],
+      "answer": 0,
+      "why": "La position d'attente est adaptée au confort respiratoire de la victime.",
+      "mode": "Opérationnel",
+      "id": "RTN26-06-002"
+    },
+    {
+      "page": 186,
+      "ref": "06PR02",
+      "level": "Moyen",
+      "q": "Une victime a une douleur thoracique non traumatique sans détresse évidente. Quelle démarche complémentaire est prévue en PSE2 ?",
+      "options": [
+        "Réaliser un électrocardiogramme selon les compétences et le matériel disponibles",
+        "Lui demander de faire des pompes",
+        "Massager systématiquement la poitrine",
+        "Attendre que la douleur passe sans bilan"
+      ],
+      "answer": 0,
+      "why": "La procédure ajoute un ECG à la conduite à tenir devant un malaise.",
+      "mode": "Opérationnel",
+      "id": "RTN26-06-003"
+    },
+    {
+      "page": 189,
+      "ref": "06PR03",
+      "level": "Moyen",
+      "q": "Une victime présente soudain une asymétrie du visage et des troubles de la parole. Que suspecter ?",
+      "options": [
+        "Un accident vasculaire cérébral",
+        "Une simple fatigue sans conséquence",
+        "Une fracture du bras",
+        "Un traumatisme isolé du pied"
+      ],
+      "answer": 0,
+      "why": "Des signes neurologiques focaux soudains font évoquer un AVC ou un AIT.",
+      "mode": "Opérationnel",
+      "id": "RTN26-06-004"
+    },
+    {
+      "page": 189,
+      "ref": "06PR03",
+      "level": "Expert",
+      "q": "Une victime consciente suspecte d'AVC présente des vomissements. Quelle position la procédure peut-elle indiquer ?",
+      "options": [
+        "La position latérale de sécurité",
+        "La station debout",
+        "La position assise sur un tabouret",
+        "La position ventrale"
+      ],
+      "answer": 0,
+      "why": "Le RTN prévoit une installation latérale en présence de nausées et vomissements.",
+      "mode": "Opérationnel",
+      "id": "RTN26-06-005"
+    },
+    {
+      "page": 192,
+      "ref": "06PR04",
+      "level": "Facile",
+      "q": "Une victime est en pleine crise convulsive généralisée. Quel geste convient pendant les secousses ?",
+      "options": [
+        "Protéger sa tête et écarter les objets dangereux",
+        "La maintenir de force",
+        "Introduire un objet dans sa bouche",
+        "Lui faire boire de l'eau"
+      ],
+      "answer": 0,
+      "why": "La protection de la victime prime ; on ne bloque pas les mouvements convulsifs.",
+      "mode": "Opérationnel",
+      "id": "RTN26-06-006"
+    },
+    {
+      "page": 192,
+      "ref": "06PR04",
+      "level": "Moyen",
+      "q": "Les convulsions viennent de cesser. Que faut-il vérifier sans délai ?",
+      "options": [
+        "La liberté des voies aériennes et la respiration",
+        "La mémoire de son code postal",
+        "Sa capacité à courir",
+        "La température des objets au sol"
+      ],
+      "answer": 0,
+      "why": "Après les convulsions, il faut contrôler les fonctions vitales.",
+      "mode": "Opérationnel",
+      "id": "RTN26-06-007"
+    },
+    {
+      "page": 194,
+      "ref": "06PR05",
+      "level": "Expert",
+      "q": "Une victime consciente présente une crise d'asthme. Quel paramètre surveiller particulièrement ?",
+      "options": [
+        "L'évolution de sa respiration",
+        "Son acuité auditive uniquement",
+        "La longueur de son trajet domicile-travail",
+        "La couleur de ses vêtements"
+      ],
+      "answer": 0,
+      "why": "Le bilan et la surveillance respiratoires sont essentiels lors d'une crise d'asthme.",
+      "mode": "Opérationnel",
+      "id": "RTN26-06-008"
+    },
+    {
+      "page": 197,
+      "ref": "06PR06",
+      "level": "Expert",
+      "q": "Une personne diabétique a un malaise et une glycémie capillaire a été mesurée. Quelle transmission est essentielle ?",
+      "options": [
+        "Communiquer le résultat lors de la demande d'avis médical",
+        "Ne jamais signaler la valeur",
+        "Remplacer le bilan par la seule glycémie",
+        "Effacer la mesure après l'avoir lue"
+      ],
+      "answer": 0,
+      "why": "La mesure de glycémie fait partie des informations utiles au bilan transmis.",
+      "mode": "Opérationnel",
+      "id": "RTN26-06-009"
+    },
+    {
+      "page": 177,
+      "ref": "06PR01",
+      "level": "Facile",
+      "q": "Face à une victime consciente qui présente un malaise, que faut-il rechercher lors du bilan ?",
+      "options": [
+        "Les plaintes, circonstances, antécédents et traitements",
+        "Uniquement la couleur de ses vêtements",
+        "Le nombre de personnes présentes dans la rue",
+        "Exclusivement son métier"
+      ],
+      "answer": 0,
+      "why": "L'interrogatoire aide à caractériser le malaise et son contexte.",
+      "mode": "Opérationnel",
+      "id": "RTN26-06-010"
+    },
+    {
+      "page": 207,
+      "ref": "07PR02",
+      "level": "Facile",
+      "q": "Une victime présente une plaie grave avec un corps étranger profondément fiché. Que faut-il faire ?",
+      "options": [
+        "Laisser l'objet en place et protéger la plaie",
+        "Retirer immédiatement l'objet",
+        "Faire marcher la victime",
+        "Essayer de refermer la plaie avec les doigts"
+      ],
+      "answer": 0,
+      "why": "Le retrait d'un corps étranger peut aggraver les lésions et le saignement.",
+      "mode": "Opérationnel",
+      "id": "RTN26-07-001"
+    },
+    {
+      "page": 203,
+      "ref": "07PR01",
+      "level": "Facile",
+      "q": "Une victime présente une brûlure thermique récente. Quel geste initial est adapté ?",
+      "options": [
+        "Refroidir la brûlure selon la procédure",
+        "Appliquer du beurre",
+        "Percer les cloques",
+        "Retirer la peau décollée"
+      ],
+      "answer": 0,
+      "why": "Le refroidissement est un geste de première intention pour une brûlure thermique.",
+      "mode": "Opérationnel",
+      "id": "RTN26-07-002"
+    },
+    {
+      "page": 220,
+      "ref": "07PR05",
+      "level": "Moyen",
+      "q": "Après un choc violent au thorax, une victime se plaint d'une difficulté respiratoire. Quelle priorité ?",
+      "options": [
+        "Rechercher et traiter une détresse vitale",
+        "Tester sa capacité à courir",
+        "Faire d'abord un bilan administratif",
+        "La faire inspirer au maximum contre sa douleur"
+      ],
+      "answer": 0,
+      "why": "Les traumatismes imposent la recherche prioritaire d'une menace vitale.",
+      "mode": "Opérationnel",
+      "id": "RTN26-07-003"
+    },
+    {
+      "page": 225,
+      "ref": "07PR07",
+      "level": "Facile",
+      "q": "Une victime présente une déformation douloureuse de l'avant-bras. Quel conseil donner ?",
+      "options": [
+        "Ne pas mobiliser le membre blessé",
+        "Faire plusieurs mouvements pour vérifier",
+        "Le masser vigoureusement",
+        "Le redresser sans immobilisation"
+      ],
+      "answer": 0,
+      "why": "Le membre blessé doit être mobilisé le moins possible.",
+      "mode": "Opérationnel",
+      "id": "RTN26-07-004"
+    },
+    {
+      "page": 225,
+      "ref": "07PR07",
+      "level": "Moyen",
+      "q": "Une victime suspecte de fracture de jambe est consciente sans détresse vitale. Quelle installation est généralement recommandée ?",
+      "options": [
+        "Allongée en limitant les mouvements du membre",
+        "Debout en appui sur la jambe",
+        "Assise jambes pendantes systématiquement",
+        "En marche assistée"
+      ],
+      "answer": 0,
+      "why": "La procédure prévoit une installation allongée pour un traumatisme de membre inférieur.",
+      "mode": "Opérationnel",
+      "id": "RTN26-07-005"
+    },
+    {
+      "page": 225,
+      "ref": "07PR07",
+      "level": "Moyen",
+      "q": "Un membre traumatisé doit être immobilisé. Comment choisir le moyen ?",
+      "options": [
+        "Utiliser l'attelle appropriée à la lésion et aux circonstances",
+        "Toujours la plus courte sans évaluer",
+        "Ne jamais immobiliser",
+        "Employer une attelle sur le membre sain uniquement"
+      ],
+      "answer": 0,
+      "why": "Le choix de l'attelle dépend de la localisation et du traumatisme.",
+      "mode": "Opérationnel",
+      "id": "RTN26-07-006"
+    },
+    {
+      "page": 241,
+      "ref": "07PR08",
+      "level": "Expert",
+      "q": "Une victime après chute présente une douleur du cou. Quel principe appliquer dès le bilan ?",
+      "options": [
+        "Limiter les mouvements du rachis et rechercher les menaces vitales",
+        "Lui faire tourner la tête pour tester sa mobilité",
+        "La relever immédiatement",
+        "Lui demander de retirer seule son casque"
+      ],
+      "answer": 0,
+      "why": "En cas de suspicion de lésion du rachis, limiter les mouvements et traiter d'abord les menaces vitales.",
+      "mode": "Opérationnel",
+      "id": "RTN26-07-007"
+    },
+    {
+      "page": 262,
+      "ref": "07PR09",
+      "level": "Expert",
+      "q": "Un blessé présente un traumatisme crânien sans détresse apparente. Que faut-il surveiller ?",
+      "options": [
+        "L'évolution de l'état neurologique et l'apparition de signes de gravité",
+        "Uniquement l'aspect de ses chaussures",
+        "Seulement le véhicule ayant causé l'accident",
+        "Rien si la victime parle"
+      ],
+      "answer": 0,
+      "why": "Un traumatisme crânien nécessite bilan, transmission et surveillance.",
+      "mode": "Opérationnel",
+      "id": "RTN26-07-008"
+    },
+    {
+      "page": 264,
+      "ref": "07PR10",
+      "level": "Expert",
+      "q": "Une victime présente une douleur du bassin après choc violent. Quelle position privilégier ?",
+      "options": [
+        "Une position allongée stricte si possible",
+        "La station debout",
+        "Une marche d'essai",
+        "La position assise jambes croisées"
+      ],
+      "answer": 0,
+      "why": "La procédure recommande de laisser la victime allongée strictement si possible.",
+      "mode": "Opérationnel",
+      "id": "RTN26-07-009"
+    },
+    {
+      "page": 222,
+      "ref": "07PR06",
+      "level": "Expert",
+      "q": "Une plaie située au cou doit être considérée comment ?",
+      "options": [
+        "Comme potentiellement grave compte tenu de sa localisation",
+        "Comme superficielle par définition",
+        "Comme une simple brûlure",
+        "Comme sans risque si elle est petite"
+      ],
+      "answer": 0,
+      "why": "La localisation face/cou peut justifier une prise en charge de plaie grave.",
+      "mode": "Opérationnel",
+      "id": "RTN26-07-010"
+    },
+    {
+      "page": 273,
+      "ref": "08PR02",
+      "level": "Facile",
+      "q": "Une personne se noie à quelques mètres de la berge. Quelle aide proposer en priorité si possible ?",
+      "options": [
+        "Lui tendre ou lancer un objet flottant sans entrer dans l'eau",
+        "Plonger seul et sans équipement",
+        "Sauter tête la première",
+        "La laisser sans alerter"
+      ],
+      "answer": 0,
+      "why": "La sécurité du sauveteur prime ; privilégier un sauvetage depuis la berge et alerter les moyens spécialisés.",
+      "mode": "Opérationnel",
+      "id": "RTN26-08-001"
+    },
+    {
+      "page": 270,
+      "ref": "08PR01",
+      "level": "Moyen",
+      "q": "Une victime est en contact avec un appareil électrique sous tension. Que fais-tu ?",
+      "options": [
+        "Faire supprimer l'alimentation avant tout contact",
+        "La tirer à mains nues",
+        "Verser de l'eau sur l'appareil",
+        "La masser immédiatement sans sécurisation"
+      ],
+      "answer": 0,
+      "why": "Le contact avec la victime est dangereux tant que l'alimentation n'est pas supprimée.",
+      "mode": "Opérationnel",
+      "id": "RTN26-08-002"
+    },
+    {
+      "page": 281,
+      "ref": "08PR04",
+      "level": "Moyen",
+      "q": "Une femme enceinte en travail est prise en charge avant la naissance. Quel élément faut-il préciser lors du bilan ?",
+      "options": [
+        "La fréquence et la durée des contractions",
+        "La couleur de sa voiture",
+        "La taille du logement",
+        "L'heure de son dernier voyage"
+      ],
+      "answer": 0,
+      "why": "Les caractéristiques des contractions aident à apprécier l'imminence de l'accouchement.",
+      "mode": "Opérationnel",
+      "id": "RTN26-08-003"
+    },
+    {
+      "page": 281,
+      "ref": "08PR04",
+      "level": "Expert",
+      "q": "Lors d'un accouchement inopiné non encore commencé, quelle installation est proposée ?",
+      "options": [
+        "Sur le côté",
+        "Debout sans appui",
+        "Sur le ventre",
+        "Sur une chaise haute"
+      ],
+      "answer": 0,
+      "why": "La procédure propose l'installation latérale de la femme enceinte.",
+      "mode": "Opérationnel",
+      "id": "RTN26-08-004"
+    },
+    {
+      "page": 291,
+      "ref": "08PR06",
+      "level": "Facile",
+      "q": "Une personne fait un malaise après un effort par forte chaleur. Quelle mesure immédiate est pertinente ?",
+      "options": [
+        "La soustraire à la chaleur et entreprendre un refroidissement adapté",
+        "La couvrir très chaudement",
+        "La faire courir davantage",
+        "La laisser au soleil"
+      ],
+      "answer": 0,
+      "why": "La conduite à tenir repose notamment sur le refroidissement passif.",
+      "mode": "Opérationnel",
+      "id": "RTN26-08-005"
+    },
+    {
+      "page": 296,
+      "ref": "08PR07",
+      "level": "Moyen",
+      "q": "Une victime est retrouvée très refroidie avec des vêtements mouillés. Quel principe appliquer ?",
+      "options": [
+        "Limiter les pertes de chaleur et la manipuler avec prudence",
+        "La frictionner vigoureusement",
+        "La faire courir sans bilan",
+        "L'installer au vent"
+      ],
+      "answer": 0,
+      "why": "La procédure d'hypothermie prévoit l'isolement du froid et une mobilisation prudente.",
+      "mode": "Opérationnel",
+      "id": "RTN26-08-006"
+    },
+    {
+      "page": 303,
+      "ref": "08PR09",
+      "level": "Moyen",
+      "q": "Une personne a avalé un produit toxique. Quel geste faut-il éviter ?",
+      "options": [
+        "La faire vomir",
+        "Rechercher le produit en cause",
+        "Noter l'heure d'ingestion",
+        "Transmettre les informations au médecin régulateur"
+      ],
+      "answer": 0,
+      "why": "Le RTN indique de ne pas faire vomir ni boire une victime d'intoxication.",
+      "mode": "Opérationnel",
+      "id": "RTN26-08-007"
+    },
+    {
+      "page": 303,
+      "ref": "08PR09",
+      "level": "Expert",
+      "q": "Après une ingestion suspecte, quelle information est particulièrement utile au bilan ?",
+      "options": [
+        "Nature, quantité supposée et heure de prise du produit",
+        "Marque de ses chaussures",
+        "Numéro de série de la télévision",
+        "Température de son réfrigérateur"
+      ],
+      "answer": 0,
+      "why": "Le contexte et les caractéristiques du toxique orientent la prise en charge.",
+      "mode": "Opérationnel",
+      "id": "RTN26-08-008"
+    },
+    {
+      "page": 307,
+      "ref": "08PR11",
+      "level": "Expert",
+      "q": "Une victime piquée par un insecte a déjà fait un choc allergique dans les mêmes circonstances. Quelle attitude ?",
+      "options": [
+        "Transmettre rapidement un bilan en raison du risque de réaction grave",
+        "Attendre systématiquement une heure",
+        "Lui demander de marcher",
+        "Ne pas mentionner ses antécédents"
+      ],
+      "answer": 0,
+      "why": "Les antécédents de réaction allergique grave justifient une alerte urgente.",
+      "mode": "Opérationnel",
+      "id": "RTN26-08-009"
+    },
+    {
+      "page": 313,
+      "ref": "08PR13",
+      "level": "Expert",
+      "q": "Une victime a subi une strangulation. Quel geste est prioritaire après sécurisation ?",
+      "options": [
+        "Desserrer et retirer la constriction du cou, puis évaluer les fonctions vitales",
+        "Attendre une heure avant toute action",
+        "La faire boire",
+        "Effectuer un test de course"
+      ],
+      "answer": 0,
+      "why": "Il faut supprimer rapidement la constriction et appliquer les gestes de secours adaptés.",
+      "mode": "Opérationnel",
+      "id": "RTN26-08-010"
+    },
+    {
+      "page": 322,
+      "ref": "08PR17",
+      "level": "Moyen",
+      "q": "Une personne est frappée par la foudre et ne respire plus. Quelle priorité après mise en sécurité ?",
+      "options": [
+        "La réanimation cardiopulmonaire",
+        "La laisser attendre un retour spontané",
+        "La faire marcher",
+        "La recouvrir uniquement"
+      ],
+      "answer": 0,
+      "why": "La prise en charge d'un arrêt cardiorespiratoire prime après sécurisation.",
+      "mode": "Opérationnel",
+      "id": "RTN26-08-011"
+    },
+    {
+      "page": 328,
+      "ref": "09PR01",
+      "level": "Facile",
+      "q": "Une personne en situation de crise est agitée mais accessible au dialogue. Quelle approche est adaptée ?",
+      "options": [
+        "Adopter une attitude calme, sécurisante et non jugeante",
+        "La provoquer pour obtenir une réponse",
+        "Hausser immédiatement le ton",
+        "L'entourer de plusieurs personnes qui parlent en même temps"
+      ],
+      "answer": 0,
+      "why": "L'abord relationnel cherche à stabiliser l'état de crise.",
+      "mode": "Opérationnel",
+      "id": "RTN26-09-001"
+    },
+    {
+      "page": 328,
+      "ref": "09PR01",
+      "level": "Moyen",
+      "q": "Une personne en crise menace de se faire du mal. Quelle est la priorité pour l'équipe ?",
+      "options": [
+        "Assurer la sécurité de la victime, de l'entourage et des intervenants",
+        "Laisser toute personne entrer dans la pièce",
+        "Lui demander de partir seule",
+        "Éviter toute transmission aux secours médicaux"
+      ],
+      "answer": 0,
+      "why": "La sécurité est un principe fondamental de la prise en charge.",
+      "mode": "Opérationnel",
+      "id": "RTN26-09-002"
+    },
+    {
+      "page": 328,
+      "ref": "09PR01",
+      "level": "Moyen",
+      "q": "Lors du bilan d'une personne en crise, que doit-on recueillir et transmettre ?",
+      "options": [
+        "Les comportements inhabituels, le contexte et les éléments utiles à l'évaluation",
+        "Seulement l'adresse du bâtiment",
+        "Exclusivement le nombre de témoins",
+        "Uniquement l'âge des secouristes"
+      ],
+      "answer": 0,
+      "why": "L'identification et la transmission d'informations pertinentes favorisent l'orientation.",
+      "mode": "Opérationnel",
+      "id": "RTN26-09-003"
+    },
+    {
+      "page": 328,
+      "ref": "09PR01",
+      "level": "Expert",
+      "q": "Une personne en crise semble se calmer mais son discours reste inquiétant. Quelle attitude convient ?",
+      "options": [
+        "Poursuivre l'évaluation et la surveillance sans minimiser les risques",
+        "Considérer le risque disparu",
+        "La laisser automatiquement seule",
+        "Annuler la transmission du bilan"
+      ],
+      "answer": 0,
+      "why": "La stabilisation apparente n'exclut pas une surveillance et une évaluation continues.",
+      "mode": "Opérationnel",
+      "id": "RTN26-09-004"
+    },
+    {
+      "page": 328,
+      "ref": "09PR01",
+      "level": "Moyen",
+      "q": "Pendant l'échange, plusieurs intervenants donnent des consignes contradictoires à une victime en crise. Que privilégier ?",
+      "options": [
+        "Un interlocuteur principal et des messages cohérents",
+        "Des injonctions simultanées",
+        "Le silence complet sans observation",
+        "Des menaces pour accélérer le bilan"
+      ],
+      "answer": 0,
+      "why": "Une communication coordonnée facilite l'abord relationnel.",
+      "mode": "Opérationnel",
+      "id": "RTN26-09-005"
+    },
+    {
+      "page": 328,
+      "ref": "09PR01",
+      "level": "Expert",
+      "q": "Une personne en crise refuse de parler mais reste sous surveillance. Quelle posture convient ?",
+      "options": [
+        "Respecter son rythme tout en préservant la sécurité et en cherchant le dialogue",
+        "L'obliger à parler immédiatement",
+        "La ridiculiser",
+        "Quitter les lieux sans alerter"
+      ],
+      "answer": 0,
+      "why": "La communication doit rester non coercitive et compatible avec la sécurité.",
+      "mode": "Opérationnel",
+      "id": "RTN26-09-006"
+    },
+    {
+      "page": 324,
+      "ref": "09AC01",
+      "level": "Facile",
+      "q": "Lors d'une crise psychique, la prise en charge d'une victime doit-elle inclure la recherche de détresses physiques ?",
+      "options": [
+        "Oui, les fonctions vitales restent prioritaires",
+        "Non, jamais",
+        "Seulement si un proche le demande",
+        "Uniquement en fin de transport"
+      ],
+      "answer": 0,
+      "why": "Une situation de crise n'exclut pas une urgence vitale associée.",
+      "mode": "Opérationnel",
+      "id": "RTN26-09-007"
+    },
+    {
+      "page": 328,
+      "ref": "09PR01",
+      "level": "Expert",
+      "q": "Un membre de l'entourage est très agité et perturbe la prise en charge. Quelle réponse est adaptée ?",
+      "options": [
+        "Organiser la sécurité des personnes et l'environnement de la victime",
+        "Le laisser intervenir dans tous les gestes",
+        "Faire semblant de ne pas le voir",
+        "L'inviter à manipuler le matériel"
+      ],
+      "answer": 0,
+      "why": "La sécurisation porte sur la victime, les intervenants et l'entourage.",
+      "mode": "Opérationnel",
+      "id": "RTN26-09-008"
+    },
+    {
+      "page": 341,
+      "ref": "10AC01",
+      "level": "Facile",
+      "q": "À quoi correspond le relevage d'une victime ?",
+      "options": [
+        "La placer sur un brancard ou un dispositif de portage",
+        "Mesurer uniquement son pouls",
+        "La faire marcher sans aide",
+        "Assurer la désinfection des locaux"
+      ],
+      "answer": 0,
+      "why": "Le relevage consiste à mettre la victime en position de transport sur un dispositif.",
+      "mode": "Opérationnel",
+      "id": "RTN26-10-001"
+    },
+    {
+      "page": 345,
+      "ref": "10FT01",
+      "level": "Facile",
+      "q": "Dans quel cas une aide à la marche est-elle adaptée ?",
+      "options": [
+        "Blessé léger pouvant tenir debout et marcher quelques mètres",
+        "Victime inconsciente",
+        "Victime en arrêt cardiaque",
+        "Victime suspecte de fracture instable du bassin"
+      ],
+      "answer": 0,
+      "why": "L'aide à la marche concerne les blessés légers autonomes sur quelques mètres.",
+      "mode": "Opérationnel",
+      "id": "RTN26-10-002"
+    },
+    {
+      "page": 353,
+      "ref": "10FT06",
+      "level": "Moyen",
+      "q": "Quel dispositif est recommandé en première intention pour relever une victime traumatisée allongée sur le dos, suspecte de lésion du rachis ?",
+      "options": [
+        "Un brancard cuillère",
+        "Une chaise de transport",
+        "Une simple couverture",
+        "Une aide à la marche"
+      ],
+      "answer": 0,
+      "why": "Le brancard cuillère est recommandé dans cette indication.",
+      "mode": "Opérationnel",
+      "id": "RTN26-10-003"
+    },
+    {
+      "page": 363,
+      "ref": "10FT10",
+      "level": "Facile",
+      "q": "Avant de déplacer une victime sur un brancard, que faut-il vérifier ?",
+      "options": [
+        "Qu'elle est correctement arrimée au dispositif",
+        "Qu'elle a retiré toutes les couvertures",
+        "Que les sangles sont ouvertes",
+        "Qu'elle tient seule les poignées"
+      ],
+      "answer": 0,
+      "why": "L'arrimage évite une chute de la victime pendant le brancardage.",
+      "mode": "Opérationnel",
+      "id": "RTN26-10-004"
+    },
+    {
+      "page": 358,
+      "ref": "10FT08",
+      "level": "Moyen",
+      "q": "Le relevage à trois secouristes porteurs est-il systématiquement possible quelle que soit la victime ?",
+      "options": [
+        "Non, il dépend notamment de la corpulence de la victime",
+        "Oui, sans aucune condition",
+        "Oui, seulement si la victime marche",
+        "Non, il n'existe pas"
+      ],
+      "answer": 0,
+      "why": "La technique à trois porteurs dépend de la corpulence et des conditions.",
+      "mode": "Opérationnel",
+      "id": "RTN26-10-005"
+    },
+    {
+      "page": 370,
+      "ref": "10FT13",
+      "level": "Moyen",
+      "q": "Au moment de l'installation d'une victime dans le véhicule de transport, quel objectif est essentiel ?",
+      "options": [
+        "Assurer sa sécurité et la stabilité du dispositif de transport",
+        "Supprimer toute surveillance",
+        "Détacher systématiquement toutes les sangles",
+        "La placer debout dans le véhicule"
+      ],
+      "answer": 0,
+      "why": "L'installation doit préserver la sécurité pendant le déplacement.",
+      "mode": "Opérationnel",
+      "id": "RTN26-10-006"
+    },
+    {
+      "page": 341,
+      "ref": "10AC01",
+      "level": "Expert",
+      "q": "Avant un relevage non urgent, quel préalable est essentiel ?",
+      "options": [
+        "Traiter les détresses et préparer un déplacement coordonné",
+        "Déplacer la victime sans bilan ni consigne",
+        "Enlever toutes les immobilisations",
+        "Faire tenir le matériel par la victime"
+      ],
+      "answer": 0,
+      "why": "Le relevage intervient après les gestes de secours nécessaires et suppose une coordination.",
+      "mode": "Opérationnel",
+      "id": "RTN26-10-007"
+    },
+    {
+      "page": 364,
+      "ref": "10FT11",
+      "level": "Expert",
+      "q": "Pendant un brancardage à plusieurs porteurs, que faut-il privilégier ?",
+      "options": [
+        "Des mouvements coordonnés par des commandements clairs",
+        "Des déplacements indépendants",
+        "Un départ sans prévenir l'équipe",
+        "Des accélérations brusques"
+      ],
+      "answer": 0,
+      "why": "Le brancardage en équipe repose sur la coordination des porteurs.",
+      "mode": "Opérationnel",
+      "id": "RTN26-10-008"
+    },
+    {
+      "page": 351,
+      "ref": "10FT05",
+      "level": "Expert",
+      "q": "Quel est l'objectif du transfert à l'aide d'une alèse portoir ?",
+      "options": [
+        "Déplacer une victime vers un dispositif de portage dans les conditions prévues",
+        "Remplacer l'oxygénation",
+        "Réaliser une glycémie",
+        "Évaluer uniquement la douleur"
+      ],
+      "answer": 0,
+      "why": "L'alèse portoir est un moyen de transfert vers un dispositif de portage.",
+      "mode": "Opérationnel",
+      "id": "RTN26-10-009"
+    },
+    {
+      "page": 373,
+      "ref": "11AC01",
+      "level": "Facile",
+      "q": "À ton arrivée, plusieurs blessés sont signalés et la situation peut encore évoluer. Quelle organisation est nécessaire ?",
+      "options": [
+        "Adapter l'organisation des secours à une situation à nombreuses victimes",
+        "Traiter tous les blessés dans l'ordre de leur nom",
+        "Ne transmettre aucune information avant la fin des soins",
+        "Faire transporter immédiatement la première personne qui parle"
+      ],
+      "answer": 0,
+      "why": "Une situation à nombreuses victimes demande une organisation spécifique et une évaluation des priorités.",
+      "mode": "Opérationnel",
+      "id": "RTN26-11-001"
+    },
+    {
+      "page": 375,
+      "ref": "11FT01",
+      "level": "Moyen",
+      "q": "Quand le repérage initial des victimes est-il particulièrement indiqué ?",
+      "options": [
+        "Quand les victimes apparemment graves sont plus nombreuses que les secouristes disponibles",
+        "Quand il n'y a aucune victime",
+        "Uniquement lorsque tous les transports sont terminés",
+        "À chaque simple consultation"
+      ],
+      "answer": 0,
+      "why": "Le repérage permet d'identifier les urgences en attente des renforts.",
+      "mode": "Opérationnel",
+      "id": "RTN26-11-002"
+    },
+    {
+      "page": 375,
+      "ref": "11FT01",
+      "level": "Facile",
+      "q": "Quel est un objectif du repérage lors d'un événement avec de nombreuses victimes ?",
+      "options": [
+        "Localiser les victimes et repérer celles nécessitant des gestes immédiats",
+        "Calculer le coût du matériel",
+        "Dresser la liste des véhicules stationnés",
+        "Supprimer les transmissions"
+      ],
+      "answer": 0,
+      "why": "La localisation et la hiérarchisation des urgences guident l'action.",
+      "mode": "Opérationnel",
+      "id": "RTN26-11-003"
+    },
+    {
+      "page": 375,
+      "ref": "11FT01",
+      "level": "Moyen",
+      "q": "Lors du repérage, une victime présente une hémorragie majeure. Que faut-il rechercher en priorité ?",
+      "options": [
+        "La réalisation rapide du geste vital approprié",
+        "Son numéro de téléphone",
+        "La marque de ses vêtements",
+        "Le récit détaillé de ses vacances"
+      ],
+      "answer": 0,
+      "why": "Le repérage permet d'identifier les gestes de sauvegarde immédiats.",
+      "mode": "Opérationnel",
+      "id": "RTN26-11-004"
+    },
+    {
+      "page": 373,
+      "ref": "11AC01",
+      "level": "Expert",
+      "q": "Pourquoi une situation avec de nombreuses victimes peut-elle nécessiter une méthode différente ?",
+      "options": [
+        "Parce que le nombre de victimes et l'évolution possible peuvent dépasser les moyens présents",
+        "Parce que les bilans n'ont plus d'utilité",
+        "Parce que la sécurité des secouristes devient secondaire",
+        "Parce que toutes les victimes ont nécessairement la même gravité"
+      ],
+      "answer": 0,
+      "why": "L'ampleur et le potentiel évolutif exigent une organisation adaptée.",
+      "mode": "Opérationnel",
+      "id": "RTN26-11-005"
+    },
+    {
+      "page": 375,
+      "ref": "11FT01",
+      "level": "Expert",
+      "q": "Quel est un autre objectif du repérage au-delà des gestes immédiats ?",
+      "options": [
+        "Déterminer les victimes qui devront être examinées en priorité par un médecin",
+        "Déclarer systématiquement toutes les victimes indemnes",
+        "Éviter l'arrivée de renforts",
+        "Remplacer intégralement tous les bilans"
+      ],
+      "answer": 0,
+      "why": "Le repérage aide à préparer les priorités médicales.",
+      "mode": "Opérationnel",
+      "id": "RTN26-11-006"
+    },
+    {
+      "page": 373,
+      "ref": "11AC01",
+      "level": "Moyen",
+      "q": "Une situation accidentelle comporte peu de blessés visibles mais un risque de nombreuses victimes supplémentaires. Peut-elle relever d'une situation à nombreuses victimes ?",
+      "options": [
+        "Oui, le potentiel évolutif compte aussi",
+        "Non, jamais",
+        "Seulement après le départ de tous les secours",
+        "Seulement si l'événement a lieu de nuit"
+      ],
+      "answer": 0,
+      "why": "La définition inclut le potentiel évolutif susceptible d'augmenter le nombre de victimes.",
+      "mode": "Opérationnel",
+      "id": "RTN26-11-007"
+    },
+    {
+      "page": 375,
+      "ref": "11FT01",
+      "level": "Expert",
+      "q": "Plusieurs victimes requièrent des actions urgentes et les renforts sont en route. Quelle conduite est cohérente ?",
+      "options": [
+        "Repérer, prioriser les gestes vitaux possibles et communiquer les besoins",
+        "Effectuer un quatrième regard complet pour toutes avant tout geste",
+        "Désigner les victimes au hasard",
+        "Cesser toute surveillance"
+      ],
+      "answer": 0,
+      "why": "Le repérage identifie les victimes et gestes urgents en attendant des ressources supplémentaires.",
+      "mode": "Opérationnel",
+      "id": "RTN26-11-008"
+    },
+    {
+      "page": 380,
+      "ref": "12AC02",
+      "level": "Facile",
+      "q": "Lorsqu'une personne est victime d'une urgence, quelle est la finalité de l'alerte ?",
+      "options": [
+        "Informer rapidement les services d'urgence de la situation et de l'aide apportée",
+        "Prévenir uniquement les voisins",
+        "Publier une photo de l'intervention",
+        "Attendre le transport avant de communiquer"
+      ],
+      "answer": 0,
+      "why": "Une alerte rapide et précise permet une réponse adaptée.",
+      "mode": "Opérationnel",
+      "id": "RTN26-12-001"
+    },
+    {
+      "page": 380,
+      "ref": "12AC02",
+      "level": "Moyen",
+      "q": "Que doit contenir une alerte utile ?",
+      "options": [
+        "Lieu précis, nature de l'événement, nombre de victimes et détresses constatées",
+        "Uniquement le prénom du témoin",
+        "Seulement la météo",
+        "Un message sans localisation"
+      ],
+      "answer": 0,
+      "why": "Une alerte exploitable décrit la situation et permet l'engagement des secours.",
+      "mode": "Opérationnel",
+      "id": "RTN26-12-002"
+    },
+    {
+      "page": 380,
+      "ref": "12AC02",
+      "level": "Moyen",
+      "q": "Après avoir transmis une alerte, l'opérateur donne des consignes. Que faire ?",
+      "options": [
+        "Les écouter et les appliquer dans la mesure des possibilités et en sécurité",
+        "Raccrocher immédiatement sans écouter",
+        "Les remplacer par une improvisation sans raison",
+        "Couper tout moyen de communication"
+      ],
+      "answer": 0,
+      "why": "La prise en compte des consignes reçues fait partie de l'alerte.",
+      "mode": "Opérationnel",
+      "id": "RTN26-12-003"
+    },
+    {
+      "page": 382,
+      "ref": "12AC03",
+      "level": "Facile",
+      "q": "Une alerte officielle signale un danger majeur dans ta commune. Quelle première attitude adopter ?",
+      "options": [
+        "Suivre les consignes des autorités et se mettre à l'abri selon le risque",
+        "Se rendre systématiquement sur les lieux du danger",
+        "Ignorer les messages officiels",
+        "Diffuser des rumeurs sans vérification"
+      ],
+      "answer": 0,
+      "why": "L'alerte aux populations vise à déclencher un comportement de protection.",
+      "mode": "Opérationnel",
+      "id": "RTN26-12-004"
+    },
+    {
+      "page": 382,
+      "ref": "12AC03",
+      "level": "Expert",
+      "q": "Pourquoi les consignes en cas d'alerte aux populations peuvent-elles varier ?",
+      "options": [
+        "Parce qu'elles dépendent du danger et des mesures de protection adaptées",
+        "Parce qu'elles n'ont aucune utilité",
+        "Parce qu'elles doivent toujours imposer de sortir",
+        "Parce qu'elles concernent uniquement les intervenants"
+      ],
+      "answer": 0,
+      "why": "La protection des populations est adaptée à la nature du risque.",
+      "mode": "Opérationnel",
+      "id": "RTN26-12-005"
+    },
+    {
+      "page": 380,
+      "ref": "12AC02",
+      "level": "Expert",
+      "q": "Tu alertes pour une situation qui s'aggrave rapidement. Quelle communication est la plus pertinente ?",
+      "options": [
+        "Transmettre sans délai l'évolution et les nouvelles détresses",
+        "Attendre la fin de l'intervention",
+        "Ne donner que les informations initiales",
+        "Cesser toute communication"
+      ],
+      "answer": 0,
+      "why": "L'information utile doit rester rapide, précise et actualisée.",
+      "mode": "Opérationnel",
+      "id": "RTN26-12-006"
+    },
+    {
+      "page": 378,
+      "ref": "12AC01",
+      "level": "Moyen",
+      "q": "Un témoin veut aider mais s'exposerait à un danger. Quelle priorité rappeler ?",
+      "options": [
+        "Sa propre sécurité et l'absence de suraccident",
+        "L'obligation de s'exposer",
+        "L'importance de filmer",
+        "L'interdiction absolue de prévenir les secours"
+      ],
+      "answer": 0,
+      "why": "Les principes généraux des premiers secours incluent la protection de soi et d'autrui.",
+      "mode": "Opérationnel",
+      "id": "RTN26-12-007"
+    },
+    {
+      "page": 382,
+      "ref": "12AC03",
+      "level": "Moyen",
+      "q": "Une information officielle demande à la population de rester à l'abri. Que doit privilégier un citoyen ?",
+      "options": [
+        "Appliquer les consignes et consulter les informations officielles",
+        "Se déplacer vers la zone dangereuse",
+        "Ouvrir systématiquement toutes les fenêtres",
+        "Ignorer les mises à jour"
+      ],
+      "answer": 0,
+      "why": "Les consignes de protection doivent être suivies selon le risque concerné.",
+      "mode": "Opérationnel",
+      "id": "RTN26-12-008"
+    },
+    {
+      "page": 385,
+      "ref": "13AC01",
+      "level": "Facile",
+      "q": "Une formation de premiers secours doit se tenir dans un local. Quel critère est nécessaire ?",
+      "options": [
+        "Un espace suffisant pour évoluer en sécurité",
+        "Une salle sans espace pour pratiquer",
+        "L'absence de point d'eau",
+        "Un local exposé volontairement aux intempéries"
+      ],
+      "answer": 0,
+      "why": "Le RTN fixe des conditions d'accueil favorables à la pratique et à la sécurité.",
+      "mode": "Opérationnel",
+      "id": "RTN26-13-001"
+    },
+    {
+      "page": 385,
+      "ref": "13AC01",
+      "level": "Moyen",
+      "q": "Pour une formation en salle, quelle surface minimale par personne est indiquée ?",
+      "options": [
+        "2 m² par personne",
+        "0,25 m² par personne",
+        "0,5 m² par personne",
+        "10 cm² par personne"
+      ],
+      "answer": 0,
+      "why": "Les conditions minimales d'accueil prévoient 2 m² par personne, hors mises en situation proches de la réalité.",
+      "mode": "Opérationnel",
+      "id": "RTN26-13-002"
+    },
+    {
+      "page": 385,
+      "ref": "13AC01",
+      "level": "Facile",
+      "q": "Lors d'une séance de formation, quelles installations doivent être accessibles ?",
+      "options": [
+        "Des toilettes et un point d'eau à proximité",
+        "Une piscine olympique",
+        "Une piste d'atterrissage",
+        "Une salle de cinéma"
+      ],
+      "answer": 0,
+      "why": "Les conditions d'accueil comprennent des sanitaires et un point d'eau.",
+      "mode": "Opérationnel",
+      "id": "RTN26-13-003"
+    },
+    {
+      "page": 385,
+      "ref": "13AC01",
+      "level": "Moyen",
+      "q": "Pourquoi l'espace d'une salle de secourisme doit-il être adapté au nombre de stagiaires ?",
+      "options": [
+        "Pour permettre les exercices et les déplacements sans contrainte",
+        "Pour empêcher la manipulation du matériel",
+        "Pour limiter tous les déplacements de l'équipe",
+        "Pour supprimer les mises en situation"
+      ],
+      "answer": 0,
+      "why": "Les participants doivent pouvoir évoluer correctement pendant la formation.",
+      "mode": "Opérationnel",
+      "id": "RTN26-13-004"
+    },
+    {
+      "page": 385,
+      "ref": "13AC01",
+      "level": "Expert",
+      "q": "Une formation prévoit une simulation réaliste en extérieur. Les conditions habituelles d'accueil en salle s'appliquent-elles strictement à cette mise en situation ?",
+      "options": [
+        "Non, les mises en situation peuvent se dérouler dans des conditions proches de la réalité",
+        "Oui, toute simulation doit rester en salle",
+        "Non, toute sécurité devient facultative",
+        "Oui, mais seulement avec des chaises"
+      ],
+      "answer": 0,
+      "why": "Le RTN distingue les exigences générales de salle et les mises en situation ou simulations réalistes.",
+      "mode": "Opérationnel",
+      "id": "RTN26-13-005"
+    },
+    {
+      "page": 385,
+      "ref": "13AC01",
+      "level": "Moyen",
+      "q": "Pour des stagiaires en formation, que faut-il prévoir dans le local ?",
+      "options": [
+        "Un nombre suffisant de chaises",
+        "Un seul siège pour tout le groupe",
+        "Aucun espace de repos ou d'écoute",
+        "Un espace uniquement pour le formateur"
+      ],
+      "answer": 0,
+      "why": "Les conditions minimales prévoient des chaises en quantité suffisante.",
+      "mode": "Opérationnel",
+      "id": "RTN26-13-006"
+    },
+    {
+      "page": 385,
+      "ref": "13AC01",
+      "level": "Expert",
+      "q": "Une séance de formation se déroule dans un local froid et exposé au vent. Quel problème cela pose-t-il ?",
+      "options": [
+        "Le lieu ne satisfait pas aux conditions ordinaires de protection climatique",
+        "Cela est obligatoire pour tous les stagiaires",
+        "Cela remplace les exercices pratiques",
+        "Cela autorise l'absence de point d'eau"
+      ],
+      "answer": 0,
+      "why": "Hors simulations particulières, le lieu doit protéger des contraintes climatiques.",
+      "mode": "Opérationnel",
+      "id": "RTN26-13-007"
+    },
+    {
+      "page": 385,
+      "ref": "13AC01",
+      "level": "Moyen",
+      "q": "Avant une formation comprenant des exercices pratiques au sol, quelle vérification du lieu est appropriée ?",
+      "options": [
+        "Que l'espace permette aux participants de travailler sans contrainte",
+        "Que tous les stagiaires restent debout dans un couloir",
+        "Que le sol soit volontairement encombré",
+        "Que le matériel soit inaccessible"
+      ],
+      "answer": 0,
+      "why": "Le dimensionnement du lieu doit permettre la pratique des techniques.",
+      "mode": "Opérationnel",
+      "id": "RTN26-13-008"
+    }
+  ]
+}
