@@ -1,7 +1,7 @@
 [
   {
-    "page": 203,
-    "ref": "07PR01",
+    "page": 207,
+    "ref": "07PR02",
     "level": "Facile",
     "q": "Une victime présente une plaie grave avec un corps étranger profondément fiché. Que faut-il faire ?",
     "options": [
@@ -16,8 +16,8 @@
     "id": "RTN26-07-001"
   },
   {
-    "page": 207,
-    "ref": "07PR02",
+    "page": 203,
+    "ref": "07PR01",
     "level": "Facile",
     "q": "Une victime présente une brûlure thermique récente. Quel geste initial est adapté ?",
     "options": [
@@ -32,8 +32,8 @@
     "id": "RTN26-07-002"
   },
   {
-    "page": 215,
-    "ref": "07PR03",
+    "page": 220,
+    "ref": "07PR05",
     "level": "Moyen",
     "q": "Après un choc violent au thorax, une victime se plaint d'une difficulté respiratoire. Quelle priorité ?",
     "options": [
@@ -144,8 +144,8 @@
     "id": "RTN26-07-009"
   },
   {
-    "page": 223,
-    "ref": "07AC07",
+    "page": 222,
+    "ref": "07PR06",
     "level": "Expert",
     "q": "Une plaie située au cou doit être considérée comment ?",
     "options": [
