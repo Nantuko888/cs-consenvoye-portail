@@ -51,15 +51,15 @@
     "page": 385,
     "ref": "13AC01",
     "level": "Moyen",
-    "q": "Pourquoi l'espace d'une salle de secourisme doit-il être adapté au nombre de stagiaires ?",
+    "q": "Une formation accueille une personne en situation de handicap. Que doit garantir le lieu de formation ?",
     "options": [
-      "Pour permettre les exercices et les déplacements sans contrainte",
-      "Pour empêcher la manipulation du matériel",
-      "Pour limiter tous les déplacements de l'équipe",
-      "Pour supprimer les mises en situation"
+      "Des conditions d'accessibilité conformes à la réglementation",
+      "Un accès réservé aux formateurs",
+      "L'absence d'adaptation",
+      "Une entrée uniquement par escalier"
     ],
     "answer": 0,
-    "why": "Les participants doivent pouvoir évoluer correctement pendant la formation.",
+    "why": "Le lieu doit respecter les règles en vigueur relatives à l'accessibilité et à l'accueil des personnes handicapées.",
     "mode": "Opérationnel",
     "id": "RTN26-13-004"
   },
@@ -82,48 +82,48 @@
   {
     "page": 385,
     "ref": "13AC01",
-    "level": "Moyen",
-    "q": "Pour des stagiaires en formation, que faut-il prévoir dans le local ?",
+    "level": "Expert",
+    "q": "Tu organises une formation PSE1. Faut-il obligatoirement apporter tout le matériel spécifique du PSE2 ?",
     "options": [
-      "Un nombre suffisant de chaises",
-      "Un seul siège pour tout le groupe",
-      "Aucun espace de repos ou d'écoute",
-      "Un espace uniquement pour le formateur"
+      "Non, le matériel doit être adapté aux enseignements réellement dispensés",
+      "Oui, sans exception",
+      "Seulement si la salle est petite",
+      "Non, aucun matériel pédagogique n'est requis"
     ],
     "answer": 0,
-    "why": "Les conditions minimales prévoient des chaises en quantité suffisante.",
+    "why": "Le référentiel précise que le matériel doit être adapté à la formation et aux fiches enseignées.",
     "mode": "Opérationnel",
     "id": "RTN26-13-006"
   },
   {
-    "page": 385,
+    "page": 386,
     "ref": "13AC01",
-    "level": "Expert",
-    "q": "Une séance de formation se déroule dans un local froid et exposé au vent. Quel problème cela pose-t-il ?",
+    "level": "Moyen",
+    "q": "Pour une session initiale de six à douze apprenants, combien de DAE de formation le référentiel prévoit-il ?",
     "options": [
-      "Le lieu ne satisfait pas aux conditions ordinaires de protection climatique",
-      "Cela est obligatoire pour tous les stagiaires",
-      "Cela remplace les exercices pratiques",
-      "Cela autorise l'absence de point d'eau"
+      "Un",
+      "Aucun",
+      "Quatre",
+      "Six"
     ],
     "answer": 0,
-    "why": "Hors simulations particulières, le lieu doit protéger des contraintes climatiques.",
+    "why": "Le tableau du matériel obligatoire prévoit un DAE de formation pour six à douze apprenants.",
     "mode": "Opérationnel",
     "id": "RTN26-13-007"
   },
   {
     "page": 385,
     "ref": "13AC01",
-    "level": "Moyen",
-    "q": "Avant une formation comprenant des exercices pratiques au sol, quelle vérification du lieu est appropriée ?",
+    "level": "Expert",
+    "q": "Pour une formation initiale de treize à dix-huit apprenants, combien d'appareils de communication mobiles sont prévus ?",
     "options": [
-      "Que l'espace permette aux participants de travailler sans contrainte",
-      "Que tous les stagiaires restent debout dans un couloir",
-      "Que le sol soit volontairement encombré",
-      "Que le matériel soit inaccessible"
+      "Quatre",
+      "Un",
+      "Deux",
+      "Huit"
     ],
     "answer": 0,
-    "why": "Le dimensionnement du lieu doit permettre la pratique des techniques.",
+    "why": "La liste de matériel prévoit quatre appareils mobiles de communication pour treize à dix-huit apprenants.",
     "mode": "Opérationnel",
     "id": "RTN26-13-008"
   }
