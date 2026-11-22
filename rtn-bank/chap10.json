@@ -1,0 +1,146 @@
+[
+  {
+    "page": 341,
+    "ref": "10AC01",
+    "level": "Facile",
+    "q": "À quoi correspond le relevage d'une victime ?",
+    "options": [
+      "La placer sur un brancard ou un dispositif de portage",
+      "Mesurer uniquement son pouls",
+      "La faire marcher sans aide",
+      "Assurer la désinfection des locaux"
+    ],
+    "answer": 0,
+    "why": "Le relevage consiste à mettre la victime en position de transport sur un dispositif.",
+    "mode": "Opérationnel",
+    "id": "RTN26-10-001"
+  },
+  {
+    "page": 345,
+    "ref": "10FT01",
+    "level": "Facile",
+    "q": "Dans quel cas une aide à la marche est-elle adaptée ?",
+    "options": [
+      "Blessé léger pouvant tenir debout et marcher quelques mètres",
+      "Victime inconsciente",
+      "Victime en arrêt cardiaque",
+      "Victime suspecte de fracture instable du bassin"
+    ],
+    "answer": 0,
+    "why": "L'aide à la marche concerne les blessés légers autonomes sur quelques mètres.",
+    "mode": "Opérationnel",
+    "id": "RTN26-10-002"
+  },
+  {
+    "page": 353,
+    "ref": "10FT06",
+    "level": "Moyen",
+    "q": "Quel dispositif est recommandé en première intention pour relever une victime traumatisée allongée sur le dos, suspecte de lésion du rachis ?",
+    "options": [
+      "Un brancard cuillère",
+      "Une chaise de transport",
+      "Une simple couverture",
+      "Une aide à la marche"
+    ],
+    "answer": 0,
+    "why": "Le brancard cuillère est recommandé dans cette indication.",
+    "mode": "Opérationnel",
+    "id": "RTN26-10-003"
+  },
+  {
+    "page": 363,
+    "ref": "10FT10",
+    "level": "Facile",
+    "q": "Avant de déplacer une victime sur un brancard, que faut-il vérifier ?",
+    "options": [
+      "Qu'elle est correctement arrimée au dispositif",
+      "Qu'elle a retiré toutes les couvertures",
+      "Que les sangles sont ouvertes",
+      "Qu'elle tient seule les poignées"
+    ],
+    "answer": 0,
+    "why": "L'arrimage évite une chute de la victime pendant le brancardage.",
+    "mode": "Opérationnel",
+    "id": "RTN26-10-004"
+  },
+  {
+    "page": 358,
+    "ref": "10FT08",
+    "level": "Moyen",
+    "q": "Le relevage à trois secouristes porteurs est-il systématiquement possible quelle que soit la victime ?",
+    "options": [
+      "Non, il dépend notamment de la corpulence de la victime",
+      "Oui, sans aucune condition",
+      "Oui, seulement si la victime marche",
+      "Non, il n'existe pas"
+    ],
+    "answer": 0,
+    "why": "La technique à trois porteurs dépend de la corpulence et des conditions.",
+    "mode": "Opérationnel",
+    "id": "RTN26-10-005"
+  },
+  {
+    "page": 370,
+    "ref": "10FT13",
+    "level": "Moyen",
+    "q": "Au moment de l'installation d'une victime dans le véhicule de transport, quel objectif est essentiel ?",
+    "options": [
+      "Assurer sa sécurité et la stabilité du dispositif de transport",
+      "Supprimer toute surveillance",
+      "Détacher systématiquement toutes les sangles",
+      "La placer debout dans le véhicule"
+    ],
+    "answer": 0,
+    "why": "L'installation doit préserver la sécurité pendant le déplacement.",
+    "mode": "Opérationnel",
+    "id": "RTN26-10-006"
+  },
+  {
+    "page": 341,
+    "ref": "10AC01",
+    "level": "Expert",
+    "q": "Avant un relevage non urgent, quel préalable est essentiel ?",
+    "options": [
+      "Traiter les détresses et préparer un déplacement coordonné",
+      "Déplacer la victime sans bilan ni consigne",
+      "Enlever toutes les immobilisations",
+      "Faire tenir le matériel par la victime"
+    ],
+    "answer": 0,
+    "why": "Le relevage intervient après les gestes de secours nécessaires et suppose une coordination.",
+    "mode": "Opérationnel",
+    "id": "RTN26-10-007"
+  },
+  {
+    "page": 364,
+    "ref": "10FT11",
+    "level": "Expert",
+    "q": "Pendant un brancardage à plusieurs porteurs, que faut-il privilégier ?",
+    "options": [
+      "Des mouvements coordonnés par des commandements clairs",
+      "Des déplacements indépendants",
+      "Un départ sans prévenir l'équipe",
+      "Des accélérations brusques"
+    ],
+    "answer": 0,
+    "why": "Le brancardage en équipe repose sur la coordination des porteurs.",
+    "mode": "Opérationnel",
+    "id": "RTN26-10-008"
+  },
+  {
+    "page": 351,
+    "ref": "10FT05",
+    "level": "Expert",
+    "q": "Quel est l'objectif du transfert à l'aide d'une alèse portoir ?",
+    "options": [
+      "Déplacer une victime vers un dispositif de portage dans les conditions prévues",
+      "Remplacer l'oxygénation",
+      "Réaliser une glycémie",
+      "Évaluer uniquement la douleur"
+    ],
+    "answer": 0,
+    "why": "L'alèse portoir est un moyen de transfert vers un dispositif de portage.",
+    "mode": "Opérationnel",
+    "id": "RTN26-10-009"
+  }
+]
