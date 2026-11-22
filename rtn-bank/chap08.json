@@ -1,0 +1,178 @@
+[
+  {
+    "page": 273,
+    "ref": "08PR02",
+    "level": "Facile",
+    "q": "Une personne se noie à quelques mètres de la berge. Quelle aide proposer en priorité si possible ?",
+    "options": [
+      "Lui tendre ou lancer un objet flottant sans entrer dans l'eau",
+      "Plonger seul et sans équipement",
+      "Sauter tête la première",
+      "La laisser sans alerter"
+    ],
+    "answer": 0,
+    "why": "La sécurité du sauveteur prime ; privilégier un sauvetage depuis la berge et alerter les moyens spécialisés.",
+    "mode": "Opérationnel",
+    "id": "RTN26-08-001"
+  },
+  {
+    "page": 270,
+    "ref": "08PR01",
+    "level": "Moyen",
+    "q": "Une victime est en contact avec un appareil électrique sous tension. Que fais-tu ?",
+    "options": [
+      "Faire supprimer l'alimentation avant tout contact",
+      "La tirer à mains nues",
+      "Verser de l'eau sur l'appareil",
+      "La masser immédiatement sans sécurisation"
+    ],
+    "answer": 0,
+    "why": "Le contact avec la victime est dangereux tant que l'alimentation n'est pas supprimée.",
+    "mode": "Opérationnel",
+    "id": "RTN26-08-002"
+  },
+  {
+    "page": 281,
+    "ref": "08PR04",
+    "level": "Moyen",
+    "q": "Une femme enceinte en travail est prise en charge avant la naissance. Quel élément faut-il préciser lors du bilan ?",
+    "options": [
+      "La fréquence et la durée des contractions",
+      "La couleur de sa voiture",
+      "La taille du logement",
+      "L'heure de son dernier voyage"
+    ],
+    "answer": 0,
+    "why": "Les caractéristiques des contractions aident à apprécier l'imminence de l'accouchement.",
+    "mode": "Opérationnel",
+    "id": "RTN26-08-003"
+  },
+  {
+    "page": 281,
+    "ref": "08PR04",
+    "level": "Expert",
+    "q": "Lors d'un accouchement inopiné non encore commencé, quelle installation est proposée ?",
+    "options": [
+      "Sur le côté",
+      "Debout sans appui",
+      "Sur le ventre",
+      "Sur une chaise haute"
+    ],
+    "answer": 0,
+    "why": "La procédure propose l'installation latérale de la femme enceinte.",
+    "mode": "Opérationnel",
+    "id": "RTN26-08-004"
+  },
+  {
+    "page": 291,
+    "ref": "08PR06",
+    "level": "Facile",
+    "q": "Une personne fait un malaise après un effort par forte chaleur. Quelle mesure immédiate est pertinente ?",
+    "options": [
+      "La soustraire à la chaleur et entreprendre un refroidissement adapté",
+      "La couvrir très chaudement",
+      "La faire courir davantage",
+      "La laisser au soleil"
+    ],
+    "answer": 0,
+    "why": "La conduite à tenir repose notamment sur le refroidissement passif.",
+    "mode": "Opérationnel",
+    "id": "RTN26-08-005"
+  },
+  {
+    "page": 296,
+    "ref": "08PR07",
+    "level": "Moyen",
+    "q": "Une victime est retrouvée très refroidie avec des vêtements mouillés. Quel principe appliquer ?",
+    "options": [
+      "Limiter les pertes de chaleur et la manipuler avec prudence",
+      "La frictionner vigoureusement",
+      "La faire courir sans bilan",
+      "L'installer au vent"
+    ],
+    "answer": 0,
+    "why": "La procédure d'hypothermie prévoit l'isolement du froid et une mobilisation prudente.",
+    "mode": "Opérationnel",
+    "id": "RTN26-08-006"
+  },
+  {
+    "page": 303,
+    "ref": "08PR09",
+    "level": "Moyen",
+    "q": "Une personne a avalé un produit toxique. Quel geste faut-il éviter ?",
+    "options": [
+      "La faire vomir",
+      "Rechercher le produit en cause",
+      "Noter l'heure d'ingestion",
+      "Transmettre les informations au médecin régulateur"
+    ],
+    "answer": 0,
+    "why": "Le RTN indique de ne pas faire vomir ni boire une victime d'intoxication.",
+    "mode": "Opérationnel",
+    "id": "RTN26-08-007"
+  },
+  {
+    "page": 303,
+    "ref": "08PR09",
+    "level": "Expert",
+    "q": "Après une ingestion suspecte, quelle information est particulièrement utile au bilan ?",
+    "options": [
+      "Nature, quantité supposée et heure de prise du produit",
+      "Marque de ses chaussures",
+      "Numéro de série de la télévision",
+      "Température de son réfrigérateur"
+    ],
+    "answer": 0,
+    "why": "Le contexte et les caractéristiques du toxique orientent la prise en charge.",
+    "mode": "Opérationnel",
+    "id": "RTN26-08-008"
+  },
+  {
+    "page": 307,
+    "ref": "08PR11",
+    "level": "Expert",
+    "q": "Une victime piquée par un insecte a déjà fait un choc allergique dans les mêmes circonstances. Quelle attitude ?",
+    "options": [
+      "Transmettre rapidement un bilan en raison du risque de réaction grave",
+      "Attendre systématiquement une heure",
+      "Lui demander de marcher",
+      "Ne pas mentionner ses antécédents"
+    ],
+    "answer": 0,
+    "why": "Les antécédents de réaction allergique grave justifient une alerte urgente.",
+    "mode": "Opérationnel",
+    "id": "RTN26-08-009"
+  },
+  {
+    "page": 313,
+    "ref": "08PR13",
+    "level": "Expert",
+    "q": "Une victime a subi une strangulation. Quel geste est prioritaire après sécurisation ?",
+    "options": [
+      "Desserrer et retirer la constriction du cou, puis évaluer les fonctions vitales",
+      "Attendre une heure avant toute action",
+      "La faire boire",
+      "Effectuer un test de course"
+    ],
+    "answer": 0,
+    "why": "Il faut supprimer rapidement la constriction et appliquer les gestes de secours adaptés.",
+    "mode": "Opérationnel",
+    "id": "RTN26-08-010"
+  },
+  {
+    "page": 322,
+    "ref": "08PR17",
+    "level": "Moyen",
+    "q": "Une personne est frappée par la foudre et ne respire plus. Quelle priorité après mise en sécurité ?",
+    "options": [
+      "La réanimation cardiopulmonaire",
+      "La laisser attendre un retour spontané",
+      "La faire marcher",
+      "La recouvrir uniquement"
+    ],
+    "answer": 0,
+    "why": "La prise en charge d'un arrêt cardiorespiratoire prime après sécurisation.",
+    "mode": "Opérationnel",
+    "id": "RTN26-08-011"
+  }
+]
