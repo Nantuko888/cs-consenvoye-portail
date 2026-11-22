@@ -1,0 +1,130 @@
+[
+  {
+    "page": 385,
+    "ref": "13AC01",
+    "level": "Facile",
+    "q": "Une formation de premiers secours doit se tenir dans un local. Quel critère est nécessaire ?",
+    "options": [
+      "Un espace suffisant pour évoluer en sécurité",
+      "Une salle sans espace pour pratiquer",
+      "L'absence de point d'eau",
+      "Un local exposé volontairement aux intempéries"
+    ],
+    "answer": 0,
+    "why": "Le RTN fixe des conditions d'accueil favorables à la pratique et à la sécurité.",
+    "mode": "Opérationnel",
+    "id": "RTN26-13-001"
+  },
+  {
+    "page": 385,
+    "ref": "13AC01",
+    "level": "Moyen",
+    "q": "Pour une formation en salle, quelle surface minimale par personne est indiquée ?",
+    "options": [
+      "2 m² par personne",
+      "0,25 m² par personne",
+      "0,5 m² par personne",
+      "10 cm² par personne"
+    ],
+    "answer": 0,
+    "why": "Les conditions minimales d'accueil prévoient 2 m² par personne, hors mises en situation proches de la réalité.",
+    "mode": "Opérationnel",
+    "id": "RTN26-13-002"
+  },
+  {
+    "page": 385,
+    "ref": "13AC01",
+    "level": "Facile",
+    "q": "Lors d'une séance de formation, quelles installations doivent être accessibles ?",
+    "options": [
+      "Des toilettes et un point d'eau à proximité",
+      "Une piscine olympique",
+      "Une piste d'atterrissage",
+      "Une salle de cinéma"
+    ],
+    "answer": 0,
+    "why": "Les conditions d'accueil comprennent des sanitaires et un point d'eau.",
+    "mode": "Opérationnel",
+    "id": "RTN26-13-003"
+  },
+  {
+    "page": 385,
+    "ref": "13AC01",
+    "level": "Moyen",
+    "q": "Pourquoi l'espace d'une salle de secourisme doit-il être adapté au nombre de stagiaires ?",
+    "options": [
+      "Pour permettre les exercices et les déplacements sans contrainte",
+      "Pour empêcher la manipulation du matériel",
+      "Pour limiter tous les déplacements de l'équipe",
+      "Pour supprimer les mises en situation"
+    ],
+    "answer": 0,
+    "why": "Les participants doivent pouvoir évoluer correctement pendant la formation.",
+    "mode": "Opérationnel",
+    "id": "RTN26-13-004"
+  },
+  {
+    "page": 385,
+    "ref": "13AC01",
+    "level": "Expert",
+    "q": "Une formation prévoit une simulation réaliste en extérieur. Les conditions habituelles d'accueil en salle s'appliquent-elles strictement à cette mise en situation ?",
+    "options": [
+      "Non, les mises en situation peuvent se dérouler dans des conditions proches de la réalité",
+      "Oui, toute simulation doit rester en salle",
+      "Non, toute sécurité devient facultative",
+      "Oui, mais seulement avec des chaises"
+    ],
+    "answer": 0,
+    "why": "Le RTN distingue les exigences générales de salle et les mises en situation ou simulations réalistes.",
+    "mode": "Opérationnel",
+    "id": "RTN26-13-005"
+  },
+  {
+    "page": 385,
+    "ref": "13AC01",
+    "level": "Moyen",
+    "q": "Pour des stagiaires en formation, que faut-il prévoir dans le local ?",
+    "options": [
+      "Un nombre suffisant de chaises",
+      "Un seul siège pour tout le groupe",
+      "Aucun espace de repos ou d'écoute",
+      "Un espace uniquement pour le formateur"
+    ],
+    "answer": 0,
+    "why": "Les conditions minimales prévoient des chaises en quantité suffisante.",
+    "mode": "Opérationnel",
+    "id": "RTN26-13-006"
+  },
+  {
+    "page": 385,
+    "ref": "13AC01",
+    "level": "Expert",
+    "q": "Une séance de formation se déroule dans un local froid et exposé au vent. Quel problème cela pose-t-il ?",
+    "options": [
+      "Le lieu ne satisfait pas aux conditions ordinaires de protection climatique",
+      "Cela est obligatoire pour tous les stagiaires",
+      "Cela remplace les exercices pratiques",
+      "Cela autorise l'absence de point d'eau"
+    ],
+    "answer": 0,
+    "why": "Hors simulations particulières, le lieu doit protéger des contraintes climatiques.",
+    "mode": "Opérationnel",
+    "id": "RTN26-13-007"
+  },
+  {
+    "page": 385,
+    "ref": "13AC01",
+    "level": "Moyen",
+    "q": "Avant une formation comprenant des exercices pratiques au sol, quelle vérification du lieu est appropriée ?",
+    "options": [
+      "Que l'espace permette aux participants de travailler sans contrainte",
+      "Que tous les stagiaires restent debout dans un couloir",
+      "Que le sol soit volontairement encombré",
+      "Que le matériel soit inaccessible"
+    ],
+    "answer": 0,
+    "why": "Le dimensionnement du lieu doit permettre la pratique des techniques.",
+    "mode": "Opérationnel",
+    "id": "RTN26-13-008"
+  }
+]
