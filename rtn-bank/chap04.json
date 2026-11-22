@@ -1,0 +1,146 @@
+[
+  {
+    "page": 66,
+    "ref": "04PR01",
+    "level": "Facile",
+    "q": "À ton arrivée sur intervention, quel est l'objectif du premier regard ?",
+    "options": [
+      "Évaluer globalement la situation, les dangers et le nombre de victimes",
+      "Calculer la pression artérielle",
+      "Établir le diagnostic médical définitif",
+      "Mesurer la température de chaque témoin"
+    ],
+    "answer": 0,
+    "why": "Le premier regard organise la reconnaissance initiale.",
+    "mode": "Opérationnel",
+    "id": "RTN26-04-001"
+  },
+  {
+    "page": 67,
+    "ref": "04PR02",
+    "level": "Moyen",
+    "q": "Une victime présente un saignement très abondant visible dès l'abord. Que fais-tu ?",
+    "options": [
+      "Tu traites immédiatement cette menace vitale",
+      "Tu attends d'avoir terminé l'interrogatoire",
+      "Tu commences par mesurer la température",
+      "Tu recherches d'abord ses antécédents familiaux"
+    ],
+    "answer": 0,
+    "why": "Le deuxième regard recherche les menaces vitales et impose les gestes urgents.",
+    "mode": "Opérationnel",
+    "id": "RTN26-04-002"
+  },
+  {
+    "page": 68,
+    "ref": "04PR03",
+    "level": "Facile",
+    "q": "Quelles fonctions sont appréciées lors du troisième regard ?",
+    "options": [
+      "Neurologique, respiratoire et circulatoire",
+      "Digestive, rénale et hépatique",
+      "Auditive, visuelle et olfactive",
+      "Musculaire, articulaire et osseuse seulement"
+    ],
+    "answer": 0,
+    "why": "Le troisième regard évalue les trois fonctions vitales.",
+    "mode": "Opérationnel",
+    "id": "RTN26-04-003"
+  },
+  {
+    "page": 69,
+    "ref": "04PR04",
+    "level": "Moyen",
+    "q": "Une victime consciente décrit une douleur thoracique. Que complète le quatrième regard ?",
+    "options": [
+      "Interrogatoire, examen et mesures des paramètres",
+      "Uniquement le comptage des témoins",
+      "Seulement le rangement du matériel",
+      "La liste des véhicules intervenants"
+    ],
+    "answer": 0,
+    "why": "Le quatrième regard précise les plaintes et complète l'examen.",
+    "mode": "Opérationnel",
+    "id": "RTN26-04-004"
+  },
+  {
+    "page": 82,
+    "ref": "04FT07",
+    "level": "Moyen",
+    "q": "Un adulte au repos présente 28 mouvements respiratoires par minute. Comment qualifier ce chiffre au regard de la plage habituelle du RTN ?",
+    "options": [
+      "Au-dessus de la plage habituelle",
+      "Dans la plage habituelle",
+      "En dessous de la plage habituelle",
+      "Sans intérêt pour le bilan"
+    ],
+    "answer": 0,
+    "why": "La fréquence respiratoire habituelle d'un adulte est de 12 à 20/min.",
+    "mode": "Opérationnel",
+    "id": "RTN26-04-005"
+  },
+  {
+    "page": 86,
+    "ref": "04FT09",
+    "level": "Expert",
+    "q": "Un adulte au repos a un pouls à 125/min. Quelle conclusion retenir ?",
+    "options": [
+      "Une fréquence supérieure aux valeurs usuelles adultes",
+      "Une fréquence toujours normale",
+      "Une absence de circulation",
+      "Une mesure impossible à transmettre"
+    ],
+    "answer": 0,
+    "why": "La plage usuelle indiquée pour l'adulte est de 60 à 100 battements/min.",
+    "mode": "Opérationnel",
+    "id": "RTN26-04-006"
+  },
+  {
+    "page": 71,
+    "ref": "04PR05",
+    "level": "Moyen",
+    "q": "Après un premier bilan rassurant, que doit devenir la surveillance ?",
+    "options": [
+      "Elle se poursuit et recherche toute évolution",
+      "Elle cesse jusqu'à l'hôpital",
+      "Elle est uniquement réalisée si le témoin le demande",
+      "Elle remplace toute transmission"
+    ],
+    "answer": 0,
+    "why": "La surveillance est continue depuis l'évaluation initiale jusqu'à la transmission.",
+    "mode": "Opérationnel",
+    "id": "RTN26-04-007"
+  },
+  {
+    "page": 72,
+    "ref": "04PR06",
+    "level": "Expert",
+    "q": "Lors de la transmission, que dois-tu communiquer au minimum pour permettre une décision adaptée ?",
+    "options": [
+      "Contexte, état de la victime, évolution et gestes réalisés",
+      "Seulement l'âge estimé",
+      "Uniquement le nombre de secouristes",
+      "Seulement la durée du trajet"
+    ],
+    "answer": 0,
+    "why": "Le bilan transmis reprend la situation, les constatations et la prise en charge.",
+    "mode": "Opérationnel",
+    "id": "RTN26-04-008"
+  },
+  {
+    "page": 105,
+    "ref": "04FT16",
+    "level": "Expert",
+    "q": "Une victime évalue sa douleur à 8/10. Quel est l'intérêt de renouveler la mesure pendant la surveillance ?",
+    "options": [
+      "Suivre l'évolution de la douleur et l'effet des actions menées",
+      "Obtenir obligatoirement la valeur zéro",
+      "Remplacer l'examen respiratoire",
+      "Éviter de réinterroger la victime"
+    ],
+    "answer": 0,
+    "why": "La mesure répétée aide à suivre l'évolution et l'efficacité des gestes.",
+    "mode": "Opérationnel",
+    "id": "RTN26-04-009"
+  }
+]
