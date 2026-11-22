@@ -1,0 +1,178 @@
+[
+  {
+    "page": 117,
+    "ref": "05PR01",
+    "level": "Facile",
+    "q": "Une victime présente une hémorragie externe abondante. Quel geste est prioritaire ?",
+    "options": [
+      "Comprimer immédiatement la zone qui saigne",
+      "Mesurer d'abord sa température",
+      "Attendre l'avis médical sans intervenir",
+      "La faire marcher"
+    ],
+    "answer": 0,
+    "why": "L'arrêt immédiat de l'hémorragie prime sur la poursuite du bilan.",
+    "mode": "Opérationnel",
+    "id": "RTN26-05-001"
+  },
+  {
+    "page": 123,
+    "ref": "05FT04",
+    "level": "Moyen",
+    "q": "Une hémorragie d'un membre reste incontrôlable malgré la compression directe. Quel matériel peut être indiqué ?",
+    "options": [
+      "Un garrot sur le membre concerné",
+      "Un collier cervical",
+      "Une attelle seule",
+      "Un oxymètre"
+    ],
+    "answer": 0,
+    "why": "Le garrot est indiqué sur un membre quand la compression directe est impossible ou inefficace.",
+    "mode": "Opérationnel",
+    "id": "RTN26-05-002"
+  },
+  {
+    "page": 129,
+    "ref": "05PR03",
+    "level": "Facile",
+    "q": "Une personne s'étouffe mais parle et tousse efficacement. Que fais-tu ?",
+    "options": [
+      "L'encourager à tousser et surveiller",
+      "Faire immédiatement des compressions abdominales",
+      "L'allonger sur le dos",
+      "Introduire les doigts dans sa bouche"
+    ],
+    "answer": 0,
+    "why": "Une toux efficace doit être encouragée et surveillée.",
+    "mode": "Opérationnel",
+    "id": "RTN26-05-003"
+  },
+  {
+    "page": 129,
+    "ref": "05PR03",
+    "level": "Moyen",
+    "q": "Une victime consciente ne peut plus parler ni tousser à cause d'une obstruction. Quelle première technique essayer ?",
+    "options": [
+      "De une à cinq claques dans le dos",
+      "Une boisson",
+      "Une ventilation au ballon immédiate",
+      "Un massage cardiaque debout"
+    ],
+    "answer": 0,
+    "why": "L'obstruction sévère chez une personne consciente appelle des claques dans le dos en première intention.",
+    "mode": "Opérationnel",
+    "id": "RTN26-05-004"
+  },
+  {
+    "page": 138,
+    "ref": "05PR04",
+    "level": "Facile",
+    "q": "Un adulte inconscient ne respire pas normalement. Quel rapport compressions-insufflations appliquer en RCP en équipe ?",
+    "options": [
+      "30 compressions pour 2 insufflations",
+      "5 compressions pour 1 insufflation",
+      "15 compressions pour 2 insufflations",
+      "10 compressions pour 5 insufflations"
+    ],
+    "answer": 0,
+    "why": "La RCP d'un adulte en équipe suit un cycle 30/2.",
+    "mode": "Opérationnel",
+    "id": "RTN26-05-005"
+  },
+  {
+    "page": 138,
+    "ref": "05PR04",
+    "level": "Moyen",
+    "q": "Un enfant est en arrêt cardiaque, pris en charge par une équipe formée et équipée. Quel cycle utiliser ?",
+    "options": [
+      "15 compressions pour 2 insufflations",
+      "30 compressions pour 1 insufflation",
+      "5 compressions pour 5 insufflations",
+      "10 compressions pour 2 insufflations"
+    ],
+    "answer": 0,
+    "why": "Le RTN prévoit le cycle 15/2 chez l'enfant et le nourrisson en équipe.",
+    "mode": "Opérationnel",
+    "id": "RTN26-05-006"
+  },
+  {
+    "page": 159,
+    "ref": "05PR06",
+    "level": "Moyen",
+    "q": "Une victime inconsciente respire après un malaise sans traumatisme. Quelle position est adaptée en équipe ?",
+    "options": [
+      "Une position latérale de sécurité stable",
+      "Une position debout",
+      "Une position assise sans surveillance",
+      "Une position ventrale forcée"
+    ],
+    "answer": 0,
+    "why": "Après un événement non traumatique, la victime inconsciente qui respire est placée en PLS.",
+    "mode": "Opérationnel",
+    "id": "RTN26-05-007"
+  },
+  {
+    "page": 159,
+    "ref": "05PR06",
+    "level": "Expert",
+    "q": "Une victime inconsciente respire après un traumatisme. Dans l'attente de l'avis médical, quelle conduite est indiquée en équipe ?",
+    "options": [
+      "La laisser sur le dos en stabilisant sa tête et en garantissant la liberté des voies aériennes",
+      "La mettre systématiquement debout",
+      "La déplacer seule en position assise",
+      "La faire boire"
+    ],
+    "answer": 0,
+    "why": "La procédure distingue perte de connaissance traumatique et non traumatique.",
+    "mode": "Opérationnel",
+    "id": "RTN26-05-008"
+  },
+  {
+    "page": 167,
+    "ref": "05PR08",
+    "level": "Moyen",
+    "q": "Une victime consciente a une détresse respiratoire et préfère rester assise. Quelle attitude adopter ?",
+    "options": [
+      "Respecter la position confortable et surveiller sa respiration",
+      "L'imposer strictement à plat malgré sa gêne",
+      "La faire marcher pour augmenter sa ventilation",
+      "La faire boire rapidement"
+    ],
+    "answer": 0,
+    "why": "La position assise ou demi-assise est proposée à une victime consciente en détresse respiratoire.",
+    "mode": "Opérationnel",
+    "id": "RTN26-05-009"
+  },
+  {
+    "page": 170,
+    "ref": "05PR09",
+    "level": "Expert",
+    "q": "Une victime consciente présente des signes de détresse circulatoire. Quelle installation privilégier ?",
+    "options": [
+      "L'allonger horizontalement et la protéger du froid",
+      "La mettre debout",
+      "La placer systématiquement assise jambes pendantes",
+      "Lui demander de courir"
+    ],
+    "answer": 0,
+    "why": "La procédure de détresse circulatoire préconise l'installation horizontale et la prévention du refroidissement.",
+    "mode": "Opérationnel",
+    "id": "RTN26-05-010"
+  },
+  {
+    "page": 173,
+    "ref": "05PR10",
+    "level": "Expert",
+    "q": "Une victime consciente présente une détresse neurologique. Que faut-il surveiller avec une attention particulière ?",
+    "options": [
+      "L'évolution de son état neurologique",
+      "La couleur de son téléphone",
+      "La marque de ses chaussures",
+      "La température extérieure seule"
+    ],
+    "answer": 0,
+    "why": "La surveillance neurologique est une priorité dans cette situation.",
+    "mode": "Opérationnel",
+    "id": "RTN26-05-011"
+  }
+]
