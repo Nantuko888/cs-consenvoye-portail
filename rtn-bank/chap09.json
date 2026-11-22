@@ -1,0 +1,130 @@
+[
+  {
+    "page": 328,
+    "ref": "09PR01",
+    "level": "Facile",
+    "q": "Une personne en situation de crise est agitée mais accessible au dialogue. Quelle approche est adaptée ?",
+    "options": [
+      "Adopter une attitude calme, sécurisante et non jugeante",
+      "La provoquer pour obtenir une réponse",
+      "Hausser immédiatement le ton",
+      "L'entourer de plusieurs personnes qui parlent en même temps"
+    ],
+    "answer": 0,
+    "why": "L'abord relationnel cherche à stabiliser l'état de crise.",
+    "mode": "Opérationnel",
+    "id": "RTN26-09-001"
+  },
+  {
+    "page": 328,
+    "ref": "09PR01",
+    "level": "Moyen",
+    "q": "Une personne en crise menace de se faire du mal. Quelle est la priorité pour l'équipe ?",
+    "options": [
+      "Assurer la sécurité de la victime, de l'entourage et des intervenants",
+      "Laisser toute personne entrer dans la pièce",
+      "Lui demander de partir seule",
+      "Éviter toute transmission aux secours médicaux"
+    ],
+    "answer": 0,
+    "why": "La sécurité est un principe fondamental de la prise en charge.",
+    "mode": "Opérationnel",
+    "id": "RTN26-09-002"
+  },
+  {
+    "page": 328,
+    "ref": "09PR01",
+    "level": "Moyen",
+    "q": "Lors du bilan d'une personne en crise, que doit-on recueillir et transmettre ?",
+    "options": [
+      "Les comportements inhabituels, le contexte et les éléments utiles à l'évaluation",
+      "Seulement l'adresse du bâtiment",
+      "Exclusivement le nombre de témoins",
+      "Uniquement l'âge des secouristes"
+    ],
+    "answer": 0,
+    "why": "L'identification et la transmission d'informations pertinentes favorisent l'orientation.",
+    "mode": "Opérationnel",
+    "id": "RTN26-09-003"
+  },
+  {
+    "page": 328,
+    "ref": "09PR01",
+    "level": "Expert",
+    "q": "Une personne en crise semble se calmer mais son discours reste inquiétant. Quelle attitude convient ?",
+    "options": [
+      "Poursuivre l'évaluation et la surveillance sans minimiser les risques",
+      "Considérer le risque disparu",
+      "La laisser automatiquement seule",
+      "Annuler la transmission du bilan"
+    ],
+    "answer": 0,
+    "why": "La stabilisation apparente n'exclut pas une surveillance et une évaluation continues.",
+    "mode": "Opérationnel",
+    "id": "RTN26-09-004"
+  },
+  {
+    "page": 328,
+    "ref": "09PR01",
+    "level": "Moyen",
+    "q": "Pendant l'échange, plusieurs intervenants donnent des consignes contradictoires à une victime en crise. Que privilégier ?",
+    "options": [
+      "Un interlocuteur principal et des messages cohérents",
+      "Des injonctions simultanées",
+      "Le silence complet sans observation",
+      "Des menaces pour accélérer le bilan"
+    ],
+    "answer": 0,
+    "why": "Une communication coordonnée facilite l'abord relationnel.",
+    "mode": "Opérationnel",
+    "id": "RTN26-09-005"
+  },
+  {
+    "page": 328,
+    "ref": "09PR01",
+    "level": "Expert",
+    "q": "Une personne en crise refuse de parler mais reste sous surveillance. Quelle posture convient ?",
+    "options": [
+      "Respecter son rythme tout en préservant la sécurité et en cherchant le dialogue",
+      "L'obliger à parler immédiatement",
+      "La ridiculiser",
+      "Quitter les lieux sans alerter"
+    ],
+    "answer": 0,
+    "why": "La communication doit rester non coercitive et compatible avec la sécurité.",
+    "mode": "Opérationnel",
+    "id": "RTN26-09-006"
+  },
+  {
+    "page": 324,
+    "ref": "09AC01",
+    "level": "Facile",
+    "q": "Lors d'une crise psychique, la prise en charge d'une victime doit-elle inclure la recherche de détresses physiques ?",
+    "options": [
+      "Oui, les fonctions vitales restent prioritaires",
+      "Non, jamais",
+      "Seulement si un proche le demande",
+      "Uniquement en fin de transport"
+    ],
+    "answer": 0,
+    "why": "Une situation de crise n'exclut pas une urgence vitale associée.",
+    "mode": "Opérationnel",
+    "id": "RTN26-09-007"
+  },
+  {
+    "page": 328,
+    "ref": "09PR01",
+    "level": "Expert",
+    "q": "Un membre de l'entourage est très agité et perturbe la prise en charge. Quelle réponse est adaptée ?",
+    "options": [
+      "Organiser la sécurité des personnes et l'environnement de la victime",
+      "Le laisser intervenir dans tous les gestes",
+      "Faire semblant de ne pas le voir",
+      "L'inviter à manipuler le matériel"
+    ],
+    "answer": 0,
+    "why": "La sécurisation porte sur la victime, les intervenants et l'entourage.",
+    "mode": "Opérationnel",
+    "id": "RTN26-09-008"
+  }
+]
