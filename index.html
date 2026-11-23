@@ -1303,7 +1303,7 @@ document.addEventListener("click", (e) => {
   // RTN s'ouvre hors iframe Apps Script ; aucun jeton Google dans l'URL.
   let rtnTab=null, rtnFrameLayer=null, rtnNonce='', rtnOpened=false, rtnPending=false;
   let rtnFrameAccount='', rtnFrameBornAt=0;
-  const RTN_REUSE_MS=5*60*1000; // Reprise rapide, sans conserver indéfiniment une vue sensible.
+  const RTN_REUSE_MS=55*60*1000; // Réutilise l'interface pendant la durée maximale de la session Formation.
   const allowedGASOrigin=origin=>origin===location.origin;
   function closeRtn(destroy=false){
     rtnOpened=false; rtnPending=false;
@@ -1348,6 +1348,17 @@ document.addEventListener("click", (e) => {
     try{if(!token)return false;const payload=JSON.parse(b64urlToUtf8(token.split('.')[1]));
       return Number(payload.exp||0)*1000>Date.now()+30000;}catch(e){return false;}
   }
+  function cachedRtnSession(account){
+    // La session mémorisée n'est acceptée que pour l'identité Google déjà
+    // vérifiée lors de l'ouverture du portail. Formation la revalide côté serveur.
+    if(!account || account!==portalValidatedEmail)return '';
+    try{
+      const cached=JSON.parse(sessionStorage.getItem('cs_formation_session_v2')||'null');
+      if(cached && cached.email===account && cached.expires>Date.now()+30000 &&
+         typeof cached.session==='string' && cached.session)return cached.session;
+    }catch(_){}
+    return '';
+  }
   function openRtn(){
     if(rtnOpened && rtnTab && rtnFrameLayer){rtnTab.focus();return;}
     // Même vérification d'accès locale à chaque ouverture, y compris la reprise rapide.
@@ -1355,13 +1366,17 @@ document.addEventListener("click", (e) => {
       alert('Accès aux formations non autorisé ou non vérifié. Recharge le portail si nécessaire.');
       return;
     }
-    const token=sessionStorage.getItem(RTN_TOKEN_KEY);
-    if(!hasValidRtnToken(token)){
+    const token=sessionStorage.getItem(RTN_TOKEN_KEY)||'';
+    const validGoogle=hasValidRtnToken(token);
+    const account=validGoogle ? parseJwtEmail(token) : portalValidatedEmail;
+    // Un jeton Google expiré n'impose pas une reconnexion si une session
+    // Formation du même compte reste valide, contrôlée par le serveur.
+    if(!account || account!==portalValidatedEmail ||
+       (!validGoogle && !cachedRtnSession(account))){
       closeRtn(true);
       sessionStorage.removeItem(RTN_TOKEN_KEY);
       requestGoogleForRtn();return;
     }
-    const account=parseJwtEmail(token);
     if(rtnFrameLayer && rtnTab && rtnFrameAccount===account &&
        Date.now()-rtnFrameBornAt<RTN_REUSE_MS){
       rtnFrameLayer.style.display='block';
@@ -1375,7 +1390,6 @@ document.addEventListener("click", (e) => {
     // Le compte est choisi à la connexion Google du portail.
     // authuser est uniquement un indice de routage pour Google (pas une autorisation).
     // Le serveur RTN conserve sa validation complète du credential et des droits.
-    const accountEmail=parseJwtEmail(token);
     const rtnUrl=new URL(RTN_WEBAPP_URL);
     rtnUrl.searchParams.set('launch_nonce',rtnNonce);
     // Aucun paramètre authuser : GitHub héberge l'interface, Google ne choisit pas un compte pour ouvrir la page.
@@ -1426,9 +1440,19 @@ document.addEventListener("click", (e) => {
       const caption=rtnFrameLayer?.querySelector('.rtn-loading-caption');
       if(caption)caption.textContent='Récupération de votre progression…';
       const token=sessionStorage.getItem(RTN_TOKEN_KEY)||'';
-      if(!hasValidRtnToken(token)){closeRtn(true);requestGoogleForRtn();return;}
-      e.source.postMessage({type:'rtn:credential',nonce:rtnNonce,credential:token},e.origin);
+      if(hasValidRtnToken(token) && parseJwtEmail(token)===portalValidatedEmail){
+        e.source.postMessage({type:'rtn:credential',nonce:rtnNonce,credential:token},e.origin);
+      }else{
+        const session=cachedRtnSession(portalValidatedEmail);
+        if(!session){closeRtn(true);requestGoogleForRtn();return;}
+        e.source.postMessage({type:'rtn:session',nonce:rtnNonce,session},e.origin);
+      }
       rtnPending=false;
+    }else if(e.data.type==='rtn:need-google'){
+      // Session expirée ou refusée par Formation : revenir au contrôle Google.
+      sessionStorage.removeItem('cs_formation_session_v2');
+      closeRtn(true);
+      requestGoogleForRtn();
     }else if(e.data.type==='rtn:loaded'){
       rtnFrameLayer?.querySelector('[role="status"]')?.remove();
     }else if(e.data.type==='rtn:load-error'){
