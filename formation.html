@@ -629,6 +629,8 @@ aside{background:linear-gradient(180deg,#081321 0%,#0b1b32 70%,#7d2027 170%);bor
 .home-welcome-copy{min-width:0}
 .home-welcome-actions{display:flex;flex-direction:column;align-items:flex-end;flex:0 0 auto;gap:8px}
 #homeSignals{max-width:36vw;white-space:normal;text-align:center}
+#signalPendingCount{display:inline-block;min-width:1.5em;margin-inline-start:4px;padding:1px 5px;border-radius:999px;background:#b82030;color:white;font-size:.85em;line-height:1.4;text-align:center}
+#signalPendingCount[hidden]{display:none}
 @media(max-width:760px){.home-welcome-actions:has(#homeSignals[hidden]){display:none}#homeSignals{font-size:12px!important}}
 .home-welcome h1{color:white;font-size:clamp(27px,2.7vw,39px);margin:0 0 8px;font-style:italic;font-weight:900}.home-welcome h1 em{color:#f2464d;font-style:italic}
 .home-welcome p{color:#b8c9da;line-height:1.6;margin:0;font-size:14px;max-width:720px}.training-marker{background:#1a2a40;border:1px solid #2d435b;border-radius:11px;font-size:11px;color:#cbd4e2;padding:13px;white-space:nowrap}
@@ -942,7 +944,7 @@ html,body{height:100%;overflow:hidden}
         <p>Entraîne-toi, évalue tes connaissances et progresse dans les Références Techniques Nationales.</p>
        </div>
        <div class="home-welcome-actions">
-        <button class="btn ghost hidden rtn-standard-control" id="homeSignals" type="button" hidden>Signalements RTN</button>
+        <button class="btn ghost hidden rtn-standard-control" id="homeSignals" type="button" hidden>Signalements RTN <span id="signalPendingCount" hidden></span></button>
         <span class="training-marker">✚ &nbsp; Formation · Révision · Progression</span>
        </div>
       </div>
@@ -1279,6 +1281,7 @@ function rtnDashboardVerified_(email,data){
   renderDashboard();
   rtnCacheDashboard_(email,data);
   rtnServerReady=true;
+   signalHideAdmin_();
    signalCheckPermissions();
   document.getElementById('rtn-sync-status')?.remove();
   rtnUnlock();
@@ -1616,7 +1619,7 @@ function rtnConnectFresh(credential,email) {
         if(!result || !result.ok || !result.session)throw Error('Connexion refusée');
         rtnSession=result.session;
         if(email) rtnRememberSession_(email,rtnSession);
-        refresh(()=>{rtnServerReady=true;signalCheckPermissions();rtnCacheDashboard_(email,dashboard);rtnConnecting=false;rtnUnlock();});
+        refresh(()=>{rtnServerReady=true;signalHideAdmin_();signalCheckPermissions();rtnCacheDashboard_(email,dashboard);rtnConnecting=false;rtnUnlock();});
       }).catch(fallbackErr=>{
         rtnConnecting=false;
         rtnLock('Accès Formation refusé : '+(fallbackErr && fallbackErr.message || fallbackErr));
@@ -1643,9 +1646,21 @@ if (RTN_LAUNCH_NONCE) {
 
 
 var signalAdminSession = '';
+let signalPermissionRequest = 0;
+
+function signalRenderPending_(count) {
+  const badge = $('signalPendingCount');
+  const pending = Number.isSafeInteger(count) && count > 0 ? count : 0;
+  badge.hidden = pending === 0;
+  badge.textContent = pending ? String(pending) : '';
+  const button = $('homeSignals');
+  if (pending) button.setAttribute('aria-label', 'Signalements RTN, ' + pending + ' en attente');
+  else button.removeAttribute('aria-label');
+}
 
 function signalHideAdmin_() {
   signalAdminSession = '';
+  signalRenderPending_(0);
   $('homeSignals').hidden = true;
   $('homeSignals').classList.add('hidden');
   $('signalsList').replaceChildren();
@@ -1653,12 +1668,18 @@ function signalHideAdmin_() {
 }
 
 async function signalCheckPermissions() {
-  signalHideAdmin_();
   const session = rtnSession;
+  if (!rtnServerReady || !session) return;
+  const request = ++signalPermissionRequest;
   try {
     const result = await formationBridge('signal_permissions', { session });
-    if (!rtnServerReady || session !== rtnSession || result?.canManage !== true) return;
+    if (!rtnServerReady || session !== rtnSession || request !== signalPermissionRequest) return;
+    if (result?.canManage !== true) {
+      signalHideAdmin_();
+      return;
+    }
     signalAdminSession = session;
+    signalRenderPending_(result.pendingCount);
     $('homeSignals').hidden = false;
     $('homeSignals').classList.remove('hidden');
     requestAnimationFrame(fitRtnFixedView_);
@@ -1666,6 +1687,10 @@ async function signalCheckPermissions() {
     // Keep the entry hidden if the server cannot verify access.
   }
 }
+setInterval(() => {
+  if (signalAdminSession && document.visibilityState === 'visible' &&
+      !$('home').classList.contains('hidden')) signalCheckPermissions();
+}, 60000);
 
 $('signalOpen').onclick = () => {
   const question = current[index];
@@ -1692,6 +1717,7 @@ $('signalForm').onsubmit = async event => {
     });
     if (result?.saved !== true) throw Error('Enregistrement non confirmé');
     $('signalDialog').close();
+    if (signalAdminSession === rtnSession) signalCheckPermissions();
     alert('Signalement enregistré.');
   } catch (err) {
     $('signalStatus').textContent = 'Non enregistré : ' + err.message;
@@ -1745,6 +1771,7 @@ $('homeSignals').onclick = async () => {
           const result = await formationBridge('signal_update', { session, id: item.id, statut: nextStatus });
           if (result?.updated !== true) throw Error('Modification non confirmée');
           savedStatus = nextStatus;
+          signalCheckPermissions();
         } catch (err) {
           status.value = savedStatus;
           alert('Refusé : ' + err.message);
