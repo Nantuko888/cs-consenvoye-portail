@@ -924,7 +924,7 @@ html,body{height:100%;overflow:hidden}
       <button class="nav" id="sideChapters" type="button"><span class="nav-symbol">▦</span> Les 13 chapitres</button>
       <button class="nav" id="navStats" type="button"><span class="nav-symbol">↗</span> Ma progression</button>
       <a class="nav" id="sidePdf" target="_blank" rel="noopener noreferrer"><span class="nav-symbol">▤</span> Référentiel PDF</a>
-      <button class="nav" id="sideHelp" type="button"><span class="nav-symbol">ⓘ</span> Aide</button>
+      <button class="nav hidden" id="sideSignals" hidden type="button">⚑ Signalements RTN</button><button class="nav" id="sideHelp" type="button"><span class="nav-symbol">ⓘ</span> Aide</button>
       <div class="aside-bottom"><div class="side-caption">FORMATION & SECOURS</div><div class="side-footnote">Entraînement et révision<br>13 chapitres · Édition 2026</div></div>
     </aside>
    <main class="main">
@@ -1070,7 +1070,7 @@ html,body{height:100%;overflow:hidden}
        </h2>
        <div class="answers" id="options">
        </div>
-       <div class="quiz-footer">
+       <button class="btn text" id="signalOpen" type="button">⚑ Signaler cette question</button><div class="quiz-footer">
         <button class="btn ghost" id="prev">
          ← Précédent
         </button>
@@ -1121,7 +1121,7 @@ html,body{height:100%;overflow:hidden}
       </div>
      </div>
     </section>
-    <section class="hidden rtn-subview" id="statsView">
+    <section class="hidden rtn-subview" id="signalsAdminView"><button class="btn text" id="signalsBack">← Retour accueil</button><h1>Signalements RTN</h1><p class="muted">Réservé aux administrateurs</p><div class="panel" id="signalsList"></div></section><section class="hidden rtn-subview" id="statsView">
      <div class="rtn-sticky-return"><button class="btn text rtn-subview-back rtn-standard-control rtn-return-control" id="backStats" type="button">← Retour accueil</button></div>
      <div class="eyebrow">
       ANALYSE PERSONNELLE
@@ -1152,6 +1152,7 @@ html,body{height:100%;overflow:hidden}
      </div>
     </section>
      </div>
+   <dialog id="signalDialog" style="padding:22px;border-radius:16px;max-width:95vw;width:500px"><form id="signalForm"><h2>Signaler une erreur</h2><p id="signalQuestionText"></p><label>Motif<select id="signalReason" style="display:block;width:100%;padding:10px;margin:10px 0"><option value="incorrecte">Question ou réponse incorrecte</option><option value="demonstration_incorrecte">Démonstration incorrecte</option><option value="reference">Référence erronée</option><option value="autre">Autre</option></select></label><label>Précisions<textarea id="signalComment" maxlength="1000" rows="4" style="display:block;width:100%;margin:10px 0"></textarea></label><p id="signalStatus" role="status"></p><button class="btn ghost" id="signalCancel" type="button">Annuler</button> <button class="btn primary" id="signalSend" type="submit">Envoyer</button></form></dialog>
    </main>
   </div>
   <script>
@@ -1265,6 +1266,7 @@ function rtnDashboardVerified_(email,data){
   renderDashboard();
   rtnCacheDashboard_(email,data);
   rtnServerReady=true;
+   signalCheckPermissions();
   document.getElementById('rtn-sync-status')?.remove();
   rtnUnlock();
 }
@@ -1624,6 +1626,52 @@ if (RTN_LAUNCH_NONCE) {
     rtnLock('Ouvre RTN depuis le portail CS Consenvoye.');
   }
 }
+
+
+let signalIsAdmin=false;
+function signalCheckPermissions(){
+ signalIsAdmin=false;$('sideSignals').hidden=true;
+ formationBridge('signal_permissions',{session:rtnSession}).then(r=>{
+  signalIsAdmin=rtnServerReady&&r?.canManage===true;
+  $('sideSignals').hidden=!signalIsAdmin;
+  $('sideSignals').classList.toggle('hidden',!signalIsAdmin);
+ }).catch(()=>{});
+}
+$('signalOpen').onclick=()=>{
+ const q=current[index];if(!rtnServerReady||!rtnSession||!q?.id)return;
+ $('signalForm').dataset.questionId=String(q.id);
+ $('signalQuestionText').textContent=q.q;
+ $('signalReason').value='incorrecte';$('signalComment').value='';$('signalStatus').textContent='';
+ $('signalDialog').showModal();
+};
+$('signalCancel').onclick=()=>$('signalDialog').close();
+$('signalForm').onsubmit=async e=>{
+ e.preventDefault();$('signalSend').disabled=true;
+ try{await formationBridge('signal_create',{session:rtnSession,question_id:$('signalForm').dataset.questionId,motif:$('signalReason').value,commentaire:$('signalComment').value});$('signalDialog').close();alert('Signalement enregistré.');}
+ catch(err){$('signalStatus').textContent='Non enregistré : '+err.message;}
+ finally{$('signalSend').disabled=false;}
+};
+$('sideSignals').onclick=async()=>{
+ if(!signalIsAdmin)return;view('signalsAdminView');
+ const root=$('signalsList');root.textContent='Chargement…';
+ try{
+  const r=await formationBridge('signal_list',{session:rtnSession});
+  if(!signalIsAdmin)return;root.replaceChildren();
+  if(!r?.items?.length){root.textContent='Aucun signalement.';return;}
+  for(const item of r.items){
+   const article=document.createElement('article');article.style.cssText='padding:12px 0;border-bottom:1px solid #ddd';
+   for(const value of [(item.question_id||'')+' · '+(item.motif||''),item.question||'',(item.auteur||'')+' · '+(item.date||''),item.commentaire||'']){
+    const p=document.createElement('p');p.textContent=value;article.append(p);
+   }
+   const status=document.createElement('select');
+   for(const v of ['En attente','Corrigé','Rejeté']){const o=document.createElement('option');o.value=v;o.textContent=v;status.append(o);}
+   status.value=item.statut||'En attente';
+   status.onchange=async()=>{status.disabled=true;try{await formationBridge('signal_update',{session:rtnSession,id:item.id,statut:status.value});}catch(err){alert('Refusé : '+err.message);}finally{status.disabled=false;}};
+   article.append(status);root.append(article);
+  }
+ }catch(err){root.textContent='Accès refusé ou serveur indisponible : '+err.message;}
+};
+$('signalsBack').onclick=()=>view('home');
 
   </script>
  </body>
