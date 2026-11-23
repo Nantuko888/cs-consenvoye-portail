@@ -1428,6 +1428,18 @@ document.addEventListener("click", (e) => {
     rtnOpened=true;rtnPending=true;
     try{rtnTab.focus()}catch(e){}
   }
+  // Fermeture directe depuis la page Formation, de même origine que le portail.
+  // Le message postMessage reste disponible comme solution de repli.
+  window.__closeRtnFromFormation=function(){
+    if(!rtnFrameLayer)return;
+    closeRtn(false);
+    // On retourne à l'écran Mes révisions sans détruire l'iframe RTN.
+    const menu=document.getElementById('revisions-screen');
+    if(menu && menu.style.display==='none'){
+      menu.style.display='block';
+      menu.setAttribute('aria-hidden','false');
+    }
+  };
   // Même origine GitHub : revisions.html peut appeler cette fonction depuis le clic.
   window.__openRtnFromRevisions=openRtn;
   window.addEventListener('message',e=>{
@@ -1464,7 +1476,7 @@ document.addEventListener("click", (e) => {
     }else if(e.data.type==='rtn:load-error'){
       // Montrer l'erreur produite par Formation plutôt qu'un chargement infini.
       rtnFrameLayer?.querySelector('[role="status"]')?.remove();
-    }else if(e.data.type==='rtn:exit'){closeRtn();}
+    }else if(e.data.type==='rtn:exit'){window.__closeRtnFromFormation();}
   });
   document.getElementById('logoutBtnPortal')?.addEventListener('click',()=>closeRtn(true));
 
