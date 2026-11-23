@@ -734,6 +734,7 @@ function doLogout(){
   localStorage.removeItem(LS_KEY);
   sessionStorage.removeItem(RTN_TOKEN_KEY);
   sessionStorage.removeItem("cs_formation_session_v2");
+  localStorage.removeItem("cs_formation_remember_v1");
   localStorage.removeItem("cs_role_v1");
   sessionStorage.removeItem("cs_formation_v1");
   localStorage.removeItem("cs_online_badge_cache_v1");
@@ -1352,11 +1353,14 @@ document.addEventListener("click", (e) => {
     // La session mémorisée n'est acceptée que pour l'identité Google déjà
     // vérifiée lors de l'ouverture du portail. Formation la revalide côté serveur.
     if(!account || account!==portalValidatedEmail)return '';
-    try{
-      const cached=JSON.parse(sessionStorage.getItem('cs_formation_session_v2')||'null');
-      if(cached && cached.email===account && cached.expires>Date.now()+30000 &&
-         typeof cached.session==='string' && cached.session)return cached.session;
-    }catch(_){}
+    for(const storage of [sessionStorage,localStorage]){
+      try{
+        const key=storage===sessionStorage?'cs_formation_session_v2':'cs_formation_remember_v1';
+        const cached=JSON.parse(storage.getItem(key)||'null');
+        if(cached && cached.email===account && cached.expires>Date.now()+30000 &&
+           typeof cached.session==='string' && cached.session)return cached.session;
+      }catch(_){}
+    }
     return '';
   }
   function openRtn(){
@@ -1452,6 +1456,7 @@ document.addEventListener("click", (e) => {
     }else if(e.data.type==='rtn:need-google'){
       // Session expirée ou refusée par Formation : revenir au contrôle Google.
       sessionStorage.removeItem('cs_formation_session_v2');
+      localStorage.removeItem('cs_formation_remember_v1');
       closeRtn(true);
       requestGoogleForRtn();
     }else if(e.data.type==='rtn:loaded'){
