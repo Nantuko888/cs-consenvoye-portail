@@ -1344,7 +1344,7 @@ function renderDashboard() { let st = dashboard.stats, all = CHAPTERS.map(c => s
     $('chapters').append(el);
 } renderStats(); requestAnimationFrame(fitRtnFixedView_); }
 function view(id) {
-  for(const x of ['home','dashboardView','chaptersView','setupView','quizView','resultsView','statsView'])
+  for(const x of ['home','dashboardView','chaptersView','setupView','quizView','resultsView','statsView','signalsAdminView'])
     $(x).classList.toggle('hidden',id!==x);
   $('navHome').classList.toggle('active',id==='home');
   $('navStats').classList.toggle('active',id==='statsView');
