@@ -133,7 +133,16 @@ html,body{height:100%;overflow:hidden}
  modal.addEventListener('click',e=>{if(e.target===modal)close();});
  document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
  document.getElementById('back').addEventListener('click',()=>{
-  try{const button=window.parent.document.querySelector('#revisions-screen > button');if(button){button.click();return;}}catch(e){}
+  // Navigation interne : fermer l'écran, sans recharger index.html dans l'iframe.
+  if(window.parent!==window){
+    try{
+      if(typeof window.parent.__closeRevisionsFromMenu==='function'){
+        window.parent.__closeRevisionsFromMenu();return;
+      }
+    }catch(_){}
+    window.parent.postMessage({type:'revisions:close-menu'},window.location.origin);
+    return;
+  }
   window.location.href='index.html';
  });
 })();
