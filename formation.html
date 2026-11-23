@@ -1449,9 +1449,18 @@ $('lastSessionGo').onclick = () => { renderStats(); view('statsView'); };
 $('sidePdf').href = PDF_FILE;
 $('sideHelp').onclick = () => alert('Choisis un chapitre, puis ton niveau et ton parcours. Les corrections et les liens vers le référentiel apparaissent à la fin de chaque séance.');
 $('leaveApp').onclick = () => {
+  // Formation et le portail sont servis depuis le même domaine GitHub.
+  // Un appel direct ferme immédiatement l'écran sans réinitialiser la session.
+  try {
+    if(window.parent !== window &&
+       typeof window.parent.__closeRtnFromFormation === 'function'){
+      window.parent.__closeRtnFromFormation();
+      return;
+    }
+  } catch (_) {}
   const portal = rtnPortalWindow();
-  if (portal && RTN_LAUNCH_NONCE) portal.postMessage({type:'rtn:exit',nonce:RTN_LAUNCH_NONCE}, RTN_PORTAL_ORIGIN);
-  // Le module est intégré au portail : window.close() ne ferme pas une iframe.
+  if(portal && RTN_LAUNCH_NONCE)
+    portal.postMessage({type:'rtn:exit',nonce:RTN_LAUNCH_NONCE}, RTN_PORTAL_ORIGIN);
 };
 
 $('backSetup').onclick = () => view(setupReturnView);
