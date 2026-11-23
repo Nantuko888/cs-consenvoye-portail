@@ -1450,7 +1450,7 @@ document.addEventListener("click", (e) => {
       }else{
         const session=cachedRtnSession(portalValidatedEmail);
         if(!session){closeRtn(true);requestGoogleForRtn();return;}
-        e.source.postMessage({type:'rtn:session',nonce:rtnNonce,session},e.origin);
+        e.source.postMessage({type:'rtn:session',nonce:rtnNonce,session,account:portalValidatedEmail},e.origin);
       }
       rtnPending=false;
     }else if(e.data.type==='rtn:need-google'){
