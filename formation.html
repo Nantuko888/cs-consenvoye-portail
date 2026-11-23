@@ -1231,6 +1231,43 @@ function formationBridge(action, fields={}) {
 }
 
 let dashboard = null, bank = INITIAL_BANK, chapter = '04', current = [], answers = [], index = 0, startTime = 0, questionStart = 0, level = 'Mixte';
+let rtnServerReady = false;
+const RTN_DASHBOARD_CACHE_KEY='cs_rtn_dashboard_cache_v1';
+function rtnCacheDashboard_(email,data){
+  if(!email || !data || !Array.isArray(data.questions) || !data.stats)return;
+  try{localStorage.setItem(RTN_DASHBOARD_CACHE_KEY,JSON.stringify({
+    email, savedAt:Date.now(), data
+  }));}catch(_){}
+}
+function rtnShowCachedDashboard_(email){
+  if(!email || !rtnGetRememberedSession_(email))return false;
+  try{
+    const cached=JSON.parse(localStorage.getItem(RTN_DASHBOARD_CACHE_KEY)||'null');
+    if(!cached || cached.email!==email || Date.now()-cached.savedAt>50*60*1000 ||
+       !cached.data || !Array.isArray(cached.data.questions) || !cached.data.stats)return false;
+    dashboard=cached.data;
+    rtnSetBank_(dashboard.questions);
+    renderDashboard();
+    rtnServerReady=false;
+    const note=document.getElementById('rtn-sync-status')||document.createElement('div');
+    note.id='rtn-sync-status';
+    note.setAttribute('role','status');
+    note.style.cssText='position:fixed;top:6px;right:8px;z-index:100000;background:#183653;color:#fff;border:1px solid #56758f;border-radius:10px;padding:7px 11px;font:600 12px system-ui';
+    note.textContent='Synchronisation des révisions…';
+    document.body.appendChild(note);
+    rtnUnlock();
+    return true;
+  }catch(_){return false;}
+}
+function rtnDashboardVerified_(email,data){
+  dashboard=data;
+  rtnSetBank_(data.questions);
+  renderDashboard();
+  rtnCacheDashboard_(email,data);
+  rtnServerReady=true;
+  document.getElementById('rtn-sync-status')?.remove();
+  rtnUnlock();
+}
 const escapeText = s => String(s ?? '');
 const chaptersMap = Object.fromEntries(CHAPTERS.map(c => [c.id, c]));
 /* RTN — banque opérationnelle : mise en service progressive après migration Sheets.
@@ -1351,7 +1388,7 @@ function shuffle(a) { a = [...a]; for (let i = a.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
 } return a; }
-function start() { level = $('level').value; const mode = $('mode').value; const pool = bank.filter(q => q.chap === chapter && (level === 'Mixte' || q.level === level) && (mode === 'Tout' || q.mode === mode)); let hist = []; if (!online)
+function start() { if(!rtnServerReady){alert('Synchronisation en cours. La séance sera disponible dès que le serveur aura confirmé votre session.');return;} level = $('level').value; const mode = $('mode').value; const pool = bank.filter(q => q.chap === chapter && (level === 'Mixte' || q.level === level) && (mode === 'Tout' || q.mode === mode)); let hist = []; if (!online)
     hist = store().responses;
 else if (dashboard?.seenIds)
     hist = dashboard.seenIds; const count = Math.min(Number($('count').value), pool.length); let seen = new Set(hist.map(r => r.id)); let picked = shuffle(pool.filter(q => !seen.has(q.id))).concat(shuffle(pool.filter(q => seen.has(q.id)))).slice(0, count); current = picked.map(q => ({ ...q, display: shuffle(q.options.map((s, i) => ({ text: s, original: i }))) })); answers = Array(current.length).fill(null); index = 0; startTime = Date.now(); questionStart = Date.now(); renderQuestion(); view('quizView'); }
@@ -1488,14 +1525,18 @@ window.addEventListener('message', ev=>{
     rtnConnecting=true;
     rtnLock('Vérification de l’accès…');
     const session=String(ev.data.session||'');
+    const email=String(ev.data.account||'').trim().toLowerCase();
     rtnSession=session;
+    rtnShowCachedDashboard_(email);
     formationBridge('dashboard',{session}).then(data=>{
-      dashboard=data;rtnSetBank_(data.questions);renderDashboard();
-      rtnConnecting=false;rtnUnlock();
+      rtnDashboardVerified_(email,data);
+      rtnConnecting=false;
     }).catch(()=>{
       // Une session expirée est rejetée : l'utilisateur doit alors se
       // réauthentifier normalement. Aucun quiz n'est affiché sans validation.
       rtnForgetRememberedSession_();
+      rtnServerReady=false;
+      document.getElementById('rtn-sync-status')?.remove();
       rtnSession='';rtnConnecting=false;
       const portal=rtnPortalWindow();
       if(portal)portal.postMessage({type:'rtn:need-google',nonce:RTN_LAUNCH_NONCE},RTN_PORTAL_ORIGIN);
@@ -1512,11 +1553,15 @@ window.addEventListener('message', ev=>{
   cached=rtnGetRememberedSession_(email);
   if(cached && cached.email===email && cached.expires>Date.now() && cached.session){
     rtnSession=cached.session;
+    rtnShowCachedDashboard_(email);
     formationBridge('dashboard',{session:rtnSession}).then(data=>{
-      dashboard=data;rtnSetBank_(data.questions);renderDashboard();rtnConnecting=false;rtnUnlock();
+      rtnDashboardVerified_(email,data);rtnConnecting=false;
     }).catch(()=>{
       rtnForgetRememberedSession_();
+      rtnServerReady=false;
+      document.getElementById('rtn-sync-status')?.remove();
       rtnSession='';rtnConnecting=false;
+      rtnLock('Vérification de l’accès…');
       rtnConnectFresh(ev.data.credential,email);
     });
     return;
@@ -1536,11 +1581,8 @@ function rtnConnectFresh(credential,email) {
     if(!result || !result.session || !result.dashboard)throw Error('Réponse de connexion incomplète');
     rtnSession=result.session;
     if(email) rtnRememberSession_(email,rtnSession);
-    dashboard=result.dashboard;
-    rtnSetBank_(dashboard.questions);
-    renderDashboard();
+    rtnDashboardVerified_(email,result.dashboard);
     rtnConnecting=false;
-    rtnUnlock();
   }).catch(err=>{
     // Pendant la transition, l'ancien déploiement Apps Script connaît connect
     // et dashboard mais pas encore bootstrap. Ne pas bloquer les utilisateurs.
@@ -1549,7 +1591,7 @@ function rtnConnectFresh(credential,email) {
         if(!result || !result.ok || !result.session)throw Error('Connexion refusée');
         rtnSession=result.session;
         if(email) rtnRememberSession_(email,rtnSession);
-        refresh(()=>{rtnConnecting=false;rtnUnlock();});
+        refresh(()=>{rtnServerReady=true;rtnCacheDashboard_(email,dashboard);rtnConnecting=false;rtnUnlock();});
       }).catch(fallbackErr=>{
         rtnConnecting=false;
         rtnLock('Accès Formation refusé : '+(fallbackErr && fallbackErr.message || fallbackErr));
