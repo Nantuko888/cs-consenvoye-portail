@@ -37,7 +37,13 @@ function rtnSignalSheet_(){
 }
 function rtnSignalPermissions_(session){
   const who=rtnSignalIdentity_(session);
-  return {canManage:!!who.userId && rtnSignalIsAdmin_(who)};
+  if(!rtnSignalIsAdmin_(who))return {canManage:false};
+  const sheet=SpreadsheetApp.getActiveSpreadsheet().getSheetByName(RTN_SIGNAL_SHEET);
+  const lastRow=sheet ? sheet.getLastRow() : 0;
+  const pendingCount=lastRow > 1
+    ? sheet.getRange(2,7,lastRow-1,1).getValues().filter(([status])=>status==='En attente').length
+    : 0;
+  return {canManage:true,pendingCount};
 }
 function rtnSignalCreate_(session,questionId,motif,commentaire){
   const who=rtnSignalIdentity_(session);
