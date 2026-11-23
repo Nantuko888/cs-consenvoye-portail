@@ -1560,17 +1560,16 @@ document.addEventListener("click", (e) => {
     document.body.appendChild(revisionsScreen);
 
     function closeRevisions() {
-      if (!revisionsOpened) return;
+      // La fermeture doit être idempotente : même si l'état revisionsOpened
+      // a été désynchronisé par le navigateur Android, le menu disparaît.
       revisionsOpened = false;
       revisionsScreen.style.display = 'none';
       revisionsScreen.setAttribute('aria-hidden', 'true');
-      // Conserver la page de choix déjà chargée pour le prochain retour.
-      // Ne jamais déclencher history.back() : selon la PWA, cela peut sortir du portail.
-      // On rétablit l'URL du portail sans rechargement ni navigation externe.
-      history.replaceState({page:'portal'}, '', location.pathname + '?portal=1');
+      // Conserver l'iframe et la session RTN. Ne jamais recharger le portail.
+      try{history.replaceState({page:'portal'}, '', location.pathname + '?portal=1');}catch(_){}
     }
     // Retour direct du menu Révisions : ne jamais recharger index.html dans l'iframe.
-    window.__closeRevisionsFromMenu=closeRevisions;
+    window.__closeRevisionsFromMenu=function(){closeRevisions();return true;};
     function openRevisions(e) {
       if (e) e.preventDefault();
       if (portal.style.display === 'none' || revisionsOpened) return;
