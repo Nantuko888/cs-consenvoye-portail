@@ -2,8 +2,7 @@
  * NE PAS créer un second doPost. Ajouter les quatre actions au routeur
  * Formation_Bridge_POST.gs (instructions dans README-SIGNALEMENTS-RTN.md).
  * Les identités sont toujours issues de rtnRequireSession_, jamais du client.
- * Configurer la propriété de script RTN_SIGNAL_ADMIN_IDS avec les ID
- * utilisateurs exacts (rtnUserId_(identity)), séparés par des virgules.
+ * Le suivi est réservé aux profils actifs dont le rôle serveur est admin.
  */
 const RTN_SIGNAL_SHEET='RTN_Signalements';
 const RTN_SIGNAL_HEADERS=['id','date','question_id','motif','commentaire','auteur_id','statut','date_traitement','traite_par'];
@@ -14,13 +13,18 @@ function rtnSignalIdentity_(session){
   const identity=rtnRequireSession_(String(session||''));
   return {identity,userId:String(rtnUserId_(identity)||'')};
 }
-function rtnSignalIsAdmin_(userId){
-  const raw=PropertiesService.getScriptProperties().getProperty('RTN_SIGNAL_ADMIN_IDS')||'';
-  return raw.split(',').map(s=>s.trim()).filter(Boolean).includes(String(userId));
+function rtnSignalIsAdmin_(who){
+  if(!who.userId)return false;
+  return pseRows_('Utilisateurs').some(r=>
+    String(r[0])===who.userId &&
+    String(r[2]||'').trim().toLowerCase()===who.identity.email &&
+    String(r[3]||'').trim().toLowerCase()==='admin' &&
+    r[4]===true
+  );
 }
 function rtnSignalAdmin_(session){
   const who=rtnSignalIdentity_(session);
-  if(!who.userId || !rtnSignalIsAdmin_(who.userId))throw Error('Accès administrateur refusé');
+  if(!who.userId || !rtnSignalIsAdmin_(who))throw Error('Accès administrateur refusé');
   return who;
 }
 function rtnSignalSheet_(){
@@ -33,7 +37,7 @@ function rtnSignalSheet_(){
 }
 function rtnSignalPermissions_(session){
   const who=rtnSignalIdentity_(session);
-  return {canManage:!!who.userId && rtnSignalIsAdmin_(who.userId)};
+  return {canManage:!!who.userId && rtnSignalIsAdmin_(who)};
 }
 function rtnSignalCreate_(session,questionId,motif,commentaire){
   const who=rtnSignalIdentity_(session);
@@ -53,19 +57,22 @@ function rtnSignalCreate_(session,questionId,motif,commentaire){
     const duplicate=rows.some(r=>String(r[2])===id && String(r[5])===who.userId && String(r[6])==='En attente' && r[1] instanceof Date && Date.now()-r[1].getTime()<60000);
     if(duplicate)throw Error('Un signalement récent existe déjà pour cette question');
     const signalId='SIG_'+Utilities.getUuid();
-    sh.appendRow([signalId,new Date(),id,motif,commentaire,who.userId,'En attente','','']);
+    sh.appendRow([signalId,new Date(),id,motif,commentaire ? "'" + commentaire : '',who.userId,'En attente','','']);
     return {saved:true,id:signalId};
   }finally{lock.releaseLock();}
 }
 function rtnSignalList_(session){
   rtnSignalAdmin_(session);
-  const sh=rtnSignalSheet_(),n=sh.getLastRow();
+  const sh=SpreadsheetApp.getActiveSpreadsheet().getSheetByName(RTN_SIGNAL_SHEET);
+  if(!sh)return {items:[]};
+  const n=rtnSignalSheet_().getLastRow();
   if(n<2)return {items:[]};
+  const authors=new Map(pseRows_('Utilisateurs').map(r=>[String(r[0]),String(r[1]||r[2]||r[0])]));
   const vals=sh.getRange(Math.max(2,n-499),1,Math.min(n-1,499),RTN_SIGNAL_HEADERS.length).getValues();
   return {items:vals.reverse().map(r=>({
     id:String(r[0]),date:r[1] instanceof Date?r[1].toISOString():String(r[1]),
     question_id:String(r[2]),motif:String(r[3]),commentaire:String(r[4]),
-    auteur:String(r[5]),statut:String(r[6]),
+    auteur:authors.get(String(r[5]))||String(r[5]),statut:String(r[6]),
     date_traitement:r[7] instanceof Date?r[7].toISOString():String(r[7]||''),
     traite_par:String(r[8]||'')
   }))};
