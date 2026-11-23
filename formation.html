@@ -924,7 +924,7 @@ html,body{height:100%;overflow:hidden}
       <button class="nav" id="sideChapters" type="button"><span class="nav-symbol">▦</span> Les 13 chapitres</button>
       <button class="nav" id="navStats" type="button"><span class="nav-symbol">↗</span> Ma progression</button>
       <a class="nav" id="sidePdf" target="_blank" rel="noopener noreferrer"><span class="nav-symbol">▤</span> Référentiel PDF</a>
-      <button class="nav hidden" id="sideSignals" hidden type="button">⚑ Signalements RTN</button><button class="nav" id="sideHelp" type="button"><span class="nav-symbol">ⓘ</span> Aide</button>
+      <button class="nav" id="sideHelp" type="button"><span class="nav-symbol">ⓘ</span> Aide</button>
       <div class="aside-bottom"><div class="side-caption">FORMATION & SECOURS</div><div class="side-footnote">Entraînement et révision<br>13 chapitres · Édition 2026</div></div>
     </aside>
    <main class="main">
@@ -933,6 +933,7 @@ html,body{height:100%;overflow:hidden}
      <div class="rtn-content" id="rtnContent">
      <section id="home">
       <div class="home-welcome"><div><h1>Bienvenue sur ton <em>simulateur RTN</em></h1><p>Entraîne-toi, évalue tes connaissances et progresse dans les Références Techniques Nationales.</p></div><span class="training-marker">✚ &nbsp; Formation · Révision · Progression</span></div>
+      <button class="btn ghost hidden rtn-standard-control" id="homeSignals" type="button" hidden>Signalements RTN</button>
       <div class="quick-actions">
        <button class="action-tile action-red" id="quickStart" type="button"><span class="tile-icon">▷</span><strong>Commencer une séance</strong><small>Un chapitre au hasard et des questions mélangées</small><span class="tile-arrow">›</span></button>
        <button class="action-tile action-blue" id="tileDashboard" type="button"><span class="tile-icon">▥</span><strong>Tableau de bord</strong><small>Résultats, scores et domaines à renforcer</small><span class="tile-arrow">›</span></button>
@@ -1070,7 +1071,7 @@ html,body{height:100%;overflow:hidden}
        </h2>
        <div class="answers" id="options">
        </div>
-       <button class="btn text" id="signalOpen" type="button">⚑ Signaler cette question</button><div class="quiz-footer">
+       <button class="btn text" id="signalOpen" type="button">Signaler une erreur</button><div class="quiz-footer">
         <button class="btn ghost" id="prev">
          ← Précédent
         </button>
@@ -1121,7 +1122,7 @@ html,body{height:100%;overflow:hidden}
       </div>
      </div>
     </section>
-    <section class="hidden rtn-subview" id="signalsAdminView"><button class="btn text" id="signalsBack">← Retour accueil</button><h1>Signalements RTN</h1><p class="muted">Réservé aux administrateurs</p><div class="panel" id="signalsList"></div></section><section class="hidden rtn-subview" id="statsView">
+    <section class="hidden rtn-subview" id="signalsAdminView"><button class="btn text rtn-subview-back rtn-standard-control rtn-return-control" id="signalsBack" type="button">← Retour accueil</button><h1>Signalements RTN</h1><p class="muted">Réservé aux administrateurs</p><div class="panel" id="signalsList"></div></section><section class="hidden rtn-subview" id="statsView">
      <div class="rtn-sticky-return"><button class="btn text rtn-subview-back rtn-standard-control rtn-return-control" id="backStats" type="button">← Retour accueil</button></div>
      <div class="eyebrow">
       ANALYSE PERSONNELLE
@@ -1477,6 +1478,7 @@ $('again').onclick = () => { refresh(() => view('home')); };
 $('retry').onclick = () => setup(chapter);
 // Attente de la connexion vérifiée par le serveur, pas de données anonymes ni de mode local.
 function rtnLock(message) {
+  signalHideAdmin_();
   let box=document.getElementById('rtn-lock');
   if (!box) {
     box=document.createElement('div');box.id='rtn-lock';
@@ -1602,7 +1604,7 @@ function rtnConnectFresh(credential,email) {
         if(!result || !result.ok || !result.session)throw Error('Connexion refusée');
         rtnSession=result.session;
         if(email) rtnRememberSession_(email,rtnSession);
-        refresh(()=>{rtnServerReady=true;rtnCacheDashboard_(email,dashboard);rtnConnecting=false;rtnUnlock();});
+        refresh(()=>{rtnServerReady=true;signalCheckPermissions();rtnCacheDashboard_(email,dashboard);rtnConnecting=false;rtnUnlock();});
       }).catch(fallbackErr=>{
         rtnConnecting=false;
         rtnLock('Accès Formation refusé : '+(fallbackErr && fallbackErr.message || fallbackErr));
@@ -1628,50 +1630,126 @@ if (RTN_LAUNCH_NONCE) {
 }
 
 
-let signalIsAdmin=false;
-function signalCheckPermissions(){
- signalIsAdmin=false;$('sideSignals').hidden=true;
- formationBridge('signal_permissions',{session:rtnSession}).then(r=>{
-  signalIsAdmin=rtnServerReady&&r?.canManage===true;
-  $('sideSignals').hidden=!signalIsAdmin;
-  $('sideSignals').classList.toggle('hidden',!signalIsAdmin);
- }).catch(()=>{});
+var signalAdminSession = '';
+
+function signalHideAdmin_() {
+  signalAdminSession = '';
+  $('homeSignals').hidden = true;
+  $('homeSignals').classList.add('hidden');
+  $('signalsList').replaceChildren();
+  if (!$('signalsAdminView').classList.contains('hidden')) view('home');
 }
-$('signalOpen').onclick=()=>{
- const q=current[index];if(!rtnServerReady||!rtnSession||!q?.id)return;
- $('signalForm').dataset.questionId=String(q.id);
- $('signalQuestionText').textContent=q.q;
- $('signalReason').value='incorrecte';$('signalComment').value='';$('signalStatus').textContent='';
- $('signalDialog').showModal();
-};
-$('signalCancel').onclick=()=>$('signalDialog').close();
-$('signalForm').onsubmit=async e=>{
- e.preventDefault();$('signalSend').disabled=true;
- try{await formationBridge('signal_create',{session:rtnSession,question_id:$('signalForm').dataset.questionId,motif:$('signalReason').value,commentaire:$('signalComment').value});$('signalDialog').close();alert('Signalement enregistré.');}
- catch(err){$('signalStatus').textContent='Non enregistré : '+err.message;}
- finally{$('signalSend').disabled=false;}
-};
-$('sideSignals').onclick=async()=>{
- if(!signalIsAdmin)return;view('signalsAdminView');
- const root=$('signalsList');root.textContent='Chargement…';
- try{
-  const r=await formationBridge('signal_list',{session:rtnSession});
-  if(!signalIsAdmin)return;root.replaceChildren();
-  if(!r?.items?.length){root.textContent='Aucun signalement.';return;}
-  for(const item of r.items){
-   const article=document.createElement('article');article.style.cssText='padding:12px 0;border-bottom:1px solid #ddd';
-   for(const value of [(item.question_id||'')+' · '+(item.motif||''),item.question||'',(item.auteur||'')+' · '+(item.date||''),item.commentaire||'']){
-    const p=document.createElement('p');p.textContent=value;article.append(p);
-   }
-   const status=document.createElement('select');
-   for(const v of ['En attente','Corrigé','Rejeté']){const o=document.createElement('option');o.value=v;o.textContent=v;status.append(o);}
-   status.value=item.statut||'En attente';
-   status.onchange=async()=>{status.disabled=true;try{await formationBridge('signal_update',{session:rtnSession,id:item.id,statut:status.value});}catch(err){alert('Refusé : '+err.message);}finally{status.disabled=false;}};
-   article.append(status);root.append(article);
+
+async function signalCheckPermissions() {
+  signalHideAdmin_();
+  const session = rtnSession;
+  try {
+    const result = await formationBridge('signal_permissions', { session });
+    if (!rtnServerReady || session !== rtnSession || result?.canManage !== true) return;
+    signalAdminSession = session;
+    $('homeSignals').hidden = false;
+    $('homeSignals').classList.remove('hidden');
+    requestAnimationFrame(fitRtnFixedView_);
+  } catch {
+    // Keep the entry hidden if the server cannot verify access.
   }
- }catch(err){root.textContent='Accès refusé ou serveur indisponible : '+err.message;}
+}
+
+$('signalOpen').onclick = () => {
+  const question = current[index];
+  if (!rtnServerReady || !rtnSession || !question?.id) return;
+  $('signalForm').dataset.questionId = String(question.id);
+  $('signalQuestionText').textContent = question.q;
+  $('signalReason').value = 'incorrecte';
+  $('signalComment').value = '';
+  $('signalStatus').textContent = '';
+  $('signalDialog').showModal();
 };
-$('signalsBack').onclick=()=>view('home');
+$('signalCancel').onclick = () => $('signalDialog').close();
+$('signalForm').onsubmit = async event => {
+  event.preventDefault();
+  const send = $('signalSend');
+  if (send.disabled) return;
+  send.disabled = true;
+  try {
+    const result = await formationBridge('signal_create', {
+      session: rtnSession,
+      question_id: $('signalForm').dataset.questionId,
+      motif: $('signalReason').value,
+      commentaire: $('signalComment').value
+    });
+    if (result?.saved !== true) throw Error('Enregistrement non confirmé');
+    $('signalDialog').close();
+    alert('Signalement enregistré.');
+  } catch (err) {
+    $('signalStatus').textContent = 'Non enregistré : ' + err.message;
+  } finally {
+    send.disabled = false;
+  }
+};
+
+$('homeSignals').onclick = async () => {
+  const session = rtnSession;
+  if (!rtnServerReady || !session || signalAdminSession !== session) return;
+  view('signalsAdminView');
+  const root = $('signalsList');
+  root.textContent = 'Chargement…';
+  try {
+    const result = await formationBridge('signal_list', { session });
+    if (signalAdminSession !== session || rtnSession !== session) return;
+    root.replaceChildren();
+    if (!result?.items?.length) {
+      root.textContent = 'Aucun signalement.';
+      return;
+    }
+    for (const item of result.items) {
+      const article = document.createElement('article');
+      article.style.cssText = 'padding:12px 0;border-bottom:1px solid #ddd';
+      const question = bank.find(entry => entry.id === item.question_id);
+      const motif = Array.from($('signalReason').options).find(option => option.value === item.motif)?.textContent || item.motif;
+      const date = new Date(item.date);
+      const formattedDate = Number.isNaN(date.getTime()) ? item.date : date.toLocaleString('fr-FR');
+      for (const value of [item.question_id + ' · ' + motif, question?.q, item.auteur + ' · ' + formattedDate, item.commentaire]) {
+        if (!value) continue;
+        const paragraph = document.createElement('p');
+        paragraph.textContent = value;
+        article.append(paragraph);
+      }
+      const status = document.createElement('select');
+      status.setAttribute('aria-label', 'Statut du signalement ' + item.question_id);
+      for (const value of ['En attente', 'Corrigé', 'Rejeté']) {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = value;
+        status.append(option);
+      }
+      let savedStatus = item.statut || 'En attente';
+      status.value = savedStatus;
+      status.onchange = async () => {
+        if (signalAdminSession !== session || rtnSession !== session) return;
+        const nextStatus = status.value;
+        status.disabled = true;
+        try {
+          const result = await formationBridge('signal_update', { session, id: item.id, statut: nextStatus });
+          if (result?.updated !== true) throw Error('Modification non confirmée');
+          savedStatus = nextStatus;
+        } catch (err) {
+          status.value = savedStatus;
+          alert('Refusé : ' + err.message);
+        } finally {
+          status.disabled = false;
+        }
+      };
+      article.append(status);
+      root.append(article);
+    }
+  } catch (err) {
+    if (signalAdminSession === session && rtnSession === session) {
+      root.textContent = 'Accès refusé ou serveur indisponible : ' + err.message;
+    }
+  }
+};
+$('signalsBack').onclick = () => view('home');
 
   </script>
  </body>
