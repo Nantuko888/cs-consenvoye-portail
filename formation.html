@@ -1459,8 +1459,30 @@ window.addEventListener('message', ev=>{
     rtnRequestCredential();
     return;
   }
+  // Reprise rapide de la session existante : toujours validée par le serveur.
+  if(ev.data.type==='rtn:session' && RTN_LAUNCH_NONCE &&
+     ev.data.nonce===RTN_LAUNCH_NONCE && !rtnConnecting){
+    if(!online){rtnLock('Connexion au serveur indisponible.');return;}
+    rtnConnecting=true;
+    rtnLock('Vérification de l’accès…');
+    const session=String(ev.data.session||'');
+    rtnSession=session;
+    formationBridge('dashboard',{session}).then(data=>{
+      dashboard=data;rtnSetBank_(data.questions);renderDashboard();
+      rtnConnecting=false;rtnUnlock();
+    }).catch(()=>{
+      // Une session expirée est rejetée : l'utilisateur doit alors se
+      // réauthentifier normalement. Aucun quiz n'est affiché sans validation.
+      sessionStorage.removeItem(FORMATION_SESSION_KEY);
+      rtnSession='';rtnConnecting=false;
+      const portal=rtnPortalWindow();
+      if(portal)portal.postMessage({type:'rtn:need-google',nonce:RTN_LAUNCH_NONCE},RTN_PORTAL_ORIGIN);
+      else rtnLock('Session expirée. Retourne au portail pour te reconnecter.');
+    });
+    return;
+  }
   if(ev.data.type!=='rtn:credential' || !RTN_LAUNCH_NONCE || ev.data.nonce!==RTN_LAUNCH_NONCE || rtnConnecting) return;
-  if(!online) {rtnLock('L’application doit être ouverte depuis Apps Script.');return;}
+  if(!online) {rtnLock('Connexion au serveur indisponible.');return;}
   rtnConnecting=true;
   rtnLock('Vérification de l’accès…');
   const email=rtnCredentialEmail(ev.data.credential);
