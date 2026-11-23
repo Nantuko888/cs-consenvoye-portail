@@ -626,6 +626,10 @@ aside{background:linear-gradient(180deg,#081321 0%,#0b1b32 70%,#7d2027 170%);bor
 .logout-btn{background:#53242d;border:1px solid #b74449;border-radius:12px;color:#ffeff0;font-weight:850;padding:11px 16px;cursor:pointer}
 .logout-btn:hover{background:#922b37}
 .home-welcome{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:15px 0 24px}
+.home-welcome-copy{min-width:0}
+.home-welcome-actions{display:flex;flex-direction:column;align-items:flex-end;flex:0 0 auto;gap:8px}
+#homeSignals{max-width:36vw;white-space:normal;text-align:center}
+@media(max-width:760px){.home-welcome-actions:has(#homeSignals[hidden]){display:none}#homeSignals{font-size:12px!important}}
 .home-welcome h1{color:white;font-size:clamp(27px,2.7vw,39px);margin:0 0 8px;font-style:italic;font-weight:900}.home-welcome h1 em{color:#f2464d;font-style:italic}
 .home-welcome p{color:#b8c9da;line-height:1.6;margin:0;font-size:14px;max-width:720px}.training-marker{background:#1a2a40;border:1px solid #2d435b;border-radius:11px;font-size:11px;color:#cbd4e2;padding:13px;white-space:nowrap}
 .quick-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:18px}
@@ -932,8 +936,16 @@ html,body{height:100%;overflow:hidden}
      <div class="topline"><span class="eyebrow">ESPACE PERSONNEL DE RÉVISION</span><div class="user-actions"><span class="profile rtn-standard-control rtn-profile" id="profile">Bonjour</span><button class="logout-btn rtn-standard-control rtn-return-control" id="leaveApp" type="button">← Mes Révisions</button></div></div>
      <div class="rtn-content" id="rtnContent">
      <section id="home">
-      <div class="home-welcome"><div><h1>Bienvenue sur ton <em>simulateur RTN</em></h1><p>Entraîne-toi, évalue tes connaissances et progresse dans les Références Techniques Nationales.</p></div><span class="training-marker">✚ &nbsp; Formation · Révision · Progression</span></div>
-      <button class="btn ghost hidden rtn-standard-control" id="homeSignals" type="button" hidden>Signalements RTN</button>
+      <div class="home-welcome">
+       <div class="home-welcome-copy">
+        <h1>Bienvenue sur ton <em>simulateur RTN</em></h1>
+        <p>Entraîne-toi, évalue tes connaissances et progresse dans les Références Techniques Nationales.</p>
+       </div>
+       <div class="home-welcome-actions">
+        <button class="btn ghost hidden rtn-standard-control" id="homeSignals" type="button" hidden>Signalements RTN</button>
+        <span class="training-marker">✚ &nbsp; Formation · Révision · Progression</span>
+       </div>
+      </div>
       <div class="quick-actions">
        <button class="action-tile action-red" id="quickStart" type="button"><span class="tile-icon">▷</span><strong>Commencer une séance</strong><small>Un chapitre au hasard et des questions mélangées</small><span class="tile-arrow">›</span></button>
        <button class="action-tile action-blue" id="tileDashboard" type="button"><span class="tile-icon">▥</span><strong>Tableau de bord</strong><small>Résultats, scores et domaines à renforcer</small><span class="tile-arrow">›</span></button>
