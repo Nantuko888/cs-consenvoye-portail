@@ -1164,6 +1164,28 @@ const $ = x => document.getElementById(x), online = true;
 let RTN_LAUNCH_NONCE = new URL(location.href).searchParams.get('launch_nonce') || '';
 let rtnSession = '';
 const FORMATION_SESSION_KEY='cs_formation_session_v2';
+const FORMATION_PERSISTENT_SESSION_KEY='cs_formation_remember_v1';
+function rtnRememberSession_(email,session){
+  if(!email || !session)return;
+  const saved={email,session,expires:Date.now()+50*60*1000};
+  sessionStorage.setItem(FORMATION_SESSION_KEY,JSON.stringify(saved));
+  try{localStorage.setItem(FORMATION_PERSISTENT_SESSION_KEY,JSON.stringify(saved));}catch(_){}
+}
+function rtnForgetRememberedSession_(){
+  sessionStorage.removeItem(FORMATION_SESSION_KEY);
+  try{localStorage.removeItem(FORMATION_PERSISTENT_SESSION_KEY);}catch(_){}
+}
+function rtnGetRememberedSession_(email){
+  for(const storage of [sessionStorage,localStorage]){
+    try{
+      const key=storage===sessionStorage?FORMATION_SESSION_KEY:FORMATION_PERSISTENT_SESSION_KEY;
+      const saved=JSON.parse(storage.getItem(key)||'null');
+      if(saved && saved.email===email && saved.expires>Date.now()+30000 &&
+         typeof saved.session==='string' && saved.session)return saved;
+    }catch(_){}
+  }
+  return null;
+}
 const RTN_PORTAL_ORIGIN = 'https://nantuko888.github.io';
 
 /* Pont de communication sécurisé : POST dans une iframe éphémère.
@@ -1473,7 +1495,7 @@ window.addEventListener('message', ev=>{
     }).catch(()=>{
       // Une session expirée est rejetée : l'utilisateur doit alors se
       // réauthentifier normalement. Aucun quiz n'est affiché sans validation.
-      sessionStorage.removeItem(FORMATION_SESSION_KEY);
+      rtnForgetRememberedSession_();
       rtnSession='';rtnConnecting=false;
       const portal=rtnPortalWindow();
       if(portal)portal.postMessage({type:'rtn:need-google',nonce:RTN_LAUNCH_NONCE},RTN_PORTAL_ORIGIN);
@@ -1487,13 +1509,13 @@ window.addEventListener('message', ev=>{
   rtnLock('Vérification de l’accès…');
   const email=rtnCredentialEmail(ev.data.credential);
   let cached=null;
-  try{cached=JSON.parse(sessionStorage.getItem(FORMATION_SESSION_KEY)||'null');}catch(e){}
+  cached=rtnGetRememberedSession_(email);
   if(cached && cached.email===email && cached.expires>Date.now() && cached.session){
     rtnSession=cached.session;
     formationBridge('dashboard',{session:rtnSession}).then(data=>{
       dashboard=data;rtnSetBank_(data.questions);renderDashboard();rtnConnecting=false;rtnUnlock();
     }).catch(()=>{
-      sessionStorage.removeItem(FORMATION_SESSION_KEY);
+      rtnForgetRememberedSession_();
       rtnSession='';rtnConnecting=false;
       rtnConnectFresh(ev.data.credential,email);
     });
@@ -1513,7 +1535,7 @@ function rtnConnectFresh(credential,email) {
   formationBridge('bootstrap',{credential}).then(result=>{
     if(!result || !result.session || !result.dashboard)throw Error('Réponse de connexion incomplète');
     rtnSession=result.session;
-    if(email) sessionStorage.setItem(FORMATION_SESSION_KEY,JSON.stringify({email,session:rtnSession,expires:Date.now()+55*60*1000}));
+    if(email) rtnRememberSession_(email,rtnSession);
     dashboard=result.dashboard;
     rtnSetBank_(dashboard.questions);
     renderDashboard();
@@ -1526,7 +1548,7 @@ function rtnConnectFresh(credential,email) {
       formationBridge('connect',{credential}).then(result=>{
         if(!result || !result.ok || !result.session)throw Error('Connexion refusée');
         rtnSession=result.session;
-        if(email) sessionStorage.setItem(FORMATION_SESSION_KEY,JSON.stringify({email,session:rtnSession,expires:Date.now()+55*60*1000}));
+        if(email) rtnRememberSession_(email,rtnSession);
         refresh(()=>{rtnConnecting=false;rtnUnlock();});
       }).catch(fallbackErr=>{
         rtnConnecting=false;
