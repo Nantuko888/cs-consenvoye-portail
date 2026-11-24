@@ -471,7 +471,6 @@ body.mode-portal{
     width: calc(100vw - 20px);
   }
 }
-body:not(.formation-authorized) .rtn-launch{display:none!important}
 </style>
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -616,11 +615,9 @@ function showPortal(){
 }
 function setFormationAccess_(allowed){
   sessionStorage.setItem('cs_formation_v1', allowed === true ? '1' : allowed === false ? '0' : 'inconnu');
-  document.body.classList.toggle('formation-authorized', allowed === true);
 }
 
 function showLogin(){
-  document.body.classList.remove('formation-authorized');
   portalValidatedEmail = '';
   document.body.classList.remove("mode-portal");
   document.body.classList.add("mode-login");
@@ -1582,7 +1579,7 @@ document.addEventListener("click", (e) => {
       if (e) e.preventDefault();
       const email = portalValidatedEmail;
       if (portal.style.display === 'none' || revisionsOpened || revisionsChecking ||
-          !email || sessionStorage.getItem('cs_formation_v1') !== '1') return;
+          !email) return;
       revisionsChecking = true;
       try {
         const access = await authCheck(email);
@@ -1590,7 +1587,7 @@ document.addEventListener("click", (e) => {
         const allowed = access?.ok === true && access.formation === true;
         setFormationAccess_(allowed);
         if (!allowed) {
-          alert('Accès aux révisions non autorisé.');
+          showDenied();
           return;
         }
       } catch {
