@@ -1304,7 +1304,7 @@ document.addEventListener("click", (e) => {
   'use strict';
 
   // À définir après déploiement du nouvel Apps Script RTN.
-  const RTN_WEBAPP_URL = new URL('formation.html', location.href).href;
+  const RTN_WEBAPP_URL = new URL('formation.html?v=6e04cf57', location.href).href;
   // RTN s'ouvre hors iframe Apps Script ; aucun jeton Google dans l'URL.
   let rtnTab=null, rtnFrameLayer=null, rtnNonce='', rtnOpened=false, rtnPending=false;
   let rtnFrameAccount='', rtnFrameBornAt=0, rtnResultsRequested=false;
@@ -1606,7 +1606,7 @@ document.addEventListener("click", (e) => {
       } finally {
         revisionsChecking = false;
       }
-      if (!revisionsFrame.getAttribute('src')) revisionsFrame.src = 'revisions.html';
+      if (!revisionsFrame.getAttribute('src')) revisionsFrame.src = 'revisions.html?v=6e04cf57';
       revisionsScreen.style.display = 'block';
       revisionsScreen.setAttribute('aria-hidden', 'false');
       revisionsOpened = true;
