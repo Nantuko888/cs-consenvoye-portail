@@ -471,6 +471,7 @@ body.mode-portal{
     width: calc(100vw - 20px);
   }
 }
+body:not(.formation-authorized) .rtn-launch{display:none!important}
 </style>
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -613,7 +614,13 @@ function showPortal(){
   showRefreshBtn();
   markPortalUrl_();
 }
+function setFormationAccess_(allowed){
+  sessionStorage.setItem('cs_formation_v1', allowed === true ? '1' : allowed === false ? '0' : 'inconnu');
+  document.body.classList.toggle('formation-authorized', allowed === true);
+}
+
 function showLogin(){
+  document.body.classList.remove('formation-authorized');
   portalValidatedEmail = '';
   document.body.classList.remove("mode-portal");
   document.body.classList.add("mode-login");
@@ -754,7 +761,7 @@ async function checkAndShow_(email){
     if(res && res.ok === true){
       localStorage.setItem(LS_KEY, email);
       localStorage.setItem("cs_role_v1", String(res.role || "").trim().toLowerCase());
-      sessionStorage.setItem("cs_formation_v1", res.formation === true ? "1" : res.formation === false ? "0" : "inconnu");
+      setFormationAccess_(res.formation);
       portalValidatedEmail = email.trim().toLowerCase();
 
       hideChecking();
@@ -822,7 +829,7 @@ async function handleCredentialResponse(response){
 
       if(res && res.ok === true){
         localStorage.setItem("cs_role_v1", String(res.role || "").trim().toLowerCase());
-        sessionStorage.setItem("cs_formation_v1", res.formation === true ? "1" : res.formation === false ? "0" : "inconnu");
+        setFormationAccess_(res.formation);
         portalValidatedEmail = saved;
         hideSync();
         return;
@@ -1570,9 +1577,28 @@ document.addEventListener("click", (e) => {
     }
     // Retour direct du menu Révisions : ne jamais recharger index.html dans l'iframe.
     window.__closeRevisionsFromMenu=function(){closeRevisions();return true;};
-    function openRevisions(e) {
+    let revisionsChecking = false;
+    async function openRevisions(e) {
       if (e) e.preventDefault();
-      if (portal.style.display === 'none' || revisionsOpened) return;
+      const email = portalValidatedEmail;
+      if (portal.style.display === 'none' || revisionsOpened || revisionsChecking ||
+          !email || sessionStorage.getItem('cs_formation_v1') !== '1') return;
+      revisionsChecking = true;
+      try {
+        const access = await authCheck(email);
+        if (portalValidatedEmail !== email || portal.style.display === 'none') return;
+        const allowed = access?.ok === true && access.formation === true;
+        setFormationAccess_(allowed);
+        if (!allowed) {
+          alert('Accès aux révisions non autorisé.');
+          return;
+        }
+      } catch {
+        alert('Impossible de vérifier l’accès aux révisions. Réessaie dans un instant.');
+        return;
+      } finally {
+        revisionsChecking = false;
+      }
       if (!revisionsFrame.getAttribute('src')) revisionsFrame.src = 'revisions.html';
       revisionsScreen.style.display = 'block';
       revisionsScreen.setAttribute('aria-hidden', 'false');
