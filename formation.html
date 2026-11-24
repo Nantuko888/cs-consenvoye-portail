@@ -1540,6 +1540,10 @@ function rtnRequestCredential() {
 }
 window.addEventListener('message', ev=>{
   if(ev.origin!==RTN_PORTAL_ORIGIN || !ev.data) return;
+  if(ev.data.type==='rtn:show-results'){
+    if(rtnServerReady && RTN_LAUNCH_NONCE && ev.data.nonce===RTN_LAUNCH_NONCE && ev.source===rtnPortalWindow())view('dashboardView');
+    return;
+  }
   if (ev.data.type==='rtn:init' && !RTN_LAUNCH_NONCE && /^[a-zA-Z0-9_-]{16,100}$/.test(String(ev.data.nonce||''))) {
     RTN_LAUNCH_NONCE=ev.data.nonce;
     rtnLock('Vérification de l’accès…');
