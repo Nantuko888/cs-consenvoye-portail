@@ -102,22 +102,23 @@ html,body{height:100%;overflow:hidden}
   rtn:['Références Techniques Nationales','Pour accéder au simulateur RTN, ouvre cette page depuis le portail CS Consenvoye.'],
   tableaux:['Tableaux à compléter','Ce type de question sera intégré aux révisions : fréquences cardiaques et respiratoires, classification ATLS, paramètres et autres exercices.'],
   autres:['Autres formations','Cet espace accueillera prochainement les autres fascicules et thèmes de formation.'],
+  resultats:['Mes résultats','Ouvre Mes révisions depuis le portail CS Consenvoye pour consulter tes résultats.'],
   reprendre:['Reprendre une révision','La reprise des séances sera disponible après raccordement du simulateur et de la progression individuelle.'],
-  resultats:['Mes résultats','Le suivi individuel sera disponible après raccordement sécurisé à Google Sheets.'],
   parametres:['Paramètres de révision','Les préférences des questionnaires seront accessibles lorsque le module RTN sera relié à cet espace.']
  };
  function close(){modal.classList.remove('open');modal.hidden=true;}
  document.querySelectorAll('[data-module]').forEach(b=>b.addEventListener('click',()=>{
   // L'ouverture du simulateur RTN passe par le portail, qui détient
   // le jeton Google et qui communique avec Apps Script en toute sécurité.
-  if(b.dataset.module==='rtn' && window.parent!==window){
+  if((b.dataset.module==='rtn' || b.dataset.module==='resultats') && window.parent!==window){
+    const results=b.dataset.module==='resultats';
     // Appel direct, depuis le clic, pour éviter le bloqueur de fenêtres surgissantes.
     try {
       if (typeof window.parent.__openRtnFromRevisions === 'function') {
-        window.parent.__openRtnFromRevisions(); return;
+        window.parent.__openRtnFromRevisions(results); return;
       }
     } catch (_) {}
-    window.parent.postMessage({type:'revisions:open-rtn'}, window.location.origin);
+    window.parent.postMessage({type:'revisions:open-rtn',results}, window.location.origin);
     return;
   }
   if(b.dataset.module==='tableaux'){
