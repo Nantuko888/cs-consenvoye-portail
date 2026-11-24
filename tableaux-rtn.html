@@ -248,4 +248,5 @@ function finish(){
 el('retrySync').onclick=()=>{const local=readHistory().find(x=>x.client_id===activeSavedId);if(local)sendToSheets(local)};
 el('retryErrors').onclick=()=>{const seen=new Set();const items=results.filter(r=>r.mistakes?.length).map(r=>byId(r.id)).filter(b=>b&&!seen.has(b[0])&&seen.add(b[0]));if(items.length)startQueue(shuffle(items))};
 el('again').onclick=()=>view('setup');
-</script></body></html>
+</script><script src="rtn-pdf-dialog.js?v=1"></script>
+</body></html>
