@@ -1307,7 +1307,7 @@ document.addEventListener("click", (e) => {
   const RTN_WEBAPP_URL = new URL('formation.html', location.href).href;
   // RTN s'ouvre hors iframe Apps Script ; aucun jeton Google dans l'URL.
   let rtnTab=null, rtnFrameLayer=null, rtnNonce='', rtnOpened=false, rtnPending=false;
-  let rtnFrameAccount='', rtnFrameBornAt=0;
+  let rtnFrameAccount='', rtnFrameBornAt=0, rtnResultsRequested=false;
   const RTN_REUSE_MS=55*60*1000; // Réutilise l'interface pendant la durée maximale de la session Formation.
   const allowedGASOrigin=origin=>origin===location.origin;
   function closeRtn(destroy=false){
@@ -1367,9 +1367,14 @@ document.addEventListener("click", (e) => {
     }
     return '';
   }
+  function showRtnResults_(){
+    if(!rtnResultsRequested || !rtnTab || rtnFrameLayer?.querySelector('[role="status"]'))return;
+    rtnTab.postMessage({type:'rtn:show-results',nonce:rtnNonce},location.origin);
+    rtnResultsRequested=false;
+  }
   function openRtn(){
-    if(rtnFrameLayer && rtnTab && portalValidatedEmail && rtnFrameAccount===portalValidatedEmail && sessionStorage.getItem('cs_formation_v1')==='1' && Date.now()-rtnFrameBornAt<RTN_REUSE_MS){rtnFrameLayer.style.display='block';rtnOpened=true;try{rtnTab.focus()}catch(_){}return;}
-    if(rtnOpened && rtnTab && rtnFrameLayer){rtnTab.focus();return;}
+    if(rtnFrameLayer && rtnTab && portalValidatedEmail && rtnFrameAccount===portalValidatedEmail && sessionStorage.getItem('cs_formation_v1')==='1' && Date.now()-rtnFrameBornAt<RTN_REUSE_MS){rtnFrameLayer.style.display='block';rtnOpened=true;showRtnResults_();try{rtnTab.focus()}catch(_){}return;}
+    if(rtnOpened && rtnTab && rtnFrameLayer){showRtnResults_();rtnTab.focus();return;}
     // Même vérification d'accès locale à chaque ouverture, y compris la reprise rapide.
     if(sessionStorage.getItem('cs_formation_v1') !== '1'){
       alert('Accès aux formations non autorisé ou non vérifié. Recharge le portail si nécessaire.');
@@ -1390,6 +1395,7 @@ document.addEventListener("click", (e) => {
        Date.now()-rtnFrameBornAt<RTN_REUSE_MS){
       rtnFrameLayer.style.display='block';
       rtnOpened=true;
+      showRtnResults_();
       rtnTab.focus();
       return;
     }
@@ -1445,7 +1451,10 @@ document.addEventListener("click", (e) => {
     }
   };
   // Même origine GitHub : revisions.html peut appeler cette fonction depuis le clic.
-  window.__openRtnFromRevisions=openRtn;
+  window.__openRtnFromRevisions=function(results){
+    rtnResultsRequested=results===true;
+    openRtn();
+  };
   window.addEventListener('message',e=>{
     if(!rtnOpened||!allowedGASOrigin(e.origin)||!e.data||!rtnNonce)return;
     // Dans Apps Script, la page est parfois dans une iframe interne au nouvel onglet.
@@ -1477,6 +1486,7 @@ document.addEventListener("click", (e) => {
       requestGoogleForRtn();
     }else if(e.data.type==='rtn:loaded'){
       rtnFrameLayer?.querySelector('[role="status"]')?.remove();
+      showRtnResults_();
     }else if(e.data.type==='rtn:load-error'){
       // Montrer l'erreur produite par Formation plutôt qu'un chargement infini.
       rtnFrameLayer?.querySelector('[role="status"]')?.remove();
@@ -1609,7 +1619,7 @@ document.addEventListener("click", (e) => {
           event.source !== revisionsFrame.contentWindow || !event.data) return;
       if(event.data.type==='revisions:close-menu'){closeRevisions();return;}
       if(!revisionsOpened || event.data.type!=='revisions:open-rtn')return;
-      openRtn(); // vérification Google et droits RTN assurés par le système existant
+      window.__openRtnFromRevisions(event.data.results);
     });
     rtnLink.addEventListener('click', openRevisions);
     window.addEventListener('popstate', () => {
