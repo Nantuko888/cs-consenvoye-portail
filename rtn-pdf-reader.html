@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Référentiel RTN</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0a1420;color:#fff;font:14px system-ui,sans-serif;display:flex;flex-direction:column;height:100dvh}nav{flex:none;display:flex;align-items:center;justify-content:center;gap:8px;padding:5px;background:#192c42}button,input{font:inherit;min-height:40px;border:1px solid #627991;border-radius:6px;background:#263e59;color:#fff;padding:4px 10px}nav[hidden]{display:none}button:disabled{opacity:.45}input{width:5em;font-size:16px}main{flex:1;min-height:0;overflow:auto;text-align:center;padding:6px}canvas{display:block;margin:auto;background:white;max-width:100%;height:auto}#status{margin:0;padding:6px;text-align:center}#status:empty{display:none}
+</style>
+</head>
+<body>
+<nav aria-label="Choisir une page" hidden>
+<button id="prev" type="button" aria-label="Page précédente">←</button>
+<label for="page">Page</label><input id="page" type="number" min="1" inputmode="numeric">
+<span id="total"></span>
+<button id="next" type="button" aria-label="Page suivante">→</button>
+</nav>
+<p id="status" role="status"></p>
+<main><canvas aria-label="Page du référentiel RTN"></canvas></main>
+<script>
+const origin = new URL(location.href).origin;
+const tell = type => parent.postMessage({type},origin);
+const pageInput = document.getElementById('page');
+const prev = document.getElementById('prev');
+const next = document.getElementById('next');
+const canvas = document.querySelector('canvas');
+const scroller = document.querySelector('main');
+const status = document.getElementById('status');
+const base = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/legacy/build/';
+let documentPdf;
+let page = 1;
+let drawing = false;
+
+async function draw(number) {
+  if (!documentPdf || drawing) return;
+  drawing = true;
+  page = Math.max(1, Math.min(documentPdf.numPages, Math.trunc(Number(number) || page)));
+  pageInput.value = page;
+  prev.disabled = next.disabled = true;
+  status.textContent = 'Chargement de la page…';
+  try {
+    const content = await documentPdf.getPage(page);
+    const bounds = content.getViewport({scale:1});
+    const scale = Math.min(2, devicePixelRatio || 1) * Math.max(320,Math.min(scroller.clientWidth - 12,1100)) / bounds.width;
+    const viewport = content.getViewport({scale});
+    canvas.width = Math.ceil(viewport.width);
+    canvas.height = Math.ceil(viewport.height);
+    await content.render({canvasContext:canvas.getContext('2d'),viewport}).promise;
+    scroller.scrollTop = 0;
+    status.textContent = '';
+    tell('rtn-pdf-ready');
+  } catch {
+    status.textContent = 'Cette page n’a pas pu être affichée.';
+    tell('rtn-pdf-error');
+  } finally {
+    drawing = false;
+    prev.disabled = page <= 1;
+    next.disabled = page >= documentPdf.numPages;
+  }
+}
+prev.onclick = () => draw(page - 1);
+next.onclick = () => draw(page + 1);
+pageInput.onchange = () => draw(pageInput.value);
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') tell('rtn-pdf-close');
+  if (event.key === 'Enter' && event.target === pageInput) pageInput.blur();
+});
+window.addEventListener('message', async event => {
+  if (event.source !== parent || event.origin !== origin || event.data?.type !== 'rtn-pdf-data' || documentPdf) return;
+  try {
+    const pdfjs = await import(base + 'pdf.mjs');
+    pdfjs.GlobalWorkerOptions.workerSrc = base + 'pdf.worker.mjs';
+    documentPdf = await pdfjs.getDocument({data:new Uint8Array(event.data.bytes),isEvalSupported:false}).promise;
+    pageInput.max = documentPdf.numPages;
+    document.getElementById('total').textContent = '/ ' + documentPdf.numPages;
+    document.querySelector('nav').hidden = false;
+    await draw(event.data.page);
+  } catch {
+    tell('rtn-pdf-error');
+  }
+});
+</script>
+</body>
+</html>
